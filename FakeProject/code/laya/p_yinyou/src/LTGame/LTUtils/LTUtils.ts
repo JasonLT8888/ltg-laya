@@ -35,15 +35,13 @@ export class LTUtils {
 
     public static EnableShadow(directionLight: Laya.DirectionLight, farDistance: number) {
         //灯光开启阴影
-        directionLight.shadow = true;
+        directionLight.shadowMode = Laya.ShadowMode.Hard;
         //可见阴影距离
         directionLight.shadowDistance = farDistance;
         //生成阴影贴图尺寸
         directionLight.shadowResolution = 1024;
         //生成阴影贴图数量
-        directionLight.shadowPSSMCount = 1;
-        //模糊等级,越大越高,更耗性能
-        directionLight.shadowPCFType = 3;
+        directionLight.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
     }
 
     public static GetRes(resUrl: string, noClone: boolean = false): Laya.Sprite3D {

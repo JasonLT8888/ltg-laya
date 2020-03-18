@@ -12,6 +12,7 @@ window.Laya= (function (exports) {
     Config.webGL2D_MeshAllocMaxMem = true;
     Config.is2DPixelArtGame = false;
     Config.useWebGL2 = true;
+    Config.allowGPUInstanceDynamicBatch = true;
     Config.useRetinalCanvas = false;
     window.Config = Config;
 
@@ -832,18 +833,6 @@ window.Laya= (function (exports) {
             WebGLContext._activedTextureID = gl.TEXTURE0;
             WebGLContext._glTextureIDs = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3, gl.TEXTURE4, gl.TEXTURE5, gl.TEXTURE6, gl.TEXTURE7];
         }
-        static get _sFactor() {
-            return WebGLContext.__sFactor;
-        }
-        static set _sFactor(value) {
-            WebGLContext.__sFactor = value;
-        }
-        static get _dFactor() {
-            return WebGLContext.__dFactor;
-        }
-        static set _dFactor(value) {
-            WebGLContext.__dFactor = value;
-        }
         static useProgram(gl, program) {
             if (WebGLContext._useProgram === program)
                 return false;
@@ -878,8 +867,8 @@ window.Laya= (function (exports) {
                 gl.blendEquationSeparate(blendEquationRGB, blendEquationAlpha);
             }
         }
-        static setBlendFunc(gl, sFactor, dFactor) {
-            if (sFactor !== WebGLContext._sFactor || dFactor !== WebGLContext._dFactor) {
+        static setBlendFunc(gl, sFactor, dFactor, force = false) {
+            if (force || sFactor !== WebGLContext._sFactor || dFactor !== WebGLContext._dFactor) {
                 WebGLContext._sFactor = sFactor;
                 WebGLContext._dFactor = dFactor;
                 WebGLContext._sFactorRGB = null;
@@ -2071,8 +2060,6 @@ window.Laya= (function (exports) {
                     throw "Texture2D:unkonwn format.";
             }
         }
-        _recoverResource() {
-        }
         getPixels() {
             if (this._canRead)
                 return this._pixels;
@@ -2142,12 +2129,15 @@ window.Laya= (function (exports) {
         RenderTextureFormat[RenderTextureFormat["R8G8B8A8"] = 1] = "R8G8B8A8";
         RenderTextureFormat[RenderTextureFormat["Alpha8"] = 2] = "Alpha8";
         RenderTextureFormat[RenderTextureFormat["R16G16B16A16"] = 14] = "R16G16B16A16";
+        RenderTextureFormat[RenderTextureFormat["Depth"] = 15] = "Depth";
+        RenderTextureFormat[RenderTextureFormat["ShadowMap"] = 16] = "ShadowMap";
     })(exports.RenderTextureFormat || (exports.RenderTextureFormat = {}));
     (function (RenderTextureDepthFormat) {
         RenderTextureDepthFormat[RenderTextureDepthFormat["DEPTH_16"] = 0] = "DEPTH_16";
         RenderTextureDepthFormat[RenderTextureDepthFormat["STENCIL_8"] = 1] = "STENCIL_8";
-        RenderTextureDepthFormat[RenderTextureDepthFormat["DEPTHSTENCIL_16_8"] = 2] = "DEPTHSTENCIL_16_8";
+        RenderTextureDepthFormat[RenderTextureDepthFormat["DEPTHSTENCIL_24_8"] = 2] = "DEPTHSTENCIL_24_8";
         RenderTextureDepthFormat[RenderTextureDepthFormat["DEPTHSTENCIL_NONE"] = 3] = "DEPTHSTENCIL_NONE";
+        RenderTextureDepthFormat[RenderTextureDepthFormat["DEPTHSTENCIL_16_8"] = 2] = "DEPTHSTENCIL_16_8";
     })(exports.RenderTextureDepthFormat || (exports.RenderTextureDepthFormat = {}));
 
     class RenderTexture2D extends BaseTexture {
@@ -2206,7 +2196,7 @@ window.Laya= (function (exports) {
                         gl.renderbufferStorage(gl.RENDERBUFFER, gl.STENCIL_INDEX8, width, height);
                         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.STENCIL_ATTACHMENT, gl.RENDERBUFFER, this._depthStencilBuffer);
                         break;
-                    case exports.RenderTextureDepthFormat.DEPTHSTENCIL_16_8:
+                    case exports.RenderTextureDepthFormat.DEPTHSTENCIL_24_8:
                         gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, width, height);
                         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, this._depthStencilBuffer);
                         break;
@@ -2367,46 +2357,46 @@ window.Laya= (function (exports) {
             BlendMode.targetFns = [BlendMode.BlendNormalTarget, BlendMode.BlendAddTarget, BlendMode.BlendMultiplyTarget, BlendMode.BlendScreenTarget, BlendMode.BlendOverlayTarget, BlendMode.BlendLightTarget, BlendMode.BlendMask, BlendMode.BlendDestinationOut];
         }
         static BlendNormal(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_ALPHA, true);
         }
         static BlendAdd(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.DST_ALPHA);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.DST_ALPHA, true);
         }
         static BlendMultiply(gl) {
-            WebGLContext.setBlendFunc(gl, gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+            WebGLContext.setBlendFunc(gl, gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA, true);
         }
         static BlendScreen(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE, true);
         }
         static BlendOverlay(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_COLOR);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_COLOR, true);
         }
         static BlendLight(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE, true);
         }
         static BlendNormalTarget(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_ALPHA, true);
         }
         static BlendAddTarget(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.DST_ALPHA);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.DST_ALPHA, true);
         }
         static BlendMultiplyTarget(gl) {
-            WebGLContext.setBlendFunc(gl, gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+            WebGLContext.setBlendFunc(gl, gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA, true);
         }
         static BlendScreenTarget(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE, true);
         }
         static BlendOverlayTarget(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_COLOR);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE_MINUS_SRC_COLOR, true);
         }
         static BlendLightTarget(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE);
+            WebGLContext.setBlendFunc(gl, gl.ONE, gl.ONE, true);
         }
         static BlendMask(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ZERO, gl.SRC_ALPHA);
+            WebGLContext.setBlendFunc(gl, gl.ZERO, gl.SRC_ALPHA, true);
         }
         static BlendDestinationOut(gl) {
-            WebGLContext.setBlendFunc(gl, gl.ZERO, gl.ZERO);
+            WebGLContext.setBlendFunc(gl, gl.ZERO, gl.ZERO, true);
         }
     }
     BlendMode.activeBlendFunction = null;
@@ -6853,7 +6843,7 @@ window.Laya= (function (exports) {
             var offsetX = this.offsetX;
             var offsetY = this.offsetY;
             let draww = width;
-            let drawh = width;
+            let drawh = height;
             if (x + width > texw + offsetX)
                 draww -= (x + width) - texw - offsetX;
             if (x + width > sourceWidth)
@@ -8925,6 +8915,9 @@ window.Laya= (function (exports) {
             return enable;
         }
         _inner_drawTexture(tex, imgid, x, y, width, height, m, uv, alpha, lastRender) {
+            if (width <= 0 || height <= 0) {
+                return;
+            }
             var preKey = this._curSubmit._key;
             uv = uv || tex._uv;
             if (preKey.submitType === SubmitBase.KEY_TRIANGLES && preKey.other === imgid) {
@@ -10367,10 +10360,7 @@ window.Laya= (function (exports) {
         static supportTextureFormat(format) {
             switch (format) {
                 case exports.TextureFormat.R32G32B32A32:
-                    if (!LayaGL.layaGPUInstance._isWebGL2 && !LayaGL.layaGPUInstance._oesTextureFloat)
-                        return false;
-                    else
-                        return true;
+                    return (!LayaGL.layaGPUInstance._isWebGL2 && !LayaGL.layaGPUInstance._oesTextureFloat) ? false : true;
                 default:
                     return true;
             }
@@ -10378,10 +10368,11 @@ window.Laya= (function (exports) {
         static supportRenderTextureFormat(format) {
             switch (format) {
                 case exports.RenderTextureFormat.R16G16B16A16:
-                    if (LayaGL.layaGPUInstance._isWebGL2 || LayaGL.layaGPUInstance._oesTextureHalfFloat && LayaGL.layaGPUInstance._oesTextureHalfFloatLinear)
-                        return true;
-                    else
-                        return false;
+                    return (LayaGL.layaGPUInstance._isWebGL2 || LayaGL.layaGPUInstance._oesTextureHalfFloat && LayaGL.layaGPUInstance._oesTextureHalfFloatLinear) ? true : false;
+                case exports.RenderTextureFormat.Depth:
+                    return (LayaGL.layaGPUInstance._isWebGL2 || LayaGL.layaGPUInstance._webgl_depth_texture) ? true : false;
+                case exports.RenderTextureFormat.ShadowMap:
+                    return LayaGL.layaGPUInstance._isWebGL2 ? true : false;
                 default:
                     return true;
             }
@@ -10403,6 +10394,7 @@ window.Laya= (function (exports) {
             this._compressedTextureS3tc = null;
             this._compressedTexturePvrtc = null;
             this._compressedTextureEtc1 = null;
+            this._webgl_depth_texture = null;
             this._gl = gl;
             this._isWebGL2 = isWebGL2;
             var maxTextureFS = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
@@ -10419,6 +10411,7 @@ window.Laya= (function (exports) {
                 this._oesTextureFloat = this._getExtension("OES_texture_float");
                 this._oes_element_index_uint = this._getExtension("OES_element_index_uint");
                 this._extShaderTextureLod = this._getExtension("EXT_shader_texture_lod");
+                this._webgl_depth_texture = this._getExtension("WEBGL_depth_texture");
                 SystemUtils._shaderCapailityLevel = 30;
             }
             else {
@@ -10484,7 +10477,7 @@ window.Laya= (function (exports) {
                 this._angleInstancedArrays.vertexAttribDivisorANGLE(index, divisor);
         }
         supportInstance() {
-            if (this._isWebGL2 || this._angleInstancedArrays)
+            if ((this._isWebGL2 || this._angleInstancedArrays) && Config.allowGPUInstanceDynamicBatch)
                 return true;
             else
                 return false;
@@ -22280,7 +22273,7 @@ window.Laya= (function (exports) {
             newU8List.set(arrU8List);
             return newU8List.buffer;
         }
-        static set alertGlobalError(value) {
+        static alertGlobalError(value) {
             var erralert = 0;
             if (value) {
                 Browser.window.onerror = function (msg, url, line, column, detail) {
@@ -22380,7 +22373,7 @@ window.Laya= (function (exports) {
     Laya.lateTimer = null;
     Laya.timer = null;
     Laya.loader = null;
-    Laya.version = "2.5.0";
+    Laya.version = "2.6.0beta";
     Laya._isinit = false;
     Laya.isWXOpenDataContext = false;
     Laya.isWXPosMsg = false;

@@ -12,13 +12,9 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
     public static get instance(): UI_MainMediator {
         if (this._instance == null) {
             this._instance = new UI_MainMediator();
+            this._instance._classDefine = UI_Main;
         }
         return this._instance;
-    }
-
-    public Show() {
-        this._ui = FGuiEx.AddUI(UI_Main) as UI_Main;
-        this._OnShow();
     }
 
     _OnShow() {

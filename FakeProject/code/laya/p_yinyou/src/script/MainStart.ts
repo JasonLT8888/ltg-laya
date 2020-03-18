@@ -10,7 +10,7 @@ export default class MainStart extends LTStart {
 
     constructor() {
         super();
-        this._enableStat = true;
+        this.enableStat = true;
     }
 
     private _appId: string = "wx149cdd1b3b19378f";

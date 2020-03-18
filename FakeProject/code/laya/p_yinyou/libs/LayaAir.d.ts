@@ -48,6 +48,11 @@
 		 * 是否使用webgl2
 		 */
 		static useWebGL2:boolean;
+
+		/**
+		 * 是否允许GPUInstance动态合并,仅对3D有效。
+		 */
+		static allowGPUInstanceDynamicBatch:boolean;
 		static useRetinalCanvas:boolean;
 	}
 
@@ -3312,15 +3317,19 @@ declare module laya.d3.core.light {
 	class DirectionLight extends laya.d3.core.light.LightSprite  {
 
 		/**
-		 * @iternal 
+		 * 阴影级联数量。
 		 */
-		_direction:laya.d3.math.Vector3;
+		shadowCascadesMode:laya.d3.core.light.ShadowCascadesMode;
 
 		/**
-		 * @inheritDoc 
-		 * @override 
+		 * 二级级联阴影分割比例。
 		 */
-		shadow:boolean;
+		shadowTwoCascadeSplits:number;
+
+		/**
+		 * 四级级联阴影分割比例,X、Y、Z依次为其分割比例,Z必须大于Y,Y必须大于X。
+		 */
+		shadowFourCascadeSplits:laya.d3.math.Vector3;
 
 		/**
 		 * 创建一个 <code>DirectionLight</code> 实例。
@@ -3364,29 +3373,39 @@ declare module laya.d3.core.light {
 		intensity:number;
 
 		/**
-		 * 是否产生阴影。
+		 * 阴影模式。
 		 */
-		shadow:boolean;
+		shadowMode:laya.d3.core.light.ShadowMode;
 
 		/**
-		 * 阴影最远范围。
+		 * 最大阴影距离。
 		 */
 		shadowDistance:number;
 
 		/**
-		 * 阴影贴图尺寸。
+		 * 阴影贴图分辨率。
 		 */
 		shadowResolution:number;
 
 		/**
-		 * 阴影分段数。
+		 * 阴影深度偏差。
 		 */
-		shadowPSSMCount:number;
+		shadowDepthBias:number;
 
 		/**
-		 * 阴影PCF类型。
+		 * 阴影法线偏差。
 		 */
-		shadowPCFType:number;
+		shadowNormalBias:number;
+
+		/**
+		 * 阴影强度。
+		 */
+		shadowStrength:number;
+
+		/**
+		 * 阴影视锥的近裁面。
+		 */
+		shadowNearPlane:number;
 
 		/**
 		 * 灯光烘培类型。
@@ -3412,8 +3431,7 @@ declare module laya.d3.core.light {
 		protected _onInActive():void;
 
 		/**
-		 * 灯光的漫反射颜色。
-		 * @return 灯光的漫反射颜色。
+		 * @deprecated please use color property instead.
 		 */
 		diffuseColor:laya.d3.math.Vector3;
 	}
@@ -3440,6 +3458,26 @@ declare module laya.d3.core.light {
 		constructor();
 	}
 
+}
+
+declare module laya.d3.core.light {
+enum ShadowCascadesMode {
+    /** 无级联。 */
+    NoCascades = 0,
+    /** 二级级联。 */
+    TwoCascades = 1,
+    /** 四级级联。 */
+    FourCascades = 2
+}
+}
+
+declare module laya.d3.core.light {
+enum ShadowMode {
+    None = 0,
+    Hard = 1,
+    SoftLow = 2,
+    SoftHigh = 3
+}
 }
 
 declare module laya.d3.core.light {
@@ -8262,6 +8300,11 @@ declare module laya.d3.core {
 		static SAHDERDEFINE_LIGHTMAP:laya.d3.shader.ShaderDefine;
 
 		/**
+		 * 精灵级着色器宏定义,光照贴图方向。
+		 */
+		static SHADERDEFINE_LIGHTMAP_DIRECTIONAL:laya.d3.shader.ShaderDefine;
+
+		/**
 		 * 着色器变量名，光照贴图缩放和偏移。
 		 */
 		static LIGHTMAPSCALEOFFSET:number;
@@ -8270,6 +8313,11 @@ declare module laya.d3.core {
 		 * 着色器变量名，光照贴图。
 		 */
 		static LIGHTMAP:number;
+
+		/**
+		 * 着色器变量名，光照贴图方向。
+		 */
+		static LIGHTMAP_DIRECTION:number;
 
 		/**
 		 * 拾取颜色。
@@ -8400,7 +8448,7 @@ declare module laya.d3.core.scene {
 		 * 获取与指定视锥相交的的物理列表。
 		 * @param 渲染上下文 。
 		 */
-		getCollidingWithFrustum(context:laya.d3.core.render.RenderContext3D,shader:laya.d3.shader.Shader3D,replacementTag:string,isShadowCasterCull:boolean):void;
+		getCollidingWithFrustum(cameraCullInfo:laya.d3.graphics.CameraCullInfo,context:laya.d3.core.render.RenderContext3D,shader:laya.d3.shader.Shader3D,replacementTag:string,isShadowCasterCull:boolean):void;
 
 		/**
 		 * 获取最大包围盒
@@ -8483,7 +8531,7 @@ declare module laya.d3.core.scene {
 		 * @param ray 射线。.
 		 * @param result 相交物体列表。
 		 */
-		getCollidingWithFrustum(context:laya.d3.core.render.RenderContext3D,customShader:laya.d3.shader.Shader3D,replacementTag:string,isShadowCasterCull:boolean):void;
+		getCollidingWithFrustum(cameraCullInfo:laya.d3.graphics.CameraCullInfo,context:laya.d3.core.render.RenderContext3D,customShader:laya.d3.shader.Shader3D,replacementTag:string,isShadowCasterCull:boolean):void;
 
 		/**
 		 * 获取是否与指定包围盒相交。
@@ -8519,6 +8567,26 @@ declare module laya.d3.core.scene {
 		_getIndexInMotionList():number;
 		_setIndexInMotionList(value:number):void;
 		bounds:laya.d3.core.Bounds;
+	}
+
+}
+
+declare module laya.d3.core.scene {
+
+	/**
+	 * 光照贴图。
+	 */
+	class Lightmap  {
+
+		/**
+		 * 光照贴图颜色。
+		 */
+		lightmapColor:laya.resource.Texture2D;
+
+		/**
+		 * 光照贴图方向。
+		 */
+		lightmapDirection:laya.resource.Texture2D;
 	}
 
 }
@@ -8610,12 +8678,6 @@ enum AmbientMode {
 		static SPOTLIGHTSPOTANGLE:number;
 		static SPOTLIGHTRANGE:number;
 		static SPOTLIGHTCOLOR:number;
-		static SHADOWDISTANCE:number;
-		static SHADOWLIGHTVIEWPROJECT:number;
-		static SHADOWMAPPCFOFFSET:number;
-		static SHADOWMAPTEXTURE1:number;
-		static SHADOWMAPTEXTURE2:number;
-		static SHADOWMAPTEXTURE3:number;
 		static AMBIENTCOLOR:number;
 		static REFLECTIONTEXTURE:number;
 		static TIME:number;
@@ -8636,7 +8698,6 @@ enum AmbientMode {
 		 * 是否启用灯光。
 		 */
 		enableLight:boolean;
-		parallelSplitShadowMaps:laya.d3.shadowMap.ParallelSplitShadowMap[];
 
 		/**
 		 * 资源的URL地址。
@@ -8721,6 +8782,11 @@ enum AmbientMode {
 		readonly input:laya.d3.Input3D;
 
 		/**
+		 * 光照贴图数组,返回值为浅拷贝数组。
+		 */
+		lightmaps:laya.d3.core.scene.Lightmap[];
+
+		/**
 		 * 创建一个 <code>Scene3D</code> 实例。
 		 */
 
@@ -8741,18 +8807,6 @@ enum AmbientMode {
 		 * @override 
 		 */
 		protected _onInActive():void;
-
-		/**
-		 * 设置光照贴图。
-		 * @param value 光照贴图。
-		 */
-		setlightmaps(value:laya.resource.Texture2D[]):void;
-
-		/**
-		 * 获取光照贴图浅拷贝列表。
-		 * @return 获取光照贴图浅拷贝列表。
-		 */
-		getlightmaps():laya.resource.Texture2D[];
 
 		/**
 		 * @inheritDoc 
@@ -8785,6 +8839,18 @@ enum AmbientMode {
 		 * @deprecated 
 		 */
 		reflectionMode:number;
+
+		/**
+		 * @deprecated 设置光照贴图。
+		 * @param value 光照贴图。
+		 */
+		setlightmaps(value:laya.resource.Texture2D[]):void;
+
+		/**
+		 * @deprecated 获取光照贴图浅拷贝列表。
+		 * @return 获取光照贴图浅拷贝列表。
+		 */
+		getlightmaps():laya.resource.Texture2D[];
 	}
 
 }
@@ -9097,6 +9163,7 @@ declare module laya.d3.core.trail {
 		textureMode:number;
 
 		constructor(owner:laya.d3.core.trail.TrailSprite3D);
+		clear():void;
 
 		/**
 		 * 轨迹准线_面向摄像机。
@@ -9147,6 +9214,7 @@ declare module laya.d3.core.trail {
 		 * @override 
 		 */
 		destroy():void;
+		clear():void;
 	}
 
 }
@@ -9433,6 +9501,7 @@ declare module laya.d3.core.trail {
 		 * @override 
 		 */
 		destroy(destroyChild?:boolean):void;
+		clear():void;
 	}
 
 }
@@ -9679,6 +9748,23 @@ declare module laya.d3.core {
 		 * @override 
 		 */
 		cloneTo(dest:any):void;
+	}
+
+}
+
+declare module laya.d3.graphics {
+	class CameraCullInfo  {
+		position:laya.d3.math.Vector3;
+		useOcclusionCulling:Boolean;
+		boundFrustum:laya.d3.math.BoundFrustum;
+		cullingMask:number;
+	}
+	class ShadowCullInfo  {
+		position:laya.d3.math.Vector3;
+		cullPlanes:laya.d3.math.Plane[];
+		cullSphere:laya.d3.math.BoundSphere;
+		cullPlaneCount:number;
+		direction:laya.d3.math.Vector3;
 	}
 
 }
@@ -10056,6 +10142,11 @@ declare module laya.d3.graphics {
 		bind():boolean;
 
 		/**
+		 * 剥离内存块存储。
+		 */
+		orphanStorage():void;
+
+		/**
 		 * 设置数据。
 		 * @param data 顶点数据。
 		 * @param bufferOffset 顶点缓冲中的偏移,以字节为单位。
@@ -10288,46 +10379,33 @@ declare module laya.d3.math {
 }
 
 declare module laya.d3.math {
-
+enum FrustumCorner {
+    FarBottomLeft = 0,
+    FarTopLeft = 1,
+    FarTopRight = 2,
+    FarBottomRight = 3,
+    nearBottomLeft = 4,
+    nearTopLeft = 5,
+    nearTopRight = 6,
+    nearBottomRight = 7,
+    unknown = 8
+}
 	/**
 	 * <code>BoundFrustum</code> 类用于创建锥截体。
 	 */
 	class BoundFrustum  {
 
 		/**
-		 * 4x4矩阵
+		 * 根据矩阵获取6个包围平面。
+		 * @param m 描述矩阵。
+		 * @param np 近平面。
+		 * @param fp 远平面。
+		 * @param lp 左平面。
+		 * @param rp 右平面。
+		 * @param tp 顶平面。
+		 * @param bp 底平面。
 		 */
-		private _matrix:any;
-
-		/**
-		 * 近平面
-		 */
-		private _near:any;
-
-		/**
-		 * 远平面
-		 */
-		private _far:any;
-
-		/**
-		 * 左平面
-		 */
-		private _left:any;
-
-		/**
-		 * 右平面
-		 */
-		private _right:any;
-
-		/**
-		 * 顶平面
-		 */
-		private _top:any;
-
-		/**
-		 * 底平面
-		 */
-		private _bottom:any;
+		static getPlanesFromMatrix(m:laya.d3.math.Matrix4x4,np:laya.d3.math.Plane,fp:laya.d3.math.Plane,lp:laya.d3.math.Plane,rp:laya.d3.math.Plane,tp:laya.d3.math.Plane,bp:laya.d3.math.Plane):void;
 
 		/**
 		 * 创建一个 <code>BoundFrustum</code> 实例。
@@ -10337,49 +10415,37 @@ declare module laya.d3.math {
 		constructor(matrix:laya.d3.math.Matrix4x4);
 
 		/**
-		 * 获取描述矩阵。
-		 * @return 描述矩阵。
-		 */
-
-		/**
-		 * 设置描述矩阵。
-		 * @param matrix 描述矩阵。
+		 * 描述矩阵。
 		 */
 		matrix:laya.d3.math.Matrix4x4;
 
 		/**
-		 * 获取近平面。
-		 * @return 近平面。
+		 * 近平面。
 		 */
 		readonly near:laya.d3.math.Plane;
 
 		/**
-		 * 获取远平面。
-		 * @return 远平面。
+		 * 远平面。
 		 */
 		readonly far:laya.d3.math.Plane;
 
 		/**
-		 * 获取左平面。
-		 * @return 左平面。
+		 * 左平面。
 		 */
 		readonly left:laya.d3.math.Plane;
 
 		/**
-		 * 获取右平面。
-		 * @return 右平面。
+		 * 右平面。
 		 */
 		readonly right:laya.d3.math.Plane;
 
 		/**
-		 * 获取顶平面。
-		 * @return 顶平面。
+		 * 顶平面。
 		 */
 		readonly top:laya.d3.math.Plane;
 
 		/**
-		 * 获取底平面。
-		 * @return 底平面。
+		 * 底平面。
 		 */
 		readonly bottom:laya.d3.math.Plane;
 
@@ -10408,24 +10474,12 @@ declare module laya.d3.math {
 		getPlane(index:number):laya.d3.math.Plane;
 
 		/**
-		 * 根据描述矩阵获取锥截体的6个面。
-		 * @param m 描述矩阵。
-		 * @param np 近平面。
-		 * @param fp 远平面。
-		 * @param lp 左平面。
-		 * @param rp 右平面。
-		 * @param tp 顶平面。
-		 * @param bp 底平面。
-		 */
-		private static _getPlanesFromMatrix:any;
-
-		/**
 		 * 锥截体三个相交平面的交点。
 		 * @param p1 平面1。
 		 * @param p2 平面2。
 		 * @param p3 平面3。
 		 */
-		private static _get3PlaneInterPoint:any;
+		static get3PlaneInterPoint(p1:laya.d3.math.Plane,p2:laya.d3.math.Plane,p3:laya.d3.math.Plane,out:laya.d3.math.Vector3):void;
 
 		/**
 		 * 锥截体的8个顶点。
@@ -11019,7 +11073,7 @@ declare module laya.d3.math {
 declare module laya.d3.math {
 
 	/**
-	 * <code>MathUtils</code> 类用于创建数学工具。
+	 * <code>MathUtils3D</code> 类用于创建数学工具。
 	 */
 	class MathUtils3D  {
 
@@ -11037,6 +11091,11 @@ declare module laya.d3.math {
 		 * 浮点数默认最小值
 		 */
 		static MinValue:number;
+
+		/**
+		 * 角度转弧度系数
+		 */
+		static Deg2Rad:number;
 
 		/**
 		 * 创建一个 <code>MathUtils</code> 实例。
@@ -11302,7 +11361,7 @@ declare module laya.d3.math {
 		/**
 		 * 计算观察矩阵
 		 * @param eye 视点位置
-		 * @param center 视点目标
+		 * @param target 视点目标
 		 * @param up 向上向量
 		 * @param out 输出矩阵
 		 */
@@ -12251,7 +12310,7 @@ declare module laya.d3.math.Native {
 declare module laya.d3.math {
 
 	/**
-	 * <code>Plane</code> 类用于创建平面。
+	 * 平面。
 	 */
 	class Plane  {
 
@@ -12281,17 +12340,29 @@ declare module laya.d3.math {
 		constructor(normal:laya.d3.math.Vector3,d?:number);
 
 		/**
-		 * 创建一个 <code>Plane</code> 实例。
-		 * @param point1 第一点
-		 * @param point2 第二点
-		 * @param point3 第三点
+		 * 通过三个点创建一个平面。
+		 * @param point0 第零个点
+		 * @param point1 第一个点
+		 * @param point2 第二个点
 		 */
-		static createPlaneBy3P(point1:laya.d3.math.Vector3,point2:laya.d3.math.Vector3,point3:laya.d3.math.Vector3):Plane;
+		static createPlaneBy3P(point0:laya.d3.math.Vector3,point1:laya.d3.math.Vector3,point2:laya.d3.math.Vector3,out:Plane):void;
 
 		/**
 		 * 更改平面法线向量的系数，使之成单位长度。
 		 */
 		normalize():void;
+
+		/**
+		 * 克隆。
+		 * @param destObject 克隆源。
+		 */
+		cloneTo(destObject:any):void;
+
+		/**
+		 * 克隆。
+		 * @return 克隆副本。
+		 */
+		clone():Plane;
 	}
 
 }
@@ -13641,17 +13712,6 @@ declare module laya.d3.physics {
 		readonly isActive:boolean;
 
 		/**
-		 * @inheritDoc 
-		 * @override 
-		 */
-
-		/**
-		 * @inheritDoc 
-		 * @override 
-		 */
-		enabled:boolean;
-
-		/**
 		 * 碰撞形状。
 		 */
 		colliderShape:laya.d3.physics.shape.ColliderShape;
@@ -13667,11 +13727,7 @@ declare module laya.d3.physics {
 		collisionGroup:number;
 
 		/**
-		 * 可碰撞的碰撞组。
-		 */
-
-		/**
-		 * 设置可碰撞的碰撞组(如果多组采用位操作）。
+		 * 可碰撞的碰撞组,基于位运算。
 		 */
 		canCollideWith:number;
 
@@ -14438,7 +14494,7 @@ declare module laya.d3.resource.models {
 		/**
 		 * 加载网格模板。
 		 * @param url 模板地址。
-		 * @param complete 完成回掉。
+		 * @param complete 完成回调。
 		 */
 		static load(url:string,complete:laya.utils.Handler):void;
 
@@ -14844,7 +14900,7 @@ declare module laya.d3.resource {
 		/**
 		 * 从对象池获取临时渲染目标。
 		 */
-		static createFromPool(width:number,height:number,format?:number,depthStencilFormat?:number,filterMode?:laya.resource.FilterMode):RenderTexture;
+		static createFromPool(width:number,height:number,format?:number,depthStencilFormat?:number):RenderTexture;
 
 		/**
 		 * 回收渲染目标到对象池,释放后可通过createFromPool复用。
@@ -14890,7 +14946,14 @@ declare module laya.d3.resource {
 }
 
 declare module laya.d3.resource {
-
+enum TextureCubeFace {
+    PositiveX = 0,
+    NegativeX = 1,
+    PositiveY = 2,
+    NegativeY = 3,
+    PositiveZ = 4,
+    NegativeZ = 5
+}
 	/**
 	 * <code>TextureCube</code> 类用于生成立方体纹理。
 	 */
@@ -14970,10 +15033,12 @@ declare module laya.d3.resource {
 		setSixSidePixels(pixels:Array<Uint8Array>,miplevel?:number):void;
 
 		/**
-		 * @inheritDoc 
-		 * @override 
+		 * 通过图源设置一个面的颜色。
+		 * @param face 面。
+		 * @param imageSource 图源。
+		 * @param miplevel 层级。
 		 */
-		protected _recoverResource():void;
+		setImageSource(face:TextureCubeFace,imageSource:HTMLImageElement|HTMLCanvasElement,miplevel?:number):void;
 	}
 
 }
@@ -15484,8 +15549,7 @@ declare module laya.d3.shader {
 	class ShaderPass extends laya.webgl.utils.ShaderCompile  {
 
 		/**
-		 * 获取渲染状态。
-		 * @return 渲染状态。
+		 * 渲染状态。
 		 */
 		readonly renderState:laya.d3.core.material.RenderState;
 
@@ -15496,6 +15560,19 @@ declare module laya.d3.shader {
 		 * @override 
 		 */
 		protected _compileToTree(parent:laya.webgl.utils.ShaderNode,lines:any[],start:number,includefiles:any[],defs:any):void;
+
+		/**
+		 * 添加标记。
+		 * @param key 标记键。
+		 * @param value 标记值。
+		 */
+		setTag(key:string,value:string):void;
+
+		/**
+		 * 获取标记值。
+		 * @return key 标记键。
+		 */
+		getTag(key:string):string;
 	}
 
 }
@@ -15648,39 +15725,9 @@ declare module laya.d3.shader {
 		 * @param vs 
 		 * @param ps 
 		 * @param stateMap 
+		 * @param pipelineMode 渲染管线模式。
 		 */
-		addShaderPass(vs:string,ps:string,stateMap?:object):laya.d3.shader.ShaderPass;
-	}
-
-}
-
-declare module laya.d3.shadowMap {
-
-	/**
-	 * ...
-	 * @author ...
-	 */
-	class ParallelSplitShadowMap  {
-
-		constructor();
-		setInfo(scene:laya.d3.core.scene.Scene3D,maxDistance:number,globalParallelDir:laya.d3.math.Vector3,shadowMapTextureSize:number,numberOfPSSM:number,PCFType:number):void;
-		setPCFType(PCFtype:number):void;
-		getPCFType():number;
-		setFarDistance(value:number):void;
-		getFarDistance():number;
-		shadowMapCount:number;
-		private _beginSampler:any;
-		calcSplitFrustum(sceneCamera:laya.d3.core.BaseCamera):void;
-
-		/**
-		 * 计算两个矩阵的乘法
-		 * @param left left矩阵
-		 * @param right right矩阵
-		 * @param out 输出矩阵
-		 */
-		static multiplyMatrixOutFloat32Array(left:laya.d3.math.Matrix4x4,right:laya.d3.math.Matrix4x4,out:Float32Array):void;
-		setShadowMapTextureSize(size:number):void;
-		disposeAllRenderTarget():void;
+		addShaderPass(vs:string,ps:string,stateMap?:object,pipelineMode?:string):laya.d3.shader.ShaderPass;
 	}
 
 }
@@ -24421,6 +24468,7 @@ declare module laya.html.utils {
 		 * 是否为粗体
 		 */
 		bold:boolean;
+		fontWeight:string;
 
 		/**
 		 * 表示使用此文本格式的文本是否为斜体。
@@ -31432,16 +31480,22 @@ enum RenderTextureFormat {
     /**Alpha格式,8位。*/
     Alpha8 = 2,
     /**RGBA格式,每个通道16位。*/
-    R16G16B16A16 = 14
+    R16G16B16A16 = 14,
+    /**深度格式。*/
+    Depth = 15,
+    /**阴影贴图格式格式。*/
+    ShadowMap = 16
 }enum RenderTextureDepthFormat {
     /**深度格式_DEPTH_16。*/
     DEPTH_16 = 0,
     /**深度格式_STENCIL_8。*/
     STENCIL_8 = 1,
-    /**深度格式_DEPTHSTENCIL_16_8。*/
-    DEPTHSTENCIL_16_8 = 2,
+    /**深度格式_DEPTHSTENCIL_24_8。*/
+    DEPTHSTENCIL_24_8 = 2,
     /**深度格式_DEPTHSTENCIL_NONE。*/
-    DEPTHSTENCIL_NONE = 3
+    DEPTHSTENCIL_NONE = 3,
+    /** @deprecated*/
+    DEPTHSTENCIL_16_8 = 2
 }
 }
 
@@ -31915,12 +31969,6 @@ declare module laya.resource {
 		 * @param miplevel 层级。
 		 */
 		setCompressData(data:ArrayBuffer):void;
-
-		/**
-		 * @inheritDoc 
-		 * @override 
-		 */
-		protected _recoverResource():void;
 
 		/**
 		 * 返回图片像素。
@@ -43392,8 +43440,6 @@ declare module laya.webgl {
 	 * @private 
 	 */
 	class WebGLContext  {
-		static _sFactor:number;
-		static _dFactor:number;
 	}
 
 }
@@ -43482,7 +43528,7 @@ declare module laya.webgl {
 		 * 表示是否捕获全局错误并弹出提示。默认为false。
 		 * 适用于移动设备等不方便调试的时候，设置为true后，如有未知错误，可以弹窗抛出详细错误堆栈。
 		 */
-		static alertGlobalError:boolean;
+		static alertGlobalError(value:boolean):void;
 
 		/**
 		 * 开启DebugPanel
@@ -43958,6 +44004,22 @@ enum CameraClearFlags {
 
 	class PointLight extends laya.d3.core.light.PointLight {}
 
+enum ShadowCascadesMode {
+    /** 无级联。 */
+    NoCascades = 0,
+    /** 二级级联。 */
+    TwoCascades = 1,
+    /** 四级级联。 */
+    FourCascades = 2
+}
+
+enum ShadowMode {
+    None = 0,
+    Hard = 1,
+    SoftLow = 2,
+    SoftHigh = 3
+}
+
 	/**
 	 * <code>SpotLight</code> 类用于创建聚光。
 	 */
@@ -44401,6 +44463,12 @@ enum PBRMetallicSmoothnessSource {
 	class BoundsOctreeNode extends laya.d3.core.scene.BoundsOctreeNode {}
 
 	/**
+	 * 光照贴图。
+	 */
+
+	class Lightmap extends laya.d3.core.scene.Lightmap {}
+
+	/**
 	 * <code>OctreeMotionList</code> 类用于实现物理更新队列。
 	 */
 
@@ -44502,6 +44570,10 @@ enum TrailAlignment {
 	 */
 
 	class Vector3Keyframe extends laya.d3.core.Vector3Keyframe {}
+
+	class CameraCullInfo extends laya.d3.graphics.CameraCullInfo {}
+
+	class ShadowCullInfo extends laya.d3.graphics.ShadowCullInfo {}
 
 	/**
 	 * <code>IndexBuffer3D</code> 类用于创建索引缓冲。
@@ -44606,6 +44678,18 @@ enum IndexFormat {
 
 	class BoundBox extends laya.d3.math.BoundBox {}
 
+enum FrustumCorner {
+    FarBottomLeft = 0,
+    FarTopLeft = 1,
+    FarTopRight = 2,
+    FarBottomRight = 3,
+    nearBottomLeft = 4,
+    nearTopLeft = 5,
+    nearTopRight = 6,
+    nearBottomRight = 7,
+    unknown = 8
+}
+
 	/**
 	 * <code>BoundFrustum</code> 类用于创建锥截体。
 	 */
@@ -44643,7 +44727,7 @@ enum IndexFormat {
 	class HalfFloatUtils extends laya.d3.math.HalfFloatUtils {}
 
 	/**
-	 * <code>MathUtils</code> 类用于创建数学工具。
+	 * <code>MathUtils3D</code> 类用于创建数学工具。
 	 */
 
 	class MathUtils3D extends laya.d3.math.MathUtils3D {}
@@ -44679,7 +44763,7 @@ enum IndexFormat {
 	class ConchVector4 extends laya.d3.math.Native.ConchVector4 {}
 
 	/**
-	 * <code>Plane</code> 类用于创建平面。
+	 * 平面。
 	 */
 
 	class Plane extends laya.d3.math.Plane {}
@@ -44936,6 +45020,15 @@ enum IndexFormat {
 
 	class RenderTexture extends laya.d3.resource.RenderTexture {}
 
+enum TextureCubeFace {
+    PositiveX = 0,
+    NegativeX = 1,
+    PositiveY = 2,
+    NegativeY = 3,
+    PositiveZ = 4,
+    NegativeZ = 5
+}
+
 	/**
 	 * <code>TextureCube</code> 类用于生成立方体纹理。
 	 */
@@ -44992,13 +45085,6 @@ enum IndexFormat {
 	 */
 
 	class SubShader extends laya.d3.shader.SubShader {}
-
-	/**
-	 * ...
-	 * @author ...
-	 */
-
-	class ParallelSplitShadowMap extends laya.d3.shadowMap.ParallelSplitShadowMap {}
 
 	/**
 	 * <code>TextMesh</code> 类用于创建文本网格。
@@ -46366,7 +46452,11 @@ enum RenderTextureFormat {
     /**Alpha格式,8位。*/
     Alpha8 = 2,
     /**RGBA格式,每个通道16位。*/
-    R16G16B16A16 = 14
+    R16G16B16A16 = 14,
+    /**深度格式。*/
+    Depth = 15,
+    /**阴影贴图格式格式。*/
+    ShadowMap = 16
 }
 
 enum RenderTextureDepthFormat {
@@ -46374,10 +46464,12 @@ enum RenderTextureDepthFormat {
     DEPTH_16 = 0,
     /**深度格式_STENCIL_8。*/
     STENCIL_8 = 1,
-    /**深度格式_DEPTHSTENCIL_16_8。*/
-    DEPTHSTENCIL_16_8 = 2,
+    /**深度格式_DEPTHSTENCIL_24_8。*/
+    DEPTHSTENCIL_24_8 = 2,
     /**深度格式_DEPTHSTENCIL_NONE。*/
-    DEPTHSTENCIL_NONE = 3
+    DEPTHSTENCIL_NONE = 3,
+    /** @deprecated*/
+    DEPTHSTENCIL_16_8 = 2
 }
 
 	/**

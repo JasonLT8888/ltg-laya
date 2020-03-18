@@ -86,10 +86,10 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/LTGame/Async/Awaiters.ts":
-/*!**************************************!*\
-  !*** ./src/LTGame/Async/Awaiters.ts ***!
-  \**************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Async/Awaiters.ts":
+/*!********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Async/Awaiters.ts ***!
+  \********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -120,10 +120,10 @@ class Awaiters {
 
 /***/ }),
 
-/***/ "./src/LTGame/Commom/CommonEventId.ts":
-/*!********************************************!*\
-  !*** ./src/LTGame/Commom/CommonEventId.ts ***!
-  \********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Commom/CommonEventId.ts":
+/*!**************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Commom/CommonEventId.ts ***!
+  \**************************************************************************/
 /*! exports provided: CommonEventId */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -139,10 +139,35 @@ CommonEventId.AD_CONFIG_GETTED = "AD_CONFIG_GETTED";
 
 /***/ }),
 
-/***/ "./src/LTGame/Config/ConfigManager.ts":
-/*!********************************************!*\
-  !*** ./src/LTGame/Config/ConfigManager.ts ***!
-  \********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Commom/EScreenOrientation.ts":
+/*!*******************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Commom/EScreenOrientation.ts ***!
+  \*******************************************************************************/
+/*! exports provided: EScreenOrientation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EScreenOrientation", function() { return EScreenOrientation; });
+var EScreenOrientation;
+(function (EScreenOrientation) {
+    /**
+     * 竖屏
+     */
+    EScreenOrientation[EScreenOrientation["Portrait"] = 0] = "Portrait";
+    /**
+     * 横屏
+     */
+    EScreenOrientation[EScreenOrientation["Landscape"] = 1] = "Landscape";
+})(EScreenOrientation || (EScreenOrientation = {}));
+
+
+/***/ }),
+
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Config/ConfigManager.ts":
+/*!**************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Config/ConfigManager.ts ***!
+  \**************************************************************************/
 /*! exports provided: ConfigManager */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -189,10 +214,10 @@ ConfigManager._configList = [];
 
 /***/ }),
 
-/***/ "./src/LTGame/Config/LoadPackConfig.ts":
-/*!*********************************************!*\
-  !*** ./src/LTGame/Config/LoadPackConfig.ts ***!
-  \*********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Config/LoadPackConfig.ts":
+/*!***************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Config/LoadPackConfig.ts ***!
+  \***************************************************************************/
 /*! exports provided: LoadPackConfig, EPackType */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -216,10 +241,10 @@ var EPackType;
 
 /***/ }),
 
-/***/ "./src/LTGame/Fsm/BaseState.ts":
-/*!*************************************!*\
-  !*** ./src/LTGame/Fsm/BaseState.ts ***!
-  \*************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Fsm/BaseState.ts":
+/*!*******************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Fsm/BaseState.ts ***!
+  \*******************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -267,17 +292,17 @@ class BaseState {
 
 /***/ }),
 
-/***/ "./src/LTGame/Fsm/StateMachine.ts":
-/*!****************************************!*\
-  !*** ./src/LTGame/Fsm/StateMachine.ts ***!
-  \****************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Fsm/StateMachine.ts":
+/*!**********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Fsm/StateMachine.ts ***!
+  \**********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return StateMachine; });
-/* harmony import */ var _LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/LTDictionary */ "./src/LTGame/LTUtils/LTDictionary.ts");
+/* harmony import */ var _LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/LTDictionary */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTDictionary.ts");
 
 class StateMachine {
     constructor() {
@@ -330,10 +355,10 @@ class StateMachine {
 
 /***/ }),
 
-/***/ "./src/LTGame/LTUtils/ColorEx.ts":
-/*!***************************************!*\
-  !*** ./src/LTGame/LTUtils/ColorEx.ts ***!
-  \***************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/ColorEx.ts":
+/*!*********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/LTUtils/ColorEx.ts ***!
+  \*********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -376,10 +401,10 @@ class ColorEx {
 
 /***/ }),
 
-/***/ "./src/LTGame/LTUtils/LTDictionary.ts":
-/*!********************************************!*\
-  !*** ./src/LTGame/LTUtils/LTDictionary.ts ***!
-  \********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTDictionary.ts":
+/*!**************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/LTUtils/LTDictionary.ts ***!
+  \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -478,10 +503,10 @@ class LTDictionary {
 
 /***/ }),
 
-/***/ "./src/LTGame/LTUtils/LTUtils.ts":
-/*!***************************************!*\
-  !*** ./src/LTGame/LTUtils/LTUtils.ts ***!
-  \***************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTUtils.ts":
+/*!*********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/LTUtils/LTUtils.ts ***!
+  \*********************************************************************/
 /*! exports provided: LTUtils */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -520,15 +545,13 @@ class LTUtils {
     }
     static EnableShadow(directionLight, farDistance) {
         //灯光开启阴影
-        directionLight.shadow = true;
+        directionLight.shadowMode = Laya.ShadowMode.Hard;
         //可见阴影距离
         directionLight.shadowDistance = farDistance;
         //生成阴影贴图尺寸
         directionLight.shadowResolution = 1024;
         //生成阴影贴图数量
-        directionLight.shadowPSSMCount = 1;
-        //模糊等级,越大越高,更耗性能
-        directionLight.shadowPCFType = 3;
+        directionLight.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
     }
     static GetRes(resUrl, noClone = false) {
         var getRes = Laya.loader.getRes(resUrl);
@@ -701,10 +724,10 @@ LTUtils.ONE_DAY = 60 * 60 * 24;
 
 /***/ }),
 
-/***/ "./src/LTGame/LTUtils/MathEx.ts":
-/*!**************************************!*\
-  !*** ./src/LTGame/LTUtils/MathEx.ts ***!
-  \**************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/MathEx.ts":
+/*!********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/LTUtils/MathEx.ts ***!
+  \********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -804,10 +827,10 @@ MathEx.Rad2Deg = 57.2958;
 
 /***/ }),
 
-/***/ "./src/LTGame/LTUtils/MonoHelper.ts":
-/*!******************************************!*\
-  !*** ./src/LTGame/LTUtils/MonoHelper.ts ***!
-  \******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/MonoHelper.ts":
+/*!************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/LTUtils/MonoHelper.ts ***!
+  \************************************************************************/
 /*! exports provided: default, EActionType */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -891,10 +914,10 @@ var EActionType;
 
 /***/ }),
 
-/***/ "./src/LTGame/LTUtils/StringEx.ts":
-/*!****************************************!*\
-  !*** ./src/LTGame/LTUtils/StringEx.ts ***!
-  \****************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts":
+/*!**********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts ***!
+  \**********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -936,10 +959,10 @@ class StringEx {
 
 /***/ }),
 
-/***/ "./src/LTGame/LTVersion.ts":
-/*!*********************************!*\
-  !*** ./src/LTGame/LTVersion.ts ***!
-  \*********************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/LTVersion.ts":
+/*!***************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/LTVersion.ts ***!
+  \***************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -953,20 +976,20 @@ LTVersion.version = "0.0.1";
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/BDPlatform.ts":
-/*!*******************************************!*\
-  !*** ./src/LTGame/Platform/BDPlatform.ts ***!
-  \*******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/BDPlatform.ts":
+/*!*************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/BDPlatform.ts ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BDPlatform; });
-/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
-/* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
+/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/WXPlatform.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../LTUtils/StringEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Commom/CommonEventId */ "../../../../../p_02/code/laya/p_02/src/LTGame/Commom/CommonEventId.ts");
 
 
 
@@ -1112,10 +1135,10 @@ class BDPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/Data/LTPlatformData.ts":
-/*!****************************************************!*\
-  !*** ./src/LTGame/Platform/Data/LTPlatformData.ts ***!
-  \****************************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/Data/LTPlatformData.ts":
+/*!**********************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/Data/LTPlatformData.ts ***!
+  \**********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1133,18 +1156,18 @@ class LTPlatformData {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/DefaultPlatform.ts":
-/*!************************************************!*\
-  !*** ./src/LTGame/Platform/DefaultPlatform.ts ***!
-  \************************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/DefaultPlatform.ts":
+/*!******************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/DefaultPlatform.ts ***!
+  \******************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DefaultPlatform; });
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
 
 
 class DefaultPlatform {
@@ -1223,10 +1246,10 @@ class DefaultPlatform {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/EPlatformType.ts":
-/*!**********************************************!*\
-  !*** ./src/LTGame/Platform/EPlatformType.ts ***!
-  \**********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts":
+/*!****************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts ***!
+  \****************************************************************************/
 /*! exports provided: EPlatformType */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1249,18 +1272,18 @@ var EPlatformType;
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/LTPlatform.ts":
-/*!*******************************************!*\
-  !*** ./src/LTGame/Platform/LTPlatform.ts ***!
-  \*******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts":
+/*!*************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTPlatform; });
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _LTPlatformFactory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LTPlatformFactory */ "./src/LTGame/Platform/LTPlatformFactory.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTPlatformFactory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LTPlatformFactory */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatformFactory.ts");
 
 
 class LTPlatform {
@@ -1312,22 +1335,22 @@ class LTPlatform {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/LTPlatformFactory.ts":
-/*!**************************************************!*\
-  !*** ./src/LTGame/Platform/LTPlatformFactory.ts ***!
-  \**************************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatformFactory.ts":
+/*!********************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/LTPlatformFactory.ts ***!
+  \********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTPlatformFactory; });
-/* harmony import */ var _TTPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TTPlatform */ "./src/LTGame/Platform/TTPlatform.ts");
-/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
-/* harmony import */ var _BDPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BDPlatform */ "./src/LTGame/Platform/BDPlatform.ts");
-/* harmony import */ var _QTTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./QTTPlatform */ "./src/LTGame/Platform/QTTPlatform.ts");
-/* harmony import */ var _QQPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./QQPlatform */ "./src/LTGame/Platform/QQPlatform.ts");
-/* harmony import */ var _DefaultPlatform__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DefaultPlatform */ "./src/LTGame/Platform/DefaultPlatform.ts");
+/* harmony import */ var _TTPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/TTPlatform.ts");
+/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WXPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/WXPlatform.ts");
+/* harmony import */ var _BDPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BDPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/BDPlatform.ts");
+/* harmony import */ var _QTTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./QTTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/QTTPlatform.ts");
+/* harmony import */ var _QQPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./QQPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/QQPlatform.ts");
+/* harmony import */ var _DefaultPlatform__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DefaultPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/DefaultPlatform.ts");
 
 
 
@@ -1365,20 +1388,20 @@ class LTPlatformFactory {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/QQPlatform.ts":
-/*!*******************************************!*\
-  !*** ./src/LTGame/Platform/QQPlatform.ts ***!
-  \*******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/QQPlatform.ts":
+/*!*************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/QQPlatform.ts ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return QQPlatform; });
-/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/WXPlatform.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LTUtils/StringEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts");
 
 
 
@@ -1455,19 +1478,19 @@ class QQPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/QTTPlatform.ts":
-/*!********************************************!*\
-  !*** ./src/LTGame/Platform/QTTPlatform.ts ***!
-  \********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/QTTPlatform.ts":
+/*!**************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/QTTPlatform.ts ***!
+  \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return QTTPlatform; });
-/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
+/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/WXPlatform.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Commom/CommonEventId */ "../../../../../p_02/code/laya/p_02/src/LTGame/Commom/CommonEventId.ts");
 
 
 
@@ -1550,10 +1573,10 @@ class QTTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/ShareInfo.ts":
-/*!******************************************!*\
-  !*** ./src/LTGame/Platform/ShareInfo.ts ***!
-  \******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/ShareInfo.ts":
+/*!************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/ShareInfo.ts ***!
+  \************************************************************************/
 /*! exports provided: ShareInfo */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1566,19 +1589,19 @@ class ShareInfo {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/ShareManager.ts":
-/*!*********************************************!*\
-  !*** ./src/LTGame/Platform/ShareManager.ts ***!
-  \*********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/ShareManager.ts":
+/*!***************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/ShareManager.ts ***!
+  \***************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ShareManager; });
-/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _ShareInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShareInfo */ "./src/LTGame/Platform/ShareInfo.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/MathEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _ShareInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShareInfo */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/ShareInfo.ts");
 
 
 
@@ -1623,22 +1646,22 @@ class ShareManager {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/TTPlatform.ts":
-/*!*******************************************!*\
-  !*** ./src/LTGame/Platform/TTPlatform.ts ***!
-  \*******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/TTPlatform.ts":
+/*!*************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/TTPlatform.ts ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TTPlatform; });
-/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _ShareManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ShareManager */ "./src/LTGame/Platform/ShareManager.ts");
-/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WXPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/WXPlatform.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../LTUtils/MathEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _ShareManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ShareManager */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/ShareManager.ts");
+/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUtils/StringEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts");
 
 
 
@@ -1818,22 +1841,22 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 /***/ }),
 
-/***/ "./src/LTGame/Platform/WXPlatform.ts":
-/*!*******************************************!*\
-  !*** ./src/LTGame/Platform/WXPlatform.ts ***!
-  \*******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/WXPlatform.ts":
+/*!*************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Platform/WXPlatform.ts ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return WXPlatform; });
-/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _ShareManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShareManager */ "./src/LTGame/Platform/ShareManager.ts");
-/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
+/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/StringEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _ShareManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShareManager */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/ShareManager.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUtils/MathEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Commom/CommonEventId */ "../../../../../p_02/code/laya/p_02/src/LTGame/Commom/CommonEventId.ts");
 
 
 
@@ -2293,10 +2316,10 @@ class WXPlatform {
 
 /***/ }),
 
-/***/ "./src/LTGame/Res/LTRes.ts":
-/*!*********************************!*\
-  !*** ./src/LTGame/Res/LTRes.ts ***!
-  \*********************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Res/LTRes.ts":
+/*!***************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Res/LTRes.ts ***!
+  \***************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2329,20 +2352,20 @@ class LTRes {
 
 /***/ }),
 
-/***/ "./src/LTGame/Res/LTRespackManager.ts":
-/*!********************************************!*\
-  !*** ./src/LTGame/Res/LTRespackManager.ts ***!
-  \********************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Res/LTRespackManager.ts":
+/*!**************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Res/LTRespackManager.ts ***!
+  \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTRespackManager; });
-/* harmony import */ var _Config_LoadPackConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Config/LoadPackConfig */ "./src/LTGame/Config/LoadPackConfig.ts");
-/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _Config_LoadPackConfig__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Config/LoadPackConfig */ "../../../../../p_02/code/laya/p_02/src/LTGame/Config/LoadPackConfig.ts");
+/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../LTUtils/StringEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Platform/LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Platform/EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
 
 
 
@@ -2450,26 +2473,59 @@ class LTRespackManager {
 
 /***/ }),
 
-/***/ "./src/LTGame/Start/LTMain.ts":
-/*!************************************!*\
-  !*** ./src/LTGame/Start/LTMain.ts ***!
-  \************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/ESceneType.ts":
+/*!**********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Start/ESceneType.ts ***!
+  \**********************************************************************/
+/*! exports provided: ESceneType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESceneType", function() { return ESceneType; });
+var ESceneType;
+(function (ESceneType) {
+    ESceneType[ESceneType["None"] = 0] = "None";
+    ESceneType[ESceneType["Splash"] = 1] = "Splash";
+    ESceneType[ESceneType["Main"] = 2] = "Main";
+})(ESceneType || (ESceneType = {}));
+
+
+/***/ }),
+
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/LTMain.ts":
+/*!******************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Start/LTMain.ts ***!
+  \******************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTMain; });
+/* harmony import */ var _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Commom/EScreenOrientation */ "../../../../../p_02/code/laya/p_02/src/LTGame/Commom/EScreenOrientation.ts");
+
 class LTMain {
     constructor(mainLogicClass) {
+        this._mainLogic = new mainLogicClass();
         let config3D = new Config3D();
         config3D.octreeCulling = false;
         config3D.enableMultiLight = false;
         config3D.isAntialias = true;
         //根据IDE设置初始化引擎
-        Laya3D.init(750, 1334, config3D, Laya.Handler.create(null, () => {
-            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_WIDTH;
-            Laya.stage.screenMode = Laya.Stage.SCREEN_VERTICAL;
+        Laya3D.init(this._mainLogic.designWidth, this._mainLogic.designHeight, config3D, Laya.Handler.create(null, () => {
+            switch (this._mainLogic.screenOrientation) {
+                case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_0__["EScreenOrientation"].Landscape:
+                    Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
+                    break;
+                case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_0__["EScreenOrientation"].Portrait:
+                    Laya.stage.screenMode = Laya.Stage.SCREEN_VERTICAL;
+                    break;
+                default:
+                    console.error("未处理的屏幕初始化方向", this._mainLogic.screenOrientation);
+                    break;
+            }
+            Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_AUTO;
             Laya.stage.alignV = Laya.Stage.ALIGN_MIDDLE;
             Laya.stage.alignH = Laya.Stage.ALIGN_CENTER;
             //兼容微信不支持加载scene后缀场景
@@ -2477,9 +2533,11 @@ class LTMain {
             //打开调试面板（通过IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
             // if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
             // if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
-            // Laya.Stat.show();
-            Laya.alertGlobalError = false;
-            this._mainLogic = new mainLogicClass();
+            if (this._mainLogic.enableStat) {
+                Laya.Stat.show();
+            }
+            Laya.alertGlobalError(false);
+            this._mainLogic.InitGame();
         }));
     }
 }
@@ -2487,23 +2545,23 @@ class LTMain {
 
 /***/ }),
 
-/***/ "./src/LTGame/Start/LTSplashScene.ts":
-/*!*******************************************!*\
-  !*** ./src/LTGame/Start/LTSplashScene.ts ***!
-  \*******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/LTSplashScene.ts":
+/*!*************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Start/LTSplashScene.ts ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTSplashScene; });
-/* harmony import */ var _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Fsm/BaseState */ "./src/LTGame/Fsm/BaseState.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _UIExt_FGui_FGuiData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../UIExt/FGui/FGuiData */ "./src/LTGame/UIExt/FGui/FGuiData.ts");
-/* harmony import */ var _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Res/LTRespackManager */ "./src/LTGame/Res/LTRespackManager.ts");
-/* harmony import */ var _Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Config/ConfigManager */ "./src/LTGame/Config/ConfigManager.ts");
-/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Fsm/BaseState */ "../../../../../p_02/code/laya/p_02/src/LTGame/Fsm/BaseState.ts");
+/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Platform/LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _UIExt_FGui_FGuiData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../UIExt/FGui/FGuiData */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiData.ts");
+/* harmony import */ var _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Res/LTRespackManager */ "../../../../../p_02/code/laya/p_02/src/LTGame/Res/LTRespackManager.ts");
+/* harmony import */ var _Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Config/ConfigManager */ "../../../../../p_02/code/laya/p_02/src/LTGame/Config/ConfigManager.ts");
+/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiEx.ts");
+/* harmony import */ var _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Res/LTRes */ "../../../../../p_02/code/laya/p_02/src/LTGame/Res/LTRes.ts");
 
 
 
@@ -2658,24 +2716,26 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
 
 /***/ }),
 
-/***/ "./src/LTGame/Start/LTStart.ts":
-/*!*************************************!*\
-  !*** ./src/LTGame/Start/LTStart.ts ***!
-  \*************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/LTStart.ts":
+/*!*******************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/Start/LTStart.ts ***!
+  \*******************************************************************/
 /*! exports provided: LTStart */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTStart", function() { return LTStart; });
-/* harmony import */ var _Fsm_StateMachine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Fsm/StateMachine */ "./src/LTGame/Fsm/StateMachine.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _Platform_Data_LTPlatformData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Platform/Data/LTPlatformData */ "./src/LTGame/Platform/Data/LTPlatformData.ts");
-/* harmony import */ var _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Res/LTRespackManager */ "./src/LTGame/Res/LTRespackManager.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
-/* harmony import */ var _LTVersion__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../LTVersion */ "./src/LTGame/LTVersion.ts");
+/* harmony import */ var _Fsm_StateMachine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Fsm/StateMachine */ "../../../../../p_02/code/laya/p_02/src/LTGame/Fsm/StateMachine.ts");
+/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Platform/LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _Platform_Data_LTPlatformData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Platform/Data/LTPlatformData */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/Data/LTPlatformData.ts");
+/* harmony import */ var _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Res/LTRespackManager */ "../../../../../p_02/code/laya/p_02/src/LTGame/Res/LTRespackManager.ts");
+/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Platform/EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiEx.ts");
+/* harmony import */ var _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTUtils/MonoHelper */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTVersion__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../LTVersion */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTVersion.ts");
+/* harmony import */ var _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Commom/EScreenOrientation */ "../../../../../p_02/code/laya/p_02/src/LTGame/Commom/EScreenOrientation.ts");
+
 
 
 
@@ -2688,8 +2748,8 @@ class LTStart {
     constructor() {
         this._jsonPath = "subpack.json";
         this.__enableStat = false;
-        console.log("游戏开始初始化,当前框架版本号", _LTVersion__WEBPACK_IMPORTED_MODULE_7__["default"].version);
-        Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        this.enableStat = false;
+        this.screenOrientation = _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Portrait;
     }
     get _currentState() {
         return this._fsm.currState;
@@ -2697,11 +2757,31 @@ class LTStart {
     get _enableStat() {
         return this.__enableStat;
     }
-    set _enableStat(value) {
-        if (value == this.__enableStat)
-            return;
-        Laya.Stat.show();
-        this.__enableStat = value;
+    get designWidth() {
+        switch (this.screenOrientation) {
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Portrait:
+                return 750;
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Landscape:
+                return 1334;
+            default:
+                console.error("未处理的屏幕初始化方向", this.screenOrientation);
+                return 0;
+        }
+    }
+    get designHeight() {
+        switch (this.screenOrientation) {
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Portrait:
+                return 1334;
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Landscape:
+                return 750;
+            default:
+                console.error("未处理的屏幕初始化方向", this.screenOrientation);
+                return 0;
+        }
+    }
+    InitGame() {
+        console.log("游戏开始初始化,当前框架版本号", _LTVersion__WEBPACK_IMPORTED_MODULE_7__["default"].version);
+        Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
     }
     _OnJsonLoaded() {
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].CreateInstance();
@@ -2771,16 +2851,20 @@ class LTStart {
 
 /***/ }),
 
-/***/ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts":
-/*!*************************************************!*\
-  !*** ./src/LTGame/UIExt/FGui/BaseUIMediator.ts ***!
-  \*************************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/BaseUIMediator.ts":
+/*!*******************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/UIExt/FGui/BaseUIMediator.ts ***!
+  \*******************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BaseUIMediator; });
+/* harmony import */ var _FGuiEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FGuiEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiEx.ts");
+/* harmony import */ var _FGuiData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FGuiData */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiData.ts");
+
+
 class BaseUIMediator {
     constructor() {
         this._scaleSmall = 0.8;
@@ -2806,6 +2890,11 @@ class BaseUIMediator {
             return;
         bottomGroup.y = this._defaultBottomHeight + downDistance;
     }
+    Show() {
+        let uiData = new _FGuiData__WEBPACK_IMPORTED_MODULE_1__["default"]();
+        this._ui = _FGuiEx__WEBPACK_IMPORTED_MODULE_0__["default"].AddUI(this._classDefine, uiData);
+        this._OnShow();
+    }
     _OnShow() {
         this._isShow = true;
     }
@@ -2830,10 +2919,10 @@ class BaseUIMediator {
 
 /***/ }),
 
-/***/ "./src/LTGame/UIExt/FGui/FGuiData.ts":
-/*!*******************************************!*\
-  !*** ./src/LTGame/UIExt/FGui/FGuiData.ts ***!
-  \*******************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiData.ts":
+/*!*************************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiData.ts ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2852,18 +2941,18 @@ class FGuiData {
 
 /***/ }),
 
-/***/ "./src/LTGame/UIExt/FGui/FGuiEx.ts":
-/*!*****************************************!*\
-  !*** ./src/LTGame/UIExt/FGui/FGuiEx.ts ***!
-  \*****************************************/
+/***/ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiEx.ts":
+/*!***********************************************************************!*\
+  !*** D:/Projects/p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiEx.ts ***!
+  \***********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FGuiEx; });
-/* harmony import */ var _LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTUtils/LTDictionary */ "./src/LTGame/LTUtils/LTDictionary.ts");
-/* harmony import */ var _FGuiData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FGuiData */ "./src/LTGame/UIExt/FGui/FGuiData.ts");
+/* harmony import */ var _LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTUtils/LTDictionary */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTDictionary.ts");
+/* harmony import */ var _FGuiData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FGuiData */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/FGuiData.ts");
 
 
 class FGuiEx {
@@ -2953,7 +3042,7 @@ FGuiEx._cacheMap = new _LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__["defau
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _LTGame_Start_LTMain__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LTGame/Start/LTMain */ "./src/LTGame/Start/LTMain.ts");
+/* harmony import */ var _LTGame_Start_LTMain__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LTGame/Start/LTMain */ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/LTMain.ts");
 /* harmony import */ var _script_MainStart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./script/MainStart */ "./src/script/MainStart.ts");
 
 
@@ -2972,12 +3061,12 @@ new _LTGame_Start_LTMain__WEBPACK_IMPORTED_MODULE_0__["default"](_script_MainSta
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MainStart; });
-/* harmony import */ var _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTGame/Start/LTStart */ "./src/LTGame/Start/LTStart.ts");
+/* harmony import */ var _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTGame/Start/LTStart */ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/LTStart.ts");
 /* harmony import */ var _scene_SplashScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scene/SplashScene */ "./src/script/scene/SplashScene.ts");
 /* harmony import */ var _scene_MainScene__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scene/MainScene */ "./src/script/scene/MainScene.ts");
-/* harmony import */ var _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LTGame/Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTGame/Res/LTRespackManager */ "./src/LTGame/Res/LTRespackManager.ts");
+/* harmony import */ var _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LTGame/Platform/EPlatformType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTGame/Platform/LTPlatform */ "../../../../../p_02/code/laya/p_02/src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTGame/Res/LTRespackManager */ "../../../../../p_02/code/laya/p_02/src/LTGame/Res/LTRespackManager.ts");
 
 
 
@@ -2988,7 +3077,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
     constructor() {
         super();
         this._appId = "wx149cdd1b3b19378f";
-        this._enableStat = true;
+        this.enableStat = true;
     }
     _HandleInitPlatform(ePlatform, platformData) {
         let version = "v0.0.1";
@@ -3059,7 +3148,7 @@ GameConst.halfRoadWidth = 3.5;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SaveData", function() { return SaveData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameData; });
-/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/StringEx.ts");
 
 class SaveData {
     constructor() {
@@ -3282,8 +3371,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CameraManager; });
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
 /* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
-/* harmony import */ var _LTGame_LTUtils_ColorEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/ColorEx */ "./src/LTGame/LTUtils/ColorEx.ts");
+/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTGame_LTUtils_ColorEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/ColorEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/ColorEx.ts");
 /* harmony import */ var _common_GameConst__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../common/GameConst */ "./src/script/common/GameConst.ts");
 
 
@@ -3335,7 +3424,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameManager; });
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
 /* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTUtils.ts");
 /* harmony import */ var _RoadManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RoadManager */ "./src/script/manager/RoadManager.ts");
 /* harmony import */ var _PlayerManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PlayerManager */ "./src/script/manager/PlayerManager.ts");
 /* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
@@ -3420,7 +3509,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayerManager; });
 /* harmony import */ var _player_ModelPlayer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../player/ModelPlayer */ "./src/script/player/ModelPlayer.ts");
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
-/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTUtils.ts");
 /* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
 
 
@@ -3457,14 +3546,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RoadManager; });
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
 /* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTUtils */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/LTUtils.ts");
 /* harmony import */ var _common_GameConst__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/GameConst */ "./src/script/common/GameConst.ts");
 /* harmony import */ var _config_PropConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/PropConfig */ "./src/script/config/PropConfig.ts");
 /* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
 /* harmony import */ var _common_GameData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common/GameData */ "./src/script/common/GameData.ts");
 /* harmony import */ var _AudioManager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AudioManager */ "./src/script/manager/AudioManager.ts");
-/* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
-/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "../../../../../p_02/code/laya/p_02/src/LTGame/Async/Awaiters.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "../../../../../p_02/code/laya/p_02/src/LTGame/Res/LTRes.ts");
 
 
 
@@ -3552,7 +3641,7 @@ class RoadManager {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ModelPlayer; });
 /* harmony import */ var _common_GameConst__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/GameConst */ "./src/script/common/GameConst.ts");
-/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "../../../../../p_02/code/laya/p_02/src/LTGame/LTUtils/MathEx.ts");
 /* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
 /* harmony import */ var _manager_AudioManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../manager/AudioManager */ "./src/script/manager/AudioManager.ts");
 /* harmony import */ var _config_PropConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/PropConfig */ "./src/script/config/PropConfig.ts");
@@ -3635,26 +3724,6 @@ class ModelPlayer {
 
 /***/ }),
 
-/***/ "./src/script/scene/ESceneType.ts":
-/*!****************************************!*\
-  !*** ./src/script/scene/ESceneType.ts ***!
-  \****************************************/
-/*! exports provided: ESceneType */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESceneType", function() { return ESceneType; });
-var ESceneType;
-(function (ESceneType) {
-    ESceneType[ESceneType["None"] = 0] = "None";
-    ESceneType[ESceneType["Splash"] = 1] = "Splash";
-    ESceneType[ESceneType["Main"] = 2] = "Main";
-})(ESceneType || (ESceneType = {}));
-
-
-/***/ }),
-
 /***/ "./src/script/scene/MainScene.ts":
 /*!***************************************!*\
   !*** ./src/script/scene/MainScene.ts ***!
@@ -3665,26 +3734,26 @@ var ESceneType;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MainScene; });
-/* harmony import */ var _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Fsm/BaseState */ "./src/LTGame/Fsm/BaseState.ts");
-/* harmony import */ var _ESceneType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ESceneType */ "./src/script/scene/ESceneType.ts");
-/* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Fsm/BaseState */ "../../../../../p_02/code/laya/p_02/src/LTGame/Fsm/BaseState.ts");
+/* harmony import */ var _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Start/ESceneType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/ESceneType.ts");
 
 
 
 
-class MainScene extends _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class MainScene extends _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_2__["default"] {
     constructor() {
-        super(_ESceneType__WEBPACK_IMPORTED_MODULE_1__["ESceneType"].Main);
+        super(_LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_3__["ESceneType"].Main);
     }
     _DoEnter() {
-        _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__["UI_MainMediator"].instance.Show();
+        _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_0__["UI_MainMediator"].instance.Show();
     }
     _DoRunning() {
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].gameManager.LogicUpdate(this.deltaTime);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].gameManager.LogicUpdate(this.deltaTime);
     }
     _DoLateUpdate() {
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].gameManager.LateUpdate(this.deltaTime);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].gameManager.LateUpdate(this.deltaTime);
     }
 }
 
@@ -3702,15 +3771,15 @@ class MainScene extends _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["defa
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SplashScene; });
 /* harmony import */ var _ui_Load_UI_splash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../ui/Load/UI_splash */ "./src/ui/Load/UI_splash.ts");
-/* harmony import */ var _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/Start/LTSplashScene */ "./src/LTGame/Start/LTSplashScene.ts");
+/* harmony import */ var _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/Start/LTSplashScene */ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/LTSplashScene.ts");
 /* harmony import */ var _ui_Load_LoadBinder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ui/Load/LoadBinder */ "./src/ui/Load/LoadBinder.ts");
 /* harmony import */ var _ui_Main_MainBinder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../ui/Main/MainBinder */ "./src/ui/Main/MainBinder.ts");
-/* harmony import */ var _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Config/ConfigManager */ "./src/LTGame/Config/ConfigManager.ts");
+/* harmony import */ var _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Config/ConfigManager */ "../../../../../p_02/code/laya/p_02/src/LTGame/Config/ConfigManager.ts");
 /* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
-/* harmony import */ var _ESceneType__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ESceneType */ "./src/script/scene/ESceneType.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _config_AudioConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/AudioConfig */ "./src/script/config/AudioConfig.ts");
-/* harmony import */ var _config_PropConfig__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config/PropConfig */ "./src/script/config/PropConfig.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _config_AudioConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/AudioConfig */ "./src/script/config/AudioConfig.ts");
+/* harmony import */ var _config_PropConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/PropConfig */ "./src/script/config/PropConfig.ts");
+/* harmony import */ var _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTGame/Start/ESceneType */ "../../../../../p_02/code/laya/p_02/src/LTGame/Start/ESceneType.ts");
 
 
 
@@ -3732,15 +3801,15 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
     }
     _OnSetLoadConfig() {
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_LevelConfig__WEBPACK_IMPORTED_MODULE_5__["LevelConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_AudioConfig__WEBPACK_IMPORTED_MODULE_8__["AudioConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_PropConfig__WEBPACK_IMPORTED_MODULE_9__["PropConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_AudioConfig__WEBPACK_IMPORTED_MODULE_7__["AudioConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_PropConfig__WEBPACK_IMPORTED_MODULE_8__["PropConfig"]);
     }
     _OnGameResPrepared(urls) {
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_7__["default"].InitAll();
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_7__["default"].gameManager.Preload(urls);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_6__["default"].InitAll();
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_6__["default"].gameManager.Preload(urls);
     }
     _OnGameResLoaded() {
-        this.nextState = _ESceneType__WEBPACK_IMPORTED_MODULE_6__["ESceneType"].Main;
+        this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_9__["ESceneType"].Main;
     }
 }
 
@@ -3757,12 +3826,10 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_DeadMediator", function() { return UI_DeadMediator; });
-/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_Dead__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Dead */ "./src/ui/Main/UI_Dead.ts");
-/* harmony import */ var _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
-
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
 
 
 
@@ -3771,21 +3838,18 @@ class UI_DeadMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_DeadMediator();
+            this._instance._classDefine = _ui_Main_UI_Dead__WEBPACK_IMPORTED_MODULE_1__["default"];
         }
         return this._instance;
-    }
-    Show() {
-        this._ui = _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__["default"].AddUI(_ui_Main_UI_Dead__WEBPACK_IMPORTED_MODULE_1__["default"]);
-        this._OnShow();
     }
     _OnShow() {
         super._OnShow();
         this.ui.m_btn_continue.onClick(this, this._OnClickContinue);
     }
     _OnClickContinue() {
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].gameManager.ClearGame();
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].gameManager.ClearGame();
         this.Hide();
-        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_4__["UI_MainMediator"].instance.Show();
+        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_3__["UI_MainMediator"].instance.Show();
     }
 }
 
@@ -3802,11 +3866,9 @@ class UI_DeadMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_FightMediator", function() { return UI_FightMediator; });
-/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_Fight__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Fight */ "./src/ui/Main/UI_Fight.ts");
-/* harmony import */ var _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
 
 
 
@@ -3814,12 +3876,9 @@ class UI_FightMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORT
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_FightMediator();
+            this._instance._classDefine = _ui_Main_UI_Fight__WEBPACK_IMPORTED_MODULE_1__["default"];
         }
         return this._instance;
-    }
-    Show() {
-        this._ui = _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__["default"].AddUI(_ui_Main_UI_Fight__WEBPACK_IMPORTED_MODULE_1__["default"]);
-        this._OnShow();
     }
     _OnShow() {
         super._OnShow();
@@ -3845,7 +3904,7 @@ class UI_FightMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORT
         let xOffset = event.stageX - this._lastPos.x;
         this._lastPos.x = event.stageX;
         let xProgress = -xOffset / Laya.stage.width;
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].gameManager.playerManager.mainPlayer.MoveX(xProgress);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].gameManager.playerManager.mainPlayer.MoveX(xProgress);
     }
     _OnMouseUp(event) {
         if (!this._isPressed)
@@ -3872,22 +3931,17 @@ class UI_FightMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORT
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_LoadMediator", function() { return UI_LoadMediator; });
-/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_Load__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Load */ "./src/ui/Main/UI_Load.ts");
-/* harmony import */ var _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-
 
 
 class UI_LoadMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_LoadMediator();
+            this._instance._classDefine = _ui_Main_UI_Load__WEBPACK_IMPORTED_MODULE_1__["default"];
         }
         return this._instance;
-    }
-    Show() {
-        this._ui = _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__["default"].AddUI(_ui_Main_UI_Load__WEBPACK_IMPORTED_MODULE_1__["default"]);
-        this._OnShow();
     }
     _OnShow() {
         super._OnShow();
@@ -3907,14 +3961,12 @@ class UI_LoadMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_MainMediator", function() { return UI_MainMediator; });
-/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_Main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Main */ "./src/ui/Main/UI_Main.ts");
-/* harmony import */ var _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _UI_FightMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
-/* harmony import */ var _UI_LoadMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_LoadMediator */ "./src/script/ui/UI_LoadMediator.ts");
-/* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
-
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _UI_FightMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _UI_LoadMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_LoadMediator */ "./src/script/ui/UI_LoadMediator.ts");
+/* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "../../../../../p_02/code/laya/p_02/src/LTGame/Async/Awaiters.ts");
 
 
 
@@ -3925,12 +3977,9 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_MainMediator();
+            this._instance._classDefine = _ui_Main_UI_Main__WEBPACK_IMPORTED_MODULE_1__["default"];
         }
         return this._instance;
-    }
-    Show() {
-        this._ui = _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__["default"].AddUI(_ui_Main_UI_Main__WEBPACK_IMPORTED_MODULE_1__["default"]);
-        this._OnShow();
     }
     _OnShow() {
         super._OnShow();
@@ -3939,13 +3988,13 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
     _OnClickStart() {
         return __awaiter(this, void 0, void 0, function* () {
             this.Hide();
-            _UI_LoadMediator__WEBPACK_IMPORTED_MODULE_5__["UI_LoadMediator"].instance.Show();
-            yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_6__["default"].NextFrame();
-            yield _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].gameManager.CreateGame();
-            yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_6__["default"].NextFrame();
-            _UI_FightMediator__WEBPACK_IMPORTED_MODULE_4__["UI_FightMediator"].instance.Show();
-            _UI_LoadMediator__WEBPACK_IMPORTED_MODULE_5__["UI_LoadMediator"].instance.Hide();
-            _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].gameManager.StartGame();
+            _UI_LoadMediator__WEBPACK_IMPORTED_MODULE_4__["UI_LoadMediator"].instance.Show();
+            yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_5__["default"].NextFrame();
+            yield _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].gameManager.CreateGame();
+            yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_5__["default"].NextFrame();
+            _UI_FightMediator__WEBPACK_IMPORTED_MODULE_3__["UI_FightMediator"].instance.Show();
+            _UI_LoadMediator__WEBPACK_IMPORTED_MODULE_4__["UI_LoadMediator"].instance.Hide();
+            _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].gameManager.StartGame();
         });
     }
 }
@@ -3963,12 +4012,10 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_PassMediator", function() { return UI_PassMediator; });
-/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "../../../../../p_02/code/laya/p_02/src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_Pass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Pass */ "./src/ui/Main/UI_Pass.ts");
-/* harmony import */ var _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
-
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
 
 
 
@@ -3977,21 +4024,18 @@ class UI_PassMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_PassMediator();
+            this._instance._classDefine = _ui_Main_UI_Pass__WEBPACK_IMPORTED_MODULE_1__["default"];
         }
         return this._instance;
-    }
-    Show() {
-        this._ui = _LTGame_UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_2__["default"].AddUI(_ui_Main_UI_Pass__WEBPACK_IMPORTED_MODULE_1__["default"]);
-        this._OnShow();
     }
     _OnShow() {
         super._OnShow();
         this.ui.m_btn_continue.onClick(this, this._OnClickContinue);
     }
     _OnClickContinue() {
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].gameManager.ClearGame();
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].gameManager.ClearGame();
         this.Hide();
-        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_4__["UI_MainMediator"].instance.Show();
+        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_3__["UI_MainMediator"].instance.Show();
     }
 }
 

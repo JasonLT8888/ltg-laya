@@ -8,6 +8,7 @@ import FGuiEx from "../UIExt/FGui/FGuiEx";
 import MonoHelper, { EActionType } from "../LTUtils/MonoHelper";
 import BaseState from "../Fsm/BaseState";
 import LTVersion from "../LTVersion";
+import { EScreenOrientation } from "../Commom/EScreenOrientation";
 
 export class LTStart {
 
@@ -23,15 +24,41 @@ export class LTStart {
     protected get _enableStat(): boolean {
         return this.__enableStat;
     }
-    protected set _enableStat(value: boolean) {
-        if (value == this.__enableStat) return;
-        Laya.Stat.show();
-        this.__enableStat = value;
+    
+    public enableStat: boolean = false;
+
+    public screenOrientation: EScreenOrientation = EScreenOrientation.Portrait;
+
+    public get designWidth(): number {
+        switch (this.screenOrientation) {
+            case EScreenOrientation.Portrait:
+                return 750;
+            case EScreenOrientation.Landscape:
+                return 1334;
+            default:
+                console.error("未处理的屏幕初始化方向", this.screenOrientation);
+                return 0;
+        }
+    }
+
+    public get designHeight(): number {
+        switch (this.screenOrientation) {
+            case EScreenOrientation.Portrait:
+                return 1334;
+            case EScreenOrientation.Landscape:
+                return 750;
+            default:
+                console.error("未处理的屏幕初始化方向", this.screenOrientation);
+                return 0;
+        }
     }
 
     constructor() {
-        console.log("游戏开始初始化,当前框架版本号", LTVersion.version);
 
+    }
+
+    public InitGame() {
+        console.log("游戏开始初始化,当前框架版本号", LTVersion.version);
         Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
     }
 

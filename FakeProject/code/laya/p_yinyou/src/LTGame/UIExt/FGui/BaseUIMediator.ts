@@ -1,3 +1,6 @@
+import FGuiEx from "./FGuiEx";
+import FGuiData from "./FGuiData";
+
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
     protected _tweenTime: number = 180;
@@ -6,6 +9,8 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         return this._ui;
     }
     protected _ui: T;
+
+    protected _classDefine: any;
 
     public owner: any;
 
@@ -25,6 +30,12 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         let bottomGroup = this.ui["m_bottom_group"];
         if (bottomGroup == null) return;
         bottomGroup.y = this._defaultBottomHeight + downDistance;
+    }
+
+    public Show() {
+        let uiData = new FGuiData();
+        this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
+        this._OnShow();
     }
 
     protected _OnShow() {

@@ -10,13 +10,9 @@ export class UI_FightMediator extends BaseUIMediator<UI_Fight> {
     public static get instance(): UI_FightMediator {
         if (this._instance == null) {
             this._instance = new UI_FightMediator();
+            this._instance._classDefine = UI_Fight;
         }
         return this._instance;
-    }
-
-    public Show() {
-        this._ui = FGuiEx.AddUI(UI_Fight) as UI_Fight;
-        this._OnShow();
     }
 
     private _cacheTouchId: number;

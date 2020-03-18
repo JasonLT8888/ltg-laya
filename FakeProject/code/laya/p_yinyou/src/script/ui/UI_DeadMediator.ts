@@ -1,6 +1,5 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Dead from "../../ui/Main/UI_Dead";
-import FGuiEx from "../../LTGame/UIExt/FGui/FGuiEx";
 import GlobalUnit from "../common/GlobalUnit";
 import { UI_MainMediator } from "./UI_MainMediator";
 
@@ -10,14 +9,11 @@ export class UI_DeadMediator extends BaseUIMediator<UI_Dead> {
     public static get instance(): UI_DeadMediator {
         if (this._instance == null) {
             this._instance = new UI_DeadMediator();
+            this._instance._classDefine = UI_Dead;
         }
         return this._instance;
     }
 
-    public Show() {
-        this._ui = FGuiEx.AddUI(UI_Dead) as UI_Dead;
-        this._OnShow();
-    }
 
     _OnShow() {
         super._OnShow();

@@ -8,13 +8,9 @@ export class UI_LoadMediator extends BaseUIMediator<UI_Load> {
     public static get instance(): UI_LoadMediator {
         if (this._instance == null) {
             this._instance = new UI_LoadMediator();
+            this._instance._classDefine = UI_Load;
         }
         return this._instance;
-    }
-
-    public Show() {
-        this._ui = FGuiEx.AddUI(UI_Load) as UI_Load;
-        this._OnShow();
     }
 
     _OnShow() {

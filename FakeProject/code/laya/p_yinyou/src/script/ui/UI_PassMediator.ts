@@ -10,13 +10,9 @@ export class UI_PassMediator extends BaseUIMediator<UI_Pass> {
     public static get instance(): UI_PassMediator {
         if (this._instance == null) {
             this._instance = new UI_PassMediator();
+            this._instance._classDefine = UI_Pass;
         }
         return this._instance;
-    }
-
-    public Show() {
-        this._ui = FGuiEx.AddUI(UI_Pass) as UI_Pass;
-        this._OnShow();
     }
 
     _OnShow() {
