@@ -6,7 +6,7 @@
 	"binaryFormat":true,
 	"codeGeneration":{
 		"classNamePrefix":"UI_",
-		"codePath":"D:\\Work_Projects\\p_yinyou\\code\\laya\\p_yinyou\\src\\ui",
+		"codePath":"..\\..\\laya\\p_yinyou\\src\\ui",
 		"codeType":"TS-2",
 		"getMemberByName":false,
 		"ignoreNoname":true,
@@ -16,5 +16,5 @@
 	"compressDesc":false,
 	"fileExtension":"bin",
 	"packageCount":2,
-	"path":"D:\\Work_Projects\\p_yinyou\\code\\laya\\p_yinyou\\bin\\res\\fgui"
+	"path":"..\\..\\laya\\p_yinyou\\bin\\res\\fgui"
 }
