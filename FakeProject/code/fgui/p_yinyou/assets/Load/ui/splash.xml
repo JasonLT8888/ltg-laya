@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://n3oedpp6m8kn9" designImageOffsetX="43">
+  <displayList>
+    <loader id="n5_10q8e" name="bg" xy="0,0" pivot="0.5,0.5" size="750,1334" url="ui://n3oedpp6m8kn8" align="center" vAlign="middle" fill="scaleMatchHeight">
+      <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
+    </loader>
+    <component id="n2_tjpp" name="progress" src="nihr1" fileName="cmp/progress_simple.xml" xy="82,1244">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <ProgressBar value="100" max="100"/>
+    </component>
+  </displayList>
+</component>

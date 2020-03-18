@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n0_cc4x" name="bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#00000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1_cc4x" name="text_combo" xy="33,190" size="119,31" fontSize="24" color="#ffffff" text="Combo:11">
+      <relation target="" sidePair="left-left,top-top"/>
+    </text>
+  </displayList>
+</component>

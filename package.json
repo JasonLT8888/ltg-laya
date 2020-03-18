@@ -1,0 +1,18 @@
+{
+  "name": "ltg-laya",
+  "version": "1.0.0",
+  "description": "ltg-laya",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghostwolfliu/ltg-laya.git"
+  },
+  "author": "lt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ghostwolfliu/ltg-laya/issues"
+  },
+  "homepage": "https://github.com/ghostwolfliu/ltg-laya#readme"
+}

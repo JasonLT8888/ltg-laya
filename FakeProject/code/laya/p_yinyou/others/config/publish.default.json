@@ -1,0 +1,12 @@
+{
+    "appid": "",
+    "forceRemote": [
+        "res/config"
+    ],
+    "forceInPack": [
+        "res/fgui_load"
+    ],
+    "maxSinglePackSize": 4,
+    "maxTotalPackSize": 8,
+    "packType": 1
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="kk7g5mmm">
+  <resources>
+    <component id="jhmq1" name="Main.xml" path="/ui/" exported="true"/>
+    <image id="cc4x2" name="btn_huanganniu.png" path="/img/" scale="9grid" scale9grid="30,30,72,54"/>
+    <component id="cc4x3" name="btn_text.xml" path="/cmp/"/>
+    <component id="cc4x4" name="Fight.xml" path="/ui/" exported="true"/>
+    <component id="k28i5" name="Load.xml" path="/ui/" exported="true"/>
+    <component id="t3pe6" name="Dead.xml" path="/ui/" exported="true"/>
+    <component id="t3pe7" name="Pass.xml" path="/ui/" exported="true"/>
+  </resources>
+  <publish name="Main" genCode="true"/>
+</packageDescription>
