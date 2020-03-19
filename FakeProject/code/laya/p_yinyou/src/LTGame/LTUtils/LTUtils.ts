@@ -1,3 +1,4 @@
+import UI_CommomToastMediator from "../UIExt/DefaultUI/UI_CommomToastMediator";
 
 
 export class LTUtils {
@@ -44,13 +45,8 @@ export class LTUtils {
         directionLight.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
     }
 
-    public static GetRes(resUrl: string, noClone: boolean = false): Laya.Sprite3D {
-        var getRes = Laya.loader.getRes(resUrl);
-        if (getRes == null) {
-            console.error("资源尚未加载", resUrl);
-            return null;
-        }
-        return noClone ? getRes : getRes.clone();
+    public static Toast(str: string) {
+        UI_CommomToastMediator.instance.Show(str);
     }
 
     public static FindChild(parent: Laya.Sprite3D, path: string): Laya.Sprite3D {
@@ -101,10 +97,10 @@ export class LTUtils {
         return num.toFixed(1) + this._strMap[count];
     }
 
-        /**
-     * 获得金币字符串显示
-     * @param num 
-     */
+    /**
+ * 获得金币字符串显示
+ * @param num 
+ */
     public static GetCoinStr1(num: number): string {
         if (this._strMap == null) {
             this._strMap = ["", "K", "M", "B", "T", "Q"];

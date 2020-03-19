@@ -3,11 +3,13 @@
   <resources>
     <component id="jhmq1" name="Main.xml" path="/ui/" exported="true"/>
     <image id="cc4x2" name="btn_huanganniu.png" path="/img/" scale="9grid" scale9grid="30,30,72,54"/>
-    <component id="cc4x3" name="btn_text.xml" path="/cmp/"/>
-    <component id="cc4x4" name="Fight.xml" path="/ui/" exported="true"/>
-    <component id="k28i5" name="Load.xml" path="/ui/" exported="true"/>
-    <component id="t3pe6" name="Dead.xml" path="/ui/" exported="true"/>
-    <component id="t3pe7" name="Pass.xml" path="/ui/" exported="true"/>
+    <component id="cc4x3" name="btn_text_yellow.xml" path="/cmp/"/>
+    <image id="gxfz8" name="btn_anniuhui.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <image id="gxfz9" name="btn_anniuhuang.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <image id="gxfza" name="btn_anniulan.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <component id="gxfzb" name="ADDemo.xml" path="/ui/" exported="true"/>
+    <component id="gxfzc" name="btn_text_blue.xml" path="/cmp/"/>
+    <component id="gxfzd" name="UIDemo.xml" path="/ui/" exported="true"/>
   </resources>
   <publish name="Main" genCode="true"/>
 </packageDescription>

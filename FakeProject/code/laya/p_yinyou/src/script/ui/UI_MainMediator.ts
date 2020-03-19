@@ -1,6 +1,8 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Main from "../../ui/Main/UI_Main";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import UI_UIDemoMediator from "./UI_UIDemoMediator";
+import UI_ADDemoMediator from "./UI_ADDemoMediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -15,18 +17,17 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
     _OnShow() {
         super._OnShow();
-        this.ui.m_btn_start.onClick(this, this._OnClickStart);
-
-        LTPlatform.instance.ShowBannerAd();
+        this.ui.m_btn_ad.onClick(this, this._OnClickBtnAd);
+        this.ui.m_btn_ui.onClick(this, this._OnClickBtnUI);
     }
 
-    _OnHide() {
-        LTPlatform.instance.HideBannerAd();
+
+    private _OnClickBtnAd() {
+        UI_ADDemoMediator.instance.Show();
     }
 
-    private _OnClickStart() {
-        console.log("点击开始游戏");
-        
+    private _OnClickBtnUI() {
+        UI_UIDemoMediator.instance.Show();
     }
 
 }

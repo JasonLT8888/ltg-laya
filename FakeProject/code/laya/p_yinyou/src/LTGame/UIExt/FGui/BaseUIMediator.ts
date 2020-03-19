@@ -20,6 +20,10 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         return this._isShow;
     }
 
+    protected _openParam: any;
+
+    protected _sortOrder: number = 0;
+
     protected _InitBottom() {
         let bottomGroup = this.ui["m_bottom_group"];
         if (bottomGroup == null) {
@@ -35,10 +39,12 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         bottomGroup.y = this._defaultBottomHeight + downDistance;
     }
 
-    public Show() {
+    public Show(obj: any = null) {
+        this._openParam = obj;
         let uiData = new FGuiData();
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
         this._OnShow();
+        this._ui.sortingOrder = this._sortOrder;
     }
 
     protected _OnShow() {

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334">
   <displayList>
-    <graph id="n1_cc4x" name="n1" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ff000000">
+    <graph id="n1_cc4x" name="n1" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <text id="n0_cc4x" name="title" xy="105,238" size="539,88" fontSize="76" color="#ffffff" text="游戏名字七个字">
+    <text id="n0_cc4x" name="title" xy="71,147" size="607,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="LTGame框架展示">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <component id="n2_cc4x" name="btn_start" src="cc4x3" fileName="cmp/btn_text.xml" xy="235,852">
+    <component id="n3_gxfz" name="btn_ad" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="87,370">
       <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="广告相关"/>
+    </component>
+    <component id="n4_gxfz" name="btn_ui" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="408,370">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="UI相关"/>
     </component>
   </displayList>
 </component>

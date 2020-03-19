@@ -3,7 +3,9 @@ import { EPlatformType } from "./EPlatformType";
 import LTPlatformData from "./Data/LTPlatformData";
 import { ShareInfo } from "./ShareInfo";
 import LTPlatform from "./LTPlatform";
-import UI_BannerVMediator from "../UIExt/DefaultUI/UI_BannerVMediator";
+import UI_FakeBannerVMediator from "../UIExt/DefaultUI/UI_FakeBannerVMediator";
+import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator";
+import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
 
 export default class DefaultPlatform implements IPlatform {
     onPause: Laya.Handler;
@@ -38,20 +40,19 @@ export default class DefaultPlatform implements IPlatform {
     }
     ShowBannerAd() {
         console.log("调用ShowBannerAd");
-        UI_BannerVMediator.instance.Show();
+        UI_FakeBannerVMediator.instance.Show();
     }
     HideBannerAd() {
         console.log("调用HideBannerAd");
-        UI_BannerVMediator.instance.Hide();
+        UI_FakeBannerVMediator.instance.Hide();
     }
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         console.log("调用ShowRewardVideoAd");
-        if (onSuccess != null) {
-            onSuccess.run();
-        }
+        UI_FakeRewardADMediator.instance.Show([onSuccess, onSkipped]);
     }
     ShowInterstitalAd() {
         console.log("调用ShowInterstitalAd");
+        UI_FakeInterstitalMediator.instance.Show();
     }
     GetFromAppId(): string {
         return null;

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n0_gxfz" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1_gxfz" name="title" xy="221,112" size="308,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="广告展示">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n2_gxfz" name="btn_back" src="gxfzc" fileName="cmp/btn_text_blue.xml" xy="265,1158">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="返回"/>
+    </component>
+    <component id="n3_gxfz" name="btn_show_banner" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="77,297">
+      <Button title="显示Banner"/>
+    </component>
+    <component id="n4_gxfz" name="btn_hide_banner" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="446,297">
+      <Button title="关闭Banner"/>
+    </component>
+    <component id="n5_gxfz" name="btn_rewardvideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="77,482">
+      <Button title="有奖视频"/>
+    </component>
+    <component id="n6_gxfz" name="btn_intvideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="446,482">
+      <Button title="插页广告"/>
+    </component>
+  </displayList>
+</component>
