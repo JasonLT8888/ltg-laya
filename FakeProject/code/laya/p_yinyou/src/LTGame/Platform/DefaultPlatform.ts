@@ -8,6 +8,7 @@ import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator"
 import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
 
 export default class DefaultPlatform implements IPlatform {
+
     onPause: Laya.Handler;
 
     appId: string;
@@ -49,6 +50,15 @@ export default class DefaultPlatform implements IPlatform {
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         console.log("调用ShowRewardVideoAd");
         UI_FakeRewardADMediator.instance.Show([onSuccess, onSkipped]);
+    }
+    ShowRewardVideoAdAsync(): Promise<boolean> {
+        return new Promise(function (resolve) {
+            LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
+                resolve(true);
+            }), Laya.Handler.create(this, () => {
+                resolve(false);
+            }));
+        });
     }
     ShowInterstitalAd() {
         console.log("调用ShowInterstitalAd");

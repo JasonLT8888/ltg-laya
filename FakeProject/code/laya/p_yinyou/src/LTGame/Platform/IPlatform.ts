@@ -79,6 +79,8 @@ export default interface IPlatform {
      */
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler);
 
+    ShowRewardVideoAdAsync(): Promise<boolean>;
+
     /**
      * 展示插页广告
      */

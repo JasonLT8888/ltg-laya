@@ -1130,6 +1130,15 @@ class DefaultPlatform {
         console.log("调用ShowRewardVideoAd");
         _UIExt_DefaultUI_UI_FakeRewardADMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show([onSuccess, onSkipped]);
     }
+    ShowRewardVideoAdAsync() {
+        return new Promise(function (resolve) {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
+                resolve(true);
+            }), Laya.Handler.create(this, () => {
+                resolve(false);
+            }));
+        });
+    }
     ShowInterstitalAd() {
         console.log("调用ShowInterstitalAd");
         _UIExt_DefaultUI_UI_FakeInterstitalMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show();
@@ -2087,6 +2096,15 @@ class WXPlatform {
         else {
             this._rewardVideo.show();
         }
+    }
+    ShowRewardVideoAdAsync() {
+        return new Promise(function (resolve) {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
+                resolve(true);
+            }), Laya.Handler.create(this, () => {
+                resolve(false);
+            }));
+        });
     }
     ShowInterstitalAd() {
         if (!this._isInterstitialLoaded) {
