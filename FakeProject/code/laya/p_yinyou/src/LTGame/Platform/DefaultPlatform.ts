@@ -3,6 +3,7 @@ import { EPlatformType } from "./EPlatformType";
 import LTPlatformData from "./Data/LTPlatformData";
 import { ShareInfo } from "./ShareInfo";
 import LTPlatform from "./LTPlatform";
+import UI_BannerVMediator from "../UIExt/DefaultUI/UI_BannerVMediator";
 
 export default class DefaultPlatform implements IPlatform {
     onPause: Laya.Handler;
@@ -37,9 +38,11 @@ export default class DefaultPlatform implements IPlatform {
     }
     ShowBannerAd() {
         console.log("调用ShowBannerAd");
+        UI_BannerVMediator.instance.Show();
     }
     HideBannerAd() {
         console.log("调用HideBannerAd");
+        UI_BannerVMediator.instance.Hide();
     }
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         console.log("调用ShowRewardVideoAd");

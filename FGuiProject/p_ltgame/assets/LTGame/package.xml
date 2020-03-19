@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="75kiu87k">
+  <resources>
+    <image id="ovsy1" name="btn_anniuhui.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <image id="ovsy2" name="btn_anniuhuang.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <image id="ovsy3" name="btn_anniulan.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <component id="ovsy4" name="Banner_V.xml" path="/ui/" exported="true"/>
+    <image id="ovsy5" name="sp_tishijiemianbg.png" path="/img/" scale="9grid" scale9grid="15,15,24,24"/>
+    <component id="ovsy6" name="view_banner.xml" path="/cmp/"/>
+  </resources>
+  <publish name="LTGame" genCode="true"/>
+</packageDescription>

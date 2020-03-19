@@ -29,7 +29,6 @@ export default class SplashScene extends LTSplashScene {
 
     _OnGameResPrepared(urls: string[]) {
         GlobalUnit.InitAll();
-        GlobalUnit.gameManager.Preload(urls);
     }
 
     _OnGameResLoaded() {

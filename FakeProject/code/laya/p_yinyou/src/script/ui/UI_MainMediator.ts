@@ -1,10 +1,6 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Main from "../../ui/Main/UI_Main";
-import FGuiEx from "../../LTGame/UIExt/FGui/FGuiEx";
-import GlobalUnit from "../common/GlobalUnit";
-import { UI_FightMediator } from "./UI_FightMediator";
-import { UI_LoadMediator } from "./UI_LoadMediator";
-import Awaiters from "../../LTGame/Async/Awaiters";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -20,21 +16,17 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
     _OnShow() {
         super._OnShow();
         this.ui.m_btn_start.onClick(this, this._OnClickStart);
+
+        LTPlatform.instance.ShowBannerAd();
     }
 
-    private async _OnClickStart() {
-        this.Hide();
-        UI_LoadMediator.instance.Show();
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
+    }
 
-        await Awaiters.NextFrame();
-
-        await GlobalUnit.gameManager.CreateGame();
-
-        await Awaiters.NextFrame();
-
-        UI_FightMediator.instance.Show();
-        UI_LoadMediator.instance.Hide();
-        GlobalUnit.gameManager.StartGame();
+    private _OnClickStart() {
+        console.log("点击开始游戏");
+        
     }
 
 }

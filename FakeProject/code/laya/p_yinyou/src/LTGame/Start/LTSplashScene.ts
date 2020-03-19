@@ -6,6 +6,7 @@ import { ConfigManager } from "../Config/ConfigManager";
 import FGuiEx from "../UIExt/FGui/FGuiEx";
 import LTRes from "../Res/LTRes";
 import Awaiters from "../Async/Awaiters";
+import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
 
 export default class LTSplashScene extends BaseState {
 
@@ -52,11 +53,15 @@ export default class LTSplashScene extends BaseState {
     }
 
     _DoEnter() {
+        this._needLoadOtherUIPack.push(
+            "res/ltgame/ui/ltgame"
+        );
         this._InitUI();
     }
 
     private _InitUI() {
         LTPlatform.instance.RecordEvent("开始初始化启动界面", null);
+        LTGameBinder.bindAll();
         this._OnBindUI();
         let loadUrl = [];
         loadUrl.push({ url: this._initPath + ".bin", type: Laya.Loader.BUFFER });
