@@ -24,4 +24,13 @@ export default class LTRes {
         });
     }
 
+    public static Get(resUrl: string, noClone: boolean = false): any {
+        let getRes = Laya.loader.getRes(resUrl);
+        if (getRes == null) {
+            console.error("资源尚未加载", resUrl);
+            return null;
+        }
+        return noClone ? getRes : getRes.clone();
+    }
+
 }

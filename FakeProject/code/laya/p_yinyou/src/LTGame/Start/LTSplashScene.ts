@@ -64,9 +64,7 @@ export default class LTSplashScene extends BaseState {
         Laya.loader.load(loadUrl, Laya.Handler.create(this, this._OnUILoaded));
     }
 
-    protected _OnBindUI() {
-
-    }
+    protected _OnBindUI() { }
 
     private _OnUILoaded() {
         fgui.UIPackage.addPackage(this._initPath);

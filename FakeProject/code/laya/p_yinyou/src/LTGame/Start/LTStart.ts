@@ -19,11 +19,6 @@ export class LTStart {
     private get _currentState(): BaseState {
         return this._fsm.currState;
     }
-
-    private __enableStat: boolean = false;
-    protected get _enableStat(): boolean {
-        return this.__enableStat;
-    }
     
     public enableStat: boolean = false;
 

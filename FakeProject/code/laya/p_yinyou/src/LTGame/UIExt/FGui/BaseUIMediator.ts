@@ -16,6 +16,9 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     protected _defaultBottomHeight: number;
     protected _isShow: boolean = false;
+    public get isShow(): boolean {
+        return this._isShow;
+    }
 
     protected _InitBottom() {
         let bottomGroup = this.ui["m_bottom_group"];
