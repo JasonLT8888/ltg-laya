@@ -6,7 +6,7 @@
 	"binaryFormat":true,
 	"codeGeneration":{
 		"classNamePrefix":"UI_",
-		"codePath":"D:\\Work_Projects\\ltg-laya\\FakeProject\\code\\laya\\p_yinyou\\src\\LTGame\\UIExt\\DefaultUI\\UI",
+		"codePath":"..\\..\\FakeProject\\code\\laya\\p_yinyou\\src\\LTGame\\UIExt\\DefaultUI\\UI",
 		"codeType":"TS-2",
 		"getMemberByName":false,
 		"ignoreNoname":true,
@@ -16,5 +16,5 @@
 	"compressDesc":false,
 	"fileExtension":"bin",
 	"packageCount":2,
-	"path":"D:\\Work_Projects\\ltg-laya\\FakeProject\\code\\laya\\p_yinyou\\bin\\res\\ltgame\\ui"
+	"path":"..\\..\\FakeProject\\code\\laya\\p_yinyou\\bin\\res\\ltgame\\ui"
 }
