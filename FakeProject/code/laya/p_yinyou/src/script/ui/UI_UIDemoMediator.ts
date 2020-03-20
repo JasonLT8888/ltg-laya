@@ -2,6 +2,8 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_UIDemo from "../../ui/Main/UI_UIDemo";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import MathEx from "../../LTGame/LTUtils/MathEx";
+import LTUI from "../../LTGame/UIExt/LTUI";
+import Awaiters from "../../LTGame/Async/Awaiters";
 
 export default class UI_UIDemoMediator extends BaseUIMediator<UI_UIDemo> {
 
@@ -20,6 +22,7 @@ export default class UI_UIDemoMediator extends BaseUIMediator<UI_UIDemo> {
 
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
         this.ui.m_btn_toast.onClick(this, this._OnClickToast);
+        this.ui.m_btn_load.onClick(this, this._OnClickLoad);
     }
 
     private _OnClickBack() {
@@ -27,7 +30,13 @@ export default class UI_UIDemoMediator extends BaseUIMediator<UI_UIDemo> {
     }
 
     private _OnClickToast() {
-        LTUtils.Toast("显示通知" + MathEx.RandomInt(100, 500));
+        LTUI.Toast("显示通知" + MathEx.RandomInt(100, 500));
+    }
+
+    private async _OnClickLoad() {
+        LTUI.ShowLoading("展示5秒加载...");
+        await Awaiters.Seconds(5);
+        LTUI.HideLoading();
     }
 
 }

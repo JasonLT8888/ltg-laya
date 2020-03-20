@@ -1,5 +1,7 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
+import UI_CommonLoad from "./UI_CommonLoad";
+import UI_view_load from "./UI_view_load";
 import UI_FakeBanner_V from "./UI_FakeBanner_V";
 import UI_CommomToast from "./UI_CommomToast";
 import UI_view_toast from "./UI_view_toast";
@@ -8,6 +10,8 @@ import UI_FakeInterstital from "./UI_FakeInterstital";
 
 export default class LTGameBinder{
 	public static bindAll():void {
+		fgui.UIObjectFactory.setExtension(UI_CommonLoad.URL, UI_CommonLoad);
+		fgui.UIObjectFactory.setExtension(UI_view_load.URL, UI_view_load);
 		fgui.UIObjectFactory.setExtension(UI_FakeBanner_V.URL, UI_FakeBanner_V);
 		fgui.UIObjectFactory.setExtension(UI_CommomToast.URL, UI_CommomToast);
 		fgui.UIObjectFactory.setExtension(UI_view_toast.URL, UI_view_toast);

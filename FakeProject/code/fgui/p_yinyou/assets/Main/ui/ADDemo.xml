@@ -27,13 +27,5 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="插页广告"/>
     </component>
-    <component id="n7_x62b" name="btn_startrecord" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="77,545">
-      <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="开始录屏"/>
-    </component>
-    <component id="n9_x62b" name="btn_sharevideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="446,545">
-      <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="分享录屏"/>
-    </component>
   </displayList>
 </component>

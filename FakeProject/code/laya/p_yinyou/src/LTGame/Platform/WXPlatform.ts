@@ -5,8 +5,11 @@ import LTPlatformData from "./Data/LTPlatformData";
 import { ShareInfo } from "./ShareInfo";
 import ShareManager from "./ShareManager";
 import LTPlatform from "./LTPlatform";
-import MathEx from "../LTUtils/MathEx";
 import { CommonEventId } from "../Commom/CommonEventId";
+import IRecordManager from "./IRecordManager";
+import DefaultRecordManager from "./DefaultRecordManager";
+import LTUI from "../UIExt/LTUI";
+import Awaiters from "../Async/Awaiters";
 
 export default class WXPlatform implements IPlatform {
     onPause: Laya.Handler;
@@ -17,6 +20,7 @@ export default class WXPlatform implements IPlatform {
     loginState: LTGame.LoginState;
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
+    recordManager: IRecordManager = new DefaultRecordManager();
 
     protected _data: LTPlatformData;
 
@@ -33,11 +37,6 @@ export default class WXPlatform implements IPlatform {
     protected _rewardSuccessed: Laya.Handler;
     protected _rewardSkipped: Laya.Handler;
 
-    protected _recorderManager;
-    protected _cacheRecorderVideoPath: string;
-    protected _isRecording: boolean;
-    protected _isRecordSuccess: boolean;
-
     protected _cacheScreenScale: number;
 
     protected _shareVideoBtn;
@@ -46,7 +45,9 @@ export default class WXPlatform implements IPlatform {
 
     protected _platformData: LTPlatformData;
 
-    protected _showVideoLoad: boolean = true;
+    protected _cacheVideoAD: boolean = false;
+
+    protected _cacheOnShowHandle: Laya.Handler;
 
     Init(platformData: LTPlatformData) {
         this._base = window["wx"];
@@ -63,8 +64,6 @@ export default class WXPlatform implements IPlatform {
         this._CreateBannerAd();
         this._CreateVideoAd();
         this._CreateInterstitalAd();
-
-        // this._CreateRecordManager();
 
         window["iplatform"] = this;
     }
@@ -105,27 +104,6 @@ export default class WXPlatform implements IPlatform {
             this._base.showToast({
                 title: "更新失败，下次启动继续..."
             });
-        });
-    }
-
-    protected _CreateRecordManager() {
-        this._isRecording = false;
-        this._isRecordSuccess = false;
-        this._recorderManager = this._base.getGameRecorder();
-        this._recorderManager.on("start", () => {
-            console.log("开始录制");
-            this._isRecording = true;
-            this._isRecordSuccess = false;
-        });
-        this._recorderManager.on("stop", (res) => {
-            console.log("停止录制", res);
-            this._cacheRecorderVideoPath = res.videoPath;
-            this._isRecording = false;
-            this._isRecordSuccess = true;
-        });
-        this._recorderManager.on("error", (err) => {
-            console.log("录制发生错误", err);
-            this._isRecordSuccess = false;
         });
     }
 
@@ -245,6 +223,10 @@ export default class WXPlatform implements IPlatform {
     }
 
     protected _CreateVideoAd() {
+        if (!this._cacheVideoAD) {
+            console.log("当前策略为不缓存视频广告");
+            return;
+        }
         let createRewardedVideoAd = this._base["createRewardedVideoAd"];
         if (createRewardedVideoAd == null) {
             console.error("无createRewardedVideoAd方法,跳过初始化");
@@ -277,13 +259,15 @@ export default class WXPlatform implements IPlatform {
             console.log("视频回调", res);
 
             let isEnd = res["isEnded"] as boolean;
-            if (isEnd) {
-                if (this._rewardSuccessed) this._rewardSuccessed.run();
-            } else {
-                if (this._rewardSkipped) this._rewardSkipped.run();
 
-                this.ShowToast("跳过视频无法获得奖励");
-            }
+            // 修复广告bug
+            Awaiters.NextFrame().then(() => {
+                if (isEnd) {
+                    if (this._rewardSuccessed) this._rewardSuccessed.run();
+                } else {
+                    if (this._rewardSkipped) this._rewardSkipped.run();
+                }
+            });
         });
     }
 
@@ -337,7 +321,8 @@ export default class WXPlatform implements IPlatform {
         if (!this.IsBannerAvaliable()) return;
         this._bannerAd.hide();
     }
-    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
+
+    protected _DoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         if (!this._isVideoLoaded) {
             console.error("视频广告尚未加载好");
             return;
@@ -345,21 +330,69 @@ export default class WXPlatform implements IPlatform {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
         this._isVideoLoaded = false;
-        if (this._showVideoLoad)
-            this._base.showLoading(
-                {
-                    title: "正在加载视频广告",
-                    mask: true
-                }
-            );
         Laya.stage.event(CommonEventId.PAUSE_AUDIO);
-        if (this._showVideoLoad) {
-            this._rewardVideo.show().then(() => {
-                this._base.hideLoading();
-            });
-        } else {
-            this._rewardVideo.show();
+        this._rewardVideo.show();
+    }
+
+    protected _DoNoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
+        this._rewardSuccessed = onSuccess;
+        this._rewardSkipped = onSkipped;
+        if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
+            console.log("无有效的视频广告ID,取消加载");
+            return;
         }
+        let createRewardedVideoAd = this._base["createRewardedVideoAd"];
+        if (createRewardedVideoAd == null) {
+            console.error("无createRewardedVideoAd方法,跳过初始化");
+            return;
+        }
+        LTUI.ShowLoading("广告拉取中...");
+        this._videoFailedCount = 0;
+        let videoObj = {};
+        videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+        this._rewardVideo = createRewardedVideoAd(videoObj);
+        this._rewardVideo.onLoad(() => {
+            console.log("视频广告加载成功");
+            this._isVideoLoaded = true;
+        });
+        this._rewardVideo.onError((res) => {
+            this._videoFailedCount++;
+            console.error("视频广告加载失败", res, this._videoFailedCount);
+        });
+        this._rewardVideo.onClose((res) => {
+
+            Laya.stage.event(CommonEventId.RESUM_AUDIO);
+            console.log("视频回调", res);
+            let isEnd = res["isEnded"] as boolean;
+            Awaiters.NextFrame().then(() => {
+                if (isEnd) {
+                    if (this._rewardSuccessed) this._rewardSuccessed.run();
+                } else {
+                    if (this._rewardSkipped) this._rewardSkipped.run();
+                }
+            });
+        });
+
+        this._rewardVideo.show().then(() => {
+            LTUI.HideLoading();
+        }).catch(err => {
+            console.log("广告组件出现问题", err);
+            // 可以手动加载一次
+            this._rewardVideo.load().then(() => {
+                console.log("手动加载成功");
+                // 加载成功后需要再显示广告
+                return this._rewardVideo.show();
+            });
+        });;
+    }
+
+    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
+        if (this._cacheVideoAD) {
+            this._DoCacheShowVideo(onSuccess, onSkipped);
+        } else {
+            this._DoNoCacheShowVideo(onSuccess, onSkipped);
+        }
+
     }
     ShowRewardVideoAdAsync(): Promise<boolean> {
         return new Promise(function (resolve) {
@@ -395,9 +428,19 @@ export default class WXPlatform implements IPlatform {
         console.log(LTPlatform.platformStr, "OnShow", res);
         LTPlatform.instance.lauchOption = res;
         LTPlatform.instance._CheckUpdate();
-        if (LTPlatform.instance.onResume) {
-            LTPlatform.instance.onResume.runWith(res);
-        }
+
+        Awaiters.NextFrame().then(() => {
+            if (LTPlatform.instance.onResume) {
+                LTPlatform.instance.onResume.runWith(res);
+            }
+            let cacheOnShow = LTPlatform.instance["_cacheOnShowHandle"];
+            if (cacheOnShow) {
+                cacheOnShow.run();
+                LTPlatform.instance["_cacheOnShowHandle"] = null;
+            }
+        });
+
+
     }
 
     /**
@@ -461,26 +504,6 @@ export default class WXPlatform implements IPlatform {
         } else {
             aldSendEvent(eventId);
         }
-    }
-
-    StartRecord(maxTime: number, startCallBack: Laya.Handler, overCallBack: Laya.Handler) {
-        if (this._isRecording) {
-            console.log("视频已经在录制中,不能重复录制");
-            return;
-        }
-        console.log("调用开始录屏");
-        let recordObj = {} as any;
-        recordObj["duration"] = MathEx.Clamp(maxTime, 5, 7200);
-        this._recorderManager.start(recordObj);
-    }
-
-    StopRecord() {
-        if (!this._isRecording) {
-            console.log("没有视频正在录制中,无法停止录制");
-            return;
-        }
-        console.log("调用停止录屏");
-        this._recorderManager.stop();
     }
 
     /**

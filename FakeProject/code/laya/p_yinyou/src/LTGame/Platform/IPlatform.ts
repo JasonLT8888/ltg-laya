@@ -1,6 +1,7 @@
 import { EPlatformType } from "./EPlatformType";
 import LTPlatformData from "./Data/LTPlatformData";
 import { ShareInfo } from "./ShareInfo";
+import IRecordManager from "./IRecordManager";
 
 export default interface IPlatform {
 
@@ -42,6 +43,12 @@ export default interface IPlatform {
      * 回到前台
      */
     onPause: Laya.Handler;
+
+    /**
+     * 视频录制器
+     */
+    recordManager: IRecordManager;
+
     /**
      * 初始化
      */
@@ -79,6 +86,9 @@ export default interface IPlatform {
      */
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler);
 
+    /**
+     * 异步方法展示广告
+     */
     ShowRewardVideoAdAsync(): Promise<boolean>;
 
     /**
@@ -108,16 +118,6 @@ export default interface IPlatform {
      * 记录事件
      */
     RecordEvent(eventId: string, param: object);
-
-    /**
-     * 开始录屏
-     */
-    StartRecord(maxTime: number, startCallBack: Laya.Handler, overCallBack: Laya.Handler);
-
-    /**
-     * 停止录屏
-     */
-    StopRecord();
 
     /**
      * 分享视频内容

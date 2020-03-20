@@ -6,6 +6,8 @@ import LTPlatform from "./LTPlatform";
 import UI_FakeBannerVMediator from "../UIExt/DefaultUI/UI_FakeBannerVMediator";
 import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator";
 import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
+import IRecordManager from "./IRecordManager";
+import DefaultRecordManager from "./DefaultRecordManager";
 
 export default class DefaultPlatform implements IPlatform {
 
@@ -18,6 +20,7 @@ export default class DefaultPlatform implements IPlatform {
     loginState: LTGame.LoginState;
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
+    recordManager: IRecordManager = new DefaultRecordManager();
 
     Init(platformData: LTPlatformData) {
         this.loginState = {

@@ -2,6 +2,7 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_ADDemo from "../../ui/Main/UI_ADDemo";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
 
@@ -22,15 +23,10 @@ export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
         this.ui.m_btn_hide_banner.onClick(this, this._OnClickHideBanner);
         this.ui.m_btn_rewardvideo.onClick(this, this._OnClickRewardAd);
         this.ui.m_btn_intvideo.onClick(this, this._OnClickIntAd);
-        this.ui.m_btn_startrecord.onClick(this, this._OnClickStartRecord);
     }
 
     private _OnClickBack() {
         this.Hide();
-    }
-
-    private _OnClickStartRecord() {
-        console.log("???????");
     }
 
     private _OnClickShowBanner() {
@@ -43,9 +39,9 @@ export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
 
     private _OnClickRewardAd() {
         LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
-            LTUtils.Toast("获得奖励");
+            LTUI.Toast("获得奖励");
         }), Laya.Handler.create(this, () => {
-            LTUtils.Toast("跳过视频");
+            LTUI.Toast("跳过视频");
         }));
     }
 

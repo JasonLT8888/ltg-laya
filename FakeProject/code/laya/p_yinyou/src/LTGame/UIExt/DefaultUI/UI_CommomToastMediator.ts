@@ -24,7 +24,7 @@ export default class UI_CommomToastMediator extends BaseUIMediator<UI_CommomToas
             this.ui.m_toast.visible = false;
             this._OnShow();
         }
-
+        
         this._DoToast(this._openParam as string);
     }
 

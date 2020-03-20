@@ -15,5 +15,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="Toast"/>
     </component>
+    <component id="n4_x62b" name="btn_load" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="429,257">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="加载弹窗"/>
+    </component>
   </displayList>
 </component>

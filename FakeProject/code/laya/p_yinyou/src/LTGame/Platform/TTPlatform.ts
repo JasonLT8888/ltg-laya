@@ -1,11 +1,12 @@
 import WXPlatform from "./WXPlatform";
 import { EPlatformType } from "./EPlatformType";
 import LTPlatformData from "./Data/LTPlatformData";
-import MathEx from "../LTUtils/MathEx";
 import LTPlatform from "./LTPlatform";
 import ShareManager from "./ShareManager";
 import { ShareInfo } from "./ShareInfo";
 import StringEx from "../LTUtils/StringEx";
+import IRecordManager from "./IRecordManager";
+import TTRecordManager from "./Impl/TT/TTRecordManager";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -13,10 +14,7 @@ export default class TTPlatform extends WXPlatform {
 
     protected _showVideoLoad: boolean = false;
 
-    private _startCallBack: Laya.Handler;
-    private _endCallBack: Laya.Handler;
-
-    public is
+    recordManager: IRecordManager;
 
     Init(platformData: LTPlatformData) {
         this._base = window["tt"];
@@ -33,7 +31,8 @@ export default class TTPlatform extends WXPlatform {
         this._CreateBannerAd();
         this._CreateVideoAd();
         this._CreateInterstitalAd();
-        this._CreateRecordManager();
+
+        this.recordManager = new TTRecordManager(this._base);
 
         window["iplatform"] = this;
     }
@@ -73,31 +72,6 @@ export default class TTPlatform extends WXPlatform {
         });
     }
 
-    protected _CreateRecordManager() {
-        this._isRecording = false;
-        this._isRecordSuccess = false;
-        this._recorderManager = this._base.getGameRecorderManager();
-        this._recorderManager.onStart((res) => {
-            console.log("开始录制", res);
-            this._isRecording = true;
-            this._isRecordSuccess = false;
-            this._startCallBack && this._startCallBack.run();
-            this._startCallBack = null;
-        });
-        this._recorderManager.onStop((res) => {
-            console.log("停止录制", res);
-            this._cacheRecorderVideoPath = res.videoPath;
-            this._isRecording = false;
-            this._isRecordSuccess = true;
-            this._endCallBack && this._endCallBack.run();
-            this._endCallBack = null;
-        });
-        this._recorderManager.onError((err) => {
-            console.log("录制发生错误", err);
-            this._isRecordSuccess = false;
-        });
-    }
-
     RecordEvent(eventId: string, param: object) {
         let reportAnalytics = this._base["reportAnalytics"];
         if (reportAnalytics) {
@@ -117,59 +91,30 @@ export default class TTPlatform extends WXPlatform {
         this._bannerAd.show();
     }
 
-    StartRecord(maxTime: number, startCallBack: Laya.Handler, overCallBack: Laya.Handler) {
-        if (this._isRecording) {
-            console.log("视频已经在录制中,不能重复录制");
-            return;
-        }
-        console.log("调用开始录屏");
-        maxTime = MathEx.Clamp(maxTime, 3, 300);
-        this._recorderManager.start(
-            {
-                duration: maxTime
-            }
-        );
-        if (this._startCallBack) {
-            this._startCallBack.recover();
-            this._startCallBack = null;
-        }
-        this._startCallBack = startCallBack;
-        if (this._endCallBack) {
-            this._endCallBack.recover();
-            this._endCallBack = null;
-        }
-        this._endCallBack = overCallBack;
-    }
-
-    StopRecord() {
-        if (!this._isRecording) {
-            console.log("没有视频正在录制中,无法停止录制");
-            return;
-        }
-        console.log("调用停止录屏");
-        this._recorderManager.stop();
-    }
-
     ShareVideoInfo(onSuccess: Laya.Handler, onFailed: Laya.Handler) {
-        if (this._isRecordSuccess) {
+        if (this.recordManager.isRecordSuccess) {
             let shareData = {} as any;
             shareData.channel = "video";
             let getShareData = ShareManager.instance.GetShareInfo();
             shareData.title = getShareData.shareTitle;
             shareData.extra = {
-                videoPath: this._cacheRecorderVideoPath
+                videoPath: this.recordManager.videoSavePath
             };
             shareData.success = () => {
-                console.log("分享成功");
-                if (onSuccess) {
-                    onSuccess.run();
-                }
+                this._cacheOnShowHandle = Laya.Handler.create(null, () => {
+                    console.log("分享成功");
+                    if (onSuccess) {
+                        onSuccess.run();
+                    }
+                })
             };
             shareData.fail = (e) => {
-                console.log("分享失败", e);
-                if (onFailed) {
-                    onFailed.run();
-                }
+                this._cacheOnShowHandle = Laya.Handler.create(null, () => {
+                    console.log("分享失败");
+                    if (onFailed) {
+                        onFailed.run();
+                    }
+                })
             }
             this._base.shareAppMessage(shareData);
         } else {
@@ -182,19 +127,24 @@ export default class TTPlatform extends WXPlatform {
 
         let shareObj = WXPlatform._WrapShareInfo(shareInfo);
         shareObj["success"] = () => {
-            console.log("分享成功");
 
-            if (onSuccess) {
-                onSuccess.run();
-            }
+            this._cacheOnShowHandle = Laya.Handler.create(null, () => {
+                console.log("分享成功");
+                if (onSuccess) {
+                    onSuccess.run();
+                }
+            })
+
         }
 
         shareObj["fail"] = () => {
-            console.log("分享失败");
 
-            if (onFailed) {
-                onFailed.run();
-            }
+            this._cacheOnShowHandle = Laya.Handler.create(null, () => {
+                console.log("分享失败");
+                if (onFailed) {
+                    onFailed.run();
+                }
+            })
         }
 
         this._base.shareAppMessage(shareObj);

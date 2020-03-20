@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n0_mhas" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#66000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n1_mhas" name="load" src="mhase" fileName="cmp/view_load.xml" xy="225,517">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+  </displayList>
+</component>

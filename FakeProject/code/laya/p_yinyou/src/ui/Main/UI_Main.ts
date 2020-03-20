@@ -7,6 +7,7 @@ export default class UI_Main extends fgui.GComponent {
 	public m_title:fgui.GTextField;
 	public m_btn_ad:fgui.GButton;
 	public m_btn_ui:fgui.GButton;
+	public m_btn_record:fgui.GButton;
 
 	public static URL:string = "ui://kk7g5mmmjhmq1";
 
@@ -22,5 +23,6 @@ export default class UI_Main extends fgui.GComponent {
 		this.m_title = <fgui.GTextField><any>(this.getChildAt(1));
 		this.m_btn_ad = <fgui.GButton><any>(this.getChildAt(2));
 		this.m_btn_ui = <fgui.GButton><any>(this.getChildAt(3));
+		this.m_btn_record = <fgui.GButton><any>(this.getChildAt(4));
 	}
 }

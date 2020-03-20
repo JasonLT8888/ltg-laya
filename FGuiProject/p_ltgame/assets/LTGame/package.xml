@@ -12,6 +12,9 @@
     <component id="ovsy9" name="FakeRewardVideo.xml" path="/ui/" exported="true"/>
     <component id="ovsya" name="btn_blue.xml" path="/cmp/"/>
     <component id="ovsyb" name="FakeInterstital.xml" path="/ui/" exported="true"/>
+    <component id="mhasc" name="CommonLoad.xml" path="/ui/" exported="true"/>
+    <image id="mhasd" name="sp_jiazai.png" path="/img/"/>
+    <component id="mhase" name="view_load.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

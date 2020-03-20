@@ -1,5 +1,3 @@
-import UI_CommomToastMediator from "../UIExt/DefaultUI/UI_CommomToastMediator";
-
 
 export class LTUtils {
 
@@ -43,10 +41,6 @@ export class LTUtils {
         directionLight.shadowResolution = 1024;
         //生成阴影贴图数量
         directionLight.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
-    }
-
-    public static Toast(str: string) {
-        UI_CommomToastMediator.instance.Show(str);
     }
 
     public static FindChild(parent: Laya.Sprite3D, path: string): Laya.Sprite3D {

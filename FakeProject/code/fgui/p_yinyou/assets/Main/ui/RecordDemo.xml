@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n0_x62b" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1_x62b" name="title" xy="220,112" size="309,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="广告展示">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n2_x62b" name="btn_back" src="gxfzc" fileName="cmp/btn_text_blue.xml" xy="265,1158">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="返回"/>
+    </component>
+    <component id="n3_x62b" name="btn_start_record" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="103,499">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="开始录屏"/>
+    </component>
+    <component id="n4_x62b" name="btn_stop_record" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="412,499">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="停止录屏"/>
+    </component>
+    <component id="n5_x62b" name="btn_pause_record" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="103,631">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="暂停录制"/>
+    </component>
+    <component id="n6_x62b" name="btn_resume_record" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="412,631">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="恢复录制"/>
+    </component>
+    <component id="n7_x62b" name="btn_record_clip" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="103,763">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="记录精彩时刻"/>
+    </component>
+    <text id="n8_x62b" name="n8" xy="99,217" size="152,31" fontSize="24" color="#ffffff" text="当前录制状态:">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n10_x62b" name="text_supportrecord" xy="374,273" pivot="0.5,0.5" anchor="true" size="235,31" fontSize="24" color="#ffffff" text="录制中: 是否支持录制">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n9_x62b" name="text_isrecording" xy="374,314" pivot="0.5,0.5" anchor="true" size="129,31" fontSize="24" color="#ffffff" text="录制中: true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n11_x62b" name="text_pausestate" xy="374,353" pivot="0.5,0.5" anchor="true" size="101,31" fontSize="24" color="#ffffff" text="暂停状态">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n12_x62b" name="text_savepath" xy="374,392" pivot="0.5,0.5" anchor="true" size="164,31" fontSize="24" color="#ffffff" text="video缓存地址:">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n13_x62b" name="btn_share_video" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="265,972">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="分享视频"/>
+    </component>
+  </displayList>
+</component>

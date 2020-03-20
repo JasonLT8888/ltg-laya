@@ -10,6 +10,7 @@
     <component id="gxfzb" name="ADDemo.xml" path="/ui/" exported="true"/>
     <component id="gxfzc" name="btn_text_blue.xml" path="/cmp/"/>
     <component id="gxfzd" name="UIDemo.xml" path="/ui/" exported="true"/>
+    <component id="x62be" name="RecordDemo.xml" path="/ui/" exported="true"/>
   </resources>
   <publish name="Main" genCode="true"/>
 </packageDescription>
