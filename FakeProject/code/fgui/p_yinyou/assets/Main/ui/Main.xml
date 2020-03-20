@@ -19,5 +19,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="录屏相关"/>
     </component>
+    <component id="n6_x62b" name="btn_others" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="408,511">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="其他"/>
+    </component>
   </displayList>
 </component>

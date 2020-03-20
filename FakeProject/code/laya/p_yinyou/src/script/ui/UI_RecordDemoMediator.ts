@@ -62,21 +62,21 @@ export default class UI_RecordDemoMediator extends BaseUIMediator<UI_RecordDemo>
         }), Laya.Handler.create(null, () => {
             LTUI.Toast("分享视频失败");
             this._UpdateUI();
-        }))
+        }));
     }
 
     private _OnClickPause() {
         LTPlatform.instance.recordManager.Pause(Laya.Handler.create(null, () => {
             LTUI.Toast("暂停录制视频");
             this._UpdateUI();
-        }))
+        }));
     }
 
     private _OnClickResume() {
         LTPlatform.instance.recordManager.Resume(Laya.Handler.create(null, () => {
             LTUI.Toast("恢复录制视频");
             this._UpdateUI();
-        }))
+        }));
     }
 
     private _OnClickRecordClip() {

@@ -23,6 +23,7 @@ export default class MainStart extends LTStart {
                 break;
             case EPlatformType.TT:
                 this._appId = "ttbe90c82d21ba845b";
+                platformData.interstitialId = "1mdxrmurdy34bi2hql";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_yinyou/" + version + "_tt/");

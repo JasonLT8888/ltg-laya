@@ -17,22 +17,22 @@ export default class DefaultRecordManager implements IRecordManager {
     videoSavePath: string;
 
     StartRecord(onStart: Laya.Handler, onOverTime: Laya.Handler) {
-        LTUI.Toast("该平台" + LTPlatform.platformStr + "不支持录制视频");
+        console.log("该平台" + LTPlatform.platformStr + "不支持录制视频");
     }
 
     StopRecord(onStop: Laya.Handler) {
-        LTUI.Toast("该平台" + LTPlatform.platformStr + "不支持录制视频");
+        console.log("该平台" + LTPlatform.platformStr + "不支持录制视频");
     }
 
     Pause(onPause: Laya.Handler) {
-        LTUI.Toast("该平台" + LTPlatform.platformStr + "不支持录制视频");
+        console.log("该平台" + LTPlatform.platformStr + "不支持录制视频");
     }
     Resume(onReume: Laya.Handler) {
-        LTUI.Toast("该平台" + LTPlatform.platformStr + "不支持录制视频");
+        console.log("该平台" + LTPlatform.platformStr + "不支持录制视频");
     }
 
     RecordClip(timeRange: number[]) {
-        LTUI.Toast("该平台" + LTPlatform.platformStr + "不支持录制视频");
+        console.log("该平台" + LTPlatform.platformStr + "不支持录制视频");
     }
 
 }

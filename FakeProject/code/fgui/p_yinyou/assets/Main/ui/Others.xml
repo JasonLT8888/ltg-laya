@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n0_x62b" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1_x62b" name="title" xy="219,112" size="310,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="其他展示">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n2_x62b" name="btn_back" src="gxfzc" fileName="cmp/btn_text_blue.xml" xy="265,1158">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="返回"/>
+    </component>
+    <component id="n3_x62b" name="btn_share" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="89,274">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="分享"/>
+    </component>
+    <component id="n4_x62b" name="btn_othergame" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="89,408" size="271,100">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="更多游戏(平台)"/>
+    </component>
+  </displayList>
+</component>

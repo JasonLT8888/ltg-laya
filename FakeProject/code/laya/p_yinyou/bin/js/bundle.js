@@ -1009,8 +1009,6 @@ class DefaultPlatform {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DefaultRecordManager; });
 /* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-
 
 class DefaultRecordManager {
     constructor() {
@@ -1020,19 +1018,19 @@ class DefaultRecordManager {
         this.isRecordSuccess = false;
     }
     StartRecord(onStart, onOverTime) {
-        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__["default"].Toast("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
+        console.log("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
     }
     StopRecord(onStop) {
-        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__["default"].Toast("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
+        console.log("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
     }
     Pause(onPause) {
-        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__["default"].Toast("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
+        console.log("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
     }
     Resume(onReume) {
-        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__["default"].Toast("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
+        console.log("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
     }
     RecordClip(timeRange) {
-        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__["default"].Toast("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
+        console.log("该平台" + _LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].platformStr + "不支持录制视频");
     }
 }
 
@@ -3977,7 +3975,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_UIDemo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI_UIDemo */ "./src/ui/Main/UI_UIDemo.ts");
 /* harmony import */ var _UI_Main__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_Main */ "./src/ui/Main/UI_Main.ts");
 /* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
+/* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
 
 
 
@@ -3988,6 +3988,7 @@ class MainBinder {
         fgui.UIObjectFactory.setExtension(_UI_UIDemo__WEBPACK_IMPORTED_MODULE_1__["default"].URL, _UI_UIDemo__WEBPACK_IMPORTED_MODULE_1__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_Main__WEBPACK_IMPORTED_MODULE_2__["default"].URL, _UI_Main__WEBPACK_IMPORTED_MODULE_2__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_3__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_4__["default"]);
     }
 }
 
@@ -4049,9 +4050,40 @@ class UI_Main extends fgui.GComponent {
         this.m_btn_ad = (this.getChildAt(2));
         this.m_btn_ui = (this.getChildAt(3));
         this.m_btn_record = (this.getChildAt(4));
+        this.m_btn_others = (this.getChildAt(5));
     }
 }
 UI_Main.URL = "ui://kk7g5mmmjhmq1";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_Others.ts":
+/*!**********************************!*\
+  !*** ./src/ui/Main/UI_Others.ts ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Others; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_Others extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "Others"));
+    }
+    onConstruct() {
+        this.m_title = (this.getChildAt(1));
+        this.m_btn_back = (this.getChildAt(2));
+        this.m_btn_share = (this.getChildAt(3));
+        this.m_btn_othergame = (this.getChildAt(4));
+    }
+}
+UI_Others.URL = "ui://kk7g5mmmx62bf";
 
 
 /***/ }),
