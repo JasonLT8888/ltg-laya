@@ -22,10 +22,15 @@ export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
         this.ui.m_btn_hide_banner.onClick(this, this._OnClickHideBanner);
         this.ui.m_btn_rewardvideo.onClick(this, this._OnClickRewardAd);
         this.ui.m_btn_intvideo.onClick(this, this._OnClickIntAd);
+        this.ui.m_btn_startrecord.onClick(this, this._OnClickStartRecord);
     }
 
     private _OnClickBack() {
         this.Hide();
+    }
+
+    private _OnClickStartRecord() {
+        console.log("???????");
     }
 
     private _OnClickShowBanner() {

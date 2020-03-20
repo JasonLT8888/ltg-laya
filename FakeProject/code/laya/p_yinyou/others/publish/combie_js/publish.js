@@ -517,9 +517,9 @@ class PublishHandler {
     }
     _InitAll() {
         this._workPath = process.cwd();
-        let configPath = path.join(this._workPath, "./others/config/publish." + this._platformStr + ".json");
+        let configPath = path.join(this._workPath, "./pack_config/publish." + this._platformStr + ".json");
         if (!LTUtils_1.LTUtils.IsFileExist(configPath)) {
-            console.log("当前平台", this._platformStr, "不存在打包配置文件", ("publish." + this._platformStr + ".json").red, "读取默认配置");
+            console.log("当前平台", this._platformStr, "不存在打包配置文件", configPath.red, "读取默认配置");
             configPath = path.join(this._workPath, "./others/config/publish.default.json");
         }
         let readStr = LTUtils_1.LTUtils.ReadStrFrom(configPath);

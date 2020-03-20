@@ -4,7 +4,7 @@
     <graph id="n0_gxfz" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <text id="n1_gxfz" name="title" xy="221,112" size="308,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="广告展示">
+    <text id="n1_gxfz" name="title" xy="221,112" size="309,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="广告展示">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <component id="n2_gxfz" name="btn_back" src="gxfzc" fileName="cmp/btn_text_blue.xml" xy="265,1158">
@@ -12,16 +12,28 @@
       <Button title="返回"/>
     </component>
     <component id="n3_gxfz" name="btn_show_banner" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="77,297">
+      <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="显示Banner"/>
     </component>
     <component id="n4_gxfz" name="btn_hide_banner" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="446,297">
+      <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="关闭Banner"/>
     </component>
-    <component id="n5_gxfz" name="btn_rewardvideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="77,482">
+    <component id="n5_gxfz" name="btn_rewardvideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="77,421">
+      <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="有奖视频"/>
     </component>
-    <component id="n6_gxfz" name="btn_intvideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="446,482">
+    <component id="n6_gxfz" name="btn_intvideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="446,421">
+      <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="插页广告"/>
+    </component>
+    <component id="n7_x62b" name="btn_startrecord" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="77,545">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="开始录屏"/>
+    </component>
+    <component id="n9_x62b" name="btn_sharevideo" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="446,545">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="分享录屏"/>
     </component>
   </displayList>
 </component>

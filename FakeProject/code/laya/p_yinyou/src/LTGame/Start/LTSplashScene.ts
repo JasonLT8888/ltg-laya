@@ -53,9 +53,11 @@ export default class LTSplashScene extends BaseState {
     }
 
     _DoEnter() {
+        
         this._needLoadOtherUIPack.push(
-            "res/ltgame/ui/ltgame"
+            "res/ltgame/ui/LTGame"
         );
+        
         this._InitUI();
     }
 
