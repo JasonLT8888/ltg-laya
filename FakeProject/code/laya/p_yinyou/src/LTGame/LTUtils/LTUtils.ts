@@ -20,16 +20,32 @@ export class LTUtils {
         if (meshRenderer != null) {
             meshRenderer.castShadow = castShadow;
             meshRenderer.receiveShadow = receiveShadow;
-            return obj;
         }
         let skinnedMeshRenderer = obj.skinnedMeshRenderer as Laya.SkinnedMeshRenderer;
         if (skinnedMeshRenderer != null) {
             skinnedMeshRenderer.castShadow = castShadow;
             skinnedMeshRenderer.receiveShadow = receiveShadow;
-            return obj;
         }
-        // console.error("未处理的阴影设置类型", obj);
-        return obj;
+        let node = obj as Laya.Node;
+        for (let i = 0; i < node.numChildren; ++i) {
+            let getChild = node.getChildAt(i);
+            this.SetShadow(getChild, castShadow, receiveShadow);
+        }
+    }
+
+    public static GetComponentsInChildren(obj: Laya.Sprite3D, cmp: typeof Laya.Component): typeof Laya.Component[] {
+        let result: typeof Laya.Component[] = [];
+        this._GetComponentsInChildrenHelper(obj, cmp, result);
+        return result;
+    }
+
+    private static _GetComponentsInChildrenHelper(obj: Laya.Sprite3D, cmp: typeof Laya.Component, result: typeof Laya.Component[]) {
+        let cmps = obj.getComponents(cmp) as typeof Laya.Component[];
+        result.push(...cmps);
+        for (let i = 0; i < obj.numChildren; ++i) {
+            let getChild = obj.getChildAt(i);
+            this._GetComponentsInChildrenHelper(getChild as Laya.Sprite3D, cmp, result);
+        }
     }
 
     public static EnableShadow(directionLight: Laya.DirectionLight, farDistance: number) {
@@ -38,7 +54,7 @@ export class LTUtils {
         //可见阴影距离
         directionLight.shadowDistance = farDistance;
         //生成阴影贴图尺寸
-        directionLight.shadowResolution = 1024;
+        directionLight.shadowResolution = 512;
         //生成阴影贴图数量
         directionLight.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
     }
