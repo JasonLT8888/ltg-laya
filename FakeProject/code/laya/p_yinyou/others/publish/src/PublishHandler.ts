@@ -200,6 +200,7 @@ export class PublishHandler {
         }
         let readStr = LTUtils.ReadStrFrom(configPath);
         this._packConfig = JSON.parse(readStr);
+        this._useCompress = this._packConfig.compress;
 
         this._releasePath = path.join(this._workPath, "./release/" + this._platformStr);
         this._templatePath = path.join(this._workPath, "./others/publish/templates/" + this._platformStr);
