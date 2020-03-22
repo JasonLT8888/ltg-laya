@@ -1,10 +1,12 @@
+import Vector2Ex from "../../LTUtils/Vector2Ex";
+
 export default class LTJoystick01 {
 
     private _pressBg: fgui.GObject;
     private _joystickBg: fgui.GObject;
     private _joystickFont: fgui.GObject;
 
-    private _isPressed: boolean;
+    private _isPressed: boolean = false;
     private _cacheTouchId: number;
 
     private _cacheInitPos: Laya.Point;
@@ -43,6 +45,13 @@ export default class LTJoystick01 {
         return this._cacheDragVec;
     }
 
+    private _cacheUp: Laya.Vector2 = new Laya.Vector2(0, 1);
+
+    private _cacheYaw: number = 0;
+    public get yaw(): number {
+        return this._cacheYaw;
+    }
+
     public Init(ui: any) {
         this._pressBg = ui;
         this._joystickBg = ui['m_joystick_bg'];
@@ -56,6 +65,7 @@ export default class LTJoystick01 {
         this._radius = this._joystickBg.width / 2;
         this._pressBg.alpha = 0.5;
         this._cacheDragVec = new Laya.Vector2();
+        this._cacheYaw = 0;
     }
 
     private _OnTouchDown(event: Laya.Event) {
@@ -91,6 +101,7 @@ export default class LTJoystick01 {
 
         this._cacheDragVec.x = xOffset;
         this._cacheDragVec.y = yOffset;
+        this._cacheYaw = -Vector2Ex.SignedAngle(this._cacheUp, this._cacheDragVec);
     }
 
     private _OnTouchUp(event: Laya.Event) {
@@ -104,8 +115,10 @@ export default class LTJoystick01 {
         this._joystickBg.setXY(point.x, point.y);
         this._joystickFont.setXY(point.x, point.y);
 
+        // 这里不重置
         this._cacheDragVec.x = 0;
         this._cacheDragVec.y = 0;
+        this._cacheYaw = 0;
     }
 
     public Dispose() {
