@@ -108,9 +108,9 @@ export class LTUtils {
     }
 
     /**
- * 获得金币字符串显示
- * @param num 
- */
+     * 获得金币字符串显示
+     * @param num 
+     */
     public static GetCoinStr1(num: number): string {
         if (this._strMap == null) {
             this._strMap = ["", "K", "M", "B", "T", "Q"];

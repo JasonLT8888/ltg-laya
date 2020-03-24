@@ -7,6 +7,7 @@ import FGuiEx from "../UIExt/FGui/FGuiEx";
 import LTRes from "../Res/LTRes";
 import Awaiters from "../Async/Awaiters";
 import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
+import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 
 export default class LTSplashScene extends BaseState {
 
@@ -18,7 +19,7 @@ export default class LTSplashScene extends BaseState {
     /**
      * 需要加载的其他UI包
      */
-    private _needLoadOtherUIPack = [
+    protected _needLoadOtherUIPack = [
         "res/fgui/Main"
     ];
 
@@ -53,11 +54,11 @@ export default class LTSplashScene extends BaseState {
     }
 
     _DoEnter() {
-        
+
         this._needLoadOtherUIPack.push(
             "res/ltgame/ui/LTGame"
         );
-        
+
         this._InitUI();
     }
 
@@ -139,7 +140,9 @@ export default class LTSplashScene extends BaseState {
         for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
             let otherUIPack = this._needLoadOtherUIPack[i];
             fgui.UIPackage.addPackage(otherUIPack);
+            console.log(otherUIPack, "已加载");
         }
+        UI_FlyPanelMediator.instance.Show();
 
         let loadUrls = [];
         this._OnGameResPrepared(loadUrls);

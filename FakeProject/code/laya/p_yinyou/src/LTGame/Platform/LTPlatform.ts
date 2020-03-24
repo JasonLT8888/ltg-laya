@@ -21,6 +21,7 @@ export default class LTPlatform {
         this._instance = LTPlatformFactory.CreateInstance();
         this._instance.appId = appId;
         console.log("平台实例创建完成", LTPlatform.GetPlatformStr(this._instance.platform));
+        window['LTPlatform'] = this._instance;
         return this._instance;
     }
 

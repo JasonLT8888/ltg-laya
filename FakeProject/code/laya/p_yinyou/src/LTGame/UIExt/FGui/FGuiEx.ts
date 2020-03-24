@@ -1,6 +1,5 @@
 import LTDictionary from "../../LTUtils/LTDictionary";
 import FGuiData from "./FGuiData";
-import Vector3Ex from "../../LTUtils/Vector3Ex";
 
 export default class FGuiEx {
 
@@ -36,7 +35,7 @@ export default class FGuiEx {
         window[ui.constructor.name] = ui;
 
         console.log("打开界面", ui.constructor.name);
-        
+
         return ui;
     }
 
@@ -46,7 +45,7 @@ export default class FGuiEx {
         if (this.safeArea != null) {
             let scale = Laya.stage.width / this.safeArea.width;
             this.top = this.safeArea.top * scale;
-            this.bottom = this.safeArea.bottom * scale;
+            this.bottom = this.safeArea.bottom - this.safeArea.height - this.safeArea.top * scale;
         }
         fgui.GRoot.inst.setSize(setWidth, setHeight);
         let childCount = fgui.GRoot.inst.numChildren;

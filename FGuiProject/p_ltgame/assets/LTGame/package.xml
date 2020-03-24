@@ -15,6 +15,9 @@
     <component id="mhasc" name="CommonLoad.xml" path="/ui/" exported="true"/>
     <image id="mhasd" name="sp_jiazai.png" path="/img/"/>
     <component id="mhase" name="view_load.xml" path="/cmp/"/>
+    <component id="h75rf" name="FlyPanel.xml" path="/ui/" exported="true"/>
+    <image id="h75rg" name="coin@2x.png" path="/img/"/>
+    <component id="h75rh" name="view_fly_coin.xml" path="/cmp/" exported="true"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

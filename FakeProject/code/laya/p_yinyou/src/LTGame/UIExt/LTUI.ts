@@ -1,5 +1,6 @@
 import UI_CommomToastMediator from "./DefaultUI/UI_CommomToastMediator";
 import UI_CommondLoadMediator from "./DefaultUI/UI_CommonLoadMediator";
+import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
 
 export default class LTUI {
 
@@ -18,6 +19,11 @@ export default class LTUI {
 
     public static HideLoading() {
         UI_CommondLoadMediator.instance.Hide();
+    }
+
+    public static async FlyCoinsTo(fromObj: fgui.GObject, toObj: fgui.GObject, flyIcon: string = null, flyCount: number = 10,
+        flyTime: number = 1, circleRadius: number = 60) {
+        await UI_FlyPanelMediator.instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
     }
 
 }
