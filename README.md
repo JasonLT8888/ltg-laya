@@ -12,5 +12,19 @@
 ## 目录说明
 * FakeProject 示例工程
 * Other 杂项文件
+* FGuiProject 框架UI工程
+* Publish 发布路径
+
+## 使用说明
+1. 使用layaide新建一个工程
+2. 将Publish下的*所有文件*(others和package.json)拷贝到工程*根目录*
+3. 在根目录执行npm install 命令
+4. 运行npm指令:update-ltg
+5. 开始写代码
+
+# npm命令说明:
+* build:编译代码并持续watch
+* publish-xx:发布指定平台代码
+* update-ltg:更新框架代码（使用others/内的框架模板替换工程内的）
 
 待续
