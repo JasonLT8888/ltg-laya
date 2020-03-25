@@ -1,6 +1,8 @@
 import UI_CommomToastMediator from "./DefaultUI/UI_CommomToastMediator";
 import UI_CommondLoadMediator from "./DefaultUI/UI_CommonLoadMediator";
 import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
+import SignOpenData from "./DefaultUI/Data/SignOpenData";
+import UI_CommonSignMediator from "./DefaultUI/UI_CommonSignMediator";
 
 export default class LTUI {
 
@@ -24,6 +26,10 @@ export default class LTUI {
     public static async FlyCoinsTo(fromObj: fgui.GObject, toObj: fgui.GObject, flyIcon: string = null, flyCount: number = 10,
         flyTime: number = 1, circleRadius: number = 60) {
         await UI_FlyPanelMediator.instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
+    }
+
+    public static ShowSignUI(openData: SignOpenData) {
+        UI_CommonSignMediator.instance.Show(openData);
     }
 
 }

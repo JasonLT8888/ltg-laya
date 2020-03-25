@@ -2,12 +2,12 @@
 <packageDescription id="75kiu87k">
   <resources>
     <image id="ovsy1" name="btn_anniuhui.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
-    <image id="ovsy2" name="btn_anniuhuang.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <image id="ovsy2" name="btn_anniuhuang.png" path="/img/" scale="9grid" scale9grid="20,20,18,13"/>
     <image id="ovsy3" name="btn_anniulan.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
     <component id="ovsy4" name="FakeBanner_V.xml" path="/ui/" exported="true"/>
     <image id="ovsy5" name="sp_tishijiemianbg.png" path="/img/" scale="9grid" scale9grid="15,15,24,24"/>
     <component id="ovsy6" name="view_banner.xml" path="/cmp/"/>
-    <component id="ovsy7" name="CommomToast.xml" path="/ui/" exported="true"/>
+    <component id="ovsy7" name="CommonToast.xml" path="/ui/" exported="true"/>
     <component id="ovsy8" name="view_toast.xml" path="/cmp/"/>
     <component id="ovsy9" name="FakeRewardVideo.xml" path="/ui/" exported="true"/>
     <component id="ovsya" name="btn_blue.xml" path="/cmp/"/>
@@ -18,6 +18,22 @@
     <component id="h75rf" name="FlyPanel.xml" path="/ui/" exported="true"/>
     <image id="h75rg" name="coin@2x.png" path="/img/"/>
     <component id="h75rh" name="view_fly_coin.xml" path="/cmp/" exported="true"/>
+    <image id="it2ii" name="登录奖励.jpg" path="/效果图/"/>
+    <component id="it2ij" name="CommonSign.xml" path="/ui/" exported="true"/>
+    <image id="it2ik" name="sp_erjibg0.png" path="/img/" scale="9grid" scale9grid="40,125,32,43"/>
+    <image id="it2il" name="sp_denglujiangli.png" path="/img/"/>
+    <image id="it2im" name="sp_guanbi.png" path="/img/"/>
+    <component id="it2in" name="btn_close_01.xml" path="/cmp/"/>
+    <image id="it2io" name="sp_shipin.png" path="/img/"/>
+    <image id="it2ip" name="sp_shuangbeilingqu.png" path="/img/"/>
+    <component id="it2iq" name="btn_double_get.xml" path="/cmp/"/>
+    <image id="it2ir" name="sp_weilingqubg.png" path="/img/" scale="9grid" scale9grid="20,55,28,49"/>
+    <image id="it2it" name="sp_lingqujiangli.png" path="/img/"/>
+    <component id="it2iu" name="btn_normal_get.xml" path="/cmp/"/>
+    <image id="it2iv" name="sp_yijinglingqubg.png" path="/img/" scale="9grid" scale9grid="20,50,27,54"/>
+    <image id="it2iw" name="sp_yijinglingqu.png" path="/img/"/>
+    <component id="it2ix" name="view_item_sign.xml" path="/cmp/"/>
+    <component id="it2iy" name="view_common_sign.xml" path="/cache/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
