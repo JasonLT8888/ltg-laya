@@ -12,6 +12,6 @@ loadLib("libs/laya.core.js");
 loadLib("libs/laya.html.js");
 loadLib("libs/laya.d3.js")//-----libs-end-------
 loadLib("libs/ltgame/promise.js");
-loadLib("libs/fairygui/fairygui.min.js");
+loadLib("libs/fairygui/fairygui.js");
 loadLib("libs/laya.physics3D.js");
 loadLib("js/bundle.js");
