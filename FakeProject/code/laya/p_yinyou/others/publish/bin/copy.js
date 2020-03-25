@@ -81,15 +81,15 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/Main.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/CopyProject.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/Main.ts":
-/*!*********************!*\
-  !*** ./src/Main.ts ***!
-  \*********************/
+/***/ "./src/CopyProject.ts":
+/*!****************************!*\
+  !*** ./src/CopyProject.ts ***!
+  \****************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -98,14 +98,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! process */ "process");
 /* harmony import */ var process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(process__WEBPACK_IMPORTED_MODULE_0__);
 
-class Main {
+class CopyProject {
     constructor() {
         // D:\Work_Projects\ltg-laya\FakeProject\code\laya\p_yinyou
         let currentWorkPath = process__WEBPACK_IMPORTED_MODULE_0__["cwd"]();
         console.log("开始初始化工程");
     }
 }
-new Main();
+new CopyProject();
 
 
 /***/ }),
@@ -122,4 +122,4 @@ module.exports = require("process");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=copy.js.map

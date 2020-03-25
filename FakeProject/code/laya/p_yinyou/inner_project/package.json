@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "test-run": "node ./../others/publish/bin/bundle.js"
+    "copy-project": "node ./../others/publish/bin/copy.js"
   },
   "author": "lt",
   "license": "MIT"

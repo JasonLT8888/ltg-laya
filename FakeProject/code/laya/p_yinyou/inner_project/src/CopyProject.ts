@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as process from 'process';
 
-class Main {
+class CopyProject {
 
     constructor() {
         // D:\Work_Projects\ltg-laya\FakeProject\code\laya\p_yinyou
@@ -12,4 +12,4 @@ class Main {
 
 }
 
-new Main();
+new CopyProject();

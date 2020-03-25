@@ -16,11 +16,16 @@ module.exports = (env) => {
         externals: [
             nodeExternals()
         ],
-        entry: path.join(workSpaceDir2, 'src/Main.ts'),
-        output: {
-            path: path.join(workSpaceDir2, './../others/publish/bin/'),
-            filename: 'bundle.js'
+        entry: {
+            main: path.join(workSpaceDir2, 'src/Main.ts'),
+            copy: path.join(workSpaceDir2, 'src/CopyProject.ts')
         },
+        output:
+        {
+            path: path.join(workSpaceDir2, './../others/publish/bin/'),
+            filename: '[name].js'
+        },
+
         module: {
             rules: [
                 {
