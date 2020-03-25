@@ -1,10 +1,13 @@
 {
     "compilerOptions": {
-      "module": "es6",
+      "module": "CommonJS",
       "target": "es6",
       "noEmitHelpers": true,
       "sourceMap": true,
-      "baseUrl": "src"
+      "baseUrl": "src",
+      "lib": [
+        "DOM"
+      ]
     },
     "exclude": [
       "node_modules"

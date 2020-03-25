@@ -90,18 +90,17 @@
 /*!*********************!*\
   !*** ./src/Main.ts ***!
   \*********************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! process */ "process");
-/* harmony import */ var process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(process__WEBPACK_IMPORTED_MODULE_0__);
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const process = __webpack_require__(/*! process */ "process");
 class Main {
     constructor() {
         // D:\Work_Projects\ltg-laya\FakeProject\code\laya\p_yinyou
-        let currentWorkPath = process__WEBPACK_IMPORTED_MODULE_0__["cwd"]();
+        let currentWorkPath = process.cwd();
         console.log("开始初始化工程");
     }
 }
