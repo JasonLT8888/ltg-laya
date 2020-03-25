@@ -23,6 +23,7 @@ export default class UI_UIDemoMediator extends BaseUIMediator<UI_UIDemo> {
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
         this.ui.m_btn_toast.onClick(this, this._OnClickToast);
         this.ui.m_btn_load.onClick(this, this._OnClickLoad);
+        this.ui.m_btn_fly_cons.onClick(this, this._OnClickFlyCoins);
     }
 
     private _OnClickBack() {
@@ -31,6 +32,14 @@ export default class UI_UIDemoMediator extends BaseUIMediator<UI_UIDemo> {
 
     private _OnClickToast() {
         LTUI.Toast("显示通知" + MathEx.RandomInt(100, 500));
+    }
+
+    private async _OnClickFlyCoins() {
+        console.log("开始飞金币");
+        
+        await LTUI.FlyCoinsTo(this.ui.m_btn_fly_cons, this.ui.m_title);
+
+        console.log("飞金币结束,你可以在这里做金币接收动画");
     }
 
     private async _OnClickLoad() {

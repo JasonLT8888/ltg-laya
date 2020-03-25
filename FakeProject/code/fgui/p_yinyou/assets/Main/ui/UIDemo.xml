@@ -4,7 +4,7 @@
     <graph id="n0_gxfz" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <text id="n1_gxfz" name="title" xy="257,112" size="235,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="UI展示">
+    <text id="n1_gxfz" name="title" xy="373,156" pivot="0.5,0.5" anchor="true" size="233,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="UI展示">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <component id="n2_gxfz" name="btn_back" src="gxfzc" fileName="cmp/btn_text_blue.xml" xy="265,1158">
@@ -18,6 +18,10 @@
     <component id="n4_x62b" name="btn_load" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="429,257">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="加载弹窗"/>
+    </component>
+    <component id="n5_ooek" name="btn_fly_cons" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="81,387">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="飞金币"/>
     </component>
   </displayList>
 </component>

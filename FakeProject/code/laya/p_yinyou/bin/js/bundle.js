@@ -1206,6 +1206,7 @@ class LTPlatform {
         this._instance = _LTPlatformFactory__WEBPACK_IMPORTED_MODULE_1__["default"].CreateInstance();
         this._instance.appId = appId;
         console.log("平台实例创建完成", LTPlatform.GetPlatformStr(this._instance.platform));
+        window['LTPlatform'] = this._instance;
         return this._instance;
     }
     static get platformStr() {
@@ -2468,6 +2469,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
 /* harmony import */ var _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
 /* harmony import */ var _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI/LTGame/LTGameBinder */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/LTGameBinder.ts");
+/* harmony import */ var _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
+
 
 
 
@@ -2581,7 +2584,9 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
             for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
                 let otherUIPack = this._needLoadOtherUIPack[i];
                 fgui.UIPackage.addPackage(otherUIPack);
+                console.log(otherUIPack, "已加载");
             }
+            _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_8__["default"].instance.Show();
             let loadUrls = [];
             this._OnGameResPrepared(loadUrls);
             if (loadUrls.length == 0) {
@@ -2765,14 +2770,18 @@ class LTStart {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTGameBinder; });
-/* harmony import */ var _UI_CommonLoad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UI_CommonLoad */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonLoad.ts");
-/* harmony import */ var _UI_view_load__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI_view_load */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_load.ts");
-/* harmony import */ var _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_FakeBanner_V */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeBanner_V.ts");
-/* harmony import */ var _UI_CommomToast__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_CommomToast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommomToast.ts");
-/* harmony import */ var _UI_view_toast__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_view_toast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_toast.ts");
-/* harmony import */ var _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_FakeRewardVideo */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeRewardVideo.ts");
-/* harmony import */ var _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_FakeInterstital */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeInterstital.ts");
+/* harmony import */ var _UI_FlyPanel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UI_FlyPanel */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FlyPanel.ts");
+/* harmony import */ var _UI_view_fly_coin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI_view_fly_coin */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_fly_coin.ts");
+/* harmony import */ var _UI_CommonLoad__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_CommonLoad */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonLoad.ts");
+/* harmony import */ var _UI_view_load__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_view_load */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_load.ts");
+/* harmony import */ var _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_FakeBanner_V */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeBanner_V.ts");
+/* harmony import */ var _UI_CommomToast__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_CommomToast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommomToast.ts");
+/* harmony import */ var _UI_view_toast__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_view_toast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_toast.ts");
+/* harmony import */ var _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_FakeRewardVideo */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeRewardVideo.ts");
+/* harmony import */ var _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_FakeInterstital */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeInterstital.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
 
 
 
@@ -2782,13 +2791,15 @@ __webpack_require__.r(__webpack_exports__);
 
 class LTGameBinder {
     static bindAll() {
-        fgui.UIObjectFactory.setExtension(_UI_CommonLoad__WEBPACK_IMPORTED_MODULE_0__["default"].URL, _UI_CommonLoad__WEBPACK_IMPORTED_MODULE_0__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_load__WEBPACK_IMPORTED_MODULE_1__["default"].URL, _UI_view_load__WEBPACK_IMPORTED_MODULE_1__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_2__["default"].URL, _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_2__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_CommomToast__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_CommomToast__WEBPACK_IMPORTED_MODULE_3__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_toast__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _UI_view_toast__WEBPACK_IMPORTED_MODULE_4__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_5__["default"].URL, _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_5__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_6__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FlyPanel__WEBPACK_IMPORTED_MODULE_0__["default"].URL, _UI_FlyPanel__WEBPACK_IMPORTED_MODULE_0__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_fly_coin__WEBPACK_IMPORTED_MODULE_1__["default"].URL, _UI_view_fly_coin__WEBPACK_IMPORTED_MODULE_1__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommonLoad__WEBPACK_IMPORTED_MODULE_2__["default"].URL, _UI_CommonLoad__WEBPACK_IMPORTED_MODULE_2__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_load__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_view_load__WEBPACK_IMPORTED_MODULE_3__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_4__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommomToast__WEBPACK_IMPORTED_MODULE_5__["default"].URL, _UI_CommomToast__WEBPACK_IMPORTED_MODULE_5__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_toast__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_view_toast__WEBPACK_IMPORTED_MODULE_6__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_7__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_8__["default"]);
     }
 }
 
@@ -2927,6 +2938,60 @@ class UI_FakeRewardVideo extends fgui.GComponent {
     }
 }
 UI_FakeRewardVideo.URL = "ui://75kiu87kovsy9";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FlyPanel.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FlyPanel.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FlyPanel; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_FlyPanel extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "FlyPanel"));
+    }
+    onConstruct() {
+        this.m_test = (this.getChildAt(0));
+    }
+}
+UI_FlyPanel.URL = "ui://75kiu87kh75rf";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_fly_coin.ts":
+/*!******************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_fly_coin.ts ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_fly_coin; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_view_fly_coin extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "view_fly_coin"));
+    }
+    onConstruct() {
+        this.m_icon = (this.getChildAt(0));
+    }
+}
+UI_view_fly_coin.URL = "ui://75kiu87kh75rh";
 
 
 /***/ }),
@@ -3197,6 +3262,76 @@ class UI_FakeRewardADMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MOD
 
 /***/ }),
 
+/***/ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts":
+/*!***********************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FlyPanelMediator; });
+/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTGame_UI_FlyPanel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI/LTGame/UI_FlyPanel */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FlyPanel.ts");
+/* harmony import */ var _UI_LTGame_UI_view_fly_coin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI/LTGame/UI_view_fly_coin */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_fly_coin.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+
+
+
+
+
+class UI_FlyPanelMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_FlyPanelMediator();
+            this._instance._classDefine = _UI_LTGame_UI_FlyPanel__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._sortOrder = Number.MAX_SAFE_INTEGER - 1;
+        this.ui.m_test.dispose();
+    }
+    /**
+     * 先往外扩,然后飞到指定位置
+     * @param fromObj
+     * @param toObj
+     * @param flyIcon
+     * @param flyCount
+     * @param flyTime
+     */
+    FlyCoins(fromObj, toObj, flyIcon = null, flyCount = 100, flyTime = 1, circleRadius = 10) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let startPos = fromObj.localToGlobal();
+            let stopPos = toObj.localToGlobal();
+            let cacheTime = flyTime * 0.6 * 1000;
+            let finalTime = flyTime * 0.4 * 1000;
+            for (let i = 0; i < flyCount; ++i) {
+                let flyCoin = _UI_LTGame_UI_view_fly_coin__WEBPACK_IMPORTED_MODULE_2__["default"].createInstance();
+                this.ui.addChild(flyCoin);
+                if (flyIcon != null) {
+                    flyCoin.m_icon.url = flyIcon;
+                }
+                flyCoin.setXY(startPos.x, startPos.y);
+                let cachePos = new Laya.Vector2(startPos.x + _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-circleRadius, circleRadius), startPos.y + _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-circleRadius, circleRadius));
+                Laya.Tween.to(flyCoin, { x: cachePos.x, y: cachePos.y }, cacheTime, Laya.Ease.quadInOut, Laya.Handler.create(this, () => {
+                    Laya.Tween.to(flyCoin, { x: stopPos.x, y: stopPos.y }, finalTime, Laya.Ease.quadInOut, Laya.Handler.create(this, () => {
+                        flyCoin.dispose();
+                    }));
+                }));
+            }
+            yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].Seconds(flyTime);
+        });
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts":
 /*!*************************************************!*\
   !*** ./src/LTGame/UIExt/FGui/BaseUIMediator.ts ***!
@@ -3339,7 +3474,7 @@ class FGuiEx {
         if (this.safeArea != null) {
             let scale = Laya.stage.width / this.safeArea.width;
             this.top = this.safeArea.top * scale;
-            this.bottom = this.safeArea.bottom * scale;
+            this.bottom = this.safeArea.bottom - this.safeArea.height - this.safeArea.top * scale;
         }
         fgui.GRoot.inst.setSize(setWidth, setHeight);
         let childCount = fgui.GRoot.inst.numChildren;
@@ -3397,6 +3532,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTUI; });
 /* harmony import */ var _DefaultUI_UI_CommomToastMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultUI/UI_CommomToastMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommomToastMediator.ts");
 /* harmony import */ var _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DefaultUI/UI_CommonLoadMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonLoadMediator.ts");
+/* harmony import */ var _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
+
 
 
 class LTUI {
@@ -3413,6 +3550,11 @@ class LTUI {
     }
     static HideLoading() {
         _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Hide();
+    }
+    static FlyCoinsTo(fromObj, toObj, flyIcon = null, flyCount = 10, flyTime = 1, circleRadius = 60) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
+        });
     }
 }
 
@@ -3473,6 +3615,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].TT:
                 this._appId = "ttbe90c82d21ba845b";
+                platformData.interstitialId = "1mdxrmurdy34bi2hql";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_yinyou/" + version + "_tt/");
@@ -3892,12 +4035,20 @@ class UI_UIDemoMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPOR
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
         this.ui.m_btn_toast.onClick(this, this._OnClickToast);
         this.ui.m_btn_load.onClick(this, this._OnClickLoad);
+        this.ui.m_btn_fly_cons.onClick(this, this._OnClickFlyCoins);
     }
     _OnClickBack() {
         this.Hide();
     }
     _OnClickToast() {
         _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].Toast("显示通知" + _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_2__["default"].RandomInt(100, 500));
+    }
+    _OnClickFlyCoins() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("开始飞金币");
+            yield _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].FlyCoinsTo(this.ui.m_btn_fly_cons, this.ui.m_title);
+            console.log("飞金币结束,你可以在这里做金币接收动画");
+        });
     }
     _OnClickLoad() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -4149,6 +4300,7 @@ class UI_UIDemo extends fgui.GComponent {
         this.m_btn_back = (this.getChildAt(2));
         this.m_btn_toast = (this.getChildAt(3));
         this.m_btn_load = (this.getChildAt(4));
+        this.m_btn_fly_cons = (this.getChildAt(5));
     }
 }
 UI_UIDemo.URL = "ui://kk7g5mmmgxfzd";

@@ -36,7 +36,6 @@ export default class UI_FlyPanelMediator extends BaseUIMediator<UI_FlyPanel> {
         flyTime: number = 1, circleRadius: number = 10) {
         let startPos = fromObj.localToGlobal();
         let stopPos = toObj.localToGlobal();
-        console.log(startPos, stopPos);
         let cacheTime = flyTime * 0.6 * 1000;
         let finalTime = flyTime * 0.4 * 1000;
         for (let i = 0; i < flyCount; ++i) {
@@ -57,7 +56,7 @@ export default class UI_FlyPanelMediator extends BaseUIMediator<UI_FlyPanel> {
 
         await Awaiters.Seconds(flyTime);
 
-        
+
 
     }
 
