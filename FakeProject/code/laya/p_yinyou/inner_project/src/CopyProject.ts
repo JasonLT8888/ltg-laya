@@ -38,9 +38,25 @@ class CopyProject {
             }
             console.log("拷贝", combieSrc, "完成");
         }
-        console.log("拷贝完成");
+        console.log("拷贝完成,开始发布,请耐心等待");
 
-
+        // 将整个others拷贝到发布目录
+        // D:\Work_Projects\ltg-laya\FakeProject\code\laya\p_yinyou\others
+        let othersPath = path.join(rootPath, 'others');
+        // D:\Work_Projects\ltg-laya\Publish\others
+        let publishPath = path.join(rootPath, './../../../../Publish/others');
+        LTUtils.DeleteDir(publishPath);
+        LTUtils.CopyDir(othersPath, publishPath, function (fileName: string) {
+            if (fileName.endsWith('node_modules')) {
+                return false;
+            }
+            return true;
+        });
+        // 拷贝package.json
+        let packageJsonPath = path.join(rootPath, 'package.json');
+        let targetPackageJsonPath = path.join(rootPath, './../../../../Publish/package.json');
+        LTUtils.CopyFile(packageJsonPath, targetPackageJsonPath);
+        console.log("已发布到", path.join(rootPath, './../../../../Publish'));
     }
 
 }

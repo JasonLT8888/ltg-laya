@@ -112,7 +112,7 @@ export class LTUtils {
             let targetPath = path.join(targetDir, fileName);
             let fileStat = fs.statSync(filePath);
             if (fileStat.isDirectory()) {
-                this.CopyDir(filePath, targetPath);
+                this.CopyDir(filePath, targetPath, checkFunc);
             } else {
                 fs.copyFileSync(filePath, targetPath);
             }
