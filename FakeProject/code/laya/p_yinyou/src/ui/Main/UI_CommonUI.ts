@@ -10,6 +10,7 @@ export default class UI_CommonUI extends fgui.GComponent {
 	public m_btn_endshare:fgui.GButton;
 	public m_btn_endreward:fgui.GButton;
 	public m_btn_offline:fgui.GButton;
+	public m_btn_tryskin:fgui.GButton;
 
 	public static URL:string = "ui://kk7g5mmmfkl1g";
 
@@ -28,5 +29,6 @@ export default class UI_CommonUI extends fgui.GComponent {
 		this.m_btn_endshare = <fgui.GButton><any>(this.getChildAt(4));
 		this.m_btn_endreward = <fgui.GButton><any>(this.getChildAt(5));
 		this.m_btn_offline = <fgui.GButton><any>(this.getChildAt(6));
+		this.m_btn_tryskin = <fgui.GButton><any>(this.getChildAt(7));
 	}
 }

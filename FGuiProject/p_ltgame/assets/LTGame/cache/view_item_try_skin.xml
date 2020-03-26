@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="186,190">
+  <displayList>
+    <image id="n4_bg00" name="n4" src="bg001y" fileName="img/sp_shiwanpifubg.png" xy="9,0" size="169,190"/>
+    <loader id="n8_bg00" name="icon" xy="18,20" size="150,150" url="ui://75kiu87kbg001q" align="center" vAlign="middle" fill="scale"/>
+    <image id="n5_bg00" name="n5" src="bg001z" fileName="img/btn_shiwananniu.png" xy="0,130" size="186,51"/>
+    <image id="n6_bg00" name="n6" src="it2io" fileName="img/sp_shipin.png" xy="22,136"/>
+    <image id="n7_bg00" name="n7" src="bg0020" fileName="img/sp_shiwan.png" xy="87,137"/>
+  </displayList>
+</component>

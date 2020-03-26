@@ -5,6 +5,7 @@ import SignOpenData from "../../LTGame/UIExt/DefaultUI/Data/SignOpenData";
 import EndShareOpenData from "../../LTGame/UIExt/DefaultUI/Data/EndShareOpenData";
 import EndRewardOpenData from "../../LTGame/UIExt/DefaultUI/Data/EndRewardOpenData";
 import OfflineOpenData from "../../LTGame/UIExt/DefaultUI/Data/OfflineOpenData";
+import TrySkinOpenData from "../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -25,6 +26,19 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_endshare.onClick(this, this._OnClickEndShare);
         this.ui.m_btn_endreward.onClick(this, this._OnClickEndReward);
         this.ui.m_btn_offline.onClick(this, this._OnClickOffline);
+        this.ui.m_btn_tryskin.onClick(this, this._OnClickTrySkin);
+    }
+
+    private _OnClickTrySkin() {
+        let openData = new TrySkinOpenData();
+        openData.onClose = Laya.Handler.create(null, (type: number, ) => {
+            if (type < 0) {
+                LTUI.Toast("不试用皮肤");
+            } else {
+                LTUI.Toast("试用皮肤" + type);
+            }
+        });
+        LTUI.ShowTrySkin(openData);
     }
 
     private _OnClickOffline() {

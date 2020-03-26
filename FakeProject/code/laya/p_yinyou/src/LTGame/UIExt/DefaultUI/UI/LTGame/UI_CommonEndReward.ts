@@ -1,5 +1,6 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
+import UI_view_title from "./UI_view_title";
 import UI_view_end_games from "./UI_view_end_games";
 import UI_btn_double_get from "./UI_btn_double_get";
 import UI_view_reward_count from "./UI_view_reward_count";
@@ -7,7 +8,7 @@ import UI_view_reward_count from "./UI_view_reward_count";
 export default class UI_CommonEndReward extends fgui.GComponent {
 
 	public m_c1:fgui.Controller;
-	public m_view_title:fgui.GComponent;
+	public m_view_title:UI_view_title;
 	public m_view_moregames:UI_view_end_games;
 	public m_btn_normal_get:UI_btn_double_get;
 	public m_btn_double_get:UI_btn_double_get;
@@ -25,7 +26,7 @@ export default class UI_CommonEndReward extends fgui.GComponent {
 
 	protected onConstruct(): void {
 		this.m_c1 = this.getControllerAt(0);
-		this.m_view_title = <fgui.GComponent><any>(this.getChildAt(1));
+		this.m_view_title = <UI_view_title><any>(this.getChildAt(1));
 		this.m_view_moregames = <UI_view_end_games><any>(this.getChildAt(2));
 		this.m_btn_normal_get = <UI_btn_double_get><any>(this.getChildAt(3));
 		this.m_btn_double_get = <UI_btn_double_get><any>(this.getChildAt(4));

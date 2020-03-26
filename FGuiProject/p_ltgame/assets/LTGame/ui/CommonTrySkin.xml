@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://75kiu87kbg001w" designImageLayer="1">
+  <displayList>
+    <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n1_bg00" name="n1" src="bg001l" fileName="cmp/view_title.xml" xy="145,221">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="icon" propertyId="1" value="ui://75kiu87kbg001x"/>
+    </component>
+    <component id="n2_bg00" name="btn_thanks" src="bg0015" fileName="cmp/btn_nothanks.xml" xy="297,864">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <list id="n8_bg00" name="list_item" xy="147,370" size="484,497" layout="flow_hz" overflow="scroll" lineGap="58" colGap="80" defaultItem="ui://75kiu87kbg0022">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

@@ -9,6 +9,8 @@ import EndRewardOpenData from "./DefaultUI/Data/EndRewardOpenData";
 import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
 import OfflineOpenData from "./DefaultUI/Data/OfflineOpenData";
 import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
+import TrySkinOpenData from "./DefaultUI/Data/TrySkinOpenData";
+import UI_CommonTrySkinMediator from "./DefaultUI/UI_CommonTrySkinMediator";
 
 export default class LTUI {
 
@@ -48,6 +50,10 @@ export default class LTUI {
 
     public static ShowOffline(openData: OfflineOpenData) {
         UI_CommonOfflineMediator.instance.Show(openData);
+    }
+
+    public static ShowTrySkin(openData: TrySkinOpenData) {
+        UI_CommonTrySkinMediator.instance.Show(openData);
     }
 
 }

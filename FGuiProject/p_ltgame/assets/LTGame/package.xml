@@ -64,6 +64,13 @@
     <image id="bg001s" name="sp_beishubg.png" path="/img/"/>
     <component id="bg001t" name="view_scale.xml" path="/cache/"/>
     <component id="bg001u" name="btn_double_get_02.xml" path="/cmp/"/>
+    <component id="bg001v" name="CommonTrySkin.xml" path="/ui/" exported="true"/>
+    <image id="bg001w" name="皮肤试用.jpg" path="/效果图/"/>
+    <image id="bg001x" name="sp_pifushiyong.png" path="/img/"/>
+    <image id="bg001y" name="sp_shiwanpifubg.png" path="/img/" scale="9grid" scale9grid="20,20,36,33"/>
+    <image id="bg001z" name="btn_shiwananniu.png" path="/img/" scale="9grid" scale9grid="15,15,20,13"/>
+    <image id="bg0020" name="sp_shiwan.png" path="/img/"/>
+    <component id="bg0022" name="view_item_try_skin.xml" path="/cache/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
