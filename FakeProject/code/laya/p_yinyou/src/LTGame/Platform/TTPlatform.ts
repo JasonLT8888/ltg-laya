@@ -119,4 +119,16 @@ export default class TTPlatform extends WXPlatform {
         this._base.shareAppMessage(shareObj);
     }
 
+    OpenGameBox(appIds: string[]) {
+        let openData = [];
+        for (let i = 0; i < appIds.length; ++i) {
+            openData.push({
+                appId: appIds[i]
+            });
+        }
+        this._base.showMoreGamesModal({
+            appLaunchOptions: openData
+        });
+    }
+
 }

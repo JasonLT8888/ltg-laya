@@ -5,6 +5,7 @@ import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
 import LTSDK from "../../../SDK/LTSDK";
 import UI_view_item_game from "./UI/LTGame/UI_view_item_game";
+import { EPlatformType } from "../../Platform/EPlatformType";
 
 export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_CommonEndReward> {
 
@@ -79,7 +80,11 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
     }
 
     private _OnClickGames() {
-        console.log("调用头条的跳转广告界面");
+        let appIds: string[] = [];
+        for (let ad of this._cacheAds) {
+            appIds.push(ad.ad_appid);
+        }
+        LTPlatform.instance.OpenGameBox(appIds);
     }
 
 }

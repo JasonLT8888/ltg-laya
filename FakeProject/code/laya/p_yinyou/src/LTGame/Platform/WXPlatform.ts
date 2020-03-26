@@ -553,4 +553,8 @@ export default class WXPlatform implements IPlatform {
         );
     }
 
+    OpenGameBox(appIds: string[]) {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
+    }
+
 }

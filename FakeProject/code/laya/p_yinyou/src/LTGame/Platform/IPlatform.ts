@@ -129,4 +129,9 @@ export default interface IPlatform {
      */
     ShowToast(str: string);
 
+    /**
+     * 打开游戏盒子
+     */
+    OpenGameBox(appIds: string[]);
+
 }

@@ -1314,6 +1314,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UIExt_DefaultUI_UI_FakeRewardADMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FakeRewardADMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FakeRewardADMediator.ts");
 /* harmony import */ var _UIExt_DefaultUI_UI_FakeInterstitalMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FakeInterstitalMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FakeInterstitalMediator.ts");
 /* harmony import */ var _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DefaultRecordManager */ "./src/LTGame/Platform/DefaultRecordManager.ts");
+/* harmony import */ var _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+
 
 
 
@@ -1388,19 +1390,16 @@ class DefaultPlatform {
     RecordEvent(eventId, param) {
         console.log("记录事件", eventId, param);
     }
-    StartRecord(maxTime) {
-        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "暂未实现录屏功能");
-    }
-    StopRecord() {
-        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "暂未实现录屏功能");
-    }
     ShareVideoInfo() {
         console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "暂未实现录屏功能");
     }
     _CheckUpdate() {
     }
     ShowToast(str) {
-        console.log("提示信息:", str);
+        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].Toast(str);
+    }
+    OpenGameBox() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "暂不支持互推游戏盒子");
     }
 }
 
@@ -2114,6 +2113,17 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
         };
         this._base.shareAppMessage(shareObj);
     }
+    OpenGameBox(appIds) {
+        let openData = [];
+        for (let i = 0; i < appIds.length; ++i) {
+            openData.push({
+                appId: appIds[i]
+            });
+        }
+        this._base.showMoreGamesModal({
+            appLaunchOptions: openData
+        });
+    }
 }
 
 
@@ -2622,6 +2632,9 @@ class WXPlatform {
             title: str,
             duration: 2000
         });
+    }
+    OpenGameBox(appIds) {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].platformStr, "暂不支持互推游戏盒子");
     }
 }
 
@@ -4081,7 +4094,11 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         });
     }
     _OnClickGames() {
-        console.log("调用头条的跳转广告界面");
+        let appIds = [];
+        for (let ad of this._cacheAds) {
+            appIds.push(ad.ad_appid);
+        }
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.OpenGameBox(appIds);
     }
 }
 
