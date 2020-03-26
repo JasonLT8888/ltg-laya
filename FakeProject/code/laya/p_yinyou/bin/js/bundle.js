@@ -3686,10 +3686,10 @@ class UI_CommonRoll extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "CommonRoll"));
     }
     onConstruct() {
-        this.m_btn_close = (this.getChildAt(1));
-        this.m_btn_roll = (this.getChildAt(2));
-        this.m_view_roll = (this.getChildAt(3));
-        this.m_pointer = (this.getChildAt(4));
+        this.m_btn_roll = (this.getChildAt(1));
+        this.m_view_roll = (this.getChildAt(2));
+        this.m_pointer = (this.getChildAt(3));
+        this.m_btn_close = (this.getChildAt(5));
     }
 }
 UI_CommonRoll.URL = "ui://75kiu87kbg002d";
@@ -4747,6 +4747,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Data_RollOpenData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Data/RollOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/RollOpenData.ts");
 /* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+
 
 
 
@@ -4800,8 +4802,13 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         return __awaiter(this, void 0, void 0, function* () {
             if (this._isRolling)
                 return;
-            _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
-            this._DoRoll();
+            let result = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
+            if (result) {
+                this._DoRoll();
+            }
+            else {
+                _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].Toast("跳过视频无法获得奖励");
+            }
         });
     }
     _DoRoll() {

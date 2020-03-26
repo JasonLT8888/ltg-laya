@@ -4,6 +4,7 @@ import RollOpenData from "./Data/RollOpenData";
 import UI_view_item_roll from "./UI/LTGame/UI_view_item_roll";
 import MathEx from "../../LTUtils/MathEx";
 import LTPlatform from "../../Platform/LTPlatform";
+import LTUI from "../LTUI";
 
 export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll> {
 
@@ -58,8 +59,12 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
 
     private async _OnClickRoll() {
         if (this._isRolling) return;
-        LTPlatform.instance.ShowRewardVideoAdAsync();
-        this._DoRoll();
+        let result = LTPlatform.instance.ShowRewardVideoAdAsync();
+        if (result) {
+            this._DoRoll();
+        } else {
+            LTUI.Toast("跳过视频无法获得奖励");
+        }
     }
 
     private _DoRoll() {
