@@ -12,6 +12,7 @@ import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
 import TrySkinOpenData from "./DefaultUI/Data/TrySkinOpenData";
 import UI_CommonTrySkinMediator from "./DefaultUI/UI_CommonTrySkinMediator";
 import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
+import SetOpenData from "./DefaultUI/Data/SetOpenData";
 
 export default class LTUI {
 
@@ -57,8 +58,8 @@ export default class LTUI {
         UI_CommonTrySkinMediator.instance.Show(openData);
     }
 
-    public static ShowSet(onClose: Laya.Handler) {
-        UI_CommonSetMediator.instance.Show(onClose);
+    public static ShowSet(openData: SetOpenData) {
+        UI_CommonSetMediator.instance.Show(openData);
     }
 
 }

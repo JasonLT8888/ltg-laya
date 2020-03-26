@@ -6,6 +6,7 @@ import EndShareOpenData from "../../LTGame/UIExt/DefaultUI/Data/EndShareOpenData
 import EndRewardOpenData from "../../LTGame/UIExt/DefaultUI/Data/EndRewardOpenData";
 import OfflineOpenData from "../../LTGame/UIExt/DefaultUI/Data/OfflineOpenData";
 import TrySkinOpenData from "../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData";
+import SetOpenData from "../../LTGame/UIExt/DefaultUI/Data/SetOpenData";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -31,9 +32,11 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
     }
 
     private _OnClickSet() {
-        LTUI.ShowSet(Laya.Handler.create(null, () => {
-            LTUI.Toast("设置界面已关闭");
-        }));
+        let openData = new SetOpenData();
+        openData.onToggleChange = Laya.Handler.create(null, () => {
+            LTUI.Toast("改变设置");
+        }, null, false);
+        LTUI.ShowSet(openData);
     }
 
     private _OnClickTrySkin() {

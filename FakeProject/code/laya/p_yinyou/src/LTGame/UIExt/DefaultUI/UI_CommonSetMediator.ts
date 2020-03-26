@@ -1,6 +1,7 @@
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import UI_CommonSet from "./UI/LTGame/UI_CommonSet";
 import CommonSaveData from "../../Commom/CommonSaveData";
+import SetOpenData from "./Data/SetOpenData";
 
 export default class UI_CommonSetMediator extends BaseUIMediator<UI_CommonSet> {
 
@@ -13,12 +14,21 @@ export default class UI_CommonSetMediator extends BaseUIMediator<UI_CommonSet> {
         return this._instance;
     }
 
-    private _onClose: Laya.Handler;
+    private _openData: SetOpenData;
 
     _OnShow() {
         super._OnShow();
         // your code
-        this._onClose = this._openParam;
+
+        this._openData = new SetOpenData();
+        if (this._openParam == null) {
+            // console.error("请传入OfflineOpenData用于初始化离线奖励界面");
+        } else {
+            for (let key in this._openParam) {
+                this._openData[key] = this._openParam[key];
+            }
+        }
+
         this._UpdateUI();
 
         this.ui.m_view.m_toggle_music.onClick(this, this._OnClickToggleMusic);
@@ -34,8 +44,8 @@ export default class UI_CommonSetMediator extends BaseUIMediator<UI_CommonSet> {
     private _OnClickClose() {
         this.Hide();
 
-        if (this._onClose) {
-            this._onClose.run();
+        if (this._openData.onClose) {
+            this._openData.onClose.run();
         }
     }
 
@@ -43,12 +53,20 @@ export default class UI_CommonSetMediator extends BaseUIMediator<UI_CommonSet> {
         CommonSaveData.instance.isMusicOn = !CommonSaveData.instance.isMusicOn;
         this._UpdateUI();
         CommonSaveData.SaveToDisk();
+
+        if (this._openData.onToggleChange) {
+            this._openData.onToggleChange.run();
+        }
     }
 
     private _OnClickToggleShake() {
         CommonSaveData.instance.isShakeOn = !CommonSaveData.instance.isShakeOn;
         this._UpdateUI();
         CommonSaveData.SaveToDisk();
+
+        if (this._openData.onToggleChange) {
+            this._openData.onToggleChange.run();
+        }
     }
 
 }
