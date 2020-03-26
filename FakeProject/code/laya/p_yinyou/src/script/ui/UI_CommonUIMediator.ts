@@ -27,6 +27,13 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_endreward.onClick(this, this._OnClickEndReward);
         this.ui.m_btn_offline.onClick(this, this._OnClickOffline);
         this.ui.m_btn_tryskin.onClick(this, this._OnClickTrySkin);
+        this.ui.m_btn_set.onClick(this, this._OnClickSet);
+    }
+
+    private _OnClickSet() {
+        LTUI.ShowSet(Laya.Handler.create(null, () => {
+            LTUI.Toast("设置界面已关闭");
+        }));
     }
 
     private _OnClickTrySkin() {

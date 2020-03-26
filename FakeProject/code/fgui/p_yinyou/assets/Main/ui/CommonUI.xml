@@ -31,5 +31,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="试用皮肤"/>
     </component>
+    <component id="n8_fkl1" name="btn_set" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="436,538">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="设置界面"/>
+    </component>
   </displayList>
 </component>

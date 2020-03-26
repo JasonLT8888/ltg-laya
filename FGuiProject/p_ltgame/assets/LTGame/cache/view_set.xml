@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="530,518">
+  <displayList>
+    <image id="n1_bg00" name="n1" src="it2ik" fileName="img/sp_erjibg0.png" xy="0,0" size="530,518"/>
+    <image id="n2_bg00" name="n2" src="bg0025" fileName="img/sp_shezhi.png" xy="213,41"/>
+    <component id="n3_bg00" name="btn_close" src="it2in" fileName="cmp/btn_close_01.xml" xy="445,24"/>
+    <image id="n4_bg00" name="n4" src="bg0026" fileName="img/sp_shengyin.png" xy="112,195"/>
+    <image id="n5_bg00" name="n5" src="bg0029" fileName="img/sp_zhengdong.png" xy="110,361"/>
+    <component id="n6_bg00" name="toggle_music" src="bg002a" fileName="cmp/btn_toggle_01.xml" xy="292,179"/>
+    <component id="n8_bg00" name="toggle_shake" src="bg002a" fileName="cmp/btn_toggle_01.xml" xy="292,349"/>
+  </displayList>
+</component>

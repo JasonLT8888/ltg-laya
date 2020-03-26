@@ -19,6 +19,14 @@ export class SaveData {
      * 签到天数
      */
     public signDayCount: number = 0;
+    /**
+     * 音乐是否开启
+     */
+    public isMusicOn: boolean = true;
+    /**
+     * 振动是否开启
+     */
+    public isShakeOn: boolean = true;
 }
 
 export default class CommonSaveData {

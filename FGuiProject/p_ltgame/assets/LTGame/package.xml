@@ -71,6 +71,15 @@
     <image id="bg001z" name="btn_shiwananniu.png" path="/img/" scale="9grid" scale9grid="15,15,20,13"/>
     <image id="bg0020" name="sp_shiwan.png" path="/img/"/>
     <component id="bg0022" name="view_item_try_skin.xml" path="/cache/"/>
+    <component id="bg0023" name="CommonSet.xml" path="/ui/" exported="true"/>
+    <image id="bg0024" name="设置.jpg" path="/效果图/"/>
+    <image id="bg0025" name="sp_shezhi.png" path="/img/"/>
+    <image id="bg0026" name="sp_shengyin.png" path="/img/"/>
+    <image id="bg0027" name="btn_kai.png" path="/img/"/>
+    <image id="bg0028" name="btn_guan.png" path="/img/"/>
+    <image id="bg0029" name="sp_zhengdong.png" path="/img/"/>
+    <component id="bg002a" name="btn_toggle_01.xml" path="/cmp/"/>
+    <component id="bg002b" name="view_set.xml" path="/cache/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
