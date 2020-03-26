@@ -7,6 +7,7 @@ import EndRewardOpenData from "../../LTGame/UIExt/DefaultUI/Data/EndRewardOpenDa
 import OfflineOpenData from "../../LTGame/UIExt/DefaultUI/Data/OfflineOpenData";
 import TrySkinOpenData from "../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData";
 import SetOpenData from "../../LTGame/UIExt/DefaultUI/Data/SetOpenData";
+import RollOpenData from "../../LTGame/UIExt/DefaultUI/Data/RollOpenData";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -29,6 +30,15 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_offline.onClick(this, this._OnClickOffline);
         this.ui.m_btn_tryskin.onClick(this, this._OnClickTrySkin);
         this.ui.m_btn_set.onClick(this, this._OnClickSet);
+        this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
+    }
+
+    private _OnClickRoll() {
+        let openData = new RollOpenData();
+        openData.onRolled = Laya.Handler.create(null, (index: number, fromObj: fgui.GObject) => {
+            LTUI.Toast("转中" + index);
+        }, null, false);
+        LTUI.ShowRoll(openData);
     }
 
     private _OnClickSet() {

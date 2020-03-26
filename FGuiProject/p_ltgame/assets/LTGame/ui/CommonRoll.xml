@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://75kiu87kbg002c" designImageLayer="1">
+  <displayList>
+    <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n2_bg00" name="btn_close" src="it2in" fileName="cmp/btn_close_01.xml" xy="575,234">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n3_bg00" name="btn_roll" src="it2iq" fileName="cmp/btn_double_get.xml" xy="250,841">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kbg002f"/>
+    </component>
+    <component id="n5_bg00" name="view_roll" src="bg002r" fileName="cache/view_roll_bg.xml" xy="375,526" pivot="0.5,0.5" anchor="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <image id="n4_bg00" name="pointer" src="bg002g" fileName="img/sp_zhizheng.png" xy="375,529" pivot="0.5,0.6" anchor="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n1_bg00" name="n1" src="bg002e" fileName="img/sp_xinyundazhuanpan.png" xy="194,181">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+</component>

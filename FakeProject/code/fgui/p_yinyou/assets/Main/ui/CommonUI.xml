@@ -35,5 +35,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="设置界面"/>
     </component>
+    <component id="n9_fkl1" name="btn_roll" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="85,677">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="大转盘"/>
+    </component>
   </displayList>
 </component>

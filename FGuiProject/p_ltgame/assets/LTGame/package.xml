@@ -80,6 +80,22 @@
     <image id="bg0029" name="sp_zhengdong.png" path="/img/"/>
     <component id="bg002a" name="btn_toggle_01.xml" path="/cmp/"/>
     <component id="bg002b" name="view_set.xml" path="/cache/"/>
+    <image id="bg002c" name="幸运大转盘.jpg" path="/效果图/"/>
+    <component id="bg002d" name="CommonRoll.xml" path="/ui/" exported="true"/>
+    <image id="bg002e" name="sp_xinyundazhuanpan.png" path="/img/"/>
+    <image id="bg002f" name="sp_mianfeichoujiang.png" path="/img/"/>
+    <image id="bg002g" name="sp_zhizheng.png" path="/img/"/>
+    <image id="bg002h" name="sp_zhuanpan.png" path="/img/"/>
+    <image id="bg002i" name="sp_6beijinbi.png" path="/img/"/>
+    <image id="bg002j" name="sp_zhuanshidui3.png" path="/img/"/>
+    <image id="bg002k" name="sp_zhuanshidui2.png" path="/img/"/>
+    <image id="bg002l" name="sp_zhuanshidui1.png" path="/img/"/>
+    <image id="bg002m" name="sp_sanbeijinbi.png" path="/img/"/>
+    <image id="bg002n" name="sp_jinbidui3.png" path="/img/"/>
+    <image id="bg002o" name="sp_jinbidui2.png" path="/img/"/>
+    <image id="bg002p" name="sp_jinbidui1.png" path="/img/"/>
+    <component id="bg002q" name="view_item_roll.xml" path="/cache/"/>
+    <component id="bg002r" name="view_roll_bg.xml" path="/cache/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
