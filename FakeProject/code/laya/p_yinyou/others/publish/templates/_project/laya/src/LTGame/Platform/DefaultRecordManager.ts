@@ -1,7 +1,5 @@
 import IRecordManager from "./IRecordManager";
-import { LTUtils } from "../LTUtils/LTUtils";
 import LTPlatform from "./LTPlatform";
-import LTUI from "../UIExt/LTUI";
 
 export default class DefaultRecordManager implements IRecordManager {
 
@@ -33,6 +31,12 @@ export default class DefaultRecordManager implements IRecordManager {
 
     RecordClip(timeRange: number[]) {
         console.log("该平台" + LTPlatform.platformStr + "不支持录制视频");
+    }
+
+    ShareVideo(onSuccess: Laya.Handler, onCancel: Laya.Handler, onFailed: Laya.Handler) {
+        if (onFailed) {
+            onFailed.run();
+        }
     }
 
 }

@@ -2,14 +2,14 @@
 
 import UI_view_toast from "./UI_view_toast";
 
-export default class UI_CommomToast extends fgui.GComponent {
+export default class UI_CommonToast extends fgui.GComponent {
 
 	public m_toast:UI_view_toast;
 
 	public static URL:string = "ui://75kiu87kovsy7";
 
-	public static createInstance():UI_CommomToast {
-		return <UI_CommomToast><any>(fgui.UIPackage.createObject("LTGame","CommomToast"));
+	public static createInstance():UI_CommonToast {
+		return <UI_CommonToast><any>(fgui.UIPackage.createObject("LTGame","CommonToast"));
 	}
 
 	public constructor() {

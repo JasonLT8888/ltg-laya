@@ -544,10 +544,6 @@ export default class WXPlatform implements IPlatform {
         }
     }
 
-    ShareVideoInfo(onSuccess: Laya.Handler, onFailed: Laya.Handler) {
-        console.log(LTPlatform.platformStr, "不支持直接调用视频分享");
-    }
-
     ShowToast(str: string) {
         this._base.showToast(
             {
@@ -555,6 +551,10 @@ export default class WXPlatform implements IPlatform {
                 duration: 2000
             }
         );
+    }
+
+    OpenGameBox(appIds: string[]) {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
 
 }

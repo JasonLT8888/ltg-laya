@@ -55,4 +55,12 @@ export default interface IRecordManager {
      */
     StopRecord(onStop: Laya.Handler);
 
+    /**
+     * 分享视频
+     * @param onSuccess 
+     * @param onCancel 
+     * @param onFailed 
+     */
+    ShareVideo(onSuccess: Laya.Handler, onCancel: Laya.Handler, onFailed: Laya.Handler);
+
 }

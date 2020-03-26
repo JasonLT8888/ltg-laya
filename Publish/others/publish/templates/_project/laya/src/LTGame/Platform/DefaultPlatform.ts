@@ -8,6 +8,7 @@ import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator"
 import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
 import IRecordManager from "./IRecordManager";
 import DefaultRecordManager from "./DefaultRecordManager";
+import LTUI from "../UIExt/LTUI";
 
 export default class DefaultPlatform implements IPlatform {
 
@@ -86,14 +87,6 @@ export default class DefaultPlatform implements IPlatform {
         console.log("记录事件", eventId, param);
     }
 
-    StartRecord(maxTime: number) {
-        console.log(LTPlatform.platformStr, "暂未实现录屏功能");
-    }
-
-    StopRecord() {
-        console.log(LTPlatform.platformStr, "暂未实现录屏功能");
-    }
-
     ShareVideoInfo() {
         console.log(LTPlatform.platformStr, "暂未实现录屏功能");
     }
@@ -103,6 +96,10 @@ export default class DefaultPlatform implements IPlatform {
     }
 
     ShowToast(str: string) {
-        console.log("提示信息:", str);
+        LTUI.Toast(str);
+    }
+
+    OpenGameBox() {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
 }

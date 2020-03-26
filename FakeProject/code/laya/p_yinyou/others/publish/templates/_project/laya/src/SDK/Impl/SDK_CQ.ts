@@ -4,6 +4,7 @@ import LTHttp from "../../LTGame/Net/LTHttp";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import ShareManager from "../../LTGame/Platform/ShareManager";
 import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
+import FakeAdDefine from "../common/FakeAdDefine";
 
 export default class SDK_CQ implements ISDK {
 
@@ -19,6 +20,8 @@ export default class SDK_CQ implements ISDK {
 
     enableDebug: boolean = true;
 
+    private _headPrefix = "https://games.api.gugudang.com";
+
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         this.flg = flg;
         this.channel = channel;
@@ -32,13 +35,40 @@ export default class SDK_CQ implements ISDK {
         this.adManager = new SDKADManager();
 
         this._RequestShareInfo();
+        this._RequestSelfAdInfo();
+    }
+
+    private _RequestSelfAdInfo() {
+        LTHttp.Send("https://hs.yz061.com/res/down/public/configs/SelfAdConfig.json", Laya.Handler.create(this, this._OnGetSelfAdInfos),
+            Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
+    }
+
+    private _OnGetSelfAdInfosFailed(res: string) {
+        console.error("拉取到广告信息失败", res);
+    }
+
+    private _OnGetSelfAdInfos(res: string) {
+        let adJson = JSON.parse(res) as FakeAdDefine[];
+        console.log("拉取到广告信息", adJson.length, "条");
+        let fakePosId = 0;
+        let adList = [];
+        for (let fakeAd of adJson) {
+            let adData = {} as SDK.ADInfoData;
+            adData.ad_appid = fakeAd.id;
+            adData.ad_img = fakeAd.icon;
+            adData.ad_name = fakeAd.title;
+            adList.push(adData);
+        }
+
+        // 加入广告控制器
+        this.adManager.InitADs(fakePosId, adList);
     }
 
     private _RequestShareInfo() {
         let sendData = {
             appid: this.appId
         };
-        LTHttp.Send("https://games.api.gugudang.com/api/shares", Laya.Handler.create(this, this._OnRequestShareInfo), Laya.Handler.create(this, (res) => {
+        LTHttp.Send(this._headPrefix + "/api/shares", Laya.Handler.create(this, this._OnRequestShareInfo), Laya.Handler.create(this, (res) => {
             console.log("获取分享接口访问失败", res);
         }), true, sendData);
     }
@@ -81,7 +111,7 @@ export default class SDK_CQ implements ISDK {
             appid: this.appId
         }
 
-        LTHttp.Send("https://games.api.gugudang.com/api/game/config", Laya.Handler.create(this, this._OnRemoteConfigBack), Laya.Handler.create(this, (res) => {
+        LTHttp.Send(this._headPrefix + "/api/game/config", Laya.Handler.create(this, this._OnRemoteConfigBack), Laya.Handler.create(this, (res) => {
             console.log("云控HTTP访问失败", res);
         }), true, sendData);
     }
@@ -139,7 +169,7 @@ export default class SDK_CQ implements ISDK {
         if (fromAppId) {
             sendData["fappid"] = fromAppId;
         }
-        LTHttp.Send("https://games.api.gugudang.com/api/login", Laya.Handler.create(this, this._OnAuthSuccess), Laya.Handler.create(this, (res) => {
+        LTHttp.Send(this._headPrefix + "/api/login", Laya.Handler.create(this, this._OnAuthSuccess), Laya.Handler.create(this, (res) => {
             console.log("登录HTTP访问失败", res);
         }), true, sendData);
     }

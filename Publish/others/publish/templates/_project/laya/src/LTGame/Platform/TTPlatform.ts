@@ -91,37 +91,6 @@ export default class TTPlatform extends WXPlatform {
         this._bannerAd.show();
     }
 
-    ShareVideoInfo(onSuccess: Laya.Handler, onFailed: Laya.Handler) {
-        if (this.recordManager.isRecordSuccess) {
-            let shareData = {} as any;
-            shareData.channel = "video";
-            let getShareData = ShareManager.instance.GetShareInfo();
-            shareData.title = getShareData.shareTitle;
-            shareData.extra = {
-                videoPath: this.recordManager.videoSavePath
-            };
-            shareData.success = () => {
-                this._cacheOnShowHandle = Laya.Handler.create(null, () => {
-                    console.log("分享成功");
-                    if (onSuccess) {
-                        onSuccess.run();
-                    }
-                })
-            };
-            shareData.fail = (e) => {
-                this._cacheOnShowHandle = Laya.Handler.create(null, () => {
-                    console.log("分享失败");
-                    if (onFailed) {
-                        onFailed.run();
-                    }
-                })
-            }
-            this._base.shareAppMessage(shareData);
-        } else {
-            console.log(LTPlatform.platformStr, "录屏发生错误,无法分享");
-        }
-    }
-
     ShareAppMessage(shareInfo: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
         console.log("分享消息", shareInfo);
 
@@ -148,6 +117,18 @@ export default class TTPlatform extends WXPlatform {
         }
 
         this._base.shareAppMessage(shareObj);
+    }
+
+    OpenGameBox(appIds: string[]) {
+        let openData = [];
+        for (let i = 0; i < appIds.length; ++i) {
+            openData.push({
+                appId: appIds[i]
+            });
+        }
+        this._base.showMoreGamesModal({
+            appLaunchOptions: openData
+        });
     }
 
 }

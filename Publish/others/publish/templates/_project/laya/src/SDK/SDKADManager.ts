@@ -29,7 +29,7 @@ export default class SDKADManager {
     /**
      * 记录展示
      */
-    public RecordShow(...adInfo : SDK.ADInfoData[]) {
+    public RecordShow(...adInfo: SDK.ADInfoData[]) {
 
     }
 
@@ -38,7 +38,7 @@ export default class SDKADManager {
      * @param locationId 
      */
     public GetADListByLocationId(locationId: number): SDK.ADInfoData[] {
-        return null;
+        return this._adDict[locationId];
     }
 
 }

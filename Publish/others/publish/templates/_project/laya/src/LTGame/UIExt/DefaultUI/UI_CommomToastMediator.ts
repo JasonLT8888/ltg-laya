@@ -1,16 +1,16 @@
 import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_CommomToast from "./UI/LTGame/UI_CommomToast";
+import UI_CommonToast from "./UI/LTGame/UI_CommonToast";
 import FGuiData from "../FGui/FGuiData";
 import FGuiEx from "../FGui/FGuiEx";
 import UI_view_toast from "./UI/LTGame/UI_view_toast";
 
-export default class UI_CommomToastMediator extends BaseUIMediator<UI_CommomToast> {
+export default class UI_CommomToastMediator extends BaseUIMediator<UI_CommonToast> {
 
     private static _instance: UI_CommomToastMediator;
     public static get instance(): UI_CommomToastMediator {
         if (this._instance == null) {
             this._instance = new UI_CommomToastMediator();
-            this._instance._classDefine = UI_CommomToast;
+            this._instance._classDefine = UI_CommonToast;
         }
         return this._instance;
     }
@@ -19,12 +19,12 @@ export default class UI_CommomToastMediator extends BaseUIMediator<UI_CommomToas
         this._openParam = obj;
         if (this._ui == null) {
             let uiData = new FGuiData();
-            this._ui = FGuiEx.AddUI(this._classDefine, uiData) as UI_CommomToast;
+            this._ui = FGuiEx.AddUI(this._classDefine, uiData) as UI_CommonToast;
             this._ui.sortingOrder = Number.MAX_SAFE_INTEGER;
             this.ui.m_toast.visible = false;
             this._OnShow();
         }
-        
+
         this._DoToast(this._openParam as string);
     }
 

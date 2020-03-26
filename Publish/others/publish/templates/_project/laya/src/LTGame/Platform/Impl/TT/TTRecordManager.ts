@@ -1,4 +1,6 @@
 import DefaultRecordManager from "../../DefaultRecordManager";
+import ShareManager from "../../ShareManager";
+import LTPlatform from "../../LTPlatform";
 
 export default class TTRecordManager extends DefaultRecordManager {
 
@@ -115,5 +117,39 @@ export default class TTRecordManager extends DefaultRecordManager {
         this._cacheStopHandle = onStop;
 
         this._nativeManager.stop();
+    }
+
+    ShareVideo(onSuccess: Laya.Handler, onCancel: Laya.Handler, onFailed: Laya.Handler) {
+        if (this.isRecordSuccess) {
+            let shareData = {} as any;
+            shareData.channel = "video";
+            let getShareData = ShareManager.instance.GetShareInfo();
+            shareData.title = getShareData.shareTitle;
+            shareData.extra = {
+                videoPath: this.videoSavePath
+            };
+            shareData.success = () => {
+                LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
+                    console.log("分享成功");
+                    if (onSuccess) {
+                        onSuccess.run();
+                    }
+                })
+            };
+            shareData.fail = (e) => {
+                LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
+                    console.log("取消分享");
+                    if (onCancel) {
+                        onCancel.run();
+                    }
+                })
+            }
+            this._base.shareAppMessage(shareData);
+        } else {
+            console.log("无视频可以分享");
+            if (onFailed) {
+                onFailed.run();
+            }
+        }
     }
 }
