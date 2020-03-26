@@ -56,8 +56,11 @@ export default class UI_RecordDemoMediator extends BaseUIMediator<UI_RecordDemo>
     }
 
     private _OnClickShareRecord() {
-        LTPlatform.instance.ShareVideoInfo(Laya.Handler.create(null, () => {
+        LTPlatform.instance.recordManager.ShareVideo(Laya.Handler.create(null, () => {
             LTUI.Toast("分享视频成功");
+            this._UpdateUI();
+        }), Laya.Handler.create(null, () => {
+            LTUI.Toast("取消分享视频");
             this._UpdateUI();
         }), Laya.Handler.create(null, () => {
             LTUI.Toast("分享视频失败");

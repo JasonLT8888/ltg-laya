@@ -5,6 +5,8 @@ import { EPlatformType } from "../LTGame/Platform/EPlatformType";
 import LTPlatformData from "../LTGame/Platform/Data/LTPlatformData";
 import LTPlatform from "../LTGame/Platform/LTPlatform";
 import LTRespackManager from "../LTGame/Res/LTRespackManager";
+import LTSDK from "../SDK/LTSDK";
+import SDK_CQ from "../SDK/Impl/SDK_CQ";
 
 export default class MainStart extends LTStart {
 
@@ -13,7 +15,7 @@ export default class MainStart extends LTStart {
         this.enableStat = true;
     }
 
-    private _appId: string = "wx149cdd1b3b19378f";
+    private _appId: string = "ttbe90c82d21ba845b";
 
     _HandleInitPlatform(ePlatform: EPlatformType, platformData: LTPlatformData) {
         let version = "v0.0.1";
@@ -32,6 +34,10 @@ export default class MainStart extends LTStart {
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");
                 break;
         }
+    }
+
+    _HandleSDK() {
+        LTSDK.CreateInstace(SDK_CQ, "ltg", "1.0.0", this._appId);
     }
 
     _InitFsm() {

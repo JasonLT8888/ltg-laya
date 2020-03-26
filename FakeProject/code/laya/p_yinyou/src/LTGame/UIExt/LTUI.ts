@@ -3,6 +3,10 @@ import UI_CommondLoadMediator from "./DefaultUI/UI_CommonLoadMediator";
 import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
 import SignOpenData from "./DefaultUI/Data/SignOpenData";
 import UI_CommonSignMediator from "./DefaultUI/UI_CommonSignMediator";
+import EndShareOpenData from "./DefaultUI/Data/EndShareOpenData";
+import UI_CommonEndShareMediator from "./DefaultUI/UI_CommonEndShareMediator";
+import EndRewardOpenData from "./DefaultUI/Data/EndRewardOpenData";
+import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
 
 export default class LTUI {
 
@@ -30,6 +34,14 @@ export default class LTUI {
 
     public static ShowSignUI(openData: SignOpenData) {
         UI_CommonSignMediator.instance.Show(openData);
+    }
+
+    public static ShowEndShare(openData: EndShareOpenData) {
+        UI_CommonEndShareMediator.instance.Show(openData);
+    }
+
+    public static ShowEndReward(openData: EndRewardOpenData) {
+        UI_CommonEndRewardMediator.instance.Show(openData);
     }
 
 }

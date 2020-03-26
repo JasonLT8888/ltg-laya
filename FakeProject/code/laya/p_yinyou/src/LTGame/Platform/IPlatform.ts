@@ -120,11 +120,6 @@ export default interface IPlatform {
     RecordEvent(eventId: string, param: object);
 
     /**
-     * 分享视频内容
-     */
-    ShareVideoInfo(onSuccess: Laya.Handler, onFailed: Laya.Handler);
-
-    /**
      * 检查更新,非外部调用
      */
     _CheckUpdate();

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://75kiu87kbg001a" designImageAlpha="0" designImageLayer="1">
+  <controller name="c1" pages="0,有导流,1,无导流" selected="0"/>
+  <displayList>
+    <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n1_bg00" name="view_title" src="bg001l" fileName="cmp/view_title.xml" xy="145,143">
+      <gearXY controller="c1" pages="1" values="145,227" default="145,143"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n3_bg00" name="view_moregames" src="bg001k" fileName="cache/view_end_games.xml" xy="35,271">
+      <gearDisplay controller="c1" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n8_bg00" name="btn_normal_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="394,778">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kit2it"/>
+    </component>
+    <component id="n9_bg00" name="btn_double_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="105,778">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kit2ip"/>
+    </component>
+    <component id="n10_bg00" name="view_reward" src="bg001j" fileName="cache/view_reward_count.xml" xy="256,900">
+      <gearXY controller="c1" pages="1" values="256,497" default="256,900"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+  </displayList>
+</component>

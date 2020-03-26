@@ -544,10 +544,6 @@ export default class WXPlatform implements IPlatform {
         }
     }
 
-    ShareVideoInfo(onSuccess: Laya.Handler, onFailed: Laya.Handler) {
-        console.log(LTPlatform.platformStr, "不支持直接调用视频分享");
-    }
-
     ShowToast(str: string) {
         this._base.showToast(
             {

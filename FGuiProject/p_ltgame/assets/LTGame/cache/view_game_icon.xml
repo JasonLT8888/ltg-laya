@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="152,151" mask="n5_bg00">
+  <displayList>
+    <image id="n5_bg00" name="n5" src="bg001f" fileName="img/sp_youxikuang.png" xy="0,0"/>
+    <loader id="n6_bg00" name="icon" xy="0,0" size="152,151" url="ui://75kiu87kbg001f" align="center" vAlign="middle" fill="scale"/>
+  </displayList>
+  <customProperty target="icon" propertyId="1"/>
+</component>

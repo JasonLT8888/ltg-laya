@@ -15,5 +15,13 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="签到"/>
     </component>
+    <component id="n4_fkl1" name="btn_endshare" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="436,260">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="结算视频分享"/>
+    </component>
+    <component id="n5_fkl1" name="btn_endreward" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="85,399">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="结算奖励"/>
+    </component>
   </displayList>
 </component>

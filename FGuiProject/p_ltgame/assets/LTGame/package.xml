@@ -6,18 +6,18 @@
     <image id="ovsy3" name="btn_anniulan.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
     <component id="ovsy4" name="FakeBanner_V.xml" path="/ui/" exported="true"/>
     <image id="ovsy5" name="sp_tishijiemianbg.png" path="/img/" scale="9grid" scale9grid="15,15,24,24"/>
-    <component id="ovsy6" name="view_banner.xml" path="/cmp/"/>
+    <component id="ovsy6" name="view_banner.xml" path="/cache/"/>
     <component id="ovsy7" name="CommonToast.xml" path="/ui/" exported="true"/>
-    <component id="ovsy8" name="view_toast.xml" path="/cmp/"/>
+    <component id="ovsy8" name="view_toast.xml" path="/cache/"/>
     <component id="ovsy9" name="FakeRewardVideo.xml" path="/ui/" exported="true"/>
     <component id="ovsya" name="btn_blue.xml" path="/cmp/"/>
     <component id="ovsyb" name="FakeInterstital.xml" path="/ui/" exported="true"/>
     <component id="mhasc" name="CommonLoad.xml" path="/ui/" exported="true"/>
     <image id="mhasd" name="sp_jiazai.png" path="/img/"/>
-    <component id="mhase" name="view_load.xml" path="/cmp/"/>
+    <component id="mhase" name="view_load.xml" path="/cache/"/>
     <component id="h75rf" name="FlyPanel.xml" path="/ui/" exported="true"/>
     <image id="h75rg" name="coin@2x.png" path="/img/"/>
-    <component id="h75rh" name="view_fly_coin.xml" path="/cmp/" exported="true"/>
+    <component id="h75rh" name="view_fly_coin.xml" path="/cache/" exported="true"/>
     <image id="it2ii" name="登录奖励.jpg" path="/效果图/"/>
     <component id="it2ij" name="CommonSign.xml" path="/ui/" exported="true"/>
     <image id="it2ik" name="sp_erjibg0.png" path="/img/" scale="9grid" scale9grid="40,125,32,43"/>
@@ -32,8 +32,30 @@
     <component id="it2iu" name="btn_normal_get.xml" path="/cmp/"/>
     <image id="it2iv" name="sp_yijinglingqubg.png" path="/img/" scale="9grid" scale9grid="20,50,27,54"/>
     <image id="it2iw" name="sp_yijinglingqu.png" path="/img/"/>
-    <component id="it2ix" name="view_item_sign.xml" path="/cmp/"/>
+    <component id="it2ix" name="view_item_sign.xml" path="/cache/"/>
     <component id="it2iy" name="view_common_sign.xml" path="/cache/"/>
+    <component id="bg00z" name="CommonEndShare.xml" path="/ui/" exported="true"/>
+    <image id="bg0010" name="sp_erjibg2.png" path="/img/" scale="9grid" scale9grid="40,40,52,52"/>
+    <image id="bg0011" name="超神时刻.jpg" path="/效果图/"/>
+    <image id="bg0013" name="sp_fenxiangchaoshen.png" path="/img/"/>
+    <image id="bg0014" name="sp_xuanyaoyixia.png" path="/img/"/>
+    <component id="bg0015" name="btn_nothanks.xml" path="/cmp/"/>
+    <image id="bg0016" name="sp_jinbi.png" path="/img/"/>
+    <component id="bg0017" name="view_endshare.xml" path="/cache/"/>
+    <image id="bg0018" name="sp_fenxiangl.png" path="/img/"/>
+    <component id="bg0019" name="CommonEndReward.xml" path="/ui/" exported="true"/>
+    <image id="bg001a" name="获得金币.jpg" path="/效果图/"/>
+    <image id="bg001b" name="sp_huodekuang.png" path="/img/" scale="9grid" scale9grid="80,0,50,94"/>
+    <image id="bg001c" name="sp_huodejinbi.png" path="/img/"/>
+    <image id="bg001d" name="sp_baiwanren.png" path="/img/"/>
+    <image id="bg001e" name="sp_canpinditu.png" path="/img/" scale="9grid" scale9grid="30,30,14,14"/>
+    <image id="bg001f" name="sp_youxikuang.png" path="/img/"/>
+    <component id="bg001g" name="view_item_game.xml" path="/cache/"/>
+    <component id="bg001h" name="view_game_icon.xml" path="/cache/"/>
+    <image id="bg001i" name="sp_lipin.png" path="/img/"/>
+    <component id="bg001j" name="view_reward_count.xml" path="/cache/"/>
+    <component id="bg001k" name="view_end_games.xml" path="/cache/"/>
+    <component id="bg001l" name="view_title.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

@@ -17,7 +17,6 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
 
     private _openData: SignOpenData;
     private _cacheRewardItem: UI_view_item_sign;
-    private _cacheRewardCount: number;
 
     _OnShow() {
         super._OnShow();
@@ -73,10 +72,8 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
 
         if (!isSigned) {
             if (displayDay < 6) {
-                this._cacheRewardCount = this._openData.rewardCount[displayDay];
                 this._cacheRewardItem = this.ui.m_view.m_list_day.getChildAt(displayDay) as UI_view_item_sign;
             } else {
-                this._cacheRewardCount = this._openData.rewardCount[displayDay];
                 this._cacheRewardItem = this.ui.m_view.m_view_day7;
             }
         }
@@ -102,16 +99,16 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         CommonSaveData.instance.isSigned = true;
         CommonSaveData.instance.signDayCount++;
         CommonSaveData.SaveToDisk();
-        
+
         this.Hide();
     }
 
     private _OnClickClose() {
-        
+
         if (this._openData.onClose) {
             this._openData.onClose.runWith(0);
         }
-        
+
         this.Hide();
     }
 
