@@ -1,12 +1,8 @@
-import StringEx from "../../LTGame/LTUtils/StringEx";
+import StringEx from "../LTUtils/StringEx";
 import { LTUtils } from "../LTUtils/LTUtils";
 
 export class SaveData {
 
-    /**
-     * 金币数量
-     */
-    public coinCount: number = 0;
     /**
      * 最后一次打开时间戳
      */

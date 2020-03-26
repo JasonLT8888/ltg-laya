@@ -4,16 +4,16 @@
 export default class SignOpenData {
 
     /**
-     * 当前是第几天
+     * 当前是第几天,如果传null,则使用系统默认
      */
-    public currentDayCount: number = 0;
+    public currentDayCount: number = null;
     /**
-     * 是否已经签到
+     * 是否已经签到,如果传null,则使用系统默认
      */
     public isSigned: boolean = null;
 
     /**
-     * 展示图标列表,如果为空,则用默认的
+     * 展示图标列表,如果为空或者为null,则用默认的
      */
     public iconPaths: string[] = [];
 

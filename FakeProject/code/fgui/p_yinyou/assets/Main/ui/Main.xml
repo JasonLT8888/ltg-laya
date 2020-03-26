@@ -23,5 +23,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="其他"/>
     </component>
+    <component id="n7_fkl1" name="btn_common" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="87,652">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="共用ui"/>
+    </component>
   </displayList>
 </component>

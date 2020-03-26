@@ -12,6 +12,7 @@
     <component id="gxfzd" name="UIDemo.xml" path="/ui/" exported="true"/>
     <component id="x62be" name="RecordDemo.xml" path="/ui/" exported="true"/>
     <component id="x62bf" name="Others.xml" path="/ui/" exported="true"/>
+    <component id="fkl1g" name="CommonUI.xml" path="/ui/" exported="true"/>
   </resources>
   <publish name="Main" genCode="true"/>
 </packageDescription>
