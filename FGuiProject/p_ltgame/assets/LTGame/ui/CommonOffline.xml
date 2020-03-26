@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://75kiu87kbg001n" designImageLayer="1">
+  <displayList>
+    <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n3_bg00" name="n3" src="bg001q" fileName="img/sp_guang.png" xy="375,459" pivot="0.5,0.5" anchor="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n2_bg00" name="n2" src="bg001p" fileName="img/sp_lixianshouyi.png" xy="235,214">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n4_bg00" name="icon" src="bg001r" fileName="img/sp_jinbidui.png" xy="375,440" pivot="0.5,0.5" anchor="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <text id="n5_bg00" name="text_max_offline_time" xy="374,781" pivot="0.5,0.5" anchor="true" size="293,31" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="离线最多可获得2小时收益">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n6_bg00" name="btn_nothanks" src="bg0015" fileName="cmp/btn_nothanks.xml" xy="297,865">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <text id="n7_bg00" name="text_value" xy="375,580" pivot="0.5,0.5" anchor="true" size="116,49" fontSize="38" color="#ffffff" align="center" vAlign="middle" letterSpacing="2" bold="true" text="+1234">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n8_bg00" name="btn_double_get" src="bg001u" fileName="cmp/btn_double_get_02.xml" xy="250,633">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n11_bg00" name="view_scale" src="bg001t" fileName="cache/view_scale.xml" xy="446,590">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <text id="n13_bg00" name="text_offline_time" xy="374,317" pivot="0.5,0.5" anchor="true" size="223,34" fontSize="26" color="#ffffff" align="center" vAlign="middle" bold="true" text="离线时间00时15分">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Rotation" target="n3_bg00" tween="true" startValue="0" endValue="360" duration="24" ease="Linear"/>
+  </transition>
+</component>

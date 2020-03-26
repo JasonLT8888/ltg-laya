@@ -4,6 +4,7 @@ import LTUI from "../../LTGame/UIExt/LTUI";
 import SignOpenData from "../../LTGame/UIExt/DefaultUI/Data/SignOpenData";
 import EndShareOpenData from "../../LTGame/UIExt/DefaultUI/Data/EndShareOpenData";
 import EndRewardOpenData from "../../LTGame/UIExt/DefaultUI/Data/EndRewardOpenData";
+import OfflineOpenData from "../../LTGame/UIExt/DefaultUI/Data/OfflineOpenData";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -23,6 +24,27 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_sign.onClick(this, this._OnClickSign);
         this.ui.m_btn_endshare.onClick(this, this._OnClickEndShare);
         this.ui.m_btn_endreward.onClick(this, this._OnClickEndReward);
+        this.ui.m_btn_offline.onClick(this, this._OnClickOffline);
+    }
+
+    private _OnClickOffline() {
+        let openData = new OfflineOpenData();
+        openData.onClose = Laya.Handler.create(null, (type: number, fromObj: fgui.GObject) => {
+            switch (type) {
+                case 0:
+                    LTUI.Toast("单倍领取");
+                    LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
+                    break;
+                case 1:
+                    LTUI.Toast("双倍领取");
+                    LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
+                    break;
+                default:
+                    LTUI.Toast("未处理相应类型" + type);
+                    break;
+            }
+        });
+        LTUI.ShowOffline(openData);
     }
 
     private _OnClickEndReward() {

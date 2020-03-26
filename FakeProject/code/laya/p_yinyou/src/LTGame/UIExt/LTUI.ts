@@ -7,6 +7,8 @@ import EndShareOpenData from "./DefaultUI/Data/EndShareOpenData";
 import UI_CommonEndShareMediator from "./DefaultUI/UI_CommonEndShareMediator";
 import EndRewardOpenData from "./DefaultUI/Data/EndRewardOpenData";
 import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
+import OfflineOpenData from "./DefaultUI/Data/OfflineOpenData";
+import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
 
 export default class LTUI {
 
@@ -42,6 +44,10 @@ export default class LTUI {
 
     public static ShowEndReward(openData: EndRewardOpenData) {
         UI_CommonEndRewardMediator.instance.Show(openData);
+    }
+
+    public static ShowOffline(openData: OfflineOpenData) {
+        UI_CommonOfflineMediator.instance.Show(openData);
     }
 
 }

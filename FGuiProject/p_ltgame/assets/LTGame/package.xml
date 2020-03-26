@@ -56,6 +56,14 @@
     <component id="bg001j" name="view_reward_count.xml" path="/cache/"/>
     <component id="bg001k" name="view_end_games.xml" path="/cache/"/>
     <component id="bg001l" name="view_title.xml" path="/cmp/"/>
+    <component id="bg001m" name="CommonOffline.xml" path="/ui/" exported="true"/>
+    <image id="bg001n" name="离线收益.jpg" path="/效果图/"/>
+    <image id="bg001p" name="sp_lixianshouyi.png" path="/img/"/>
+    <image id="bg001q" name="sp_guang.png" path="/img/"/>
+    <image id="bg001r" name="sp_jinbidui.png" path="/img/"/>
+    <image id="bg001s" name="sp_beishubg.png" path="/img/"/>
+    <component id="bg001t" name="view_scale.xml" path="/cache/"/>
+    <component id="bg001u" name="btn_double_get_02.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
