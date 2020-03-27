@@ -43,13 +43,12 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         this._openParam = obj;
         let uiData = new FGuiData();
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
+        this._isShow = true;
         this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
     }
 
-    protected _OnShow() {
-        this._isShow = true;
-    }
+    protected _OnShow() { }
 
     public Hide(dispose: boolean = true) {
         if (this._ui == null) return;

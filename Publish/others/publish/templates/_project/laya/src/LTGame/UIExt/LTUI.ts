@@ -13,6 +13,8 @@ import TrySkinOpenData from "./DefaultUI/Data/TrySkinOpenData";
 import UI_CommonTrySkinMediator from "./DefaultUI/UI_CommonTrySkinMediator";
 import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
 import SetOpenData from "./DefaultUI/Data/SetOpenData";
+import RollOpenData from "./DefaultUI/Data/RollOpenData";
+import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
 
 export default class LTUI {
 
@@ -60,6 +62,10 @@ export default class LTUI {
 
     public static ShowSet(openData: SetOpenData) {
         UI_CommonSetMediator.instance.Show(openData);
+    }
+
+    public static ShowRoll(openData: RollOpenData) {
+        UI_CommonRollMediator.instance.Show(openData);
     }
 
 }
