@@ -27,7 +27,7 @@
     <Ios>False</Ios>
     <Android>False</Android>
     <Conventional>True</Conventional>
-    <SavePath>D:/Work_Projects/p_yinyou/code/laya/p_yinyou/bin/res</SavePath>
+    <SavePath>D:/Work_Projects/ltg-laya/FakeProject/code/laya/p_yinyou/bin/res</SavePath>
     <ScrollPositionY>0</ScrollPositionY>
   </config1>
   <config2>
@@ -155,7 +155,7 @@
     <ScrollPositionY>0</ScrollPositionY>
   </config5>
   <language>1</language>
-  <time>1584439169</time>
+  <time>1585532196</time>
   <saveAcount>
   </saveAcount>
   <savePassWorld>

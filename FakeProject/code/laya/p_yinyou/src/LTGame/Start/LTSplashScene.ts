@@ -8,6 +8,7 @@ import LTRes from "../Res/LTRes";
 import Awaiters from "../Async/Awaiters";
 import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
 import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
+import { ESceneType } from "./ESceneType";
 
 export default class LTSplashScene extends BaseState {
 
@@ -50,7 +51,7 @@ export default class LTSplashScene extends BaseState {
     }
 
     constructor() {
-        super(1);
+        super(ESceneType.Splash);
     }
 
     _DoEnter() {
@@ -78,7 +79,7 @@ export default class LTSplashScene extends BaseState {
         fgui.UIPackage.addPackage(this._initPath);
         // 打开界面
         let needFit = new FGuiData();
-        needFit.needFitScreen = true;
+        needFit.needFitScreen = false;
         this._ui = FGuiEx.AddUI(this._splashUIClass, needFit);
         this._progressUI = this._ui["m_progress"];
         this._progressUI.value = 0;
