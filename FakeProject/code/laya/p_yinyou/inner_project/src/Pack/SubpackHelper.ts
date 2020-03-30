@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { LTPackNode } from "./LTPackNode";
-import { LTUtils } from "LTUtils";
-import { EPackResolveType } from "EPackResolveType";
-import { IPackConfig } from "IPackConfig";
+import { IPackConfig } from "Pack/IPackConfig";
+import { LTUtils } from "Utils/LTUtils";
+import { EPackResolveType } from "Pack/EPackResolveType";
 
 export class SubpackHelper {
 

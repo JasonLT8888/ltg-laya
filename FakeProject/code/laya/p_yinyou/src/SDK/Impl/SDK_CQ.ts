@@ -20,7 +20,7 @@ export default class SDK_CQ implements ISDK {
 
     enableDebug: boolean = true;
 
-    private _headPrefix = "https://games.api.gugudang.com";
+    private _headPrefix = "https://gamer.api.gugudang.com";
 
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         this.flg = flg;

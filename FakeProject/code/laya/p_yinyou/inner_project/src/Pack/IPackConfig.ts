@@ -1,4 +1,4 @@
-import { EPackResolveType } from "EPackResolveType";
+import { EPackResolveType } from "./EPackResolveType";
 
 export interface IPackConfig {
 

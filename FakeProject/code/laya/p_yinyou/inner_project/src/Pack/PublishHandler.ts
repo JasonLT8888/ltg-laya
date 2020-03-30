@@ -2,11 +2,10 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as process from 'process';
 import * as colors from 'colors';
-import { LTUtils } from 'LTUtils';
-import { SubpackHelper } from 'SubpackHelper';
-import { EPackResolveType } from 'EPackResolveType';
-import StringEx from 'Ex/StringEx';
-import { IPackConfig } from 'IPackConfig';
+import { IPackConfig } from 'Pack/IPackConfig';
+import { LTUtils } from 'Utils/LTUtils';
+import { SubpackHelper } from './SubpackHelper';
+import StringEx from 'Utils/StringEx';
 
 export class PublishHandler {
 
@@ -183,8 +182,9 @@ export class PublishHandler {
     private _CheckRelease() {
         let checkResult = LTUtils.MakeDirExist(this._releasePath);
         if (checkResult) {
-            console.log("release路径检查通过");
+            console.log("release路径检查", "通过".green);
         } else {
+            console.log("release路径检查", "失败".red);
             throw SyntaxError("release路径创建失败,请检查权限");
         }
 
@@ -208,9 +208,9 @@ export class PublishHandler {
         this._cdnPath = path.join(this._workPath, "./cdn/" + this._platformStr);
 
         console.log("release路径", this._releasePath.green);
-        console.log("template路径", this._templatePath.green);
-        console.log("bin路径", this._binPath.green);
-        console.log("cdn路径", this._cdnPath.green);
+        //console.log("template路径", this._templatePath.green);
+        //console.log("bin路径", this._binPath.green);
+        //console.log("cdn路径", this._cdnPath.green);
 
         this._keepFiles = this._keepPlatforms[this._platformStr];
         if (!this._keepFiles) {

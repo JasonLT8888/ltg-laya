@@ -7,4 +7,8 @@ export default class StringEx {
         return str;
     }
 
+    public static IsNullOrEmpty(str: string): boolean {
+        return str == null || str == "";
+    }
+
 }

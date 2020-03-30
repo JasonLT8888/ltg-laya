@@ -1,7 +1,7 @@
 import * as process from 'process';
-import { PublishHandler } from './PublishHandler';
+import { PublishHandler } from 'Pack/PublishHandler';
 
-export class Main {
+class Main {
 
     constructor() {
         let platformPath = this._GetParam("-p");
