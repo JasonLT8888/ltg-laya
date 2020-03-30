@@ -81,15 +81,15 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/Main.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/Main.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/EPackResolveType.ts":
-/*!*********************************!*\
-  !*** ./src/EPackResolveType.ts ***!
-  \*********************************/
+/***/ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/EPackResolveType.ts":
+/*!*******************************************************************************************!*\
+  !*** D:/Work_Projects/p_yinyou/code/laya/p_yinyou/others/publish/src/EPackResolveType.ts ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -115,10 +115,10 @@ var EPackResolveType;
 
 /***/ }),
 
-/***/ "./src/Ex/StringEx.ts":
-/*!****************************!*\
-  !*** ./src/Ex/StringEx.ts ***!
-  \****************************/
+/***/ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/Ex/StringEx.ts":
+/*!**************************************************************************************!*\
+  !*** D:/Work_Projects/p_yinyou/code/laya/p_yinyou/others/publish/src/Ex/StringEx.ts ***!
+  \**************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -135,10 +135,10 @@ exports.default = StringEx;
 
 /***/ }),
 
-/***/ "./src/LTPackNode.ts":
-/*!***************************!*\
-  !*** ./src/LTPackNode.ts ***!
-  \***************************/
+/***/ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/LTPackNode.ts":
+/*!*************************************************************************************!*\
+  !*** D:/Work_Projects/p_yinyou/code/laya/p_yinyou/others/publish/src/LTPackNode.ts ***!
+  \*************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -156,10 +156,10 @@ exports.LTPackNode = LTPackNode;
 
 /***/ }),
 
-/***/ "./src/LTUtils.ts":
-/*!************************!*\
-  !*** ./src/LTUtils.ts ***!
-  \************************/
+/***/ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/LTUtils.ts":
+/*!**********************************************************************************!*\
+  !*** D:/Work_Projects/p_yinyou/code/laya/p_yinyou/others/publish/src/LTUtils.ts ***!
+  \**********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -309,10 +309,10 @@ exports.LTUtils = LTUtils;
 
 /***/ }),
 
-/***/ "./src/Main.ts":
-/*!*********************!*\
-  !*** ./src/Main.ts ***!
-  \*********************/
+/***/ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/Main.ts":
+/*!*******************************************************************************!*\
+  !*** D:/Work_Projects/p_yinyou/code/laya/p_yinyou/others/publish/src/Main.ts ***!
+  \*******************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -320,7 +320,7 @@ exports.LTUtils = LTUtils;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const process = __webpack_require__(/*! process */ "process");
-const PublishHandler_1 = __webpack_require__(/*! ./PublishHandler */ "./src/PublishHandler.ts");
+const PublishHandler_1 = __webpack_require__(/*! ./PublishHandler */ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/PublishHandler.ts");
 class Main {
     constructor() {
         let platformPath = this._GetParam("-p");
@@ -344,10 +344,10 @@ new Main();
 
 /***/ }),
 
-/***/ "./src/PublishHandler.ts":
-/*!*******************************!*\
-  !*** ./src/PublishHandler.ts ***!
-  \*******************************/
+/***/ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/PublishHandler.ts":
+/*!*****************************************************************************************!*\
+  !*** D:/Work_Projects/p_yinyou/code/laya/p_yinyou/others/publish/src/PublishHandler.ts ***!
+  \*****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -358,9 +358,9 @@ const path = __webpack_require__(/*! path */ "path");
 const fs = __webpack_require__(/*! fs */ "fs");
 const process = __webpack_require__(/*! process */ "process");
 const colors = __webpack_require__(/*! colors */ "colors");
-const LTUtils_1 = __webpack_require__(/*! LTUtils */ "./src/LTUtils.ts");
-const SubpackHelper_1 = __webpack_require__(/*! SubpackHelper */ "./src/SubpackHelper.ts");
-const StringEx_1 = __webpack_require__(/*! Ex/StringEx */ "./src/Ex/StringEx.ts");
+const LTUtils_1 = __webpack_require__(/*! LTUtils */ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/LTUtils.ts");
+const SubpackHelper_1 = __webpack_require__(/*! SubpackHelper */ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/SubpackHelper.ts");
+const StringEx_1 = __webpack_require__(/*! Ex/StringEx */ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/Ex/StringEx.ts");
 class PublishHandler {
     constructor(platformStr, useCompress = true) {
         this._keepPlatforms = {
@@ -524,6 +524,7 @@ class PublishHandler {
         }
         let readStr = LTUtils_1.LTUtils.ReadStrFrom(configPath);
         this._packConfig = JSON.parse(readStr);
+        this._useCompress = this._packConfig.compress;
         this._releasePath = path.join(this._workPath, "./release/" + this._platformStr);
         this._templatePath = path.join(this._workPath, "./others/publish/templates/" + this._platformStr);
         this._binPath = path.join(this._workPath, "./bin/");
@@ -545,10 +546,10 @@ exports.PublishHandler = PublishHandler;
 
 /***/ }),
 
-/***/ "./src/SubpackHelper.ts":
-/*!******************************!*\
-  !*** ./src/SubpackHelper.ts ***!
-  \******************************/
+/***/ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/SubpackHelper.ts":
+/*!****************************************************************************************!*\
+  !*** D:/Work_Projects/p_yinyou/code/laya/p_yinyou/others/publish/src/SubpackHelper.ts ***!
+  \****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -557,9 +558,9 @@ exports.PublishHandler = PublishHandler;
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __webpack_require__(/*! fs */ "fs");
 const path = __webpack_require__(/*! path */ "path");
-const LTPackNode_1 = __webpack_require__(/*! ./LTPackNode */ "./src/LTPackNode.ts");
-const LTUtils_1 = __webpack_require__(/*! LTUtils */ "./src/LTUtils.ts");
-const EPackResolveType_1 = __webpack_require__(/*! EPackResolveType */ "./src/EPackResolveType.ts");
+const LTPackNode_1 = __webpack_require__(/*! ./LTPackNode */ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/LTPackNode.ts");
+const LTUtils_1 = __webpack_require__(/*! LTUtils */ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/LTUtils.ts");
+const EPackResolveType_1 = __webpack_require__(/*! EPackResolveType */ "../../../../../../../p_yinyou/code/laya/p_yinyou/others/publish/src/EPackResolveType.ts");
 class SubpackHelper {
     constructor(rootPath, packConfig) {
         this.single_max_size = 4 * 1024 * 1024;

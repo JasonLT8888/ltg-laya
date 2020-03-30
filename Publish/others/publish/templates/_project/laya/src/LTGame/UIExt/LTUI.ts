@@ -23,12 +23,12 @@ export default class LTUI {
         UI_CommomToastMediator.instance.Show(str);
     }
 
-    public static ShowLoading(str: string) {
+    public static ShowLoading(str: string, isBig: boolean = false) {
         if (UI_CommondLoadMediator.instance.isShow) {
             console.log("加载弹窗界面已打开");
             return;
         }
-        UI_CommondLoadMediator.instance.Show(str);
+        UI_CommondLoadMediator.instance.Show([str, isBig]);
     }
 
     public static HideLoading() {
