@@ -53,73 +53,98 @@ namespace LTGame
             _CheckHandle();
             var filedCount = code.fileds.Count;
             var totalData = new JsonData();
-            var isAdded = false;
-            foreach (var row in rows)
+            if (code.isConst)
             {
-                if (row == null) continue;
-                var jsonData = new JsonData();
-                var isId = true;
-                var id = 0;
-                var isGen = false;
-                foreach (var filed in code.fileds)
+                for (var i = 0; i < code.fileds.Count; ++i)
                 {
-                    if (isId)
-                    {
-                        isId = false;
-                        // 检查是否是ID
-                        if (filed.name != "id")
-                        {
-                            LTDebug.LogError("excel配置表首行必须为id");
-                            break;
-                        }
-                        // 检查是否是ID
-                        if (filed.mtype != "int")
-                        {
-                            LTDebug.LogError("id配表类型必须为int");
-                            break;
-                        }
-                        // 检查内容是否为空
-                        var idCell = row.GetCell(filed.index);
-                        if (idCell == null)
-                        {
-                            break;
-                        }
-                        if (idCell.CellType != CellType.Numeric)
-                        {
-                            break;
-                        }
-                        id = Mathf.CeilToInt((float)row.GetCell(filed.index).NumericCellValue);
-                        isGen = true;
-                    }
-                    if (filed.mtype == "" || filed.mtype == "skip") continue;
-                    var cell = row.GetCell(filed.index);
+                    var filed = code.fileds[i];
+                    var row = rows[i];
+                    if (row == null) continue;
+                    var rowName = row.GetCell(0).StringCellValue;
+                    var cell = row.GetCell(2);
+
                     BaseExcelFiledExporter exporter = null;
                     if (_handleActions.TryGetValue(filed.mtype, out exporter))
                     {
-                        exporter.DoExport(jsonData, filed, cell);
+                        exporter.DoExport(totalData, filed, cell);
                     }
                     else
                     {
                         LTDebug.LogError("未处理的配表类型:{0}", filed.mtype);
                     }
                 }
-                if (isGen)
+            }
+            else
+            {
+                var isAdded = false;
+                foreach (var row in rows)
                 {
-                    if (isTs)
+                    if (row == null) continue;
+                    var jsonData = new JsonData();
+                    var isId = true;
+                    var id = 0;
+                    var isGen = false;
+                    foreach (var filed in code.fileds)
                     {
-                        (totalData as IDictionary)[id.ToString()] = jsonData;
+                        if (isId)
+                        {
+                            isId = false;
+                            // 检查是否是ID
+                            if (filed.name != "id")
+                            {
+                                LTDebug.LogError("excel配置表首行必须为id");
+                                break;
+                            }
+                            // 检查是否是ID
+                            if (filed.mtype != "int")
+                            {
+                                LTDebug.LogError("id配表类型必须为int");
+                                break;
+                            }
+                            // 检查内容是否为空
+                            var idCell = row.GetCell(filed.index);
+                            if (idCell == null)
+                            {
+                                break;
+                            }
+                            if (idCell.CellType != CellType.Numeric)
+                            {
+                                break;
+                            }
+                            id = Mathf.CeilToInt((float)row.GetCell(filed.index).NumericCellValue);
+                            isGen = true;
+                        }
+                        if (filed.mtype == "" || filed.mtype == "skip") continue;
+                        var cell = row.GetCell(filed.index);
+                        BaseExcelFiledExporter exporter = null;
+                        if (_handleActions.TryGetValue(filed.mtype, out exporter))
+                        {
+                            exporter.DoExport(jsonData, filed, cell);
+                        }
+                        else
+                        {
+                            LTDebug.LogError("未处理的配表类型:{0}", filed.mtype);
+                        }
                     }
-                    else
+                    if (isGen)
                     {
-                        totalData.Add(jsonData);
+                        if (isTs)
+                        {
+                            (totalData as IDictionary)[id.ToString()] = jsonData;
+                        }
+                        else
+                        {
+                            totalData.Add(jsonData);
+                        }
+                        isAdded = true;
                     }
-                    isAdded = true;
+                }
+                if (!isAdded)
+                {
+                    return string.Empty;
                 }
             }
-            if (!isAdded)
-            {
-                return string.Empty;
-            }
+
             if (isTs)
             {
                 return totalData.ToJson();
@@ -200,13 +225,95 @@ namespace LTGame
                 return;
             }
 
+            if (fileName.EndsWith("const"))
+            {
+                _DoExportConstConfig(excelPath, isTs);
+            }
+            else
+            {
+                _DoExportNormalConfig(excelPath, isTs);
+            }
+
+        }
+
+        private static void _DoExportConstConfig(string excelPath, bool isTs)
+        {
+            var fileName = LTUtils.GetFileName(excelPath);
 
             var workbook = ReadExcel(excelPath);
             var sheet1 = workbook.GetSheetAt(0);
             var code = new CSStruct();
-            code.nameSpace = isTs ? LTEditorData.instance.ts_excelNameSpace : LTEditorData.instance.excelNameSpace;
+            code.nameSpace = isTs ? "NoName" : LTEditorData.instance.excelNameSpace;
             code.className = LTUtils.ConvertNameToFormat(fileName);
             code.fileds = new List<CSFiled>();
+            code.isConst = true;
+
+            var startIndex = 1;
+            var rows = new List<IRow>();
+            var row = sheet1.GetRow(startIndex);
+            while (row != null)
+            {
+                code.fileds.Add(new CSFiled()
+                {
+                    index = startIndex,
+                    mtype = row.GetCell(1).StringCellValue,
+                    region = row.GetCell(3).StringCellValue,
+                    name = row.GetCell(0).StringCellValue
+                });
+                rows.Add(row);
+                startIndex++;
+                row = sheet1.GetRow(startIndex);
+            }
+
+            if (isTs)
+            {
+                var codeSb = new StringBuilder();
+                // 写入命名空间
+                codeSb.AppendLine("export namespace {0} {".ReplaceAll("{0}", code.className));
+
+                // 写入结构体
+                codeSb.AppendLine(code.GetTSClass());
+
+                var tsSavePath = LTEditorData.instance.ts_configCodeSavePath;
+                if (tsSavePath.StartsWith("/"))
+                {
+                    tsSavePath = Application.dataPath + tsSavePath;
+                }
+                tsSavePath = tsSavePath + "/" + code.className + ".ts";
+                WriteStrToFile(codeSb.ToString(), tsSavePath);
+
+                // 写入数据
+                var minJson = _GenJson(code, rows, isTs);
+                var jsonSavePath = LTEditorData.instance.ts_configJsonSavePath;
+                if (jsonSavePath.StartsWith("/"))
+                {
+                    jsonSavePath = Application.dataPath + jsonSavePath;
+                }
+                jsonSavePath = jsonSavePath + "/" + code.className + ".json";
+                WriteStrToFile(minJson, jsonSavePath);
+
+                Debug.Log("[TS模式]配置生成完成");
+                Debug.LogFormat("ts:{0},json:{1}", tsSavePath, jsonSavePath);
+
+            }
+            else
+            {
+                Debug.LogError("暂未支持");
+            }
+
+        }
+
+        private static void _DoExportNormalConfig(string excelPath, bool isTs)
+        {
+            var fileName = LTUtils.GetFileName(excelPath);
+
+            var workbook = ReadExcel(excelPath);
+            var sheet1 = workbook.GetSheetAt(0);
+            var code = new CSStruct();
+            code.nameSpace = isTs ? "NoName" : LTEditorData.instance.excelNameSpace;
+            code.className = LTUtils.ConvertNameToFormat(fileName);
+            code.fileds = new List<CSFiled>();
+            code.isConst = false;
 
             var comments = new List<string>();
             var types = new List<string>();

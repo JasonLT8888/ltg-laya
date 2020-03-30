@@ -8,6 +8,7 @@ import OfflineOpenData from "../../LTGame/UIExt/DefaultUI/Data/OfflineOpenData";
 import TrySkinOpenData from "../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData";
 import SetOpenData from "../../LTGame/UIExt/DefaultUI/Data/SetOpenData";
 import RollOpenData from "../../LTGame/UIExt/DefaultUI/Data/RollOpenData";
+import { TestConst } from "../config/TestConst";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -39,6 +40,8 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
             LTUI.Toast("转中" + index);
         }, null, false);
         LTUI.ShowRoll(openData);
+
+        TestConst.data.init_coin_count;
     }
 
     private _OnClickSet() {

@@ -9,6 +9,7 @@ namespace LTGame
         public List<CSFiled> fileds;
         public string className; // class名字
         public string nameSpace; // 命名空间
+        public bool isConst = false;
 
         public const string IMPORT = "using System.Collections.Generic;";
         public const string HEAD = "namespace {0}\n";
@@ -69,8 +70,11 @@ namespace LTGame
 
             sb.AppendLine("    }");
 
-            sb.AppendLine("    export var data : {[key: number]: {0}.config};".ReplaceAll("{0}",className));
-            sb.AppendLine("    export var dataList : {0}.config[];".ReplaceAll("{0}", className));
+            sb.AppendLine("    export var data : {0}.config;".ReplaceAll("{0}", className));
+            if (!isConst)
+            {
+                sb.AppendLine("    export var dataList : {0}.config[];".ReplaceAll("{0}", className));
+            }
             sb.AppendLine("    export const path = \"res/config/{0}.json\";".ReplaceAll("{0}", className));
             sb.AppendLine("}");
 
@@ -127,11 +131,11 @@ namespace LTGame
         public string GetTSCode()
         {
             var wrapType = mtype;
-            if(wrapType == "int" || wrapType == "float")
+            if (wrapType == "int" || wrapType == "float")
             {
                 wrapType = "number";
             }
-            else if(wrapType == "int[]" || wrapType == "float[]")
+            else if (wrapType == "int[]" || wrapType == "float[]")
             {
                 wrapType = "number[]";
             }

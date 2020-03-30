@@ -8,6 +8,7 @@ import GlobalUnit from "../common/GlobalUnit";
 import { AudioConfig } from "../config/AudioConfig";
 import { PropConfig } from "../config/PropConfig";
 import { ESceneType } from "../../LTGame/Start/ESceneType";
+import { TestConst } from "../config/TestConst";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -25,6 +26,7 @@ export default class SplashScene extends LTSplashScene {
         ConfigManager.AddConfig(LevelConfig);
         ConfigManager.AddConfig(AudioConfig);
         ConfigManager.AddConfig(PropConfig);
+        ConfigManager.AddConfig(TestConst);
     }
 
     _OnGameResPrepared(urls: string[]) {

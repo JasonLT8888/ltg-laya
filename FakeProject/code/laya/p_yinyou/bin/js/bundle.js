@@ -2905,6 +2905,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
 /* harmony import */ var _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI/LTGame/LTGameBinder */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/LTGameBinder.ts");
 /* harmony import */ var _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
+/* harmony import */ var _ESceneType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ESceneType */ "./src/LTGame/Start/ESceneType.ts");
+
 
 
 
@@ -2916,7 +2918,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
-        super(1);
+        super(_ESceneType__WEBPACK_IMPORTED_MODULE_9__["ESceneType"].Splash);
         /**
          * 用于初始化的ui包
          */
@@ -2967,7 +2969,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         fgui.UIPackage.addPackage(this._initPath);
         // 打开界面
         let needFit = new _UIExt_FGui_FGuiData__WEBPACK_IMPORTED_MODULE_2__["default"]();
-        needFit.needFitScreen = true;
+        needFit.needFitScreen = false;
         this._ui = _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__["default"].AddUI(this._splashUIClass, needFit);
         this._progressUI = this._ui["m_progress"];
         this._progressUI.value = 0;
@@ -5338,12 +5340,11 @@ class BaseUIMediator {
         this._openParam = obj;
         let uiData = new _FGuiData__WEBPACK_IMPORTED_MODULE_1__["default"]();
         this._ui = _FGuiEx__WEBPACK_IMPORTED_MODULE_0__["default"].AddUI(this._classDefine, uiData);
+        this._isShow = true;
         this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
     }
-    _OnShow() {
-        this._isShow = true;
-    }
+    _OnShow() { }
     Hide(dispose = true) {
         if (this._ui == null)
             return;
@@ -6009,6 +6010,27 @@ var PropConfig;
 
 /***/ }),
 
+/***/ "./src/script/config/TestConst.ts":
+/*!****************************************!*\
+  !*** ./src/script/config/TestConst.ts ***!
+  \****************************************/
+/*! exports provided: TestConst */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TestConst", function() { return TestConst; });
+var TestConst;
+(function (TestConst) {
+    class config {
+    }
+    TestConst.config = config;
+    TestConst.path = "res/config/TestConst.json";
+})(TestConst || (TestConst = {}));
+
+
+/***/ }),
+
 /***/ "./src/script/scene/MainScene.ts":
 /*!***************************************!*\
   !*** ./src/script/scene/MainScene.ts ***!
@@ -6057,6 +6079,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_AudioConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/AudioConfig */ "./src/script/config/AudioConfig.ts");
 /* harmony import */ var _config_PropConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/PropConfig */ "./src/script/config/PropConfig.ts");
 /* harmony import */ var _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTGame/Start/ESceneType */ "./src/LTGame/Start/ESceneType.ts");
+/* harmony import */ var _config_TestConst__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../config/TestConst */ "./src/script/config/TestConst.ts");
+
 
 
 
@@ -6080,6 +6104,7 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_LevelConfig__WEBPACK_IMPORTED_MODULE_5__["LevelConfig"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_AudioConfig__WEBPACK_IMPORTED_MODULE_7__["AudioConfig"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_PropConfig__WEBPACK_IMPORTED_MODULE_8__["PropConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__["ConfigManager"].AddConfig(_config_TestConst__WEBPACK_IMPORTED_MODULE_10__["TestConst"]);
     }
     _OnGameResPrepared(urls) {
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_6__["default"].InitAll();
@@ -6171,6 +6196,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_UIExt_DefaultUI_Data_TrySkinOpenData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/TrySkinOpenData.ts");
 /* harmony import */ var _LTGame_UIExt_DefaultUI_Data_SetOpenData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/SetOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/SetOpenData.ts");
 /* harmony import */ var _LTGame_UIExt_DefaultUI_Data_RollOpenData__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/RollOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/RollOpenData.ts");
+/* harmony import */ var _config_TestConst__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../config/TestConst */ "./src/script/config/TestConst.ts");
+
 
 
 
@@ -6207,6 +6234,7 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
             _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].Toast("转中" + index);
         }, null, false);
         _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].ShowRoll(openData);
+        _config_TestConst__WEBPACK_IMPORTED_MODULE_10__["TestConst"].data.init_coin_count;
     }
     _OnClickSet() {
         let openData = new _LTGame_UIExt_DefaultUI_Data_SetOpenData__WEBPACK_IMPORTED_MODULE_8__["default"]();
@@ -6331,6 +6359,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_ADDemoMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_ADDemoMediator */ "./src/script/ui/UI_ADDemoMediator.ts");
 /* harmony import */ var _UI_RecordDemoMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_RecordDemoMediator */ "./src/script/ui/UI_RecordDemoMediator.ts");
 /* harmony import */ var _UI_CommonUIMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_CommonUIMediator */ "./src/script/ui/UI_CommonUIMediator.ts");
+/* harmony import */ var _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTGame/UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _config_TestConst__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/TestConst */ "./src/script/config/TestConst.ts");
+
+
 
 
 
@@ -6351,6 +6383,10 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
         this.ui.m_btn_ui.onClick(this, this._OnClickBtnUI);
         this.ui.m_btn_record.onClick(this, this._OnClickRecord);
         this.ui.m_btn_common.onClick(this, this._OnClickCommon);
+        this.ui.m_btn_others.onClick(this, this._OnClickOthers);
+    }
+    _OnClickOthers() {
+        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].Toast("读取到配置:" + _config_TestConst__WEBPACK_IMPORTED_MODULE_7__["TestConst"].data.init_coin_count);
     }
     _OnClickBtnAd() {
         _UI_ADDemoMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();

@@ -5,6 +5,8 @@ import UI_UIDemoMediator from "./UI_UIDemoMediator";
 import UI_ADDemoMediator from "./UI_ADDemoMediator";
 import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_CommonUIMediator from "./UI_CommonUIMediator";
+import LTUI from "../../LTGame/UIExt/LTUI";
+import { TestConst } from "../config/TestConst";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -23,8 +25,12 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
         this.ui.m_btn_ui.onClick(this, this._OnClickBtnUI);
         this.ui.m_btn_record.onClick(this, this._OnClickRecord);
         this.ui.m_btn_common.onClick(this, this._OnClickCommon);
+        this.ui.m_btn_others.onClick(this, this._OnClickOthers);
     }
 
+    private _OnClickOthers() {
+        LTUI.Toast("读取到配置:" + TestConst.data.init_coin_count);
+    }
 
     private _OnClickBtnAd() {
         UI_ADDemoMediator.instance.Show();
