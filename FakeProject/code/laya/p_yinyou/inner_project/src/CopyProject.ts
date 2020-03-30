@@ -3,6 +3,7 @@ import * as process from 'process';
 import CommonConfig from 'Config/CommonConfig';
 import { LTUtils } from 'Utils/LTUtils';
 import { EFileType } from 'Config/EFileType';
+import * as fs from 'fs';
 
 
 /**
@@ -20,26 +21,15 @@ class CopyProject {
         LTUtils.DeleteDir(deletePath);
         console.log("删除", deletePath, "完成");
 
-        let targetPath = path.join(rootPath, 'others/publish/templates/_project/laya/');
+        console.log("开始拷贝工程_Laya");
+        this._CopyLaya(rootPath);
+        console.log("laya工程拷贝完成");
+        console.log("开始拷贝工程_Unity");
+        this._CopyUnity(rootPath);
+        console.log("unity工程拷贝完成");
 
-        console.log("开始拷贝工程");
-        for (let value of CommonConfig.needCopy) {
-            let combieSrc = path.join(rootPath, value);
-            let fileType = LTUtils.IsFileOrDir(combieSrc);
-            if (fileType == EFileType.NotExist) {
-                console.log(combieSrc, "不存在");
-                continue;
-            }
-            let combieTarget = path.join(targetPath, value);
-            if (fileType == EFileType.File) {
-                LTUtils.CopyFile(combieSrc, combieTarget);
-            } else {
-                LTUtils.CopyDir(combieSrc, combieTarget);
-            }
-            console.log("拷贝", combieSrc, "完成");
-        }
-        console.log("拷贝完成,开始发布,请耐心等待");
 
+        console.log("所有工程拷贝完成,开始发布,请耐心等待");
         // 将整个others拷贝到发布目录
         // D:\Work_Projects\ltg-laya\FakeProject\code\laya\p_yinyou\others
         let othersPath = path.join(rootPath, 'others');
@@ -57,6 +47,48 @@ class CopyProject {
         let targetPackageJsonPath = path.join(rootPath, './../../../../Publish/package.json');
         LTUtils.CopyFile(packageJsonPath, targetPackageJsonPath);
         console.log("已发布到", path.join(rootPath, './../../../../Publish'));
+    }
+
+    private _CopyUnity(rootPath: string) {
+        let projectName = LTUtils.GetDirName(rootPath);
+        console.log("projectName", projectName);
+        
+        let targetPath = path.join(rootPath, 'others/publish/templates/_project/unity/');
+        let srcPath = path.join(rootPath, './../../unity/' + projectName + '/');
+        for (let value of CommonConfig.needCopyUnity) {
+            let combieSrc = path.join(srcPath, value);
+            let fileType = LTUtils.IsFileOrDir(combieSrc);
+            if (fileType == EFileType.NotExist) {
+                console.log(combieSrc, "不存在");
+                continue;
+            }
+            let combieTarget = path.join(targetPath, value);
+            if (fileType == EFileType.File) {
+                LTUtils.CopyFile(combieSrc, combieTarget);
+            } else {
+                LTUtils.CopyDir(combieSrc, combieTarget);
+            }
+            console.log("拷贝", combieSrc, "完成");
+        }
+    }
+
+    private _CopyLaya(rootPath: string) {
+        let targetPath = path.join(rootPath, 'others/publish/templates/_project/laya/');
+        for (let value of CommonConfig.needCopy) {
+            let combieSrc = path.join(rootPath, value);
+            let fileType = LTUtils.IsFileOrDir(combieSrc);
+            if (fileType == EFileType.NotExist) {
+                console.log(combieSrc, "不存在");
+                continue;
+            }
+            let combieTarget = path.join(targetPath, value);
+            if (fileType == EFileType.File) {
+                LTUtils.CopyFile(combieSrc, combieTarget);
+            } else {
+                LTUtils.CopyDir(combieSrc, combieTarget);
+            }
+            console.log("拷贝", combieSrc, "完成");
+        }
     }
 
 }

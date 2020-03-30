@@ -107,6 +107,11 @@ CommonConfig.needCopy = [
     'bin/index.js',
     'libs'
 ];
+CommonConfig.needCopyUnity = [
+    'Assets/Plugins',
+    'Assets/LayaAir3D',
+    'Assets/StreamingAssets'
+];
 
 
 /***/ }),
@@ -196,6 +201,7 @@ const path = __webpack_require__(/*! path */ "path");
 const uglify_es = __webpack_require__(/*! uglify-es */ "uglify-es");
 const child_process = __webpack_require__(/*! child_process */ "child_process");
 const EFileType_1 = __webpack_require__(/*! Config/EFileType */ "./src/Config/EFileType.ts");
+const StringEx_1 = __webpack_require__(/*! ./StringEx */ "./src/Utils/StringEx.ts");
 class LTUtils {
     static CompressJs(srcPath, targetPath) {
         let oldStat = fs.statSync(srcPath);
@@ -328,6 +334,22 @@ class LTUtils {
         return fs.existsSync(filePath);
     }
     /**
+     * 获取文件名字
+     * @param dirPath
+     */
+    static GetDirName(dirPath) {
+        let fileType = this.IsFileOrDir(dirPath);
+        if (fileType == EFileType_1.EFileType.NotExist) {
+            return "";
+        }
+        dirPath = StringEx_1.default.ReplaceAll(dirPath, '\\', '/');
+        let splitNames = dirPath.split('/');
+        if (dirPath.endsWith('/') || fileType == EFileType_1.EFileType.File) {
+            return splitNames[splitNames.length - 2];
+        }
+        return splitNames[splitNames.length - 1];
+    }
+    /**
      * 向文件写入内容
      * @param filePath 指定文件路径
      */
@@ -341,6 +363,29 @@ class LTUtils {
     }
 }
 exports.LTUtils = LTUtils;
+
+
+/***/ }),
+
+/***/ "./src/Utils/StringEx.ts":
+/*!*******************************!*\
+  !*** ./src/Utils/StringEx.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class StringEx {
+    static ReplaceAll(str, oldStr, newStr) {
+        while (str.indexOf(oldStr) >= 0) {
+            str = str.replace(oldStr, newStr);
+        }
+        return str;
+    }
+}
+exports.default = StringEx;
 
 
 /***/ }),
