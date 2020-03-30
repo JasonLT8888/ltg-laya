@@ -15,7 +15,7 @@ class UpdateProject {
         let currentWorkPath = process.cwd();
         console.log("开始更新框架内容");
         this._CopyLaya(currentWorkPath);
-
+        this._CopyUnity(currentWorkPath);
         console.log("更新框架完成");
     }
 
