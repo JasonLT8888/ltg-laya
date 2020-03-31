@@ -96,6 +96,7 @@
     <image id="bg002p" name="sp_jinbidui1.png" path="/img/"/>
     <component id="bg002q" name="view_item_roll.xml" path="/cache/"/>
     <component id="bg002r" name="view_roll_bg.xml" path="/cache/"/>
+    <component id="i2wq2s" name="CommonLockScreen.xml" path="/ui/" exported="true"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

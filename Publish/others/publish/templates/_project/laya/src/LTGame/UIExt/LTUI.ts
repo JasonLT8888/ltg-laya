@@ -15,6 +15,7 @@ import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
 import SetOpenData from "./DefaultUI/Data/SetOpenData";
 import RollOpenData from "./DefaultUI/Data/RollOpenData";
 import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
+import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
 
 export default class LTUI {
 
@@ -66,6 +67,14 @@ export default class LTUI {
 
     public static ShowRoll(openData: RollOpenData) {
         UI_CommonRollMediator.instance.Show(openData);
+    }
+
+    public static LockScreen() {
+        UI_CommonLockScreenMediator.instance.Show();
+    }
+
+    public static UnlockScreen() {
+        UI_CommonLockScreenMediator.instance.Hide();
     }
 
 }
