@@ -80,25 +80,25 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
     }
 
     private _OnClickNormalGet() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([1, this._cacheRewardItem.m_icon_reward]);
-        }
-
         CommonSaveData.instance.isSigned = true;
         CommonSaveData.instance.signDayCount++;
         CommonSaveData.SaveToDisk();
+
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith([1, this._cacheRewardItem.m_icon_reward]);
+        }
 
         this.Hide();
     }
 
     private _OnClickDoubleGet() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
-        }
-
         CommonSaveData.instance.isSigned = true;
         CommonSaveData.instance.signDayCount++;
         CommonSaveData.SaveToDisk();
+
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+        }
 
         this.Hide();
     }
