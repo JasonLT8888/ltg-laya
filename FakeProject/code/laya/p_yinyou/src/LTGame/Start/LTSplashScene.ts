@@ -81,6 +81,7 @@ export default class LTSplashScene extends BaseState {
         let needFit = new FGuiData();
         needFit.needFitScreen = false;
         this._ui = FGuiEx.AddUI(this._splashUIClass, needFit);
+        this._ui.sortingOrder = Number.MAX_SAFE_INTEGER;
         this._progressUI = this._ui["m_progress"];
         this._progressUI.value = 0;
         this._isUIShowed = true;
