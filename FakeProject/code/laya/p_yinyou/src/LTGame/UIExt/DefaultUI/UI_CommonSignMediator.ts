@@ -54,12 +54,19 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         for (let i = 0; i < this.ui.m_view.m_list_day.numChildren; ++i) {
             let itemUI = this.ui.m_view.m_list_day.getChildAt(i) as UI_view_item_sign;
             itemUI.m_text_day.text = "第" + (i + 1) + "天";
+            if(this._openData.iconPaths && this._openData.iconPaths[i]) {
+                itemUI.m_icon_reward.url = this._openData.iconPaths[i];
+            }
             if (i < displayDay || (displayDay == 0 && isSigned)) {
                 itemUI.m_c1.selectedIndex = 1;
             } else {
                 itemUI.m_c1.selectedIndex = 0;
             }
             itemUI.m_text_reward.text = this._openData.rewardCount[i].toFixed(0);
+        }
+
+        if(this._openData.iconPaths && this._openData.iconPaths[6]) {
+            this.ui.m_view.m_view_day7.m_icon_reward.url = this._openData.iconPaths[6];
         }
         // 更新第七天
         this.ui.m_view.m_view_day7.m_text_day.text = "第七天";
