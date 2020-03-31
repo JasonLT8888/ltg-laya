@@ -35,7 +35,14 @@ class UpdateProject {
             if (fileType == EFileType.File) {
                 LTUtils.CopyFile(combieSrc, combieTarget);
             } else {
-                LTUtils.CopyDir(combieSrc, combieTarget);
+                LTUtils.CopyDir(combieSrc, combieTarget, function (fileName: string, targetPath: string) {
+                    if (fileName == "Configuration.xml") {
+                        if (LTUtils.IsFileExist(targetPath)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
             }
             console.log("拷贝", combieSrc, "完成");
         }

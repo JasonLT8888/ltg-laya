@@ -41,9 +41,9 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     public Show(obj: any = null) {
         if (this._isShow) {
-            this._isShow = true;
             return;
         }
+        this._isShow = true;
         this._openParam = obj;
         let uiData = new FGuiData();
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;

@@ -105,12 +105,13 @@ export class LTUtils {
         let files = fs.readdirSync(srcDir);
         for (let i = 0; i < files.length; ++i) {
             let fileName = files[i];
-            if (checkFunc && !checkFunc(fileName)) {
+            let targetPath = path.join(targetDir, fileName);
+            if (checkFunc && !checkFunc(fileName, targetPath)) {
                 // true表示继续使用,false表示跳过
                 continue;
             }
+            
             let filePath = path.join(srcDir, fileName);
-            let targetPath = path.join(targetDir, fileName);
             let fileStat = fs.statSync(filePath);
             if (fileStat.isDirectory()) {
                 this.CopyDir(filePath, targetPath, checkFunc);
