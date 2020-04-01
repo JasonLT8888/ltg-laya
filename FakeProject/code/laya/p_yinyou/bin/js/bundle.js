@@ -3429,7 +3429,7 @@ class SignOpenData {
         /**
          * 奖励数量,仅用作展示
          */
-        this.rewardCount = [50, 100, 150, 250, 300, 350, 500];
+        this.rewardStrs = ["50", "100", "150", "250", "300", "350", "500"];
         /**
          * 关闭事件
          * closeType: number
@@ -5238,14 +5238,14 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
             else {
                 itemUI.m_c1.selectedIndex = 0;
             }
-            itemUI.m_text_reward.text = this._openData.rewardCount[i].toFixed(0);
+            itemUI.m_text_reward.text = this._openData.rewardStrs[i];
         }
         if (this._openData.iconPaths && this._openData.iconPaths[6]) {
             this.ui.m_view.m_view_day7.m_icon_reward.url = this._openData.iconPaths[6];
         }
         // 更新第七天
         this.ui.m_view.m_view_day7.m_text_day.text = "第七天";
-        this.ui.m_view.m_view_day7.m_text_reward.text = this._openData.rewardCount[6].toFixed(0);
+        this.ui.m_view.m_view_day7.m_text_reward.text = this._openData.rewardStrs[6];
         if (displayDay == 0 && isSigned) {
             this.ui.m_view.m_view_day7.m_c1.selectedIndex = 1;
         }

@@ -64,7 +64,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
             } else {
                 itemUI.m_c1.selectedIndex = 0;
             }
-            itemUI.m_text_reward.text = this._openData.rewardCount[i].toFixed(0);
+            itemUI.m_text_reward.text = this._openData.rewardStrs[i];
         }
 
         if (this._openData.iconPaths && this._openData.iconPaths[6]) {
@@ -72,7 +72,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         }
         // 更新第七天
         this.ui.m_view.m_view_day7.m_text_day.text = "第七天";
-        this.ui.m_view.m_view_day7.m_text_reward.text = this._openData.rewardCount[6].toFixed(0);
+        this.ui.m_view.m_view_day7.m_text_reward.text = this._openData.rewardStrs[6];
         if (displayDay == 0 && isSigned) {
             this.ui.m_view.m_view_day7.m_c1.selectedIndex = 1;
         } else {

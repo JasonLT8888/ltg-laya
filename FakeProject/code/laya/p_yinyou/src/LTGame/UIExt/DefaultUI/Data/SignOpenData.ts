@@ -20,7 +20,7 @@ export default class SignOpenData {
     /**
      * 奖励数量,仅用作展示
      */
-    public rewardCount: number[] = [50, 100, 150, 250, 300, 350, 500];
+    public rewardStrs: string[] = ["50", "100", "150", "250", "300", "350", "500"];
 
     /**
      * 关闭事件
