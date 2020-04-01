@@ -172,9 +172,9 @@ export default class LTSplashScene extends BaseState {
     private _OnResLoaded() {
         this._progressUI.value = 100;
         LTPlatform.instance.RecordEvent("进入游戏", null);
-        this.isFinished = true;
 
         this._OnGameResLoaded();
+        this.isFinished = true;
     }
 
     protected _OnGameResLoaded() {
