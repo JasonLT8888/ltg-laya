@@ -100,8 +100,8 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         this.Hide();
     }
 
-    private _OnClickDoubleGet() {
-        let result = LTPlatform.instance.ShowRewardVideoAdAsync();
+    private async _OnClickDoubleGet() {
+        let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             CommonSaveData.instance.isSigned = true;
             CommonSaveData.instance.signDayCount++;

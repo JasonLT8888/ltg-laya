@@ -5094,19 +5094,21 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         this.Hide();
     }
     _OnClickDoubleGet() {
-        let result = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
-        if (result) {
-            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSigned = true;
-            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.signDayCount++;
-            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].SaveToDisk();
-            if (this._openData.onClose) {
-                this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+        return __awaiter(this, void 0, void 0, function* () {
+            let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
+            if (result) {
+                _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSigned = true;
+                _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.signDayCount++;
+                _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].SaveToDisk();
+                if (this._openData.onClose) {
+                    this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+                }
+                this.Hide();
             }
-            this.Hide();
-        }
-        else {
-            _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].Toast("跳过广告无法获得奖励");
-        }
+            else {
+                _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].Toast("跳过广告无法获得奖励");
+            }
+        });
     }
     _OnClickClose() {
         if (this._openData.onClose) {
