@@ -517,9 +517,9 @@ internal class JSONObject {
     private delegate void GetFieldResponse(JSONObject obj);
     private bool GetField(out bool field, string name, bool fallback) {
 		field = fallback;
-		return GetField(ref field, name);
+		return GetField(field, name);
 	}
-    private bool GetField(ref bool field, string name, FieldNotFound fail = null) {
+    private bool GetField(bool field, string name, FieldNotFound fail = null) {
 		if(type == Type.OBJECT) {
 			int index = keys.IndexOf(name);
 			if(index >= 0) {
@@ -536,12 +536,12 @@ internal class JSONObject {
 	public bool GetField(out double field, string name, double fallback) {
 #endif
 		field = fallback;
-		return GetField(ref field, name);
+		return GetField(field, name);
 	}
 #if USEFLOAT
-    private bool GetField(ref float field, string name, FieldNotFound fail = null) {
+    private bool GetField(float field, string name, FieldNotFound fail = null) {
 #else
-	public bool GetField(ref double field, string name, FieldNotFound fail = null) {
+	public bool GetField(double field, string name, FieldNotFound fail = null) {
 #endif
 		if(type == Type.OBJECT) {
 			int index = keys.IndexOf(name);
@@ -555,9 +555,9 @@ internal class JSONObject {
 	}
     private bool GetField(out int field, string name, int fallback) {
 		field = fallback;
-		return GetField(ref field, name);
+		return GetField(field, name);
 	}
-    private bool GetField(ref int field, string name, FieldNotFound fail = null) {
+    private bool GetField(int field, string name, FieldNotFound fail = null) {
 		if(IsObject) {
 			int index = keys.IndexOf(name);
 			if(index >= 0) {
@@ -570,9 +570,9 @@ internal class JSONObject {
 	}
     private bool GetField(out long field, string name, long fallback) {
 		field = fallback;
-		return GetField(ref field, name);
+		return GetField(field, name);
 	}
-    private bool GetField(ref long field, string name, FieldNotFound fail = null) {
+    private bool GetField(long field, string name, FieldNotFound fail = null) {
 		if(IsObject) {
 			int index = keys.IndexOf(name);
 			if(index >= 0) {
@@ -585,9 +585,9 @@ internal class JSONObject {
 	}
     private bool GetField(out uint field, string name, uint fallback) {
 		field = fallback;
-		return GetField(ref field, name);
+		return GetField(field, name);
 	}
-    private bool GetField(ref uint field, string name, FieldNotFound fail = null) {
+    private bool GetField(uint field, string name, FieldNotFound fail = null) {
 		if(IsObject) {
 			int index = keys.IndexOf(name);
 			if(index >= 0) {
@@ -600,9 +600,9 @@ internal class JSONObject {
 	}
     private bool GetField(out string field, string name, string fallback) {
 		field = fallback;
-		return GetField(ref field, name);
+		return GetField(field, name);
 	}
-    private bool GetField(ref string field, string name, FieldNotFound fail = null) {
+    private bool GetField(string field, string name, FieldNotFound fail = null) {
 		if(IsObject) {
 			int index = keys.IndexOf(name);
 			if(index >= 0) {

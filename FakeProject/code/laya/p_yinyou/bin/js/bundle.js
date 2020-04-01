@@ -5003,6 +5003,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_LTGame_UI_CommonSign__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI/LTGame/UI_CommonSign */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonSign.ts");
 /* harmony import */ var _Data_SignOpenData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Data/SignOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/SignOpenData.ts");
 /* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
+/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+
+
 
 
 
@@ -5090,13 +5094,19 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         this.Hide();
     }
     _OnClickDoubleGet() {
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSigned = true;
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.signDayCount++;
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].SaveToDisk();
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+        let result = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
+        if (result) {
+            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSigned = true;
+            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.signDayCount++;
+            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].SaveToDisk();
+            if (this._openData.onClose) {
+                this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+            }
+            this.Hide();
         }
-        this.Hide();
+        else {
+            _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].Toast("跳过广告无法获得奖励");
+        }
     }
     _OnClickClose() {
         if (this._openData.onClose) {

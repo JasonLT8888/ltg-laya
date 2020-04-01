@@ -137,7 +137,7 @@ class LayaShaderGUI : ShaderGUI
 
     MaterialProperty isVertexColor = null;
 
-    
+
 
     public void FindProperties(MaterialProperty[] props)
     {
@@ -279,7 +279,7 @@ class LayaShaderGUI : ShaderGUI
 
                 //renderMode
                 renderMode.floatValue = (float)mode;
-                
+
                 //lightMode
                 lighting.floatValue = (float)light;
                 material.SetInt("_Lighting", (int)light);
@@ -374,7 +374,7 @@ class LayaShaderGUI : ShaderGUI
 
     public void onChangeRender(Material material, RenderMode mode)
     {
-        
+
         switch (mode)
         {
             case RenderMode.Opaque:
@@ -388,7 +388,7 @@ class LayaShaderGUI : ShaderGUI
                 material.DisableKeyword("_ALPHATEST_ON");
                 material.DisableKeyword("_ALPHABLEND_ON");
                 material.DisableKeyword("EnableAlphaCutoff");
-                if (lighting.floatValue == 0)
+                if (lighting == null || lighting.floatValue == 0)
                 {
                     material.EnableKeyword("EnableLighting");
                 }

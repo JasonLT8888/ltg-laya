@@ -3,6 +3,8 @@ import UI_CommonSign from "./UI/LTGame/UI_CommonSign";
 import SignOpenData from "./Data/SignOpenData";
 import UI_view_item_sign from "./UI/LTGame/UI_view_item_sign";
 import CommonSaveData from "../../Commom/CommonSaveData";
+import LTPlatform from "../../Platform/LTPlatform";
+import LTUI from "../LTUI";
 
 export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign> {
 
@@ -54,7 +56,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         for (let i = 0; i < this.ui.m_view.m_list_day.numChildren; ++i) {
             let itemUI = this.ui.m_view.m_list_day.getChildAt(i) as UI_view_item_sign;
             itemUI.m_text_day.text = "第" + (i + 1) + "天";
-            if(this._openData.iconPaths && this._openData.iconPaths[i]) {
+            if (this._openData.iconPaths && this._openData.iconPaths[i]) {
                 itemUI.m_icon_reward.url = this._openData.iconPaths[i];
             }
             if (i < displayDay || (displayDay == 0 && isSigned)) {
@@ -65,7 +67,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
             itemUI.m_text_reward.text = this._openData.rewardCount[i].toFixed(0);
         }
 
-        if(this._openData.iconPaths && this._openData.iconPaths[6]) {
+        if (this._openData.iconPaths && this._openData.iconPaths[6]) {
             this.ui.m_view.m_view_day7.m_icon_reward.url = this._openData.iconPaths[6];
         }
         // 更新第七天
@@ -99,15 +101,21 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
     }
 
     private _OnClickDoubleGet() {
-        CommonSaveData.instance.isSigned = true;
-        CommonSaveData.instance.signDayCount++;
-        CommonSaveData.SaveToDisk();
+        let result = LTPlatform.instance.ShowRewardVideoAdAsync();
+        if (result) {
+            CommonSaveData.instance.isSigned = true;
+            CommonSaveData.instance.signDayCount++;
+            CommonSaveData.SaveToDisk();
 
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+            if (this._openData.onClose) {
+                this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+            }
+
+            this.Hide();
+        } else {
+            LTUI.Toast("跳过广告无法获得奖励");
         }
 
-        this.Hide();
     }
 
     private _OnClickClose() {
