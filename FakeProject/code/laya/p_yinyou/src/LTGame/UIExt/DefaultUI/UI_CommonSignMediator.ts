@@ -94,7 +94,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         CommonSaveData.SaveToDisk();
 
         if (this._openData.onClose) {
-            this._openData.onClose.runWith([1, this._cacheRewardItem.m_icon_reward]);
+            this._openData.onClose.runWith([1, this._cacheRewardItem.m_icon_reward, (CommonSaveData.instance.signDayCount - 1) % 7]);
         }
 
         this.Hide();
@@ -108,7 +108,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
             CommonSaveData.SaveToDisk();
 
             if (this._openData.onClose) {
-                this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+                this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward, (CommonSaveData.instance.signDayCount - 1) % 7]);
             }
 
             this.Hide();

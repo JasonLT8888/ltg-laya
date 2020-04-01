@@ -97,6 +97,10 @@
     <component id="bg002q" name="view_item_roll.xml" path="/cache/"/>
     <component id="bg002r" name="view_roll_bg.xml" path="/cache/"/>
     <component id="i2wq2s" name="CommonLockScreen.xml" path="/ui/" exported="true"/>
+    <component id="gxi82t" name="CommonOneMore.xml" path="/ui/" exported="true"/>
+    <image id="gxi82u" name="再来一份.jpg" path="/效果图/"/>
+    <image id="gxi82v" name="sp_zailaiyifen.png" path="/img/"/>
+    <component id="gxi82w" name="view_one_more.xml" path="/cache/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

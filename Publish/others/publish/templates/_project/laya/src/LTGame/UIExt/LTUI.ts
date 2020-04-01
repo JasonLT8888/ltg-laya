@@ -16,6 +16,8 @@ import SetOpenData from "./DefaultUI/Data/SetOpenData";
 import RollOpenData from "./DefaultUI/Data/RollOpenData";
 import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
 import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
+import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
+import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
 
 export default class LTUI {
 
@@ -41,8 +43,20 @@ export default class LTUI {
         await UI_FlyPanelMediator.instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
     }
 
+    /**
+     * 打开签到界面
+     * @param openData 
+     */
     public static ShowSignUI(openData: SignOpenData) {
         UI_CommonSignMediator.instance.Show(openData);
+    }
+
+    /**
+     * 打开再来一份界面
+     * @param openData 
+     */
+    public static ShowOneMore(openData: OneMoreOpenData) {
+        UI_CommonOneMoreMediator.instance.Show(openData);
     }
 
     public static ShowEndShare(openData: EndShareOpenData) {
