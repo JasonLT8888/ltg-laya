@@ -2,9 +2,9 @@
 
 
 
-export default class UI_view_reward_count extends fgui.GComponent {
+export default class UI_view_reward_count extends fgui.GButton {
 
-	public m_icon:fgui.GImage;
+	public m_icon_img:fgui.GLoader;
 	public m_text_count:fgui.GTextField;
 
 	public static URL:string = "ui://75kiu87kbg001j";
@@ -18,7 +18,7 @@ export default class UI_view_reward_count extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_icon = <fgui.GImage><any>(this.getChildAt(1));
+		this.m_icon_img = <fgui.GLoader><any>(this.getChildAt(1));
 		this.m_text_count = <fgui.GTextField><any>(this.getChildAt(2));
 	}
 }

@@ -3241,6 +3241,7 @@ class EndRewardOpenData {
          * closeType: number
          *      0 :  普通领取
          *      1 :  双倍领取
+         *      2 :  打开大转盘界面
          * fromObj: fgui.GObject
          *      用于作为飞金币的起点
          */
@@ -3631,9 +3632,10 @@ class UI_CommonEndReward extends fgui.GComponent {
         this.m_c1 = this.getControllerAt(0);
         this.m_view_title = (this.getChildAt(1));
         this.m_view_moregames = (this.getChildAt(2));
-        this.m_btn_normal_get = (this.getChildAt(3));
+        this.m_btn_open_roll = (this.getChildAt(3));
         this.m_btn_double_get = (this.getChildAt(4));
-        this.m_view_reward = (this.getChildAt(5));
+        this.m_btn_normal_get = (this.getChildAt(5));
+        this.m_btn_toggle_watchad = (this.getChildAt(6));
     }
 }
 UI_CommonEndReward.URL = "ui://75kiu87kbg0019";
@@ -4443,7 +4445,7 @@ UI_view_one_more.URL = "ui://75kiu87kgxi82w";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_reward_count; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
-class UI_view_reward_count extends fgui.GComponent {
+class UI_view_reward_count extends fgui.GButton {
     constructor() {
         super();
     }
@@ -4451,7 +4453,7 @@ class UI_view_reward_count extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "view_reward_count"));
     }
     onConstruct() {
-        this.m_icon = (this.getChildAt(1));
+        this.m_icon_img = (this.getChildAt(1));
         this.m_text_count = (this.getChildAt(2));
     }
 }
@@ -4650,6 +4652,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+
 
 
 
@@ -4676,18 +4680,34 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
                 this._openData[key] = this._openParam[key];
             }
         }
+        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
+                this.ui.m_btn_toggle_watchad.visible = false;
+                this._isChecked = false;
+                break;
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
+                this._isChecked = false;
+                break;
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
+                this._isChecked = true;
+                break;
+        }
         this.ui.m_c1.selectedIndex = this._openData.enableShowGames ? 0 : 1;
         this.ui.m_btn_normal_get.onClick(this, this._OnClickNormalGet);
         this.ui.m_btn_double_get.onClick(this, this._OnClickDoubleGet);
         this.ui.m_view_moregames.onClick(this, this._OnClickGames);
+        this.ui.m_btn_open_roll.onClick(this, this._OnClickOpenRoll);
         if (this._openData.enableShowGames) {
             this._cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.adManager.GetADListByLocationId(0);
             this.ui.m_view_moregames.m_list_games.setVirtual();
             this.ui.m_view_moregames.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
             this.ui.m_view_moregames.m_list_games.numItems = this._cacheAds.length;
         }
-        this.ui.m_view_reward.m_text_count.text = "x" + this._openData.rewardCount;
-        this.ui.m_btn_normal_get.m_btn_type.selectedIndex = 2;
+        this.ui.m_btn_normal_get.m_text_count.text = "x" + this._openData.rewardCount;
+        this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";
+        this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
+        this.ui.m_btn_open_roll.m_btn_type.selectedIndex = 2;
         this.ui.m_btn_double_get.m_bg_type.selectedIndex = 1;
     }
     _OnAdItemRender(index, adUI) {
@@ -4695,9 +4715,23 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         adUI.m_icon.m_icon.url = adData.ad_img;
         adUI.m_text_name.text = adData.ad_name;
     }
-    _OnClickNormalGet() {
+    _OnClickOpenRoll() {
         if (this._openData.onClose) {
-            this._openData.onClose.runWith([0, this.ui.m_view_reward.m_icon]);
+            this._openData.onClose.runWith(2);
+        }
+    }
+    _OnClickToggle() {
+        this._isChecked = !this._isChecked;
+        this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";
+    }
+    _OnClickNormalGet() {
+        if (this._isChecked) {
+            this._OnClickDoubleGet();
+            return;
+        }
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith([0, this.ui.m_btn_normal_get.m_icon_img]);
         }
         this.Hide();
     }
@@ -4706,7 +4740,7 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
             let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowRewardVideoAdAsync();
             if (result) {
                 if (this._openData.onClose) {
-                    this._openData.onClose.runWith([1, this.ui.m_view_reward.m_icon]);
+                    this._openData.onClose.runWith([1, this.ui.m_btn_normal_get.m_icon_img]);
                 }
                 this.Hide();
             }
@@ -6800,6 +6834,9 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
                 case 1:
                     _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].Toast("双倍领取");
                     _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
+                    break;
+                case 2:
+                    this._OnClickRoll();
                     break;
                 default:
                     _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].Toast("未处理相应类型" + type);

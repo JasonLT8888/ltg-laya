@@ -98,6 +98,9 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
                     LTUI.Toast("双倍领取");
                     LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
                     break;
+                case 2:
+                    this._OnClickRoll();
+                    break;
                 default:
                     LTUI.Toast("未处理相应类型" + type);
                     break;

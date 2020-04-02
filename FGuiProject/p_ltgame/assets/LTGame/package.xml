@@ -107,6 +107,7 @@
     <component id="gxi832" name="btn_toggle_02.xml" path="/cmp/"/>
     <component id="htjj33" name="btn_text.xml" path="/cmp/"/>
     <image id="htjj35" name="皮肤试用(1).jpg" path="/效果图/"/>
+    <image id="htjj36" name="获得金币2.jpg" path="/效果图/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

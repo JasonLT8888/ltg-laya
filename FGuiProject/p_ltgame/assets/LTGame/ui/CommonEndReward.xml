@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87kbg001a" designImageAlpha="0" designImageLayer="1">
+<component size="750,1334" designImage="ui://75kiu87khtjj36" designImageLayer="1">
   <controller name="c1" pages="0,有导流,1,无导流" selected="0"/>
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
@@ -13,16 +13,21 @@
       <gearDisplay controller="c1" pages="0"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n8_bg00" name="btn_normal_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="394,778">
+    <component id="n8_bg00" name="btn_open_roll" src="it2iq" fileName="cmp/btn_double_get.xml" xy="394,793">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87kit2it"/>
     </component>
-    <component id="n9_bg00" name="btn_double_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="105,778">
+    <component id="n9_bg00" name="btn_double_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="105,793">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87kit2ip"/>
     </component>
-    <component id="n10_bg00" name="view_reward" src="bg001j" fileName="cache/view_reward_count.xml" xy="256,900">
-      <gearXY controller="c1" pages="1" values="256,497" default="256,900"/>
+    <component id="n10_bg00" name="btn_normal_get" src="bg001j" fileName="cache/view_reward_count.xml" xy="214,915">
+      <gearXY controller="c1" pages="0,1" values="214,915|256,497"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="五倍领取奖励"/>
+      <property target="text_title" propertyId="0" value="五倍领取奖励"/>
+    </component>
+    <component id="n11_htjj" name="btn_toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="273,741">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
   </displayList>
