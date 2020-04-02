@@ -2455,11 +2455,13 @@ class WXPlatform {
         this._rewardSkipped = onSkipped;
         if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__["default"].IsNullOrEmpty(this._platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
+            onSkipped.run();
             return;
         }
         let createRewardedVideoAd = this._base["createRewardedVideoAd"];
         if (createRewardedVideoAd == null) {
             console.error("无createRewardedVideoAd方法,跳过初始化");
+            onSkipped.run();
             return;
         }
         _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].ShowLoading("广告拉取中...");
@@ -5748,7 +5750,6 @@ class BaseUIMediator {
         this._tweenTime = 180;
         this._isShow = false;
         this._sortOrder = 0;
-        this._lockScreen = false;
     }
     get ui() {
         return this._ui;
@@ -5781,6 +5782,11 @@ class BaseUIMediator {
         this._ui = _FGuiEx__WEBPACK_IMPORTED_MODULE_0__["default"].AddUI(this._classDefine, uiData);
         this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
+        const anim_enter = "m_anim_enter";
+        if (this._ui[anim_enter]) {
+            let anim = this._ui[anim_enter];
+            anim.play();
+        }
     }
     _OnShow() { }
     Hide(dispose = true) {
@@ -5789,8 +5795,17 @@ class BaseUIMediator {
         if (this._ui.isDisposed)
             return;
         this._isShow = false;
-        this._lockScreen = false;
         this._OnHide();
+        const anim_exit = "m_anim_exit";
+        if (this._ui[anim_exit]) {
+            let anim = this._ui[anim_exit];
+            anim.play(Laya.Handler.create(this, this._DoHide, [dispose]));
+        }
+        else {
+            this._DoHide(dispose);
+        }
+    }
+    _DoHide(dispose) {
         if (dispose) {
             this.ui.dispose();
         }

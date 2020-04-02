@@ -1,8 +1,6 @@
 import WXPlatform from "./WXPlatform";
 import { EPlatformType } from "./EPlatformType";
 import LTPlatformData from "./Data/LTPlatformData";
-import LTPlatform from "./LTPlatform";
-import ShareManager from "./ShareManager";
 import { ShareInfo } from "./ShareInfo";
 import StringEx from "../LTUtils/StringEx";
 import IRecordManager from "./IRecordManager";
