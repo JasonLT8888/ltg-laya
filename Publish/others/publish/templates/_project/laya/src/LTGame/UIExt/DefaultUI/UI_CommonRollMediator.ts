@@ -59,7 +59,7 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
 
     private async _OnClickRoll() {
         if (this._isRolling) return;
-        let result = LTPlatform.instance.ShowRewardVideoAdAsync();
+        let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             this._DoRoll();
         } else {
