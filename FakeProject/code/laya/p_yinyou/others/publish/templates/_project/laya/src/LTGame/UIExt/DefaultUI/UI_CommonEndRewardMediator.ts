@@ -62,11 +62,9 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
             this.ui.m_view_moregames.m_list_games.numItems = this._cacheAds.length;
         }
 
-        this.ui.m_btn_normal_get.m_text_count.text = "x" + this._openData.rewardCount;
-
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";
-
+        this.ui.m_btn_normal_get.m_text_count.text = "x" + (this._isChecked ? this._openData.rewardCount * 5 : this._openData.rewardCount);
         this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
 
         this.ui.m_btn_open_roll.m_btn_type.selectedIndex = 2;
@@ -89,6 +87,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         this._isChecked = !this._isChecked;
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";
+        this.ui.m_btn_normal_get.m_text_count.text = "x" + (this._isChecked ? this._openData.rewardCount * 5 : this._openData.rewardCount);
     }
 
     private _OnClickNormalGet() {

@@ -19,7 +19,7 @@
     </component>
     <component id="n9_bg00" name="btn_double_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="105,793">
       <relation target="" sidePair="center-center,middle-middle"/>
-      <Button icon="ui://75kiu87kit2ip"/>
+      <Button icon="ui://75kiu87khtjj37"/>
     </component>
     <component id="n10_bg00" name="btn_normal_get" src="bg001j" fileName="cache/view_reward_count.xml" xy="214,915">
       <gearXY controller="c1" pages="0,1" values="214,915|256,497"/>
