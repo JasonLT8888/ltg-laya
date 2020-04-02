@@ -3917,6 +3917,7 @@ class UI_CommonTrySkin extends fgui.GComponent {
     onConstruct() {
         this.m_btn_thanks = (this.getChildAt(2));
         this.m_list_item = (this.getChildAt(3));
+        this.m_btn_toggle_check = (this.getChildAt(4));
     }
 }
 UI_CommonTrySkin.URL = "ui://75kiu87kbg001v";
@@ -4108,7 +4109,6 @@ class UI_btn_toggle_02 extends fgui.GButton {
     }
     onConstruct() {
         this.m_selected = this.getControllerAt(0);
-        this.m_text_str = (this.getChildAt(2));
     }
 }
 UI_btn_toggle_02.URL = "ui://75kiu87kgxi832";
@@ -5388,12 +5388,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Data_TrySkinOpenData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Data/TrySkinOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/TrySkinOpenData.ts");
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+
+
+
 
 
 
 
 
 class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor() {
+        super(...arguments);
+        this._isChecked = true;
+    }
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_CommonTrySkinMediator();
@@ -5413,6 +5423,18 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
                 this._openData[key] = this._openParam[key];
             }
         }
+        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
+                this.ui.m_btn_toggle_check.visible = false;
+                this._isChecked = false;
+                break;
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
+                this._isChecked = false;
+                break;
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
+                this._isChecked = true;
+                break;
+        }
         if (this._openData.iconPaths == null || this._openData.iconPaths.length != 4) {
             console.error("请传入试用皮肤图标");
         }
@@ -5424,6 +5446,14 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
             getUI.onClick(this, this._OnClickTrySkin, [i]);
         }
         this.ui.m_btn_thanks.onClick(this, this._OnClickNoThanks);
+        this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
+        this.ui.m_btn_toggle_check.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        this.ui.m_btn_thanks.text = this._isChecked ? "暂时试用" : "暂不试用";
+    }
+    _OnClickToggle() {
+        this._isChecked = !this._isChecked;
+        this.ui.m_btn_toggle_check.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        this.ui.m_btn_thanks.text = this._isChecked ? "暂时试用" : "暂不试用";
     }
     _OnClickTrySkin(index) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -5440,10 +5470,26 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
         });
     }
     _OnClickNoThanks() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith(-1);
-        }
-        this.Hide();
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this._isChecked) {
+                let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowRewardVideoAdAsync();
+                if (result) {
+                    if (this._openData.onClose) {
+                        this._openData.onClose.runWith(_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__["default"].RandomInt(0, 4));
+                    }
+                    this.Hide();
+                }
+                else {
+                    _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过视频无法获得奖励");
+                }
+            }
+            else {
+                if (this._openData.onClose) {
+                    this._openData.onClose.runWith(-1);
+                }
+                this.Hide();
+            }
+        });
     }
 }
 
