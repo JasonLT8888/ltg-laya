@@ -5100,7 +5100,6 @@ __webpack_require__.r(__webpack_exports__);
 class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
         super(...arguments);
-        this._isRolling = false;
         this._randomIndex = [0, 1, 2, 3, 4, 5, 6, 7];
         this._unitDegree = 360 / 8;
         this._rotateTime = 4 * 1000;
@@ -5139,12 +5138,9 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
                 getUI.m_text_title.text = "测试数据" + i;
             }
         }
-        this._isRolling = false;
     }
     _OnClickRoll() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this._isRolling)
-                return;
             let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
             if (result) {
                 this._DoRoll();
@@ -5155,7 +5151,7 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         });
     }
     _DoRoll() {
-        this._isRolling = true;
+        _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].LockScreen();
         this._cacheIndex = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].RandomFromWithWeight(this._randomIndex, this._openData.rollWeight);
         let centerDegree = this._cacheIndex * this._unitDegree;
         this._cacheDegree = centerDegree + _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-this._unitDegree, this._unitDegree) * 0.2;
@@ -5167,11 +5163,9 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         if (this._openData.onRolled) {
             this._openData.onRolled.runWith([this._cacheIndex, this.ui.m_pointer]);
         }
-        this._isRolling = false;
+        _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].UnlockScreen();
     }
     _OnClickClose() {
-        if (this._isRolling)
-            return;
         this.Hide();
     }
 }
