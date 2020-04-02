@@ -12,13 +12,17 @@ export default class LTSDK {
         return this._instance;
     }
 
+    public static get isInited(): boolean {
+        return this._instance != null;
+    }
+
     /**
      * 
      * @param sdkClass 初始化的类
      * @param identifyId 游戏标识
      * @param controlVersion 广告版本
      */
-    public static CreateInstace(sdkClass: any, identifyId: string, controlVersion: string, appId : string): ISDK {
+    public static CreateInstace(sdkClass: any, identifyId: string, controlVersion: string, appId: string): ISDK {
         if (this._instance != null) {
             console.error("SDK不能反复进行初始化");
             return this._instance;

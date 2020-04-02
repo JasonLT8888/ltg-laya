@@ -3101,6 +3101,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
 /* harmony import */ var _LTVersion__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../LTVersion */ "./src/LTGame/LTVersion.ts");
 /* harmony import */ var _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Commom/EScreenOrientation */ "./src/LTGame/Commom/EScreenOrientation.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../SDK/Impl/SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
+
+
 
 
 
@@ -3159,6 +3163,9 @@ class LTStart {
         }
         this._HandleInitPlatform(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform, platformData);
         this._HandleSDK();
+        if (!_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__["default"].isInited) {
+            _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_10__["default"], "default", "default", "default");
+        }
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Init(platformData);
         // 非web平台禁用debug模式
         if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].Web) {
@@ -6284,6 +6291,9 @@ class LTSDK {
             return null;
         }
         return this._instance;
+    }
+    static get isInited() {
+        return this._instance != null;
     }
     /**
      *

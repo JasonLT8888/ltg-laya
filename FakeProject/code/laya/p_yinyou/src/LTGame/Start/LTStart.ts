@@ -9,6 +9,8 @@ import MonoHelper, { EActionType } from "../LTUtils/MonoHelper";
 import BaseState from "../Fsm/BaseState";
 import LTVersion from "../LTVersion";
 import { EScreenOrientation } from "../Commom/EScreenOrientation";
+import LTSDK from "../../SDK/LTSDK";
+import SDK_Default from "../../SDK/Impl/SDK_Default";
 
 export class LTStart {
 
@@ -19,7 +21,7 @@ export class LTStart {
     private get _currentState(): BaseState {
         return this._fsm.currState;
     }
-    
+
     public enableStat: boolean = false;
 
     public screenOrientation: EScreenOrientation = EScreenOrientation.Portrait;
@@ -72,6 +74,9 @@ export class LTStart {
 
         this._HandleInitPlatform(LTPlatform.instance.platform, platformData);
         this._HandleSDK();
+        if (!LTSDK.isInited) {
+            LTSDK.CreateInstace(SDK_Default, "default", "default", "default");
+        }
         LTPlatform.instance.Init(platformData);
 
 
