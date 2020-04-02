@@ -1,4 +1,5 @@
 import SDKADManager from "../SDKADManager";
+import { ECheckState } from "../common/ECheckState";
 
 export interface ISDK {
 
@@ -58,6 +59,11 @@ export interface ISDK {
      * 用于控制常规交叉推广
      */
     isConfigEnable: boolean;
+
+    /**
+     * 游戏状态
+     */
+    checkState: ECheckState;
 
     /**
      * 请求远程开关信息

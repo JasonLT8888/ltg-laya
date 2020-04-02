@@ -19,6 +19,7 @@ import UI_view_roll_bg from "./UI_view_roll_bg";
 import UI_CommonEndShare from "./UI_CommonEndShare";
 import UI_CommonOneMore from "./UI_CommonOneMore";
 import UI_view_one_more from "./UI_view_one_more";
+import UI_btn_toggle_02 from "./UI_btn_toggle_02";
 import UI_FlyPanel from "./UI_FlyPanel";
 import UI_view_fly_coin from "./UI_view_fly_coin";
 import UI_CommonLockScreen from "./UI_CommonLockScreen";
@@ -55,6 +56,7 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_CommonEndShare.URL, UI_CommonEndShare);
 		fgui.UIObjectFactory.setExtension(UI_CommonOneMore.URL, UI_CommonOneMore);
 		fgui.UIObjectFactory.setExtension(UI_view_one_more.URL, UI_view_one_more);
+		fgui.UIObjectFactory.setExtension(UI_btn_toggle_02.URL, UI_btn_toggle_02);
 		fgui.UIObjectFactory.setExtension(UI_FlyPanel.URL, UI_FlyPanel);
 		fgui.UIObjectFactory.setExtension(UI_view_fly_coin.URL, UI_view_fly_coin);
 		fgui.UIObjectFactory.setExtension(UI_CommonLockScreen.URL, UI_CommonLockScreen);

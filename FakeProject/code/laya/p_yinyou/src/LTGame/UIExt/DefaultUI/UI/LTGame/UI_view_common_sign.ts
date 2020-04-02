@@ -1,15 +1,15 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
 import UI_view_item_sign from "./UI_view_item_sign";
-import UI_btn_double_get from "./UI_btn_double_get";
+import UI_btn_toggle_02 from "./UI_btn_toggle_02";
 
 export default class UI_view_common_sign extends fgui.GComponent {
 
 	public m_btn_close:fgui.GButton;
 	public m_view_day7:UI_view_item_sign;
-	public m_btn_normal_get:fgui.GButton;
-	public m_btn_double_get:UI_btn_double_get;
+	public m_btn_get:fgui.GButton;
 	public m_list_day:fgui.GList;
+	public m_toggle_watchad:UI_btn_toggle_02;
 
 	public static URL:string = "ui://75kiu87kit2iy";
 
@@ -24,8 +24,8 @@ export default class UI_view_common_sign extends fgui.GComponent {
 	protected onConstruct(): void {
 		this.m_btn_close = <fgui.GButton><any>(this.getChildAt(2));
 		this.m_view_day7 = <UI_view_item_sign><any>(this.getChildAt(3));
-		this.m_btn_normal_get = <fgui.GButton><any>(this.getChildAt(4));
-		this.m_btn_double_get = <UI_btn_double_get><any>(this.getChildAt(5));
-		this.m_list_day = <fgui.GList><any>(this.getChildAt(6));
+		this.m_btn_get = <fgui.GButton><any>(this.getChildAt(4));
+		this.m_list_day = <fgui.GList><any>(this.getChildAt(5));
+		this.m_toggle_watchad = <UI_btn_toggle_02><any>(this.getChildAt(6));
 	}
 }

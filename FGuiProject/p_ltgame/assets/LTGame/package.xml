@@ -101,6 +101,10 @@
     <image id="gxi82u" name="再来一份.jpg" path="/效果图/"/>
     <image id="gxi82v" name="sp_zailaiyifen.png" path="/img/"/>
     <component id="gxi82w" name="view_one_more.xml" path="/cache/"/>
+    <image id="gxi82y" name="登录奖励(1).jpg" path="/效果图/"/>
+    <image id="gxi82z" name="sp_gouxuankuang.png" path="/img/"/>
+    <image id="gxi830" name="sp_gou.png" path="/img/"/>
+    <component id="gxi832" name="btn_toggle_02.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

@@ -1,4 +1,3 @@
-import { ISDK } from "../Interface/ISDK";
 import LTHttp from "../../LTGame/Net/LTHttp";
 import SDKADManager from "../SDKADManager";
 import StringEx from "../../LTGame/LTUtils/StringEx";
@@ -7,8 +6,9 @@ import CryptoJS from "./../Libs/hmac-sha256.js";
 import md5 from "./../Libs/md5.js";
 import ShareManager from "../../LTGame/Platform/ShareManager";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
+import SDK_Default from "./SDK_Default";
 
-export default class SDK_YQ implements ISDK {
+export default class SDK_YQ extends SDK_Default {
 
     isADEnable: boolean;
     isConfigEnable: boolean;

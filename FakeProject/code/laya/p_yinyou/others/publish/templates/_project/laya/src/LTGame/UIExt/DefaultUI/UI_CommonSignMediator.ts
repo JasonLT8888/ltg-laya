@@ -5,6 +5,8 @@ import UI_view_item_sign from "./UI/LTGame/UI_view_item_sign";
 import CommonSaveData from "../../Commom/CommonSaveData";
 import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
+import LTSDK from "../../../SDK/LTSDK";
+import { ECheckState } from "../../../SDK/common/ECheckState";
 
 export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign> {
 
@@ -20,6 +22,8 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
     private _openData: SignOpenData;
     private _cacheRewardItem: UI_view_item_sign;
 
+    private _isChecked: boolean = true;
+
     _OnShow() {
         super._OnShow();
         // your code
@@ -31,9 +35,23 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
                 this._openData[key] = this._openParam[key];
             }
         }
+
+        switch (LTSDK.instance.checkState) {
+            case ECheckState.InCheck:
+                this.ui.m_view.m_toggle_watchad.visible = false;
+                this._isChecked = false;
+                break;
+            case ECheckState.Normal:
+                this._isChecked = false;
+                break;
+            case ECheckState.NoGame:
+                this._isChecked = true;
+                break;
+        }
         this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
-        this.ui.m_view.m_btn_normal_get.onClick(this, this._OnClickNormalGet);
-        this.ui.m_view.m_btn_double_get.onClick(this, this._OnClickDoubleGet);
+        this.ui.m_view.m_btn_get.onClick(this, this._OnClickGet);
+        this.ui.m_view.m_toggle_watchad.onClick(this, this._OnClickToggle);
+        this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
 
         this._UpdateUI();
     }
@@ -43,8 +61,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         if (this._openData.isSigned != null) {
             isSigned = this._openData.isSigned;
         }
-        this.ui.m_view.m_btn_double_get.enabled = !isSigned;
-        this.ui.m_view.m_btn_normal_get.enabled = !isSigned;
+        this.ui.m_view.m_btn_get.enabled = !isSigned;
 
         let currentSignDay = CommonSaveData.instance.signDayCount;
         if (this._openData.currentDayCount != null) {
@@ -85,6 +102,19 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
             } else {
                 this._cacheRewardItem = this.ui.m_view.m_view_day7;
             }
+        }
+    }
+
+    private _OnClickToggle() {
+        this._isChecked = !this._isChecked;
+        this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+    }
+
+    private _OnClickGet() {
+        if (this._isChecked) {
+            this._OnClickDoubleGet();
+        } else {
+            this._OnClickNormalGet();
         }
     }
 

@@ -19,7 +19,7 @@
     <text id="n10_it2i" name="text_reward" xy="82,156" pivot="0.5,0.5" anchor="true" size="62,41" fontSize="32" color="#ff552e" align="center" vAlign="middle" letterSpacing="1" bold="true" text="300">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <image id="n14_it2i" name="n14" src="it2iw" fileName="img/sp_yijinglingqu.png" xy="54,90">
+    <image id="n14_it2i" name="n14" src="it2iw" fileName="img/sp_yijinglingqu.png" xy="114,129">
       <gearDisplay controller="c1" pages="1"/>
       <relation target="" sidePair="right-right,bottom-bottom"/>
     </image>
