@@ -25,6 +25,35 @@ export default class UI_FlyPanelMediator extends BaseUIMediator<UI_FlyPanel> {
     }
 
     /**
+     * 爆炸金币,用于没有可飞行位置的时候
+     * @param fromObj 
+     * @param flyIcon 
+     * @param flyCount 
+     * @param flyTime 
+     * @param circleRadius 
+     */
+    public async BoomCoins(fromObj: fgui.GObject, flyIcon: string = null, flyCount: number = 100,
+        flyTime: number = 1, circleRadius: number = 10) {
+        let startPos = fromObj.localToGlobal();
+        let cacheTime = flyTime * 1000;
+        for (let i = 0; i < flyCount; ++i) {
+            let flyCoin = UI_view_fly_coin.createInstance();
+            this.ui.addChild(flyCoin);
+            if (flyIcon != null) {
+                flyCoin.m_icon.url = flyIcon;
+            }
+            flyCoin.setXY(startPos.x, startPos.y);
+            let cachePos = new Laya.Vector2(startPos.x + MathEx.Random(-circleRadius, circleRadius),
+                startPos.y + MathEx.Random(-circleRadius, circleRadius));
+            Laya.Tween.to(flyCoin, { x: cachePos.x, y: cachePos.y }, cacheTime, Laya.Ease.quadInOut, Laya.Handler.create(this, () => {
+                flyCoin.dispose();
+            }));
+        }
+
+        await Awaiters.Seconds(flyTime);
+    }
+
+    /**
      * 先往外扩,然后飞到指定位置
      * @param fromObj 
      * @param toObj 
@@ -55,9 +84,6 @@ export default class UI_FlyPanelMediator extends BaseUIMediator<UI_FlyPanel> {
         }
 
         await Awaiters.Seconds(flyTime);
-
-
-
     }
 
 }

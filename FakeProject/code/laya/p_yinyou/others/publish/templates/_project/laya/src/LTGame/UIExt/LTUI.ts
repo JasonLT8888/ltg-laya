@@ -43,6 +43,11 @@ export default class LTUI {
         await UI_FlyPanelMediator.instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
     }
 
+    public static async BoomCoins(fromObj: fgui.GObject, flyIcon: string = null, flyCount: number = 10,
+        flyTime: number = 1, circleRadius: number = 60) {
+        await UI_FlyPanelMediator.instance.BoomCoins(fromObj, flyIcon, flyCount, flyTime, circleRadius);
+    }
+
     /**
      * 打开签到界面
      * @param openData 

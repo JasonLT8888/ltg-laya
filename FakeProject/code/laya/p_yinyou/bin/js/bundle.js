@@ -3965,10 +3965,10 @@ class UI_CommonRoll extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "CommonRoll"));
     }
     onConstruct() {
-        this.m_btn_roll = (this.getChildAt(1));
-        this.m_view_roll = (this.getChildAt(2));
-        this.m_pointer = (this.getChildAt(3));
-        this.m_btn_close = (this.getChildAt(5));
+        this.m_view_roll = (this.getChildAt(1));
+        this.m_pointer = (this.getChildAt(2));
+        this.m_btn_close = (this.getChildAt(4));
+        this.m_btn_roll = (this.getChildAt(5));
     }
 }
 UI_CommonRoll.URL = "ui://75kiu87kbg002d";
@@ -5840,6 +5840,33 @@ class UI_FlyPanelMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
         this.ui.m_test.dispose();
     }
     /**
+     * 爆炸金币,用于没有可飞行位置的时候
+     * @param fromObj
+     * @param flyIcon
+     * @param flyCount
+     * @param flyTime
+     * @param circleRadius
+     */
+    BoomCoins(fromObj, flyIcon = null, flyCount = 100, flyTime = 1, circleRadius = 10) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let startPos = fromObj.localToGlobal();
+            let cacheTime = flyTime * 1000;
+            for (let i = 0; i < flyCount; ++i) {
+                let flyCoin = _UI_LTGame_UI_view_fly_coin__WEBPACK_IMPORTED_MODULE_2__["default"].createInstance();
+                this.ui.addChild(flyCoin);
+                if (flyIcon != null) {
+                    flyCoin.m_icon.url = flyIcon;
+                }
+                flyCoin.setXY(startPos.x, startPos.y);
+                let cachePos = new Laya.Vector2(startPos.x + _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-circleRadius, circleRadius), startPos.y + _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-circleRadius, circleRadius));
+                Laya.Tween.to(flyCoin, { x: cachePos.x, y: cachePos.y }, cacheTime, Laya.Ease.quadInOut, Laya.Handler.create(this, () => {
+                    flyCoin.dispose();
+                }));
+            }
+            yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].Seconds(flyTime);
+        });
+    }
+    /**
      * 先往外扩,然后飞到指定位置
      * @param fromObj
      * @param toObj
@@ -6130,6 +6157,11 @@ class LTUI {
     static FlyCoinsTo(fromObj, toObj, flyIcon = null, flyCount = 10, flyTime = 1, circleRadius = 60) {
         return __awaiter(this, void 0, void 0, function* () {
             yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
+        });
+    }
+    static BoomCoins(fromObj, flyIcon = null, flyCount = 10, flyTime = 1, circleRadius = 60) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.BoomCoins(fromObj, flyIcon, flyCount, flyTime, circleRadius);
         });
     }
     /**
