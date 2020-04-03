@@ -2206,9 +2206,6 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this._CreateInterstitalAd();
         this.recordManager = new _Impl_TT_TTRecordManager__WEBPACK_IMPORTED_MODULE_3__["default"](this._base);
         this.device = new _Impl_TT_TTDevice__WEBPACK_IMPORTED_MODULE_4__["default"](this._base);
-        this._base.onNavigateToMiniProgram((res) => {
-            console.log('onNavigateToMiniProgram', res);
-        });
         window["iplatform"] = this;
     }
     _CreateBannerAd() {
