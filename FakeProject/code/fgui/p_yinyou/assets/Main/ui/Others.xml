@@ -31,5 +31,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="短振动"/>
     </component>
+    <component id="n9_rlak" name="btn_jump" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="439,408">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="直接跳转"/>
+    </component>
   </displayList>
 </component>

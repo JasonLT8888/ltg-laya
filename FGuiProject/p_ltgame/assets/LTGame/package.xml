@@ -54,7 +54,7 @@
     <component id="bg001h" name="view_game_icon.xml" path="/cache/"/>
     <image id="bg001i" name="sp_lipin.png" path="/img/"/>
     <component id="bg001j" name="view_reward_count.xml" path="/cache/"/>
-    <component id="bg001k" name="view_end_games.xml" path="/cache/"/>
+    <component id="bg001k" name="view_end_games.xml" path="/cache/" exported="true"/>
     <component id="bg001l" name="view_title.xml" path="/cmp/"/>
     <component id="bg001m" name="CommonOffline.xml" path="/ui/" exported="true"/>
     <image id="bg001n" name="离线收益.jpg" path="/效果图/"/>

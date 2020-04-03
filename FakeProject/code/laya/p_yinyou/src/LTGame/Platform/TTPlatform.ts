@@ -36,6 +36,10 @@ export default class TTPlatform extends WXPlatform {
         this.recordManager = new TTRecordManager(this._base);
         this.device = new TTDevice(this._base);
 
+        this._base.onNavigateToMiniProgram((res) => {
+            console.log('onNavigateToMiniProgram', res);
+        });
+
         window["iplatform"] = this;
     }
 

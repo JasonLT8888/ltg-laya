@@ -2206,6 +2206,9 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this._CreateInterstitalAd();
         this.recordManager = new _Impl_TT_TTRecordManager__WEBPACK_IMPORTED_MODULE_3__["default"](this._base);
         this.device = new _Impl_TT_TTDevice__WEBPACK_IMPORTED_MODULE_4__["default"](this._base);
+        this._base.onNavigateToMiniProgram((res) => {
+            console.log('onNavigateToMiniProgram', res);
+        });
         window["iplatform"] = this;
     }
     _CreateBannerAd() {
@@ -7194,6 +7197,7 @@ class UI_OthersMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPOR
         this.ui.m_btn_shake_long.onClick(this, this._OnClickShakeLong);
         this.ui.m_btn_shake_short.onClick(this, this._OnClickShakeShort);
         this.ui.m_btn_const.onClick(this, this._OnClickConst);
+        this.ui.m_btn_jump.onClick(this, this._OnClickDirectJump);
     }
     _OnClickBack() {
         this.Hide();
@@ -7216,7 +7220,18 @@ class UI_OthersMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPOR
         for (let i = 0; i < adList.length && i < 10; ++i) {
             appidList.push(adList[i].ad_appid);
         }
-        _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.OpenGameBox(appidList);
+        let appids = [
+            "ttce8db83051a7f459",
+            "ttfdfc8b4162d6c8ab",
+            "ttedfb9b4672d1d8ad",
+            "tt4dcb3b76d2e178a7",
+        ];
+        _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.OpenGameBox(appids);
+    }
+    _OnClickDirectJump() {
+        let tt = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance['_base'];
+        tt['navigateToMiniProgram']({ appId: "ttce8db83051a7f459" });
+        // LTPlatform.instance['_base']['navigateToMiniProgram']({ appId: "ttce8db83051a7f459" });
     }
 }
 
@@ -7664,6 +7679,7 @@ class UI_Others extends fgui.GComponent {
         this.m_btn_const = (this.getChildAt(5));
         this.m_btn_shake_long = (this.getChildAt(6));
         this.m_btn_shake_short = (this.getChildAt(7));
+        this.m_btn_jump = (this.getChildAt(8));
     }
 }
 UI_Others.URL = "ui://kk7g5mmmx62bf";

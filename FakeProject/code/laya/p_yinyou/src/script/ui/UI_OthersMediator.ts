@@ -28,6 +28,7 @@ export default class UI_OthersMediator extends BaseUIMediator<UI_Others> {
         this.ui.m_btn_shake_long.onClick(this, this._OnClickShakeLong);
         this.ui.m_btn_shake_short.onClick(this, this._OnClickShakeShort);
         this.ui.m_btn_const.onClick(this, this._OnClickConst);
+        this.ui.m_btn_jump.onClick(this, this._OnClickDirectJump);
     }
 
     private _OnClickBack() {
@@ -56,7 +57,19 @@ export default class UI_OthersMediator extends BaseUIMediator<UI_Others> {
         for (let i = 0; i < adList.length && i < 10; ++i) {
             appidList.push(adList[i].ad_appid);
         }
-        LTPlatform.instance.OpenGameBox(appidList);
+        let appids = [
+            "ttce8db83051a7f459",
+            "ttfdfc8b4162d6c8ab",
+            "ttedfb9b4672d1d8ad",
+            "tt4dcb3b76d2e178a7",
+        ];
+        LTPlatform.instance.OpenGameBox(appids);
+    }
+
+    private _OnClickDirectJump() {
+        let tt = LTPlatform.instance['_base'];
+        tt['navigateToMiniProgram']({ appId: "ttce8db83051a7f459" });
+        // LTPlatform.instance['_base']['navigateToMiniProgram']({ appId: "ttce8db83051a7f459" });
     }
 
 }
