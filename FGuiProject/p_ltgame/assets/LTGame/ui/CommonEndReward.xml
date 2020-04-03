@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImage="ui://75kiu87khtjj36" designImageLayer="1">
-  <controller name="c1" pages="0,有导流,1,无导流" selected="0"/>
+  <controller name="c1" pages="0,有导流,1,无导流" selected="1"/>
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n1_bg00" name="view_title" src="bg001l" fileName="cmp/view_title.xml" xy="145,143">
+    <component id="n1_bg00" name="view_title" src="bg001l" fileName="cmp/view_title.xml" xy="145,227">
       <gearXY controller="c1" pages="1" values="145,227" default="145,143"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
@@ -21,8 +21,8 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87khtjj37"/>
     </component>
-    <component id="n10_bg00" name="btn_normal_get" src="bg001j" fileName="cache/view_reward_count.xml" xy="214,915">
-      <gearXY controller="c1" pages="0,1" values="214,915|256,497"/>
+    <component id="n10_bg00" name="btn_normal_get" src="bg001j" fileName="cache/view_reward_count.xml" xy="214,497">
+      <gearXY controller="c1" pages="0,1" values="214,915|214,497"/>
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="五倍领取奖励"/>
       <property target="text_title" propertyId="0" value="五倍领取奖励"/>

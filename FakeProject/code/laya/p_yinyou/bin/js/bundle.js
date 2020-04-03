@@ -4841,7 +4841,7 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_7__["EPlatformType"].TT) {
             let tt = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance['_base'];
             let systemInfo = tt.getSystemInfoSync();
-            if (systemInfo == "ios") {
+            if (systemInfo.platform == "ios") {
                 this._openData.enableShowGames = false;
             }
             let [major, minor] = systemInfo.SDKVersion.split(".");

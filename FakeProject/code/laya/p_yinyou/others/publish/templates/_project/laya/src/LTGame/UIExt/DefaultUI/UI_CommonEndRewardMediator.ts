@@ -39,7 +39,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         if (LTPlatform.instance.platform == EPlatformType.TT) {
             let tt = LTPlatform.instance['_base'];
             let systemInfo = tt.getSystemInfoSync();
-            if (systemInfo == "ios") {
+            if (systemInfo.platform == "ios") {
                 this._openData.enableShowGames = false;
             }
             let [major, minor] = systemInfo.SDKVersion.split(".");
