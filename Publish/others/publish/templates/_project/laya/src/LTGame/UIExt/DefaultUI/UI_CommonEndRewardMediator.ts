@@ -117,11 +117,12 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
     }
 
     private _OnClickGames() {
-        let appIds: string[] = [];
-        for (let ad of this._cacheAds) {
-            appIds.push(ad.ad_appid);
+        let adList = this._cacheAds;
+        let appidList = [];
+        for (let i = 0; i < adList.length && i < 10; ++i) {
+            appidList.push(adList[i].ad_appid);
         }
-        LTPlatform.instance.OpenGameBox(appIds);
+        LTPlatform.instance.OpenGameBox(appidList);
     }
 
 }

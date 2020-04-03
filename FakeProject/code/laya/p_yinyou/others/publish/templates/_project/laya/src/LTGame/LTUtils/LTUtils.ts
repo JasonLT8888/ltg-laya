@@ -1,3 +1,5 @@
+import LTPlatform from "../Platform/LTPlatform";
+import CommonSaveData from "../Commom/CommonSaveData";
 
 export class LTUtils {
 
@@ -224,6 +226,16 @@ export class LTUtils {
         for (let i = 0; i < obj.numChildren; ++i) {
             let getChild = obj.getChildAt(i);
             this.SetLayer(getChild as Laya.Sprite3D, layerIndex);
+        }
+    }
+
+    /**
+     * 调用震动
+     * @param isLong 是否是长震动
+     */
+    public static Vibrate(isLong: boolean = true) {
+        if (CommonSaveData.instance.isShakeOn) {
+            LTPlatform.instance.device.Vibrate(isLong);
         }
     }
 }

@@ -2,6 +2,7 @@ import { EPlatformType } from "./EPlatformType";
 import LTPlatformData from "./Data/LTPlatformData";
 import { ShareInfo } from "./ShareInfo";
 import IRecordManager from "./IRecordManager";
+import { IDevice } from "./IDevice";
 
 export default interface IPlatform {
 
@@ -48,6 +49,11 @@ export default interface IPlatform {
      * 视频录制器
      */
     recordManager: IRecordManager;
+
+    /**
+     * 设备硬件驱动
+     */
+    device: IDevice;
 
     /**
      * 初始化

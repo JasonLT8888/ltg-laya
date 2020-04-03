@@ -4,9 +4,7 @@
     "rewardVideoId": "",
     "interstitialId": "",
     "forceRemote": [
-        "res/config",
-        "res/bgm",
-        "res/level"
+        "res/config"
     ],
     "forceInPack": [
         "res/fgui_load"
@@ -14,5 +12,5 @@
     "maxSinglePackSize": 8,
     "maxTotalPackSize": 8,
     "packType": 1,
-    "compress": true
+    "compress": false
 }

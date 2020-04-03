@@ -8,6 +8,7 @@ import UI_CommonUIMediator from "./UI_CommonUIMediator";
 import LTUI from "../../LTGame/UIExt/LTUI";
 import { TestConst } from "../config/TestConst";
 import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
+import UI_OthersMediator from "./UI_OthersMediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -35,7 +36,7 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
     }
 
     private _OnClickOthers() {
-        LTUI.Toast("读取到配置:" + TestConst.data.init_coin_count);
+        UI_OthersMediator.instance.Show();
     }
 
     private _OnClickBtnAd() {

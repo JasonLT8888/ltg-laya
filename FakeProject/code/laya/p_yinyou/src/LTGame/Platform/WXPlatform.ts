@@ -10,6 +10,8 @@ import IRecordManager from "./IRecordManager";
 import DefaultRecordManager from "./DefaultRecordManager";
 import LTUI from "../UIExt/LTUI";
 import Awaiters from "../Async/Awaiters";
+import { IDevice } from "./IDevice";
+import DefaultDevice from "./DefaultDevice";
 
 export default class WXPlatform implements IPlatform {
     onPause: Laya.Handler;
@@ -21,6 +23,7 @@ export default class WXPlatform implements IPlatform {
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
     recordManager: IRecordManager = new DefaultRecordManager();
+    device: IDevice = new DefaultDevice();
 
     protected _data: LTPlatformData;
 

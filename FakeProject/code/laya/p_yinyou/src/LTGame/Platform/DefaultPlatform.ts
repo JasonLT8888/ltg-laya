@@ -9,6 +9,8 @@ import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMed
 import IRecordManager from "./IRecordManager";
 import DefaultRecordManager from "./DefaultRecordManager";
 import LTUI from "../UIExt/LTUI";
+import { IDevice } from "./IDevice";
+import DefaultDevice from "./DefaultDevice";
 
 export default class DefaultPlatform implements IPlatform {
 
@@ -22,6 +24,7 @@ export default class DefaultPlatform implements IPlatform {
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
     recordManager: IRecordManager = new DefaultRecordManager();
+    device: IDevice = new DefaultDevice();
 
     Init(platformData: LTPlatformData) {
         this.loginState = {
