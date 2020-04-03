@@ -6,6 +6,7 @@ import LTUI from "../LTUI";
 import LTSDK from "../../../SDK/LTSDK";
 import UI_view_item_game from "./UI/LTGame/UI_view_item_game";
 import { ECheckState } from "../../../SDK/common/ECheckState";
+import { EPlatformType } from "../../Platform/EPlatformType";
 
 export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_CommonEndReward> {
 
@@ -32,6 +33,20 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         } else {
             for (let key in this._openParam) {
                 this._openData[key] = this._openParam[key];
+            }
+        }
+
+        if (LTPlatform.instance.platform == EPlatformType.TT) {
+            let tt = LTPlatform.instance['_base'];
+            let systemInfo = tt.getSystemInfoSync();
+            if (systemInfo == "ios") {
+                this._openData.enableShowGames = false;
+            }
+            let [major, minor] = systemInfo.SDKVersion.split(".");
+            if (major >= 1 && minor >= 33) {
+
+            } else {
+                this._openData.enableShowGames = false;
             }
         }
 

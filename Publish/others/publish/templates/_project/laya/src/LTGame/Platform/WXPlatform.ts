@@ -58,7 +58,6 @@ export default class WXPlatform implements IPlatform {
             console.error("平台初始化错误", LTPlatform.platformStr);
             return;
         }
-
         this._platformData = platformData;
         this._InitLauchOption();
         this._Login();
