@@ -6,5 +6,11 @@
     "connectSocket": 10000,
     "uploadFile": 10000,
     "downloadFile": 10000
-  }
+  },
+  "ttNavigateToMiniGameAppIdList": [
+    "ttce8db83051a7f459",
+    "ttfdfc8b4162d6c8ab",
+    "ttedfb9b4672d1d8ad",
+    "tt4dcb3b76d2e178a7"
+  ]
 }

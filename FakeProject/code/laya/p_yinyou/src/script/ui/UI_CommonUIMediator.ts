@@ -8,6 +8,8 @@ import OfflineOpenData from "../../LTGame/UIExt/DefaultUI/Data/OfflineOpenData";
 import TrySkinOpenData from "../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData";
 import SetOpenData from "../../LTGame/UIExt/DefaultUI/Data/SetOpenData";
 import RollOpenData from "../../LTGame/UIExt/DefaultUI/Data/RollOpenData";
+import { TestConst } from "../config/TestConst";
+import OneMoreOpenData from "../../LTGame/UIExt/DefaultUI/Data/OneMoreOpenData";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -31,6 +33,7 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_tryskin.onClick(this, this._OnClickTrySkin);
         this.ui.m_btn_set.onClick(this, this._OnClickSet);
         this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
+        this.ui.m_btn_onemore.onClick(this, this._OnClickOneMore);
     }
 
     private _OnClickRoll() {
@@ -39,6 +42,8 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
             LTUI.Toast("转中" + index);
         }, null, false);
         LTUI.ShowRoll(openData);
+
+        TestConst.data.init_coin_count;
     }
 
     private _OnClickSet() {
@@ -93,6 +98,9 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
                     LTUI.Toast("双倍领取");
                     LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
                     break;
+                case 2:
+                    this._OnClickRoll();
+                    break;
                 default:
                     LTUI.Toast("未处理相应类型" + type);
                     break;
@@ -120,10 +128,8 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         LTUI.ShowEndShare(openData);
     }
 
-    private _OnClickSign() {
-        let openData = new SignOpenData();
-        // 强制未签到
-        openData.isSigned = false;
+    private _OnClickOneMore() {
+        let openData = new OneMoreOpenData();
         openData.onClose = Laya.Handler.create(null, (type: number, fromObj: fgui.GObject) => {
             switch (type) {
                 case 0:
@@ -135,6 +141,31 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
                     break;
                 case 2:
                     LTUI.Toast("点击了双倍领取按钮");
+                    LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
+                    break;
+                default:
+                    LTUI.Toast("未处理相应类型" + type);
+                    break;
+            }
+        });
+        LTUI.ShowOneMore(openData);
+    }
+
+    private _OnClickSign() {
+        let openData = new SignOpenData();
+        // 强制未签到
+        openData.isSigned = false;
+        openData.onClose = Laya.Handler.create(null, (type: number, fromObj: fgui.GObject, dayCount: number) => {
+            switch (type) {
+                case 0:
+                    LTUI.Toast("点击了关闭按钮");
+                    break;
+                case 1:
+                    LTUI.Toast("点击了普通领取按钮" + dayCount);
+                    LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
+                    break;
+                case 2:
+                    LTUI.Toast("点击了双倍领取按钮" + dayCount);
                     LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
                     break;
                 default:

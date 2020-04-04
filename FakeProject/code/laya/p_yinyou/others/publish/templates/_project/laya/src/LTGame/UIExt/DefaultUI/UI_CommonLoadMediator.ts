@@ -17,8 +17,16 @@ export default class UI_CommondLoadMediator extends BaseUIMediator<UI_CommonLoad
         // your code
         this._sortOrder = Number.MAX_SAFE_INTEGER;
 
-        let openStr = this._openParam as string;
+        let openStr = this._openParam[0] as string;
+        let isBig = this._openParam[1] as boolean;
         this.ui.m_load.m_text_load.text = openStr;
+        if (isBig) {
+            this.ui.m_small_bg.visible = false;
+            this.ui.m_big_bg.visible = true;
+        } else {
+            this.ui.m_small_bg.visible = true;
+            this.ui.m_big_bg.visible = false;
+        }
     }
 
 }

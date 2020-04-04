@@ -4,6 +4,7 @@ import * as uglify_es from 'uglify-es';
 import * as child_process from 'child_process';
 import * as colors from 'colors';
 import { EFileType } from 'Config/EFileType';
+import StringEx from './StringEx';
 
 export class LTUtils {
 
@@ -104,12 +105,13 @@ export class LTUtils {
         let files = fs.readdirSync(srcDir);
         for (let i = 0; i < files.length; ++i) {
             let fileName = files[i];
-            if (checkFunc && !checkFunc(fileName)) {
+            let targetPath = path.join(targetDir, fileName);
+            if (checkFunc && !checkFunc(fileName, targetPath)) {
                 // true表示继续使用,false表示跳过
                 continue;
             }
+            
             let filePath = path.join(srcDir, fileName);
-            let targetPath = path.join(targetDir, fileName);
             let fileStat = fs.statSync(filePath);
             if (fileStat.isDirectory()) {
                 this.CopyDir(filePath, targetPath, checkFunc);
@@ -142,6 +144,23 @@ export class LTUtils {
      */
     public static IsFileExist(filePath: string): boolean {
         return fs.existsSync(filePath);
+    }
+
+    /**
+     * 获取文件名字
+     * @param dirPath 
+     */
+    public static GetDirName(dirPath: string): string {
+        let fileType = this.IsFileOrDir(dirPath);
+        if (fileType == EFileType.NotExist) {
+            return "";
+        }
+        dirPath = StringEx.ReplaceAll(dirPath, '\\', '/');
+        let splitNames = dirPath.split('/');
+        if (dirPath.endsWith('/') || fileType == EFileType.File) {
+            return splitNames[splitNames.length - 2];
+        }
+        return splitNames[splitNames.length - 1];
     }
 
     /**

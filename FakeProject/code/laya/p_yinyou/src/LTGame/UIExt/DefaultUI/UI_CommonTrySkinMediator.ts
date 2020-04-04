@@ -4,6 +4,9 @@ import TrySkinOpenData from "./Data/TrySkinOpenData";
 import UI_view_item_try_skin from "./UI/LTGame/UI_view_item_try_skin";
 import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
+import LTSDK from "../../../SDK/LTSDK";
+import { ECheckState } from "../../../SDK/common/ECheckState";
+import MathEx from "../../LTUtils/MathEx";
 
 export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTrySkin> {
 
@@ -18,6 +21,8 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
 
     private _openData: TrySkinOpenData;
 
+    private _isChecked: boolean = true;
+
     _OnShow() {
         super._OnShow();
         // your code
@@ -29,6 +34,20 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
                 this._openData[key] = this._openParam[key];
             }
         }
+
+        switch (LTSDK.instance.checkState) {
+            case ECheckState.InCheck:
+                this.ui.m_btn_toggle_check.visible = false;
+                this._isChecked = false;
+                break;
+            case ECheckState.Normal:
+                this._isChecked = false;
+                break;
+            case ECheckState.NoGame:
+                this._isChecked = true;
+                break;
+        }
+
         if (this._openData.iconPaths == null || this._openData.iconPaths.length != 4) {
             console.error("请传入试用皮肤图标");
         }
@@ -41,6 +60,16 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
         }
 
         this.ui.m_btn_thanks.onClick(this, this._OnClickNoThanks);
+
+        this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
+        this.ui.m_btn_toggle_check.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        this.ui.m_btn_thanks.text = this._isChecked ? "暂时试用" : "暂不试用";
+    }
+
+    private _OnClickToggle() {
+        this._isChecked = !this._isChecked;
+        this.ui.m_btn_toggle_check.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        this.ui.m_btn_thanks.text = this._isChecked ? "暂时试用" : "暂不试用";
     }
 
     private async _OnClickTrySkin(index: number) {
@@ -57,12 +86,24 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
         }
     }
 
-    private _OnClickNoThanks() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith(-1);
-        }
+    private async _OnClickNoThanks() {
+        if (this._isChecked) {
+            let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
+            if (result) {
+                if (this._openData.onClose) {
+                    this._openData.onClose.runWith(MathEx.RandomInt(0, 4));
+                }
+                this.Hide();
+            } else {
+                LTUI.Toast("跳过视频无法获得奖励");
+            }
 
-        this.Hide();
+        } else {
+            if (this._openData.onClose) {
+                this._openData.onClose.runWith(-1);
+            }
+            this.Hide();
+        }
     }
 
 }

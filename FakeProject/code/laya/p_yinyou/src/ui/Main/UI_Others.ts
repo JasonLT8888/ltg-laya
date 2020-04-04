@@ -8,6 +8,10 @@ export default class UI_Others extends fgui.GComponent {
 	public m_btn_back:fgui.GButton;
 	public m_btn_share:fgui.GButton;
 	public m_btn_othergame:fgui.GButton;
+	public m_btn_const:fgui.GButton;
+	public m_btn_shake_long:fgui.GButton;
+	public m_btn_shake_short:fgui.GButton;
+	public m_btn_jump:fgui.GButton;
 
 	public static URL:string = "ui://kk7g5mmmx62bf";
 
@@ -24,5 +28,9 @@ export default class UI_Others extends fgui.GComponent {
 		this.m_btn_back = <fgui.GButton><any>(this.getChildAt(2));
 		this.m_btn_share = <fgui.GButton><any>(this.getChildAt(3));
 		this.m_btn_othergame = <fgui.GButton><any>(this.getChildAt(4));
+		this.m_btn_const = <fgui.GButton><any>(this.getChildAt(5));
+		this.m_btn_shake_long = <fgui.GButton><any>(this.getChildAt(6));
+		this.m_btn_shake_short = <fgui.GButton><any>(this.getChildAt(7));
+		this.m_btn_jump = <fgui.GButton><any>(this.getChildAt(8));
 	}
 }

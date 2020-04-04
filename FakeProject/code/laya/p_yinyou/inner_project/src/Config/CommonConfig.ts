@@ -9,4 +9,10 @@ export default class CommonConfig {
         'libs'
     ];
 
+    static needCopyUnity = [
+        'Assets/Plugins',
+        'Assets/LayaAir3D',
+        'Assets/StreamingAssets'
+    ];
+
 }

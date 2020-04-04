@@ -4,7 +4,7 @@
     <graph id="n0_x62b" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <text id="n1_x62b" name="title" xy="219,112" size="310,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="其他展示">
+    <text id="n1_x62b" name="title" xy="219,112" size="309,88" fontSize="76" color="#ffffff" shadowColor="#000000" shadowOffset="0,1" text="其他展示">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <component id="n2_x62b" name="btn_back" src="gxfzc" fileName="cmp/btn_text_blue.xml" xy="265,1158">
@@ -18,6 +18,22 @@
     <component id="n4_x62b" name="btn_othergame" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="89,408" size="271,100">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="更多游戏(平台)"/>
+    </component>
+    <component id="n5_rlak" name="btn_const" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="439,275">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="读取常量"/>
+    </component>
+    <component id="n6_rlak" name="btn_shake_long" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="89,542">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="长振动"/>
+    </component>
+    <component id="n7_rlak" name="btn_shake_short" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="439,542">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="短振动"/>
+    </component>
+    <component id="n9_rlak" name="btn_jump" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="439,408">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="直接跳转"/>
     </component>
   </displayList>
 </component>

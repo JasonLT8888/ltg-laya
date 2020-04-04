@@ -1,12 +1,12 @@
 import WXPlatform from "./WXPlatform";
 import { EPlatformType } from "./EPlatformType";
 import LTPlatformData from "./Data/LTPlatformData";
-import LTPlatform from "./LTPlatform";
-import ShareManager from "./ShareManager";
 import { ShareInfo } from "./ShareInfo";
 import StringEx from "../LTUtils/StringEx";
 import IRecordManager from "./IRecordManager";
 import TTRecordManager from "./Impl/TT/TTRecordManager";
+import { IDevice } from "./IDevice";
+import TTDevice from "./Impl/TT/TTDevice";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -15,6 +15,7 @@ export default class TTPlatform extends WXPlatform {
     protected _showVideoLoad: boolean = false;
 
     recordManager: IRecordManager;
+    device: IDevice;
 
     Init(platformData: LTPlatformData) {
         this._base = window["tt"];
@@ -33,6 +34,7 @@ export default class TTPlatform extends WXPlatform {
         this._CreateInterstitalAd();
 
         this.recordManager = new TTRecordManager(this._base);
+        this.device = new TTDevice(this._base);
 
         window["iplatform"] = this;
     }

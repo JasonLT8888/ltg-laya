@@ -1,12 +1,12 @@
-import { ISDK } from "../Interface/ISDK";
 import SDKADManager from "../SDKADManager";
 import LTHttp from "../../LTGame/Net/LTHttp";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import ShareManager from "../../LTGame/Platform/ShareManager";
 import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
 import FakeAdDefine from "../common/FakeAdDefine";
+import SDK_Default from "./SDK_Default";
 
-export default class SDK_CQ implements ISDK {
+export default class SDK_CQ extends SDK_Default {
 
     isADConfigInited: boolean;
     isADEnable: boolean;
@@ -20,48 +20,11 @@ export default class SDK_CQ implements ISDK {
 
     enableDebug: boolean = true;
 
-    private _headPrefix = "https://games.api.gugudang.com";
+    private _headPrefix = "https://gamer.api.gugudang.com";
 
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
-        this.flg = flg;
-        this.channel = channel;
-        this.controlVersion = controlVersion;
-        this.appId = appId;
-
-        this.isADEnable = false;
-        this.isConfigEnable = false;
-        this.isADConfigInited = false;
-
-        this.adManager = new SDKADManager();
-
+        super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
-        this._RequestSelfAdInfo();
-    }
-
-    private _RequestSelfAdInfo() {
-        LTHttp.Send("https://hs.yz061.com/res/down/public/configs/SelfAdConfig.json", Laya.Handler.create(this, this._OnGetSelfAdInfos),
-            Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
-    }
-
-    private _OnGetSelfAdInfosFailed(res: string) {
-        console.error("拉取到广告信息失败", res);
-    }
-
-    private _OnGetSelfAdInfos(res: string) {
-        let adJson = JSON.parse(res) as FakeAdDefine[];
-        console.log("拉取到广告信息", adJson.length, "条");
-        let fakePosId = 0;
-        let adList = [];
-        for (let fakeAd of adJson) {
-            let adData = {} as SDK.ADInfoData;
-            adData.ad_appid = fakeAd.id;
-            adData.ad_img = fakeAd.icon;
-            adData.ad_name = fakeAd.title;
-            adList.push(adData);
-        }
-
-        // 加入广告控制器
-        this.adManager.InitADs(fakePosId, adList);
     }
 
     private _RequestShareInfo() {

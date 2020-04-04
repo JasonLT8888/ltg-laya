@@ -15,6 +15,9 @@ import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
 import SetOpenData from "./DefaultUI/Data/SetOpenData";
 import RollOpenData from "./DefaultUI/Data/RollOpenData";
 import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
+import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
+import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
+import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
 
 export default class LTUI {
 
@@ -23,12 +26,12 @@ export default class LTUI {
         UI_CommomToastMediator.instance.Show(str);
     }
 
-    public static ShowLoading(str: string) {
+    public static ShowLoading(str: string, isBig: boolean = false) {
         if (UI_CommondLoadMediator.instance.isShow) {
             console.log("加载弹窗界面已打开");
             return;
         }
-        UI_CommondLoadMediator.instance.Show(str);
+        UI_CommondLoadMediator.instance.Show([str, isBig]);
     }
 
     public static HideLoading() {
@@ -40,8 +43,25 @@ export default class LTUI {
         await UI_FlyPanelMediator.instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
     }
 
+    public static async BoomCoins(fromObj: fgui.GObject, flyIcon: string = null, flyCount: number = 10,
+        flyTime: number = 1, circleRadius: number = 60) {
+        await UI_FlyPanelMediator.instance.BoomCoins(fromObj, flyIcon, flyCount, flyTime, circleRadius);
+    }
+
+    /**
+     * 打开签到界面
+     * @param openData 
+     */
     public static ShowSignUI(openData: SignOpenData) {
         UI_CommonSignMediator.instance.Show(openData);
+    }
+
+    /**
+     * 打开再来一份界面
+     * @param openData 
+     */
+    public static ShowOneMore(openData: OneMoreOpenData) {
+        UI_CommonOneMoreMediator.instance.Show(openData);
     }
 
     public static ShowEndShare(openData: EndShareOpenData) {
@@ -66,6 +86,14 @@ export default class LTUI {
 
     public static ShowRoll(openData: RollOpenData) {
         UI_CommonRollMediator.instance.Show(openData);
+    }
+
+    public static LockScreen() {
+        UI_CommonLockScreenMediator.instance.Show();
+    }
+
+    public static UnlockScreen() {
+        UI_CommonLockScreenMediator.instance.Hide();
     }
 
 }

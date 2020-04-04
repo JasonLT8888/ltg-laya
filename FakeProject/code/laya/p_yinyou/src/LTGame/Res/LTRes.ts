@@ -33,4 +33,8 @@ export default class LTRes {
         return noClone ? getRes : getRes.clone();
     }
 
+    public static Unload(resUrl: string) {
+        Laya.loader.clearRes(resUrl);
+    }
+
 }

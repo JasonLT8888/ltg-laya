@@ -1,3 +1,5 @@
+import ArrayEx from "./ArrayEx";
+
 export default class MathEx {
 
     public static Deg2Rad = 0.0175;
@@ -8,8 +10,23 @@ export default class MathEx {
     }
 
     public static RandomFromArray<T>(numArr: T[]): T {
-        var randomIndex = MathEx.RandomInt(0, numArr.length);
+        let randomIndex = MathEx.RandomInt(0, numArr.length);
         return numArr[randomIndex];
+    }
+
+    public static RandomArrayFromArray<T>(arr: T[], count: number): T[] {
+        let result = [];
+        let indexList = [];
+        for (let i = 0; i < arr.length; ++i) {
+            indexList.push(i);
+        }
+        for (let i = 0; i < count; ++i) {
+            let randomIndex = MathEx.RandomInt(0, indexList.length);
+            let getIndex = indexList[randomIndex];
+            ArrayEx.RemoveAt(indexList, randomIndex);
+            result.push(arr[getIndex]);
+        }
+        return result;
     }
 
     public static RandomFromWithWeight(numArr: number[], weightArr: number[]) {

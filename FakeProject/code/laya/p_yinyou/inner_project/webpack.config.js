@@ -20,6 +20,7 @@ module.exports = (env) => {
             main: path.join(workSpaceDir2, 'src/Main.ts'),
             copy: path.join(workSpaceDir2, 'src/CopyProject.ts'),
             update: path.join(workSpaceDir2, 'src/UpdateProject.ts'),
+            publish: path.join(workSpaceDir2, 'src/PublishProject.ts')
         },
         output:
         {
@@ -47,8 +48,8 @@ module.exports = (env) => {
                 new TsconfigPathsPlugin({ configFile: path.join(workSpaceDir, 'tsconfig.json') })
             ]
         },
-        devtool: env.production ? "" : "source-map",
-        mode: env.production ? "production" : "development",
+        devtool: "",
+        mode: "production"
     });
     return result;
 };

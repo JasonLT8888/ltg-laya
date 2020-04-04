@@ -17,7 +17,6 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
         return this._instance;
     }
 
-    private _isRolling: boolean = false;
     private _openData: RollOpenData;
     private _randomIndex: number[] = [0, 1, 2, 3, 4, 5, 6, 7];
     private _unitDegree: number = 360 / 8;
@@ -53,13 +52,10 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
             }
         }
 
-        this._isRolling = false;
-
     }
 
     private async _OnClickRoll() {
-        if (this._isRolling) return;
-        let result = LTPlatform.instance.ShowRewardVideoAdAsync();
+        let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             this._DoRoll();
         } else {
@@ -68,7 +64,7 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
     }
 
     private _DoRoll() {
-        this._isRolling = true;
+        LTUI.LockScreen();
         this._cacheIndex = MathEx.RandomFromWithWeight(this._randomIndex, this._openData.rollWeight);
         let centerDegree = this._cacheIndex * this._unitDegree;
         this._cacheDegree = centerDegree + MathEx.Random(-this._unitDegree, this._unitDegree) * 0.2;
@@ -82,11 +78,10 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
         if (this._openData.onRolled) {
             this._openData.onRolled.runWith([this._cacheIndex, this.ui.m_pointer]);
         }
-        this._isRolling = false;
+        LTUI.UnlockScreen();
     }
 
     private _OnClickClose() {
-        if (this._isRolling) return;
         this.Hide();
     }
 

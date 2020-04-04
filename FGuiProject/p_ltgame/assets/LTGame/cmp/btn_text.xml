@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="156,50" extention="Button">
+  <displayList>
+    <text id="n5_bg00" name="title" xy="80,25" pivot="0.5,0.5" anchor="true" size="117,31" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="不了, 谢谢">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <graph id="n6_htjj" name="n6" xy="79,44" pivot="0.5,0.5" anchor="true" size="117,2" type="rect" lineSize="0">
+      <relation target="n5_bg00" sidePair="width-width"/>
+    </graph>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

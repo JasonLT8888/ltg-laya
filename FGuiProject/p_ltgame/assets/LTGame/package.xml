@@ -54,7 +54,7 @@
     <component id="bg001h" name="view_game_icon.xml" path="/cache/"/>
     <image id="bg001i" name="sp_lipin.png" path="/img/"/>
     <component id="bg001j" name="view_reward_count.xml" path="/cache/"/>
-    <component id="bg001k" name="view_end_games.xml" path="/cache/"/>
+    <component id="bg001k" name="view_end_games.xml" path="/cache/" exported="true"/>
     <component id="bg001l" name="view_title.xml" path="/cmp/"/>
     <component id="bg001m" name="CommonOffline.xml" path="/ui/" exported="true"/>
     <image id="bg001n" name="离线收益.jpg" path="/效果图/"/>
@@ -96,6 +96,19 @@
     <image id="bg002p" name="sp_jinbidui1.png" path="/img/"/>
     <component id="bg002q" name="view_item_roll.xml" path="/cache/"/>
     <component id="bg002r" name="view_roll_bg.xml" path="/cache/"/>
+    <component id="i2wq2s" name="CommonLockScreen.xml" path="/ui/" exported="true"/>
+    <component id="gxi82t" name="CommonOneMore.xml" path="/ui/" exported="true"/>
+    <image id="gxi82u" name="再来一份.jpg" path="/效果图/"/>
+    <image id="gxi82v" name="sp_zailaiyifen.png" path="/img/"/>
+    <component id="gxi82w" name="view_one_more.xml" path="/cache/"/>
+    <image id="gxi82y" name="登录奖励(1).jpg" path="/效果图/"/>
+    <image id="gxi82z" name="sp_gouxuankuang.png" path="/img/"/>
+    <image id="gxi830" name="sp_gou.png" path="/img/"/>
+    <component id="gxi832" name="btn_toggle_02.xml" path="/cmp/"/>
+    <component id="htjj33" name="btn_text.xml" path="/cmp/"/>
+    <image id="htjj35" name="皮肤试用(1).jpg" path="/效果图/"/>
+    <image id="htjj36" name="获得金币2.jpg" path="/效果图/"/>
+    <image id="htjj37" name="sp_wubeilingqu.png" path="/img/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

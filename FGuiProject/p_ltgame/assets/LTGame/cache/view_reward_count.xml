@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="240,47">
+<component size="321,47" extention="Button">
   <displayList>
-    <text id="n10_bg00" name="n10" xy="0,6" size="133,40" fontSize="32" color="#ffffff" align="center" vAlign="middle" text="领取奖励"/>
-    <image id="n11_bg00" name="icon" src="bg0016" fileName="img/sp_jinbi.png" xy="158,23" pivot="0.5,0.5" anchor="true" size="43,46"/>
-    <text id="n12_bg00" name="text_count" xy="186,6" size="55,40" fontSize="32" color="#ffffff" align="center" vAlign="middle" text="x30"/>
+    <text id="n10_bg00" name="title" xy="7,4" pivot="1,0" size="197,40" fontSize="32" color="#ffffff" align="center" vAlign="middle" text="五倍领取奖励"/>
+    <loader id="n11_bg00" name="icon_img" xy="229,21" pivot="0.5,0.5" anchor="true" size="43,46" url="ui://75kiu87kbg0016" align="center" vAlign="middle" fill="scale"/>
+    <text id="n12_bg00" name="text_count" xy="257,4" size="55,40" fontSize="32" color="#ffffff" align="center" vAlign="middle" text="x30"/>
+    <graph id="n13_htjj" name="n13" xy="5,45" size="310,2" type="rect" lineSize="0"/>
   </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+  <customProperty target="text_title" propertyId="0"/>
 </component>

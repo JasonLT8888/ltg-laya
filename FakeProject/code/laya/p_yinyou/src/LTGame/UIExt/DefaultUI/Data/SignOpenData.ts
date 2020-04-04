@@ -20,7 +20,7 @@ export default class SignOpenData {
     /**
      * 奖励数量,仅用作展示
      */
-    public rewardCount: number[] = [50, 100, 150, 250, 300, 350, 500];
+    public rewardStrs: string[] = ["50", "100", "150", "250", "300", "350", "500"];
 
     /**
      * 关闭事件
@@ -30,6 +30,8 @@ export default class SignOpenData {
      *      2 :  双倍领取
      * fromObj: fgui.GObject
      *      用于作为飞金币的起点
+     * dayCount: number
+     *      当前是第几天,index,从0开始
      */
     public onClose: Laya.Handler = null;
 }

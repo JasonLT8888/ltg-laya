@@ -10,6 +10,8 @@ import IRecordManager from "./IRecordManager";
 import DefaultRecordManager from "./DefaultRecordManager";
 import LTUI from "../UIExt/LTUI";
 import Awaiters from "../Async/Awaiters";
+import { IDevice } from "./IDevice";
+import DefaultDevice from "./DefaultDevice";
 
 export default class WXPlatform implements IPlatform {
     onPause: Laya.Handler;
@@ -21,6 +23,7 @@ export default class WXPlatform implements IPlatform {
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
     recordManager: IRecordManager = new DefaultRecordManager();
+    device: IDevice = new DefaultDevice();
 
     protected _data: LTPlatformData;
 
@@ -55,7 +58,6 @@ export default class WXPlatform implements IPlatform {
             console.error("平台初始化错误", LTPlatform.platformStr);
             return;
         }
-
         this._platformData = platformData;
         this._InitLauchOption();
         this._Login();
@@ -339,11 +341,13 @@ export default class WXPlatform implements IPlatform {
         this._rewardSkipped = onSkipped;
         if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
+            onSkipped.run();
             return;
         }
         let createRewardedVideoAd = this._base["createRewardedVideoAd"];
         if (createRewardedVideoAd == null) {
             console.error("无createRewardedVideoAd方法,跳过初始化");
+            onSkipped.run();
             return;
         }
         LTUI.ShowLoading("广告拉取中...");

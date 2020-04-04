@@ -5,6 +5,10 @@ import UI_UIDemoMediator from "./UI_UIDemoMediator";
 import UI_ADDemoMediator from "./UI_ADDemoMediator";
 import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_CommonUIMediator from "./UI_CommonUIMediator";
+import LTUI from "../../LTGame/UIExt/LTUI";
+import { TestConst } from "../config/TestConst";
+import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
+import UI_OthersMediator from "./UI_OthersMediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -23,8 +27,17 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
         this.ui.m_btn_ui.onClick(this, this._OnClickBtnUI);
         this.ui.m_btn_record.onClick(this, this._OnClickRecord);
         this.ui.m_btn_common.onClick(this, this._OnClickCommon);
+        this.ui.m_btn_others.onClick(this, this._OnClickOthers);
+        this.ui.m_btn_performance.onClick(this, this._OnClickPerfomance);
     }
 
+    private _OnClickPerfomance() {
+        UI_PerfomanceMediator.instance.Show();
+    }
+
+    private _OnClickOthers() {
+        UI_OthersMediator.instance.Show();
+    }
 
     private _OnClickBtnAd() {
         UI_ADDemoMediator.instance.Show();

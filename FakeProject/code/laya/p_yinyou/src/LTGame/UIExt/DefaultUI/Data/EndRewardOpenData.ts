@@ -18,6 +18,7 @@ export default class EndRewardOpenData {
      * closeType: number
      *      0 :  普通领取
      *      1 :  双倍领取
+     *      2 :  打开大转盘界面
      * fromObj: fgui.GObject
      *      用于作为飞金币的起点
      */

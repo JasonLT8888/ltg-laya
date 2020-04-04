@@ -3,6 +3,10 @@ import UI_CommonSign from "./UI/LTGame/UI_CommonSign";
 import SignOpenData from "./Data/SignOpenData";
 import UI_view_item_sign from "./UI/LTGame/UI_view_item_sign";
 import CommonSaveData from "../../Commom/CommonSaveData";
+import LTPlatform from "../../Platform/LTPlatform";
+import LTUI from "../LTUI";
+import LTSDK from "../../../SDK/LTSDK";
+import { ECheckState } from "../../../SDK/common/ECheckState";
 
 export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign> {
 
@@ -18,6 +22,8 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
     private _openData: SignOpenData;
     private _cacheRewardItem: UI_view_item_sign;
 
+    private _isChecked: boolean = true;
+
     _OnShow() {
         super._OnShow();
         // your code
@@ -29,9 +35,23 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
                 this._openData[key] = this._openParam[key];
             }
         }
+
+        switch (LTSDK.instance.checkState) {
+            case ECheckState.InCheck:
+                this.ui.m_view.m_toggle_watchad.visible = false;
+                this._isChecked = false;
+                break;
+            case ECheckState.Normal:
+                this._isChecked = false;
+                break;
+            case ECheckState.NoGame:
+                this._isChecked = true;
+                break;
+        }
         this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
-        this.ui.m_view.m_btn_normal_get.onClick(this, this._OnClickNormalGet);
-        this.ui.m_view.m_btn_double_get.onClick(this, this._OnClickDoubleGet);
+        this.ui.m_view.m_btn_get.onClick(this, this._OnClickGet);
+        this.ui.m_view.m_toggle_watchad.onClick(this, this._OnClickToggle);
+        this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
 
         this._UpdateUI();
     }
@@ -41,8 +61,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         if (this._openData.isSigned != null) {
             isSigned = this._openData.isSigned;
         }
-        this.ui.m_view.m_btn_double_get.enabled = !isSigned;
-        this.ui.m_view.m_btn_normal_get.enabled = !isSigned;
+        this.ui.m_view.m_btn_get.enabled = !isSigned;
 
         let currentSignDay = CommonSaveData.instance.signDayCount;
         if (this._openData.currentDayCount != null) {
@@ -54,16 +73,23 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         for (let i = 0; i < this.ui.m_view.m_list_day.numChildren; ++i) {
             let itemUI = this.ui.m_view.m_list_day.getChildAt(i) as UI_view_item_sign;
             itemUI.m_text_day.text = "第" + (i + 1) + "天";
+            if (this._openData.iconPaths && this._openData.iconPaths[i]) {
+                itemUI.m_icon_reward.url = this._openData.iconPaths[i];
+            }
             if (i < displayDay || (displayDay == 0 && isSigned)) {
                 itemUI.m_c1.selectedIndex = 1;
             } else {
                 itemUI.m_c1.selectedIndex = 0;
             }
-            itemUI.m_text_reward.text = this._openData.rewardCount[i].toFixed(0);
+            itemUI.m_text_reward.text = this._openData.rewardStrs[i];
+        }
+
+        if (this._openData.iconPaths && this._openData.iconPaths[6]) {
+            this.ui.m_view.m_view_day7.m_icon_reward.url = this._openData.iconPaths[6];
         }
         // 更新第七天
         this.ui.m_view.m_view_day7.m_text_day.text = "第七天";
-        this.ui.m_view.m_view_day7.m_text_reward.text = this._openData.rewardCount[6].toFixed(0);
+        this.ui.m_view.m_view_day7.m_text_reward.text = this._openData.rewardStrs[6];
         if (displayDay == 0 && isSigned) {
             this.ui.m_view.m_view_day7.m_c1.selectedIndex = 1;
         } else {
@@ -79,28 +105,47 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         }
     }
 
-    private _OnClickNormalGet() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([1, this._cacheRewardItem.m_icon_reward]);
-        }
+    private _OnClickToggle() {
+        this._isChecked = !this._isChecked;
+        this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+    }
 
+    private _OnClickGet() {
+        if (this._isChecked) {
+            this._OnClickDoubleGet();
+        } else {
+            this._OnClickNormalGet();
+        }
+    }
+
+    private _OnClickNormalGet() {
         CommonSaveData.instance.isSigned = true;
         CommonSaveData.instance.signDayCount++;
         CommonSaveData.SaveToDisk();
+
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith([1, this._cacheRewardItem.m_icon_reward, (CommonSaveData.instance.signDayCount - 1) % 7]);
+        }
 
         this.Hide();
     }
 
-    private _OnClickDoubleGet() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward]);
+    private async _OnClickDoubleGet() {
+        let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
+        if (result) {
+            CommonSaveData.instance.isSigned = true;
+            CommonSaveData.instance.signDayCount++;
+            CommonSaveData.SaveToDisk();
+
+            if (this._openData.onClose) {
+                this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward, (CommonSaveData.instance.signDayCount - 1) % 7]);
+            }
+
+            this.Hide();
+        } else {
+            LTUI.Toast("跳过广告无法获得奖励");
         }
 
-        CommonSaveData.instance.isSigned = true;
-        CommonSaveData.instance.signDayCount++;
-        CommonSaveData.SaveToDisk();
-
-        this.Hide();
     }
 
     private _OnClickClose() {
