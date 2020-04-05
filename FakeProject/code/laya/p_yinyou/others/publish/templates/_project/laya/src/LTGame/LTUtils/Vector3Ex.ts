@@ -120,8 +120,13 @@ export default class Vector3Ex {
     }
 
     public static DistanceSqrt(from: Laya.Vector3, to: Laya.Vector3): number {
-        var offset = Vector3Ex.Subtract(from, to);
+        let offset = Vector3Ex.Subtract(from, to);
         return offset.x * offset.x + offset.y * offset.y + offset.z * offset.z;
+    }
+
+    public static DistanceSqrt2D(from: Laya.Vector3, to: Laya.Vector3): number {
+        let offset = Vector3Ex.Subtract(from, to);
+        return offset.x * offset.x + offset.z * offset.z;
     }
 
     /**
@@ -130,7 +135,7 @@ export default class Vector3Ex {
      * @param to 
      * @param asix 
      */
-    public static SignAngleAsix(from: Laya.Vector3, to: Laya.Vector3, asix: Laya.Vector3) : number {
+    public static SignAngleAsix(from: Laya.Vector3, to: Laya.Vector3, asix: Laya.Vector3): number {
         let normalAsix = Vector3Ex.Normalize(asix);
         let dotFrom = Vector3Ex.Dot(from, normalAsix);
         let wrapFrom = Vector3Ex.Subtract(from, Vector3Ex.Scale(normalAsix, dotFrom));
