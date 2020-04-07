@@ -9,7 +9,11 @@ export default class CommonConfig {
         'bin/res/ltgame',
         'bin/libs',
         'bin/index.js',
-        'libs'
+        'libs',
+        '.vscode/launch.json',
+        'bin/game.js',
+        'bin/game.json',
+        'bin/index.html'
     ];
 
     /**

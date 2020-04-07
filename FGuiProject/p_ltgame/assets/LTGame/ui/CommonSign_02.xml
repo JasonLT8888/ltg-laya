@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://75kiu87kre3i3c" designImageLayer="1">
+  <displayList>
+    <graph id="n5_re3i" name="bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n1_re3i" name="img_content_bg" src="bg0010" fileName="img/sp_erjibg2.png" xy="81,201" size="589,716"/>
+    <image id="n0_re3i" name="img_title" src="re3i3d" fileName="img/sp_denglujiangli2.png" xy="143,62"/>
+    <component id="n2_re3i" name="btn_watchad" src="bg001u" fileName="cmp/btn_double_get_02.xml" xy="245,940">
+      <Button title="五倍领取"/>
+    </component>
+    <component id="n7_re3i" name="view_day7" src="re3i3i" fileName="cache/view_item_sign_02.xml" xy="181,682" size="406,197"/>
+    <list id="n6_re3i" name="list_day" xy="96,277" size="562,413" layout="flow_hz" lineGap="5" colGap="15" lineItemCount="3" defaultItem="ui://75kiu87kre3i3i">
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <component id="n4_re3i" name="toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="272,874"/>
+    <component id="n3_re3i" name="btn_close" src="re3i3f" fileName="cmp/btn_back.xml" xy="8,35"/>
+  </displayList>
+</component>

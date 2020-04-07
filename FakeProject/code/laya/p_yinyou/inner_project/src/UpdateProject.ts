@@ -60,6 +60,10 @@ class UpdateProject {
         let readStr = LTUtils.ReadStrFrom(loadXmlPath);
         readStr = LTUtils.ReplaceAll(readStr, oldStr, newStr);
         LTUtils.WriteStrTo(loadXmlPath, readStr);
+        // 重命名项目工程
+        let oldProjectPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/p_yinyou.fairy');
+        let newProjectPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/' + projectName + '.fairy');
+        LTUtils.Rename(oldProjectPath, newProjectPath);
     }
 
     private _CopyUnity(currentWorkPath: string) {

@@ -176,4 +176,13 @@ export class LTUtils {
             "encoding": "utf-8"
         });
     }
+
+    /**
+     * 重命名文件
+     * @param filePath 
+     * @param newPath 
+     */
+    public static Rename(filePath: string, newPath: string) {
+        fs.renameSync(filePath, newPath);
+    }
 }

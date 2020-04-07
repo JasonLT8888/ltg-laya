@@ -35,7 +35,7 @@
     <component id="it2ix" name="view_item_sign.xml" path="/cache/"/>
     <component id="it2iy" name="view_common_sign.xml" path="/cache/"/>
     <component id="bg00z" name="CommonEndShare.xml" path="/ui/" exported="true"/>
-    <image id="bg0010" name="sp_erjibg2.png" path="/img/" scale="9grid" scale9grid="40,40,52,52"/>
+    <image id="bg0010" name="sp_erjibg2.png" path="/img/" scale="9grid" scale9grid="40,40,22,18"/>
     <image id="bg0011" name="超神时刻.jpg" path="/效果图/"/>
     <image id="bg0013" name="sp_fenxiangchaoshen.png" path="/img/"/>
     <image id="bg0014" name="sp_xuanyaoyixia.png" path="/img/"/>
@@ -111,6 +111,14 @@
     <image id="htjj37" name="sp_wubeilingqu.png" path="/img/"/>
     <image id="re3i38" name="登录奖励02.jpg" path="/效果图/"/>
     <image id="re3i39" name="sp_xuanzhongkuang.png" path="/img/" scale="9grid" scale9grid="30,30,12,12"/>
+    <component id="re3i3a" name="CommonSign_02.xml" path="/ui/" exported="true"/>
+    <image id="re3i3c" name="通用ui.jpg" path="/效果图/"/>
+    <image id="re3i3d" name="sp_denglujiangli2.png" path="/img/"/>
+    <image id="re3i3e" name="btn_fanhui.png" path="/img/"/>
+    <component id="re3i3f" name="btn_back.xml" path="/cmp/"/>
+    <image id="re3i3g" name="sp_suo.png" path="/img/"/>
+    <image id="re3i3h" name="sp_xuanzhongbg.png" path="/img/" scale="9grid" scale9grid="25,50,29,19"/>
+    <component id="re3i3i" name="view_item_sign_02.xml" path="/cache/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
