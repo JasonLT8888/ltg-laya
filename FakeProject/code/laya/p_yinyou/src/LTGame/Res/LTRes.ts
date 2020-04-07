@@ -9,6 +9,9 @@ export default class LTRes {
     }
 
     public static LoadAsync(urls: string | string[], onProgress: Laya.Handler = null): Promise<void> {
+        if (onProgress && onProgress.once) {
+            onProgress.once = false;
+        }
         return new Promise(function (resolve) {
             LTRes.Load(urls, Laya.Handler.create(null, () => {
                 resolve();

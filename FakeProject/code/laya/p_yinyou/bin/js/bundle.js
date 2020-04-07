@@ -2828,6 +2828,9 @@ class LTRes {
         Laya.loader.load(urls, onCompleted, onProgress);
     }
     static LoadAsync(urls, onProgress = null) {
+        if (onProgress && onProgress.once) {
+            onProgress.once = false;
+        }
         return new Promise(function (resolve) {
             LTRes.Load(urls, Laya.Handler.create(null, () => {
                 resolve();
@@ -3196,7 +3199,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
                 this._OnResLoaded();
                 return;
             }
-            yield _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__["default"].LoadAsync(loadUrls, Laya.Handler.create(this, this._OnResProgress, null, false));
+            yield _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__["default"].LoadAsync(loadUrls, Laya.Handler.create(this, this._OnResProgress));
             this._OnResLoaded();
         });
     }
