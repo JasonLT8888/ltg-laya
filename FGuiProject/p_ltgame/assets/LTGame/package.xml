@@ -109,6 +109,8 @@
     <image id="htjj35" name="皮肤试用(1).jpg" path="/效果图/"/>
     <image id="htjj36" name="获得金币2.jpg" path="/效果图/"/>
     <image id="htjj37" name="sp_wubeilingqu.png" path="/img/"/>
+    <image id="re3i38" name="登录奖励02.jpg" path="/效果图/"/>
+    <image id="re3i39" name="sp_xuanzhongkuang.png" path="/img/" scale="9grid" scale9grid="30,30,12,12"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

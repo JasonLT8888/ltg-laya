@@ -4295,9 +4295,9 @@ class UI_view_common_sign extends fgui.GComponent {
     onConstruct() {
         this.m_btn_close = (this.getChildAt(2));
         this.m_view_day7 = (this.getChildAt(3));
-        this.m_btn_get = (this.getChildAt(4));
-        this.m_list_day = (this.getChildAt(5));
-        this.m_toggle_watchad = (this.getChildAt(6));
+        this.m_list_day = (this.getChildAt(4));
+        this.m_toggle_watchad = (this.getChildAt(5));
+        this.m_btn_get = (this.getChildAt(6));
     }
 }
 UI_view_common_sign.URL = "ui://75kiu87kit2iy";
@@ -4497,6 +4497,7 @@ class UI_view_item_sign extends fgui.GComponent {
         this.m_text_day = (this.getChildAt(2));
         this.m_icon_reward = (this.getChildAt(3));
         this.m_text_reward = (this.getChildAt(4));
+        this.m_img_current = (this.getChildAt(6));
     }
 }
 UI_view_item_sign.URL = "ui://75kiu87kit2ix";
@@ -5503,6 +5504,7 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
                 itemUI.m_c1.selectedIndex = 0;
             }
             itemUI.m_text_reward.text = this._openData.rewardStrs[i];
+            itemUI.m_img_current.visible = false;
         }
         if (this._openData.iconPaths && this._openData.iconPaths[6]) {
             this.ui.m_view.m_view_day7.m_icon_reward.url = this._openData.iconPaths[6];
@@ -5516,12 +5518,15 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         else {
             this.ui.m_view.m_view_day7.m_c1.selectedIndex = 0;
         }
+        this.ui.m_view.m_view_day7.m_img_current.visible = false;
         if (!isSigned) {
             if (displayDay < 6) {
                 this._cacheRewardItem = this.ui.m_view.m_list_day.getChildAt(displayDay);
+                this._cacheRewardItem.m_img_current.visible = true;
             }
             else {
                 this._cacheRewardItem = this.ui.m_view.m_view_day7;
+                this.ui.m_view.m_view_day7.m_img_current.visible = true;
             }
         }
     }

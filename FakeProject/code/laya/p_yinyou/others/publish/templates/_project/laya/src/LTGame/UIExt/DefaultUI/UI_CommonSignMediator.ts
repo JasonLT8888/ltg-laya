@@ -82,6 +82,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
                 itemUI.m_c1.selectedIndex = 0;
             }
             itemUI.m_text_reward.text = this._openData.rewardStrs[i];
+            itemUI.m_img_current.visible = false;
         }
 
         if (this._openData.iconPaths && this._openData.iconPaths[6]) {
@@ -95,12 +96,15 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         } else {
             this.ui.m_view.m_view_day7.m_c1.selectedIndex = 0;
         }
+        this.ui.m_view.m_view_day7.m_img_current.visible = false;
 
         if (!isSigned) {
             if (displayDay < 6) {
                 this._cacheRewardItem = this.ui.m_view.m_list_day.getChildAt(displayDay) as UI_view_item_sign;
+                this._cacheRewardItem.m_img_current.visible = true;
             } else {
                 this._cacheRewardItem = this.ui.m_view.m_view_day7;
+                this.ui.m_view.m_view_day7.m_img_current.visible = true;
             }
         }
     }

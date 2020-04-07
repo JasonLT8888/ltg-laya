@@ -8,6 +8,7 @@ export default class UI_view_item_sign extends fgui.GComponent {
 	public m_text_day:fgui.GTextField;
 	public m_icon_reward:fgui.GLoader;
 	public m_text_reward:fgui.GTextField;
+	public m_img_current:fgui.GImage;
 
 	public static URL:string = "ui://75kiu87kit2ix";
 
@@ -24,5 +25,6 @@ export default class UI_view_item_sign extends fgui.GComponent {
 		this.m_text_day = <fgui.GTextField><any>(this.getChildAt(2));
 		this.m_icon_reward = <fgui.GLoader><any>(this.getChildAt(3));
 		this.m_text_reward = <fgui.GTextField><any>(this.getChildAt(4));
+		this.m_img_current = <fgui.GImage><any>(this.getChildAt(6));
 	}
 }

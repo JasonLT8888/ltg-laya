@@ -5,7 +5,6 @@
     <image id="n2_it2i" name="n2" src="it2il" fileName="img/sp_denglujiangli.png" xy="202,41"/>
     <component id="n3_it2i" name="btn_close" src="it2in" fileName="cmp/btn_close_01.xml" xy="501,27"/>
     <component id="n7_it2i" name="view_day7" src="it2ix" fileName="cache/view_item_sign.xml" xy="99,531" size="406,197"/>
-    <component id="n11_it2i" name="btn_get" src="it2iu" fileName="cmp/btn_normal_get.xml" xy="169,788"/>
     <list id="n15_it2i" name="list_day" xy="15,133" size="562,413" layout="flow_hz" lineGap="1" colGap="15" lineItemCount="3" defaultItem="ui://75kiu87kit2ix">
       <item/>
       <item/>
@@ -15,5 +14,6 @@
       <item/>
     </list>
     <component id="n16_gxi8" name="toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="191,724"/>
+    <component id="n18_re3i" name="btn_get" src="it2iu" fileName="cmp/btn_normal_get.xml" xy="167,788"/>
   </displayList>
 </component>
