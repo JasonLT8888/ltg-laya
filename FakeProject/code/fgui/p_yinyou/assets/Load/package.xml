@@ -4,17 +4,9 @@
     <component id="nihr0" name="splash.xml" path="/ui/" exported="true"/>
     <component id="nihr1" name="progress_simple.xml" path="/cmp/"/>
     <image id="nihr3" name="sp_jindutiao.png" path="/img/" scale="9grid" scale9grid="100,18,78,6"/>
-    <image id="nihr4" name="sp_dingjitegong.png" path="/img/"/>
-    <movieclip id="mgkn5" name="run.jta" path="/ui/"/>
-    <image id="mgkn6" name="1.png" path="/ui/"/>
-    <image id="mgkn7" name="2.png" path="/ui/"/>
-    <image id="m8kn8" name="加载界面.jpg" path="/img/"/>
-    <image id="m8kna" name="3.png" path="/img/"/>
     <image id="m8knb" name="sp_jindutiaobg.png" path="/img/" scale="9grid" scale9grid="27,13,234,12"/>
-    <image id="10q8ec" name="loadBg.jpg" path="/img/"/>
-    <image id="gqj0ed" name="sp_jiazaibg.png" path="/img/"/>
   </resources>
-  <publish name="Load" path="D:\Work_Projects\p_yinyou\code\laya\p_yinyou\bin\res\fgui_load" packageCount="2" genCode="true">
+  <publish name="Load" path="..\..\laya\p_yinyou\bin\res\fgui_load" packageCount="2" genCode="true">
     <atlas compression="true" index="0"/>
   </publish>
 </packageDescription>

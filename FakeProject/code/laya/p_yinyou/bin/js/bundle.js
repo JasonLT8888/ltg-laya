@@ -7524,6 +7524,9 @@ class UI_splash extends fgui.GComponent {
     onConstruct() {
         this.m_bg = (this.getChildAt(0));
         this.m_progress = (this.getChildAt(1));
+        this.m_text_logo = (this.getChildAt(2));
+        this.m_text_progress = (this.getChildAt(3));
+        this.m_text_laya = (this.getChildAt(4));
     }
 }
 UI_splash.URL = "ui://n3oedpp6nihr0";
