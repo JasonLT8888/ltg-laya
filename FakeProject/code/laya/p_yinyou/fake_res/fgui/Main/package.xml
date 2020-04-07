@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="c6t3i6k8">
+  <resources>
+    <image id="qqmy0" name="btn_anniulan.png" path="/img/" scale="9grid" scale9grid="25,25,20,20"/>
+    <component id="qqmy1" name="Main.xml" path="/ui/" exported="true"/>
+    <component id="qqmy2" name="btn_text_01.xml" path="/cmp/"/>
+  </resources>
+  <publish name="" genCode="true"/>
+</packageDescription>

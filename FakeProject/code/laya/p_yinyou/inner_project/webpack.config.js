@@ -20,7 +20,8 @@ module.exports = (env) => {
             main: path.join(workSpaceDir2, 'src/Main.ts'),
             copy: path.join(workSpaceDir2, 'src/CopyProject.ts'),
             update: path.join(workSpaceDir2, 'src/UpdateProject.ts'),
-            publish: path.join(workSpaceDir2, 'src/PublishProject.ts')
+            publish: path.join(workSpaceDir2, 'src/PublishProject.ts'),
+            test: path.join(workSpaceDir2, 'src/Test.ts'),
         },
         output:
         {

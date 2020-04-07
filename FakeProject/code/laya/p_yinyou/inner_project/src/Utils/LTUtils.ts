@@ -40,6 +40,7 @@ export class LTUtils {
 
     static ReplaceAll(str: string, replaceStr: string, newStr: string): string {
         let result = str;
+        if(replaceStr == newStr) return result;
         while (result.indexOf(replaceStr) >= 0) {
             result = result.replace(replaceStr, newStr);
         }

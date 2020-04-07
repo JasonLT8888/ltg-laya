@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="220,100" extention="Button">
+  <displayList>
+    <image id="n1_qqmy" name="n1" src="qqmy0" fileName="img/btn_anniulan.png" xy="0,0" size="220,100">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <text id="n2_qqmy" name="title" xy="41,29" size="138,41" fontSize="32" color="#ffffff" bold="true" text="开始游戏">
+      <relation target="" sidePair="center-center"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>

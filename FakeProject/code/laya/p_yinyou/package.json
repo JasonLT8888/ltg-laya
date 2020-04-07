@@ -8,7 +8,6 @@
     "colors": "^1.4.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "happypack": "^5.0.1",
     "raw-loader": "^4.0.0",
     "ts-loader": "^6.2.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
@@ -16,7 +15,8 @@
     "uglify-es": "^3.3.9",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "xml": "^1.0.1"
   },
   "scripts": {
     "build": "webpack --config others/webpack_config/webpack-config-for-game.js",
@@ -25,7 +25,7 @@
     "publish-qq": "node others/publish/bin/publish.js -p qq -c false",
     "publish-bd": "node others/publish/bin/publish.js -p bd -c false",
     "update-ltg": "node others/publish/bin/update.js",
-    "test": "node gulpfile.js"
+    "test": "node others/publish/bin/test.js"
   },
   "author": "lt",
   "license": "MIT"

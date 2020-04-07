@@ -22,6 +22,15 @@ export default class CommonConfig {
     ];
 
     /**
+     * fgui所需文件,只创建第一次
+     */
+    static needUpdateFGUI = [
+        'assets',
+        'settings',
+        'p_yinyou.fairy'
+    ];
+
+    /**
      * unity所需文件,配置文件保留
      */
     static needCopyUnity = [

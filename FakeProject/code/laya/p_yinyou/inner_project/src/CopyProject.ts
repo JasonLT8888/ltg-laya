@@ -76,6 +76,12 @@ class CopyProject {
             }
             console.log("拷贝", combieSrc, "完成");
         }
+
+        // 单独拷贝main
+        let targetMainPath = path.join(rootPath, 'others/publish/templates/_project/fgui/assets/Main');
+        let srcMainPath = path.join(rootPath, 'fake_res/fgui/Main');
+        LTUtils.CopyDir(srcMainPath, targetMainPath);
+        console.log("拷贝", srcMainPath, "完成");
     }
 
     /**
