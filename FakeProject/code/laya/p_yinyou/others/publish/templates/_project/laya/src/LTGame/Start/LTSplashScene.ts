@@ -153,7 +153,7 @@ export default class LTSplashScene extends BaseState {
             this._OnResLoaded();
             return;
         }
-        await LTRes.LoadAsync(loadUrls, Laya.Handler.create(this, this._OnResProgress, null, false));
+        await LTRes.LoadAsync(loadUrls, Laya.Handler.create(this, this._OnResProgress));
         this._OnResLoaded();
     }
 

@@ -1,0 +1,20 @@
+{
+	"atlasSetting":{
+		"paging":true,
+		"sizeOption":"pot"
+	},
+	"binaryFormat":true,
+	"codeGeneration":{
+		"classNamePrefix":"UI_",
+		"codePath":"..\\..\\laya\\p_yinyou\\src\\ui",
+		"codeType":"TS-2",
+		"getMemberByName":false,
+		"ignoreNoname":true,
+		"memberNamePrefix":"m_",
+		"packageName":null
+	},
+	"compressDesc":false,
+	"fileExtension":"bin",
+	"packageCount":2,
+	"path":"..\\..\\laya\\p_yinyou\\bin\\res\\fgui"
+}
