@@ -2822,15 +2822,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTRes; });
 class LTRes {
     static Load(urls, onCompleted, onProgress = null) {
-        Laya.loader.create(urls, onCompleted, onProgress);
-    }
-    static Load2d(urls, onCompleted, onProgress = null) {
-        Laya.loader.load(urls, onCompleted, onProgress);
-    }
-    static LoadAsync(urls, onProgress = null) {
         if (onProgress && onProgress.once) {
             onProgress.once = false;
         }
+        Laya.loader.create(urls, onCompleted, onProgress);
+    }
+    static Load2d(urls, onCompleted, onProgress = null) {
+        if (onProgress && onProgress.once) {
+            onProgress.once = false;
+        }
+        Laya.loader.load(urls, onCompleted, onProgress);
+    }
+    static LoadAsync(urls, onProgress = null) {
         return new Promise(function (resolve) {
             LTRes.Load(urls, Laya.Handler.create(null, () => {
                 resolve();
