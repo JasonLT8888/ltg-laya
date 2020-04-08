@@ -6,7 +6,7 @@
     </graph>
     <image id="n1_re3i" name="img_content_bg" src="bg0010" fileName="img/sp_erjibg2.png" xy="81,201" size="589,716"/>
     <image id="n0_re3i" name="img_title" src="re3i3d" fileName="img/sp_denglujiangli2.png" xy="143,62"/>
-    <component id="n2_re3i" name="btn_watchad" src="bg001u" fileName="cmp/btn_double_get_02.xml" xy="245,940">
+    <component id="n2_re3i" name="btn_watchad" src="bg001u" fileName="cmp/btn_double_get_02.xml" xy="250,940">
       <Button title="五倍领取"/>
     </component>
     <component id="n7_re3i" name="view_day7" src="re3i3i" fileName="cache/view_item_sign_02.xml" xy="181,682" size="406,197"/>

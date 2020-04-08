@@ -3695,7 +3695,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_view_toast__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./UI_view_toast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_toast.ts");
 /* harmony import */ var _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./UI_FakeRewardVideo */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeRewardVideo.ts");
 /* harmony import */ var _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./UI_FakeInterstital */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeInterstital.ts");
+/* harmony import */ var _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./UI_CommonSign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonSign_02.ts");
+/* harmony import */ var _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./UI_view_item_sign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_02.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
 
 
 
@@ -3766,6 +3770,8 @@ class LTGameBinder {
         fgui.UIObjectFactory.setExtension(_UI_view_toast__WEBPACK_IMPORTED_MODULE_31__["default"].URL, _UI_view_toast__WEBPACK_IMPORTED_MODULE_31__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_32__["default"].URL, _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_32__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_33__["default"].URL, _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_33__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_34__["default"].URL, _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_34__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_35__["default"].URL, _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_35__["default"]);
     }
 }
 
@@ -4029,6 +4035,40 @@ class UI_CommonSign extends fgui.GComponent {
     }
 }
 UI_CommonSign.URL = "ui://75kiu87kit2ij";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonSign_02.ts":
+/*!******************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonSign_02.ts ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonSign_02; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_CommonSign_02 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "CommonSign_02"));
+    }
+    onConstruct() {
+        this.m_bg = (this.getChildAt(0));
+        this.m_img_content_bg = (this.getChildAt(1));
+        this.m_img_title = (this.getChildAt(2));
+        this.m_btn_watchad = (this.getChildAt(3));
+        this.m_view_day7 = (this.getChildAt(4));
+        this.m_list_day = (this.getChildAt(5));
+        this.m_toggle_watchad = (this.getChildAt(6));
+        this.m_btn_close = (this.getChildAt(7));
+    }
+}
+UI_CommonSign_02.URL = "ui://75kiu87kre3i3a";
 
 
 /***/ }),
@@ -4507,6 +4547,37 @@ class UI_view_item_sign extends fgui.GComponent {
     }
 }
 UI_view_item_sign.URL = "ui://75kiu87kit2ix";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_02.ts":
+/*!**********************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_02.ts ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_sign_02; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_view_item_sign_02 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "view_item_sign_02"));
+    }
+    onConstruct() {
+        this.m_c1 = this.getControllerAt(0);
+        this.m_img_current = (this.getChildAt(2));
+        this.m_text_day = (this.getChildAt(3));
+        this.m_icon_reward = (this.getChildAt(4));
+        this.m_text_reward = (this.getChildAt(5));
+    }
+}
+UI_view_item_sign_02.URL = "ui://75kiu87kre3i3i";
 
 
 /***/ }),
@@ -5510,7 +5581,6 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
                 itemUI.m_c1.selectedIndex = 0;
             }
             itemUI.m_text_reward.text = this._openData.rewardStrs[i];
-            itemUI.m_img_current.visible = false;
         }
         if (this._openData.iconPaths && this._openData.iconPaths[6]) {
             this.ui.m_view.m_view_day7.m_icon_reward.url = this._openData.iconPaths[6];
@@ -5524,15 +5594,14 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         else {
             this.ui.m_view.m_view_day7.m_c1.selectedIndex = 0;
         }
-        this.ui.m_view.m_view_day7.m_img_current.visible = false;
         if (!isSigned) {
             if (displayDay < 6) {
                 this._cacheRewardItem = this.ui.m_view.m_list_day.getChildAt(displayDay);
-                this._cacheRewardItem.m_img_current.visible = true;
+                this._cacheRewardItem.m_c1.selectedIndex = 2;
             }
             else {
                 this._cacheRewardItem = this.ui.m_view.m_view_day7;
-                this.ui.m_view.m_view_day7.m_img_current.visible = true;
+                this._cacheRewardItem.m_c1.selectedIndex = 2;
             }
         }
     }
