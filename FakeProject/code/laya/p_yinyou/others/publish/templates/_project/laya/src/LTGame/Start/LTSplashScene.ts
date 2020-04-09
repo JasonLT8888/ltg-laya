@@ -174,7 +174,6 @@ export default class LTSplashScene extends BaseState {
         LTPlatform.instance.RecordEvent("进入游戏", null);
 
         this._OnGameResLoaded();
-        this.isFinished = true;
     }
 
     protected _OnGameResLoaded() {
