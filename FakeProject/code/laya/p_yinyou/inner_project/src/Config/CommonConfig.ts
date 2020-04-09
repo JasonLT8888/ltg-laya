@@ -13,7 +13,8 @@ export default class CommonConfig {
         '.vscode/launch.json',
         'bin/game.js',
         'bin/game.json',
-        'bin/index.html'
+        'bin/index.html',
+        'tsconfig.json'
     ];
 
     /**

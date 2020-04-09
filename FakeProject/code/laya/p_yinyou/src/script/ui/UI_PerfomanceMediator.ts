@@ -1,5 +1,7 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Perfomance from "../../ui/Main/UI_PerfomanceDemo";
+import LTRes from "../../LTGame/Res/LTRes";
+import ResDefine from "../common/ResDefine";
 
 export default class UI_PerfomanceMediator extends BaseUIMediator<UI_Perfomance> {
 
@@ -16,10 +18,17 @@ export default class UI_PerfomanceMediator extends BaseUIMediator<UI_Perfomance>
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
+        this.ui.m_btn_boneAnim.onClick(this, this._OnClickTest);
     }
 
     private _OnClickBack() {
         this.Hide();
+    }
+
+    private async _OnClickTest() {
+        await LTRes.LoadAsync(ResDefine.FixPath(ResDefine.floor_path));
+        let loadObj = LTRes.Get(ResDefine.FixPath(ResDefine.floor_path), true);
+        console.log(loadObj);
     }
 
 }

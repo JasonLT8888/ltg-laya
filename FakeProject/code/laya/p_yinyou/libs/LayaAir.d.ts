@@ -9272,8 +9272,8 @@ declare module laya.d3.core {
 		/**
 		 * 额外数据
 		 */
-		get extData():[];
-		set extData(value:[]);
+		get extData():any;
+		set extData(value:any);
 
 		/**
 		 * 唯一标识ID。

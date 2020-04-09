@@ -108,7 +108,13 @@ class UpdateProject {
             }
             let combieTarget = path.join(targetPath, value);
             if (fileType == EFileType.File) {
-                LTUtils.CopyFile(combieSrc, combieTarget);
+                if (value != 'tsconfig.json') {
+                    LTUtils.CopyFile(combieSrc, combieTarget);
+                } else {
+                    if (!LTUtils.IsFileExist(combieTarget)) {
+                        LTUtils.CopyFile(combieSrc, combieTarget);
+                    }
+                }
             } else {
                 LTUtils.CopyDir(combieSrc, combieTarget);
             }

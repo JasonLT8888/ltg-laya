@@ -6787,6 +6787,29 @@ class GlobalUnit {
 
 /***/ }),
 
+/***/ "./src/script/common/ResDefine.ts":
+/*!****************************************!*\
+  !*** ./src/script/common/ResDefine.ts ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ResDefine; });
+class ResDefine {
+    static FixPath(filePath) {
+        return "res/export/Conventional/" + filePath + ".lh";
+    }
+}
+ResDefine.camera_path = "main_camera";
+ResDefine.light_path = "default_light";
+ResDefine.floor_path = "floor";
+ResDefine.player_path = "player";
+
+
+/***/ }),
+
 /***/ "./src/script/config/AudioConfig.ts":
 /*!******************************************!*\
   !*** ./src/script/config/AudioConfig.ts ***!
@@ -7374,6 +7397,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_PerfomanceMediator; });
 /* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_PerfomanceDemo */ "./src/ui/Main/UI_PerfomanceDemo.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
+
+
 
 
 class UI_PerfomanceMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
@@ -7388,9 +7415,17 @@ class UI_PerfomanceMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_I
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
+        this.ui.m_btn_boneAnim.onClick(this, this._OnClickTest);
     }
     _OnClickBack() {
         this.Hide();
+    }
+    _OnClickTest() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].LoadAsync(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].floor_path));
+            let loadObj = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].floor_path), true);
+            console.log(loadObj);
+        });
     }
 }
 
