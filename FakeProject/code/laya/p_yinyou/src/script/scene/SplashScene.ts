@@ -34,6 +34,7 @@ export default class SplashScene extends LTSplashScene {
     }
 
     _OnGameResLoaded() {
+        this.isFinished = true;
         this.nextState = ESceneType.Main;
     }
 

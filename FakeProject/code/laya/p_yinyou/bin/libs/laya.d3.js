@@ -5412,6 +5412,7 @@
 	                            }
 	                        }
 	                        break;
+	                    default:
 	                }
 	                controllerLayer._crossNodesOwnersCount = crossCount;
 	                controllerLayer._crossPlayState = destAnimatorState;
@@ -8441,6 +8442,7 @@
 	                break;
 	            default:
 	                throw new Error("compile shader err!");
+	                break;
 	        }
 	    }
 	    _createShader(gl, str, type) {
@@ -11710,6 +11712,18 @@
 	})(exports.IndexFormat || (exports.IndexFormat = {}));
 
 	class IndexBuffer3D extends Laya.Buffer {
+	    get indexType() {
+	        return this._indexType;
+	    }
+	    get indexTypeByteCount() {
+	        return this._indexTypeByteCount;
+	    }
+	    get indexCount() {
+	        return this._indexCount;
+	    }
+	    get canRead() {
+	        return this._canRead;
+	    }
 	    constructor(indexType, indexCount, bufferUsage = 0x88E4, canRead = false) {
 	        super();
 	        this._indexType = indexType;
@@ -11761,18 +11775,6 @@
 	                    break;
 	            }
 	        }
-	    }
-	    get indexType() {
-	        return this._indexType;
-	    }
-	    get indexTypeByteCount() {
-	        return this._indexTypeByteCount;
-	    }
-	    get indexCount() {
-	        return this._indexCount;
-	    }
-	    get canRead() {
-	        return this._canRead;
 	    }
 	    _bindForVAO() {
 	        if (Laya.BufferStateBase._curBindedBufferState) {
@@ -11935,11 +11937,6 @@
 	VertexDeclaration._uniqueIDCounter = 1;
 
 	class VertexElement {
-	    constructor(offset, elementFormat, elementUsage) {
-	        this._offset = offset;
-	        this._elementFormat = elementFormat;
-	        this._elementUsage = elementUsage;
-	    }
 	    get offset() {
 	        return this._offset;
 	    }
@@ -11948,6 +11945,11 @@
 	    }
 	    get elementUsage() {
 	        return this._elementUsage;
+	    }
+	    constructor(offset, elementFormat, elementUsage) {
+	        this._offset = offset;
+	        this._elementFormat = elementFormat;
+	        this._elementUsage = elementUsage;
 	    }
 	}
 
@@ -12129,6 +12131,9 @@
 	}
 
 	class SkyBox extends SkyMesh {
+	    static __init__() {
+	        SkyBox.instance = new SkyBox();
+	    }
 	    constructor() {
 	        super();
 	        var gl = Laya.LayaGL.instance;
@@ -12157,9 +12162,6 @@
 	        bufferState.applyIndexBuffer(this._indexBuffer);
 	        bufferState.unBind();
 	        this._bufferState = bufferState;
-	    }
-	    static __init__() {
-	        SkyBox.instance = new SkyBox();
 	    }
 	    _render(state) {
 	        var gl = Laya.LayaGL.instance;
@@ -13874,16 +13876,6 @@
 	ColliderShape._tempVector30 = new Vector3();
 
 	class BoxColliderShape extends ColliderShape {
-	    constructor(sizeX = 1.0, sizeY = 1.0, sizeZ = 1.0) {
-	        super();
-	        this._sizeX = sizeX;
-	        this._sizeY = sizeY;
-	        this._sizeZ = sizeZ;
-	        this._type = ColliderShape.SHAPETYPES_BOX;
-	        var bt = Physics3D._bullet;
-	        bt.btVector3_setValue(BoxColliderShape._btSize, sizeX / 2, sizeY / 2, sizeZ / 2);
-	        this._btShape = bt.btBoxShape_create(BoxColliderShape._btSize);
-	    }
 	    static __init__() {
 	        BoxColliderShape._btSize = Physics3D._bullet.btVector3_create(0, 0, 0);
 	    }
@@ -13895,6 +13887,16 @@
 	    }
 	    get sizeZ() {
 	        return this._sizeZ;
+	    }
+	    constructor(sizeX = 1.0, sizeY = 1.0, sizeZ = 1.0) {
+	        super();
+	        this._sizeX = sizeX;
+	        this._sizeY = sizeY;
+	        this._sizeZ = sizeZ;
+	        this._type = ColliderShape.SHAPETYPES_BOX;
+	        var bt = Physics3D._bullet;
+	        bt.btVector3_setValue(BoxColliderShape._btSize, sizeX / 2, sizeY / 2, sizeZ / 2);
+	        this._btShape = bt.btBoxShape_create(BoxColliderShape._btSize);
 	    }
 	    clone() {
 	        var dest = new BoxColliderShape(this._sizeX, this._sizeY, this._sizeZ);
@@ -14205,14 +14207,14 @@
 	}
 
 	class SphereColliderShape extends ColliderShape {
+	    get radius() {
+	        return this._radius;
+	    }
 	    constructor(radius = 0.5) {
 	        super();
 	        this._radius = radius;
 	        this._type = ColliderShape.SHAPETYPES_SPHERE;
 	        this._btShape = Physics3D._bullet.btSphereShape_create(radius);
-	    }
-	    get radius() {
-	        return this._radius;
 	    }
 	    clone() {
 	        var dest = new SphereColliderShape(this._radius);
@@ -15528,10 +15530,6 @@
 	}
 
 	class VertexPositionTexture0 {
-	    constructor(position, textureCoordinate0) {
-	        this._position = position;
-	        this._textureCoordinate0 = textureCoordinate0;
-	    }
 	    static get vertexDeclaration() {
 	        return VertexPositionTexture0._vertexDeclaration;
 	    }
@@ -15547,6 +15545,10 @@
 	    }
 	    get vertexDeclaration() {
 	        return VertexPositionTexture0._vertexDeclaration;
+	    }
+	    constructor(position, textureCoordinate0) {
+	        this._position = position;
+	        this._textureCoordinate0 = textureCoordinate0;
 	    }
 	}
 
@@ -16202,8 +16204,6 @@
 	GeometryElement._typeCounter = 0;
 
 	class PixelLineVertex {
-	    constructor() {
-	    }
 	    static get vertexDeclaration() {
 	        return PixelLineVertex._vertexDeclaration;
 	    }
@@ -16213,6 +16213,8 @@
 	    }
 	    get vertexDeclaration() {
 	        return PixelLineVertex._vertexDeclaration;
+	    }
+	    constructor() {
 	    }
 	}
 
@@ -17597,12 +17599,6 @@
 	}
 
 	class PixelLineSprite3D extends RenderableSprite3D {
-	    constructor(maxCount = 2, name = null) {
-	        super(name);
-	        this._geometryFilter = new PixelLineFilter(this, maxCount);
-	        this._render = new PixelLineRenderer(this);
-	        this._changeRenderObjects(this._render, 0, PixelLineMaterial.defaultMaterial);
-	    }
 	    get maxLineCount() {
 	        return this._geometryFilter._maxLineCount;
 	    }
@@ -17621,6 +17617,12 @@
 	    }
 	    get pixelLineRenderer() {
 	        return this._render;
+	    }
+	    constructor(maxCount = 2, name = null) {
+	        super(name);
+	        this._geometryFilter = new PixelLineFilter(this, maxCount);
+	        this._render = new PixelLineRenderer(this);
+	        this._changeRenderObjects(this._render, 0, PixelLineMaterial.defaultMaterial);
 	    }
 	    _changeRenderObjects(sender, index, material) {
 	        var renderObjects = this._render._renderElements;
@@ -17835,6 +17837,7 @@
 	                    max.y = this.center.y - quarter + halfChildSize;
 	                    max.z = this.center.z + quarter + halfChildSize;
 	                    break;
+	                default:
 	            }
 	            return bounds;
 	        }
@@ -17887,6 +17890,7 @@
 	                    childCenter.y = this.center.y - quarter;
 	                    childCenter.z = this.center.z + quarter;
 	                    break;
+	                default:
 	            }
 	            return childCenter;
 	        }
@@ -20001,7 +20005,7 @@
 	        return dest;
 	    }
 	}
-	PBRSpecularMaterial.SPECULARTEXTURE = Shader3D.propertyNameToID("u_SpecGlossTexture");
+	PBRSpecularMaterial.SPECULARTEXTURE = Shader3D.propertyNameToID("u_SpecularTexture");
 	PBRSpecularMaterial.SPECULARCOLOR = Shader3D.propertyNameToID("u_SpecularColor");
 
 	var PBRPS$1 = "#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n\tprecision highp int;\r\n#else\r\n\tprecision mediump float;\r\n\tprecision mediump int;\r\n#endif\r\n\r\n#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\"\r\n#include \"PBRFSInput.glsl\";\r\n#include \"LayaPBRBRDF.glsl\";\r\n#include \"GlobalIllumination.glsl\";\r\n#include \"PBRCore.glsl\";\r\n\r\nvoid main()\r\n{\r\n\tfragmentForward();\r\n}";
@@ -21062,12 +21066,6 @@
 	MeshRenderDynamicBatchManager.instance = new MeshRenderDynamicBatchManager();
 
 	class MeshSprite3D extends RenderableSprite3D {
-	    constructor(mesh = null, name = null) {
-	        super(name);
-	        this._meshFilter = new MeshFilter(this);
-	        this._render = new MeshRenderer(this);
-	        (mesh) && (this._meshFilter.sharedMesh = mesh);
-	    }
 	    static __init__() {
 	        MeshSprite3DShaderDeclaration.SHADERDEFINE_UV0 = Shader3D.getDefineByName("UV");
 	        MeshSprite3DShaderDeclaration.SHADERDEFINE_COLOR = Shader3D.getDefineByName("COLOR");
@@ -21081,6 +21079,12 @@
 	    }
 	    get meshRenderer() {
 	        return this._render;
+	    }
+	    constructor(mesh = null, name = null) {
+	        super(name);
+	        this._meshFilter = new MeshFilter(this);
+	        this._render = new MeshRenderer(this);
+	        (mesh) && (this._meshFilter.sharedMesh = mesh);
 	    }
 	    _parse(data, spriteMap) {
 	        super._parse(data, spriteMap);
@@ -21419,11 +21423,6 @@
 	}
 
 	class Burst {
-	    constructor(time, minCount, maxCount) {
-	        this._time = time;
-	        this._minCount = minCount;
-	        this._maxCount = maxCount;
-	    }
 	    get time() {
 	        return this._time;
 	    }
@@ -21432,6 +21431,11 @@
 	    }
 	    get maxCount() {
 	        return this._maxCount;
+	    }
+	    constructor(time, minCount, maxCount) {
+	        this._time = time;
+	        this._minCount = minCount;
+	        this._maxCount = maxCount;
 	    }
 	    cloneTo(destObject) {
 	        var destBurst = destObject;
@@ -21521,11 +21525,11 @@
 	}
 
 	class ColorOverLifetime {
-	    constructor(color) {
-	        this._color = color;
-	    }
 	    get color() {
 	        return this._color;
+	    }
+	    constructor(color) {
+	        this._color = color;
 	    }
 	    cloneTo(destObject) {
 	        var destColorOverLifetime = destObject;
@@ -22220,11 +22224,11 @@
 	}
 
 	class RotationOverLifetime {
-	    constructor(angularVelocity) {
-	        this._angularVelocity = angularVelocity;
-	    }
 	    get angularVelocity() {
 	        return this._angularVelocity;
+	    }
+	    constructor(angularVelocity) {
+	        this._angularVelocity = angularVelocity;
 	    }
 	    cloneTo(destObject) {
 	        var destRotationOverLifetime = destObject;
@@ -22871,11 +22875,11 @@
 	}
 
 	class SizeOverLifetime {
-	    constructor(size) {
-	        this._size = size;
-	    }
 	    get size() {
 	        return this._size;
+	    }
+	    constructor(size) {
+	        this._size = size;
 	    }
 	    cloneTo(destObject) {
 	        var destSizeOverLifetime = destObject;
@@ -23531,23 +23535,6 @@
 	VertexShuriKenParticle.PARTICLE_SIMULATIONWORLDROTATION = 14;
 
 	class VertexShurikenParticleBillboard extends VertexShuriKenParticle {
-	    constructor(cornerTextureCoordinate, positionStartLifeTime, velocity, startColor, startSize, startRotation0, startRotation1, startRotation2, ageAddScale, time, startSpeed, randoms0, randoms1, simulationWorldPostion) {
-	        super();
-	        this._cornerTextureCoordinate = cornerTextureCoordinate;
-	        this._positionStartLifeTime = positionStartLifeTime;
-	        this._velocity = velocity;
-	        this._startColor = startColor;
-	        this._startSize = startSize;
-	        this._startRotation0 = startRotation0;
-	        this._startRotation1 = startRotation1;
-	        this._startRotation2 = startRotation2;
-	        this._startLifeTime = ageAddScale;
-	        this._time = time;
-	        this._startSpeed = startSpeed;
-	        this._randoms0 = this.random0;
-	        this._randoms1 = this.random1;
-	        this._simulationWorldPostion = simulationWorldPostion;
-	    }
 	    static get vertexDeclaration() {
 	        return VertexShurikenParticleBillboard._vertexDeclaration;
 	    }
@@ -23606,9 +23593,6 @@
 	    get simulationWorldPostion() {
 	        return this._simulationWorldPostion;
 	    }
-	}
-
-	class VertexShurikenParticleMesh extends VertexShuriKenParticle {
 	    constructor(cornerTextureCoordinate, positionStartLifeTime, velocity, startColor, startSize, startRotation0, startRotation1, startRotation2, ageAddScale, time, startSpeed, randoms0, randoms1, simulationWorldPostion) {
 	        super();
 	        this._cornerTextureCoordinate = cornerTextureCoordinate;
@@ -23626,6 +23610,9 @@
 	        this._randoms1 = this.random1;
 	        this._simulationWorldPostion = simulationWorldPostion;
 	    }
+	}
+
+	class VertexShurikenParticleMesh extends VertexShuriKenParticle {
 	    static __init__() {
 	        VertexShurikenParticleMesh._vertexDeclaration = new VertexDeclaration(172, [new VertexElement(0, VertexElementFormat.Vector3, VertexShuriKenParticle.PARTICLE_POSITION0),
 	            new VertexElement(12, VertexElementFormat.Vector4, VertexShuriKenParticle.PARTICLE_COLOR0),
@@ -23685,6 +23672,23 @@
 	    }
 	    get simulationWorldPostion() {
 	        return this._simulationWorldPostion;
+	    }
+	    constructor(cornerTextureCoordinate, positionStartLifeTime, velocity, startColor, startSize, startRotation0, startRotation1, startRotation2, ageAddScale, time, startSpeed, randoms0, randoms1, simulationWorldPostion) {
+	        super();
+	        this._cornerTextureCoordinate = cornerTextureCoordinate;
+	        this._positionStartLifeTime = positionStartLifeTime;
+	        this._velocity = velocity;
+	        this._startColor = startColor;
+	        this._startSize = startSize;
+	        this._startRotation0 = startRotation0;
+	        this._startRotation1 = startRotation1;
+	        this._startRotation2 = startRotation2;
+	        this._startLifeTime = ageAddScale;
+	        this._time = time;
+	        this._startSpeed = startSpeed;
+	        this._randoms0 = this.random0;
+	        this._randoms1 = this.random1;
+	        this._simulationWorldPostion = simulationWorldPostion;
 	    }
 	}
 
@@ -24818,6 +24822,8 @@
 	                minStartSpeed = this.startLifetimeConstantMin;
 	                maxStartSpeed = this.startLifetimeConstantMax;
 	                break;
+	            case 3:
+	                break;
 	        }
 	        var minPosition, maxPosition, minDirection, maxDirection;
 	        if (this._shape && this._shape.enable) ;
@@ -24932,6 +24938,8 @@
 	                    if (renderMode === 1)
 	                        maxSizeY = this.startSizeConstantMax;
 	                }
+	                break;
+	            case 3:
 	                break;
 	        }
 	        if (this._sizeOverLifetime && this._sizeOverLifetime.enable) {
@@ -25734,17 +25742,6 @@
 	ShurikenParticleSystem._type = GeometryElement._typeCounter++;
 
 	class ShuriKenParticle3D extends RenderableSprite3D {
-	    constructor() {
-	        super(null);
-	        this._render = new ShurikenParticleRenderer(this);
-	        this._particleSystem = new ShurikenParticleSystem(this);
-	        var elements = this._render._renderElements;
-	        var element = elements[0] = new RenderElement();
-	        element.setTransform(this._transform);
-	        element.render = this._render;
-	        element.setGeometry(this._particleSystem);
-	        element.material = ShurikenParticleMaterial.defaultMaterial;
-	    }
 	    static __init__() {
 	        ShuriKenParticle3DShaderDeclaration.SHADERDEFINE_RENDERMODE_BILLBOARD = Shader3D.getDefineByName("SPHERHBILLBOARD");
 	        ShuriKenParticle3DShaderDeclaration.SHADERDEFINE_RENDERMODE_STRETCHEDBILLBOARD = Shader3D.getDefineByName("STRETCHEDBILLBOARD");
@@ -25776,6 +25773,17 @@
 	    }
 	    get particleRenderer() {
 	        return this._render;
+	    }
+	    constructor() {
+	        super(null);
+	        this._render = new ShurikenParticleRenderer(this);
+	        this._particleSystem = new ShurikenParticleSystem(this);
+	        var elements = this._render._renderElements;
+	        var element = elements[0] = new RenderElement();
+	        element.setTransform(this._transform);
+	        element.render = this._render;
+	        element.setGeometry(this._particleSystem);
+	        element.material = ShurikenParticleMaterial.defaultMaterial;
 	    }
 	    _parseModule(module, moduleData) {
 	        for (var t in moduleData) {
@@ -27695,11 +27703,6 @@
 	}
 
 	class TrailSprite3D extends RenderableSprite3D {
-	    constructor(name = null) {
-	        super(name);
-	        this._render = new TrailRenderer(this);
-	        this._geometryFilter = new TrailFilter(this);
-	    }
 	    static __init__() {
 	    }
 	    get trailFilter() {
@@ -27707,6 +27710,11 @@
 	    }
 	    get trailRenderer() {
 	        return this._render;
+	    }
+	    constructor(name = null) {
+	        super(name);
+	        this._render = new TrailRenderer(this);
+	        this._geometryFilter = new TrailFilter(this);
 	    }
 	    _parse(data, spriteMap) {
 	        super._parse(data, spriteMap);
@@ -28441,6 +28449,9 @@
 	Rigidbody3D._BT_ENABLE_GYROPSCOPIC_FORCE = 2;
 
 	class StaticPlaneColliderShape extends ColliderShape {
+	    static __init__() {
+	        StaticPlaneColliderShape._btNormal = Physics3D._bullet.btVector3_create(0, 0, 0);
+	    }
 	    constructor(normal, offset) {
 	        super();
 	        this._normal = normal;
@@ -28449,9 +28460,6 @@
 	        var bt = Physics3D._bullet;
 	        bt.btVector3_setValue(StaticPlaneColliderShape._btNormal, -normal.x, normal.y, normal.z);
 	        this._btShape = bt.btStaticPlaneShape_create(StaticPlaneColliderShape._btNormal, offset);
-	    }
-	    static __init__() {
-	        StaticPlaneColliderShape._btNormal = Physics3D._bullet.btVector3_create(0, 0, 0);
 	    }
 	    clone() {
 	        var dest = new StaticPlaneColliderShape(this._normal, this._offset);
@@ -30175,16 +30183,16 @@
 	}
 
 	class PointLight extends LightSprite {
-	    constructor() {
-	        super();
-	        this._range = 6.0;
-	        this._lightType = exports.LightType.Point;
-	    }
 	    get range() {
 	        return this._range;
 	    }
 	    set range(value) {
 	        this._range = value;
+	    }
+	    constructor() {
+	        super();
+	        this._range = 6.0;
+	        this._lightType = exports.LightType.Point;
 	    }
 	    _addToLightQueue() {
 	        this._scene._pointLights.add(this);
@@ -30199,13 +30207,6 @@
 	}
 
 	class SpotLight extends LightSprite {
-	    constructor() {
-	        super();
-	        this._spotAngle = 30.0;
-	        this._range = 10.0;
-	        this._direction = new Vector3();
-	        this._lightType = exports.LightType.Spot;
-	    }
 	    get spotAngle() {
 	        return this._spotAngle;
 	    }
@@ -30217,6 +30218,13 @@
 	    }
 	    set range(value) {
 	        this._range = value;
+	    }
+	    constructor() {
+	        super();
+	        this._spotAngle = 30.0;
+	        this._range = 10.0;
+	        this._direction = new Vector3();
+	        this._lightType = exports.LightType.Spot;
 	    }
 	    _addToLightQueue() {
 	        this._scene._spotLights.add(this);
@@ -32350,8 +32358,6 @@
 	}
 
 	class TextMesh {
-	    constructor() {
-	    }
 	    get text() {
 	        return this._text;
 	    }
@@ -32369,6 +32375,8 @@
 	    }
 	    set color(value) {
 	        this._color = value;
+	    }
+	    constructor() {
 	    }
 	    _createVertexBuffer(charCount) {
 	    }

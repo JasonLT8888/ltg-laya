@@ -3219,7 +3219,6 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         this._progressUI.value = 100;
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.RecordEvent("进入游戏", null);
         this._OnGameResLoaded();
-        this.isFinished = true;
     }
     _OnGameResLoaded() {
     }
@@ -6951,6 +6950,7 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_6__["default"].InitAll();
     }
     _OnGameResLoaded() {
+        this.isFinished = true;
         this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_9__["ESceneType"].Main;
     }
 }
