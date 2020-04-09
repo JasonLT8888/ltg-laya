@@ -9391,6 +9391,12 @@
 	    static load(url, complete) {
 	        Laya.Laya.loader.create(url, complete, null, Sprite3D.HIERARCHY);
 	    }
+	    get extData() {
+	        return this._extData;
+	    }
+	    set extData(value) {
+	        this._extData = value;
+	    }
 	    get id() {
 	        return this._id;
 	    }
@@ -9516,6 +9522,9 @@
 	            this.transform.localScale = localScale;
 	        }
 	        (data.layer != undefined) && (this.layer = data.layer);
+	        if (data.extData !== undefined) {
+	            this.extData = data.extData;
+	        }
 	    }
 	    _cloneTo(destObject, srcRoot, dstRoot) {
 	        if (this.destroyed)
