@@ -30,7 +30,9 @@ class CopyProject {
         console.log("开始拷贝工程_FGUI");
         this._CopyFGUI(rootPath);
         console.log("fgui工程拷贝完成");
-
+        console.log("开始拷贝工程_Excel");
+        this._CopyExcel(rootPath);
+        console.log("excel工程拷贝完成");
 
         console.log("所有工程拷贝完成,开始发布,请耐心等待");
         // 将整个others拷贝到发布目录
@@ -50,6 +52,30 @@ class CopyProject {
         let targetPackageJsonPath = path.join(rootPath, './../../../../Publish/package.json');
         LTUtils.CopyFile(packageJsonPath, targetPackageJsonPath);
         console.log("已发布到", path.join(rootPath, './../../../../Publish'));
+    }
+
+    /**
+     * 拷贝excel
+     */
+    private _CopyExcel(rootPath: string) {
+        let targetPath = path.join(rootPath, 'others/publish/templates/_project/excel/');
+        let srcPath = path.join(rootPath, './../../../design/excel/');
+
+        for (let value of CommonConfig.needCopyExcel) {
+            let combieSrc = path.join(srcPath, value);
+            let fileType = LTUtils.IsFileOrDir(combieSrc);
+            if (fileType == EFileType.NotExist) {
+                console.log(combieSrc, "不存在");
+                continue;
+            }
+            let combieTarget = path.join(targetPath, value);
+            if (fileType == EFileType.File) {
+                LTUtils.CopyFile(combieSrc, combieTarget);
+            } else {
+                LTUtils.CopyDir(combieSrc, combieTarget);
+            }
+            console.log("拷贝", combieSrc, "完成");
+        }
     }
 
     /**
@@ -130,6 +156,24 @@ class CopyProject {
             }
             console.log("拷贝", combieSrc, "完成");
         }
+
+        // 判定初始工程初始化
+        for (let value of CommonConfig.initProject) {
+            let combieSrc = path.join(rootPath, value);
+            let fileType = LTUtils.IsFileOrDir(combieSrc);
+            if (fileType == EFileType.NotExist) {
+                console.log(combieSrc, "不存在");
+                continue;
+            }
+            let combieTarget = path.join(targetPath, value);
+            if (fileType == EFileType.File) {
+                LTUtils.CopyFile(combieSrc, combieTarget);
+            } else {
+                LTUtils.CopyDir(combieSrc, combieTarget);
+            }
+            console.log("拷贝", combieSrc, "完成");
+        }
+
     }
 
 }

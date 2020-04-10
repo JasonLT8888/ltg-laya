@@ -56,6 +56,18 @@ export default class MathEx {
         return (max - min) * Math.random() + min;
     }
 
+    /**
+     * 判定概率命中
+     * @param ratio 概率，百分数
+     */
+    public static RandomRatio(ratio: number): boolean {
+        let v = MathEx.RandomInt(0, 10000) * 0.01;
+        if (ratio > v) {
+            return true;
+        }
+        return false;
+    }
+
     public static Clamp(value: number, min: number, max: number): number {
         if (value < min) return min;
         if (value > max) return max;
@@ -113,7 +125,7 @@ export default class MathEx {
         return MathEx.Clamp(t - Math.floor(t / length) * length, 0, length);
     }
 
-    public static IsSimilar(n1 : number, n2 : number) {
+    public static IsSimilar(n1: number, n2: number) {
         return n1 == n2;
     }
 
