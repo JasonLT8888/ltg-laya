@@ -6,10 +6,6 @@ export class SaveData {
      * 金币数量
      */
     public coinCount: number = 0;
-    /**
-     * 当前关卡id
-     */
-    public levelId: number = 1;
 
 }
 

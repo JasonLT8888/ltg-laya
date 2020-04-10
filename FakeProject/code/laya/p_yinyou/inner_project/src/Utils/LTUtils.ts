@@ -40,7 +40,7 @@ export class LTUtils {
 
     static ReplaceAll(str: string, replaceStr: string, newStr: string): string {
         let result = str;
-        if(replaceStr == newStr) return result;
+        if (replaceStr == newStr) return result;
         while (result.indexOf(replaceStr) >= 0) {
             result = result.replace(replaceStr, newStr);
         }
@@ -111,7 +111,7 @@ export class LTUtils {
                 // true表示继续使用,false表示跳过
                 continue;
             }
-            
+
             let filePath = path.join(srcDir, fileName);
             let fileStat = fs.statSync(filePath);
             if (fileStat.isDirectory()) {

@@ -44,4 +44,31 @@ export default class CommonConfig {
         'Assets/StreamingAssets'
     ];
 
+    /**
+     * 初始工程需要文件
+     */
+    static initProject = [
+        "src/script/common/GlobalUnit.ts",
+        "src/script/common/GameData.ts",
+        "src/script/common/ResDefine.ts",
+        "src/script/scene/MainScene.ts",
+        "src/script/scene/SplashScene.ts",
+        "src/script/config/PackConst.ts",
+        "src/script/config/GameConst.ts",
+        "src/script/config/AudioConfig.ts",
+        "src/script/config/EffectConfig.ts",
+        "src/script/MainStart.ts",
+        "src/script/ui/UI_MainMediator.ts"
+    ];
+
+    /**
+     * 需要初始化的配置内容
+     */
+    static needCopyExcel = [
+        "game_const.xlsx",
+        "pack_const.xlsx",
+        "effect_config.xlsx",
+        "audio_config.xlsx"
+    ];
+
 }

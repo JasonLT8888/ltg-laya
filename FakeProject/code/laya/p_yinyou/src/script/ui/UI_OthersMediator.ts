@@ -3,9 +3,9 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Others from "../../ui/Main/UI_Others";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import LTUI from "../../LTGame/UIExt/LTUI";
-import { TestConst } from "../config/TestConst";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import LTSDK from "../../SDK/LTSDK";
+import { GameConst } from "../config/GameConst";
 
 export default class UI_OthersMediator extends BaseUIMediator<UI_Others> {
 
@@ -36,7 +36,7 @@ export default class UI_OthersMediator extends BaseUIMediator<UI_Others> {
     }
 
     private _OnClickConst() {
-        LTUI.Toast("读取到配置:" + TestConst.data.init_coin_count);
+        LTUI.Toast("读取到配置:" + GameConst.data.game_version);
     }
 
     private _OnClickShakeLong() {

@@ -26,8 +26,8 @@ export default class UI_PerfomanceMediator extends BaseUIMediator<UI_Perfomance>
     }
 
     private async _OnClickTest() {
-        await LTRes.LoadAsync(ResDefine.FixPath(ResDefine.floor_path));
-        let loadObj = LTRes.Get(ResDefine.FixPath(ResDefine.floor_path), true);
+        await LTRes.LoadAsync(ResDefine.FixPath("floor"));
+        let loadObj = LTRes.Get(ResDefine.FixPath("floor"), true);
         console.log(loadObj);
     }
 

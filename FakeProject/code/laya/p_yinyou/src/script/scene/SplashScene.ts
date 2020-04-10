@@ -3,12 +3,11 @@ import LTSplashScene from "../../LTGame/Start/LTSplashScene";
 import LoadBinder from "../../ui/Load/LoadBinder";
 import MainBinder from "../../ui/Main/MainBinder";
 import { ConfigManager } from "../../LTGame/Config/ConfigManager";
-import { LevelConfig } from "../config/LevelConfig";
 import GlobalUnit from "../common/GlobalUnit";
 import { AudioConfig } from "../config/AudioConfig";
-import { PropConfig } from "../config/PropConfig";
 import { ESceneType } from "../../LTGame/Start/ESceneType";
-import { TestConst } from "../config/TestConst";
+import { EffectConfig } from "../config/EffectConfig";
+import { GameConst } from "../config/GameConst";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -23,10 +22,9 @@ export default class SplashScene extends LTSplashScene {
     }
 
     _OnSetLoadConfig() {
-        ConfigManager.AddConfig(LevelConfig);
         ConfigManager.AddConfig(AudioConfig);
-        ConfigManager.AddConfig(PropConfig);
-        ConfigManager.AddConfig(TestConst);
+        ConfigManager.AddConfig(EffectConfig);
+        ConfigManager.AddConfig(GameConst);
     }
 
     _OnGameResPrepared(urls: string[]) {

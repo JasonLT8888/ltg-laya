@@ -1,12 +1,9 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Main from "../../ui/Main/UI_Main";
-import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import UI_UIDemoMediator from "./UI_UIDemoMediator";
 import UI_ADDemoMediator from "./UI_ADDemoMediator";
 import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_CommonUIMediator from "./UI_CommonUIMediator";
-import LTUI from "../../LTGame/UIExt/LTUI";
-import { TestConst } from "../config/TestConst";
 import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
 import UI_OthersMediator from "./UI_OthersMediator";
 
