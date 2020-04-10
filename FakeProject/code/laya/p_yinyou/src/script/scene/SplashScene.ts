@@ -8,6 +8,7 @@ import { AudioConfig } from "../config/AudioConfig";
 import { ESceneType } from "../../LTGame/Start/ESceneType";
 import { EffectConfig } from "../config/EffectConfig";
 import { GameConst } from "../config/GameConst";
+import { EffectManager } from "../manager/EffectManager";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -29,9 +30,14 @@ export default class SplashScene extends LTSplashScene {
 
     _OnGameResPrepared(urls: string[]) {
         GlobalUnit.InitAll();
+
+        EffectManager.instance.Preload(urls);
     }
 
-    _OnGameResLoaded() {
+    async _OnGameResLoaded() {
+
+        await EffectManager.instance.WarmEffects();
+
         this.isFinished = true;
         this.nextState = ESceneType.Main;
     }

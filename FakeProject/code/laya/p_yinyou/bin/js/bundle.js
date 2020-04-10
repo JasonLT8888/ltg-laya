@@ -909,6 +909,17 @@ class MathEx {
     static Random(min, max) {
         return (max - min) * Math.random() + min;
     }
+    /**
+     * 判定概率命中
+     * @param ratio 概率，百分数
+     */
+    static RandomRatio(ratio) {
+        let v = MathEx.RandomInt(0, 10000) * 0.01;
+        if (ratio > v) {
+            return true;
+        }
+        return false;
+    }
     static Clamp(value, min, max) {
         if (value < min)
             return min;
@@ -6869,6 +6880,160 @@ var GameConst;
 
 /***/ }),
 
+/***/ "./src/script/manager/EffectManager.ts":
+/*!*********************************************!*\
+  !*** ./src/script/manager/EffectManager.ts ***!
+  \*********************************************/
+/*! exports provided: EffectManager, EffectShowData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EffectManager", function() { return EffectManager; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EffectShowData", function() { return EffectShowData; });
+/* harmony import */ var _LTGame_LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/LTDictionary */ "./src/LTGame/LTUtils/LTDictionary.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../config/EffectConfig */ "./src/script/config/EffectConfig.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+/* harmony import */ var _LTGame_LTUtils_ArrayEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/ArrayEx */ "./src/LTGame/LTUtils/ArrayEx.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
+
+
+
+
+
+
+
+class EffectManager {
+    constructor() {
+        this._Init();
+    }
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new EffectManager();
+        }
+        return this._instance;
+    }
+    _Init() {
+        this._effectRoot = new Laya.Sprite3D("EffectManager");
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].s3d.addChild(this._effectRoot);
+        this._effectMap = new _LTGame_LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        this._continueEffects = [];
+    }
+    Preload(urls) {
+        for (let i = 0; i < _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList.length; ++i) {
+            let configItem = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList[i];
+            if (configItem.need_preload) {
+                let effectPath = _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__["default"].FixPath(configItem.model_path);
+                urls.push(effectPath);
+            }
+        }
+    }
+    WarmEffects() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let preloadEffects = [];
+            for (let i = 0; i < _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList.length; ++i) {
+                let configItem = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList[i];
+                if (configItem.need_preload) {
+                    let effectPath = _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__["default"].FixPath(configItem.model_path);
+                    let effectObj = this._effectRoot.addChild(_LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(effectPath, true));
+                    preloadEffects.push(effectObj);
+                    this._effectMap.set(configItem.id, effectObj);
+                }
+            }
+            yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].NextFrame();
+            for (let effectObj of preloadEffects) {
+                effectObj.removeSelf();
+            }
+        });
+    }
+    StopEffectByIndex(index) {
+        if (index == null)
+            return;
+        if (index < 0)
+            return;
+        if (index >= this._continueEffects.length)
+            return;
+        let effectObj = this._continueEffects[index];
+        effectObj.destroy();
+        _LTGame_LTUtils_ArrayEx__WEBPACK_IMPORTED_MODULE_5__["default"].RemoveAt(this._continueEffects, index);
+    }
+    PlayEffectByData(showData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let effectConfig = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].data[showData.effectId];
+            if (effectConfig == null) {
+                console.error("无效的特效id", showData.effectId);
+                return -1;
+            }
+            let effectObj = this._effectMap.Get(showData.effectId);
+            if (effectObj == null) {
+                let effectPath = _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__["default"].FixPath(effectConfig.model_path);
+                yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].LoadAsync(effectPath);
+                effectObj = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(effectPath);
+                this._effectMap.set(effectConfig.id, effectObj);
+            }
+            let instEffect = effectObj.clone();
+            this._effectRoot.addChild(instEffect);
+            if (showData.setPos != null) {
+                instEffect.transform.position = showData.setPos.clone();
+            }
+            if (showData.setRot != null) {
+                instEffect.transform.rotation = showData.setRot.clone();
+            }
+            if (showData.setScale != null) {
+                instEffect.transform.setWorldLossyScale(showData.setScale);
+            }
+            if (showData.continueTime) {
+                yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].Seconds(showData.continueTime);
+                instEffect.destroy();
+            }
+            else {
+                this._continueEffects.push(instEffect);
+                return this._continueEffects.length - 1;
+            }
+            return -1;
+        });
+    }
+    PlayEffectById(effectId, duringTime = 2, pos = null, rot = null) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let data = new EffectShowData(effectId);
+            data.continueTime = duringTime;
+            data.setPos = pos;
+            data.setRot = rot;
+            return this.PlayEffectByData(data);
+        });
+    }
+}
+class EffectShowData {
+    constructor(effectId) {
+        /**
+         * 特效持续时间
+         */
+        this.continueTime = 2;
+        /**
+         * 设置位置,world
+         */
+        this.setPos = null;
+        /**
+         * 设置旋转,world
+         */
+        this.setRot = null;
+        /**
+         * 设置缩放,world
+         */
+        this.setScale = null;
+        /**
+         * 创建父物体
+         */
+        this.parent = null;
+        this.effectId = effectId;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/scene/MainScene.ts":
 /*!***************************************!*\
   !*** ./src/script/scene/MainScene.ts ***!
@@ -6917,6 +7082,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTGame/Start/ESceneType */ "./src/LTGame/Start/ESceneType.ts");
 /* harmony import */ var _config_EffectConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/EffectConfig */ "./src/script/config/EffectConfig.ts");
 /* harmony import */ var _config_GameConst__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config/GameConst */ "./src/script/config/GameConst.ts");
+/* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
+
 
 
 
@@ -6943,10 +7110,14 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
     }
     _OnGameResPrepared(urls) {
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_5__["default"].InitAll();
+        _manager_EffectManager__WEBPACK_IMPORTED_MODULE_10__["EffectManager"].instance.Preload(urls);
     }
     _OnGameResLoaded() {
-        this.isFinished = true;
-        this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_7__["ESceneType"].Main;
+        return __awaiter(this, void 0, void 0, function* () {
+            yield _manager_EffectManager__WEBPACK_IMPORTED_MODULE_10__["EffectManager"].instance.WarmEffects();
+            this.isFinished = true;
+            this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_7__["ESceneType"].Main;
+        });
     }
 }
 
