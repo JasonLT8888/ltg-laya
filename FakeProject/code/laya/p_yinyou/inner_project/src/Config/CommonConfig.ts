@@ -41,7 +41,10 @@ export default class CommonConfig {
     static needCopyUnity = [
         'Assets/Plugins',
         'Assets/LayaAir3D',
-        'Assets/StreamingAssets'
+        'Assets/StreamingAssets',
+        'Assets/LTEditorData.asset',
+        'Packages',
+        'ProjectSettings'
     ];
 
     /**
