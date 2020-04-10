@@ -141,6 +141,7 @@ class CopyProject {
      */
     private _CopyLaya(rootPath: string) {
         let targetPath = path.join(rootPath, 'others/publish/templates/_project/laya/');
+        let fakePath = path.join(rootPath, 'fake_res/laya/');
         for (let value of CommonConfig.needCopy) {
             let combieSrc = path.join(rootPath, value);
             let fileType = LTUtils.IsFileOrDir(combieSrc);
@@ -160,6 +161,9 @@ class CopyProject {
         // 判定初始工程初始化
         for (let value of CommonConfig.initProject) {
             let combieSrc = path.join(rootPath, value);
+            if (value == CommonConfig.initProject[0]) {
+                combieSrc = path.join(fakePath, value);
+            }
             let fileType = LTUtils.IsFileOrDir(combieSrc);
             if (fileType == EFileType.NotExist) {
                 console.log(combieSrc, "不存在");

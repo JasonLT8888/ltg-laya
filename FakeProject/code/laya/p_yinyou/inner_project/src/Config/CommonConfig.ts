@@ -48,6 +48,7 @@ export default class CommonConfig {
      * 初始工程需要文件
      */
     static initProject = [
+        "src/script/ui/UI_MainMediator.ts",
         "src/script/common/GlobalUnit.ts",
         "src/script/common/GameData.ts",
         "src/script/common/ResDefine.ts",
@@ -58,7 +59,6 @@ export default class CommonConfig {
         "src/script/config/AudioConfig.ts",
         "src/script/config/EffectConfig.ts",
         "src/script/MainStart.ts",
-        "src/script/ui/UI_MainMediator.ts"
     ];
 
     /**
