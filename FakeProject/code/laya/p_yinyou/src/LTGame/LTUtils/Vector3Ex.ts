@@ -2,6 +2,67 @@ import MathEx from "./MathEx";
 
 export default class Vector3Ex {
 
+    /**
+     * 
+     * 增加方向常量，可用于赋值给transform信息，
+     * 只能用于当作临时变量使用，不可持有
+     * 
+     */
+    protected static __temp__: Laya.Vector3;
+    protected static __up__: Laya.Vector3;
+    protected static __down__: Laya.Vector3;
+    protected static __forward__: Laya.Vector3;
+    protected static __zero__: Laya.Vector3;
+    protected static __one__: Laya.Vector3;
+
+    public static get temp(): Laya.Vector3 {
+        if (!Vector3Ex.__temp__) {
+            Vector3Ex.__temp__ = Vector3Ex.zero;
+        }
+        Vector3Ex.__temp__.setValue(0, 0, 0);
+        return Vector3Ex.__temp__
+    }
+
+    public static get s_up(): Laya.Vector3 {
+        if (!Vector3Ex.__up__) {
+            Vector3Ex.__up__ = Vector3Ex.up;
+        }
+        Vector3Ex.__up__.setValue(0, 1, 0);
+        return Vector3Ex.__up__
+    }
+
+    public static get s_down(): Laya.Vector3 {
+        if (!Vector3Ex.__down__) {
+            Vector3Ex.__down__ = Vector3Ex.down;
+        }
+        Vector3Ex.__down__.setValue(0, -1, 0);
+        return Vector3Ex.__down__
+    }
+
+    public static get s_forward(): Laya.Vector3 {
+        if (!Vector3Ex.__forward__) {
+            Vector3Ex.__forward__ = Vector3Ex.forward;
+        }
+        Vector3Ex.__forward__.setValue(0, 0, 1);
+        return Vector3Ex.__forward__
+    }
+
+    public static get s_zero(): Laya.Vector3 {
+        if (!Vector3Ex.__zero__) {
+            Vector3Ex.__zero__ = Vector3Ex.zero;
+        }
+        Vector3Ex.__zero__.setValue(0, 0, 0);
+        return Vector3Ex.__zero__
+    }
+
+    public static get s_one(): Laya.Vector3 {
+        if (!Vector3Ex.__one__) {
+            Vector3Ex.__one__ = Vector3Ex.one;
+        }
+        Vector3Ex.__one__.setValue(1, 1, 1);
+        return Vector3Ex.__one__
+    }
+
     public static get up(): Laya.Vector3 {
         return new Laya.Vector3(0, 1, 0);
     }
@@ -227,4 +288,34 @@ export default class Vector3Ex {
         return Vector3Ex.Add(xt, at2, startPos);
     }
 
+    /**
+     * 重置空间信息
+     * @param trs 
+     */
+    public static InitialTransform(trs: Laya.Transform3D) {
+        trs.localPosition = Vector3Ex.s_zero;
+        trs.localScale = Vector3Ex.s_one;
+        trs.rotationEuler = Vector3Ex.s_zero;
+    }
+
+    /**
+     * 判定目标点，是否在以中心点为扇心，指定扇形内
+     * @param center 扇形中心点
+     * @param target 目标点
+     * @param range 扇形半径
+     * @param halfAngle 扇形半角
+     * @param forward 扇形正向
+     * @param axis 垂直于扇面的轴向
+     */
+    public static InSector(center: Laya.Vector3, target: Laya.Vector3, range: number, halfAngle: number, forward: Laya.Vector3, axis: Laya.Vector3): boolean {
+        let dir: Laya.Vector3 = Vector3Ex.temp;
+        dir.setValue((target.x - center.x) * (1 - axis.x), (target.y - center.y) * (1 - axis.y), (target.z - center.z) * (1 - axis.z));
+        if (Vector3Ex.MagnitudeSqrt(dir) <= range * range) {
+            let angle: number = Vector3Ex.Angle(forward, dir, axis);
+            if (angle <= halfAngle) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
