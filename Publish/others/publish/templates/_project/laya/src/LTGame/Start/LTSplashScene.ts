@@ -9,6 +9,7 @@ import Awaiters from "../Async/Awaiters";
 import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
 import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 import { ESceneType } from "./ESceneType";
+import { EPlatformType } from "../Platform/EPlatformType";
 
 export default class LTSplashScene extends BaseState {
 
@@ -52,6 +53,15 @@ export default class LTSplashScene extends BaseState {
 
     constructor() {
         super(ESceneType.Splash);
+        switch (LTPlatform.instance.platform) {
+            case EPlatformType.WX:
+            case EPlatformType.QQ:
+                this._loadProgressWeight = [10, 1, 5, 2];
+                break;
+            default:
+                this._loadProgressWeight = [1, 1, 5, 2];
+                break;
+        }
     }
 
     _DoEnter() {
