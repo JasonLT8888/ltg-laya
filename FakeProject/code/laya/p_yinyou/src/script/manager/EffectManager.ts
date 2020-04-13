@@ -69,13 +69,13 @@ export class EffectManager {
         ArrayEx.RemoveAt(this._continueEffects, index);
     }
 
-    public async PlayEffectByData(showData: EffectShowData): Promise<number> {
-        let effectConfig = EffectConfig.data[showData.effectId];
+    public async GetEffectObjById(effectId: number): Promise<Laya.Sprite3D> {
+        let effectConfig = EffectConfig.data[effectId];
         if (effectConfig == null) {
-            console.error("无效的特效id", showData.effectId);
-            return -1;
+            console.error("无效的特效id", effectId);
+            return null;
         }
-        let effectObj = this._effectMap.Get(showData.effectId);
+        let effectObj = this._effectMap.Get(effectId);
         if (effectObj == null) {
             let effectPath = ResDefine.FixPath(effectConfig.model_path);
             await LTRes.LoadAsync(effectPath);
@@ -83,7 +83,16 @@ export class EffectManager {
             this._effectMap.set(effectConfig.id, effectObj);
         }
         let instEffect = effectObj.clone() as Laya.Sprite3D;
-        this._effectRoot.addChild(instEffect);
+        return instEffect;
+    }
+
+    public async PlayEffectByData(showData: EffectShowData): Promise<number> {
+        let instEffect = await this.GetEffectObjById(showData.effectId);
+        if (showData.parent != null) {
+            showData.parent.addChild(instEffect);
+        } else {
+            this._effectRoot.addChild(instEffect);
+        }
         if (showData.setPos != null) {
             instEffect.transform.position = showData.setPos.clone();
         }
