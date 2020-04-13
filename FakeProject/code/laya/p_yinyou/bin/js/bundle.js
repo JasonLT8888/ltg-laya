@@ -3087,6 +3087,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI/LTGame/LTGameBinder */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/LTGameBinder.ts");
 /* harmony import */ var _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
 /* harmony import */ var _ESceneType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ESceneType */ "./src/LTGame/Start/ESceneType.ts");
+/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+
 
 
 
@@ -3123,6 +3125,15 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         this._resProgress = 0;
         this._subPackProgress = 0;
         this._isUIShowed = false;
+        switch (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform) {
+            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].WX:
+            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].QQ:
+                this._loadProgressWeight = [10, 1, 5, 2];
+                break;
+            default:
+                this._loadProgressWeight = [1, 1, 5, 2];
+                break;
+        }
     }
     get _loadProgress() {
         let totalWeight = this._loadProgressWeight[0] + this._loadProgressWeight[1] + this._loadProgressWeight[2] + this._loadProgressWeight[3];
@@ -6880,6 +6891,109 @@ var GameConst;
 
 /***/ }),
 
+/***/ "./src/script/manager/AudioManager.ts":
+/*!********************************************!*\
+  !*** ./src/script/manager/AudioManager.ts ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return AudioManager; });
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTGame_LTUtils_ArrayEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/LTUtils/ArrayEx */ "./src/LTGame/LTUtils/ArrayEx.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _config_AudioConfig__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config/AudioConfig */ "./src/script/config/AudioConfig.ts");
+/* harmony import */ var _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
+
+
+
+
+
+class AudioManager {
+    constructor() {
+        this._isInited = false;
+        Laya.SoundManager.autoStopMusic = true;
+        this.Init();
+    }
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new AudioManager();
+        }
+        return this._instance;
+    }
+    Init() {
+        if (this._isInited)
+            return;
+        this._isInited = true;
+        this._needPlayAudioIds = [];
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].Update, this, this._LogicUpdate);
+    }
+    PlayByPath(audioPath) {
+        return Laya.SoundManager.playMusic(audioPath);
+    }
+    PlayBgm(bgmPath) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let formatUrl = Laya.URL.formatURL(bgmPath);
+            if (Laya.SoundManager['_musicChannel'])
+                Laya.SoundManager['_musicChannel'].stop();
+            Laya.SoundManager['_bgMusic'] = formatUrl;
+            yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].Load2dAsync(bgmPath);
+            this._bgmAudio = AudioManager.instance.PlayByPath(bgmPath);
+        });
+    }
+    StopBgm() {
+        if (this._bgmAudio != null) {
+            this._bgmAudio.stop();
+        }
+    }
+    PlayById(audioId) {
+        if (!_LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_4__["default"].instance.isMusicOn)
+            return;
+        let audioConfig = _config_AudioConfig__WEBPACK_IMPORTED_MODULE_3__["AudioConfig"].data[audioId];
+        if (audioConfig == null) {
+            console.error("不存在的音效id");
+            return;
+        }
+        if (audioConfig.audio_type == 1) {
+            // 音效
+            if (!_LTGame_LTUtils_ArrayEx__WEBPACK_IMPORTED_MODULE_1__["default"].Contains(this._needPlayAudioIds, audioConfig.id)) {
+                this._needPlayAudioIds.push(audioConfig.id);
+            }
+        }
+        else {
+            this.PlayBgm("res/audio/" + audioConfig.audio_path);
+            // this.PlayByPath("res/audio/" + audioConfig.audio_path);
+        }
+    }
+    _LogicUpdate() {
+        if (this._needPlayAudioIds.length > 0) {
+            for (let id of this._needPlayAudioIds) {
+                let audioConfig = _config_AudioConfig__WEBPACK_IMPORTED_MODULE_3__["AudioConfig"].data[id];
+                Laya.SoundManager.playSound("res/audio/" + audioConfig.audio_path);
+            }
+            this._needPlayAudioIds = [];
+        }
+    }
+    StopAll() {
+        Laya.SoundManager.stopAll();
+    }
+    Pause() {
+        if (this._bgmAudio) {
+            this._bgmAudio.pause();
+        }
+    }
+    Resume() {
+        if (this._bgmAudio) {
+            this._bgmAudio.resume();
+        }
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/manager/EffectManager.ts":
 /*!*********************************************!*\
   !*** ./src/script/manager/EffectManager.ts ***!
@@ -6959,14 +7073,14 @@ class EffectManager {
         effectObj.destroy();
         _LTGame_LTUtils_ArrayEx__WEBPACK_IMPORTED_MODULE_5__["default"].RemoveAt(this._continueEffects, index);
     }
-    PlayEffectByData(showData) {
+    GetEffectObjById(effectId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let effectConfig = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].data[showData.effectId];
+            let effectConfig = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].data[effectId];
             if (effectConfig == null) {
-                console.error("无效的特效id", showData.effectId);
-                return -1;
+                console.error("无效的特效id", effectId);
+                return null;
             }
-            let effectObj = this._effectMap.Get(showData.effectId);
+            let effectObj = this._effectMap.Get(effectId);
             if (effectObj == null) {
                 let effectPath = _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__["default"].FixPath(effectConfig.model_path);
                 yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].LoadAsync(effectPath);
@@ -6974,7 +7088,18 @@ class EffectManager {
                 this._effectMap.set(effectConfig.id, effectObj);
             }
             let instEffect = effectObj.clone();
-            this._effectRoot.addChild(instEffect);
+            return instEffect;
+        });
+    }
+    PlayEffectByData(showData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let instEffect = yield this.GetEffectObjById(showData.effectId);
+            if (showData.parent != null) {
+                showData.parent.addChild(instEffect);
+            }
+            else {
+                this._effectRoot.addChild(instEffect);
+            }
             if (showData.setPos != null) {
                 instEffect.transform.position = showData.setPos.clone();
             }
@@ -7459,6 +7584,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
 /* harmony import */ var _config_GameConst__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/GameConst */ "./src/script/config/GameConst.ts");
+/* harmony import */ var _manager_AudioManager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../manager/AudioManager */ "./src/script/manager/AudioManager.ts");
+
 
 
 
@@ -7485,6 +7612,18 @@ class UI_OthersMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPOR
         this.ui.m_btn_shake_short.onClick(this, this._OnClickShakeShort);
         this.ui.m_btn_const.onClick(this, this._OnClickConst);
         this.ui.m_btn_jump.onClick(this, this._OnClickDirectJump);
+        this.ui.m_btn_shake_playmusic.onClick(this, this._OnClickPlayBgm);
+        this.ui.m_btn_shake_stopmusic.onClick(this, this._OnClickStopBgm);
+        this.ui.m_btn_shake_playshort.onClick(this, this._OnClickPlayAudio);
+    }
+    _OnClickPlayBgm() {
+        _manager_AudioManager__WEBPACK_IMPORTED_MODULE_8__["default"].instance.PlayById(2);
+    }
+    _OnClickStopBgm() {
+        _manager_AudioManager__WEBPACK_IMPORTED_MODULE_8__["default"].instance.StopAll();
+    }
+    _OnClickPlayAudio() {
+        _manager_AudioManager__WEBPACK_IMPORTED_MODULE_8__["default"].instance.PlayById(1);
     }
     _OnClickBack() {
         this.Hide();
@@ -7982,6 +8121,9 @@ class UI_Others extends fgui.GComponent {
         this.m_btn_shake_long = (this.getChildAt(6));
         this.m_btn_shake_short = (this.getChildAt(7));
         this.m_btn_jump = (this.getChildAt(8));
+        this.m_btn_shake_playmusic = (this.getChildAt(9));
+        this.m_btn_shake_stopmusic = (this.getChildAt(10));
+        this.m_btn_shake_playshort = (this.getChildAt(11));
     }
 }
 UI_Others.URL = "ui://kk7g5mmmx62bf";

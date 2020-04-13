@@ -6,6 +6,7 @@ import LTUI from "../../LTGame/UIExt/LTUI";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import LTSDK from "../../SDK/LTSDK";
 import { GameConst } from "../config/GameConst";
+import AudioManager from "../manager/AudioManager";
 
 export default class UI_OthersMediator extends BaseUIMediator<UI_Others> {
 
@@ -29,6 +30,21 @@ export default class UI_OthersMediator extends BaseUIMediator<UI_Others> {
         this.ui.m_btn_shake_short.onClick(this, this._OnClickShakeShort);
         this.ui.m_btn_const.onClick(this, this._OnClickConst);
         this.ui.m_btn_jump.onClick(this, this._OnClickDirectJump);
+        this.ui.m_btn_shake_playmusic.onClick(this, this._OnClickPlayBgm);
+        this.ui.m_btn_shake_stopmusic.onClick(this, this._OnClickStopBgm);
+        this.ui.m_btn_shake_playshort.onClick(this, this._OnClickPlayAudio);
+    }
+
+    private _OnClickPlayBgm() {
+        AudioManager.instance.PlayById(2);
+    }
+
+    private _OnClickStopBgm() {
+        AudioManager.instance.StopAll();
+    }
+
+    private _OnClickPlayAudio() {
+        AudioManager.instance.PlayById(1);
     }
 
     private _OnClickBack() {

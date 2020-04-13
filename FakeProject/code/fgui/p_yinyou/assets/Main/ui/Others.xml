@@ -35,5 +35,17 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="直接跳转"/>
     </component>
+    <component id="n10_9227" name="btn_shake_playmusic" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="89,669">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="播放音乐"/>
+    </component>
+    <component id="n11_9227" name="btn_shake_stopmusic" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="439,669">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="停止音乐"/>
+    </component>
+    <component id="n12_9227" name="btn_shake_playshort" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="89,795">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="播放音效"/>
+    </component>
   </displayList>
 </component>
