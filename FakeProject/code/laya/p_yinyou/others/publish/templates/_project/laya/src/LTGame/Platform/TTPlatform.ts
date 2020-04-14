@@ -132,5 +132,43 @@ export default class TTPlatform extends WXPlatform {
             appLaunchOptions: openData
         });
     }
+    NavigateToApp(appid: string, path?: string, extra?: any) {
+        return new Promise((resolve, reject) => {
+            this._base.navigateToMiniProgram({
+                appId: appid,
+                path: path,
+                extraData: extra,
+                envVersion: 'current',
+                success: (ret) => {
+                    resolve(ret);
+                },
+                fail: (err) => {
+                    const systemInfo = this._base.getSystemInfoSync();
+                    // iOS 不支持，建议先检测再使用
+                    if (systemInfo.platform !== "ios") {
+                        // 打开互跳弹窗
+                        this._base.showMoreGamesModal({
+                            appLaunchOptions: [
+                                {
+                                    appId: this._platformData.appId,
+                                    query: "foo=bar&baz=qux",
+                                    extraData: {}
+                                }
+                            ],
+                            success(res) {
+                                resolve(res);
+                            },
+                            fail(err) {
+                                reject(err);
+                            }
+                        });
+                    } else {
+                        throw new Error("iOS 平台不支持该功能");
+                    }
+                },
+                complete: undefined,
+            });
+        });
+    }
 
 }
