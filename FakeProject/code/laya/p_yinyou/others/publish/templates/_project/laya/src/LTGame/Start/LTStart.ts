@@ -54,9 +54,13 @@ export class LTStart {
 
     }
 
-    public InitGame() {
-        console.log("游戏开始初始化,当前框架版本号", LTVersion.version);
-        Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+    public InitGame() { 
+        console.log("游戏开始初始化,当前框架版本号", LTVersion.version); 
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this._OnJsonLoaded();
+        } else {
+            Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        }
     }
 
     private _OnJsonLoaded() {
@@ -78,16 +82,14 @@ export class LTStart {
             LTSDK.CreateInstace(SDK_Default, "default", "default", "default");
         }
         LTPlatform.instance.Init(platformData);
-
-
         // 非web平台禁用debug模式
         if (LTPlatform.instance.platform != EPlatformType.Web) {
             Laya.Shader3D.debugMode = false;
         }
-
+    
         FGuiEx.Init(LTPlatform.instance.safeArea);
 
-
+        
         Laya.timer.frameOnce(1, this, this._NextFramUpdate);
     }
 
