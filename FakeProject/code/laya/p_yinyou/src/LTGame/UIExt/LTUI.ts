@@ -18,6 +18,8 @@ import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
 import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
 import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
 import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
+import UI_CommonMainMoreGameAdsMediator from "./DefaultUI/UI_CommonMainMoreGameAdsMediator";
+import UI_CommonMainHotGameMediator from "./DefaultUI/UI_CommonMainHotGameMediator";
 
 export default class LTUI {
 
@@ -71,6 +73,14 @@ export default class LTUI {
     public static ShowEndReward(openData: EndRewardOpenData) {
         UI_CommonEndRewardMediator.instance.Show(openData);
     }
+
+    public static ShowMoreGame(openData: EndRewardOpenData) {
+        UI_CommonMainMoreGameAdsMediator.instance.Show(openData);
+    }
+    public static ShowHotGame(openData: EndRewardOpenData) {
+        UI_CommonMainHotGameMediator.instance.Show(openData);
+    }
+
 
     public static ShowOffline(openData: OfflineOpenData) {
         UI_CommonOfflineMediator.instance.Show(openData);

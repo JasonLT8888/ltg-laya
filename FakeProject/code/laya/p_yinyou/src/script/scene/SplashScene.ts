@@ -18,6 +18,7 @@ export default class SplashScene extends LTSplashScene {
     }
 
     _OnBindUI() {
+        console.log('splash',this);
         LoadBinder.bindAll();
         MainBinder.bindAll();
     }

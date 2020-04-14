@@ -31,7 +31,7 @@ export interface ISDK {
     /**
      * 程序APPID
      */
-    appId : string;
+    appId: string;
 
     /**
      * 初始化sdk
@@ -39,7 +39,7 @@ export interface ISDK {
      * @param channel 渠道号
      * @param controlVersion 版本控制信息
      */
-    Init(flg: string, channel: string, controlVersion: string, appid : string);
+    Init(flg: string, channel: string, controlVersion: string, appid: string, configFile?: string);
 
     /**
      * SDK登录,登录完成后会自动完成日活统计
@@ -91,6 +91,6 @@ export interface ISDK {
     /**
      * 记录看视频和分享
      */
-    RecordStat(isShare : boolean, sid : string);
+    RecordStat(isShare: boolean, sid: string);
 
 }
