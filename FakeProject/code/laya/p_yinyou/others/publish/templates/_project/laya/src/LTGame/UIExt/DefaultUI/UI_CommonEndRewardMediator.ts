@@ -75,6 +75,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
             this.ui.m_view_moregames.m_list_games.setVirtual();
             this.ui.m_view_moregames.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
             this.ui.m_view_moregames.m_list_games.numItems = this._cacheAds.length;
+            this.ui.m_view_moregames.m_list_games.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem)
         }
 
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
@@ -88,6 +89,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
     private _OnAdItemRender(index: number, adUI: UI_view_item_game) {
         let adData = this._cacheAds[index];
+        adUI.data = index;
         adUI.m_icon.m_icon.url = adData.ad_img;
         adUI.m_text_name.text = adData.ad_name;
     }
@@ -138,6 +140,19 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
             appidList.push(adList[i].ad_appid);
         }
         LTPlatform.instance.OpenGameBox(appidList);
+    }
+    private _OnClickGameItem(item: UI_view_item_game) {
+        let data = this._cacheAds[item.data as number];
+        let uid = data.ad_appid;
+        switch (LTPlatform.instance.platform) {
+            case EPlatformType.Oppo:
+            case EPlatformType.Vivo:
+                uid = data.ad_package;
+                break;
+            default:
+                break;
+        }
+        LTPlatform.instance.NavigateToApp(uid);
     }
 
 }
