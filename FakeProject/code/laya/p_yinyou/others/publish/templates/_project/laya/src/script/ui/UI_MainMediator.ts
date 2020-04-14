@@ -1,6 +1,7 @@
-import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
-import UI_Main from "../../ui/Main/UI_Main";
+import BaseUIMediator from "../../../../../src/LTGame/UIExt/FGui/BaseUIMediator";
+import UI_Main from "../../../../../src/ui/Main/UI_Main";
 
+ 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
     private static _instance;
