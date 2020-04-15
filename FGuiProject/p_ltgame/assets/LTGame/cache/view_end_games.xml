@@ -2,16 +2,6 @@
 <component size="680,465">
   <displayList>
     <image id="n3_bg00" name="n3" src="bg001d" fileName="img/sp_baiwanren.png" xy="150,0"/>
-    <image id="n4_bg00" name="img_game_bg" src="bg001e" fileName="img/sp_canpinditu.png" xy="0,54" size="680,408"/>
-    <list id="n7_bg00" name="list_games" xy="22,75" size="658,374" layout="flow_hz" overflow="scroll" lineGap="9" colGap="11" defaultItem="ui://75kiu87kbg001g">
-      <item/>
-      <item/>
-      <item/>
-      <item/>
-      <item/>
-      <item/>
-      <item/>
-      <item/>
-    </list>
+    <component id="n4_bg00" name="sharegames" src="wjpo4i" fileName="cache/view_sharegames_big.xml" xy="0,54"/>
   </displayList>
 </component>

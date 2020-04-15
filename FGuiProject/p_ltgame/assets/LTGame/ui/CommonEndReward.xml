@@ -31,6 +31,6 @@
     </component>
   </displayList>
   <transition name="anim_enter">
-    <item time="66" type="Scale" target="n10_bg00" tween="true" startValue="0.1,0.1" endValue="1,1" duration="54" ease="Sine.InOut"/>
+    <item time="66" type="Scale" target="n10_bg00" tween="true" startValue="0.1,0.1" endValue="1,1" duration="24" ease="Sine.InOut"/>
   </transition>
 </component>

@@ -4430,7 +4430,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./UI_FakeInterstital */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeInterstital.ts");
 /* harmony import */ var _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./UI_CommonSign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonSign_02.ts");
 /* harmony import */ var _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./UI_view_item_sign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_02.ts");
+/* harmony import */ var _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./UI_view_sharegames_big */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_sharegames_big.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
 
 
 
@@ -4513,6 +4515,7 @@ class LTGameBinder {
         fgui.UIObjectFactory.setExtension(_UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_37__["default"].URL, _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_37__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_38__["default"].URL, _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_38__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_39__["default"].URL, _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_39__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_40__["default"].URL, _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_40__["default"]);
     }
 }
 
@@ -5226,8 +5229,7 @@ class UI_view_end_games extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "view_end_games"));
     }
     onConstruct() {
-        this.m_img_game_bg = (this.getChildAt(1));
-        this.m_list_games = (this.getChildAt(2));
+        this.m_sharegames = (this.getChildAt(1));
     }
 }
 UI_view_end_games.URL = "ui://75kiu87kbg001k";
@@ -5615,6 +5617,34 @@ UI_view_set.URL = "ui://75kiu87kbg002b";
 
 /***/ }),
 
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_sharegames_big.ts":
+/*!************************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_sharegames_big.ts ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_sharegames_big; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_view_sharegames_big extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "view_sharegames_big"));
+    }
+    onConstruct() {
+        this.m_img_game_bg = (this.getChildAt(0));
+        this.m_list_games = (this.getChildAt(1));
+    }
+}
+UI_view_sharegames_big.URL = "ui://75kiu87kwjpo4i";
+
+
+/***/ }),
+
 /***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_title.ts":
 /*!***************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_title.ts ***!
@@ -5804,10 +5834,10 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         this.ui.m_btn_open_roll.onClick(this, this._OnClickOpenRoll);
         if (this._openData.enableShowGames) {
             this._cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.adManager.GetADListByLocationId(0);
-            this.ui.m_view_moregames.m_list_games.setVirtual();
-            this.ui.m_view_moregames.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
-            this.ui.m_view_moregames.m_list_games.numItems = this._cacheAds.length;
-            this.ui.m_view_moregames.m_list_games.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
+            // this.ui.m_view_moregames.m_sharegames.m_list_games.setVirtualAndLoop();
+            this.ui.m_view_moregames.m_sharegames.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
+            this.ui.m_view_moregames.m_sharegames.m_list_games.numItems = this._cacheAds.length;
+            this.ui.m_view_moregames.m_sharegames.m_list_games.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
         }
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";

@@ -40,6 +40,7 @@ import UI_FakeRewardVideo from "./UI_FakeRewardVideo";
 import UI_FakeInterstital from "./UI_FakeInterstital";
 import UI_CommonSign_02 from "./UI_CommonSign_02";
 import UI_view_item_sign_02 from "./UI_view_item_sign_02";
+import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
 export default class LTGameBinder{
 	public static bindAll():void {
@@ -83,5 +84,6 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_FakeInterstital.URL, UI_FakeInterstital);
 		fgui.UIObjectFactory.setExtension(UI_CommonSign_02.URL, UI_CommonSign_02);
 		fgui.UIObjectFactory.setExtension(UI_view_item_sign_02.URL, UI_view_item_sign_02);
+		fgui.UIObjectFactory.setExtension(UI_view_sharegames_big.URL, UI_view_sharegames_big);
 	}
 }

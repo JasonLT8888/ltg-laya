@@ -72,10 +72,10 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
         if (this._openData.enableShowGames) {
             this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(0);
-            this.ui.m_view_moregames.m_list_games.setVirtual();
-            this.ui.m_view_moregames.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
-            this.ui.m_view_moregames.m_list_games.numItems = this._cacheAds.length;
-            this.ui.m_view_moregames.m_list_games.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem)
+            // this.ui.m_view_moregames.m_sharegames.m_list_games.setVirtualAndLoop();
+            this.ui.m_view_moregames.m_sharegames.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
+            this.ui.m_view_moregames.m_sharegames.m_list_games.numItems = this._cacheAds.length;
+            this.ui.m_view_moregames.m_sharegames.m_list_games.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem)
         }
 
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
