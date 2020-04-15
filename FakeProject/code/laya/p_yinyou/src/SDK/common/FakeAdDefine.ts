@@ -12,5 +12,9 @@ export default class FakeAdDefine {
      * 名字
      */
     public title: string;
+     /**
+     * 包名
+     */
+    public package: string;
     
 }

@@ -27,5 +27,21 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="插页广告"/>
     </component>
+    <component id="n7_v7b9" name="btn_moregame" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="81,556">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="主页推荐位"/>
+    </component>
+    <component id="n8_v7b9" name="btn_hotgame" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="451,559">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="主页热玩"/>
+    </component>
+    <component id="n9_v7b9" name="btn_native" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="87,977">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="展示Oppo原生"/>
+    </component>
+    <component id="n10_vrgz" name="btn_native_close" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="458,976">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="关闭Oppo原生"/>
+    </component>
   </displayList>
 </component>

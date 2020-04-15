@@ -10,6 +10,10 @@ export default class UI_ADDemo extends fgui.GComponent {
 	public m_btn_hide_banner:fgui.GButton;
 	public m_btn_rewardvideo:fgui.GButton;
 	public m_btn_intvideo:fgui.GButton;
+	public m_btn_moregame:fgui.GButton;
+	public m_btn_hotgame:fgui.GButton;
+	public m_btn_native:fgui.GButton;
+	public m_btn_native_close:fgui.GButton;
 
 	public static URL:string = "ui://kk7g5mmmgxfzb";
 
@@ -28,5 +32,9 @@ export default class UI_ADDemo extends fgui.GComponent {
 		this.m_btn_hide_banner = <fgui.GButton><any>(this.getChildAt(4));
 		this.m_btn_rewardvideo = <fgui.GButton><any>(this.getChildAt(5));
 		this.m_btn_intvideo = <fgui.GButton><any>(this.getChildAt(6));
+		this.m_btn_moregame = <fgui.GButton><any>(this.getChildAt(7));
+		this.m_btn_hotgame = <fgui.GButton><any>(this.getChildAt(8));
+		this.m_btn_native = <fgui.GButton><any>(this.getChildAt(9));
+		this.m_btn_native_close = <fgui.GButton><any>(this.getChildAt(10));
 	}
 }

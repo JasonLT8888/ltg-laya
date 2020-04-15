@@ -277,7 +277,7 @@ export default class WXPlatform implements IPlatform {
         if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
-        }
+        } 
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
         let bannerObj = {};
@@ -385,7 +385,12 @@ export default class WXPlatform implements IPlatform {
             this._rewardVideo.load().then(() => {
                 console.log("手动加载成功");
                 // 加载成功后需要再显示广告
-                return this._rewardVideo.show();
+                return this._rewardVideo.show().then(() => {
+                    LTUI.HideLoading();
+                }).catch((err) => {
+                    console.error(err);
+                    LTUI.HideLoading();
+                });;
             });
         });;
     }
@@ -559,6 +564,24 @@ export default class WXPlatform implements IPlatform {
 
     OpenGameBox(appIds: string[]) {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
+    }
+
+    NavigateToApp(appid: string, path?: string, extra?: any) {
+        return new Promise((resolve, reject) => {
+            Laya.Browser.window.qg.navigateToMiniGame({
+                pkgName: appid,
+                path: path,
+                extraData: extra,
+                success: function () {
+                    resolve();
+                    console.log('oppo小游戏跳转成功');
+                },
+                fail: function (res) {
+                    reject();
+                    console.log('oppo小游戏跳转失败：', JSON.stringify(res));
+                }
+            });
+        })
     }
 
 }

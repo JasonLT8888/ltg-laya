@@ -3,6 +3,7 @@ import UI_ADDemo from "../../ui/Main/UI_ADDemo";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import LTUI from "../../LTGame/UIExt/LTUI";
+import OppoPlatform from "../../LTGame/Platform/OppoPlatform";
 
 export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
 
@@ -23,6 +24,22 @@ export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
         this.ui.m_btn_hide_banner.onClick(this, this._OnClickHideBanner);
         this.ui.m_btn_rewardvideo.onClick(this, this._OnClickRewardAd);
         this.ui.m_btn_intvideo.onClick(this, this._OnClickIntAd);
+        this.ui.m_btn_hotgame.onClick(this, this._OnClickHotgame);
+        this.ui.m_btn_moregame.onClick(this, this._OnClickMoregame);
+        this.ui.m_btn_native.onClick(this, this._OnClickNative);
+        this.ui.m_btn_native_close.onClick(this, this._OnClickHideNative);
+    }
+    _OnClickMoregame() {
+        LTUI.ShowMoreGame(this._openParam);
+    }
+    _OnClickHotgame() {
+        LTUI.ShowHotGame(this._openParam);
+    }
+    _OnClickNative() {
+        (LTPlatform.instance as OppoPlatform).ShowNativeAd();
+    }
+    _OnClickHideNative() {
+        (LTPlatform.instance as OppoPlatform).HideNativeAd();
     }
 
     private _OnClickBack() {

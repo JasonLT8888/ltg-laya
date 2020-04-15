@@ -1,5 +1,9 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
+import UI_CommonMainMoreGameAds from "./UI_CommonMainMoreGameAds";
+import UI_side_ads from "./UI_side_ads";
+import UI_CommonMainHotGame from "./UI_CommonMainHotGame";
+import UI_hot_game from "./UI_hot_game";
 import UI_view_endshare from "./UI_view_endshare";
 import UI_CommonEndReward from "./UI_CommonEndReward";
 import UI_view_item_game from "./UI_view_item_game";
@@ -39,6 +43,10 @@ import UI_view_item_sign_02 from "./UI_view_item_sign_02";
 
 export default class LTGameBinder{
 	public static bindAll():void {
+		fgui.UIObjectFactory.setExtension(UI_CommonMainMoreGameAds.URL, UI_CommonMainMoreGameAds);
+		fgui.UIObjectFactory.setExtension(UI_side_ads.URL, UI_side_ads);
+		fgui.UIObjectFactory.setExtension(UI_CommonMainHotGame.URL, UI_CommonMainHotGame);
+		fgui.UIObjectFactory.setExtension(UI_hot_game.URL, UI_hot_game);
 		fgui.UIObjectFactory.setExtension(UI_view_endshare.URL, UI_view_endshare);
 		fgui.UIObjectFactory.setExtension(UI_CommonEndReward.URL, UI_CommonEndReward);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game.URL, UI_view_item_game);

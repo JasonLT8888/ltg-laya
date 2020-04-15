@@ -5,6 +5,7 @@ import BDPlatform from "./BDPlatform";
 import QTTPlatform from "./QTTPlatform";
 import QQPlatform from "./QQPlatform";
 import DefaultPlatform from "./DefaultPlatform";
+import OppoPlatform from "./OppoPlatform";
 
 export default class LTPlatformFactory {
 
@@ -24,6 +25,8 @@ export default class LTPlatformFactory {
             result = new QTTPlatform();
         } else if (Laya.Browser.onQQMiniGame) {
             result = new QQPlatform();
+        } else if (Laya.Browser.onQGMiniGame) {
+            result = new OppoPlatform();
         } else {
             console.log("未识别平台,默认创建为web", Laya.Browser.userAgent);
             result = new DefaultPlatform();
