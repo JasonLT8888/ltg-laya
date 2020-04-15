@@ -4545,6 +4545,7 @@ class UI_CommonEndReward extends fgui.GComponent {
         this.m_btn_double_get = (this.getChildAt(4));
         this.m_btn_normal_get = (this.getChildAt(5));
         this.m_btn_toggle_watchad = (this.getChildAt(6));
+        this.m_anim_enter = this.getTransitionAt(0);
     }
 }
 UI_CommonEndReward.URL = "ui://75kiu87kbg0019";
@@ -4920,6 +4921,7 @@ class UI_CommonTrySkin extends fgui.GComponent {
         this.m_btn_thanks = (this.getChildAt(2));
         this.m_list_item = (this.getChildAt(3));
         this.m_btn_toggle_check = (this.getChildAt(4));
+        this.m_anim_enter = this.getTransitionAt(0);
     }
 }
 UI_CommonTrySkin.URL = "ui://75kiu87kbg001v";

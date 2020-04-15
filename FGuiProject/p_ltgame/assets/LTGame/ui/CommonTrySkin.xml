@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87khtjj35" designImageLayer="1">
+<component size="750,1334" designImage="ui://75kiu87khtjj35" designImageAlpha="0" designImageLayer="1">
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -8,7 +8,7 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <property target="icon" propertyId="1" value="ui://75kiu87kbg001x"/>
     </component>
-    <component id="n2_bg00" name="btn_thanks" src="htjj33" fileName="cmp/btn_text.xml" xy="297,932">
+    <component id="n2_bg00" name="btn_thanks" src="htjj33" fileName="cmp/btn_text.xml" xy="375,957" pivot="0.5,0.5" anchor="true" scale="0,0">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="随机使用"/>
     </component>
@@ -24,4 +24,7 @@
       <Button title="随机试玩皮肤"/>
     </component>
   </displayList>
+  <transition name="anim_enter">
+    <item time="67" type="Scale" target="n2_bg00" tween="true" startValue="0,0" endValue="1,1" duration="29" ease="Back.Out"/>
+  </transition>
 </component>

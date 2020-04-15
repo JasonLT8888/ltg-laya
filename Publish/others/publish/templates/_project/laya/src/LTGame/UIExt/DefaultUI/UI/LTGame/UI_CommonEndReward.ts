@@ -15,6 +15,7 @@ export default class UI_CommonEndReward extends fgui.GComponent {
 	public m_btn_double_get:UI_btn_double_get;
 	public m_btn_normal_get:UI_view_reward_count;
 	public m_btn_toggle_watchad:UI_btn_toggle_02;
+	public m_anim_enter:fgui.Transition;
 
 	public static URL:string = "ui://75kiu87kbg0019";
 
@@ -34,5 +35,6 @@ export default class UI_CommonEndReward extends fgui.GComponent {
 		this.m_btn_double_get = <UI_btn_double_get><any>(this.getChildAt(4));
 		this.m_btn_normal_get = <UI_view_reward_count><any>(this.getChildAt(5));
 		this.m_btn_toggle_watchad = <UI_btn_toggle_02><any>(this.getChildAt(6));
+		this.m_anim_enter = this.getTransitionAt(0);
 	}
 }
