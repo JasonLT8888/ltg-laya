@@ -105,4 +105,7 @@ export default class DefaultPlatform implements IPlatform {
     OpenGameBox() {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
+    NavigateToApp(appid: string, path?: string, extra?: any) {
+        console.error("当前平台", LTPlatform.platformStr, `暂不支持小程序跳转appid:${appid}`);
+    }
 }

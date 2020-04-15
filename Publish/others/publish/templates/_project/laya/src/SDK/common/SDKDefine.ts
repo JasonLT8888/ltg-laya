@@ -72,6 +72,10 @@ module SDK {
          */
         ad_appid: string;
         /**
+         * 小程序包名
+         */
+        ad_package: string;
+        /**
          * 游戏人数
          */
         ad_count: number;

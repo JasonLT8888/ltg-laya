@@ -7,6 +7,7 @@ import FakeAdDefine from "../common/FakeAdDefine";
 
 export default class SDK_Default implements ISDK {
 
+
     checkState: ECheckState;
     isADConfigInited: boolean;
     isADEnable: boolean;
@@ -32,12 +33,11 @@ export default class SDK_Default implements ISDK {
 
         this._RequestCheckState();
         this._RequestSelfAdInfo();
-
         console.log("SDK:Init", this);
     }
 
     protected _RequestSelfAdInfo() {
-        LTHttp.Send("https://hs.yz061.com/res/down/public/configs/SelfAdConfig.json", Laya.Handler.create(this, this._OnGetSelfAdInfos),
+        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/SelfAdConfig.json`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
             Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
     }
 
@@ -45,7 +45,7 @@ export default class SDK_Default implements ISDK {
         console.error("拉取到广告信息失败", res);
     }
 
-    private _OnGetSelfAdInfos(res: string) {
+    private _OnGetSelfAdInfos(res: string) { 
         let adJson = JSON.parse(res) as FakeAdDefine[];
         console.log("拉取到广告信息", adJson.length, "条");
         let fakePosId = 0;
@@ -55,6 +55,7 @@ export default class SDK_Default implements ISDK {
             adData.ad_appid = fakeAd.id;
             adData.ad_img = fakeAd.icon;
             adData.ad_name = fakeAd.title;
+            adData.ad_package = fakeAd.package;
             adList.push(adData);
         }
 

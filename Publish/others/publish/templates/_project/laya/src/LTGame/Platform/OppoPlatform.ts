@@ -1,22 +1,22 @@
-import IPlatform from "./IPlatform";
-import StringEx from "../LTUtils/StringEx";
-import { EPlatformType } from "./EPlatformType";
-import LTPlatformData from "./Data/LTPlatformData";
-import { ShareInfo } from "./ShareInfo";
-import ShareManager from "./ShareManager";
-import LTPlatform from "./LTPlatform";
-import { CommonEventId } from "../Commom/CommonEventId";
-import IRecordManager from "./IRecordManager";
-import DefaultRecordManager from "./DefaultRecordManager";
-import LTUI from "../UIExt/LTUI";
 import Awaiters from "../Async/Awaiters";
-import { IDevice } from "./IDevice";
+import { CommonEventId } from "../Commom/CommonEventId";
+import StringEx from "../LTUtils/StringEx";
+import LTUI from "../UIExt/LTUI";
+import LTPlatformData from "./Data/LTPlatformData";
 import DefaultDevice from "./DefaultDevice";
+import DefaultRecordManager from "./DefaultRecordManager";
+import { EPlatformType } from "./EPlatformType";
+import { IDevice } from "./IDevice";
+import IPlatform from "./IPlatform";
+import IRecordManager from "./IRecordManager";
+import LTPlatform from "./LTPlatform";
+import { ShareInfo } from "./ShareInfo";
 
-export default class WXPlatform implements IPlatform {
+export default class OppoPlatform implements IPlatform {
+
     onPause: Laya.Handler;
     appId: string;
-    platform: EPlatformType = EPlatformType.WX;
+    platform: EPlatformType = EPlatformType.Oppo;
     safeArea: LTGame.SafeArea = null;
     lauchOption: LTGame.LaunchOption;
     loginState: LTGame.LoginState;
@@ -30,12 +30,15 @@ export default class WXPlatform implements IPlatform {
     protected _bannerAd;
     protected _rewardVideo;
     protected _intersitialAd;
+    protected _nativeAd;
 
     protected _isBannerLoaded: boolean = false;
     protected _isVideoLoaded: boolean = false;
     protected _isInterstitialLoaded: boolean = false;
+    protected _nativeAdLoaded: boolean = false;
     protected _videoFailedCount: number;
     protected _interstitalFailedCount: number;
+    protected _nativeAdFailedCount: number;
 
     protected _rewardSuccessed: Laya.Handler;
     protected _rewardSkipped: Laya.Handler;
@@ -53,7 +56,7 @@ export default class WXPlatform implements IPlatform {
     protected _cacheOnShowHandle: Laya.Handler;
 
     Init(platformData: LTPlatformData) {
-        this._base = window["wx"];
+        this._base = window["qg"];
         if (this._base == null) {
             console.error("平台初始化错误", LTPlatform.platformStr);
             return;
@@ -61,52 +64,26 @@ export default class WXPlatform implements IPlatform {
         this._platformData = platformData;
         this._InitLauchOption();
         this._Login();
-        this._InitShareInfo();
         this._InitSystemInfo();
-        this._CreateBannerAd();
-        this._CreateVideoAd();
-        this._CreateInterstitalAd();
-
+        this._base.initAdService({
+            appId: platformData.appId,
+            isDebug: true,
+            success: () => {
+                console.log("oppo广告", "初始化广告服务成功", platformData);
+                this._CreateBannerAd();
+                this._CreateVideoAd();
+                this._CreateInterstitalAd();
+                this._CreateNativeAd();
+            },
+            fail: () => {
+                console.error("oppo广告", "初始化广告服务失败")
+            }
+        });
         window["iplatform"] = this;
     }
 
     _CheckUpdate() {
-        let updateManager = this._base.getUpdateManager();
-        if (updateManager == null) return;
 
-        updateManager.onCheckForUpdate(function (res) {
-            // 请求完新版本信息的回调
-            console.log("onCheckForUpdate", res.hasUpdate);
-            if (res.hasUpdate) {
-                this._base.showToast({
-                    title: "即将有更新请留意"
-                });
-            }
-        });
-
-        updateManager.onUpdateReady(() => {
-            this._base.showModal({
-                title: "更新提示",
-                content: "新版本已经准备好，是否立即使用？",
-                success: function (res) {
-                    if (res.confirm) {
-                        // 调用 applyUpdate 应用新版本并重启
-                        updateManager.applyUpdate();
-                    } else {
-                        this._base.showToast({
-                            icon: "none",
-                            title: "小程序下一次「冷启动」时会使用新版本"
-                        });
-                    }
-                }
-            });
-        });
-
-        updateManager.onUpdateFailed(() => {
-            this._base.showToast({
-                title: "更新失败，下次启动继续..."
-            });
-        });
     }
 
     protected _Login() {
@@ -136,7 +113,9 @@ export default class WXPlatform implements IPlatform {
         this.loginState.isLogin = true;
         this.loginState.code = res.code;
     }
+    ShareAppMessage(obj: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
 
+    }
     protected _InitLauchOption() {
         // 绑定onShow事件
         this._base.onShow(this._OnShow);
@@ -146,46 +125,6 @@ export default class WXPlatform implements IPlatform {
         this._OnShow(res);
     }
 
-    protected _InitShareInfo() {
-        this._base.showShareMenu({
-            withShareTicket: true,
-            success: (res) => {
-                console.log("InitShareSuccess", res);
-            },
-            fail: (res) => {
-                console.log("InitShareFailed", res);
-            },
-            complete: (res) => {
-                console.log("InitShareComplete", res);
-            }
-        });
-        this._base.onShareAppMessage(
-            () => {
-                let shareInfo = ShareManager.instance.GetShareInfo();
-                return WXPlatform._WrapShareInfo(shareInfo);
-            }
-        );
-    }
-
-    protected static _WrapShareInfo(shareInfo: ShareInfo) {
-        let shareObj = {};
-        if (shareInfo.shareTitle) {
-            shareObj["title"] = shareInfo.shareTitle;
-        }
-        if (shareInfo.shareImg) {
-            shareObj["imageUrl"] = shareInfo.shareImg;
-        }
-        if (shareInfo.sharePath) {
-            shareObj["query"] = {};
-            let pathSplit = shareInfo.sharePath.split("?");
-            let params = pathSplit[1].split("&");
-            for (let getParam of params) {
-                let splitParam = getParam.split("=");
-                shareObj["query"][splitParam[0]] = splitParam[1];
-            }
-        }
-        return shareObj;
-    }
 
     protected _InitSystemInfo() {
         try {
@@ -207,11 +146,16 @@ export default class WXPlatform implements IPlatform {
         this._interstitalFailedCount = 0;
         let intAdObj = {};
         intAdObj["adUnitId"] = this._platformData.interstitialId;
-        this._intersitialAd = this._base.createInterstitialAd(intAdObj);
+        this._intersitialAd = this._base.createInsertAd(intAdObj);
 
         this._intersitialAd.onLoad(() => {
             console.log("插页广告加载成功");
             this._isInterstitialLoaded = true;
+        });
+        this._intersitialAd.onClose(() => {
+            console.log("插页广告关闭");
+            this._isInterstitialLoaded = false;
+            this._intersitialAd.load();
         });
         this._intersitialAd.onError((err) => {
             this._interstitalFailedCount++;
@@ -223,6 +167,118 @@ export default class WXPlatform implements IPlatform {
             }
         });
     }
+    //#region NativeAD
+    private ad_list: OppoNativeAdItem[] = [];
+    private current_ad: OppoNativeAdItem = null;
+
+    private view = new fairygui.GComponent();
+    private image = new fairygui.GLoader();
+    private tag = new fairygui.GLoader;
+    protected _CreateNativeAd() {
+        if (StringEx.IsNullOrEmpty(this._platformData.nativeId)) {
+            console.log("无有效的原生广告ID,取消加载");
+            return;
+        }
+        this._CreateNativeADComponent();
+        this._InitNativeAd();
+
+    }
+    private _CreateNativeADComponent() {
+        this.view.addChild(this.image);
+        this.view.onClick(null, () => { if (this.current_ad) this._ReportNativeClick(this.current_ad); });
+        this.image.autoSize = true;
+        this.tag.autoSize = true;
+        this.view.addChild(this.tag);
+        this.view.setPivot(0.5, 0.5, true);
+    }
+    async _InitNativeAd() {
+        this._nativeAd = qg.createNativeAd({ posId: this._platformData.nativeId });
+        this._nativeAd.onLoad(this.onNativeLoad);
+        this._nativeAd.onError(this.onNativeError);
+        this._nativeAd.load();
+    }
+    async _DestroryAd() {
+        this.view.removeFromParent();
+        if (this._nativeAd) {
+            this._nativeAd.offLoad(this.onNativeLoad);
+            this._nativeAd.offError(this.onNativeError);
+            this._nativeAd.destroy();
+            this._nativeAd = null;
+            this.current_ad = null;
+        }
+    }
+    protected onNativeLoad = (res) => {
+        console.log("OPPO广告:", "加载原生广告完成", res);
+        this.ad_list = res.adList;
+        this._nativeAdLoaded = true;
+        this._SwitchNativeAd();
+    }
+
+    protected onNativeError = (err) => {
+        this.ad_list = [];
+        console.error("OPPO广告:", "加载原生广告出错", err);
+        Laya.timer.once(5000, this._nativeAd, this._nativeAd.load);
+    }
+    protected async _SwitchNativeAd() {
+        let idx = this.ad_list.indexOf(this.current_ad);
+        if (idx < this.ad_list.length - 1 && this.ad_list.length) {
+            this.current_ad = this.ad_list[idx + 1];
+            if (this.current_ad.imgUrlList && this.current_ad.imgUrlList.length) {
+                this.image.url = this.current_ad.imgUrlList[0];
+            }
+            this.tag.url = this.current_ad.logoUrl;
+
+            console.log("OPPO广告:", "切换展示的广告", this.current_ad);
+        } else {
+            console.log("OPPO广告:", "重新拉取原生广告");
+            await this._DestroryAd();
+            await this._InitNativeAd();
+        }
+    }
+
+    protected _ReportNativeShow(ad: OppoNativeAdItem) {
+        if (this._nativeAd) {
+            this._nativeAd.reportAdShow({ adId: ad.adId } as any);
+            ad.show_reported = true;
+            console.log("OPPO广告:", "上报广告展示", ad);
+        }
+    }
+
+    protected _ReportNativeClick(ad: OppoNativeAdItem) {
+        if (this._nativeAd) {
+            this._nativeAd.reportAdClick({ adId: ad.adId } as any);
+            console.log("OPPO广告:", "上报广告点击", ad);
+            this._SwitchNativeAd();
+        }
+    }
+    async _ShowNative(pos?: Laya.Vector2, scale = 1) {
+        if (this._nativeAd) {
+            this.view.removeFromParent();
+
+            if (this.current_ad) {
+                if (!this.current_ad.show_reported) {
+                    this._ReportNativeShow(this.current_ad);
+                }
+                this.view.setSize(this.image.width, this.image.height);
+                fairygui.GRoot.inst.addChild(this.view);
+                if (pos) {
+                    this.view.setXY(pos.x, pos.y);
+                } else {
+                    this.view.setXY(Laya.stage.width / 2, Laya.stage.height / 2);
+                }
+                this.tag.setXY(this.image.width - this.tag.width, this.image.height - this.tag.height);
+                this.view.setScale(scale, scale);
+            }
+
+        } else {
+            console.error('没有原生广告');
+        }
+    }
+
+    async _HideNative() {
+        this.view.removeFromParent();
+    };
+    //#endregion
 
     protected _CreateVideoAd() {
         if (!this._cacheVideoAD) {
@@ -240,7 +296,7 @@ export default class WXPlatform implements IPlatform {
         }
         this._videoFailedCount = 0;
         let videoObj = {};
-        videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+        videoObj["adUnitId"] = this._platformData.rewardVideoId;
         this._rewardVideo = createRewardedVideoAd(videoObj);
         this._rewardVideo.onLoad(() => {
             console.log("视频广告加载成功");
@@ -256,12 +312,10 @@ export default class WXPlatform implements IPlatform {
             }
         });
         this._rewardVideo.onClose((res) => {
-
             Laya.stage.event(CommonEventId.RESUM_AUDIO);
             console.log("视频回调", res);
 
             let isEnd = res["isEnded"] as boolean;
-
             // 修复广告bug
             Awaiters.NextFrame().then(() => {
                 if (isEnd) {
@@ -273,34 +327,39 @@ export default class WXPlatform implements IPlatform {
         });
     }
 
+
     protected _CreateBannerAd() {
         if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
-        } 
+        }
+        console.log('开始创建banner')
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
-        let bannerObj = {};
-        bannerObj["adUnitId"] = this._platformData.bannerId; // "adunit-b48894d44d318e5a";
-        bannerObj["adIntervals"] = 30;
-        let styleObj = {};
-        styleObj["left"] = 0;
-        styleObj["top"] = 0;
-        styleObj["width"] = 300;
-        bannerObj["style"] = styleObj;
-
-        this._bannerAd = this._base.createBannerAd(bannerObj);
-        this._isBannerLoaded = false;
-
+        this._bannerAd = this._base.createBannerAd(
+            {
+                adUnitId: this._platformData.bannerId,
+                adIntervals: 30,
+                style: {
+                    top: 300,
+                    left: 0,
+                    width: 900,
+                    height: 300
+                }
+            });
         this._bannerAd.onLoad(() => {
-            console.log("banner加载成功");
+            console.log("banner加载成功", this._bannerAd);
             this._isBannerLoaded = true;
-            this._bannerAd.style.top = windowHeight - this._bannerAd.style.realHeight;
-            this._bannerAd.style.left = (windowWidth - this._bannerAd.style.realWidth) / 2;
         });
 
         this._bannerAd.onError((res) => {
             console.error("banner广告加载失败", res);
+            this._bannerAd == null;
+        });
+
+        this._bannerAd.onResize((size) => {
+            this._bannerAd.style.top = windowHeight - size.height;
+            this._bannerAd.style.left = (windowWidth - size.width) / 2;
         });
     }
 
@@ -313,15 +372,44 @@ export default class WXPlatform implements IPlatform {
     IsInterstitalAvaliable() {
         return this._isInterstitialLoaded;
     }
+
+    IsNativeAvaliable() {
+        return this._nativeAdLoaded;
+    }
     ShowBannerAd() {
+        console.log(1);
         if (!this.IsBannerAvaliable()) {
+            console.log(this.IsBannerAvaliable())
+            this._bannerAd.show().then(() => {
+                console.log('展示banner 成功')
+            }).catch((e) => {
+                console.error('展示banner 错误', e);
+            });
             return;
         }
-        this._bannerAd.show();
+        console.log(3)
+        this._bannerAd.show().then(() => {
+            console.log('展示banner 成功')
+        }).catch((e) => {
+            console.error('展示banner 错误', e);
+        });
+        console.log(4)
     }
     HideBannerAd() {
         if (!this.IsBannerAvaliable()) return;
         this._bannerAd.hide();
+    }
+    async  ShowNativeAd() {
+        if (!this.IsNativeAvaliable()) {
+            return;
+        }
+        await this._ShowNative();
+    }
+    HideNativeAd() {
+        if (!this.IsNativeAvaliable()) {
+            return;
+        }
+        this._HideNative();
     }
 
     protected _DoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
@@ -364,7 +452,6 @@ export default class WXPlatform implements IPlatform {
             console.error("视频广告加载失败", res, this._videoFailedCount);
         });
         this._rewardVideo.onClose((res) => {
-
             Laya.stage.event(CommonEventId.RESUM_AUDIO);
             console.log("视频回调", res);
             let isEnd = res["isEnded"] as boolean;
@@ -376,23 +463,28 @@ export default class WXPlatform implements IPlatform {
                 }
             });
         });
-
-        this._rewardVideo.show().then(() => {
+        this._rewardVideo.load().then(() => {
+            this._rewardVideo.show().then(() => {
+                LTUI.HideLoading();
+            }).catch(err => {
+                console.log("广告组件出现问题", err);
+                // 可以手动加载一次
+                this._rewardVideo.load().then(() => {
+                    console.log("手动加载成功");
+                    // 加载成功后需要再显示广告
+                    return this._rewardVideo.show().then(() => {
+                        LTUI.HideLoading();
+                    }).catch((e) => {
+                        console.error(e);
+                        LTUI.HideLoading();
+                    });
+                });
+            });;
+        }).catch((e) => {
+            console.error('视频加载出错', e);
             LTUI.HideLoading();
-        }).catch(err => {
-            console.log("广告组件出现问题", err);
-            // 可以手动加载一次
-            this._rewardVideo.load().then(() => {
-                console.log("手动加载成功");
-                // 加载成功后需要再显示广告
-                return this._rewardVideo.show().then(() => {
-                    LTUI.HideLoading();
-                }).catch((err) => {
-                    console.error(err);
-                    LTUI.HideLoading();
-                });;
-            });
-        });;
+        });
+
     }
 
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
@@ -429,7 +521,33 @@ export default class WXPlatform implements IPlatform {
         }
         return this.lauchOption.referrerInfo.appId;
     }
-
+    /** 发起创建桌面图标请求 */
+    protected CreatShortcut() {
+        return new Promise((resolve, reject) => {
+            qg['hasShortcutInstalled']({
+                success: function (res) {
+                    // 判断图标未存在时，创建图标
+                    if (res == false) {
+                        qg['installShortcut']({
+                            success: function () {
+                                resolve();
+                            },
+                            fail: function (err) {
+                                reject();
+                            },
+                            complete: function () { }
+                        })
+                    } else {
+                        resolve();
+                    }
+                } as any,
+                fail: function (err) {
+                    reject();
+                },
+                complete: function () { }
+            });
+        });
+    }
     /**
      * 小游戏回到前台的事件
      */
@@ -462,16 +580,7 @@ export default class WXPlatform implements IPlatform {
         }
     }
 
-    ShareAppMessage(shareInfo: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
-        console.log("分享消息", shareInfo);
 
-        let shareObj = WXPlatform._WrapShareInfo(shareInfo);
-        this._base.shareAppMessage(shareObj);
-
-        if (onSuccess) {
-            onSuccess.run();
-        }
-    }
 
     LoadSubpackage(name: string, onSuccess: Laya.Handler, onFailed: Laya.Handler, onProgress: Laya.Handler) {
         let loadObj = {};
@@ -502,17 +611,7 @@ export default class WXPlatform implements IPlatform {
     }
 
     RecordEvent(eventId: string, param: object) {
-        console.log("记录事件", eventId, param);
-        let aldSendEvent = this._base["aldSendEvent"];
-        if (aldSendEvent == null) {
-            console.error("阿拉丁sdk尚未接入,请检查配置");
-            return;
-        }
-        if (param != null) {
-            aldSendEvent(eventId, param);
-        } else {
-            aldSendEvent(eventId);
-        }
+
     }
 
     /**
@@ -523,25 +622,7 @@ export default class WXPlatform implements IPlatform {
      * @param height 
      */
     public CreateShareVideoBtn(x: number, y: number, width: number, height: number) {
-        let btnObj = {} as any;
-        btnObj.style = {
-            left: x * this._cacheScreenScale,
-            top: y * this._cacheScreenScale,
-            height: height * this._cacheScreenScale,
-            width: width * this._cacheScreenScale
-        };
-        btnObj.share = {
-            query: {
-                tick: 1
-            },
-            bgm: "",
-            timeRange: [0, 60 * 1000]
-        };
-        if (this._shareVideoBtn == null) {
-            this._shareVideoBtn = this._base.createGameRecorderShareButton(btnObj);
-        } else {
-            this._shareVideoBtn.show();
-        }
+
     }
 
     /**
@@ -563,13 +644,16 @@ export default class WXPlatform implements IPlatform {
     }
 
     OpenGameBox(appIds: string[]) {
+
         console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
-
-    NavigateToApp(appid: string, path?: string, extra?: any) {
+    /**
+     * @param appId oppo vivo传包名
+     */
+    NavigateToApp(appId: string, path?: string, extra?: any) {
         return new Promise((resolve, reject) => {
             Laya.Browser.window.qg.navigateToMiniGame({
-                pkgName: appid,
+                pkgName: appId,
                 path: path,
                 extraData: extra,
                 success: function () {
@@ -584,4 +668,22 @@ export default class WXPlatform implements IPlatform {
         })
     }
 
+
 }
+interface OppoNativeAdItem {
+    adId: string;
+    clickBtnTxt: string;
+    creativeType: number;
+    desc: string;
+    icon: string;
+    iconUrlList: Array<string>;
+    imgUrlList: Array<string>;
+    interactionType: number;
+    logoUrl: string;
+    title: string;
+    /** 是否已上报展示 */
+    show_reported?: boolean,
+    /** 是否已上报点击 */
+    click_reported?: boolean,
+}
+

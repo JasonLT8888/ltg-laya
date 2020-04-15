@@ -54,7 +54,8 @@ export class LTStart {
 
     }
 
-    public InitGame() { 
+    public InitGame() {
+        LTPlatform.CreateInstance();
         console.log("游戏开始初始化,当前框架版本号", LTVersion.version); 
         if (LTPlatform.instance.platform == EPlatformType.Oppo) {
             this._OnJsonLoaded();
@@ -64,7 +65,6 @@ export class LTStart {
     }
 
     private _OnJsonLoaded() {
-        LTPlatform.CreateInstance();
         let platformData = new LTPlatformData();
         let loadJson = Laya.loader.getRes(this._jsonPath);
         Laya.loader.clearRes(this._jsonPath);
