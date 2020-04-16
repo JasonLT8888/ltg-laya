@@ -18,11 +18,12 @@
 ## 模块化组件规格说明
 * 大交叉推广 
 	规格:680*408
-	预制名字:__othergames
+	预制名字:__othergames  
 	![大交叉推广](/Doc/img/img_othergames.png)
 * 爆款游戏
 	规格:139*176
-	预制名字:__hotgame
+	预制名字:__hotgame  
+	![大交叉推广](/Doc/img/img_hotgame.png)
 
 ## 使用说明
 1. 使用layaide新建一个工程
