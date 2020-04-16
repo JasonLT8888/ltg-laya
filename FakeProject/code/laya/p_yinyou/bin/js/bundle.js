@@ -4164,7 +4164,7 @@ class View_HotGame {
             return new View_HotGame(tagUI);
         }
         let uiInstance = _UI_LTGame_UI_hot_game__WEBPACK_IMPORTED_MODULE_0__["default"].createInstance();
-        tagUI.parent.addChild(uiInstance);
+        tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
         tagUI.dispose();
         return new View_HotGame(uiInstance);
@@ -4252,7 +4252,7 @@ class View_OtherGames {
             return new View_OtherGames(tagUI);
         }
         let uiInstance = _UI_LTGame_UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_0__["default"].createInstance();
-        tagUI.parent.addChild(uiInstance);
+        tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
         tagUI.dispose();
         return new View_OtherGames(uiInstance);
