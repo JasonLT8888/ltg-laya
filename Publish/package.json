@@ -8,6 +8,7 @@
   "devDependencies": {
     "babel": "^6.23.0",
     "colors": "^1.4.0",
+    "extract-zip": "^2.0.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
     "raw-loader": "^4.0.0",

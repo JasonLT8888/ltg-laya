@@ -20,7 +20,7 @@ export default class View_HotGame {
             return new View_HotGame(tagUI);
         }
         let uiInstance = UI_hot_game.createInstance();
-        tagUI.parent.addChild(uiInstance);
+        tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
         tagUI.dispose();
         return new View_HotGame(uiInstance);

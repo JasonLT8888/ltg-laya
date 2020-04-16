@@ -19,7 +19,7 @@ export default class View_OtherGames {
             return new View_OtherGames(tagUI);
         }
         let uiInstance = UI_view_sharegames_big.createInstance();
-        tagUI.parent.addChild(uiInstance);
+        tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
         tagUI.dispose();
         return new View_OtherGames(uiInstance);
