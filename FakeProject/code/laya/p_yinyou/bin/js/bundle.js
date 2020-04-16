@@ -1458,6 +1458,11 @@ class DefaultPlatform {
         this.safeArea = null;
         this.recordManager = new _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_5__["default"]();
         this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_7__["default"]();
+        /**
+         * 是否支持直接跳转到其他小程序
+         * 默认平台进行强制fake true,方便进行调试
+         */
+        this.isSupportJumpOther = true;
     }
     Init(platformData) {
         this.loginState = {
@@ -1533,7 +1538,10 @@ class DefaultPlatform {
         console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "暂不支持互推游戏盒子");
     }
     NavigateToApp(appid, path, extra) {
-        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, `暂不支持小程序跳转appid:${appid}`);
+        return new Promise((resolve, reject) => {
+            console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, `暂不支持小程序跳转appid:${appid}`);
+            reject(false);
+        });
     }
 }
 
@@ -1959,6 +1967,10 @@ class OppoPlatform {
         this.safeArea = null;
         this.recordManager = new _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_5__["default"]();
         this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        /**
+         * 是否支持直接跳转到其他小程序
+         */
+        this.isSupportJumpOther = true;
         this._isBannerLoaded = false;
         this._isVideoLoaded = false;
         this._isInterstitialLoaded = false;
@@ -2543,11 +2555,11 @@ class OppoPlatform {
                 path: path,
                 extraData: extra,
                 success: function () {
-                    resolve();
+                    resolve(true);
                     console.log('oppo小游戏跳转成功');
                 },
                 fail: function (res) {
-                    reject();
+                    reject(false);
                     console.log('oppo小游戏跳转失败：', JSON.stringify(res));
                 }
             });
@@ -2849,6 +2861,18 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
             return;
         }
         this._platformData = platformData;
+        // 检测是否支持交叉推广
+        let tt = this._base;
+        let systemInfo = tt.getSystemInfoSync();
+        if (systemInfo.platform == "ios") {
+            this.isSupportJumpOther = false;
+        }
+        let [major, minor] = systemInfo.SDKVersion.split(".");
+        if (major >= 1 && minor >= 33) {
+        }
+        else {
+            this.isSupportJumpOther = false;
+        }
         this._InitLauchOption();
         // this._Login();
         this._InitShareInfo();
@@ -2942,41 +2966,29 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
     }
     NavigateToApp(appid, path, extra) {
         return new Promise((resolve, reject) => {
-            this._base.navigateToMiniProgram({
-                appId: appid,
-                path: path,
-                extraData: extra,
-                envVersion: 'current',
-                success: (ret) => {
-                    resolve(ret);
-                },
-                fail: (err) => {
-                    const systemInfo = this._base.getSystemInfoSync();
-                    // iOS 不支持，建议先检测再使用
-                    if (systemInfo.platform !== "ios") {
-                        // 打开互跳弹窗
-                        this._base.showMoreGamesModal({
-                            appLaunchOptions: [
-                                {
-                                    appId: this._platformData.appId,
-                                    query: "foo=bar&baz=qux",
-                                    extraData: {}
-                                }
-                            ],
-                            success(res) {
-                                resolve(res);
-                            },
-                            fail(err) {
-                                reject(err);
-                            }
-                        });
+            if (!this.isSupportJumpOther) {
+                reject(false);
+                console.log("当前平台不支持小游戏跳转", this);
+            }
+            else {
+                this._base.showMoreGamesModal({
+                    appLaunchOptions: [
+                        {
+                            appId: this._platformData.appId,
+                            query: "foo=bar&baz=qux",
+                            extraData: {}
+                        }
+                    ],
+                    success(res) {
+                        resolve(true);
+                        console.log("跳转小游戏成功", appid);
+                    },
+                    fail(err) {
+                        reject(false);
+                        console.log("跳转小游戏失败", appid);
                     }
-                    else {
-                        throw new Error("iOS 平台不支持该功能");
-                    }
-                },
-                complete: undefined,
-            });
+                });
+            }
         });
     }
 }
@@ -3018,6 +3030,10 @@ class WXPlatform {
         this.safeArea = null;
         this.recordManager = new _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_5__["default"]();
         this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_8__["default"]();
+        /**
+         * 是否支持直接跳转到其他小程序
+         */
+        this.isSupportJumpOther = true;
         this._isBannerLoaded = false;
         this._isVideoLoaded = false;
         this._isInterstitialLoaded = false;
@@ -3504,17 +3520,17 @@ class WXPlatform {
     }
     NavigateToApp(appid, path, extra) {
         return new Promise((resolve, reject) => {
-            Laya.Browser.window.qg.navigateToMiniGame({
-                pkgName: appid,
+            Laya.Browser.window.qg.navigateToMiniProgram({
+                appId: appid,
                 path: path,
                 extraData: extra,
                 success: function () {
-                    resolve();
-                    console.log('oppo小游戏跳转成功');
+                    console.log('小游戏跳转成功');
+                    resolve(true);
                 },
                 fail: function (res) {
-                    reject();
-                    console.log('oppo小游戏跳转失败：', JSON.stringify(res));
+                    console.log('小游戏跳转失败：', JSON.stringify(res));
+                    reject(false);
                 }
             });
         });
@@ -4134,6 +4150,11 @@ class View_OtherGames {
     static CreateView(tagUI) {
         if (tagUI == null)
             return null;
+        // 额外判定一次是否支持交叉推广,如果不支持,则隐藏交叉推广
+        if (!_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isSupportJumpOther) {
+            tagUI.dispose();
+            return null;
+        }
         if (tagUI instanceof _UI_LTGame_UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_0__["default"]) {
             return this.BindView(tagUI);
         }
@@ -4166,21 +4187,10 @@ class View_OtherGames {
             case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Vivo:
                 uid = data.ad_package;
                 break;
-            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].TT:
-                this._OpenGameBox();
-                return;
             default:
                 break;
         }
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.NavigateToApp(uid);
-    }
-    _OpenGameBox() {
-        let adList = this._cacheAds;
-        let appidList = [];
-        for (let i = 0; i < adList.length && i < 10; ++i) {
-            appidList.push(adList[i].ad_appid);
-        }
-        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.OpenGameBox(appidList);
     }
 }
 
@@ -5856,9 +5866,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
 /* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Cmp/View_OtherGames */ "./src/LTGame/UIExt/DefaultUI/Cmp/View_OtherGames.ts");
-
+/* harmony import */ var _Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Cmp/View_OtherGames */ "./src/LTGame/UIExt/DefaultUI/Cmp/View_OtherGames.ts");
 
 
 
@@ -5887,19 +5895,7 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
                 this._openData[key] = this._openParam[key];
             }
         }
-        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_7__["EPlatformType"].TT && this._openData.enableShowGames) {
-            let tt = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance['_base'];
-            let systemInfo = tt.getSystemInfoSync();
-            if (systemInfo.platform == "ios") {
-                this._openData.enableShowGames = false;
-            }
-            let [major, minor] = systemInfo.SDKVersion.split(".");
-            if (major >= 1 && minor >= 33) {
-            }
-            else {
-                this._openData.enableShowGames = false;
-            }
-        }
+        this._openData.enableShowGames = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSupportJumpOther && this._openData.enableShowGames;
         switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
                 this.ui.m_btn_toggle_watchad.visible = false;
@@ -5917,7 +5913,7 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         this.ui.m_btn_double_get.onClick(this, this._OnClickDoubleGet);
         this.ui.m_btn_open_roll.onClick(this, this._OnClickOpenRoll);
         if (this._openData.enableShowGames) {
-            _Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_8__["default"].BindView(this.ui.m_view_moregames.m_sharegames);
+            _Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_7__["default"].BindView(this.ui.m_view_moregames.m_sharegames);
         }
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";

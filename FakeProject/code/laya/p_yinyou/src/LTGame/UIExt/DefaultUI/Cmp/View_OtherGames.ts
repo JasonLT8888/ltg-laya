@@ -13,6 +13,13 @@ export default class View_OtherGames {
 
     static CreateView(tagUI: fgui.GComponent): View_OtherGames {
         if (tagUI == null) return null;
+
+        // 额外判定一次是否支持交叉推广,如果不支持,则隐藏交叉推广
+        if (!LTPlatform.instance.isSupportJumpOther) {
+            tagUI.dispose();
+            return null;
+        }
+
         if (tagUI instanceof UI_view_sharegames_big) {
             return this.BindView(tagUI);
         }
@@ -60,22 +67,10 @@ export default class View_OtherGames {
             case EPlatformType.Vivo:
                 uid = data.ad_package;
                 break;
-            case EPlatformType.TT:
-                this._OpenGameBox();
-                return;
             default:
                 break;
         }
         LTPlatform.instance.NavigateToApp(uid);
-    }
-
-    private _OpenGameBox() {
-        let adList = this._cacheAds;
-        let appidList = [];
-        for (let i = 0; i < adList.length && i < 10; ++i) {
-            appidList.push(adList[i].ad_appid);
-        }
-        LTPlatform.instance.OpenGameBox(appidList);
     }
 
 }
