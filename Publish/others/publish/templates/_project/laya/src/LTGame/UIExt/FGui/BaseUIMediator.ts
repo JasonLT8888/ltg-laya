@@ -1,6 +1,7 @@
 import FGuiEx from "./FGuiEx";
 import FGuiData from "./FGuiData";
 import View_OtherGames from "../DefaultUI/Cmp/View_OtherGames";
+import View_HotGame from "../DefaultUI/Cmp/View_HotGame";
 
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
@@ -49,6 +50,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         let uiData = new FGuiData();
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
         View_OtherGames.CreateView(this._ui['m___othergames']);
+        View_HotGame.CreateView(this._ui['m___hotgame']);
         this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
 

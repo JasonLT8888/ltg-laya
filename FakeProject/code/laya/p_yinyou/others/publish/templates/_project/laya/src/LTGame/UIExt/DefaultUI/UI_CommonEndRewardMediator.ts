@@ -36,19 +36,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
             }
         }
 
-        if (LTPlatform.instance.platform == EPlatformType.TT && this._openData.enableShowGames) {
-            let tt = LTPlatform.instance['_base'];
-            let systemInfo = tt.getSystemInfoSync();
-            if (systemInfo.platform == "ios") {
-                this._openData.enableShowGames = false;
-            }
-            let [major, minor] = systemInfo.SDKVersion.split(".");
-            if (major >= 1 && minor >= 33) {
-
-            } else {
-                this._openData.enableShowGames = false;
-            }
-        }
+        this._openData.enableShowGames = LTPlatform.instance.isSupportJumpOther && this._openData.enableShowGames;
 
         switch (LTSDK.instance.checkState) {
             case ECheckState.InCheck:
@@ -71,7 +59,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         this.ui.m_btn_open_roll.onClick(this, this._OnClickOpenRoll);
 
         if (this._openData.enableShowGames) {
-            View_OtherGames.BindView(this.ui.m_view_moregames.m_sharegames);
+            View_OtherGames.CreateView(this.ui.m_view_moregames.m_sharegames);
         }
 
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;

@@ -114,7 +114,8 @@ export default class DefaultPlatform implements IPlatform {
     NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
             console.error("当前平台", LTPlatform.platformStr, `暂不支持小程序跳转appid:${appid}`);
-            reject(false);
+            // 这里使用resolve
+            resolve(false);
         });
     }
 }

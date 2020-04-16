@@ -56,6 +56,11 @@ export default interface IPlatform {
     device: IDevice;
 
     /**
+     * 是否支持直接跳转到其他小程序
+     */
+    isSupportJumpOther: boolean;
+
+    /**
      * 初始化
      */
     Init(platformData: LTPlatformData);
@@ -154,6 +159,6 @@ export default interface IPlatform {
      * 跳转到其他小程序
      * appid蓝绿厂的传包名
      */
-    NavigateToApp(appId: string, path?: string, extra?: any);
+    NavigateToApp(appId: string, path?: string, extra?: any): Promise<boolean>;
 
 }

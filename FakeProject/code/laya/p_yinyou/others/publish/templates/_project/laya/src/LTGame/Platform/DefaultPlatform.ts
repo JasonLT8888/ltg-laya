@@ -26,6 +26,12 @@ export default class DefaultPlatform implements IPlatform {
     recordManager: IRecordManager = new DefaultRecordManager();
     device: IDevice = new DefaultDevice();
 
+    /**
+     * 是否支持直接跳转到其他小程序
+     * 默认平台进行强制fake true,方便进行调试
+     */
+    isSupportJumpOther: boolean = true;
+
     Init(platformData: LTPlatformData) {
         this.loginState = {
             isLogin: false,
@@ -105,7 +111,11 @@ export default class DefaultPlatform implements IPlatform {
     OpenGameBox() {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
-    NavigateToApp(appid: string, path?: string, extra?: any) {
-        console.error("当前平台", LTPlatform.platformStr, `暂不支持小程序跳转appid:${appid}`);
+    NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            console.error("当前平台", LTPlatform.platformStr, `暂不支持小程序跳转appid:${appid}`);
+            // 这里使用resolve
+            resolve(false);
+        });
     }
 }

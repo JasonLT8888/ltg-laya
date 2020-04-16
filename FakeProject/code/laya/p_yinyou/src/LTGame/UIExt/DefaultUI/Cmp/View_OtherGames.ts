@@ -6,11 +6,6 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 
 export default class View_OtherGames {
 
-    static BindView(ui: UI_view_sharegames_big): View_OtherGames {
-        let result = new View_OtherGames(ui);
-        return result;
-    }
-
     static CreateView(tagUI: fgui.GComponent): View_OtherGames {
         if (tagUI == null) return null;
 
@@ -21,13 +16,13 @@ export default class View_OtherGames {
         }
 
         if (tagUI instanceof UI_view_sharegames_big) {
-            return this.BindView(tagUI);
+            return new View_OtherGames(tagUI);
         }
         let uiInstance = UI_view_sharegames_big.createInstance();
         tagUI.parent.addChild(uiInstance);
         uiInstance.setXY(tagUI.x, tagUI.y);
         tagUI.dispose();
-        return this.BindView(uiInstance);
+        return new View_OtherGames(uiInstance);
     }
 
     private _ui: UI_view_sharegames_big;
@@ -36,7 +31,7 @@ export default class View_OtherGames {
     }
 
     /**
-     * 储存的广告ids
+     * 储存的广告
      */
     private _cacheAds: SDK.ADInfoData[];
 

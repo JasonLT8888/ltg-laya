@@ -59,7 +59,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         this.ui.m_btn_open_roll.onClick(this, this._OnClickOpenRoll);
 
         if (this._openData.enableShowGames) {
-            View_OtherGames.BindView(this.ui.m_view_moregames.m_sharegames);
+            View_OtherGames.CreateView(this.ui.m_view_moregames.m_sharegames);
         }
 
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;

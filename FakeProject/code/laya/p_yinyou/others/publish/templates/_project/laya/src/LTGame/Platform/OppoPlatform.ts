@@ -25,6 +25,11 @@ export default class OppoPlatform implements IPlatform {
     recordManager: IRecordManager = new DefaultRecordManager();
     device: IDevice = new DefaultDevice();
 
+    /**
+     * 是否支持直接跳转到其他小程序
+     */
+    isSupportJumpOther: boolean = true;
+
     protected _data: LTPlatformData;
 
     protected _bannerAd;
@@ -650,18 +655,18 @@ export default class OppoPlatform implements IPlatform {
     /**
      * @param appId oppo vivo传包名
      */
-    NavigateToApp(appId: string, path?: string, extra?: any) {
+    NavigateToApp(appId: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
             Laya.Browser.window.qg.navigateToMiniGame({
                 pkgName: appId,
                 path: path,
                 extraData: extra,
                 success: function () {
-                    resolve();
+                    resolve(true);
                     console.log('oppo小游戏跳转成功');
                 },
                 fail: function (res) {
-                    reject();
+                    reject(false);
                     console.log('oppo小游戏跳转失败：', JSON.stringify(res));
                 }
             });
