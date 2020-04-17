@@ -39,8 +39,7 @@ export default class LTRespackManager {
         this._packs = [];
     }
 
-    public SetRemoteUrl(baseUrl: string) {
-        this._baseUrl = baseUrl;
+    public InitLoadSet() {
         if (StringEx.IsNullOrEmpty(this._baseUrl)) return;
         let adapter = null;
         switch (LTPlatform.instance.platform) {
@@ -63,6 +62,10 @@ export default class LTRespackManager {
                 adapter.nativefiles.push(pack.path);
             }
         }
+    }
+
+    public SetRemoteUrl(baseUrl: string) {
+        this._baseUrl = baseUrl;
     }
 
     public AddPackData(...packDatas: LoadPackConfig[]) {

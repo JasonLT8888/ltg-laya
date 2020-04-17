@@ -3636,8 +3636,7 @@ class LTRespackManager {
         }
         return loaded / total;
     }
-    SetRemoteUrl(baseUrl) {
-        this._baseUrl = baseUrl;
+    InitLoadSet() {
         if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_1__["default"].IsNullOrEmpty(this._baseUrl))
             return;
         let adapter = null;
@@ -3662,6 +3661,9 @@ class LTRespackManager {
                 adapter.nativefiles.push(pack.path);
             }
         }
+    }
+    SetRemoteUrl(baseUrl) {
+        this._baseUrl = baseUrl;
     }
     AddPackData(...packDatas) {
         packDatas.forEach(packData => {
@@ -3845,6 +3847,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         this._resProgress = 0;
         this._subPackProgress = 0;
         this._isUIShowed = false;
+        this._jsonPath = "subpack.json";
         switch (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform) {
             case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].WX:
             case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].QQ:
@@ -3865,6 +3868,24 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
     }
     _DoEnter() {
         this._needLoadOtherUIPack.push("res/ltgame/ui/LTGame");
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].Oppo) {
+            this._OnJsonLoaded();
+        }
+        else {
+            Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        }
+    }
+    _OnJsonLoaded() {
+        let loadJson = Laya.loader.getRes(this._jsonPath);
+        Laya.loader.clearRes(this._jsonPath);
+        if (loadJson != null) {
+            for (let i = 0; i < loadJson.length; ++i) {
+                let jsonData = loadJson[i];
+                console.log("自动设置分包", jsonData);
+                _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.AddPackData(jsonData);
+            }
+        }
+        _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.InitLoadSet();
         this._InitUI();
     }
     _InitUI() {
@@ -3991,15 +4012,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Fsm_StateMachine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Fsm/StateMachine */ "./src/LTGame/Fsm/StateMachine.ts");
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _Platform_Data_LTPlatformData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Platform/Data/LTPlatformData */ "./src/LTGame/Platform/Data/LTPlatformData.ts");
-/* harmony import */ var _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Res/LTRespackManager */ "./src/LTGame/Res/LTRespackManager.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
-/* harmony import */ var _LTVersion__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../LTVersion */ "./src/LTGame/LTVersion.ts");
-/* harmony import */ var _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Commom/EScreenOrientation */ "./src/LTGame/Commom/EScreenOrientation.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../SDK/Impl/SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
-
+/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
+/* harmony import */ var _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTVersion__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTVersion */ "./src/LTGame/LTVersion.ts");
+/* harmony import */ var _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Commom/EScreenOrientation */ "./src/LTGame/Commom/EScreenOrientation.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../SDK/Impl/SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
 
 
 
@@ -4012,18 +4031,17 @@ __webpack_require__.r(__webpack_exports__);
 
 class LTStart {
     constructor() {
-        this._jsonPath = "subpack.json";
         this.enableStat = false;
-        this.screenOrientation = _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Portrait;
+        this.screenOrientation = _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Portrait;
     }
     get _currentState() {
         return this._fsm.currState;
     }
     get designWidth() {
         switch (this.screenOrientation) {
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Portrait:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Portrait:
                 return 750;
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Landscape:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Landscape:
                 return 1334;
             default:
                 console.error("未处理的屏幕初始化方向", this.screenOrientation);
@@ -4032,9 +4050,9 @@ class LTStart {
     }
     get designHeight() {
         switch (this.screenOrientation) {
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Portrait:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Portrait:
                 return 1334;
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_8__["EScreenOrientation"].Landscape:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Landscape:
                 return 750;
             default:
                 console.error("未处理的屏幕初始化方向", this.screenOrientation);
@@ -4043,36 +4061,22 @@ class LTStart {
     }
     InitGame() {
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].CreateInstance();
-        console.log("游戏开始初始化,当前框架版本号", _LTVersion__WEBPACK_IMPORTED_MODULE_7__["default"].version);
-        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].Oppo) {
-            this._OnJsonLoaded();
-        }
-        else {
-            Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
-        }
+        console.log("游戏开始初始化,当前框架版本号", _LTVersion__WEBPACK_IMPORTED_MODULE_6__["default"].version);
+        this._Init();
     }
-    _OnJsonLoaded() {
+    _Init() {
         let platformData = new _Platform_Data_LTPlatformData__WEBPACK_IMPORTED_MODULE_2__["default"]();
-        let loadJson = Laya.loader.getRes(this._jsonPath);
-        Laya.loader.clearRes(this._jsonPath);
-        if (loadJson != null) {
-            for (let i = 0; i < loadJson.length; ++i) {
-                let jsonData = loadJson[i];
-                console.log("自动设置分包", jsonData);
-                _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.AddPackData(jsonData);
-            }
-        }
         this._HandleInitPlatform(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform, platformData);
         this._HandleSDK();
-        if (!_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__["default"].isInited) {
-            _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_10__["default"], "default", "default", "default");
+        if (!_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__["default"].isInited) {
+            _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__["default"], "default", "default", "default");
         }
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Init(platformData);
         // 非web平台禁用debug模式
-        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].Web) {
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Web) {
             Laya.Shader3D.debugMode = false;
         }
-        _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__["default"].Init(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.safeArea);
+        _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_4__["default"].Init(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.safeArea);
         Laya.timer.frameOnce(1, this, this._NextFramUpdate);
     }
     _NextFramUpdate() {
@@ -4086,12 +4090,12 @@ class LTStart {
         this._RegistUpdate();
     }
     _RegistUpdate() {
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["EActionType"].Update, this, this._LogicUpdate);
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["EActionType"].LateUpdate, this, this._LateUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].Update, this, this._LogicUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].LateUpdate, this, this._LateUpdate);
     }
     _UnRegistUpdate() {
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["EActionType"].Update, this, this._LogicUpdate);
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_6__["EActionType"].LateUpdate, this, this._LateUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].Update, this, this._LogicUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].LateUpdate, this, this._LateUpdate);
     }
     _HandleSDK() {
     }

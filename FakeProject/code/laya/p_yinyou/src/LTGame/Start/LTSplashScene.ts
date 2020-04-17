@@ -10,6 +10,7 @@ import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
 import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 import { ESceneType } from "./ESceneType";
 import { EPlatformType } from "../Platform/EPlatformType";
+import { LoadPackConfig } from "../Config/LoadPackConfig";
 
 export default class LTSplashScene extends BaseState {
 
@@ -51,6 +52,8 @@ export default class LTSplashScene extends BaseState {
         return loadWeight / totalWeight * 100;
     }
 
+    private _jsonPath = "subpack.json";
+
     constructor() {
         super(ESceneType.Splash);
         switch (LTPlatform.instance.platform) {
@@ -69,6 +72,25 @@ export default class LTSplashScene extends BaseState {
         this._needLoadOtherUIPack.push(
             "res/ltgame/ui/LTGame"
         );
+
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this._OnJsonLoaded();
+        } else {
+            Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        }
+    }
+
+    private _OnJsonLoaded() {
+        let loadJson = Laya.loader.getRes(this._jsonPath);
+        Laya.loader.clearRes(this._jsonPath);
+        if (loadJson != null) {
+            for (let i = 0; i < loadJson.length; ++i) {
+                let jsonData = loadJson[i] as LoadPackConfig;
+                console.log("自动设置分包", jsonData);
+                LTRespackManager.instance.AddPackData(jsonData);
+            }
+        }
+        LTRespackManager.instance.InitLoadSet();
 
         this._InitUI();
     }
