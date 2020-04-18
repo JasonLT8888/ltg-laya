@@ -9,6 +9,7 @@ export default class UI_view_endshare extends fgui.GComponent {
 	public m_text_info:fgui.GTextField;
 	public m_icon_reward:fgui.GLoader;
 	public m_text_reward:fgui.GTextField;
+	public m_anim_enter:fgui.Transition;
 
 	public static URL:string = "ui://75kiu87kbg0017";
 
@@ -26,5 +27,6 @@ export default class UI_view_endshare extends fgui.GComponent {
 		this.m_text_info = <fgui.GTextField><any>(this.getChildAt(4));
 		this.m_icon_reward = <fgui.GLoader><any>(this.getChildAt(5));
 		this.m_text_reward = <fgui.GTextField><any>(this.getChildAt(6));
+		this.m_anim_enter = this.getTransitionAt(0);
 	}
 }
