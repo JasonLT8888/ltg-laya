@@ -5451,6 +5451,7 @@ class UI_view_endshare extends fgui.GComponent {
         this.m_text_info = (this.getChildAt(4));
         this.m_icon_reward = (this.getChildAt(5));
         this.m_text_reward = (this.getChildAt(6));
+        this.m_anim_enter = this.getTransitionAt(0);
     }
 }
 UI_view_endshare.URL = "ui://75kiu87kbg0017";

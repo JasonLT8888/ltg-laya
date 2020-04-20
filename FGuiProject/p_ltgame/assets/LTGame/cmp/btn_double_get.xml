@@ -14,7 +14,9 @@
     <image id="n5_it2i" name="n5" src="it2io" fileName="img/sp_shipin.png" xy="19,31">
       <gearDisplay controller="btn_type" pages="0"/>
     </image>
-    <loader id="n6_it2i" name="icon" xy="72,31" size="151,39" url="ui://75kiu87kit2ip" align="center" vAlign="middle"/>
+    <loader id="n6_it2i" name="icon" xy="72,31" size="151,39" url="ui://75kiu87kit2ip" align="center" vAlign="middle">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
     <image id="n7_bg00" name="n7" src="bg0018" fileName="img/sp_fenxiangl.png" xy="18,30">
       <gearDisplay controller="btn_type" pages="1"/>
     </image>
