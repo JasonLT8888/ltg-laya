@@ -1,4 +1,5 @@
 import StringEx from "../../LTGame/LTUtils/StringEx";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export class SaveData {
 
@@ -28,6 +29,7 @@ export default class GameData {
         if (!this._instance) return;
         let json = JSON.stringify(this._instance._saveData);
         Laya.LocalStorage.setJSON(this._instance._savePath, json);
+        CommonSaveData.SaveToDisk();
     }
 
     private _ReadFromFile() {

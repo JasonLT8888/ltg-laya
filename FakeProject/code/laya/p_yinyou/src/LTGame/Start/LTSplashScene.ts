@@ -5,7 +5,6 @@ import LTRespackManager from "../Res/LTRespackManager";
 import { ConfigManager } from "../Config/ConfigManager";
 import FGuiEx from "../UIExt/FGui/FGuiEx";
 import LTRes from "../Res/LTRes";
-import Awaiters from "../Async/Awaiters";
 import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
 import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 import { ESceneType } from "./ESceneType";
