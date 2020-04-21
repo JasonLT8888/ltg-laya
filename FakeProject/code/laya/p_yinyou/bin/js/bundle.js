@@ -3805,12 +3805,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Res/LTRespackManager */ "./src/LTGame/Res/LTRespackManager.ts");
 /* harmony import */ var _Config_ConfigManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Config/ConfigManager */ "./src/LTGame/Config/ConfigManager.ts");
 /* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
-/* harmony import */ var _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI/LTGame/LTGameBinder */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/LTGameBinder.ts");
-/* harmony import */ var _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
-/* harmony import */ var _ESceneType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ESceneType */ "./src/LTGame/Start/ESceneType.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-
+/* harmony import */ var _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI/LTGame/LTGameBinder */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/LTGameBinder.ts");
+/* harmony import */ var _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
+/* harmony import */ var _ESceneType__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ESceneType */ "./src/LTGame/Start/ESceneType.ts");
+/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
 
 
 
@@ -3823,7 +3821,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
-        super(_ESceneType__WEBPACK_IMPORTED_MODULE_9__["ESceneType"].Splash);
+        super(_ESceneType__WEBPACK_IMPORTED_MODULE_8__["ESceneType"].Splash);
         /**
          * 用于初始化的ui包
          */
@@ -3849,8 +3847,8 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         this._isUIShowed = false;
         this._jsonPath = "subpack.json";
         switch (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform) {
-            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].WX:
-            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].QQ:
+            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_9__["EPlatformType"].WX:
+            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_9__["EPlatformType"].QQ:
                 this._loadProgressWeight = [10, 1, 5, 2];
                 break;
             default:
@@ -3868,7 +3866,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
     }
     _DoEnter() {
         this._needLoadOtherUIPack.push("res/ltgame/ui/LTGame");
-        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_10__["EPlatformType"].Oppo) {
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_9__["EPlatformType"].Oppo) {
             this._OnJsonLoaded();
         }
         else {
@@ -3890,7 +3888,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
     }
     _InitUI() {
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.RecordEvent("开始初始化启动界面", null);
-        _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_7__["default"].bindAll();
+        _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_6__["default"].bindAll();
         this._OnBindUI();
         let loadUrl = [];
         loadUrl.push({ url: this._initPath + ".bin", type: Laya.Loader.BUFFER });
@@ -3950,24 +3948,21 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         this._otherUIProgress = value;
     }
     _OnOtherUILoaded() {
-        return __awaiter(this, void 0, void 0, function* () {
-            _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.RecordEvent("开始加载剩余游戏资源", null);
-            for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
-                let otherUIPack = this._needLoadOtherUIPack[i];
-                fgui.UIPackage.addPackage(otherUIPack);
-                console.log(otherUIPack, "已加载");
-            }
-            _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_8__["default"].instance.Show();
-            let loadUrls = [];
-            this._OnGameResPrepared(loadUrls);
-            if (loadUrls.length == 0) {
-                this._resProgress = 1;
-                this._OnResLoaded();
-                return;
-            }
-            yield _Res_LTRes__WEBPACK_IMPORTED_MODULE_6__["default"].LoadAsync(loadUrls, Laya.Handler.create(this, this._OnResProgress));
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.RecordEvent("开始加载剩余游戏资源", null);
+        for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
+            let otherUIPack = this._needLoadOtherUIPack[i];
+            fgui.UIPackage.addPackage(otherUIPack);
+            console.log(otherUIPack, "已加载");
+        }
+        _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_7__["default"].instance.Show();
+        let loadUrls = [];
+        this._OnGameResPrepared(loadUrls);
+        if (loadUrls.length == 0) {
+            this._resProgress = 1;
             this._OnResLoaded();
-        });
+            return;
+        }
+        Laya.loader.create(loadUrls, Laya.Handler.create(this, this._OnResLoaded), Laya.Handler.create(this, this._OnResProgress, null, false));
     }
     /**
      * 准备需要在splash界面加载的资源,会体现在进度条上
@@ -8825,6 +8820,14 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
                 version = "v0.0.1";
                 _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_tt/");
                 break;
+            case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].WX:
+                platformData.bannerId = "adunit-11a2571806b5fc5c";
+                platformData.rewardVideoId = "adunit-fa6dd5b431c41ceb";
+                platformData.interstitialId = "adunit-abe9d252f3a3956c";
+                platformData.appId = "wx7bcca975ff17ebe9";
+                version = "v0.0.1";
+                _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_wx/");
+                break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo:
                 platformData.bannerId = "172417";
                 platformData.rewardVideoId = "172442";
@@ -9131,7 +9134,9 @@ class EffectManager {
                     this._effectMap.set(configItem.id, effectObj);
                 }
             }
+            console.log("测试1");
             yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].NextFrame();
+            console.log("测试2");
             for (let effectObj of preloadEffects) {
                 effectObj.removeSelf();
             }
@@ -9315,7 +9320,9 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
     }
     _OnGameResLoaded() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("测试0");
             yield _manager_EffectManager__WEBPACK_IMPORTED_MODULE_10__["EffectManager"].instance.WarmEffects();
+            console.log("测试3");
             this.isFinished = true;
             this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_7__["ESceneType"].Main;
         });

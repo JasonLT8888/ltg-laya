@@ -54,7 +54,11 @@ export class EffectManager {
                 this._effectMap.set(configItem.id, effectObj);
             }
         }
+        console.log("测试1");
+        
         await Awaiters.NextFrame();
+
+        console.log("测试2");
         for (let effectObj of preloadEffects) {
             effectObj.removeSelf();
         }

@@ -155,6 +155,7 @@ export default class LTSplashScene extends BaseState {
             this._OnOtherUILoaded();
             return;
         }
+
         let uiLoadData = [];
         for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
             let otherUIPack = this._needLoadOtherUIPack[i];
@@ -168,7 +169,7 @@ export default class LTSplashScene extends BaseState {
         this._otherUIProgress = value;
     }
 
-    private async _OnOtherUILoaded() {
+    private _OnOtherUILoaded() {
         LTPlatform.instance.RecordEvent("开始加载剩余游戏资源", null);
         for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
             let otherUIPack = this._needLoadOtherUIPack[i];
@@ -184,8 +185,7 @@ export default class LTSplashScene extends BaseState {
             this._OnResLoaded();
             return;
         }
-        await LTRes.LoadAsync(loadUrls, Laya.Handler.create(this, this._OnResProgress));
-        this._OnResLoaded();
+        Laya.loader.create(loadUrls, Laya.Handler.create(this, this._OnResLoaded), Laya.Handler.create(this, this._OnResProgress, null, false));
     }
 
     /**
