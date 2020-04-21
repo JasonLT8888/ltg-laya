@@ -40,6 +40,10 @@ export default class LTUI {
         UI_CommondLoadMediator.instance.Hide();
     }
 
+    public static async BoomObjs(fromObj: fgui.GObject, boomCount: number = 10, flyTime: number = 1, circleRadius: number = 10) {
+        await UI_FlyPanelMediator.instance.BoomObjs(fromObj, boomCount, flyTime, circleRadius);
+    }
+
     public static async FlyCoinsTo(fromObj: fgui.GObject, toObj: fgui.GObject, flyIcon: string = null, flyCount: number = 10,
         flyTime: number = 1, circleRadius: number = 60) {
         await UI_FlyPanelMediator.instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
