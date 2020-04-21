@@ -20,6 +20,8 @@ import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
 import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
 import UI_CommonMainMoreGameAdsMediator from "./DefaultUI/UI_CommonMainMoreGameAdsMediator";
 import UI_CommonMainHotGameMediator from "./DefaultUI/UI_CommonMainHotGameMediator";
+import LTPlatform from "../Platform/LTPlatform";
+import { EPlatformType } from "../Platform/EPlatformType";
 
 export default class LTUI {
 
@@ -67,20 +69,27 @@ export default class LTUI {
     }
 
     public static ShowEndShare(openData: EndShareOpenData) {
-        UI_CommonEndShareMediator.instance.Show(openData);
+        if (LTPlatform.instance.platform == EPlatformType.TT) {
+            UI_CommonEndShareMediator.instance.Show(openData);
+        }
     }
 
     public static ShowEndReward(openData: EndRewardOpenData) {
         UI_CommonEndRewardMediator.instance.Show(openData);
     }
 
-    public static ShowMoreGame(openData: EndRewardOpenData) {
+    public static ShowMoreGame(openData: any) {
         UI_CommonMainMoreGameAdsMediator.instance.Show(openData);
     }
-    public static ShowHotGame(openData: EndRewardOpenData) {
+    public static HideMoreGame(openData: any) {
+        UI_CommonMainMoreGameAdsMediator.instance.Hide();
+    }
+    public static ShowHotGame(openData: any) {
         UI_CommonMainHotGameMediator.instance.Show(openData);
     }
-
+    public static HideHotGame(openData: any) {
+        UI_CommonMainHotGameMediator.instance.Hide();
+    }
 
     public static ShowOffline(openData: OfflineOpenData) {
         UI_CommonOfflineMediator.instance.Show(openData);
