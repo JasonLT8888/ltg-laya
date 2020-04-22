@@ -58,6 +58,12 @@ export default class UI_BoneAnimTestMediator extends BaseUIMediator<UI_BoneAnimT
                 this._fakeObj.addChild(instObj);
                 instObj.transform.position = genPos;
             }
+        } else if (addValue < 0) {
+            addValue = -addValue;
+            for (let i = 0; i < addValue && this._cacheAnims.length > 0; ++i) {
+                let popObj = this._cacheAnims.pop();
+                popObj.destroy();
+            }
         }
 
         this.ui.m_text_total.text = "当前总数量:" + (this._cacheAnims.length + 1);

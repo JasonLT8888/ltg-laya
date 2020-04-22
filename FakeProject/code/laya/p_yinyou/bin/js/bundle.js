@@ -7195,6 +7195,36 @@ class UI_FlyPanelMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
             yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].Seconds(flyTime);
         });
     }
+    FlyObjs(fromObj, toObj, flyCount, flyTime, circleRadius) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let startPos = fromObj.localToGlobal();
+            startPos.x -= fromObj.width / 2;
+            startPos.y -= fromObj.height / 2;
+            let stopPos = toObj.localToGlobal();
+            let cacheTime = flyTime * 0.6 * 1000;
+            let finalTime = flyTime * 0.4 * 1000;
+            for (let i = 0; i < flyCount; ++i) {
+                let flyCoin = _UI_LTGame_UI_view_fly_coin__WEBPACK_IMPORTED_MODULE_2__["default"].createInstance();
+                this.ui.addChild(flyCoin);
+                if (fromObj['url'] != null) {
+                    flyCoin.m_icon.url = fromObj['url'];
+                }
+                else if (fromObj['resourceURL'] != null) {
+                    flyCoin.m_icon.url = fromObj['resourceURL'];
+                }
+                flyCoin.m_icon.setSize(fromObj.width, fromObj.height);
+                flyCoin.setPivot(fromObj.pivotX, fromObj.pivotY);
+                flyCoin.setXY(startPos.x, startPos.y);
+                let cachePos = new Laya.Vector2(startPos.x + _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-circleRadius, circleRadius), startPos.y + _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-circleRadius, circleRadius));
+                Laya.Tween.to(flyCoin, { x: cachePos.x, y: cachePos.y }, cacheTime, Laya.Ease.quadInOut, Laya.Handler.create(this, () => {
+                    Laya.Tween.to(flyCoin, { x: stopPos.x, y: stopPos.y }, finalTime, Laya.Ease.quadInOut, Laya.Handler.create(this, () => {
+                        flyCoin.dispose();
+                    }));
+                }));
+            }
+            yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].Seconds(flyTime);
+        });
+    }
     /**
      * 先往外扩,然后飞到指定位置
      * @param fromObj
@@ -7534,9 +7564,14 @@ class LTUI {
     static HideLoading() {
         _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Hide();
     }
-    static BoomObjs(fromObj, boomCount = 10, flyTime = 1, circleRadius = 10) {
+    static BoomObjs(fromObj, boomCount = 10, flyTime = 1, circleRadius = 60) {
         return __awaiter(this, void 0, void 0, function* () {
             yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.BoomObjs(fromObj, boomCount, flyTime, circleRadius);
+        });
+    }
+    static FlyObjsTo(fromObj, toObj, flyCount = 10, flyTime = 1, circleRadius = 60) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.FlyObjs(fromObj, toObj, flyCount, flyTime, circleRadius);
         });
     }
     static FlyCoinsTo(fromObj, toObj, flyIcon = null, flyCount = 10, flyTime = 1, circleRadius = 60) {
@@ -9553,6 +9588,13 @@ class UI_BoneAnimTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
                 this._cacheAnims.push(instObj);
                 this._fakeObj.addChild(instObj);
                 instObj.transform.position = genPos;
+            }
+        }
+        else if (addValue < 0) {
+            addValue = -addValue;
+            for (let i = 0; i < addValue && this._cacheAnims.length > 0; ++i) {
+                let popObj = this._cacheAnims.pop();
+                popObj.destroy();
             }
         }
         this.ui.m_text_total.text = "当前总数量:" + (this._cacheAnims.length + 1);
