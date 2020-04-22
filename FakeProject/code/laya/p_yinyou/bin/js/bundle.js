@@ -3813,6 +3813,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
 /* harmony import */ var _ESceneType__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ESceneType */ "./src/LTGame/Start/ESceneType.ts");
 /* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../UIExt/FGui/LoadUIPack */ "./src/LTGame/UIExt/FGui/LoadUIPack.ts");
+
 
 
 
@@ -3829,12 +3831,12 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         /**
          * 用于初始化的ui包
          */
-        this._initPath = "res/fgui_load/Load";
+        this._initUiPack = new _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_10__["LoadUIPack"]("res/fgui_load/Load");
         /**
          * 需要加载的其他UI包
          */
         this._needLoadOtherUIPack = [
-            "res/fgui/Main"
+            new _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_10__["LoadUIPack"]("res/fgui/Main")
         ];
         /**
          * 资源加载权重:
@@ -3869,7 +3871,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         return loadWeight / totalWeight * 100;
     }
     _DoEnter() {
-        this._needLoadOtherUIPack.push("res/ltgame/ui/LTGame");
+        this._needLoadOtherUIPack.push(new _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_10__["LoadUIPack"]("res/ltgame/ui/LTGame"));
         if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_9__["EPlatformType"].Oppo) {
             this._OnJsonLoaded();
         }
@@ -3895,13 +3897,12 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_6__["default"].bindAll();
         this._OnBindUI();
         let loadUrl = [];
-        loadUrl.push({ url: this._initPath + ".bin", type: Laya.Loader.BUFFER });
-        loadUrl.push({ url: this._initPath + "_atlas0.png", type: Laya.Loader.IMAGE });
+        this._initUiPack.PushUrl(loadUrl);
         Laya.loader.load(loadUrl, Laya.Handler.create(this, this._OnUILoaded));
     }
     _OnBindUI() { }
     _OnUILoaded() {
-        fgui.UIPackage.addPackage(this._initPath);
+        this._initUiPack.AddPackage();
         // 打开界面
         let needFit = new _UIExt_FGui_FGuiData__WEBPACK_IMPORTED_MODULE_2__["default"]();
         needFit.needFitScreen = false;
@@ -3943,8 +3944,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         let uiLoadData = [];
         for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
             let otherUIPack = this._needLoadOtherUIPack[i];
-            uiLoadData.push({ url: otherUIPack + ".bin", type: Laya.Loader.BUFFER });
-            uiLoadData.push({ url: otherUIPack + "_atlas0.png", type: Laya.Loader.IMAGE });
+            otherUIPack.PushUrl(uiLoadData);
         }
         Laya.loader.load(uiLoadData, Laya.Handler.create(this, this._OnOtherUILoaded), Laya.Handler.create(this, this._OnOtherUIProgress, null, false));
     }
@@ -3955,7 +3955,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.RecordEvent("开始加载剩余游戏资源", null);
         for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
             let otherUIPack = this._needLoadOtherUIPack[i];
-            fgui.UIPackage.addPackage(otherUIPack);
+            otherUIPack.AddPackage();
             console.log(otherUIPack, "已加载");
         }
         _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_7__["default"].instance.Show();
@@ -7278,14 +7278,23 @@ class BaseUIMediator {
         this._openParam = obj;
         let uiData = new _FGuiData__WEBPACK_IMPORTED_MODULE_1__["default"]();
         this._ui = _FGuiEx__WEBPACK_IMPORTED_MODULE_0__["default"].AddUI(this._classDefine, uiData);
-        _DefaultUI_Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_2__["default"].CreateView(this._ui['m___othergames']);
-        _DefaultUI_Cmp_View_HotGame__WEBPACK_IMPORTED_MODULE_3__["default"].CreateView(this._ui['m___hotgame']);
+        this._InitSelfAd();
         this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter]) {
             let anim = this._ui[anim_enter];
             anim.play();
+        }
+    }
+    _InitSelfAd() {
+        let othergames = _DefaultUI_Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_2__["default"].CreateView(this._ui['m___othergames']);
+        if (othergames) {
+            this._ui['m___othergames'] = othergames.ui;
+        }
+        let hotGame = _DefaultUI_Cmp_View_HotGame__WEBPACK_IMPORTED_MODULE_3__["default"].CreateView(this._ui['m___hotgame']);
+        if (hotGame) {
+            this._ui['m___hotgame'] = hotGame.ui;
         }
     }
     _OnShow() { }
@@ -7429,6 +7438,38 @@ class FGuiEx {
 FGuiEx.top = 0;
 FGuiEx.bottom = 0;
 FGuiEx._cacheMap = new _LTUtils_LTDictionary__WEBPACK_IMPORTED_MODULE_0__["default"]();
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/FGui/LoadUIPack.ts":
+/*!*********************************************!*\
+  !*** ./src/LTGame/UIExt/FGui/LoadUIPack.ts ***!
+  \*********************************************/
+/*! exports provided: LoadUIPack */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadUIPack", function() { return LoadUIPack; });
+class LoadUIPack {
+    constructor(packPath, atliasCount = 1) {
+        this.packPath = packPath;
+        this.atliasCount = atliasCount;
+    }
+    PushUrl(urls) {
+        urls.push({ url: this.packPath + ".bin", type: Laya.Loader.BUFFER });
+        if (this.atliasCount == 0)
+            return;
+        urls.push({ url: this.packPath + "_atlas0.png", type: Laya.Loader.IMAGE });
+        for (let i = 1; i < this.atliasCount; ++i) {
+            urls.push({ url: this.packPath + "_atlas0_" + i + ".png", type: Laya.Loader.IMAGE });
+        }
+    }
+    AddPackage() {
+        fgui.UIPackage.addPackage(this.packPath);
+    }
+}
 
 
 /***/ }),
