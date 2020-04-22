@@ -35,7 +35,7 @@ export class LTUtils {
         }
     }
 
-    public static GetComponentsInChildren(obj: Laya.Sprite3D, cmp: typeof Laya.Component): typeof Laya.Component[] {
+    public static GetComponentsInChildren(obj: Laya.Sprite3D, cmp: typeof Laya.Component): any[] {
         let result: typeof Laya.Component[] = [];
         this._GetComponentsInChildrenHelper(obj, cmp, result);
         return result;
