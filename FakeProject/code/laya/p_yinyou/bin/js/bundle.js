@@ -9210,9 +9210,7 @@ class EffectManager {
                     this._effectMap.set(configItem.id, effectObj);
                 }
             }
-            console.log("测试1");
             yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].NextFrame();
-            console.log("测试2");
             for (let effectObj of preloadEffects) {
                 effectObj.removeSelf();
             }
@@ -9396,9 +9394,7 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
     }
     _OnGameResLoaded() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("测试0");
             yield _manager_EffectManager__WEBPACK_IMPORTED_MODULE_10__["EffectManager"].instance.WarmEffects();
-            console.log("测试3");
             this.isFinished = true;
             this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_7__["ESceneType"].Main;
         });
