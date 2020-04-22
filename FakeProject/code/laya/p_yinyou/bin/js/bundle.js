@@ -3439,6 +3439,13 @@ class WXPlatform {
         }
     }
     LoadSubpackage(name, onSuccess, onFailed, onProgress) {
+        if (this._base['loadSubpackage'] == null) {
+            console.log("无加载子包方法,跳过加载子包", name);
+            if (onSuccess) {
+                onSuccess.run();
+            }
+            return;
+        }
         let loadObj = {};
         loadObj["name"] = name;
         loadObj["success"] = () => {
@@ -9379,7 +9386,6 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
         this._splashUIClass = _ui_Load_UI_splash__WEBPACK_IMPORTED_MODULE_0__["default"];
     }
     _OnBindUI() {
-        console.log('splash', this);
         _ui_Load_LoadBinder__WEBPACK_IMPORTED_MODULE_2__["default"].bindAll();
         _ui_Main_MainBinder__WEBPACK_IMPORTED_MODULE_3__["default"].bindAll();
     }
@@ -9473,6 +9479,95 @@ class UI_ADDemoMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPOR
     }
     _OnClickIntAd() {
         _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ShowInterstitalAd();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/ui/UI_BoneAnimTestMediator.ts":
+/*!**************************************************!*\
+  !*** ./src/script/ui/UI_BoneAnimTestMediator.ts ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_BoneAnimTestMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_BoneAnimTest */ "./src/ui/Main/UI_BoneAnimTest.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
+
+
+
+
+
+class UI_BoneAnimTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor() {
+        super(...arguments);
+        this._xBorder = [-10, 10];
+        this._zBorder = [-10, 30];
+    }
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_BoneAnimTestMediator();
+            this._instance._classDefine = _ui_Main_UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this.ui.m_btn_back.onClick(this, this._OnClickBack);
+        this.ui.m_btn_add.onClick(this, this._OnClickAdd);
+        this.ui.m_text_total.text = "场景正在初始化";
+        this._CreateScene();
+    }
+    _CreateScene() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._fakeObj = new Laya.Sprite3D("fake_obj");
+            _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].s3d.addChild(this._fakeObj);
+            yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].LoadAsync(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("default_light"));
+            yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].LoadAsync(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("main_camera"));
+            yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].LoadAsync(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("floor"));
+            yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].LoadAsync(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("player_01"));
+            yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].LoadAsync(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("pengzhuang"));
+            this._fakeObj.addChild(_LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("default_light"), true));
+            this._fakeObj.addChild(_LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("main_camera"), true));
+            this._fakeObj.addChild(_LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("floor"), true));
+            this._sampleObj = this._fakeObj.addChild(_LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath("player_01"), true));
+            this._cacheAnims = [];
+            this.ui.m_text_total.text = "当前总数量:" + (this._cacheAnims.length + 1);
+        });
+    }
+    _OnClickAdd() {
+        let addStr = this.ui.m_text_input.text;
+        let addValue = parseInt(addStr);
+        if (addValue > 0) {
+            for (let i = 0; i < addValue; ++i) {
+                let genPos = this._GetGenPos();
+                let instObj = this._sampleObj.clone();
+                this._cacheAnims.push(instObj);
+                this._fakeObj.addChild(instObj);
+                instObj.transform.position = genPos;
+            }
+        }
+        this.ui.m_text_total.text = "当前总数量:" + (this._cacheAnims.length + 1);
+    }
+    _GetGenPos() {
+        let xCount = this._xBorder[1] - this._xBorder[0];
+        let zIndex = Math.floor(this._cacheAnims.length / xCount);
+        let xIndex = this._cacheAnims.length % xCount;
+        return new Laya.Vector3(xIndex + this._xBorder[0], 0, this._zBorder[0] + zIndex);
+    }
+    _OnClickBack() {
+        this.Hide();
+    }
+    _OnHide() {
+        this._fakeObj.destroy();
     }
 }
 
@@ -9891,6 +9986,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ui_Main_UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_PerfomanceDemo */ "./src/ui/Main/UI_PerfomanceDemo.ts");
 /* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _UI_BoneAnimTestMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_BoneAnimTestMediator */ "./src/script/ui/UI_BoneAnimTestMediator.ts");
+/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+
+
 
 
 
@@ -9907,10 +10006,18 @@ class UI_PerfomanceMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_I
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
-        this.ui.m_btn_boneAnim.onClick(this, this._OnClickTest);
+        this.ui.m_btn_boneAnim.onClick(this, this._OnClickBoneTest);
+        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_5__["UI_MainMediator"].instance.Hide();
     }
     _OnClickBack() {
         this.Hide();
+        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_5__["UI_MainMediator"].instance.Show();
+    }
+    _OnClickBoneTest() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.Hide();
+            _UI_BoneAnimTestMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show();
+        });
     }
     _OnClickTest() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -10238,6 +10345,9 @@ class UI_BoneAnimTest extends fgui.GComponent {
     }
     onConstruct() {
         this.m_btn_back = (this.getChildAt(0));
+        this.m_text_input = (this.getChildAt(1));
+        this.m_btn_add = (this.getChildAt(3));
+        this.m_text_total = (this.getChildAt(4));
     }
 }
 UI_BoneAnimTest.URL = "ui://kk7g5mmmmzx7i";

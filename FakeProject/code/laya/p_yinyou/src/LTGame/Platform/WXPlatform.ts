@@ -479,6 +479,13 @@ export default class WXPlatform implements IPlatform {
     }
 
     LoadSubpackage(name: string, onSuccess: Laya.Handler, onFailed: Laya.Handler, onProgress: Laya.Handler) {
+        if (this._base['loadSubpackage'] == null) {
+            console.log("无加载子包方法,跳过加载子包", name);
+            if (onSuccess) {
+                onSuccess.run();
+            }
+            return;
+        }
         let loadObj = {};
         loadObj["name"] = name;
         loadObj["success"] = () => {

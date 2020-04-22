@@ -18,7 +18,6 @@ export default class SplashScene extends LTSplashScene {
     }
 
     _OnBindUI() {
-        console.log('splash',this);
         LoadBinder.bindAll();
         MainBinder.bindAll();
     }
@@ -31,14 +30,12 @@ export default class SplashScene extends LTSplashScene {
 
     _OnGameResPrepared(urls: string[]) {
         GlobalUnit.InitAll();
-
+        
         EffectManager.instance.Preload(urls);
     }
 
     async _OnGameResLoaded() {
-        console.log("测试0");
         await EffectManager.instance.WarmEffects();
-        console.log("测试3");
         this.isFinished = true;
         this.nextState = ESceneType.Main;
     }
