@@ -1,11 +1,12 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as process from 'process';
+import * as child_process from 'child_process';
 import * as colors from 'colors';
-import { IPackConfig } from 'Pack/IPackConfig';
 import { LTUtils } from 'Utils/LTUtils';
 import { SubpackHelper } from './SubpackHelper';
 import StringEx from 'Utils/StringEx';
+import { LTPackConfig } from './LTPackConfig';
 
 export class PublishHandler {
 
@@ -24,18 +25,16 @@ export class PublishHandler {
     }
 
     private _keepFiles: string[];
-    private _useCompress: boolean;
 
     private _workPath: string;
     private _releasePath: string;
     private _templatePath: string;
     private _binPath: string;
     private _cdnPath: string;
-    private _packConfig: IPackConfig;
+    private _packConfig: LTPackConfig;
 
     constructor(platformStr: string, useCompress: boolean = true) {
         this._platformStr = platformStr;
-        this._useCompress = useCompress;
     }
 
     public Start() {
@@ -81,7 +80,7 @@ export class PublishHandler {
         let indexJsPath = path.join(this._binPath, "./index.js");
         let readJs = LTUtils.ReadStrFrom(indexJsPath);
 
-        if (this._useCompress) {
+        if (this._packConfig.compress) {
             console.log("当前配置需要压缩js,开始压缩");
             var startTime = Date.now();
         }
@@ -96,7 +95,7 @@ export class PublishHandler {
                 regex.lastIndex++;
             }
             if (m[1]) {
-                let fileName = m[1];
+                let fileName = m[1] as string;
                 let srcPath = path.join(this._binPath, fileName);
 
                 // 确保目标路径存在
@@ -105,16 +104,27 @@ export class PublishHandler {
                 let dirPath = targetPath.substring(0, lastIndex);
                 LTUtils.MakeDirExist(dirPath);
 
-                if (this._useCompress) {
+                if (this._packConfig.compress) {
                     this._DoCacheCompress(fileName, srcPath, cachePath, targetPath);
                 } else {
                     fs.copyFileSync(srcPath, targetPath);
+                }
+
+                if (this._packConfig.es5 && fileName.endsWith("bundle.js")) {
+                    // 进行转es5操作
+                    let command = `babel --lineWrap true --presets es2015,stage-2,react ${srcPath} -o ${targetPath}`;
+                    console.log("进行转es5操作 " + targetPath.green + "");
+                    child_process.exec(command, (error, stdout, stderr) => {
+                        if (error) {
+                            console.error(`执行出错: ${error}`);
+                        }
+                    });
                 }
             }
         }
 
         let targetIndexPath = path.join(this._releasePath, "./index.js");
-        if (this._useCompress) {
+        if (this._packConfig.compress) {
             this._DoCacheCompress("index.js", indexJsPath, cachePath, targetIndexPath);
             let endTime = Date.now();
             let passTime = ((endTime - startTime) / 1000).toFixed(2);
@@ -199,8 +209,11 @@ export class PublishHandler {
             configPath = path.join(this._workPath, "./others/config/publish.default.json");
         }
         let readStr = LTUtils.ReadStrFrom(configPath);
-        this._packConfig = JSON.parse(readStr);
-        this._useCompress = this._packConfig.compress;
+        let parseData = JSON.parse(readStr);
+        this._packConfig = new LTPackConfig();
+        for (let key in parseData) {
+            this._packConfig[key] = parseData[key];
+        }
 
         this._releasePath = path.join(this._workPath, "./release/" + this._platformStr);
         this._templatePath = path.join(this._workPath, "./others/publish/templates/" + this._platformStr);

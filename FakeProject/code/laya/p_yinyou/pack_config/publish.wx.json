@@ -12,5 +12,6 @@
     "maxSinglePackSize": 4,
     "maxTotalPackSize": 12,
     "packType": 0,
-    "compress": true
+    "compress": true,
+    "es5": true
 }
