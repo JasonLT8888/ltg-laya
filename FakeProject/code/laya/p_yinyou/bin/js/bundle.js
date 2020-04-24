@@ -7362,6 +7362,10 @@ class BaseUIMediator {
     constructor() {
         this._scaleSmall = 0.8;
         this._tweenTime = 180;
+        /**
+         * 是否适配顶部刘海屏
+         */
+        this._needFilScreen = false;
         this._isShow = false;
         this._sortOrder = 0;
     }
@@ -7393,6 +7397,7 @@ class BaseUIMediator {
         this._isShow = true;
         this._openParam = obj;
         let uiData = new _FGuiData__WEBPACK_IMPORTED_MODULE_1__["default"]();
+        uiData.needFitScreen = this._needFilScreen;
         this._ui = _FGuiEx__WEBPACK_IMPORTED_MODULE_0__["default"].AddUI(this._classDefine, uiData);
         this._InitSelfAd();
         this._OnShow();
