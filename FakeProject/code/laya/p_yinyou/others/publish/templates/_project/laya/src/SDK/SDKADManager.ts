@@ -1,4 +1,5 @@
 import LTDictionary from "../LTGame/LTUtils/LTDictionary";
+import { CommonEventId } from "../LTGame/Commom/CommonEventId";
 
 export default class SDKADManager {
 
@@ -16,6 +17,7 @@ export default class SDKADManager {
     public InitADs(locationId: number, adList: Array<SDK.ADInfoData>) {
         this._adDict[locationId] = adList;
         console.log("广告位置信息初始化完成,位置ID:", locationId, "广告信息:", adList);
+        Laya.stage.event(CommonEventId.SELF_AD_INITED, locationId);
     }
 
     /**

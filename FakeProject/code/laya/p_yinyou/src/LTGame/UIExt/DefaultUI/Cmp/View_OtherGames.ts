@@ -3,6 +3,7 @@ import LTSDK from "../../../../SDK/LTSDK";
 import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 import LTPlatform from "../../../Platform/LTPlatform";
 import { EPlatformType } from "../../../Platform/EPlatformType";
+import { CommonEventId } from "../../../Commom/CommonEventId";
 
 export default class View_OtherGames {
 
@@ -35,13 +36,28 @@ export default class View_OtherGames {
      */
     private _cacheAds: SDK.ADInfoData[];
 
+    private _posId: number = 0;
+
     private constructor(ui: UI_view_sharegames_big) {
         this._ui = ui;
         this._Init();
     }
 
     private _Init() {
-        this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(0);
+        this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
+        if (this._cacheAds == null) {
+            Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
+        } else {
+            this.ui.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
+            this.ui.m_list_games.numItems = this._cacheAds.length;
+            this.ui.m_list_games.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
+        }
+
+    }
+
+    private _OnAdInited(posId: number) {
+        if (posId != this._posId) return;
+        this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         this.ui.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
         this.ui.m_list_games.numItems = this._cacheAds.length;
         this.ui.m_list_games.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);

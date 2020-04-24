@@ -4,6 +4,7 @@ import { ECheckState } from "../common/ECheckState";
 import LTRespackManager from "../../LTGame/Res/LTRespackManager";
 import LTHttp from "../../LTGame/Net/LTHttp";
 import FakeAdDefine from "../common/FakeAdDefine";
+import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
 
 export default class SDK_Default implements ISDK {
 
@@ -45,7 +46,7 @@ export default class SDK_Default implements ISDK {
         console.error("拉取到广告信息失败", res);
     }
 
-    private _OnGetSelfAdInfos(res: string) { 
+    private _OnGetSelfAdInfos(res: string) {
         let adJson = JSON.parse(res) as FakeAdDefine[];
         console.log("拉取到广告信息", adJson.length, "条");
         let fakePosId = 0;
@@ -61,6 +62,7 @@ export default class SDK_Default implements ISDK {
 
         // 加入广告控制器
         this.adManager.InitADs(fakePosId, adList);
+
     }
 
     protected _RequestCheckState() {

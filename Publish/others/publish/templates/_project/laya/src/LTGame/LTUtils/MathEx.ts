@@ -9,6 +9,15 @@ export default class MathEx {
         return num.toString(16);
     }
 
+    public static RandomFromArrayExcept<T>(numArr: T[], except: T): T {
+        let fakeRandomList = [];
+        for (let i = 0; i < numArr.length; ++i) {
+            if (except == numArr[i]) continue;
+            fakeRandomList.push(numArr[i]);
+        }
+        return this.RandomFromArray(fakeRandomList);
+    }
+
     public static RandomFromArray<T>(numArr: T[]): T {
         let randomIndex = MathEx.RandomInt(0, numArr.length);
         return numArr[randomIndex];
