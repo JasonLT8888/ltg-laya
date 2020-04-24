@@ -7,6 +7,7 @@ import LTSDK from "../../../SDK/LTSDK";
 import UI_view_item_game from "./UI/LTGame/UI_view_item_game";
 import { ECheckState } from "../../../SDK/common/ECheckState";
 import { EPlatformType } from "../../Platform/EPlatformType";
+import View_OtherGames from "./Cmp/View_OtherGames";
 
 export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_CommonEndReward> {
 
@@ -20,7 +21,6 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
     }
 
     private _openData: EndRewardOpenData;
-    private _cacheAds: SDK.ADInfoData[];
 
     private _isChecked: boolean;
 
@@ -36,19 +36,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
             }
         }
 
-        if (LTPlatform.instance.platform == EPlatformType.TT) {
-            let tt = LTPlatform.instance['_base'];
-            let systemInfo = tt.getSystemInfoSync();
-            if (systemInfo.platform == "ios") {
-                this._openData.enableShowGames = false;
-            }
-            let [major, minor] = systemInfo.SDKVersion.split(".");
-            if (major >= 1 && minor >= 33) {
-
-            } else {
-                this._openData.enableShowGames = false;
-            }
-        }
+        this._openData.enableShowGames = LTPlatform.instance.isSupportJumpOther && this._openData.enableShowGames;
 
         switch (LTSDK.instance.checkState) {
             case ECheckState.InCheck:
@@ -67,14 +55,11 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
         this.ui.m_btn_normal_get.onClick(this, this._OnClickNormalGet);
         this.ui.m_btn_double_get.onClick(this, this._OnClickDoubleGet);
-        this.ui.m_view_moregames.onClick(this, this._OnClickGames);
+
         this.ui.m_btn_open_roll.onClick(this, this._OnClickOpenRoll);
 
         if (this._openData.enableShowGames) {
-            this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(0);
-            this.ui.m_view_moregames.m_list_games.setVirtual();
-            this.ui.m_view_moregames.m_list_games.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
-            this.ui.m_view_moregames.m_list_games.numItems = this._cacheAds.length;
+            View_OtherGames.CreateView(this.ui.m_view_moregames.m_sharegames);
         }
 
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
@@ -84,12 +69,6 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
         this.ui.m_btn_open_roll.m_btn_type.selectedIndex = 2;
         this.ui.m_btn_double_get.m_bg_type.selectedIndex = 1;
-    }
-
-    private _OnAdItemRender(index: number, adUI: UI_view_item_game) {
-        let adData = this._cacheAds[index];
-        adUI.m_icon.m_icon.url = adData.ad_img;
-        adUI.m_text_name.text = adData.ad_name;
     }
 
     private _OnClickOpenRoll() {
@@ -131,13 +110,5 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         }
     }
 
-    private _OnClickGames() {
-        let adList = this._cacheAds;
-        let appidList = [];
-        for (let i = 0; i < adList.length && i < 10; ++i) {
-            appidList.push(adList[i].ad_appid);
-        }
-        LTPlatform.instance.OpenGameBox(appidList);
-    }
 
 }

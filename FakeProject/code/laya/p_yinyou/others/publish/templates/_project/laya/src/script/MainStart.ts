@@ -31,6 +31,14 @@ export default class MainStart extends LTStart {
                 version = "v0.0.1"
                 LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_tt/");
                 break;
+            case EPlatformType.WX:
+                platformData.bannerId = "adunit-11a2571806b5fc5c";
+                platformData.rewardVideoId = "adunit-fa6dd5b431c41ceb";
+                platformData.interstitialId = "adunit-abe9d252f3a3956c";
+                platformData.appId = "wx7bcca975ff17ebe9";
+                version = "v0.0.1"
+                LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_wx/");
+                break;
             case EPlatformType.Oppo:
                 platformData.bannerId = "172417";
                 platformData.rewardVideoId = "172442";

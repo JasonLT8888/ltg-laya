@@ -9,6 +9,7 @@ import TrySkinOpenData from "../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData";
 import SetOpenData from "../../LTGame/UIExt/DefaultUI/Data/SetOpenData";
 import RollOpenData from "../../LTGame/UIExt/DefaultUI/Data/RollOpenData";
 import OneMoreOpenData from "../../LTGame/UIExt/DefaultUI/Data/OneMoreOpenData";
+import UI_MoudleDemoMediator from "./UI_MoudleDemoMediator";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -33,6 +34,11 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_set.onClick(this, this._OnClickSet);
         this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
         this.ui.m_btn_onemore.onClick(this, this._OnClickOneMore);
+        this.ui.m_btn_moudle.onClick(this, this._OnClickModule);
+    }
+
+    private _OnClickModule() {
+        UI_MoudleDemoMediator.instance.Show();
     }
 
     private _OnClickRoll() {
@@ -85,6 +91,7 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
     private _OnClickEndReward() {
         let openData = new EndRewardOpenData();
+        // openData.enableShowGames = false;
         openData.onClose = Laya.Handler.create(null, (type: number, fromObj: fgui.GObject) => {
             switch (type) {
                 case 0:

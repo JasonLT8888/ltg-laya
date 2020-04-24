@@ -1,9 +1,8 @@
-import SDKADManager from "../SDKADManager";
+import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
 import LTHttp from "../../LTGame/Net/LTHttp";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import ShareManager from "../../LTGame/Platform/ShareManager";
-import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
-import FakeAdDefine from "../common/FakeAdDefine";
+import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
 
 export default class SDK_CQ extends SDK_Default {

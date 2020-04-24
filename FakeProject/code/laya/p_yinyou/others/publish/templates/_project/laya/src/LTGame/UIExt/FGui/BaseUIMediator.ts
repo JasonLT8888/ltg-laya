@@ -1,5 +1,7 @@
 import FGuiEx from "./FGuiEx";
 import FGuiData from "./FGuiData";
+import View_OtherGames from "../DefaultUI/Cmp/View_OtherGames";
+import View_HotGame from "../DefaultUI/Cmp/View_HotGame";
 
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
@@ -47,7 +49,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         this._openParam = obj;
         let uiData = new FGuiData();
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
-
+        this._InitSelfAd();
         this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
 
@@ -55,6 +57,17 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         if (this._ui[anim_enter]) {
             let anim = this._ui[anim_enter] as fgui.Transition;
             anim.play();
+        }
+    }
+
+    private _InitSelfAd() {
+        let othergames = View_OtherGames.CreateView(this._ui['m___othergames']);
+        if (othergames) {
+            this._ui['m___othergames'] = othergames.ui;
+        }
+        let hotGame = View_HotGame.CreateView(this._ui['m___hotgame']);
+        if (hotGame) {
+            this._ui['m___hotgame'] = hotGame.ui;
         }
     }
 

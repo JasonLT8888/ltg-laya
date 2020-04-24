@@ -14,7 +14,6 @@ import SDK_Default from "../../SDK/Impl/SDK_Default";
 
 export class LTStart {
 
-    private _jsonPath = "subpack.json";
 
     protected _fsm: StateMachine<BaseState>;
 
@@ -55,22 +54,13 @@ export class LTStart {
     }
 
     public InitGame() {
+        LTPlatform.CreateInstance();
         console.log("游戏开始初始化,当前框架版本号", LTVersion.version);
-        Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        this._Init();
     }
 
-    private _OnJsonLoaded() {
-        LTPlatform.CreateInstance();
+    private _Init() {
         let platformData = new LTPlatformData();
-        let loadJson = Laya.loader.getRes(this._jsonPath);
-        Laya.loader.clearRes(this._jsonPath);
-        if (loadJson != null) {
-            for (let i = 0; i < loadJson.length; ++i) {
-                let jsonData = loadJson[i] as LoadPackConfig;
-                console.log("自动设置分包", jsonData);
-                LTRespackManager.instance.AddPackData(jsonData);
-            }
-        }
 
         this._HandleInitPlatform(LTPlatform.instance.platform, platformData);
         this._HandleSDK();
@@ -78,8 +68,6 @@ export class LTStart {
             LTSDK.CreateInstace(SDK_Default, "default", "default", "default");
         }
         LTPlatform.instance.Init(platformData);
-
-
         // 非web平台禁用debug模式
         if (LTPlatform.instance.platform != EPlatformType.Web) {
             Laya.Shader3D.debugMode = false;

@@ -4,25 +4,25 @@ import FGuiData from "../UIExt/FGui/FGuiData";
 import LTRespackManager from "../Res/LTRespackManager";
 import { ConfigManager } from "../Config/ConfigManager";
 import FGuiEx from "../UIExt/FGui/FGuiEx";
-import LTRes from "../Res/LTRes";
-import Awaiters from "../Async/Awaiters";
 import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
 import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 import { ESceneType } from "./ESceneType";
 import { EPlatformType } from "../Platform/EPlatformType";
+import { LoadPackConfig } from "../Config/LoadPackConfig";
+import { LoadUIPack } from "../UIExt/FGui/LoadUIPack";
 
 export default class LTSplashScene extends BaseState {
 
     /**
      * 用于初始化的ui包
      */
-    private _initPath = "res/fgui_load/Load";
+    private _initUiPack: LoadUIPack = new LoadUIPack("res/fgui_load/Load");
 
     /**
      * 需要加载的其他UI包
      */
-    protected _needLoadOtherUIPack = [
-        "res/fgui/Main"
+    protected _needLoadOtherUIPack: LoadUIPack[] = [
+        new LoadUIPack("res/fgui/Main")
     ];
 
     /**
@@ -51,6 +51,8 @@ export default class LTSplashScene extends BaseState {
         return loadWeight / totalWeight * 100;
     }
 
+    private _jsonPath = "subpack.json";
+
     constructor() {
         super(ESceneType.Splash);
         switch (LTPlatform.instance.platform) {
@@ -67,8 +69,27 @@ export default class LTSplashScene extends BaseState {
     _DoEnter() {
 
         this._needLoadOtherUIPack.push(
-            "res/ltgame/ui/LTGame"
+            new LoadUIPack("res/ltgame/ui/LTGame")
         );
+
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this._OnJsonLoaded();
+        } else {
+            Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        }
+    }
+
+    private _OnJsonLoaded() {
+        let loadJson = Laya.loader.getRes(this._jsonPath);
+        Laya.loader.clearRes(this._jsonPath);
+        if (loadJson != null) {
+            for (let i = 0; i < loadJson.length; ++i) {
+                let jsonData = loadJson[i] as LoadPackConfig;
+                console.log("自动设置分包", jsonData);
+                LTRespackManager.instance.AddPackData(jsonData);
+            }
+        }
+        LTRespackManager.instance.InitLoadSet();
 
         this._InitUI();
     }
@@ -78,15 +99,14 @@ export default class LTSplashScene extends BaseState {
         LTGameBinder.bindAll();
         this._OnBindUI();
         let loadUrl = [];
-        loadUrl.push({ url: this._initPath + ".bin", type: Laya.Loader.BUFFER });
-        loadUrl.push({ url: this._initPath + "_atlas0.png", type: Laya.Loader.IMAGE });
+        this._initUiPack.PushUrl(loadUrl);
         Laya.loader.load(loadUrl, Laya.Handler.create(this, this._OnUILoaded));
     }
 
     protected _OnBindUI() { }
 
     private _OnUILoaded() {
-        fgui.UIPackage.addPackage(this._initPath);
+        this._initUiPack.AddPackage();
         // 打开界面
         let needFit = new FGuiData();
         needFit.needFitScreen = false;
@@ -134,11 +154,11 @@ export default class LTSplashScene extends BaseState {
             this._OnOtherUILoaded();
             return;
         }
+
         let uiLoadData = [];
         for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
             let otherUIPack = this._needLoadOtherUIPack[i];
-            uiLoadData.push({ url: otherUIPack + ".bin", type: Laya.Loader.BUFFER });
-            uiLoadData.push({ url: otherUIPack + "_atlas0.png", type: Laya.Loader.IMAGE });
+            otherUIPack.PushUrl(uiLoadData);
         }
         Laya.loader.load(uiLoadData, Laya.Handler.create(this, this._OnOtherUILoaded), Laya.Handler.create(this, this._OnOtherUIProgress, null, false));
     }
@@ -147,11 +167,11 @@ export default class LTSplashScene extends BaseState {
         this._otherUIProgress = value;
     }
 
-    private async _OnOtherUILoaded() {
+    private _OnOtherUILoaded() {
         LTPlatform.instance.RecordEvent("开始加载剩余游戏资源", null);
         for (let i = 0; i < this._needLoadOtherUIPack.length; ++i) {
             let otherUIPack = this._needLoadOtherUIPack[i];
-            fgui.UIPackage.addPackage(otherUIPack);
+            otherUIPack.AddPackage();
             console.log(otherUIPack, "已加载");
         }
         UI_FlyPanelMediator.instance.Show();
@@ -163,8 +183,8 @@ export default class LTSplashScene extends BaseState {
             this._OnResLoaded();
             return;
         }
-        await LTRes.LoadAsync(loadUrls, Laya.Handler.create(this, this._OnResProgress));
-        this._OnResLoaded();
+        Laya.loader.create(loadUrls, Laya.Handler.create(this, this._OnResLoaded),
+            Laya.Handler.create(this, this._OnResProgress, null, false));
     }
 
     /**

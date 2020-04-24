@@ -61,7 +61,10 @@ export default class CommonConfig {
         "src/script/config/GameConst.ts",
         "src/script/config/AudioConfig.ts",
         "src/script/config/EffectConfig.ts",
+        "src/script/manager/AudioManager.ts",
+        "src/script/manager/EffectManager.ts",
         "src/script/MainStart.ts",
+        "src/Main.ts",
     ];
 
     /**

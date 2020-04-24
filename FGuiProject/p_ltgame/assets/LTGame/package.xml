@@ -130,6 +130,7 @@
     <component id="74v84f" name="CommonMainHotGame.xml" path="/ad_res/" exported="true"/>
     <component id="74v84g" name="hot_game.xml" path="/ad_res/"/>
     <image id="74v84h" name="爆款游戏.png" path="/ad_res/"/>
+    <component id="wjpo4i" name="view_sharegames_big.xml" path="/cache/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

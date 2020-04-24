@@ -35,7 +35,7 @@ export class LTUtils {
         }
     }
 
-    public static GetComponentsInChildren(obj: Laya.Sprite3D, cmp: typeof Laya.Component): typeof Laya.Component[] {
+    public static GetComponentsInChildren(obj: Laya.Sprite3D, cmp: typeof Laya.Component): any[] {
         let result: typeof Laya.Component[] = [];
         this._GetComponentsInChildrenHelper(obj, cmp, result);
         return result;
@@ -43,7 +43,11 @@ export class LTUtils {
 
     private static _GetComponentsInChildrenHelper(obj: Laya.Sprite3D, cmp: typeof Laya.Component, result: typeof Laya.Component[]) {
         let cmps = obj.getComponents(cmp) as typeof Laya.Component[];
-        result.push(...cmps);
+        if (cmps != null) {
+            for (let i = 0; i < cmps.length; ++i) {
+                result.push(cmps[i]);
+            }
+        }
         for (let i = 0; i < obj.numChildren; ++i) {
             let getChild = obj.getChildAt(i);
             this._GetComponentsInChildrenHelper(getChild as Laya.Sprite3D, cmp, result);

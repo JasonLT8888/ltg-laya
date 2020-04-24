@@ -25,6 +25,20 @@ export default class TTPlatform extends WXPlatform {
         }
 
         this._platformData = platformData;
+
+        // 检测是否支持交叉推广
+        let tt = this._base;
+        let systemInfo = tt.getSystemInfoSync();
+        if (systemInfo.platform == "ios") {
+            this.isSupportJumpOther = false;
+        }
+        let [major, minor] = systemInfo.SDKVersion.split(".");
+        if (major >= 1 && minor >= 33) {
+
+        } else {
+            this.isSupportJumpOther = false;
+        }
+
         this._InitLauchOption();
         // this._Login();
         this._InitShareInfo();
@@ -132,42 +146,31 @@ export default class TTPlatform extends WXPlatform {
             appLaunchOptions: openData
         });
     }
-    NavigateToApp(appid: string, path?: string, extra?: any) {
+    
+    NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this._base.navigateToMiniProgram({
-                appId: appid,
-                path: path,
-                extraData: extra,
-                envVersion: 'current',
-                success: (ret) => {
-                    resolve(ret);
-                },
-                fail: (err) => {
-                    const systemInfo = this._base.getSystemInfoSync();
-                    // iOS 不支持，建议先检测再使用
-                    if (systemInfo.platform !== "ios") {
-                        // 打开互跳弹窗
-                        this._base.showMoreGamesModal({
-                            appLaunchOptions: [
-                                {
-                                    appId: this._platformData.appId,
-                                    query: "foo=bar&baz=qux",
-                                    extraData: {}
-                                }
-                            ],
-                            success(res) {
-                                resolve(res);
-                            },
-                            fail(err) {
-                                reject(err);
-                            }
-                        });
-                    } else {
-                        throw new Error("iOS 平台不支持该功能");
+            if (!this.isSupportJumpOther) {
+                reject(false);
+                console.log("当前平台不支持小游戏跳转", this);
+            } else {
+                this._base.showMoreGamesModal({
+                    appLaunchOptions: [
+                        {
+                            appId: this._platformData.appId,
+                            query: "foo=bar&baz=qux",
+                            extraData: {}
+                        }
+                    ],
+                    success(res) {
+                        resolve(true);
+                        console.log("跳转小游戏成功", appid);
+                    },
+                    fail(err) {
+                        reject(false);
+                        console.log("跳转小游戏失败", appid);
                     }
-                },
-                complete: undefined,
-            });
+                });
+            }
         });
     }
 

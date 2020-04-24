@@ -15,6 +15,7 @@
     <component id="fkl1g" name="CommonUI.xml" path="/ui/" exported="true"/>
     <component id="mzx7h" name="PerfomanceDemo.xml" path="/ui/" exported="true"/>
     <component id="mzx7i" name="BoneAnimTest.xml" path="/ui/" exported="true"/>
+    <component id="sgapj" name="MoudleDemo.xml" path="/ui/" exported="true"/>
   </resources>
   <publish name="Main" genCode="true"/>
 </packageDescription>

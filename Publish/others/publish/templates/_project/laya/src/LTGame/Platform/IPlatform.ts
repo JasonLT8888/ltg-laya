@@ -56,6 +56,11 @@ export default interface IPlatform {
     device: IDevice;
 
     /**
+     * 是否支持直接跳转到其他小程序
+     */
+    isSupportJumpOther: boolean;
+
+    /**
      * 初始化
      */
     Init(platformData: LTPlatformData);
@@ -84,6 +89,15 @@ export default interface IPlatform {
      * 隐藏banner广告
      */
     HideBannerAd();
+    // /**
+    //  * 展示Native广告
+    //  */
+    // ShowNativeAd();
+
+    // /**
+    //  * 隐藏Native广告
+    //  */
+    // HideNativeAd();
 
     /**
      * 展示有奖视频
@@ -139,5 +153,12 @@ export default interface IPlatform {
      * 打开游戏盒子
      */
     OpenGameBox(appIds: string[]);
+
+
+    /**
+     * 跳转到其他小程序
+     * appid蓝绿厂的传包名
+     */
+    NavigateToApp(appId: string, path?: string, extra?: any): Promise<boolean>;
 
 }

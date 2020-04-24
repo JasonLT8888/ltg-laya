@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { LTPackNode } from "./LTPackNode";
-import { IPackConfig } from "Pack/IPackConfig";
 import { LTUtils } from "Utils/LTUtils";
 import { EPackResolveType } from "Pack/EPackResolveType";
+import { LTPackConfig } from "./LTPackConfig";
 
 export class SubpackHelper {
 
@@ -17,9 +17,9 @@ export class SubpackHelper {
     private _subpacks: LTPackNode[];
     private _remoteFiles: LTPackNode[];
 
-    private _packConfig: IPackConfig;
+    private _packConfig: LTPackConfig;
 
-    constructor(rootPath: string, packConfig: IPackConfig) {
+    constructor(rootPath: string, packConfig: LTPackConfig) {
         this._rootPath = rootPath;
         this._packConfig = packConfig;
         this._rootNode = new LTPackNode();

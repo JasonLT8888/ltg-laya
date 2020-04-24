@@ -2,10 +2,13 @@
   "name": "ltgame-kit",
   "version": "1.0.0",
   "description": "ltgame-kit",
-  "dependencies": {},
+  "dependencies": {
+    "shelljs": "^0.8.3"
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "colors": "^1.4.0",
+    "extract-zip": "^2.0.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
     "raw-loader": "^4.0.0",
@@ -25,7 +28,8 @@
     "publish-qq": "node others/publish/bin/publish.js -p qq -c false",
     "publish-bd": "node others/publish/bin/publish.js -p bd -c false",
     "update-ltg": "node others/publish/bin/update.js",
-    "test": "node others/publish/bin/test.js"
+    "test": "node others/publish/bin/test.js",
+    "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js oppogame/quickgame debug"
   },
   "author": "lt",
   "license": "MIT"

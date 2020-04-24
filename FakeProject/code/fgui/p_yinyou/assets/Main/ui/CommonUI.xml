@@ -43,5 +43,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="再来一份"/>
     </component>
+    <component id="n11_sgap" name="btn_moudle" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="85,811">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="模块化组件"/>
+    </component>
   </displayList>
 </component>

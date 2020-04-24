@@ -21,7 +21,7 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87khtjj37"/>
     </component>
-    <component id="n10_bg00" name="btn_normal_get" src="bg001j" fileName="cache/view_reward_count.xml" xy="214,915">
+    <component id="n10_bg00" name="btn_normal_get" src="bg001j" fileName="cache/view_reward_count.xml" xy="214,915" pivot="0.5,0.5" scale="0,0">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="五倍领取奖励"/>
       <property target="text_title" propertyId="0" value="五倍领取奖励"/>
@@ -30,4 +30,7 @@
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
   </displayList>
+  <transition name="anim_enter">
+    <item time="66" type="Scale" target="n10_bg00" tween="true" startValue="0.1,0.1" endValue="1,1" duration="24" ease="Sine.InOut"/>
+  </transition>
 </component>

@@ -25,6 +25,11 @@ export default class WXPlatform implements IPlatform {
     recordManager: IRecordManager = new DefaultRecordManager();
     device: IDevice = new DefaultDevice();
 
+    /**
+     * 是否支持直接跳转到其他小程序
+     */
+    isSupportJumpOther: boolean = true;
+
     protected _data: LTPlatformData;
 
     protected _bannerAd;
@@ -277,7 +282,7 @@ export default class WXPlatform implements IPlatform {
         if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
-        } 
+        }
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
         let bannerObj = {};
@@ -474,6 +479,13 @@ export default class WXPlatform implements IPlatform {
     }
 
     LoadSubpackage(name: string, onSuccess: Laya.Handler, onFailed: Laya.Handler, onProgress: Laya.Handler) {
+        if (this._base['loadSubpackage'] == null) {
+            console.log("无加载子包方法,跳过加载子包", name);
+            if (onSuccess) {
+                onSuccess.run();
+            }
+            return;
+        }
         let loadObj = {};
         loadObj["name"] = name;
         loadObj["success"] = () => {
@@ -566,19 +578,19 @@ export default class WXPlatform implements IPlatform {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
 
-    NavigateToApp(appid: string, path?: string, extra?: any) {
+    NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            Laya.Browser.window.qg.navigateToMiniGame({
-                pkgName: appid,
+            Laya.Browser.window.qg.navigateToMiniProgram({
+                appId: appid,
                 path: path,
                 extraData: extra,
                 success: function () {
-                    resolve();
-                    console.log('oppo小游戏跳转成功');
+                    console.log('小游戏跳转成功');
+                    resolve(true);
                 },
                 fail: function (res) {
-                    reject();
-                    console.log('oppo小游戏跳转失败：', JSON.stringify(res));
+                    console.log('小游戏跳转失败：', JSON.stringify(res));
+                    reject(false);
                 }
             });
         })
