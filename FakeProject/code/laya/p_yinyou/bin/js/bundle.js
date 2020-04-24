@@ -4064,14 +4064,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Fsm_StateMachine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Fsm/StateMachine */ "./src/LTGame/Fsm/StateMachine.ts");
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _Platform_Data_LTPlatformData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Platform/Data/LTPlatformData */ "./src/LTGame/Platform/Data/LTPlatformData.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
-/* harmony import */ var _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
-/* harmony import */ var _LTVersion__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTVersion */ "./src/LTGame/LTVersion.ts");
-/* harmony import */ var _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Commom/EScreenOrientation */ "./src/LTGame/Commom/EScreenOrientation.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../SDK/Impl/SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
-
+/* harmony import */ var _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../UIExt/FGui/FGuiEx */ "./src/LTGame/UIExt/FGui/FGuiEx.ts");
+/* harmony import */ var _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTVersion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTVersion */ "./src/LTGame/LTVersion.ts");
+/* harmony import */ var _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Commom/EScreenOrientation */ "./src/LTGame/Commom/EScreenOrientation.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../SDK/Impl/SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
 
 
 
@@ -4084,16 +4082,16 @@ __webpack_require__.r(__webpack_exports__);
 class LTStart {
     constructor() {
         this.enableStat = false;
-        this.screenOrientation = _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Portrait;
+        this.screenOrientation = _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_6__["EScreenOrientation"].Portrait;
     }
     get _currentState() {
         return this._fsm.currState;
     }
     get designWidth() {
         switch (this.screenOrientation) {
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Portrait:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_6__["EScreenOrientation"].Portrait:
                 return 750;
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Landscape:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_6__["EScreenOrientation"].Landscape:
                 return 1334;
             default:
                 console.error("未处理的屏幕初始化方向", this.screenOrientation);
@@ -4102,9 +4100,9 @@ class LTStart {
     }
     get designHeight() {
         switch (this.screenOrientation) {
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Portrait:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_6__["EScreenOrientation"].Portrait:
                 return 1334;
-            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_7__["EScreenOrientation"].Landscape:
+            case _Commom_EScreenOrientation__WEBPACK_IMPORTED_MODULE_6__["EScreenOrientation"].Landscape:
                 return 750;
             default:
                 console.error("未处理的屏幕初始化方向", this.screenOrientation);
@@ -4113,22 +4111,24 @@ class LTStart {
     }
     InitGame() {
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].CreateInstance();
-        console.log("游戏开始初始化,当前框架版本号", _LTVersion__WEBPACK_IMPORTED_MODULE_6__["default"].version);
+        console.log("游戏开始初始化,当前框架版本号", _LTVersion__WEBPACK_IMPORTED_MODULE_5__["default"].version);
         this._Init();
     }
     _Init() {
         let platformData = new _Platform_Data_LTPlatformData__WEBPACK_IMPORTED_MODULE_2__["default"]();
         this._HandleInitPlatform(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform, platformData);
         this._HandleSDK();
-        if (!_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__["default"].isInited) {
-            _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__["default"], "default", "default", "default");
+        if (!_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].isInited) {
+            _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_8__["default"], "default", "default", "default");
         }
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Init(platformData);
+        /* 2.6.0 版本之后 该设置已经变为默认false,无需手动禁用,如果后期调整,再进行打开
         // 非web平台禁用debug模式
-        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Web) {
+        if (LTPlatform.instance.platform != EPlatformType.Web) {
             Laya.Shader3D.debugMode = false;
         }
-        _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_4__["default"].Init(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.safeArea);
+        */
+        _UIExt_FGui_FGuiEx__WEBPACK_IMPORTED_MODULE_3__["default"].Init(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.safeArea);
         Laya.timer.frameOnce(1, this, this._NextFramUpdate);
     }
     _NextFramUpdate() {
@@ -4142,12 +4142,12 @@ class LTStart {
         this._RegistUpdate();
     }
     _RegistUpdate() {
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].Update, this, this._LogicUpdate);
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].LateUpdate, this, this._LateUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["EActionType"].Update, this, this._LogicUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["default"].instance.AddAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["EActionType"].LateUpdate, this, this._LateUpdate);
     }
     _UnRegistUpdate() {
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].Update, this, this._LogicUpdate);
-        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_5__["EActionType"].LateUpdate, this, this._LateUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["EActionType"].Update, this, this._LogicUpdate);
+        _LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["default"].instance.RemoveAction(_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_4__["EActionType"].LateUpdate, this, this._LateUpdate);
     }
     _HandleSDK() {
     }

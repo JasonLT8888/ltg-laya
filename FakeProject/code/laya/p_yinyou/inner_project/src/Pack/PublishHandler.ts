@@ -14,13 +14,16 @@ export class PublishHandler {
 
     private _keepPlatforms = {
         "wx": [
-            "project.config.json"
+            "project.config.json",
+            "game.json"
         ],
         "tt": [
-            "project.config.json"
+            "project.config.json",
+            "game.json"
         ],
         "qq": [
-            "project.config.json"
+            "project.config.json",
+            "game.json"
         ]
     }
 
