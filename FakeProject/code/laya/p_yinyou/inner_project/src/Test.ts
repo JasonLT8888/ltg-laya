@@ -1,4 +1,3 @@
-import * as xml from 'xml';
 import * as path from 'path';
 import { LTUtils } from 'Utils/LTUtils';
 

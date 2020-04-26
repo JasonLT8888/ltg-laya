@@ -29,6 +29,13 @@ declare namespace fgui {
     }
 }
 declare namespace fgui {
+    const BlendMode: {
+        2: string;
+        3: string;
+        4: string;
+    };
+}
+declare namespace fgui {
     class Controller extends Laya.EventDispatcher {
         private _selectedIndex;
         private _previousIndex;

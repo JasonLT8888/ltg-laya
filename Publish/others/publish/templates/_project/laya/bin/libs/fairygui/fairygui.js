@@ -192,6 +192,14 @@ window.fairygui = window.fgui;
 })(fgui || (fgui = {}));
 
 (function (fgui) {
+    fgui.BlendMode = {
+        2: Laya.BlendMode.LIGHTER,
+        3: Laya.BlendMode.MULTIPLY,
+        4: Laya.BlendMode.SCREEN
+    };
+})(fgui || (fgui = {}));
+
+(function (fgui) {
     class Controller extends Laya.EventDispatcher {
         constructor() {
             super();
@@ -1570,8 +1578,8 @@ window.fairygui = window.fgui;
             if (buffer.readBool())
                 this.grayed = true;
             var bm = buffer.readByte();
-            if (bm == 2)
-                this.blendMode = "lighter";
+            if (fgui.BlendMode[bm])
+                this.blendMode = fgui.BlendMode[bm];
             var filter = buffer.readByte();
             if (filter == 1) {
                 fgui.ToolSet.setColorFilter(this._displayObject, [buffer.getFloat32(), buffer.getFloat32(), buffer.getFloat32(), buffer.getFloat32()]);
@@ -13864,6 +13872,7 @@ window.fairygui = window.fgui;
             }
         }
         loadFont(item) {
+            item = item.getBranch();
             var font = new fgui.BitmapFont();
             item.bitmapFont = font;
             var buffer = item.rawData;
@@ -15000,8 +15009,9 @@ window.fairygui = window.fgui;
                         else
                             this._status = 1; //new loop
                     }
-                    else if (this._start != 0)
+                    else {
                         this._status = 1; //new loop
+                    }
                 }
             }
             this.drawFrame();
@@ -16568,6 +16578,7 @@ window.fairygui = window.fgui;
         }
         _reset() {
             this._target = null;
+            this._propType = null;
             this._userData = null;
             this._path = null;
             this._onStart = this._onUpdate = this._onComplete = null;

@@ -7413,9 +7413,15 @@ class BaseUIMediator {
         if (othergames) {
             this._ui['m___othergames'] = othergames.ui;
         }
+        else {
+            this._ui['m___othergames'] = null;
+        }
         let hotGame = _DefaultUI_Cmp_View_HotGame__WEBPACK_IMPORTED_MODULE_3__["default"].CreateView(this._ui['m___hotgame']);
         if (hotGame) {
             this._ui['m___hotgame'] = hotGame.ui;
+        }
+        else {
+            this._ui['m___hotgame'] = null;
         }
     }
     _OnShow() { }
