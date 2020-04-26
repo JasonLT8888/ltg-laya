@@ -6,7 +6,7 @@
     <image id="n17_gxi8" name="n17" src="q0fh4v" fileName="img/sp_gou(1).png" xy="5,11">
       <gearDisplay controller="selected" pages="1"/>
     </image>
-    <text id="n18_gxi8" name="title" xy="44,11" size="237,30" fontSize="22" color="#cccccc" bold="true" text="观看视频五倍领取奖励"/>
+    <text id="n18_gxi8" name="title" xy="44,12" size="237,30" fontSize="22" color="#cccccc" bold="true" text="观看视频五倍领取奖励"/>
   </displayList>
   <Button/>
 </component>

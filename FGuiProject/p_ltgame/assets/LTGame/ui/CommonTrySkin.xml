@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87khtjj35" designImageAlpha="0" designImageLayer="1">
+<component size="750,1334" designImage="ui://75kiu87kq0fh57" designImageLayer="1">
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n1_bg00" name="n1" src="bg001l" fileName="cmp/view_title.xml" xy="145,221">
+    <component id="n1_bg00" name="n1" src="bg001l" fileName="cmp/view_title.xml" xy="145,188">
       <relation target="" sidePair="center-center,middle-middle"/>
-      <property target="icon" propertyId="1" value="ui://75kiu87kbg001x"/>
+      <property target="icon" propertyId="1" value="ui://75kiu87kq0fh58"/>
     </component>
     <component id="n2_bg00" name="btn_thanks" src="htjj33" fileName="cmp/btn_text.xml" xy="375,957" pivot="0.5,0.5" anchor="true" scale="0,0">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="随机使用"/>
     </component>
-    <list id="n8_bg00" name="list_item" xy="147,370" size="484,497" layout="flow_hz" overflow="scroll" lineGap="58" colGap="80" defaultItem="ui://75kiu87kbg0022">
+    <list id="n8_bg00" name="list_item" xy="144,336" size="515,507" layout="flow_hz" overflow="scroll" lineGap="58" colGap="41" defaultItem="ui://75kiu87kbg0022">
       <relation target="" sidePair="center-center,middle-middle"/>
       <item/>
       <item/>
@@ -21,7 +21,7 @@
     </list>
     <component id="n9_htjj" name="btn_toggle_check" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="272,851">
       <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="随机试玩皮肤"/>
+      <Button title="随机体验皮肤"/>
     </component>
   </displayList>
   <transition name="anim_enter">

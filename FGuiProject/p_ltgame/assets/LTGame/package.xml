@@ -153,6 +153,10 @@
     <image id="q0fh54" name="sp_wubeilingqu(1).png" path="/img/"/>
     <component id="q0fh55" name="btn_5scale.xml" path="/cmp/"/>
     <component id="q0fh56" name="view_item_sign_big.xml" path="/cache/"/>
+    <image id="q0fh57" name="皮肤试用2.jpg" path="/效果图/"/>
+    <image id="q0fh58" name="sp_pifushiyong(1).png" path="/img/"/>
+    <image id="q0fh59" name="sp_shipin1.png" path="/img/"/>
+    <image id="q0fh5a" name="sp_shiwan(1).png" path="/img/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
