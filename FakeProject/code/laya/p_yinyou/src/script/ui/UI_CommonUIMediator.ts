@@ -11,6 +11,9 @@ import RollOpenData from "../../LTGame/UIExt/DefaultUI/Data/RollOpenData";
 import OneMoreOpenData from "../../LTGame/UIExt/DefaultUI/Data/OneMoreOpenData";
 import UI_MoudleDemoMediator from "./UI_MoudleDemoMediator";
 import { EndLoseOpenData } from "../../LTGame/UIExt/DefaultUI/Data/EndLoseOpenData";
+import { UnlockProgressOpenData } from "../../LTGame/UIExt/DefaultUI/Data/UnlockProgressOpenData";
+import LTSDK from "../../SDK/LTSDK";
+import { ECheckState } from "../../SDK/common/ECheckState";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -37,6 +40,7 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_onemore.onClick(this, this._OnClickOneMore);
         this.ui.m_btn_moudle.onClick(this, this._OnClickModule);
         this.ui.m_btn_endlose.onClick(this, this._OnClickEndLose);
+        this.ui.m_btn_unlockprogress.onClick(this, this._OnClickUnlockProgress);
     }
 
     private _OnClickModule() {
@@ -195,6 +199,26 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
             }
         });
         LTUI.ShowSignUI(openData);
+    }
+
+    private _OnClickUnlockProgress() {
+        let openData = new UnlockProgressOpenData();
+        openData.endProgress = 50;
+
+        openData.onClose = Laya.Handler.create(null, (type: number) => {
+            switch (type) {
+                case 0:
+                    LTUI.Toast("点击正常关闭");
+                    break;
+                case 1:
+                    LTUI.Toast("点击视频领取");
+                    break;
+                case 2:
+                    LTUI.Toast("点击正常领取");
+                    break;
+            }
+        });
+        LTUI.ShowUnlockProgress(openData);
     }
 
     private _OnClickBack() {
