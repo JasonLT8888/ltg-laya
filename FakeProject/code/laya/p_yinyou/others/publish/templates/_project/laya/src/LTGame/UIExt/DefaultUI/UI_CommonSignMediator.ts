@@ -7,6 +7,7 @@ import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
 import LTSDK from "../../../SDK/LTSDK";
 import { ECheckState } from "../../../SDK/common/ECheckState";
+import UI_view_item_sign_big from "./UI/LTGame/UI_view_item_sign_big";
 
 export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign> {
 
@@ -20,7 +21,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
     }
 
     private _openData: SignOpenData;
-    private _cacheRewardItem: UI_view_item_sign;
+    private _cacheRewardItem: UI_view_item_sign | UI_view_item_sign_big;
 
     private _isChecked: boolean = true;
 
@@ -40,17 +41,21 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
             case ECheckState.InCheck:
                 this.ui.m_view.m_toggle_watchad.visible = false;
                 this._isChecked = false;
+                this.ui.m_view.m_check_state.selectedIndex = 0;
                 break;
             case ECheckState.Normal:
                 this._isChecked = false;
+                this.ui.m_view.m_check_state.selectedIndex = 1;
                 break;
             case ECheckState.NoGame:
                 this._isChecked = true;
+                this.ui.m_view.m_check_state.selectedIndex = 1;
                 break;
         }
         this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
         this.ui.m_view.m_btn_get.onClick(this, this._OnClickGet);
         this.ui.m_view.m_toggle_watchad.onClick(this, this._OnClickToggle);
+        this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickWatchAd);
         this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
 
         this._UpdateUI();
@@ -118,6 +123,10 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         } else {
             this._OnClickNormalGet();
         }
+    }
+
+    private _OnClickWatchAd() {
+        this._OnClickDoubleGet();
     }
 
     private _OnClickNormalGet() {

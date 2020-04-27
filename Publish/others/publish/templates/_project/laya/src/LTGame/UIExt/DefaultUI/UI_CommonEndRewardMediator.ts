@@ -4,9 +4,7 @@ import EndRewardOpenData from "./Data/EndRewardOpenData";
 import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
 import LTSDK from "../../../SDK/LTSDK";
-import UI_view_item_game from "./UI/LTGame/UI_view_item_game";
 import { ECheckState } from "../../../SDK/common/ECheckState";
-import { EPlatformType } from "../../Platform/EPlatformType";
 import View_OtherGames from "./Cmp/View_OtherGames";
 
 export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_CommonEndReward> {
@@ -51,37 +49,36 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
                 break;
         }
 
+        if (this._openData.showText != null) {
+            this.ui.m_text_str.text = this._openData.showText;
+        }
+        if (this._openData.iconPath != null) {
+            this.ui.m_icon_reward.url = this._openData.iconPath;
+        }
+        this.ui.m_text_add.text = "+" + this._openData.rewardCount;
         this.ui.m_c1.selectedIndex = this._openData.enableShowGames ? 0 : 1;
 
-        this.ui.m_btn_normal_get.onClick(this, this._OnClickNormalGet);
-        this.ui.m_btn_double_get.onClick(this, this._OnClickDoubleGet);
-
-        this.ui.m_btn_open_roll.onClick(this, this._OnClickOpenRoll);
+        this.ui.m_btn_get.onClick(this, this._OnClickNormalGet);
+        this.ui.m_btn_back.onClick(this, this._OnClickBack);
 
         if (this._openData.enableShowGames) {
-            View_OtherGames.CreateView(this.ui.m_view_moregames.m_sharegames);
+            View_OtherGames.CreateView(this.ui.m_view_othergames);
         }
 
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-        this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";
-        this.ui.m_btn_normal_get.m_text_count.text = "x" + (this._isChecked ? this._openData.rewardCount * 5 : this._openData.rewardCount);
         this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
-
-        this.ui.m_btn_open_roll.m_btn_type.selectedIndex = 2;
-        this.ui.m_btn_double_get.m_bg_type.selectedIndex = 1;
-    }
-
-    private _OnClickOpenRoll() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith(2);
-        }
     }
 
     private _OnClickToggle() {
         this._isChecked = !this._isChecked;
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-        this.ui.m_btn_normal_get.text = this._isChecked ? "五倍领取奖励" : "单倍领取奖励";
-        this.ui.m_btn_normal_get.m_text_count.text = "x" + (this._isChecked ? this._openData.rewardCount * 5 : this._openData.rewardCount);
+    }
+
+    private _OnClickBack() {
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith([2, this.ui.m_icon_reward]);
+        }
+        this.Hide();
     }
 
     private _OnClickNormalGet() {
@@ -92,7 +89,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         }
 
         if (this._openData.onClose) {
-            this._openData.onClose.runWith([0, this.ui.m_btn_normal_get.m_icon_img]);
+            this._openData.onClose.runWith([0, this.ui.m_icon_reward]);
         }
 
         this.Hide();
@@ -102,7 +99,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             if (this._openData.onClose) {
-                this._openData.onClose.runWith([1, this.ui.m_btn_normal_get.m_icon_img]);
+                this._openData.onClose.runWith([1, this.ui.m_icon_reward]);
             }
             this.Hide();
         } else {

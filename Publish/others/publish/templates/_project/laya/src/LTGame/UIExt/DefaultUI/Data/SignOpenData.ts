@@ -27,7 +27,7 @@ export default class SignOpenData {
      * closeType: number
      *      0 :  直接关闭
      *      1 :  普通领取
-     *      2 :  双倍领取
+     *      2 :  多倍领取(看完视频后走该回调)
      * fromObj: fgui.GObject
      *      用于作为飞金币的起点
      * dayCount: number
