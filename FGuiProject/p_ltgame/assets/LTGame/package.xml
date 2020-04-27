@@ -157,6 +157,12 @@
     <image id="q0fh58" name="sp_pifushiyong(1).png" path="/img/"/>
     <image id="q0fh59" name="sp_shipin1.png" path="/img/"/>
     <image id="q0fh5a" name="sp_shiwan(1).png" path="/img/"/>
+    <image id="rk935b" name="胜利通关3.jpg" path="/效果图/"/>
+    <image id="rk935c" name="sp_shenglitonguan.png" path="/img/"/>
+    <component id="rk935d" name="btn_get_02.xml" path="/cmp/"/>
+    <image id="rk935e" name="sp_lingqujiangli2.png" path="/img/"/>
+    <image id="rk935f" name="btn-fanhui2.png" path="/img/"/>
+    <component id="rk935h" name="btn_back_01.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
