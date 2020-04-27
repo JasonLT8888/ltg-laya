@@ -21,11 +21,11 @@
     </component>
     <component id="n5_fkl1" name="btn_endreward" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="85,399">
       <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="结算奖励"/>
+      <Button title="通关奖励"/>
     </component>
-    <component id="n6_fkl1" name="btn_offline" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="436,399">
+    <component id="n6_fkl1" name="btn_endlose" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="436,399">
       <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="离线奖励"/>
+      <Button title="通关失败"/>
     </component>
     <component id="n7_fkl1" name="btn_tryskin" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="85,538">
       <relation target="" sidePair="center-center,middle-middle"/>
@@ -46,6 +46,10 @@
     <component id="n11_sgap" name="btn_moudle" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="85,811">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="模块化组件"/>
+    </component>
+    <component id="n12_qjpk" name="btn_offline" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="436,811">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="离线奖励"/>
     </component>
   </displayList>
 </component>

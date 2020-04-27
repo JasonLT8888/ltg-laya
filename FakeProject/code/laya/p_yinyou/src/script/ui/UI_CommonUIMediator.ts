@@ -10,6 +10,7 @@ import SetOpenData from "../../LTGame/UIExt/DefaultUI/Data/SetOpenData";
 import RollOpenData from "../../LTGame/UIExt/DefaultUI/Data/RollOpenData";
 import OneMoreOpenData from "../../LTGame/UIExt/DefaultUI/Data/OneMoreOpenData";
 import UI_MoudleDemoMediator from "./UI_MoudleDemoMediator";
+import { EndLoseOpenData } from "../../LTGame/UIExt/DefaultUI/Data/EndLoseOpenData";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -35,6 +36,7 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
         this.ui.m_btn_onemore.onClick(this, this._OnClickOneMore);
         this.ui.m_btn_moudle.onClick(this, this._OnClickModule);
+        this.ui.m_btn_endlose.onClick(this, this._OnClickEndLose);
     }
 
     private _OnClickModule() {
@@ -87,6 +89,21 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
             }
         });
         LTUI.ShowOffline(openData);
+    }
+
+    private _OnClickEndLose() {
+        let openData = new EndLoseOpenData();
+        openData.onClose = Laya.Handler.create(null, (type: number) => {
+            switch (type) {
+                case 0:
+                    LTUI.Toast("点击重新开始");
+                    break;
+                case 1:
+                    LTUI.Toast("观看视频跳过");
+                    break;
+            }
+        });
+        LTUI.ShowEndLose(openData);
     }
 
     private _OnClickEndReward() {

@@ -20,6 +20,8 @@ import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
 import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
 import UI_CommonMainMoreGameAdsMediator from "./DefaultUI/UI_CommonMainMoreGameAdsMediator";
 import UI_CommonMainHotGameMediator from "./DefaultUI/UI_CommonMainHotGameMediator";
+import { EndLoseOpenData } from "./DefaultUI/Data/EndLoseOpenData";
+import UI_CommonEndLoseMediator from "./DefaultUI/UI_CommonEndLoseMediator";
 
 export default class LTUI {
 
@@ -81,6 +83,10 @@ export default class LTUI {
 
     public static ShowEndReward(openData: EndRewardOpenData) {
         UI_CommonEndRewardMediator.instance.Show(openData);
+    }
+
+    public static ShowEndLose(openData: EndLoseOpenData) {
+        UI_CommonEndLoseMediator.instance.Show(openData);
     }
 
     public static ShowMoreGame(openData: EndRewardOpenData) {

@@ -163,6 +163,11 @@
     <image id="rk935e" name="sp_lingqujiangli2.png" path="/img/"/>
     <image id="rk935f" name="btn-fanhui2.png" path="/img/"/>
     <component id="rk935h" name="btn_back_01.xml" path="/cmp/"/>
+    <component id="rk935i" name="CommonEndLose.xml" path="/ui/" exported="true"/>
+    <image id="rk935j" name="通关失败.jpg" path="/效果图/"/>
+    <image id="rk935k" name="sp_tonguanshibai.png" path="/img/"/>
+    <image id="rk935l" name="sp_tiaoguo.png" path="/img/"/>
+    <component id="rk935m" name="btn_watchad.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
