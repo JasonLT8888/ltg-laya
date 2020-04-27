@@ -168,6 +168,12 @@
     <image id="rk935k" name="sp_tonguanshibai.png" path="/img/"/>
     <image id="rk935l" name="sp_tiaoguo.png" path="/img/"/>
     <component id="rk935m" name="btn_watchad.xml" path="/cmp/"/>
+    <component id="rk935n" name="CommonUnlockProgress.xml" path="/ui/" exported="true"/>
+    <image id="rk935o" name="解锁界面1.jpg" path="/效果图/"/>
+    <image id="rk935p" name="sp_jiesuoxindaoju.png" path="/img/"/>
+    <image id="rk935q" name="解锁界面2.jpg" path="/效果图/"/>
+    <image id="rk935r" name="sp_queding.png" path="/img/"/>
+    <image id="rk935s" name="sp_shipinlingqu.png" path="/img/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
