@@ -72,7 +72,6 @@ export default class SDK_YQ extends SDK_Default {
         if (this.enableDebug)
             console.log("获取到广告位信息:", res);
         if (res.status == 1) {
-            let itemList = res.result;
             for (let item of res.result) {
                 let adItem = item as SDK.ADPosData;
                 this._RequestADListOnPos(adItem);

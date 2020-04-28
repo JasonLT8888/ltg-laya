@@ -124,8 +124,13 @@ class UpdateProject {
             if (fileType == EFileType.File) {
                 LTUtils.CopyFile(combieSrc, combieTarget);
             } else {
+                // 跳过这两个文件,这两个文件会保存数据
+                let skipFiles = [
+                    "Configuration.xml",
+                    "LTEditorData.asset"
+                ];
                 LTUtils.CopyDir(combieSrc, combieTarget, function (fileName: string, targetPath: string) {
-                    if (fileName == "Configuration.xml") {
+                    if (skipFiles.indexOf(targetPath) >= 0) {
                         if (LTUtils.IsFileExist(targetPath)) {
                             console.log(fileName, '已存在,跳过拷贝');
                             return false;

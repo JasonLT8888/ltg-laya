@@ -1,12 +1,12 @@
 import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_NativeInterstitial from "./UI/LTGame/UI_NativeInterstitial";
 import LTPlatform from "../../Platform/LTPlatform";
 import OppoPlatform from "../../Platform/OppoPlatform";
 import CommonSaveData from "../../Commom/CommonSaveData";
 import LTSDK from "../../../SDK/LTSDK";
 import { ECheckState } from "../../../SDK/common/ECheckState";
+import UI_NativeInterstitial from "./UI/LTGame/UI_NativeInterstitial";
 
- 
+
 
 export class OpenInterstitialData {
     public onClosed: () => void;

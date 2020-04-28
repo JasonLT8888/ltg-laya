@@ -36,10 +36,10 @@ export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
         LTUI.ShowHotGame(this._openParam);
     }
     _OnClickNative() {
-        (LTPlatform.instance as OppoPlatform).ShowNativeAd();
+        // (LTPlatform.instance as OppoPlatform).ShowNativeAd();
     }
     _OnClickHideNative() {
-        (LTPlatform.instance as OppoPlatform).HideNativeAd();
+        // (LTPlatform.instance as OppoPlatform).HideNativeAd();
     }
 
     private _OnClickBack() {

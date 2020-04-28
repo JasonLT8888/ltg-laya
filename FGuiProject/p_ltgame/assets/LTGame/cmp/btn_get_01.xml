@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="273,122" extention="Button">
+  <displayList>
+    <image id="n23_q0fh" name="n23" src="q0fh4r" fileName="img/btn_anniulan2.png" xy="0,0" size="273,122"/>
+    <loader id="n24_q0fh" name="icon" xy="53,38" size="169,46" url="ui://75kiu87kq0fh4s" align="center" vAlign="middle">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

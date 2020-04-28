@@ -120,6 +120,69 @@
     <image id="re3i3h" name="sp_xuanzhongbg.png" path="/img/" scale="9grid" scale9grid="25,50,29,19"/>
     <component id="re3i3i" name="view_item_sign_02.xml" path="/cache/"/>
     <component id="wjpo4i" name="view_sharegames_big.xml" path="/cache/"/>
+    <image id="q0fh4j" name="登录奖励(2).jpg" path="/效果图/"/>
+    <image id="q0fh4k" name="登录奖励标注.png" path="/效果图/"/>
+    <image id="q0fh4n" name="sp_erjibg.png" path="/img/" scale="9grid" scale9grid="203,87,41,26"/>
+    <image id="q0fh4o" name="sp_erjibg2(1).png" path="/img/"/>
+    <image id="q0fh4p" name="sp_denglujiangli(1).png" path="/img/"/>
+    <image id="q0fh4q" name="sp_erjibg1.png" path="/img/" scale="9grid" scale9grid="75,75,55,43"/>
+    <image id="q0fh4r" name="btn_anniulan2.png" path="/img/" scale="9grid" scale9grid="20,40,31,42"/>
+    <image id="q0fh4s" name="sp_lingqujiangli(1).png" path="/img/"/>
+    <component id="q0fh4t" name="btn_get_01.xml" path="/cmp/"/>
+    <image id="q0fh4u" name="sp_gouxuankuang(1).png" path="/img/"/>
+    <image id="q0fh4v" name="sp_gou(1).png" path="/img/"/>
+    <image id="q0fh4w" name="btn_guanbi2.png" path="/img/"/>
+    <component id="q0fh4x" name="btn_close.xml" path="/cmp/"/>
+    <image id="q0fh4y" name="sp_huang.png" path="/img/" scale="9grid" scale9grid="25,45,14,9"/>
+    <image id="q0fh4z" name="sp_huise.png" path="/img/" scale="9grid" scale9grid="22,45,14,16"/>
+    <image id="q0fh50" name="sp_lanse.png" path="/img/" scale="9grid" scale9grid="25,46,14,13"/>
+    <image id="q0fh51" name="sp_suo(1).png" path="/img/"/>
+    <image id="q0fh52" name="btn_anniuhuang(1).png" path="/img/" scale="9grid" scale9grid="20,40,34,42"/>
+    <image id="q0fh53" name="sp_shipin(1).png" path="/img/"/>
+    <image id="q0fh54" name="sp_wubeilingqu(1).png" path="/img/"/>
+    <component id="q0fh55" name="btn_5scale.xml" path="/cmp/"/>
+    <component id="q0fh56" name="view_item_sign_big.xml" path="/cache/"/>
+    <image id="q0fh57" name="皮肤试用2.jpg" path="/效果图/"/>
+    <image id="q0fh58" name="sp_pifushiyong(1).png" path="/img/"/>
+    <image id="q0fh59" name="sp_shipin1.png" path="/img/"/>
+    <image id="q0fh5a" name="sp_shiwan(1).png" path="/img/"/>
+    <image id="rk935b" name="胜利通关3.jpg" path="/效果图/"/>
+    <image id="rk935c" name="sp_shenglitonguan.png" path="/img/"/>
+    <component id="rk935d" name="btn_get_02.xml" path="/cmp/"/>
+    <image id="rk935e" name="sp_lingqujiangli2.png" path="/img/"/>
+    <image id="rk935f" name="btn-fanhui2.png" path="/img/"/>
+    <component id="rk935h" name="btn_back_01.xml" path="/cmp/"/>
+    <component id="rk935i" name="CommonEndLose.xml" path="/ui/" exported="true"/>
+    <image id="rk935j" name="通关失败.jpg" path="/效果图/"/>
+    <image id="rk935k" name="sp_tonguanshibai.png" path="/img/"/>
+    <image id="rk935l" name="sp_tiaoguo.png" path="/img/"/>
+    <component id="rk935m" name="btn_watchad.xml" path="/cmp/"/>
+    <component id="rk935n" name="CommonUnlockProgress.xml" path="/ui/" exported="true"/>
+    <image id="rk935o" name="解锁界面1.jpg" path="/效果图/"/>
+    <image id="rk935p" name="sp_jiesuoxindaoju.png" path="/img/"/>
+    <image id="rk935q" name="解锁界面2.jpg" path="/效果图/"/>
+    <image id="rk935r" name="sp_queding.png" path="/img/"/>
+    <image id="rk935s" name="sp_shipinlingqu.png" path="/img/"/>
+    <image id="74v83l" name="sp_remenyouxi.png" path="/ad_res/oppo/"/>
+    <component id="74v83q" name="btn.xml" path="/ad_res/oppo/"/>
+    <image id="74v83r" name="btn_side.png" path="/ad_res/oppo/"/>
+    <image id="74v83s" name="dot.png" path="/ad_res/oppo/"/>
+    <image id="74v83u" name="sp_celabg.png" path="/ad_res/oppo/" scale="9grid" scale9grid="41,53,82,106"/>
+    <image id="74v83v" name="btn_shoula.png" path="/ad_res/oppo/"/>
+    <component id="74v84c" name="side_ads.xml" path="/ad_res/oppo/"/>
+    <component id="74v84b" name="CommonMainMoreGameAds.xml" path="/ad_res/" exported="true"/>
+    <component id="74v84f" name="CommonMainHotGame.xml" path="/ad_res/" exported="true"/>
+    <component id="74v84g" name="hot_game.xml" path="/ad_res/"/>
+    <image id="74v84h" name="爆款游戏.png" path="/ad_res/"/>
+    <component id="l2ax4j" name="NativeInterstitial.xml" path="/ad_res/" exported="true"/>
+    <component id="l2ax4k" name="NativeBigAd.xml" path="/ad_res/" exported="true"/>
+    <component id="l2ax4l" name="btn_normal.xml" path="/ad_res/" exported="true"/>
+    <image id="l2ax4m" name="sp_guanbi.png" path="/ad_res/"/>
+    <component id="l2ax4n" name="btn_native.xml" path="/ad_res/"/>
+    <image id="l2ax4o" name="btn_anniuhui.png" path="/ad_res/" scale="9grid" scale9grid="20,31,40,62"/>
+    <image id="l2ax4p" name="btn_anniuhuang.png" path="/ad_res/" scale="9grid" scale9grid="19,31,38,62"/>
+    <image id="l2ax4q" name="sp_chakanguanggao.png" path="/ad_res/"/>
+    <image id="l2ax4r" name="sp_jixuyouxi.png" path="/ad_res/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

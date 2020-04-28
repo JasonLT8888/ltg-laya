@@ -1,8 +1,6 @@
 import StateMachine from "../Fsm/StateMachine";
 import LTPlatform from "../Platform/LTPlatform";
 import LTPlatformData from "../Platform/Data/LTPlatformData";
-import { LoadPackConfig } from "../Config/LoadPackConfig";
-import LTRespackManager from "../Res/LTRespackManager";
 import { EPlatformType } from "../Platform/EPlatformType";
 import FGuiEx from "../UIExt/FGui/FGuiEx";
 import MonoHelper, { EActionType } from "../LTUtils/MonoHelper";
@@ -68,10 +66,13 @@ export class LTStart {
             LTSDK.CreateInstace(SDK_Default, "default", "default", "default");
         }
         LTPlatform.instance.Init(platformData);
+
+        /* 2.6.0 版本之后 该设置已经变为默认false,无需手动禁用,如果后期调整,再进行打开
         // 非web平台禁用debug模式
         if (LTPlatform.instance.platform != EPlatformType.Web) {
             Laya.Shader3D.debugMode = false;
         }
+        */
 
         FGuiEx.Init(LTPlatform.instance.safeArea);
 

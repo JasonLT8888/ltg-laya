@@ -14,6 +14,11 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     protected _classDefine: any;
 
+    /**
+     * 是否适配顶部刘海屏
+     */
+    protected _needFilScreen: boolean = false;
+
     public owner: any;
 
     protected _defaultBottomHeight: number;
@@ -48,6 +53,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         this._isShow = true;
         this._openParam = obj;
         let uiData = new FGuiData();
+        uiData.needFitScreen = this._needFilScreen;
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
         this._InitSelfAd();
         this._OnShow();
@@ -61,14 +67,21 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
     }
 
     private _InitSelfAd() {
+
         let othergames = View_OtherGames.CreateView(this._ui['m___othergames']);
         if (othergames) {
             this._ui['m___othergames'] = othergames.ui;
+        } else {
+            this._ui['m___othergames'] = null;
         }
+
         let hotGame = View_HotGame.CreateView(this._ui['m___hotgame']);
         if (hotGame) {
             this._ui['m___hotgame'] = hotGame.ui;
+        } else {
+            this._ui['m___hotgame'] = null;
         }
+
     }
 
     protected _OnShow() { }

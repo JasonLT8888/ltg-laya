@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="329,197">
+  <controller name="c1" pages="0,未领取,1,已领取,4,待领取" selected="2"/>
+  <displayList>
+    <image id="n7_it2i" name="n7" src="q0fh4y" fileName="img/sp_huang.png" xy="0,0" size="312,182">
+      <gearDisplay controller="c1" pages="4"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n15_it2i" name="n15" src="q0fh4z" fileName="img/sp_huise.png" xy="0,0" size="312,182">
+      <gearDisplay controller="c1" pages="1"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n20_q0fh" name="n20" src="q0fh50" fileName="img/sp_lanse.png" xy="0,0" size="312,182">
+      <gearDisplay controller="c1" pages="0,5"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <text id="n8_it2i" name="text_day" xy="157,27" pivot="0.5,0.5" anchor="true" size="66,31" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="第1天">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <loader id="n9_it2i" name="icon_reward" xy="156,113" pivot="0.5,0.5" anchor="true" size="127,129" url="ui://75kiu87kbg0016" align="center" vAlign="middle" fill="scale">
+      <gearDisplay controller="c1" pages="1,4,5"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <text id="n10_it2i" name="text_reward" xy="156,156" pivot="0.5,0.5" anchor="true" size="62,41" fontSize="32" color="#ff552e" align="center" vAlign="middle" letterSpacing="1" bold="true" text="300">
+      <gearDisplay controller="c1" pages="1,4,5"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <image id="n14_it2i" name="n14" src="it2iw" fileName="img/sp_yijinglingqu.png" xy="262,128">
+      <gearDisplay controller="c1" pages="1"/>
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </image>
+    <image id="n21_q0fh" name="n21" src="q0fh51" fileName="img/sp_suo(1).png" xy="125,64">
+      <gearDisplay controller="c1" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+</component>

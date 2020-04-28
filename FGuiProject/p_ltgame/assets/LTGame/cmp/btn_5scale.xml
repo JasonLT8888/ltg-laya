@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="275,122" extention="Button">
+  <displayList>
+    <image id="n26_q0fh" name="n26" src="q0fh52" fileName="img/btn_anniuhuang(1).png" xy="0,0" size="275,122"/>
+    <image id="n27_q0fh" name="n27" src="q0fh53" fileName="img/sp_shipin(1).png" xy="20,37"/>
+    <loader id="n28_q0fh" name="icon" xy="82,38" size="169,46" url="ui://75kiu87kq0fh54">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

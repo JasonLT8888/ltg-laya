@@ -9,6 +9,16 @@ export default class EndRewardOpenData {
     public enableShowGames: boolean = true;
 
     /**
+     * 奖励图片图标
+     */
+    public iconPath: string = null;
+
+    /**
+     * 展示文字
+     */
+    public showText: string = null;
+
+    /**
      * 奖励金币数量
      */
     public rewardCount: number = 30;
@@ -17,8 +27,8 @@ export default class EndRewardOpenData {
      * 关闭事件(部分平台数据为伪造数据)
      * closeType: number
      *      0 :  普通领取
-     *      1 :  双倍领取
-     *      2 :  打开大转盘界面
+     *      1 :  多倍领取
+     *      2 :  点击返回按钮
      * fromObj: fgui.GObject
      *      用于作为飞金币的起点
      */

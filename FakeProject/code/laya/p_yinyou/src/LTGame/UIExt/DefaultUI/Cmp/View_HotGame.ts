@@ -4,6 +4,7 @@ import Awaiters from "../../../Async/Awaiters";
 import LTPlatform from "../../../Platform/LTPlatform";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import MathEx from "../../../LTUtils/MathEx";
+import { CommonEventId } from "../../../Commom/CommonEventId";
 
 export default class View_HotGame {
 
@@ -49,8 +50,23 @@ export default class View_HotGame {
      */
     private _updateTime: number = 5000;
 
+    private _posId: number = 0;
+
     private _Init() {
-        this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(0);
+        this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
+        if (this._cacheAds == null) {
+            Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
+        } else {
+            this._cacheIndex = MathEx.RandomInt(0, this._cacheAds.length);
+            this.ui.onClick(this, this._OnClickAD);
+            this._UpdateUI();
+            this._LoopUpdate();
+        }
+    }
+
+    private _OnAdInited(posId: number) {
+        if (posId != this._posId) return;
+        this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         this._cacheIndex = MathEx.RandomInt(0, this._cacheAds.length);
         this.ui.onClick(this, this._OnClickAD);
         this._UpdateUI();

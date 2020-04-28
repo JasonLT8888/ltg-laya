@@ -1,8 +1,9 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as process from 'process';
-import * as child_process from 'child_process';
 import * as colors from 'colors';
+import * as babel from "@babel/core";
+import * as uglify_es from 'uglify-es';
 import { LTUtils } from 'Utils/LTUtils';
 import { SubpackHelper } from './SubpackHelper';
 import StringEx from 'Utils/StringEx';
@@ -14,13 +15,16 @@ export class PublishHandler {
 
     private _keepPlatforms = {
         "wx": [
-            "project.config.json"
+            "project.config.json",
+            "game.json"
         ],
         "tt": [
-            "project.config.json"
+            "project.config.json",
+            "game.json"
         ],
         "qq": [
-            "project.config.json"
+            "project.config.json",
+            "game.json"
         ]
     }
 
@@ -104,21 +108,23 @@ export class PublishHandler {
                 let dirPath = targetPath.substring(0, lastIndex);
                 LTUtils.MakeDirExist(dirPath);
 
-                if (this._packConfig.compress) {
-                    this._DoCacheCompress(fileName, srcPath, cachePath, targetPath);
-                } else {
-                    fs.copyFileSync(srcPath, targetPath);
-                }
-
                 if (this._packConfig.es5 && fileName.endsWith("bundle.js")) {
                     // 进行转es5操作
-                    let command = `babel --lineWrap true --presets es2015,stage-2,react ${srcPath} -o ${targetPath}`;
                     console.log("进行转es5操作 " + targetPath.green + "");
-                    child_process.exec(command, (error, stdout, stderr) => {
-                        if (error) {
-                            console.error(`执行出错: ${error}`);
-                        }
-                    });
+                    let transCode = babel.transformFileSync(srcPath, {
+                        "presets": ["@babel/preset-env"],
+                        "babelrc": false
+                    }).code;
+                    if (this._packConfig.compress) {
+                        transCode = uglify_es.minify(transCode).code;
+                    }
+                    LTUtils.WriteStrTo(targetPath, transCode);
+                } else {
+                    if (this._packConfig.compress) {
+                        this._DoCacheCompress(fileName, srcPath, cachePath, targetPath);
+                    } else {
+                        fs.copyFileSync(srcPath, targetPath);
+                    }
                 }
             }
         }

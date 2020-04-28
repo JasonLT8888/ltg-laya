@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87khtjj36" designImageLayer="1">
-  <controller name="c1" pages="0,有导流,1,无导流" selected="0"/>
+<component size="750,1334" designImage="ui://75kiu87krk935b" designImageLayer="1">
+  <controller name="c1" pages="0,有导流,1,无导流" selected="1"/>
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n1_bg00" name="view_title" src="bg001l" fileName="cmp/view_title.xml" xy="145,143">
-      <gearXY controller="c1" pages="1" values="145,227" default="145,143"/>
+    <image id="n12_rk93" name="n12" src="rk935c" fileName="img/sp_shenglitonguan.png" xy="243,124">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <component id="n11_htjj" name="btn_toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="239,774">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n3_bg00" name="view_moregames" src="bg001k" fileName="cache/view_end_games.xml" xy="35,271">
+    <component id="n13_rk93" name="view_othergames" src="wjpo4i" fileName="cache/view_sharegames_big.xml" xy="35,213">
       <gearDisplay controller="c1" pages="0"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n8_bg00" name="btn_open_roll" src="it2iq" fileName="cmp/btn_double_get.xml" xy="394,793">
+    <text id="n14_rk93" name="text_str" xy="173,393" size="404,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="成功解锁下一关卡请前往挑战!">
+      <gearXY controller="c1" pages="0,1" values="173,646|173,393"/>
       <relation target="" sidePair="center-center,middle-middle"/>
-      <Button icon="ui://75kiu87kit2it"/>
-    </component>
-    <component id="n9_bg00" name="btn_double_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="105,793">
-      <relation target="" sidePair="center-center,middle-middle"/>
-      <Button icon="ui://75kiu87khtjj37"/>
-    </component>
-    <component id="n10_bg00" name="btn_normal_get" src="bg001j" fileName="cache/view_reward_count.xml" xy="214,915" pivot="0.5,0.5" scale="0,0">
-      <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="五倍领取奖励"/>
-      <property target="text_title" propertyId="0" value="五倍领取奖励"/>
-    </component>
-    <component id="n11_htjj" name="btn_toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="273,741">
+    </text>
+    <component id="n15_rk93" name="btn_get" src="rk935d" fileName="cmp/btn_get_02.xml" xy="226,846" size="297,122">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
+    <component id="n16_rk93" name="btn_back" src="rk935h" fileName="cmp/btn_back_01.xml" xy="25,129">
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </component>
+    <loader id="n17_rk93" name="icon_reward" xy="331,725" pivot="0.5,0.5" anchor="true" size="52,56" url="ui://75kiu87kbg0016" align="center" vAlign="middle" fill="scale">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <text id="n18_rk93" name="text_add" xy="364,702" size="88,49" fontSize="40" color="#ffffff" letterSpacing="-2" text="+100">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
   </displayList>
-  <transition name="anim_enter">
-    <item time="66" type="Scale" target="n10_bg00" tween="true" startValue="0.1,0.1" endValue="1,1" duration="24" ease="Sine.InOut"/>
-  </transition>
+  <transition name="anim_enter"/>
 </component>

@@ -10,6 +10,10 @@ import SetOpenData from "../../LTGame/UIExt/DefaultUI/Data/SetOpenData";
 import RollOpenData from "../../LTGame/UIExt/DefaultUI/Data/RollOpenData";
 import OneMoreOpenData from "../../LTGame/UIExt/DefaultUI/Data/OneMoreOpenData";
 import UI_MoudleDemoMediator from "./UI_MoudleDemoMediator";
+import { EndLoseOpenData } from "../../LTGame/UIExt/DefaultUI/Data/EndLoseOpenData";
+import { UnlockProgressOpenData } from "../../LTGame/UIExt/DefaultUI/Data/UnlockProgressOpenData";
+import LTSDK from "../../SDK/LTSDK";
+import { ECheckState } from "../../SDK/common/ECheckState";
 
 export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
@@ -35,6 +39,8 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
         this.ui.m_btn_onemore.onClick(this, this._OnClickOneMore);
         this.ui.m_btn_moudle.onClick(this, this._OnClickModule);
+        this.ui.m_btn_endlose.onClick(this, this._OnClickEndLose);
+        this.ui.m_btn_unlockprogress.onClick(this, this._OnClickUnlockProgress);
     }
 
     private _OnClickModule() {
@@ -89,6 +95,21 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         LTUI.ShowOffline(openData);
     }
 
+    private _OnClickEndLose() {
+        let openData = new EndLoseOpenData();
+        openData.onClose = Laya.Handler.create(null, (type: number) => {
+            switch (type) {
+                case 0:
+                    LTUI.Toast("点击重新开始");
+                    break;
+                case 1:
+                    LTUI.Toast("观看视频跳过");
+                    break;
+            }
+        });
+        LTUI.ShowEndLose(openData);
+    }
+
     private _OnClickEndReward() {
         let openData = new EndRewardOpenData();
         // openData.enableShowGames = false;
@@ -99,11 +120,11 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
                     LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
                     break;
                 case 1:
-                    LTUI.Toast("双倍领取");
+                    LTUI.Toast("多倍领取");
                     LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
                     break;
                 case 2:
-                    this._OnClickRoll();
+                    LTUI.Toast("点击返回");
                     break;
                 default:
                     LTUI.Toast("未处理相应类型" + type);
@@ -178,6 +199,26 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
             }
         });
         LTUI.ShowSignUI(openData);
+    }
+
+    private _OnClickUnlockProgress() {
+        let openData = new UnlockProgressOpenData();
+        openData.endProgress = 50;
+
+        openData.onClose = Laya.Handler.create(null, (type: number) => {
+            switch (type) {
+                case 0:
+                    LTUI.Toast("点击正常关闭");
+                    break;
+                case 1:
+                    LTUI.Toast("点击视频领取");
+                    break;
+                case 2:
+                    LTUI.Toast("点击正常领取");
+                    break;
+            }
+        });
+        LTUI.ShowUnlockProgress(openData);
     }
 
     private _OnClickBack() {

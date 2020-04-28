@@ -8,7 +8,6 @@ import UI_view_endshare from "./UI_view_endshare";
 import UI_CommonEndReward from "./UI_CommonEndReward";
 import UI_view_item_game from "./UI_view_item_game";
 import UI_view_game_icon from "./UI_view_game_icon";
-import UI_view_reward_count from "./UI_view_reward_count";
 import UI_view_end_games from "./UI_view_end_games";
 import UI_view_title from "./UI_view_title";
 import UI_CommonOffline from "./UI_CommonOffline";
@@ -31,6 +30,10 @@ import UI_CommonSign from "./UI_CommonSign";
 import UI_btn_double_get from "./UI_btn_double_get";
 import UI_view_item_sign from "./UI_view_item_sign";
 import UI_view_common_sign from "./UI_view_common_sign";
+import UI_NativeInterstitial from "./UI_NativeInterstitial";
+import UI_NativeBigAd from "./UI_NativeBigAd";
+import UI_btn_normal from "./UI_btn_normal";
+import UI_btn_native from "./UI_btn_native";
 import UI_CommonLoad from "./UI_CommonLoad";
 import UI_view_load from "./UI_view_load";
 import UI_FakeBanner_V from "./UI_FakeBanner_V";
@@ -38,8 +41,11 @@ import UI_CommonToast from "./UI_CommonToast";
 import UI_view_toast from "./UI_view_toast";
 import UI_FakeRewardVideo from "./UI_FakeRewardVideo";
 import UI_FakeInterstital from "./UI_FakeInterstital";
+import UI_view_item_sign_big from "./UI_view_item_sign_big";
 import UI_CommonSign_02 from "./UI_CommonSign_02";
 import UI_view_item_sign_02 from "./UI_view_item_sign_02";
+import UI_CommonEndLose from "./UI_CommonEndLose";
+import UI_CommonUnlockProgress from "./UI_CommonUnlockProgress";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
 export default class LTGameBinder{
@@ -52,7 +58,6 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_CommonEndReward.URL, UI_CommonEndReward);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game.URL, UI_view_item_game);
 		fgui.UIObjectFactory.setExtension(UI_view_game_icon.URL, UI_view_game_icon);
-		fgui.UIObjectFactory.setExtension(UI_view_reward_count.URL, UI_view_reward_count);
 		fgui.UIObjectFactory.setExtension(UI_view_end_games.URL, UI_view_end_games);
 		fgui.UIObjectFactory.setExtension(UI_view_title.URL, UI_view_title);
 		fgui.UIObjectFactory.setExtension(UI_CommonOffline.URL, UI_CommonOffline);
@@ -75,6 +80,10 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_btn_double_get.URL, UI_btn_double_get);
 		fgui.UIObjectFactory.setExtension(UI_view_item_sign.URL, UI_view_item_sign);
 		fgui.UIObjectFactory.setExtension(UI_view_common_sign.URL, UI_view_common_sign);
+		fgui.UIObjectFactory.setExtension(UI_NativeInterstitial.URL, UI_NativeInterstitial);
+		fgui.UIObjectFactory.setExtension(UI_NativeBigAd.URL, UI_NativeBigAd);
+		fgui.UIObjectFactory.setExtension(UI_btn_normal.URL, UI_btn_normal);
+		fgui.UIObjectFactory.setExtension(UI_btn_native.URL, UI_btn_native);
 		fgui.UIObjectFactory.setExtension(UI_CommonLoad.URL, UI_CommonLoad);
 		fgui.UIObjectFactory.setExtension(UI_view_load.URL, UI_view_load);
 		fgui.UIObjectFactory.setExtension(UI_FakeBanner_V.URL, UI_FakeBanner_V);
@@ -82,8 +91,11 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_view_toast.URL, UI_view_toast);
 		fgui.UIObjectFactory.setExtension(UI_FakeRewardVideo.URL, UI_FakeRewardVideo);
 		fgui.UIObjectFactory.setExtension(UI_FakeInterstital.URL, UI_FakeInterstital);
+		fgui.UIObjectFactory.setExtension(UI_view_item_sign_big.URL, UI_view_item_sign_big);
 		fgui.UIObjectFactory.setExtension(UI_CommonSign_02.URL, UI_CommonSign_02);
 		fgui.UIObjectFactory.setExtension(UI_view_item_sign_02.URL, UI_view_item_sign_02);
+		fgui.UIObjectFactory.setExtension(UI_CommonEndLose.URL, UI_CommonEndLose);
+		fgui.UIObjectFactory.setExtension(UI_CommonUnlockProgress.URL, UI_CommonUnlockProgress);
 		fgui.UIObjectFactory.setExtension(UI_view_sharegames_big.URL, UI_view_sharegames_big);
 	}
 }
