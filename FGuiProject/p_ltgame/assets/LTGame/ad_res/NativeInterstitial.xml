@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n3_dw0g" name="n3" xy="0,0" pivot="0.5,0.5" size="750,1334" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n4_dw0g" name="ad" src="l2ax4k" fileName="ad_res/NativeBigAd.xml" xy="375,587" size="640,320">
+      <relation target="" sidePair="center-center"/>
+    </component>
+    <component id="n1_dw0g" name="btn_return" src="l2ax4n" fileName="ad_res/btn_native.xml" xy="375,1011" size="247,95" controller="color,1">
+      <relation target="" sidePair="center-center"/>
+      <Button title="继续游戏"/>
+    </component>
+    <component id="n5_dw0g" name="btn_pay" src="l2ax4n" fileName="ad_res/btn_native.xml" xy="375,862" size="319,120">
+      <relation target="" sidePair="center-center"/>
+      <Button title="查看广告" titleFontSize="40" icon="ui://75kiu87kl2ax4s"/>
+    </component>
+  </displayList>
+  <transition name="t0">
+    <item time="0" type="Scale" target="n1_dw0g" value="0,0"/>
+    <item time="48" type="Scale" target="n1_dw0g" tween="true" startValue="0,0" endValue="1,1" duration="24" ease="Linear"/>
+  </transition>
+</component>

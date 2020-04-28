@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="260,122" pivot="0.5,0.5" anchor="true" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <controller name="color" exported="true" pages="0,yellow,1,grey,2,text" selected="2"/>
+  <displayList>
+    <image id="n4_wi8b" name="n4" src="l2ax4o" fileName="Native/btn_anniuhui.png" xy="0,0" size="260,122">
+      <gearDisplay controller="color" pages="1"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n0_wi8b" name="n0" src="l2ax4p" fileName="Native/btn_anniuhuang.png" xy="0,0" size="260,122">
+      <gearDisplay controller="color" pages="0"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n5_wi8b" name="n5" src="l2ax4q" fileName="Native/sp_chakanguanggao.png" xy="43,36">
+      <gearDisplay controller="color" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n6_wi8b" name="n6" src="l2ax4r" fileName="Native/sp_jixuyouxi.png" xy="43,36">
+      <gearDisplay controller="color" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <text id="n7_wi8b" name="n7" xy="0,0" size="260,122" font="DengXian" fontSize="36" color="#ffffff" align="center" vAlign="middle" autoSize="none" underline="true" bold="true" text="继续游戏">
+      <gearDisplay controller="color" pages="2"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>
