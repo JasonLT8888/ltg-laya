@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="hm5h0jzl">
+  <resources>
+    <image id="74v83l" name="sp_remenyouxi.png" path="/ad_res/oppo/"/>
+    <component id="74v83q" name="btn.xml" path="/ad_res/oppo/"/>
+    <image id="74v83r" name="btn_side.png" path="/ad_res/oppo/"/>
+    <image id="74v83s" name="dot.png" path="/ad_res/oppo/"/>
+    <image id="74v83u" name="sp_celabg.png" path="/ad_res/oppo/" scale="9grid" scale9grid="41,53,82,106"/>
+    <image id="74v83v" name="btn_shoula.png" path="/ad_res/oppo/"/>
+    <component id="74v84c" name="side_ads.xml" path="/ad_res/oppo/"/>
+    <component id="74v84b" name="CommonMainMoreGameAds.xml" path="/ad_res/" exported="true"/>
+    <component id="74v84f" name="CommonMainHotGame.xml" path="/ad_res/" exported="true"/>
+    <component id="74v84g" name="hot_game.xml" path="/ad_res/"/>
+    <image id="74v84h" name="爆款游戏.png" path="/ad_res/"/>
+    <component id="l2ax4j" name="NativeInterstitial.xml" path="/ad_res/" exported="true"/>
+    <component id="l2ax4k" name="NativeBigAd.xml" path="/ad_res/" exported="true"/>
+    <component id="l2ax4l" name="btn_normal.xml" path="/ad_res/" exported="true"/>
+    <image id="l2ax4m" name="sp_guanbi.png" path="/ad_res/"/>
+    <component id="l2ax4n" name="btn_native.xml" path="/ad_res/"/>
+    <image id="l2ax4o" name="btn_anniuhui.png" path="/ad_res/" scale="9grid" scale9grid="20,31,40,62"/>
+    <image id="l2ax4p" name="btn_anniuhuang.png" path="/ad_res/" scale="9grid" scale9grid="19,31,38,62"/>
+    <image id="l2ax4q" name="sp_chakanguanggao.png" path="/ad_res/"/>
+    <image id="l2ax4r" name="sp_jixuyouxi.png" path="/ad_res/"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>
