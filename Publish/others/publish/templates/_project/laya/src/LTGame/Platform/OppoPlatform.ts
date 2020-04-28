@@ -11,6 +11,7 @@ import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
+import CommonSaveData from "../Commom/CommonSaveData";
 
 export default class OppoPlatform implements IPlatform {
 
@@ -34,12 +35,14 @@ export default class OppoPlatform implements IPlatform {
 
     protected _bannerAd;
     protected _rewardVideo;
-    protected _intersitialAd;
-    protected _nativeAd;
+    intersitialAd: NativeADUnit;
+    nativeAd: NativeADUnit;
+    iconNative: NativeADUnit;
 
     protected _isBannerLoaded: boolean = false;
     protected _isVideoLoaded: boolean = false;
     protected _isInterstitialLoaded: boolean = false;
+    protected _isInterstitialCanShow: boolean = true;
     protected _nativeAdLoaded: boolean = false;
     protected _videoFailedCount: number;
     protected _interstitalFailedCount: number;
@@ -77,8 +80,10 @@ export default class OppoPlatform implements IPlatform {
                 console.log("oppo广告", "初始化广告服务成功", platformData);
                 this._CreateBannerAd();
                 this._CreateVideoAd();
-                this._CreateInterstitalAd();
-                this._CreateNativeAd();
+                // this._CreateInterstitalAd();
+                this.intersitialAd = new NativeADUnit(platformData.interstitialId);
+                this.iconNative = new NativeADUnit(platformData.nativeId);
+                this.nativeAd = new NativeADUnit(platformData.nativeId);
             },
             fail: () => {
                 console.error("oppo广告", "初始化广告服务失败")
@@ -129,7 +134,52 @@ export default class OppoPlatform implements IPlatform {
         let res = this._base.getLaunchOptionsSync() as LTGame.LaunchOption;
         this._OnShow(res);
     }
+    /**
+	 * 是否可以创建桌面图标
+	 */
+    canCreateShortcut(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            qg['hasShortcutInstalled']({
+                success: function (res) {
+                    // 判断图标是否存在  
+                    resolve(res);
+                },
+                fail: function (err) {
+                    reject();
+                },
+                complete: function () {
+                }
+            });
+        });
+    }
 
+    /** 发起创建桌面图标请求 */
+    createShortcut() {
+        return new Promise((resolve, reject) => {
+            qg['hasShortcutInstalled']({
+                success: function (res) {
+                    // 判断图标未存在时，创建图标
+                    if (res == false) {
+                        qg['installShortcut']({
+                            success: function () {
+                                resolve();
+                            },
+                            fail: function (err) {
+                                reject();
+                            },
+                            complete: function () { }
+                        })
+                    } else {
+                        resolve();
+                    }
+                } as any,
+                fail: function (err) {
+                    reject();
+                },
+                complete: function () { }
+            });
+        });
+    }
 
     protected _InitSystemInfo() {
         try {
@@ -144,146 +194,34 @@ export default class OppoPlatform implements IPlatform {
     }
 
     protected _CreateInterstitalAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.interstitialId)) {
-            console.log("无有效的插页广告ID,取消加载");
-            return;
-        }
-        this._interstitalFailedCount = 0;
-        let intAdObj = {};
-        intAdObj["adUnitId"] = this._platformData.interstitialId;
-        this._intersitialAd = this._base.createInsertAd(intAdObj);
+        // if (StringEx.IsNullOrEmpty(this._platformData.interstitialId)) {
+        //     console.log("无有效的插页广告ID,取消加载");
+        //     return;
+        // }
+        // this._interstitalFailedCount = 0;
+        // let intAdObj = {};
+        // intAdObj["adUnitId"] = this._platformData.interstitialId;
+        // this._intersitialAd = this._base.createInsertAd(intAdObj);
 
-        this._intersitialAd.onLoad(() => {
-            console.log("插页广告加载成功");
-            this._isInterstitialLoaded = true;
-        });
-        this._intersitialAd.onClose(() => {
-            console.log("插页广告关闭");
-            this._isInterstitialLoaded = false;
-            this._intersitialAd.load();
-        });
-        this._intersitialAd.onError((err) => {
-            this._interstitalFailedCount++;
-            console.error("插页广告加载失败", err);
-            if (this._interstitalFailedCount > 10) {
-                console.log("第", this._interstitalFailedCount, "次重新加载插页广告");
-                // 失败自动加载广告
-                this._intersitialAd.load();
-            }
-        });
+        // this._intersitialAd.onLoad(() => {
+        //     console.log("插页广告加载成功");
+        //     this._isInterstitialLoaded = true;
+        // });
+        // this._intersitialAd.onClose(() => {
+        //     console.log("插页广告关闭");
+        //     this._isInterstitialLoaded = false;
+        //     this._intersitialAd.load();
+        // });
+        // this._intersitialAd.onError((err) => {
+        //     this._interstitalFailedCount++;
+        //     console.error("插页广告加载失败", err);
+        //     if (this._interstitalFailedCount > 10) {
+        //         console.log("第", this._interstitalFailedCount, "次重新加载插页广告");
+        //         // 失败自动加载广告
+        //         this._intersitialAd.load();
+        //     }
+        // });
     }
-    //#region NativeAD
-    private ad_list: OppoNativeAdItem[] = [];
-    private current_ad: OppoNativeAdItem = null;
-
-    private view = new fairygui.GComponent();
-    private image = new fairygui.GLoader();
-    private tag = new fairygui.GLoader;
-    protected _CreateNativeAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.nativeId)) {
-            console.log("无有效的原生广告ID,取消加载");
-            return;
-        }
-        this._CreateNativeADComponent();
-        this._InitNativeAd();
-
-    }
-    private _CreateNativeADComponent() {
-        this.view.addChild(this.image);
-        this.view.onClick(null, () => { if (this.current_ad) this._ReportNativeClick(this.current_ad); });
-        this.image.autoSize = true;
-        this.tag.autoSize = true;
-        this.view.addChild(this.tag);
-        this.view.setPivot(0.5, 0.5, true);
-    }
-    async _InitNativeAd() {
-        this._nativeAd = qg.createNativeAd({ posId: this._platformData.nativeId });
-        this._nativeAd.onLoad(this.onNativeLoad);
-        this._nativeAd.onError(this.onNativeError);
-        this._nativeAd.load();
-    }
-    async _DestroryAd() {
-        this.view.removeFromParent();
-        if (this._nativeAd) {
-            this._nativeAd.offLoad(this.onNativeLoad);
-            this._nativeAd.offError(this.onNativeError);
-            this._nativeAd.destroy();
-            this._nativeAd = null;
-            this.current_ad = null;
-        }
-    }
-    protected onNativeLoad = (res) => {
-        console.log("OPPO广告:", "加载原生广告完成", res);
-        this.ad_list = res.adList;
-        this._nativeAdLoaded = true;
-        this._SwitchNativeAd();
-    }
-
-    protected onNativeError = (err) => {
-        this.ad_list = [];
-        console.error("OPPO广告:", "加载原生广告出错", err);
-        Laya.timer.once(5000, this._nativeAd, this._nativeAd.load);
-    }
-    protected async _SwitchNativeAd() {
-        let idx = this.ad_list.indexOf(this.current_ad);
-        if (idx < this.ad_list.length - 1 && this.ad_list.length) {
-            this.current_ad = this.ad_list[idx + 1];
-            if (this.current_ad.imgUrlList && this.current_ad.imgUrlList.length) {
-                this.image.url = this.current_ad.imgUrlList[0];
-            }
-            this.tag.url = this.current_ad.logoUrl;
-
-            console.log("OPPO广告:", "切换展示的广告", this.current_ad);
-        } else {
-            console.log("OPPO广告:", "重新拉取原生广告");
-            await this._DestroryAd();
-            await this._InitNativeAd();
-        }
-    }
-
-    protected _ReportNativeShow(ad: OppoNativeAdItem) {
-        if (this._nativeAd) {
-            this._nativeAd.reportAdShow({ adId: ad.adId } as any);
-            ad.show_reported = true;
-            console.log("OPPO广告:", "上报广告展示", ad);
-        }
-    }
-
-    protected _ReportNativeClick(ad: OppoNativeAdItem) {
-        if (this._nativeAd) {
-            this._nativeAd.reportAdClick({ adId: ad.adId } as any);
-            console.log("OPPO广告:", "上报广告点击", ad);
-            this._SwitchNativeAd();
-        }
-    }
-    async _ShowNative(pos?: Laya.Vector2, scale = 1) {
-        if (this._nativeAd) {
-            this.view.removeFromParent();
-
-            if (this.current_ad) {
-                if (!this.current_ad.show_reported) {
-                    this._ReportNativeShow(this.current_ad);
-                }
-                this.view.setSize(this.image.width, this.image.height);
-                fairygui.GRoot.inst.addChild(this.view);
-                if (pos) {
-                    this.view.setXY(pos.x, pos.y);
-                } else {
-                    this.view.setXY(Laya.stage.width / 2, Laya.stage.height / 2);
-                }
-                this.tag.setXY(this.image.width - this.tag.width, this.image.height - this.tag.height);
-                this.view.setScale(scale, scale);
-            }
-
-        } else {
-            console.error('没有原生广告');
-        }
-    }
-
-    async _HideNative() {
-        this.view.removeFromParent();
-    };
-    //#endregion
 
     protected _CreateVideoAd() {
         if (!this._cacheVideoAD) {
@@ -375,14 +313,12 @@ export default class OppoPlatform implements IPlatform {
         return this._isVideoLoaded;
     }
     IsInterstitalAvaliable() {
-        return this._isInterstitialLoaded;
+        return this._isInterstitialLoaded && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 8;
     }
-
     IsNativeAvaliable() {
         return this._nativeAdLoaded;
     }
     ShowBannerAd() {
-        console.log(1);
         if (!this.IsBannerAvaliable()) {
             console.log(this.IsBannerAvaliable())
             this._bannerAd.show().then(() => {
@@ -392,13 +328,11 @@ export default class OppoPlatform implements IPlatform {
             });
             return;
         }
-        console.log(3)
         this._bannerAd.show().then(() => {
             console.log('展示banner 成功')
         }).catch((e) => {
             console.error('展示banner 错误', e);
         });
-        console.log(4)
     }
     HideBannerAd() {
         if (!this.IsBannerAvaliable()) return;
@@ -408,14 +342,17 @@ export default class OppoPlatform implements IPlatform {
         if (!this.IsNativeAvaliable()) {
             return;
         }
-        await this._ShowNative();
+        // await this._ShowNative();
     }
     HideNativeAd() {
         if (!this.IsNativeAvaliable()) {
             return;
         }
-        this._HideNative();
+        // this._HideNative();
     }
+    // isNativeInterstitialAvaliable(){
+    //     return this.intersitialAd.canShowAD
+    // }
 
     protected _DoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         if (!this._isVideoLoaded) {
@@ -509,12 +446,20 @@ export default class OppoPlatform implements IPlatform {
             }));
         });
     }
+
     ShowInterstitalAd() {
-        if (!this._isInterstitialLoaded) {
-            console.error("插页广告尚未加载好");
+        if (!this.IsInterstitalAvaliable()) {
+            console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${CommonSaveData.instance.interstitialCount}`);
             return;
         }
-        this._intersitialAd.show();
+
+        // this._intersitialAd.show();
+        CommonSaveData.instance.interstitialCount++;
+        CommonSaveData.SaveToDisk();
+        this._isInterstitialCanShow = false;
+        Laya.timer.once(60 * 1000, this, () => {
+            this._isInterstitialCanShow = true;
+        });
     }
 
     GetFromAppId(): string {
@@ -690,5 +635,91 @@ interface OppoNativeAdItem {
     show_reported?: boolean,
     /** 是否已上报点击 */
     click_reported?: boolean,
+}
+export class NativeADUnit {
+    private ad_list: OppoNativeAdItem[] = [];
+    public current_ad: OppoNativeAdItem = null;
+    private nativeAd;
+    private id: string;
+    _nativeAdLoaded: boolean;
+    _canShowAd: boolean = true;
+    constructor(id: string) {
+        if (StringEx.IsNullOrEmpty(id)) {
+            console.log("无有效的原生广告ID,取消加载");
+            return;
+        }
+        this.id = id;
+        this._InitNativeAd(this.id);
+    }
+
+    async _InitNativeAd(id: string) {
+        this.nativeAd = qg.createNativeAd({ posId: id });
+        this.nativeAd.onLoad(this.onNativeLoad);
+        this.nativeAd.onError(this.onNativeError);
+        this.nativeAd.load();
+    }
+    async _DestroryAd() {
+        if (this.nativeAd) {
+            this.nativeAd.offLoad(this.onNativeLoad);
+            this.nativeAd.offError(this.onNativeError);
+            this.nativeAd.destroy();
+            this.nativeAd = null;
+            this.current_ad = null;
+        }
+    }
+    protected onNativeLoad = (res) => {
+        console.log("OPPO广告:", this.id, "加载原生广告完成", res);
+        this.ad_list = res.adList;
+        this._nativeAdLoaded = true;
+        this._SwitchNativeAd();
+    }
+    get canShowAD() {
+        console.log('cd&&times', this._canShowAd, CommonSaveData.instance.interstitialCount);
+        return this.current_ad && this._canShowAd && CommonSaveData.instance.interstitialCount < 8;
+    }
+    protected onNativeError = (err) => {
+        this.ad_list = [];
+        console.error("OPPO广告:", this.id, "加载原生广告出错", err);
+        Laya.timer.once(5000, this.nativeAd, this.nativeAd.load);
+    }
+    protected async _SwitchNativeAd() {
+        let idx = this.ad_list.indexOf(this.current_ad);
+        if (idx < this.ad_list.length - 1 && this.ad_list.length) {
+            this.current_ad = this.ad_list[idx + 1];
+            console.log("OPPO广告:", this.id, "切换展示的广告", this.current_ad);
+        } else {
+            console.log("OPPO广告:", "重新拉取原生广告");
+            await this._DestroryAd();
+            await this._InitNativeAd(this.id);
+        }
+    }
+
+    protected _ReportNativeShow(ad: OppoNativeAdItem) {
+        if (this.nativeAd) {
+            this.nativeAd.reportAdShow({ adId: ad.adId } as any);
+            ad.show_reported = true;
+            console.log("OPPO广告:", "上报广告展示", ad);
+        }
+    }
+
+    ReportNativeClick() {
+        if (this.nativeAd) {
+            this.nativeAd.reportAdClick({ adId: this.current_ad.adId } as any);
+            console.log("OPPO广告:", "上报广告点击", this.current_ad);
+            this._SwitchNativeAd();
+        }
+    }
+    async reportShow() {
+        this._canShowAd = false;
+        Laya.timer.once(60 * 1000, this, () => {
+            this._canShowAd = true;
+        });
+        if (this.nativeAd && this.current_ad && !this.current_ad.show_reported) {
+            await this._ReportNativeShow(this.current_ad);
+        } else {
+            console.error('没有原生广告');
+        }
+    }
+
 }
 

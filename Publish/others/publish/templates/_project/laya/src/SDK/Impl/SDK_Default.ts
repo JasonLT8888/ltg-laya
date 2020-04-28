@@ -7,8 +7,7 @@ import FakeAdDefine from "../common/FakeAdDefine";
 import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
 
 export default class SDK_Default implements ISDK {
-
-
+    isShielding: boolean = false;
     checkState: ECheckState;
     isADConfigInited: boolean;
     isADEnable: boolean;

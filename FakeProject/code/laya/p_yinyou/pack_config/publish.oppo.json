@@ -1,0 +1,18 @@
+{
+    "appid": "",
+    "bannerId": "",
+    "rewardVideoId": "",
+    "interstitialId": "",
+    "forceRemote": [
+        "res/config"
+    ],
+    "forceInPack": [
+        "res/fgui_load"
+    ],
+    "maxSinglePackSize": 12,
+    "maxTotalPackSize": 12,
+    "packType": 0,
+    "compress": true,
+    "es5": false,
+    "isDebug": false
+}

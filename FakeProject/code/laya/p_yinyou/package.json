@@ -15,14 +15,16 @@
     "uglify-es": "^3.3.9",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "shelljs": "0.8.3"
   },
   "scripts": {
     "build": "webpack --config others/webpack_config/webpack-config-for-game.js",
-    "publish-wx": "node others/publish/bin/publish.js -p wx -c true",
-    "publish-tt": "node others/publish/bin/publish.js -p tt -c true",
-    "publish-qq": "node others/publish/bin/publish.js -p qq -c false",
-    "publish-bd": "node others/publish/bin/publish.js -p bd -c false",
+    "publish-wx": "node others/publish/bin/publish.js -p wx",
+    "publish-tt": "node others/publish/bin/publish.js -p tt",
+    "publish-qq": "node others/publish/bin/publish.js -p qq",
+    "publish-oppo": "node others/publish/bin/publish.js -p oppo",
+    "publish-bd": "node others/publish/bin/publish.js -p bd",
     "update-ltg": "node others/publish/bin/update.js",
     "test": "node others/publish/bin/test.js",
     "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js oppogame/quickgame debug"

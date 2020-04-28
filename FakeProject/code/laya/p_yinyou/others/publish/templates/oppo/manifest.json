@@ -1,0 +1,13 @@
+{
+    "package": "com.ytlj.ltg.game",
+    "name": "游戏框架",
+    "versionName": "1.0",
+    "versionCode": 1,
+    "minPlatformVersion": 1040,
+    "icon": "./icon.png",
+    "orientation": "portrait",
+    "type": "game",
+    "config": {
+        "logLevel": "log"
+    }
+}

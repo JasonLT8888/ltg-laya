@@ -2,6 +2,7 @@ import { EPackResolveType } from "./EPackResolveType";
 
 export class LTPackConfig {
 
+    platform: string = "";
     appid: string = "";
     bannerId: string = "";
     rewardVideoId: string = "";
@@ -13,5 +14,6 @@ export class LTPackConfig {
     packType: EPackResolveType = EPackResolveType.AutoSearch;
     compress: boolean = true;
     es5: boolean = false;
+    isDebug: boolean = false;
 
 }

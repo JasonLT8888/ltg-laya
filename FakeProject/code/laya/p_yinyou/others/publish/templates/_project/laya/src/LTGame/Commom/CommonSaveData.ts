@@ -27,6 +27,10 @@ export class SaveData {
      * 振动是否开启
      */
     public isShakeOn: boolean = true;
+    /**
+     * 原生插屏展示次数
+     */
+    public interstitialCount: number = 0;
 }
 
 export default class CommonSaveData {
@@ -60,6 +64,7 @@ export default class CommonSaveData {
             let currentOpenDayCount = LTUtils.GetCurrentDayCount(Date.now());
             if (currentOpenDayCount != lastOpenDayCount) {
                 this._saveData.isNewDay = true;
+                this._saveData.interstitialCount = 0;
             }
         }
         this._saveData.lastOpenTick = Date.now();

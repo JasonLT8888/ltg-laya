@@ -4,6 +4,8 @@ import { LTPackNode } from "./LTPackNode";
 import { LTUtils } from "Utils/LTUtils";
 import { EPackResolveType } from "Pack/EPackResolveType";
 import { LTPackConfig } from "./LTPackConfig";
+import { EFileType } from "Config/EFileType";
+import StringEx from "Utils/StringEx";
 
 export class SubpackHelper {
 
@@ -96,14 +98,41 @@ export class SubpackHelper {
             LTUtils.CopyDir(subpack.fullPath, targetPath);
 
             // 检查有没有game.js,没有则主动创建
-            let jsPath = path.join(targetPath, "./game.js");
+            let gameJsName = "";
+            switch (this._packConfig.platform) {
+                case "oppo":
+                    gameJsName = "main";
+                    break;
+                case "tt":
+                    gameJsName = "";
+                    break;
+                default:
+                    gameJsName = "game";
+                    break;
+            }
+            if (StringEx.IsNullOrEmpty(gameJsName)) {
+                continue;
+            }
+            let jsPath = path.join(targetPath, "./" + gameJsName + ".js");
             if (!fs.existsSync(jsPath)) {
                 LTUtils.WriteStrTo(jsPath, "");
             }
         }
 
         // 生成game.json
-        let gameJsonPath = path.join(subpackPath, "./../game.json");
+        let gameJsonName = "";
+        switch (this._packConfig.platform) {
+            case "oppo":
+                gameJsonName = "manifest";
+                break;
+            default:
+                gameJsonName = "game";
+                break;
+        }
+        let gameJsonPath = path.join(subpackPath, "./../" + gameJsonName + ".json");
+        if (!LTUtils.IsFileExist(gameJsonPath)) {
+            return;
+        }
         let gameJsonStr = fs.readFileSync(gameJsonPath, {
             "encoding": "utf-8"
         });

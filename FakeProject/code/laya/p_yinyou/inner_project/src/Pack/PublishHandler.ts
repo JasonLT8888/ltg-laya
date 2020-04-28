@@ -4,6 +4,7 @@ import * as process from 'process';
 import * as colors from 'colors';
 import * as babel from "@babel/core";
 import * as uglify_es from 'uglify-es';
+import * as shellJs from 'shelljs';
 import { LTUtils } from 'Utils/LTUtils';
 import { SubpackHelper } from './SubpackHelper';
 import StringEx from 'Utils/StringEx';
@@ -25,6 +26,10 @@ export class PublishHandler {
         "qq": [
             "project.config.json",
             "game.json"
+        ],
+        "oppo": [
+            "manifest.json",
+            "icon.png"
         ]
     }
 
@@ -49,6 +54,14 @@ export class PublishHandler {
         this._CheckRelease();
         this._CopyTemplate();
         this._CopyBin();
+
+        if (this._platformStr == "oppo") {
+            // 打包成rpk
+            shellJs.cd(this._releasePath);
+            let rpk_packer = path.join(this._workPath, "./others/publish/tools/quick-tools/lib/bin/index.js");
+            let mode = this._packConfig.isDebug ? "debug" : "release";
+            shellJs.exec(`node ${rpk_packer} pack ${mode}`)
+        }
 
         // 再次提示cdn
         console.log(("注意cdn资源,需要拷贝到服务器:" + this._cdnPath).bgRed);
@@ -217,6 +230,7 @@ export class PublishHandler {
         let readStr = LTUtils.ReadStrFrom(configPath);
         let parseData = JSON.parse(readStr);
         this._packConfig = new LTPackConfig();
+        this._packConfig.platform = this._platformStr;
         for (let key in parseData) {
             this._packConfig[key] = parseData[key];
         }
