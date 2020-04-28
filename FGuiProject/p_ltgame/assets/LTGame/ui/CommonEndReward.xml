@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImage="ui://75kiu87krk935b" designImageLayer="1">
-  <controller name="c1" pages="0,有导流,1,无导流" selected="1"/>
+  <controller name="c1" pages="0,有导流,1,无导流" selected="0"/>
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -15,8 +15,8 @@
       <gearDisplay controller="c1" pages="0"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <text id="n14_rk93" name="text_str" xy="173,393" size="404,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="成功解锁下一关卡请前往挑战!">
-      <gearXY controller="c1" pages="0,1" values="173,646|173,393"/>
+    <text id="n14_rk93" name="text_str" xy="173,647" size="404,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="成功解锁下一关卡请前往挑战!">
+      <gearXY controller="c1" pages="0,1" values="173,647|173,393"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <component id="n15_rk93" name="btn_get" src="rk935d" fileName="cmp/btn_get_02.xml" xy="226,846" size="297,122">
@@ -28,7 +28,7 @@
     <loader id="n17_rk93" name="icon_reward" xy="331,725" pivot="0.5,0.5" anchor="true" size="52,56" url="ui://75kiu87kbg0016" align="center" vAlign="middle" fill="scale">
       <relation target="" sidePair="center-center,middle-middle"/>
     </loader>
-    <text id="n18_rk93" name="text_add" xy="364,702" size="88,49" fontSize="40" color="#ffffff" letterSpacing="-2" text="+100">
+    <text id="n18_rk93" name="text_add" xy="364,702" size="86,49" fontSize="40" color="#ffffff" letterSpacing="-2" text="+100">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
   </displayList>
