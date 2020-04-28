@@ -2,6 +2,7 @@ import SDKADManager from "../SDKADManager";
 import { ECheckState } from "../common/ECheckState";
 
 export interface ISDK {
+    isShielding: boolean;
 
     /**
      * 游戏唯一标识
