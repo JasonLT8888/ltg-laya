@@ -9,10 +9,10 @@
     "forceInPack": [
         "res/fgui_load"
     ],
-    "maxSinglePackSize": 12,
-    "maxTotalPackSize": 12,
+    "maxSinglePackSize": 10,
+    "maxTotalPackSize": 10,
     "packType": 0,
-    "compress": true,
+    "compress": false,
     "es5": false,
-    "isDebug": false
+    "isDebug": true
 }

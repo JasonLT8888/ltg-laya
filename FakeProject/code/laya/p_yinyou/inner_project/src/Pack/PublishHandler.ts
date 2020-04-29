@@ -121,7 +121,13 @@ export class PublishHandler {
                 let dirPath = targetPath.substring(0, lastIndex);
                 LTUtils.MakeDirExist(dirPath);
 
-                if (this._packConfig.es5 && fileName.endsWith("bundle.js")) {
+                let needTrans = this._packConfig.es5;
+                if (needTrans) {
+                    if (!fileName.endsWith("bundle.js")) {
+                        needTrans = false;
+                    }
+                }
+                if (needTrans) {
                     // 进行转es5操作
                     console.log("进行转es5操作 " + targetPath.green + "");
                     let transCode = babel.transformFileSync(srcPath, {
@@ -153,6 +159,15 @@ export class PublishHandler {
             fs.copyFileSync(indexJsPath, targetIndexPath);
 
             console.log("当前配置无需压缩,直接拷贝所有js文件");
+        }
+        if (this._packConfig.platform == "oppo") {
+            // 处理load
+            let readIndexStr = LTUtils.ReadStrFrom(targetIndexPath);
+            let cahceStr = "____";
+            readIndexStr = LTUtils.ReplaceAll(readIndexStr, "loadLib(\"", cahceStr);
+            readIndexStr = LTUtils.ReplaceAll(readIndexStr, cahceStr, "require(\"./");
+            LTUtils.WriteStrTo(targetIndexPath, readIndexStr);
+            console.log("oppo平台重写index.js");
         }
     }
 
