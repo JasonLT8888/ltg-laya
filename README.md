@@ -24,6 +24,14 @@
 	规格:139*176
 	预制名字:__hotgame  
 	![大交叉推广](/Doc/img/img_hotgame.png)
+* Oppo嵌入式原生广告
+	规格:自定义,会自动等比拉伸进行填充
+	预制名字:__nativeicon  
+	备注:  
+		1.可以在自定义数据中指定广告id(类似178855,178856)  
+		2.代码中进行强制跳转可以直接调用m___nativeicon.ClickAd()
+	![大交叉推广](/Doc/img/img_nativeicon.png)  
+	
 
 ## 使用说明
 1. 使用layaide新建一个工程
