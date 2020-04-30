@@ -2,6 +2,7 @@ import FGuiEx from "./FGuiEx";
 import FGuiData from "./FGuiData";
 import View_OtherGames from "../DefaultUI/Cmp/View_OtherGames";
 import View_HotGame from "../DefaultUI/Cmp/View_HotGame";
+import { View_NativeIcon } from "../DefaultUI/Cmp/View_NativeIcon";
 
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
@@ -80,6 +81,13 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
             this._ui['m___hotgame'] = hotGame.ui;
         } else {
             this._ui['m___hotgame'] = null;
+        }
+
+        let nativeIcon = View_NativeIcon.CreateView(this._ui['m___nativeicon']);
+        if (nativeIcon) {
+            this._ui['m___nativeicon'] = nativeIcon;
+        } else {
+            this._ui['m___nativeicon'] = null;
         }
 
     }

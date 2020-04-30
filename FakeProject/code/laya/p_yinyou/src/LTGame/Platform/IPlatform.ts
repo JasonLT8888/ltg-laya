@@ -7,6 +7,16 @@ import { IDevice } from "./IDevice";
 export default interface IPlatform {
 
     /**
+     * 基础句柄
+     */
+    base: any;
+
+    /**
+     * 平台数据
+     */
+    platformData: LTPlatformData;
+
+    /**
      * appid
      */
     appId: string;

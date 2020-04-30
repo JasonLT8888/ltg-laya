@@ -25,6 +25,7 @@ import UI_view_one_more from "./UI_view_one_more";
 import UI_btn_toggle_02 from "./UI_btn_toggle_02";
 import UI_FlyPanel from "./UI_FlyPanel";
 import UI_view_fly_coin from "./UI_view_fly_coin";
+import UI_NativeIcon from "./UI_NativeIcon";
 import UI_CommonLockScreen from "./UI_CommonLockScreen";
 import UI_CommonSign from "./UI_CommonSign";
 import UI_btn_double_get from "./UI_btn_double_get";
@@ -76,6 +77,7 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_btn_toggle_02.URL, UI_btn_toggle_02);
 		fgui.UIObjectFactory.setExtension(UI_FlyPanel.URL, UI_FlyPanel);
 		fgui.UIObjectFactory.setExtension(UI_view_fly_coin.URL, UI_view_fly_coin);
+		fgui.UIObjectFactory.setExtension(UI_NativeIcon.URL, UI_NativeIcon);
 		fgui.UIObjectFactory.setExtension(UI_CommonLockScreen.URL, UI_CommonLockScreen);
 		fgui.UIObjectFactory.setExtension(UI_CommonSign.URL, UI_CommonSign);
 		fgui.UIObjectFactory.setExtension(UI_btn_double_get.URL, UI_btn_double_get);

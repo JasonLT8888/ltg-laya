@@ -24,7 +24,7 @@ export default class BDPlatform extends WXPlatform {
             return;
         }
 
-        this._platformData = platformData;
+        this.platformData = platformData;
         this._InitLauchOption();
         // this._Login();
         this._InitShareInfo();
@@ -39,14 +39,14 @@ export default class BDPlatform extends WXPlatform {
     }
 
     protected _CreateBannerAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
         }
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
         let bannerObj = {};
-        bannerObj["adUnitId"] = this._platformData.bannerId; // "adunit-b48894d44d318e5a";
+        bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         bannerObj["appSid"] = this.sid;
         let styleObj = {};
         styleObj["left"] = 0;
@@ -72,13 +72,13 @@ export default class BDPlatform extends WXPlatform {
     }
 
     protected _CreateVideoAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
             return;
         }
         this._videoFailedCount = 0;
         let videoObj = {};
-        videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+        videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         videoObj["appSid"] = this.sid;
         this._rewardVideo = this._base.createRewardedVideoAd(videoObj);
         this._rewardVideo.onLoad(() => {

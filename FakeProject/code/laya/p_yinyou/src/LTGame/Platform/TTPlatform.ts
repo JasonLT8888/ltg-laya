@@ -24,7 +24,7 @@ export default class TTPlatform extends WXPlatform {
             return;
         }
 
-        this._platformData = platformData;
+        this.platformData = platformData;
 
         // 检测是否支持交叉推广
         let tt = this._base;
@@ -54,14 +54,14 @@ export default class TTPlatform extends WXPlatform {
     }
 
     protected _CreateBannerAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
         }
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
         let bannerObj = {};
-        bannerObj["adUnitId"] = this._platformData.bannerId; // "adunit-b48894d44d318e5a";
+        bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         bannerObj["adIntervals"] = 30;
         let styleObj = {};
         styleObj["left"] = 0;
@@ -156,7 +156,7 @@ export default class TTPlatform extends WXPlatform {
                 this._base.showMoreGamesModal({
                     appLaunchOptions: [
                         {
-                            appId: this._platformData.appId,
+                            appId: this.platformData.appId,
                             query: "foo=bar&baz=qux",
                             extraData: {}
                         }

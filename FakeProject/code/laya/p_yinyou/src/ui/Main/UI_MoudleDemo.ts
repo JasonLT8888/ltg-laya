@@ -7,6 +7,7 @@ export default class UI_MoudleDemo extends fgui.GComponent {
 	public m_btn_back:fgui.GButton;
 	public m___othergames:fgui.GGraph;
 	public m___hotgame:fgui.GGraph;
+	public m___nativeicon:fgui.GGraph;
 
 	public static URL:string = "ui://kk7g5mmmsgapj";
 
@@ -22,5 +23,6 @@ export default class UI_MoudleDemo extends fgui.GComponent {
 		this.m_btn_back = <fgui.GButton><any>(this.getChildAt(1));
 		this.m___othergames = <fgui.GGraph><any>(this.getChildAt(2));
 		this.m___hotgame = <fgui.GGraph><any>(this.getChildAt(3));
+		this.m___nativeicon = <fgui.GGraph><any>(this.getChildAt(4));
 	}
 }

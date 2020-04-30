@@ -13,9 +13,9 @@ import DefaultDevice from "./DefaultDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 
 export default class DefaultPlatform implements IPlatform {
-
+    base: any;
+    platformData: LTPlatformData;
     onPause: Laya.Handler;
-
     appId: string;
     platform: EPlatformType = EPlatformType.Web;
     safeArea: LTGame.SafeArea = null;

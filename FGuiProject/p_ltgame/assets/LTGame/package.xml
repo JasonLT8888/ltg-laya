@@ -186,6 +186,7 @@
     <component id="qdeh5t" name="ImageBanner.xml" path="/ad_res/" exported="true"/>
     <component id="qdeh5u" name="btn_close_02.xml" path="/cmp/"/>
     <image id="qdeh5v" name="n4.png" path="/img/"/>
+    <component id="h8ea5w" name="NativeIcon.xml" path="/ad_res/" exported="true"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

@@ -60,8 +60,6 @@ export default class OppoPlatform extends WXPlatform {
 
     protected _base: any;
 
-    protected _platformData: LTPlatformData;
-
     protected _cacheVideoAD: boolean = false;
 
     protected _cacheOnShowHandle: Laya.Handler;
@@ -72,7 +70,7 @@ export default class OppoPlatform extends WXPlatform {
             console.error("平台初始化错误", LTPlatform.platformStr);
             return;
         }
-        this._platformData = platformData;
+        this.platformData = platformData;
         this._InitLauchOption();
         this._Login();
         this._InitSystemInfo();
@@ -230,13 +228,13 @@ export default class OppoPlatform extends WXPlatform {
             console.error("无createRewardedVideoAd方法,跳过初始化");
             return;
         }
-        if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
             return;
         }
         this._videoFailedCount = 0;
         let videoObj = {};
-        videoObj["adUnitId"] = this._platformData.rewardVideoId;
+        videoObj["adUnitId"] = this.platformData.rewardVideoId;
         this._rewardVideo = createRewardedVideoAd(videoObj);
         this._rewardVideo.onLoad(() => {
             console.log("视频广告加载成功");
@@ -282,16 +280,16 @@ export default class OppoPlatform extends WXPlatform {
 
     async ShowBannerAd() {
         // 先尝试展示普通banner
-        if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
         }
         this.HideBannerAd();
 
-        console.log(LTPlatform.platformStr, "创建banner", this._platformData.bannerId)
+        console.log(LTPlatform.platformStr, "创建banner", this.platformData.bannerId)
         this._bannerAd = this._base.createBannerAd(
             {
-                adUnitId: this._platformData.bannerId
+                adUnitId: this.platformData.bannerId
             });
         let isBannerLoading: boolean = true;
         let loadSuccess: boolean = false;
@@ -317,7 +315,7 @@ export default class OppoPlatform extends WXPlatform {
         }
 
         // 没有则展示原生
-        for (let i = 0; i < this._platformData.nativeIconIds.length; ++i) {
+        for (let i = 0; i < this.platformData.nativeIconIds.length; ++i) {
             let ret = await this._ShowNativeBanner(i);
             if (ret) {
                 break;
@@ -327,8 +325,8 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     private async _ShowNativeBanner(index: number) {
-        let nativeBanner = qg.createNativeAd({
-            adUnitId: this._platformData.nativeBannerIds[index]
+        let nativeBanner = this.base.createNativeAd({
+            adUnitId: this.platformData.nativeBannerIds[index]
         });
         // 转接对象
         this._bannerAd = nativeBanner;
@@ -401,30 +399,24 @@ export default class OppoPlatform extends WXPlatform {
     protected _DoNoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
-        if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
-            onSkipped.run();
+            this._rewardSkipped?.run();
             return;
         }
         let createRewardedVideoAd = this._base["createRewardedVideoAd"];
         if (createRewardedVideoAd == null) {
             console.error("无createRewardedVideoAd方法,跳过初始化");
-            onSkipped.run();
+            this._rewardSkipped?.run();
             return;
         }
+        if (this._rewardVideo) {
+            this._rewardVideo.destroy();
+        }
         LTUI.ShowLoading("广告拉取中...");
-        this._videoFailedCount = 0;
         let videoObj = {};
-        videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+        videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
-        this._rewardVideo.onLoad(() => {
-            console.log("视频广告加载成功");
-            this._isVideoLoaded = true;
-        });
-        this._rewardVideo.onError((res) => {
-            this._videoFailedCount++;
-            console.error("视频广告加载失败", res, this._videoFailedCount);
-        });
         this._rewardVideo.onClose((res) => {
             Laya.stage.event(CommonEventId.RESUM_AUDIO);
             console.log("视频回调", res);
@@ -450,12 +442,14 @@ export default class OppoPlatform extends WXPlatform {
                         LTUI.HideLoading();
                     }).catch((e) => {
                         console.error(e);
+                        LTUI.Toast("视频广告无法显示")
                         LTUI.HideLoading();
                     });
                 });
             });;
         }).catch((e) => {
             console.error('视频加载出错', e);
+            LTUI.Toast("视频广告无法加载")
             LTUI.HideLoading();
         });
 
@@ -480,8 +474,8 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     private async _ShowNativeInterstital(index: number): Promise<boolean> {
-        let nativeAd = qg.createNativeAd({
-            adUnitId: this._platformData.nativeBannerIds[index]
+        let nativeAd = this._base.createNativeAd({
+            adUnitId: this.platformData.nativeBannerIds[index]
         });
         // 转接对象
         this._intersitialAd = nativeAd;
@@ -532,10 +526,10 @@ export default class OppoPlatform extends WXPlatform {
             console.log("平台版本号不足1061,无法创建普通插页", this.systemInfo.platformVersion);
             return false;
         }
-        console.log("创建普通插页", this._platformData.interstitialId);
+        console.log("创建普通插页", this.platformData.interstitialId);
         this._intersitialAd = this._base.createInterstitialAd(
             {
-                adUnitId: this._platformData.interstitialId
+                adUnitId: this.platformData.interstitialId
             }
         );
         let isloading = true;
@@ -587,7 +581,7 @@ export default class OppoPlatform extends WXPlatform {
         }
 
         // 先拉去原生插屏(一个)
-        if (this._platformData.nativeinterstitialIds.length > 0) {
+        if (this.platformData.nativeinterstitialIds.length > 0) {
             let ret = await this._ShowNativeInterstital(0);
             if (ret) {
                 this._DisableInterstitalAd();
@@ -605,7 +599,7 @@ export default class OppoPlatform extends WXPlatform {
         }
 
         // 失败再继续拉取剩余原生插屏
-        for (let i = 1; i < this._platformData.nativeinterstitialIds.length; ++i) {
+        for (let i = 1; i < this.platformData.nativeinterstitialIds.length; ++i) {
             let ret = await this._ShowNativeInterstital(i);
             if (ret) {
                 this._DisableInterstitalAd();

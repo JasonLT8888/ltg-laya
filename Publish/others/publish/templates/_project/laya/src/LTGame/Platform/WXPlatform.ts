@@ -14,6 +14,8 @@ import { IDevice } from "./IDevice";
 import DefaultDevice from "./DefaultDevice";
 
 export default class WXPlatform implements IPlatform {
+    base: any;
+    platformData: LTPlatformData;
     onPause: Laya.Handler;
     appId: string;
     platform: EPlatformType = EPlatformType.WX;
@@ -52,7 +54,6 @@ export default class WXPlatform implements IPlatform {
 
     protected _base: any;
 
-    protected _platformData: LTPlatformData;
 
     protected _cacheVideoAD: boolean = false;
 
@@ -64,12 +65,12 @@ export default class WXPlatform implements IPlatform {
             console.error("平台初始化错误", LTPlatform.platformStr);
             return;
         }
-        this._platformData = platformData;
+        this.platformData = platformData;
         this._InitLauchOption();
         this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
-        
+
         this._CreateBannerAd();
         this._CreateVideoAd();
         this._CreateInterstitalAd();
@@ -195,6 +196,7 @@ export default class WXPlatform implements IPlatform {
     }
 
     protected _InitSystemInfo() {
+        this.base = this._base;
         try {
             this.systemInfo = this._base.getSystemInfoSync();
             console.log("系统信息已获取", this.systemInfo);
@@ -209,13 +211,13 @@ export default class WXPlatform implements IPlatform {
     }
 
     protected _CreateInterstitalAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.interstitialId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.interstitialId)) {
             console.log("无有效的插页广告ID,取消加载");
             return;
         }
         this._interstitalFailedCount = 0;
         let intAdObj = {};
-        intAdObj["adUnitId"] = this._platformData.interstitialId;
+        intAdObj["adUnitId"] = this.platformData.interstitialId;
         this._intersitialAd = this._base.createInterstitialAd(intAdObj);
 
         this._intersitialAd.onLoad(() => {
@@ -243,13 +245,13 @@ export default class WXPlatform implements IPlatform {
             console.error("无createRewardedVideoAd方法,跳过初始化");
             return;
         }
-        if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
             return;
         }
         this._videoFailedCount = 0;
         let videoObj = {};
-        videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+        videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
         this._rewardVideo.onLoad(() => {
             console.log("视频广告加载成功");
@@ -283,14 +285,14 @@ export default class WXPlatform implements IPlatform {
     }
 
     protected _CreateBannerAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
         }
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
         let bannerObj = {};
-        bannerObj["adUnitId"] = this._platformData.bannerId; // "adunit-b48894d44d318e5a";
+        bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         bannerObj["adIntervals"] = 30;
         let styleObj = {};
         styleObj["left"] = 0;
@@ -348,7 +350,7 @@ export default class WXPlatform implements IPlatform {
     protected _DoNoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
-        if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
             onSkipped.run();
             return;
@@ -362,7 +364,7 @@ export default class WXPlatform implements IPlatform {
         LTUI.ShowLoading("广告拉取中...");
         this._videoFailedCount = 0;
         let videoObj = {};
-        videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+        videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
         this._rewardVideo.onLoad(() => {
             console.log("视频广告加载成功");

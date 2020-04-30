@@ -15,7 +15,7 @@ export default class QTTPlatform extends WXPlatform {
             return;
         }
 
-        this._platformData = platformData;
+        this.platformData = platformData;
         // this._InitLauchOption();
         // this._Login();
         // this._InitShareInfo();

@@ -15,7 +15,7 @@ export default class QQPlatform extends WXPlatform {
             return;
         }
 
-        this._platformData = platformData;
+        this.platformData = platformData;
         this._InitLauchOption();
         this._Login();
         this._InitShareInfo();
@@ -46,14 +46,14 @@ export default class QQPlatform extends WXPlatform {
     }
 
     protected _CreateBannerAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
+        if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
         }
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
         let bannerObj = {};
-        bannerObj["adUnitId"] = this._platformData.bannerId; // "adunit-b48894d44d318e5a";
+        bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         let styleObj = {};
         styleObj["left"] = 0;
         styleObj["top"] = 0;
