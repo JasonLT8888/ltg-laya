@@ -403,28 +403,22 @@ export default class OppoPlatform extends WXPlatform {
         this._rewardSkipped = onSkipped;
         if (StringEx.IsNullOrEmpty(this._platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
-            onSkipped.run();
+            this._rewardSkipped?.run();
             return;
         }
         let createRewardedVideoAd = this._base["createRewardedVideoAd"];
         if (createRewardedVideoAd == null) {
             console.error("无createRewardedVideoAd方法,跳过初始化");
-            onSkipped.run();
+            this._rewardSkipped?.run();
             return;
         }
+        if (this._rewardVideo) {
+            this._rewardVideo.destroy();
+        }
         LTUI.ShowLoading("广告拉取中...");
-        this._videoFailedCount = 0;
         let videoObj = {};
         videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
-        this._rewardVideo.onLoad(() => {
-            console.log("视频广告加载成功");
-            this._isVideoLoaded = true;
-        });
-        this._rewardVideo.onError((res) => {
-            this._videoFailedCount++;
-            console.error("视频广告加载失败", res, this._videoFailedCount);
-        });
         this._rewardVideo.onClose((res) => {
             Laya.stage.event(CommonEventId.RESUM_AUDIO);
             console.log("视频回调", res);
@@ -450,12 +444,14 @@ export default class OppoPlatform extends WXPlatform {
                         LTUI.HideLoading();
                     }).catch((e) => {
                         console.error(e);
+                        LTUI.Toast("视频广告无法显示")
                         LTUI.HideLoading();
                     });
                 });
             });;
         }).catch((e) => {
             console.error('视频加载出错', e);
+            LTUI.Toast("视频广告无法加载")
             LTUI.HideLoading();
         });
 

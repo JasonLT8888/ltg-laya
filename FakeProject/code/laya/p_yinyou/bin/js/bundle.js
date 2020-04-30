@@ -2364,32 +2364,27 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_9__["default"] {
         this._rewardVideo.show();
     }
     _DoNoCacheShowVideo(onSuccess, onSkipped) {
+        var _a, _b;
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
         if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(this._platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
-            onSkipped.run();
+            (_a = this._rewardSkipped) === null || _a === void 0 ? void 0 : _a.run();
             return;
         }
         let createRewardedVideoAd = this._base["createRewardedVideoAd"];
         if (createRewardedVideoAd == null) {
             console.error("无createRewardedVideoAd方法,跳过初始化");
-            onSkipped.run();
+            (_b = this._rewardSkipped) === null || _b === void 0 ? void 0 : _b.run();
             return;
         }
+        if (this._rewardVideo) {
+            this._rewardVideo.destroy();
+        }
         _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].ShowLoading("广告拉取中...");
-        this._videoFailedCount = 0;
         let videoObj = {};
         videoObj["adUnitId"] = this._platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
-        this._rewardVideo.onLoad(() => {
-            console.log("视频广告加载成功");
-            this._isVideoLoaded = true;
-        });
-        this._rewardVideo.onError((res) => {
-            this._videoFailedCount++;
-            console.error("视频广告加载失败", res, this._videoFailedCount);
-        });
         this._rewardVideo.onClose((res) => {
             Laya.stage.event(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_1__["CommonEventId"].RESUM_AUDIO);
             console.log("视频回调", res);
@@ -2418,6 +2413,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_9__["default"] {
                         _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
                     }).catch((e) => {
                         console.error(e);
+                        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].Toast("视频广告无法显示");
                         _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
                     });
                 });
@@ -2425,6 +2421,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_9__["default"] {
             ;
         }).catch((e) => {
             console.error('视频加载出错', e);
+            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].Toast("视频广告无法加载");
             _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
         });
     }
