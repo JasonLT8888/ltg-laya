@@ -61,6 +61,11 @@ export default interface IPlatform {
     isSupportJumpOther: boolean;
 
     /**
+     * 系统信息
+     */
+    systemInfo: any;
+
+    /**
      * 初始化
      */
     Init(platformData: LTPlatformData);

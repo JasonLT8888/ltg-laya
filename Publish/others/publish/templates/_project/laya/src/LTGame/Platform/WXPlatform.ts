@@ -24,6 +24,7 @@ export default class WXPlatform implements IPlatform {
     onResume: Laya.Handler;
     recordManager: IRecordManager = new DefaultRecordManager();
     device: IDevice = new DefaultDevice();
+    systemInfo: any;
 
     /**
      * 是否支持直接跳转到其他小程序
@@ -68,6 +69,7 @@ export default class WXPlatform implements IPlatform {
         this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
+        
         this._CreateBannerAd();
         this._CreateVideoAd();
         this._CreateInterstitalAd();
@@ -194,9 +196,11 @@ export default class WXPlatform implements IPlatform {
 
     protected _InitSystemInfo() {
         try {
-            let systemInfo = this._base.getSystemInfoSync();
-            this.safeArea = systemInfo.safeArea as LTGame.SafeArea;
-            this._cacheScreenScale = systemInfo.screenWidth / Laya.stage.width;
+            this.systemInfo = this._base.getSystemInfoSync();
+            console.log("系统信息已获取", this.systemInfo);
+
+            this.safeArea = this.systemInfo.safeArea as LTGame.SafeArea;
+            this._cacheScreenScale = this.systemInfo.screenWidth / Laya.stage.width;
         } catch (e) {
             console.error(e);
             console.error("获取设备信息失败,执行默认初始化");

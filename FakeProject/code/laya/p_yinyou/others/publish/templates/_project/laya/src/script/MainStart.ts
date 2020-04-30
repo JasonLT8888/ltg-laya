@@ -40,13 +40,16 @@ export default class MainStart extends LTStart {
                 LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_wx/");
                 break;
             case EPlatformType.Oppo:
-                platformData.bannerId = "172417";
-                platformData.rewardVideoId = "172442";
-                platformData.interstitialId = "172441";
-                platformData.nativeId = "172848";
-                platformData.appId = "30258214";
+                platformData.bannerId = "174341";
+                platformData.interstitialId = "174344";
+                platformData.rewardVideoId = "174349";
+                platformData.nativeId = "174348";
+                platformData.appId = "30260170";
+                platformData.nativeBannerIds = ["178853"];
+                platformData.nativeinterstitialIds = ["178854"];
+                platformData.nativeIconIds = ["178855"];
                 version = "v0.0.1"
-                LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_tt/");
+                LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_oppo/");
                 break;
             default:
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");

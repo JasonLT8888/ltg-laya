@@ -24,6 +24,11 @@ export class LTPackNode {
      */
     public childs: LTPackNode[];
 
+    /**
+     * 子包名字
+     */
+    public name: string;
+
     constructor() {
         this.childs = [];
         this.size = 0;

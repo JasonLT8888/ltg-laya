@@ -72,11 +72,7 @@ export default class LTSplashScene extends BaseState {
             new LoadUIPack("res/ltgame/ui/LTGame")
         );
 
-        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
-            this._OnJsonLoaded();
-        } else {
-            Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
-        }
+        Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
     }
 
     private _OnJsonLoaded() {

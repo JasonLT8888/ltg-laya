@@ -2,19 +2,19 @@
 <component size="640,320" pivot="0.5,0.5" anchor="true" opaque="false">
   <displayList>
     <loader id="n2_aqhv" name="img" xy="320,160" pivot="0.5,0.5" anchor="true" size="640,320" fill="scaleMatchWidth">
-      <relation target="" sidePair="width-width,height-height"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
     </loader>
     <loader id="n4_ilml" name="tag" xy="526,271" pivot="0.5,0.5" size="114,48" align="center" vAlign="middle" fill="scale">
-      <relation target="" sidePair="right-right,bottom-bottom"/>
+      <relation target="n2_aqhv" sidePair="left-right,bottom-bottom"/>
     </loader>
-    <loader id="n5_ilml" name="icon" xy="0,0" pivot="0.5,0.5" size="64,64" visible="false" align="center" vAlign="middle" fill="scale">
-      <relation target="" sidePair="left-left,top-top"/>
+    <loader id="n5_ilml" name="icon" xy="0,0" pivot="0.5,0.5" size="64,64" visible="false" vAlign="middle" fill="scaleMatchHeight">
+      <relation target="n2_aqhv" sidePair="left-left,top-top"/>
     </loader>
     <text id="n6_dw0g" name="title" xy="0,-60" size="640,59" font="DengXian" fontSize="36" color="#ffffff" align="center" vAlign="middle" autoSize="none" bold="true" text="">
       <relation target="" sidePair="width-width,center-center,top-top"/>
     </text>
-    <text id="n7_dw0g" name="desc" xy="0,342" size="640,48" visible="false" font="DengXian" fontSize="24" color="#ffffff" align="center" vAlign="middle" autoSize="none" text="">
-      <relation target="" sidePair="width-width,center-center,bottom-bottom"/>
+    <text id="n7_dw0g" name="desc" xy="319,365" pivot="0.5,0.5" anchor="true" size="10,29" font="DengXian" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <component id="n3_aqhv" name="btn_close" src="l2ax4l" fileName="ad_res/btn_normal.xml" xy="590,3" size="48,48">
       <relation target="n2_aqhv" sidePair="left-right,top-top"/>

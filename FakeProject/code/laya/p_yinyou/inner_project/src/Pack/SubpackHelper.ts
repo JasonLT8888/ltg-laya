@@ -144,13 +144,14 @@ export class SubpackHelper {
             if (subpack.isNode) continue;
             let relativePath = subpack.fullPath.replace(upRootPath, "");
             let checkRelativePath = relativePath.replace("\\", "/");
+            let name = LTUtils.ReplaceAll(checkRelativePath, "/", "_");
             if (this._packConfig.packType == EPackResolveType.AutoSearch) {
                 if (this._packConfig.forceInPack.indexOf(checkRelativePath) >= 0) {
                     console.log("强制主包", checkRelativePath.green);
                 } else {
                     subpacks.push({
-                        "name": relativePath,
-                        "root": relativePath
+                        "name": name,
+                        "root": relativePath + "/"
                     });
                 }
             }
@@ -176,8 +177,10 @@ export class SubpackHelper {
             if (this._packConfig.forceInPack.indexOf(checkRelativePath) >= 0) {
                 packType = 1;
             }
+            let name = LTUtils.ReplaceAll(checkRelativePath, "/", "_");
             subpackJsonData.push(
                 {
+                    "name": name,
                     "path": checkRelativePath,
                     "pathType": packType
                 }

@@ -53,6 +53,9 @@ export default class LTRespackManager {
             case EPlatformType.QQ:
                 adapter = Laya["QQMiniAdapter"];
                 break;
+            case EPlatformType.Oppo:
+                adapter = Laya.QGMiniAdapter;
+                break;
         }
         if (adapter == null) return;
         Laya.URL.basePath = this._baseUrl;
@@ -91,7 +94,7 @@ export default class LTRespackManager {
             let pack = this._packs[i];
             if (pack.pathType == EPackType.SubPack) {
                 let cacheIndex = reIndex;
-                LTPlatform.instance.LoadSubpackage(pack.path, Laya.Handler.create(this, () => {
+                LTPlatform.instance.LoadSubpackage(pack.name, Laya.Handler.create(this, () => {
                     this._subpackLoaded[cacheIndex] = true;
 
                     for (let i = 0; i < this._subpackLoaded.length; ++i) {
@@ -103,7 +106,7 @@ export default class LTRespackManager {
                     }
 
                 }), Laya.Handler.create(this, () => {
-                    console.error("分包加载失败", pack.path);
+                    console.error("分包加载失败", pack);
                 }), Laya.Handler.create(this, (value) => {
                     this._subpackProgress[cacheIndex] = value;
 

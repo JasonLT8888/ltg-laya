@@ -25,6 +25,7 @@ export default class DefaultPlatform implements IPlatform {
     onResume: Laya.Handler;
     recordManager: IRecordManager = new WebRecordManager();
     device: IDevice = new DefaultDevice();
+    systemInfo: any = null;
 
     /**
      * 是否支持直接跳转到其他小程序

@@ -7,13 +7,15 @@ import DefaultDevice from "./DefaultDevice";
 import DefaultRecordManager from "./DefaultRecordManager";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
-import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import CommonSaveData from "../Commom/CommonSaveData";
+import WXPlatform from "./WXPlatform";
+import UI_ImageBannerMediator, { FakeBannerData } from "../UIExt/DefaultUI/UI_ImageBannerMediator";
+import UI_NativeInterstitialMediator, { FakeInterstitalData } from "../UIExt/DefaultUI/UI_NativeInterstitialMediator";
 
-export default class OppoPlatform implements IPlatform {
+export default class OppoPlatform extends WXPlatform {
 
     onPause: Laya.Handler;
     appId: string;
@@ -25,6 +27,7 @@ export default class OppoPlatform implements IPlatform {
     onResume: Laya.Handler;
     recordManager: IRecordManager = new DefaultRecordManager();
     device: IDevice = new DefaultDevice();
+    systemInfo: any;
 
     /**
      * 是否支持直接跳转到其他小程序
@@ -73,22 +76,28 @@ export default class OppoPlatform implements IPlatform {
         this._InitLauchOption();
         this._Login();
         this._InitSystemInfo();
-        this._base.initAdService({
-            appId: platformData.appId,
-            isDebug: true,
-            success: () => {
-                console.log("oppo广告", "初始化广告服务成功", platformData);
-                this._CreateBannerAd();
-                this._CreateVideoAd();
-                // this._CreateInterstitalAd();
-                this.intersitialAd = new NativeADUnit(platformData.interstitialId);
-                this.iconNative = new NativeADUnit(platformData.nativeId);
-                this.nativeAd = new NativeADUnit(platformData.nativeId);
-            },
-            fail: () => {
-                console.error("oppo广告", "初始化广告服务失败")
-            }
-        });
+        if (this.systemInfo.platformVersion >= 1051) {
+            // 不需要在进行initAdService
+        } else {
+            this._base.initAdService({
+                appId: platformData.appId,
+                isDebug: true,
+                success: () => {
+                    console.log("oppo广告", "初始化广告服务成功", platformData);
+                    // 不提前进行预加载
+                    // this._CreateBannerAd();
+                    // this._CreateVideoAd();
+                    // this._CreateInterstitalAd();
+                    // this.intersitialAd = new NativeADUnit(platformData.interstitialId);
+                    // this.iconNative = new NativeADUnit(platformData.nativeId);
+                    // this.nativeAd = new NativeADUnit(platformData.nativeId);
+                },
+                fail: () => {
+                    console.error("oppo广告", "初始化广告服务失败")
+                }
+            });
+        }
+
         window["iplatform"] = this;
     }
 
@@ -181,18 +190,6 @@ export default class OppoPlatform implements IPlatform {
         });
     }
 
-    protected _InitSystemInfo() {
-        try {
-            let systemInfo = this._base.getSystemInfoSync();
-            this.safeArea = systemInfo.safeArea as LTGame.SafeArea;
-            this._cacheScreenScale = systemInfo.screenWidth / Laya.stage.width;
-        } catch (e) {
-            console.error(e);
-            console.error("获取设备信息失败,执行默认初始化");
-            this.safeArea = null;
-        }
-    }
-
     protected _CreateInterstitalAd() {
         // if (StringEx.IsNullOrEmpty(this._platformData.interstitialId)) {
         //     console.log("无有效的插页广告ID,取消加载");
@@ -270,42 +267,6 @@ export default class OppoPlatform implements IPlatform {
         });
     }
 
-
-    protected _CreateBannerAd() {
-        if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
-            console.log("无有效的banner广告ID,取消加载");
-            return;
-        }
-        console.log('开始创建banner')
-        let windowWidth = this._base.getSystemInfoSync().windowWidth;
-        let windowHeight = this._base.getSystemInfoSync().windowHeight;
-        this._bannerAd = this._base.createBannerAd(
-            {
-                adUnitId: this._platformData.bannerId,
-                adIntervals: 30,
-                style: {
-                    top: 300,
-                    left: 0,
-                    width: 900,
-                    height: 300
-                }
-            });
-        this._bannerAd.onLoad(() => {
-            console.log("banner加载成功", this._bannerAd);
-            this._isBannerLoaded = true;
-        });
-
-        this._bannerAd.onError((res) => {
-            console.error("banner广告加载失败", res);
-            this._bannerAd == null;
-        });
-
-        this._bannerAd.onResize((size) => {
-            this._bannerAd.style.top = windowHeight - size.height;
-            this._bannerAd.style.left = (windowWidth - size.width) / 2;
-        });
-    }
-
     IsBannerAvaliable() {
         return this._isBannerLoaded;
     }
@@ -313,30 +274,101 @@ export default class OppoPlatform implements IPlatform {
         return this._isVideoLoaded;
     }
     IsInterstitalAvaliable() {
-        return this._isInterstitialLoaded && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 8;
+        return this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 8;
     }
     IsNativeAvaliable() {
         return this._nativeAdLoaded;
     }
-    ShowBannerAd() {
-        if (!this.IsBannerAvaliable()) {
-            console.log(this.IsBannerAvaliable())
-            this._bannerAd.show().then(() => {
-                console.log('展示banner 成功')
-            }).catch((e) => {
-                console.error('展示banner 错误', e);
-            });
+
+    async ShowBannerAd() {
+        // 先尝试展示普通banner
+        if (StringEx.IsNullOrEmpty(this._platformData.bannerId)) {
+            console.log("无有效的banner广告ID,取消加载");
             return;
         }
-        this._bannerAd.show().then(() => {
-            console.log('展示banner 成功')
-        }).catch((e) => {
-            console.error('展示banner 错误', e);
-        });
+        this.HideBannerAd();
+
+        console.log(LTPlatform.platformStr, "创建banner", this._platformData.bannerId)
+        this._bannerAd = this._base.createBannerAd(
+            {
+                adUnitId: this._platformData.bannerId
+            });
+        let isBannerLoading: boolean = true;
+        let loadSuccess: boolean = false;
+        this._bannerAd.show().then((res) => {
+            console.log("banner加载成功", res);
+            if (res['code'] == 0) {
+                loadSuccess = true;
+            }
+            isBannerLoading = false;
+        }).catch((res) => {
+            console.error("banner加载失败", res);
+            isBannerLoading = false;
+        })
+        while (isBannerLoading) {
+            await Awaiters.NextFrame();
+        }
+        if (loadSuccess) return;
+
+        console.log("banner展示失败,展示native广告");
+        // 销毁广告
+        if (this._bannerAd) {
+            this._bannerAd.destroy();
+        }
+
+        // 没有则展示原生
+        for (let i = 0; i < this._platformData.nativeIconIds.length; ++i) {
+            let ret = await this._ShowNativeBanner(i);
+            if (ret) {
+                break;
+            }
+            this._bannerAd.destroy();
+        }
     }
+
+    private async _ShowNativeBanner(index: number) {
+        let nativeBanner = qg.createNativeAd({
+            adUnitId: this._platformData.nativeBannerIds[index]
+        });
+        // 转接对象
+        this._bannerAd = nativeBanner;
+
+        let loadRet = await nativeBanner.load();
+        if (loadRet["code"] == 0) {
+            // 加载成功
+            let adList = loadRet['adList'] as any[];
+            if (adList == null || adList.length == 0) {
+                console.error("native banner加载失败", loadRet);
+                return false;
+            }
+            let adData = adList[0] as {
+                adId: string,
+                imgUrlList: string[],
+                logoUrl: string
+            };
+            if (adData == null) {
+                console.error("native banner加载失败", loadRet);
+                return false;
+            }
+            let fakeData = new FakeBannerData();
+            fakeData.imgPath = adData.imgUrlList[0];
+            fakeData.noticePath = adData.logoUrl;
+            fakeData.adId = adData.adId;
+            fakeData.owner = this._bannerAd;
+            UI_ImageBannerMediator.instance.Show(fakeData);
+            return true;
+        } else {
+            console.error("native banner加载失败", loadRet);
+            return false;
+        }
+    }
+
     HideBannerAd() {
-        if (!this.IsBannerAvaliable()) return;
-        this._bannerAd.hide();
+        if (this._bannerAd) {
+            this._bannerAd.destroy();
+        }
+        this._bannerAd = null;
+        UI_ImageBannerMediator.instance.Hide();
     }
     async  ShowNativeAd() {
         if (!this.IsNativeAvaliable()) {
@@ -447,19 +479,145 @@ export default class OppoPlatform implements IPlatform {
         });
     }
 
-    ShowInterstitalAd() {
+    private async _ShowNativeInterstital(index: number): Promise<boolean> {
+        let nativeAd = qg.createNativeAd({
+            adUnitId: this._platformData.nativeBannerIds[index]
+        });
+        // 转接对象
+        this._intersitialAd = nativeAd;
+
+        let loadRet = await nativeAd.load();
+        if (loadRet["code"] == 0) {
+            // 加载成功
+            let adList = loadRet['adList'] as any[];
+            if (adList == null || adList.length == 0) {
+                console.error("native 插页 加载失败", loadRet);
+                return false;
+            }
+            let adData = adList[0] as {
+                adId: string,
+                imgUrlList: string[],
+                logoUrl: string,
+                icon: string,
+                title: string,
+                desc: string
+            };
+            console.log('广告数据加载完成', loadRet);
+
+            if (adData == null) {
+                console.error("native 插页 加载失败", loadRet);
+                return false;
+            }
+            let fakeData = new FakeInterstitalData();
+            fakeData.imgPath = adData.imgUrlList[0];
+            fakeData.noticePath = adData.logoUrl;
+            fakeData.adId = adData.adId;
+            fakeData.desc = adData.desc;
+            fakeData.iconPath = adData.icon;
+            fakeData.title = adData.title;
+            fakeData.owner = nativeAd;
+            UI_NativeInterstitialMediator.instance.Show(fakeData);
+            return true;
+        } else {
+            console.error("native 插页 加载失败", loadRet);
+            return false;
+        }
+    }
+
+    private async _ShowNormalInterstitalAd(): Promise<boolean> {
+        if (this._intersitialAd) {
+            this._intersitialAd.destroy();
+        }
+        if (this.systemInfo.platformVersion < 1061) {
+            console.log("平台版本号不足1061,无法创建普通插页", this.systemInfo.platformVersion);
+            return false;
+        }
+        console.log("创建普通插页", this._platformData.interstitialId);
+        this._intersitialAd = this._base.createInterstitialAd(
+            {
+                adUnitId: this._platformData.interstitialId
+            }
+        );
+        let isloading = true;
+        let isSuccess = false;
+        this._intersitialAd.load()
+            .then((res) => {
+                console.log("普通插页加载成功", res);
+                isloading = false;
+                isSuccess = res['code'] == 0;
+            })
+            .catch((res) => {
+                console.error("普通插页加载失败", res);
+                isloading = false;
+                isSuccess = false;
+            });
+        while (isloading) {
+            await Awaiters.Frames(1);
+        }
+        if (!isSuccess) {
+            return false;
+        }
+
+        isloading = true;
+        this._intersitialAd.show()
+            .then((res) => {
+                console.log("普通插页展示成功", res);
+                isloading = false;
+                isSuccess = res['code'] == 0;
+            })
+            .catch((res) => {
+                console.error("普通插页展示失败", res);
+                isloading = false;
+                isSuccess = false;
+            });
+        while (isloading) {
+            await Awaiters.Frames(1);
+        }
+        return isSuccess;
+    }
+
+    async ShowInterstitalAd() {
         if (!this.IsInterstitalAvaliable()) {
             console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${CommonSaveData.instance.interstitialCount}`);
             return;
         }
+        if (this._intersitialAd) {
+            this._intersitialAd.destroy();
+            UI_NativeInterstitialMediator.instance.Hide();
+        }
 
-        // this._intersitialAd.show();
-        CommonSaveData.instance.interstitialCount++;
-        CommonSaveData.SaveToDisk();
+        // 先拉去原生插屏(一个)
+        if (this._platformData.nativeinterstitialIds.length > 0) {
+            let ret = await this._ShowNativeInterstital(0);
+            if (ret) {
+                this._DisableInterstitalAd();
+                return;
+            }
+        }
+
+        // 失败则拉取正常插屏
+        let ret = await this._ShowNormalInterstitalAd();
+        if (ret) {
+            CommonSaveData.instance.interstitialCount++;
+            CommonSaveData.SaveToDisk();
+            this._DisableInterstitalAd();
+            return;
+        }
+
+        // 失败再继续拉取剩余原生插屏
+        for (let i = 1; i < this._platformData.nativeinterstitialIds.length; ++i) {
+            let ret = await this._ShowNativeInterstital(i);
+            if (ret) {
+                this._DisableInterstitalAd();
+                return;
+            }
+        }
+    }
+
+    private async _DisableInterstitalAd() {
         this._isInterstitialCanShow = false;
-        Laya.timer.once(60 * 1000, this, () => {
-            this._isInterstitialCanShow = true;
-        });
+        await Awaiters.Seconds(60);
+        this._isInterstitialCanShow = true;
     }
 
     GetFromAppId(): string {
@@ -530,8 +688,6 @@ export default class OppoPlatform implements IPlatform {
         }
     }
 
-
-
     LoadSubpackage(name: string, onSuccess: Laya.Handler, onFailed: Laya.Handler, onProgress: Laya.Handler) {
         let loadObj = {};
         loadObj["name"] = name;
@@ -549,10 +705,7 @@ export default class OppoPlatform implements IPlatform {
         };
         let loadTask = this._base.loadSubpackage(loadObj);
         loadTask.onProgressUpdate((res) => {
-
-            if (Laya.Browser.onMobile) {
-                console.log("分包加载进度", res);
-            }
+            console.log("分包加载进度", res);
 
             if (onProgress) {
                 onProgress.runWith(res.progress / 100);
@@ -561,7 +714,7 @@ export default class OppoPlatform implements IPlatform {
     }
 
     RecordEvent(eventId: string, param: object) {
-
+        console.log("[记录事件]", eventId, param);
     }
 
     /**

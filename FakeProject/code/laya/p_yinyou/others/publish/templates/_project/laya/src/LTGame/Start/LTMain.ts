@@ -44,7 +44,6 @@ export default class LTMain {
                 this._mainLogic.InitGame();
             }));
 
-
     }
 
 }

@@ -42,6 +42,7 @@ import UI_view_toast from "./UI_view_toast";
 import UI_FakeRewardVideo from "./UI_FakeRewardVideo";
 import UI_FakeInterstital from "./UI_FakeInterstital";
 import UI_view_item_sign_big from "./UI_view_item_sign_big";
+import UI_ImageBanner from "./UI_ImageBanner";
 import UI_CommonSign_02 from "./UI_CommonSign_02";
 import UI_view_item_sign_02 from "./UI_view_item_sign_02";
 import UI_CommonEndLose from "./UI_CommonEndLose";
@@ -92,6 +93,7 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_FakeRewardVideo.URL, UI_FakeRewardVideo);
 		fgui.UIObjectFactory.setExtension(UI_FakeInterstital.URL, UI_FakeInterstital);
 		fgui.UIObjectFactory.setExtension(UI_view_item_sign_big.URL, UI_view_item_sign_big);
+		fgui.UIObjectFactory.setExtension(UI_ImageBanner.URL, UI_ImageBanner);
 		fgui.UIObjectFactory.setExtension(UI_CommonSign_02.URL, UI_CommonSign_02);
 		fgui.UIObjectFactory.setExtension(UI_view_item_sign_02.URL, UI_view_item_sign_02);
 		fgui.UIObjectFactory.setExtension(UI_CommonEndLose.URL, UI_CommonEndLose);

@@ -183,6 +183,9 @@
     <image id="l2ax4p" name="btn_anniuhuang.png" path="/ad_res/" scale="9grid" scale9grid="19,31,38,62"/>
     <image id="l2ax4q" name="sp_chakanguanggao.png" path="/ad_res/"/>
     <image id="l2ax4r" name="sp_jixuyouxi.png" path="/ad_res/"/>
+    <component id="qdeh5t" name="ImageBanner.xml" path="/ad_res/" exported="true"/>
+    <component id="qdeh5u" name="btn_close_02.xml" path="/cmp/"/>
+    <image id="qdeh5v" name="n4.png" path="/img/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

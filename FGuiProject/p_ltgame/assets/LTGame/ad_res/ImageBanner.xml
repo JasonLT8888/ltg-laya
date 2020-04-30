@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" opaque="false">
+  <displayList>
+    <loader id="n0_qdeh" name="img_banner" xy="0,1215" size="750,119" url="ui://75kiu87kbg001p" align="center" vAlign="bottom" fill="scaleFree">
+      <relation target="" sidePair="width-width,bottom-bottom"/>
+    </loader>
+    <loader id="n1_qdeh" name="img_adnotice" xy="659,1277" size="71,37" touchable="false" url="ui://75kiu87kbg001i" align="right" vAlign="bottom">
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </loader>
+    <component id="n3_qdeh" name="btn_close" src="qdeh5u" fileName="cmp/btn_close_02.xml" xy="7,1237">
+      <relation target="" sidePair="left-left,bottom-bottom"/>
+    </component>
+  </displayList>
+</component>

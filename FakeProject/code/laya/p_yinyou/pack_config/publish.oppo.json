@@ -11,7 +11,7 @@
     ],
     "maxSinglePackSize": 10,
     "maxTotalPackSize": 10,
-    "packType": 0,
+    "packType": 1,
     "compress": false,
     "es5": false,
     "isDebug": true

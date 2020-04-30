@@ -5,4 +5,8 @@ export default class LTPlatformData {
     public interstitialId : string = "";
     public nativeId : string = "";
 
+    public nativeBannerIds: string[] = [];
+    public nativeIconIds: string[] = [];
+    public nativeinterstitialIds: string[] = [];
+
 }
