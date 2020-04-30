@@ -29,7 +29,7 @@
 	预制名字:__nativeicon  
 	备注:  
 		1.可以在自定义数据中指定广告id(类似178855,178856)  
-		2.代码中进行强制跳转可以直接调用m___nativeicon.ClickAd()
+		2.代码中进行强制跳转可以直接调用m___nativeicon.ClickAd()  
 	![大交叉推广](/Doc/img/img_nativeicon.png)  
 	
 
