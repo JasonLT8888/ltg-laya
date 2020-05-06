@@ -433,19 +433,9 @@ export default class OppoPlatform extends WXPlatform {
             this._rewardVideo.show().then(() => {
                 LTUI.HideLoading();
             }).catch(err => {
+                LTUI.HideLoading();
                 console.log("广告组件出现问题", err);
-                // 可以手动加载一次
-                this._rewardVideo.load().then(() => {
-                    console.log("手动加载成功");
-                    // 加载成功后需要再显示广告
-                    return this._rewardVideo.show().then(() => {
-                        LTUI.HideLoading();
-                    }).catch((e) => {
-                        console.error(e);
-                        LTUI.Toast("视频广告无法显示")
-                        LTUI.HideLoading();
-                    });
-                });
+                LTUI.Toast("广告组件出现问题")
             });;
         }).catch((e) => {
             console.error('视频加载出错', e);
