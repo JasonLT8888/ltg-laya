@@ -429,6 +429,11 @@ export default class OppoPlatform extends WXPlatform {
                 }
             });
         });
+        this._rewardVideo.onError((err) => {
+            LTUI.HideLoading();
+            console.log("广告组件出现问题", err);
+            LTUI.Toast("广告组件出现问题")
+        });
         this._rewardVideo.load().then(() => {
             this._rewardVideo.show().then(() => {
                 LTUI.HideLoading();
