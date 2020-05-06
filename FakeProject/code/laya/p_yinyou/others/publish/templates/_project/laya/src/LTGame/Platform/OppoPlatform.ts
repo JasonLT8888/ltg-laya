@@ -417,6 +417,7 @@ export default class OppoPlatform extends WXPlatform {
         let videoObj = {};
         videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
+        console.log("广告创建完成", videoObj);
         this._rewardVideo.onClose((res) => {
             Laya.stage.event(CommonEventId.RESUM_AUDIO);
             console.log("视频回调", res);
@@ -429,24 +430,18 @@ export default class OppoPlatform extends WXPlatform {
                 }
             });
         });
+
         this._rewardVideo.onError((err) => {
-            LTUI.HideLoading();
             console.log("广告组件出现问题", err);
-            LTUI.Toast("广告组件出现问题")
-        });
-        this._rewardVideo.load().then(() => {
-            this._rewardVideo.show().then(() => {
-                LTUI.HideLoading();
-            }).catch(err => {
-                LTUI.HideLoading();
-                console.log("广告组件出现问题", err);
-                LTUI.Toast("广告组件出现问题")
-            });;
-        }).catch((e) => {
-            console.error('视频加载出错', e);
-            LTUI.Toast("视频广告无法加载")
             LTUI.HideLoading();
+            if (this._rewardSkipped) this._rewardSkipped.run();
         });
+        this._rewardVideo.onLoad((res) => {
+            console.log("广告加载成功", res);
+            LTUI.HideLoading();
+            this._rewardVideo.show();
+        });
+        this._rewardVideo.load();
 
     }
 

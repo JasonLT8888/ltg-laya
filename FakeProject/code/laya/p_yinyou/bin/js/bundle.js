@@ -2385,6 +2385,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_9__["default"] {
         let videoObj = {};
         videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
+        console.log("广告创建完成", videoObj);
         this._rewardVideo.onClose((res) => {
             Laya.stage.event(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_1__["CommonEventId"].RESUM_AUDIO);
             console.log("视频回调", res);
@@ -2400,30 +2401,18 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_9__["default"] {
                 }
             });
         });
-        this._rewardVideo.load().then(() => {
-            this._rewardVideo.show().then(() => {
-                _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
-            }).catch(err => {
-                console.log("广告组件出现问题", err);
-                // 可以手动加载一次
-                this._rewardVideo.load().then(() => {
-                    console.log("手动加载成功");
-                    // 加载成功后需要再显示广告
-                    return this._rewardVideo.show().then(() => {
-                        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
-                    }).catch((e) => {
-                        console.error(e);
-                        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].Toast("视频广告无法显示");
-                        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
-                    });
-                });
-            });
-            ;
-        }).catch((e) => {
-            console.error('视频加载出错', e);
-            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].Toast("视频广告无法加载");
+        this._rewardVideo.onError((err) => {
+            console.log("广告组件出现问题", err);
             _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
+            if (this._rewardSkipped)
+                this._rewardSkipped.run();
         });
+        this._rewardVideo.onLoad((res) => {
+            console.log("广告加载成功", res);
+            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].HideLoading();
+            this._rewardVideo.show();
+        });
+        this._rewardVideo.load();
     }
     ShowRewardVideoAd(onSuccess, onSkipped) {
         if (this._cacheVideoAD) {
