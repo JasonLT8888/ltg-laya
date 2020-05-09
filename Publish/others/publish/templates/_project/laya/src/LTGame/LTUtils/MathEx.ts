@@ -103,7 +103,7 @@ export default class MathEx {
     }
 
     public static Lerp(from: number, to: number, progress: number): number {
-        return from + (to - from) * progress;
+        return from + (to - from) * MathEx.Clamp01(progress);
     }
 
     public static MoveTowardsAngle(current: number, target: number, maxDelta: number) {
