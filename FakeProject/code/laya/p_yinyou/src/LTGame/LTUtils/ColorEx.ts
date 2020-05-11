@@ -12,6 +12,9 @@ export default class ColorEx {
     }
 
     public static HexToColor(colorHex: string, alpha: number = null): Laya.Color {
+        if (colorHex.startsWith("#")) {
+            colorHex = colorHex.substring(1);
+        }
         let cr = colorHex.substring(0, 2);
         let cg = colorHex.substring(2, 4);
         let cb = colorHex.substring(4, 6);
@@ -32,6 +35,9 @@ export default class ColorEx {
     }
 
     public static HexToV4(colorHex: string, alpha: number = null): Laya.Vector4 {
+        if (colorHex.startsWith("#")) {
+            colorHex = colorHex.substring(1);
+        }
         let cr = colorHex.substring(0, 2);
         let cg = colorHex.substring(2, 4);
         let cb = colorHex.substring(4, 6);
