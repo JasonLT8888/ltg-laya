@@ -23,12 +23,21 @@ export default class ColorEx {
         return new Laya.Color(nr / 255, ng / 255, nb / 255, na);
     }
 
-    public static ToV3(color : Laya.Color) : Laya.Vector3 {
+    public static ToV3(color: Laya.Color): Laya.Vector3 {
         return new Laya.Vector3(color.r, color.g, color.b);
     }
 
-    public static ToV4(color : Laya.Color) : Laya.Vector4 {
+    public static ToV4(color: Laya.Color): Laya.Vector4 {
         return new Laya.Vector4(color.r, color.g, color.b, color.a);
+    }
+
+    public static HexToV4(hex: string, alpha?: number): Laya.Vector4 {
+        let r = hex.substr(0, 2);
+        let g = hex.substr(2, 4);
+        let b = hex.substr(4, 6);
+        let a = hex.substr(6, 8);
+
+        return new Laya.Vector4(parseInt(r, 16) / 255, parseInt(g, 16) / 255, parseInt(b, 16) / 255, alpha ? alpha : parseInt(a, 16) / 255);
     }
 
     private static _Hex(num: number): string {
