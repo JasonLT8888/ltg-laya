@@ -38,7 +38,7 @@ export default class MathEx {
         return result;
     }
 
-    public static RandomFromWithWeight(numArr: number[], weightArr: number[]) {
+    public static RandomFromWithWeight<T>(numArr: T[], weightArr: number[]) {
         if (numArr == null || numArr.length == 0) {
             return null;
         }
