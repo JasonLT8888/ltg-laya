@@ -1,7 +1,8 @@
 {
 	"atlasSetting":{
 		"paging":true,
-		"sizeOption":"pot"
+		"sizeOption":"pot",
+		"trimImage":true
 	},
 	"binaryFormat":true,
 	"codeGeneration":{

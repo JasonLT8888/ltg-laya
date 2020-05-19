@@ -1,5 +1,5 @@
+import { PackConst } from "../../../../script/config/PackConst";
 import DefaultRecordManager from "../../DefaultRecordManager";
-import ShareManager from "../../ShareManager";
 import LTPlatform from "../../LTPlatform";
 
 export default class TTRecordManager extends DefaultRecordManager {
@@ -119,31 +119,38 @@ export default class TTRecordManager extends DefaultRecordManager {
         this._nativeManager.stop();
     }
 
+
     ShareVideo(onSuccess: Laya.Handler, onCancel: Laya.Handler, onFailed: Laya.Handler) {
+        console.log(PackConst.data);
         if (this.isRecordSuccess) {
-            let shareData = {} as any;
-            shareData.channel = "video";
-            let getShareData = ShareManager.instance.GetShareInfo();
-            shareData.title = getShareData.shareTitle;
-            shareData.extra = {
-                videoPath: this.videoSavePath
-            };
-            shareData.success = () => {
-                LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
-                    console.log("分享成功");
-                    if (onSuccess) {
-                        onSuccess.run();
-                    }
-                })
-            };
-            shareData.fail = (e) => {
-                LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
-                    console.log("取消分享");
-                    if (onCancel) {
-                        onCancel.run();
-                    }
-                })
-            }
+            let shareData = {
+                channel: "video",
+                title: "",
+                desc: "",
+                imageUrl: "",
+                templateId: PackConst.data.share_id,
+                query: "",
+                extra: {
+                    videoPath: this.videoSavePath, // 可替换成录屏得到的视频地址
+                    videoTopics: PackConst.data.topics// ['小游戏', '学生党', '钻石方块']
+                },
+                success() {
+                    LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
+                        console.log("分享成功");
+                        if (onSuccess) {
+                            onSuccess.run();
+                        }
+                    })
+                },
+                fail(e) {
+                    LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
+                        console.log("取消分享");
+                        if (onCancel) {
+                            onCancel.run();
+                        }
+                    })
+                }
+            } as any;
             this._base.shareAppMessage(shareData);
         } else {
             console.log("无视频可以分享");

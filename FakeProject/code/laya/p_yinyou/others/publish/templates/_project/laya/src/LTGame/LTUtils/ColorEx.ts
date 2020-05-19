@@ -12,6 +12,9 @@ export default class ColorEx {
     }
 
     public static HexToColor(colorHex: string, alpha: number = null): Laya.Color {
+        if (colorHex.startsWith("#")) {
+            colorHex = colorHex.substring(1);
+        }
         let cr = colorHex.substring(0, 2);
         let cg = colorHex.substring(2, 4);
         let cb = colorHex.substring(4, 6);
@@ -23,12 +26,27 @@ export default class ColorEx {
         return new Laya.Color(nr / 255, ng / 255, nb / 255, na);
     }
 
-    public static ToV3(color : Laya.Color) : Laya.Vector3 {
+    public static ToV3(color: Laya.Color): Laya.Vector3 {
         return new Laya.Vector3(color.r, color.g, color.b);
     }
 
-    public static ToV4(color : Laya.Color) : Laya.Vector4 {
+    public static ToV4(color: Laya.Color): Laya.Vector4 {
         return new Laya.Vector4(color.r, color.g, color.b, color.a);
+    }
+
+    public static HexToV4(colorHex: string, alpha: number = null): Laya.Vector4 {
+        if (colorHex.startsWith("#")) {
+            colorHex = colorHex.substring(1);
+        }
+        let cr = colorHex.substring(0, 2);
+        let cg = colorHex.substring(2, 4);
+        let cb = colorHex.substring(4, 6);
+        let ca = colorHex.substring(6, 8);
+        let nr = parseInt(cr, 16);
+        let ng = parseInt(cg, 16);
+        let nb = parseInt(cb, 16);
+        let na = alpha ? alpha : parseInt(ca, 16);
+        return new Laya.Vector4(nr / 255, ng / 255, nb / 255, na);
     }
 
     private static _Hex(num: number): string {

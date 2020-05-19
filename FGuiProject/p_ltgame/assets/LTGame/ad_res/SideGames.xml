@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="120,120" opaque="false" designImageOffsetX="49" designImageOffsetY="-192" bgColor="#000000">
+  <controller name="show" exported="true" pages="1,hide,0,show" selected="0"/>
+  <displayList>
+    <graph id="n14_zutp" name="bg" xy="-375,-1500" pivot="0.5,0.5" size="1508,2990" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
+      <gearDisplay controller="show" pages="0"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n13_zutp" name="btn_show" src="74v83q" fileName="ad_res/oppo/btn.xml" xy="0,0" pivot="0.5,0.5" size="108,120">
+      <relation target="" sidePair="middle-middle,left-left"/>
+      <Button icon="ui://75kiu87k74v83r"/>
+    </component>
+    <image id="n15_gsbn" name="n15" src="74v83s" fileName="ad_res/oppo/dot.png" xy="56,10" pivot="0.5,0.5">
+      <relation target="n13_zutp" sidePair="left-right,top-top"/>
+    </image>
+    <component id="n3_kvo6" name="ads" src="74v84c" fileName="ad_res/oppo/side_ads.xml" xy="-320,-248" pivot="0.5,0.5" size="280,680">
+      <gearXY controller="show" pages="1,0" values="-320,-248|0,-248" tween="true"/>
+    </component>
+  </displayList>
+</component>

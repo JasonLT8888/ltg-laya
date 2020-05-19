@@ -1,6 +1,9 @@
 import Awaiters from "../Async/Awaiters";
 import { CommonEventId } from "../Commom/CommonEventId";
+import CommonSaveData from "../Commom/CommonSaveData";
 import StringEx from "../LTUtils/StringEx";
+import UI_ImageBannerMediator, { FakeBannerData } from "../UIExt/DefaultUI/UI_ImageBannerMediator";
+import UI_NativeInterstitialMediator, { FakeInterstitalData } from "../UIExt/DefaultUI/UI_NativeInterstitialMediator";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
 import DefaultDevice from "./DefaultDevice";
@@ -10,10 +13,7 @@ import { IDevice } from "./IDevice";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
-import CommonSaveData from "../Commom/CommonSaveData";
 import WXPlatform from "./WXPlatform";
-import UI_ImageBannerMediator, { FakeBannerData } from "../UIExt/DefaultUI/UI_ImageBannerMediator";
-import UI_NativeInterstitialMediator, { FakeInterstitalData } from "../UIExt/DefaultUI/UI_NativeInterstitialMediator";
 
 export default class OppoPlatform extends WXPlatform {
 
@@ -74,6 +74,7 @@ export default class OppoPlatform extends WXPlatform {
         this._InitLauchOption();
         this._Login();
         this._InitSystemInfo();
+        this.getSystemInfo();
         if (this.systemInfo.platformVersion >= 1051) {
             // 不需要在进行initAdService
         } else {
@@ -97,6 +98,26 @@ export default class OppoPlatform extends WXPlatform {
         }
 
         window["iplatform"] = this;
+    }
+
+    private getSystemInfo() {
+        this._base.getSystemInfo({
+            success: (res) => {
+                this.systemInfo = res;
+                console.log(this.systemInfo);
+            },
+            fail: () => { },
+            complete: () => { }
+        });
+    }
+    /**
+     * 上报数据
+     */
+    reportMonitor() {
+        console.log('oppo上报数据', this.systemInfo);
+        if (this.systemInfo && this.systemInfo.platformVersion >= 1060) {
+            this._base.reportMonitor('game_scene', 0);
+        }
     }
 
     _CheckUpdate() {
@@ -465,7 +486,7 @@ export default class OppoPlatform extends WXPlatform {
 
     private async _ShowNativeInterstital(index: number): Promise<boolean> {
         let nativeAd = this._base.createNativeAd({
-            adUnitId: this.platformData.nativeBannerIds[index]
+            adUnitId: this.platformData.nativeinterstitialIds[index]
         });
         // 转接对象
         this._intersitialAd = nativeAd;
@@ -757,7 +778,7 @@ export default class OppoPlatform extends WXPlatform {
 
 
 }
-interface OppoNativeAdItem {
+export interface OppoNativeAdItem {
     adId: string;
     clickBtnTxt: string;
     creativeType: number;
@@ -786,10 +807,12 @@ export class NativeADUnit {
             return;
         }
         this.id = id;
-        this._InitNativeAd(this.id);
     }
 
-    async _InitNativeAd(id: string) {
+    async  _InitNativeAd(id?: string) {
+        if (!id) {
+            id = this.id;
+        }
         this.nativeAd = qg.createNativeAd({ posId: id });
         this.nativeAd.onLoad(this.onNativeLoad);
         this.nativeAd.onError(this.onNativeError);

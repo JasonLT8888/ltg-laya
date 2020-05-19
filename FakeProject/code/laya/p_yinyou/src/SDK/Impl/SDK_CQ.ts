@@ -4,6 +4,7 @@ import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import ShareManager from "../../LTGame/Platform/ShareManager";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
+import { ECheckState } from "../common/ECheckState";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -16,8 +17,9 @@ export default class SDK_CQ extends SDK_Default {
     controlVersion: string;
     adManager: SDKADManager;
     uid: string = "sdk_test";
-
+    isShielding: boolean = false;
     enableDebug: boolean = true;
+
 
     private _headPrefix = "https://gamer.api.gugudang.com";
 
@@ -28,7 +30,8 @@ export default class SDK_CQ extends SDK_Default {
 
     private _RequestShareInfo() {
         let sendData = {
-            appid: this.appId
+            appid: this.appId,
+
         };
         LTHttp.Send(this._headPrefix + "/api/shares", Laya.Handler.create(this, this._OnRequestShareInfo), Laya.Handler.create(this, (res) => {
             console.log("获取分享接口访问失败", res);
@@ -70,7 +73,8 @@ export default class SDK_CQ extends SDK_Default {
 
     RequestRemoteConfig() {
         let sendData = {
-            appid: this.appId
+            appid: this.appId,
+            version: this.controlVersion
         }
 
         LTHttp.Send(this._headPrefix + "/api/game/config", Laya.Handler.create(this, this._OnRemoteConfigBack), Laya.Handler.create(this, (res) => {
@@ -94,15 +98,28 @@ export default class SDK_CQ extends SDK_Default {
         if (res.code == 1) {
             // 成功
             let result = res.data;
-            let version = result["version"];
-            if (this.controlVersion == version) {
-                let config = result["config"];
-                let ad = result["ad"];
-                if (config) {
-                    this.isConfigEnable = 1 == config;
+            if (result) {
+                let ad = parseInt(result["isADEnable"]);
+                let isShielding = parseInt(result['isShielding']);
+                let check = parseInt(result['checkState']);
+                let rate = 0;
+                if (result['payRate']) {
+                    rate = parseInt(result['payRate']);
+                } else {
+                    console.log('如果需要在重庆后台配置参数 payRate 概率 0-100')
                 }
-                if (ad) {
-                    this.isADEnable = 1 == ad;
+                this.payRate = rate;
+                if (isShielding != undefined) {
+                    this.isShielding = 1 == isShielding;
+                }
+                if (ad != undefined) {
+                    this.isADEnable = (1 == ad);
+                }
+
+                if (check != undefined) {
+                    this.checkState = check as ECheckState;
+                } else {
+                    this.checkState = ECheckState.Normal;
                 }
             } else {
                 console.log("未读取到后台信息,默认为打开状态");

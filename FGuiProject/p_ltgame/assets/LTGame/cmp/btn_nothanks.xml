@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="156,50" extention="Button">
+<component size="156,50" pivot="0.5,0.5" extention="Button">
   <displayList>
-    <text id="n5_bg00" name="n5" xy="80,25" pivot="0.5,0.5" anchor="true" size="111,31" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="不了, 谢谢">
-      <relation target="" sidePair="center-center,middle-middle"/>
+    <text id="n5_bg00" name="title" xy="80,25" pivot="0.5,0.5" anchor="true" size="115,31" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="不了, 谢谢">
+      <relation target="" sidePair="width-width,height-height"/>
     </text>
   </displayList>
-  <Button downEffect="dark" downEffectValue="0.80"/>
+  <Button downEffect="scale" downEffectValue="0.80"/>
 </component>

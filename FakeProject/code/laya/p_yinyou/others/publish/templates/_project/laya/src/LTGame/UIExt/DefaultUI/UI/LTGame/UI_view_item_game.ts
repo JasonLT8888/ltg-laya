@@ -7,7 +7,7 @@ export default class UI_view_item_game extends fgui.GComponent {
 	public m_icon:UI_view_game_icon;
 	public m_text_name:fgui.GTextField;
 
-	public static URL:string = "ui://75kiu87kbg001g";
+	public static URL:string = "ui://75kiu87kp2ld6o";
 
 	public static createInstance():UI_view_item_game {
 		return <UI_view_item_game><any>(fgui.UIPackage.createObject("LTGame","view_item_game"));

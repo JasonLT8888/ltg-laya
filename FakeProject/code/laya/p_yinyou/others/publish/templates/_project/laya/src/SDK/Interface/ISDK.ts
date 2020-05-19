@@ -2,6 +2,13 @@ import SDKADManager from "../SDKADManager";
 import { ECheckState } from "../common/ECheckState";
 
 export interface ISDK {
+    /**
+     * 误触概率
+     */
+    payRate: number;
+    /**
+     * 地区屏蔽
+     */
     isShielding: boolean;
 
     /**

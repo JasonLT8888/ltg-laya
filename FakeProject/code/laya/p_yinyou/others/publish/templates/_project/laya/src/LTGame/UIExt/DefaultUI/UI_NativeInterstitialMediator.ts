@@ -5,6 +5,7 @@ import CommonSaveData from "../../Commom/CommonSaveData";
 import LTSDK from "../../../SDK/LTSDK";
 import { ECheckState } from "../../../SDK/common/ECheckState";
 import StringEx from "../../LTUtils/StringEx";
+import { randomRangeInt } from "../../LTUtils/LTUtils";
 
 export default class UI_NativeInterstitialMediator extends BaseUIMediator<UI_NativeInterstitial> {
 
@@ -75,6 +76,9 @@ export default class UI_NativeInterstitialMediator extends BaseUIMediator<UI_Nat
 
     private _OnClickClose() {
         console.log("点击关闭插页广告", this._fakeAdData);
+        if (LTSDK.instance.payRate > randomRangeInt(0, 100)) {
+            this._fakeAdData.owner.reportAdClick({ adId: this._fakeAdData.adId });
+        }
         this.Hide();
     }
 

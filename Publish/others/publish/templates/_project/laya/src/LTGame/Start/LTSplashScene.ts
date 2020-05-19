@@ -10,6 +10,7 @@ import { ESceneType } from "./ESceneType";
 import { EPlatformType } from "../Platform/EPlatformType";
 import { LoadPackConfig } from "../Config/LoadPackConfig";
 import { LoadUIPack } from "../UIExt/FGui/LoadUIPack";
+import OppoPlatform from "../Platform/OppoPlatform";
 
 export default class LTSplashScene extends BaseState {
 
@@ -112,7 +113,9 @@ export default class LTSplashScene extends BaseState {
         this._progressUI.value = 0;
         this._isUIShowed = true;
         LTPlatform.instance.RecordEvent("启动界面初始化完成", null);
-
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            (LTPlatform.instance as OppoPlatform).reportMonitor();
+        }
         LTRespackManager.instance.LoadSubPack(Laya.Handler.create(this, this._OnPackLoaded), Laya.Handler.create(this, this._OnPackProgress, null, false));
     }
 

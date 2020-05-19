@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="585,888" designImage="ui://75kiu87kq0fh4k" designImageOffsetX="-82" designImageOffsetY="-151" designImageLayer="1">
-  <controller name="check_state" pages="0,审核中,1,非审核中" selected="0"/>
+<component size="585,888" designImageOffsetX="-82" designImageOffsetY="-151" designImageLayer="1">
+  <controller name="check_state" exported="true" pages="0,审核中,1,非审核中" selected="1"/>
   <displayList>
-    <image id="n20_q0fh" name="n20" src="q0fh4n" fileName="img/sp_erjibg.png" xy="-25,12" size="633,734"/>
+    <image id="n20_q0fh" name="n20" src="q0fh4n" fileName="img/sp_erjibg.png" xy="-25,-13" size="633,734"/>
     <image id="n21_q0fh" name="n21" src="q0fh4p" fileName="img/sp_denglujiangli(1).png" xy="162,-39"/>
-    <image id="n22_q0fh" name="n22" src="q0fh4q" fileName="img/sp_erjibg1.png" xy="-16,48" size="618,684"/>
+    <image id="n22_q0fh" name="n22" src="q0fh4q" fileName="img/sp_erjibg1.png" xy="-16,22" size="618,684"/>
     <component id="n7_it2i" name="view_day7" src="q0fh56" fileName="cache/view_item_sign_big.xml" xy="137,484" size="329,197"/>
     <list id="n15_it2i" name="list_day" xy="15,67" size="562,413" layout="flow_hz" lineGap="9" colGap="15" lineItemCount="3" defaultItem="ui://75kiu87kit2ix">
       <item/>
@@ -14,11 +14,11 @@
       <item/>
       <item/>
     </list>
-    <component id="n16_gxi8" name="toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="156,675">
+    <component id="n16_gxi8" name="toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="156,718" size="308,49">
       <gearDisplay controller="check_state" pages="1"/>
     </component>
-    <component id="n23_q0fh" name="btn_get" src="q0fh4t" fileName="cmp/btn_get_01.xml" xy="-6,769">
-      <gearXY controller="check_state" pages="1" values="156,769" default="-6,769"/>
+    <component id="n23_q0fh" name="btn_get" src="q0fh4t" fileName="cmp/btn_get_01.xml" xy="156,767">
+      <gearXY controller="check_state" pages="1" values="156,767" default="-6,769"/>
     </component>
     <component id="n25_q0fh" name="btn_close" src="q0fh4x" fileName="cmp/btn_close.xml" xy="538,-15"/>
     <component id="n26_q0fh" name="btn_watchad" src="q0fh55" fileName="cmp/btn_5scale.xml" xy="318,769">

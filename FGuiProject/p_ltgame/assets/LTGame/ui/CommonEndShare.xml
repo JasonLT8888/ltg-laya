@@ -4,8 +4,8 @@
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n2_bg00" name="view" src="bg0017" fileName="cache/view_endshare.xml" xy="60,221" size="630,740">
-      <relation target="" sidePair="center-center,middle-middle"/>
+    <component id="n2_bg00" name="view" src="bg0017" fileName="cache/view_endshare.xml" xy="0,0" size="750,1334">
+      <relation target="" sidePair="width-width,height-height,bottom-bottom"/>
     </component>
   </displayList>
 </component>
