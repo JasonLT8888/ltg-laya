@@ -193,7 +193,7 @@
     <image id="eq3z6h" name="红点小@2x.png" path="/ad_res/res/"/>
     <component id="k7jc6i" name="Native320.xml" path="/ad_res/" exported="true"/>
     <component id="j9at6j" name="CommonEndSliderADs.xml" path="/ad_res/" exported="true"/>
-    <component id="p2ld6k" name="EndSlideGames.xml" path="/ui/" exported="true"/>
+    <component id="p2ld6k" name="EndSlideGames.xml" path="/ad_res/" exported="true"/>
     <component id="p2ld6l" name="GameIcon.xml" path="/cmp/"/>
     <component id="p2ld6n" name="slideAds.xml" path="/ui/"/>
     <component id="p2ld6o" name="view_item_game.xml" path="/cache/" exported="true"/>

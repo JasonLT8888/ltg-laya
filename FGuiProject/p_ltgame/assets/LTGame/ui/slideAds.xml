@@ -12,7 +12,7 @@
       <item/>
       <item/>
     </list>
-    <list id="n5_p2ld" name="list1" xy="0,150" size="815,140" layout="row" overflow="scroll" scroll="horizontal" colGap="10" defaultItem="ui://75kiu87kp2ld6p" vAlign="middle" renderOrder="descent">
+    <list id="n5_p2ld" name="list1" xy="0,150" size="815,140" layout="row" overflow="scroll" scroll="horizontal" scrollBarFlags="160" colGap="10" defaultItem="ui://75kiu87kp2ld6p" vAlign="middle" renderOrder="descent">
       <relation target="" sidePair="width-width,center-center"/>
       <item/>
       <item/>
@@ -23,7 +23,7 @@
       <item/>
       <item/>
     </list>
-    <list id="n6_p2ld" name="list2" xy="65,300" size="750,140" layout="row" overflow="scroll" scroll="horizontal" colGap="10" defaultItem="ui://75kiu87kp2ld6p" vAlign="middle">
+    <list id="n6_p2ld" name="list2" xy="65,300" size="750,140" layout="row" overflow="scroll" scroll="horizontal" scrollBarFlags="160" colGap="10" defaultItem="ui://75kiu87kp2ld6p" vAlign="middle">
       <relation target="" sidePair="width-width,center-center"/>
       <item/>
       <item/>

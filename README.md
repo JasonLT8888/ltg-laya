@@ -23,14 +23,26 @@
 * 爆款游戏
 	规格:139*176
 	预制名字:__hotgame  
-	![大交叉推广](/Doc/img/img_hotgame.png)
-* Oppo嵌入式原生广告
+	![爆款游戏](/Doc/img/img_hotgame.png)
+* 滚动交叉推广（大）
+	规格:750*450
+	预制名字:__endSG  
+	![滚动交叉推广](/Doc/img/img_endSG.png)
+* 滚动交叉推广（底部）
+	规格:750*200
+	预制名字:__bottomgames  
+	![滚动交叉推广](/Doc/img/img_bottomgames.png)
+* 侧拉交叉推广（oppo左侧）
+	规格:120*120
+	预制名字:__sidegames  
+	![滚动交叉推广](/Doc/img/sidegames.png)	
+* Oppo嵌入式原生广告ICON
 	规格:自定义,会自动等比拉伸进行填充
 	预制名字:__nativeicon  
 	备注:  
 		1.可以在自定义数据中指定广告id(类似178855,178856)  
 		2.代码中进行强制跳转可以直接调用m___nativeicon.ClickAd()  
-	![大交叉推广](/Doc/img/img_nativeicon.png)  
+	![Oppo嵌入式原生广告ICON](/Doc/img/img_nativeicon.png)  
 	
 
 ## 使用说明
