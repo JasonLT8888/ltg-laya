@@ -18,9 +18,7 @@ import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
 import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
 import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
 import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
-import UI_CommonMainMoreGameAdsMediator from "./DefaultUI/UI_CommonMainMoreGameAdsMediator";
-import UI_CommonMainHotGameMediator from "./DefaultUI/UI_CommonMainHotGameMediator";
-import LTPlatform from "../Platform/LTPlatform";import { EPlatformType } from "../Platform/EPlatformType";
+import LTPlatform from "../Platform/LTPlatform"; import { EPlatformType } from "../Platform/EPlatformType";
 import { EndLoseOpenData } from "./DefaultUI/Data/EndLoseOpenData";
 import UI_CommonEndLoseMediator from "./DefaultUI/UI_CommonEndLoseMediator";
 import { UnlockProgressOpenData } from "./DefaultUI/Data/UnlockProgressOpenData";
@@ -92,17 +90,6 @@ export default class LTUI {
 
     public static ShowEndLose(openData: EndLoseOpenData) {
         UI_CommonEndLoseMediator.instance.Show(openData);
-    }
-
-    public static ShowMoreGame(openData: EndRewardOpenData) {
-        UI_CommonMainMoreGameAdsMediator.instance.Show(openData);
-    }
-
-    public static ShowHotGame(openData: EndRewardOpenData) {
-        UI_CommonMainHotGameMediator.instance.Show(openData);
-    }
-    public static HideHotGame(openData: any) {
-        UI_CommonMainHotGameMediator.instance.Hide();
     }
 
     public static ShowUnlockProgress(openData: UnlockProgressOpenData) {

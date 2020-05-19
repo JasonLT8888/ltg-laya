@@ -9,6 +9,7 @@ import { ESceneType } from "../../LTGame/Start/ESceneType";
 import { EffectConfig } from "../config/EffectConfig";
 import { GameConst } from "../config/GameConst";
 import { EffectManager } from "../manager/EffectManager";
+import { PackConst } from "../config/PackConst";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -26,11 +27,12 @@ export default class SplashScene extends LTSplashScene {
         ConfigManager.AddConfig(AudioConfig);
         ConfigManager.AddConfig(EffectConfig);
         ConfigManager.AddConfig(GameConst);
+        ConfigManager.AddConfig(PackConst);
     }
 
     _OnGameResPrepared(urls: string[]) {
         GlobalUnit.InitAll();
-        
+
         EffectManager.instance.Preload(urls);
     }
 

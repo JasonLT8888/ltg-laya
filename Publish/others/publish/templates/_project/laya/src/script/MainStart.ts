@@ -17,39 +17,45 @@ export default class MainStart extends LTStart {
     }
 
     private _appId: string = "ttbe90c82d21ba845b";
+    private _gameVersion = "v0.0.1";
+    private _resVersion = "0515";
+    private _gameName = "p_ltg";//基础框架
+
     _HandleInitPlatform(ePlatform: EPlatformType, platformData: LTPlatformData) {
-        let version = "v0.0.1";
         switch (ePlatform) {
             case EPlatformType.Web:
                 console.log("web平台,不做任何处理");
                 break;
             case EPlatformType.TT:
+                this._gameVersion = "v0.0.1";
+                this._resVersion = 'v0.0.1';
+                platformData.appId = "ttbe90c82d21ba845b";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
-                platformData.appId = "ttbe90c82d21ba845b";
-                version = "v0.0.1"
-                LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_tt/");
+                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}__tt/`);
                 break;
             case EPlatformType.WX:
+                this._gameVersion = "v0.0.1";
+                this._resVersion = 'v0.0.1';
+                platformData.appId = "wx7bcca975ff17ebe9";
                 platformData.bannerId = "adunit-11a2571806b5fc5c";
                 platformData.rewardVideoId = "adunit-fa6dd5b431c41ceb";
                 platformData.interstitialId = "adunit-abe9d252f3a3956c";
-                platformData.appId = "wx7bcca975ff17ebe9";
-                version = "v0.0.1"
-                LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_wx/");
+                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}__wx/`);
                 break;
             case EPlatformType.Oppo:
+                this._gameVersion = "v0.0.1";
+                this._resVersion = 'v0.0.1';
+                platformData.appId = "30260170";
                 platformData.bannerId = "174341";
                 platformData.interstitialId = "174344";
                 platformData.rewardVideoId = "174349";
                 platformData.nativeId = "174348";
-                platformData.appId = "30260170";
                 platformData.nativeBannerIds = ["178853"];
                 platformData.nativeinterstitialIds = ["178854"];
                 platformData.nativeIconIds = ["178855"];
-                version = "v0.0.1"
-                LTRespackManager.instance.SetRemoteUrl("https://hs.yz061.com/res/down/public/p_ltg/" + version + "_oppo/");
+                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
             default:
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");
@@ -62,15 +68,13 @@ export default class MainStart extends LTStart {
 
     _HandleSDK() {
         switch (LTPlatform.instance.platform) {
-            case EPlatformType.Oppo:
-                LTSDK.CreateInstace(SDK_CQ, "ltg", "1.0.0", this._appId);
-                break;
             case EPlatformType.WX:
-                LTSDK.CreateInstace(SDK_YQ, "ltg", "1.0.0", this._appId);
+                LTSDK.CreateInstace(SDK_YQ, this._gameName, this._gameVersion, this._appId);
                 break;
+            case EPlatformType.Oppo:
             case EPlatformType.TT:
             default:
-                LTSDK.CreateInstace(SDK_CQ, "ltg", "1.0.0", this._appId);
+                LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
                 break;
         }
     }

@@ -1,9 +1,9 @@
 import UI_view_sharegames_big from "../UI/LTGame/UI_view_sharegames_big";
-import LTSDK from "../../../../SDK/LTSDK";
-import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
+import LTSDK from "../../../../SDK/LTSDK"; 
 import LTPlatform from "../../../Platform/LTPlatform";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import { CommonEventId } from "../../../Commom/CommonEventId";
+import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 
 export default class View_OtherGames {
 

@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334">
+  <controller name="landscape" exported="true" pages="0,,1," selected="1"/>
   <displayList>
-    <graph id="n3_dw0g" name="n3" xy="0,0" pivot="0.5,0.5" size="750,1334" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
+    <graph id="n3_dw0g" name="n3" xy="0,0" pivot="0.5,0.5" size="750,1334" alpha="0.9" type="rect" lineSize="0" fillColor="#ff000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n6_h8ea" name="ad" src="l2ax4k" fileName="ad_res/NativeBigAd.xml" xy="375,504"/>
-    <component id="n1_dw0g" name="btn_return" src="l2ax4n" fileName="ad_res/btn_native.xml" xy="375,1011" size="247,95" controller="color,1">
-      <relation target="" sidePair="center-center"/>
+    <component id="n6_h8ea" name="ad" src="l2ax4k" fileName="ad_res/NativeBigAd.xml" xy="375,801">
+      <gearXY controller="landscape" pages="1" values="375,801" default="375,623"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </component>
+    <component id="n1_dw0g" name="btn_return" src="l2ax4n" fileName="ad_res/btn_native.xml" xy="375,1245" size="247,95" controller="color,1">
+      <gearXY controller="landscape" pages="1" values="375,1245" default="375,1067"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
       <Button title="继续游戏"/>
     </component>
-    <component id="n5_dw0g" name="btn_pay" src="l2ax4n" fileName="ad_res/btn_native.xml" xy="375,862" size="319,120">
-      <relation target="" sidePair="center-center"/>
+    <component id="n5_dw0g" name="btn_pay" src="l2ax4n" fileName="ad_res/btn_native.xml" xy="375,1096" size="319,120">
+      <gearXY controller="landscape" pages="1" values="375,1096" default="375,918"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
       <Button title="查看广告" titleFontSize="40" icon="ui://75kiu87kl2ax4s"/>
     </component>
   </displayList>

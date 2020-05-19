@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,440">
+  <displayList>
+    <component id="n6_h8ea" name="ad" src="k7jc6i" fileName="ad_res/Native320.xml" xy="375,188" size="450,295" aspect="true">
+      <relation target="" sidePair="center-center,top-top"/>
+    </component>
+    <component id="n5_dw0g" name="btn_pay" src="l2ax4n" fileName="ad_res/btn_native.xml" xy="375,389" size="263,98">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="查看广告" titleFontSize="40" icon="ui://75kiu87kl2ax4s"/>
+    </component>
+  </displayList>
+</component>
