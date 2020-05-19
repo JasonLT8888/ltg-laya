@@ -1,12 +1,14 @@
+import LTHttp from "../../LTGame/Net/LTHttp";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import LTRespackManager from "../../LTGame/Res/LTRespackManager";
+import { ECheckState } from "../common/ECheckState";
+import FakeAdDefine from "../common/FakeAdDefine";
 import { ISDK } from "../Interface/ISDK";
 import SDKADManager from "../SDKADManager";
-import { ECheckState } from "../common/ECheckState";
-import LTRespackManager from "../../LTGame/Res/LTRespackManager";
-import LTHttp from "../../LTGame/Net/LTHttp";
-import FakeAdDefine from "../common/FakeAdDefine";
-import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
 
 export default class SDK_Default implements ISDK {
+    payRate: number;
     isShielding: boolean = false;
     checkState: ECheckState;
     isADConfigInited: boolean;
@@ -24,6 +26,7 @@ export default class SDK_Default implements ISDK {
         this.isADConfigInited = true;
         this.isADEnable = true;
         this.isConfigEnable = true;
+        this.payRate = 0;
         this.flg = flg;
         this.channel = channel;
         this.controlVersion = controlVersion;
@@ -37,7 +40,11 @@ export default class SDK_Default implements ISDK {
     }
 
     protected _RequestSelfAdInfo() {
-        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/SelfAdConfig.json`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
+        let configFile = 'SelfAdConfig.json';
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            configFile = 'YTSelf.json';
+        }
+        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/${configFile}`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
             Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
     }
 
@@ -56,7 +63,9 @@ export default class SDK_Default implements ISDK {
             adData.ad_img = fakeAd.icon;
             adData.ad_name = fakeAd.title;
             adData.ad_package = fakeAd.package;
-            adList.push(adData);
+            if (adData.ad_appid != this.appId) {
+                adList.push(adData);
+            }
         }
 
         // 加入广告控制器
