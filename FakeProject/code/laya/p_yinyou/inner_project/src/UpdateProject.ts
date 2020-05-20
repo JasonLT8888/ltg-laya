@@ -122,12 +122,15 @@ class UpdateProject {
                 }
             }
             if (fileType == EFileType.File) {
+                if (combieTarget.endsWith("LTEditorData.asset") && LTUtils.IsFileExist(combieTarget)) {
+                    console.log(combieTarget, '已存在,跳过拷贝');
+                    continue;
+                }
                 LTUtils.CopyFile(combieSrc, combieTarget);
             } else {
                 // 跳过这两个文件,这两个文件会保存数据
                 let skipFiles = [
-                    "Configuration.xml",
-                    "LTEditorData.asset"
+                    "Configuration.xml"
                 ];
                 LTUtils.CopyDir(combieSrc, combieTarget, function (fileName: string, targetPath: string) {
                     if (skipFiles.indexOf(targetPath) >= 0) {
