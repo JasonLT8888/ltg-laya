@@ -198,6 +198,7 @@
     <component id="p2ld6n" name="slideAds.xml" path="/ui/"/>
     <component id="p2ld6o" name="view_item_game.xml" path="/cache/" exported="true"/>
     <component id="p2ld6p" name="view_item_game140.xml" path="/cache/" exported="true"/>
+    <image id="dn6n6q" name="sp_shipin0.png" path="/img/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
