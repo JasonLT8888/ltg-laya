@@ -24,7 +24,4 @@
       <Button title="随机体验皮肤"/>
     </component>
   </displayList>
-  <transition name="anim_enter">
-    <item time="67" type="Scale" target="n2_bg00" tween="true" startValue="0,0" endValue="1,1" duration="29" ease="Back.Out"/>
-  </transition>
 </component>

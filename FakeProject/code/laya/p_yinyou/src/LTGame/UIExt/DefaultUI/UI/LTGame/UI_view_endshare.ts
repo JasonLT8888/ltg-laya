@@ -10,23 +10,18 @@ export default class UI_view_endshare extends fgui.GComponent {
 	public m_text_reward:fgui.GTextField;
 	public m_btn_nothanks:fgui.GButton;
 	public m_anim_enter:fgui.Transition;
-
 	public static URL:string = "ui://75kiu87kbg0017";
 
 	public static createInstance():UI_view_endshare {
-		return <UI_view_endshare><any>(fgui.UIPackage.createObject("LTGame","view_endshare"));
+		return <UI_view_endshare>(fgui.UIPackage.createObject("LTGame", "view_endshare"));
 	}
 
-	public constructor() {
-		super();
-	}
-
-	protected onConstruct(): void {
-		this.m_btn_share = <UI_btn_double_get><any>(this.getChildAt(2));
-		this.m_text_info = <fgui.GTextField><any>(this.getChildAt(3));
-		this.m_icon_reward = <fgui.GLoader><any>(this.getChildAt(4));
-		this.m_text_reward = <fgui.GTextField><any>(this.getChildAt(5));
-		this.m_btn_nothanks = <fgui.GButton><any>(this.getChildAt(6));
+	protected onConstruct():void {
+		this.m_btn_share = <UI_btn_double_get>(this.getChildAt(2));
+		this.m_text_info = <fgui.GTextField>(this.getChildAt(3));
+		this.m_icon_reward = <fgui.GLoader>(this.getChildAt(4));
+		this.m_text_reward = <fgui.GTextField>(this.getChildAt(5));
+		this.m_btn_nothanks = <fgui.GButton>(this.getChildAt(6));
 		this.m_anim_enter = this.getTransitionAt(0);
 	}
 }

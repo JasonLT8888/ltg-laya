@@ -31,6 +31,13 @@ export class SaveData {
      * 原生插屏展示次数
      */
     public interstitialCount: number = 0;
+
+    /**
+     * 皮肤试用误点
+     * 0 勾中看视频
+     * 1 勾中不看视频
+     */
+    public trySignMissMode: number = 0
 }
 
 export default class CommonSaveData {

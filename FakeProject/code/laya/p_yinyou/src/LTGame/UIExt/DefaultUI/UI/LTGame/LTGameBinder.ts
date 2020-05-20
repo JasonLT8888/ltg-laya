@@ -56,7 +56,7 @@ import UI_CommonUnlockProgress from "./UI_CommonUnlockProgress";
 import UI_sliderADs from "./UI_sliderADs";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
-export default class LTGameBinder{
+export default class LTGameBinder {
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(UI_side_ads.URL, UI_side_ads);
 		fgui.UIObjectFactory.setExtension(UI_hot_game.URL, UI_hot_game);

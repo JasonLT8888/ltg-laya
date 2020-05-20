@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87krk935q" designImageLayer="1">
-  <controller name="check_state" pages="0,非审核状态,1,审核状态" selected="1"/>
+<component size="750,1334" designImage="ui://75kiu87krk935q" designImageAlpha="0" designImageLayer="1">
+  <controller name="check_state" pages="0,非审核状态,1,审核状态" selected="0"/>
   <displayList>
     <graph id="n0_rk93" name="bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -19,10 +19,10 @@
     <image id="n4_rk93" name="icon_bg" src="bg001q" fileName="img/sp_guang.png" xy="165,277" size="420,420" grayed="true" fillMethod="vt" fillOrigin="1">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <text id="n6_rk93" name="text_progress" xy="374,486" pivot="0.5,0.5" anchor="true" size="89,53" fontSize="42" align="center" vAlign="middle" bold="true" text="66%">
+    <text id="n6_rk93" name="text_progress" xy="374,486" pivot="0.5,0.5" anchor="true" size="94,56" fontSize="42" align="center" vAlign="middle" bold="true" text="66%">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <component id="n7_rk93" name="btn_ok" src="q0fh4t" fileName="cmp/btn_get_01.xml" xy="68,790">
+    <component id="n7_rk93" name="btn_ok" src="q0fh4t" fileName="cmp/btn_get_01.xml" xy="238,790">
       <gearXY controller="check_state" pages="0,1" values="238,790|68,790"/>
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87krk935r"/>

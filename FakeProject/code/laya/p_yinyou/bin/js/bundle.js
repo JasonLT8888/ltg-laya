@@ -185,6 +185,12 @@ class SaveData {
          * 原生插屏展示次数
          */
         this.interstitialCount = 0;
+        /**
+         * 皮肤试用误点
+         * 0 勾中看视频
+         * 1 勾中不看视频
+         */
+        this.trySignMissMode = 0;
     }
 }
 class CommonSaveData {
@@ -5731,9 +5737,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonEndLose; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonEndLose extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonEndLose"));
     }
@@ -5763,9 +5766,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonEndReward; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonEndReward extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonEndReward"));
     }
@@ -5798,9 +5798,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonEndShare; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonEndShare extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonEndShare"));
     }
@@ -5825,9 +5822,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonEndSliderADs; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonEndSliderADs extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonEndSliderADs"));
     }
@@ -5852,9 +5846,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonLoad; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonLoad extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonLoad"));
     }
@@ -5881,9 +5872,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonLockScreen; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonLockScreen extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonLockScreen"));
     }
@@ -5908,9 +5896,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonOffline; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonOffline extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonOffline"));
     }
@@ -5942,9 +5927,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonOneMore; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonOneMore extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonOneMore"));
     }
@@ -5969,9 +5951,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonRoll; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonRoll extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonRoll"));
     }
@@ -5999,9 +5978,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonSet; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonSet extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonSet"));
     }
@@ -6026,9 +6002,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonSign; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonSign extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonSign"));
     }
@@ -6053,9 +6026,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonSign_02; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonSign_02 extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonSign_02"));
     }
@@ -6087,9 +6057,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonToast; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonToast extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonToast"));
     }
@@ -6114,9 +6081,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonTrySkin; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonTrySkin extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonTrySkin"));
     }
@@ -6124,7 +6088,6 @@ class UI_CommonTrySkin extends fgui.GComponent {
         this.m_btn_thanks = (this.getChildAt(2));
         this.m_list_item = (this.getChildAt(3));
         this.m_btn_toggle_check = (this.getChildAt(4));
-        this.m_anim_enter = this.getTransitionAt(0);
     }
 }
 UI_CommonTrySkin.URL = "ui://75kiu87kbg001v";
@@ -6144,9 +6107,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonUnlockProgress; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonUnlockProgress extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "CommonUnlockProgress"));
     }
@@ -6178,9 +6138,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_EndSlideGames; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_EndSlideGames extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "EndSlideGames"));
     }
@@ -6205,9 +6162,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FakeBanner_V; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_FakeBanner_V extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "FakeBanner_V"));
     }
@@ -6232,9 +6186,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FakeInterstital; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_FakeInterstital extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "FakeInterstital"));
     }
@@ -6259,9 +6210,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FakeRewardVideo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_FakeRewardVideo extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "FakeRewardVideo"));
     }
@@ -6287,9 +6235,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FlyPanel; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_FlyPanel extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "FlyPanel"));
     }
@@ -6314,9 +6259,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_ImageBanner; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_ImageBanner extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "ImageBanner"));
     }
@@ -6343,9 +6285,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Native320; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_Native320 extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "Native320"));
     }
@@ -6375,9 +6314,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeBigAd; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_NativeBigAd extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "NativeBigAd"));
     }
@@ -6407,9 +6343,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeIcon; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_NativeIcon extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "NativeIcon"));
     }
@@ -6435,9 +6368,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeInpage; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_NativeInpage extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "NativeInpage"));
     }
@@ -6463,9 +6393,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeInterstitial; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_NativeInterstitial extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "NativeInterstitial"));
     }
@@ -6494,9 +6421,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_SideGames; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_SideGames extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "SideGames"));
     }
@@ -6524,9 +6448,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_btn_double_get; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_btn_double_get extends fgui.GButton {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "btn_double_get"));
     }
@@ -6552,9 +6473,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_btn_native; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_btn_native extends fgui.GButton {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "btn_native"));
     }
@@ -6579,9 +6497,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_btn_normal; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_btn_normal extends fgui.GButton {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "btn_normal"));
     }
@@ -6606,9 +6521,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_btn_toggle_01; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_btn_toggle_01 extends fgui.GButton {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "btn_toggle_01"));
     }
@@ -6633,9 +6545,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_btn_toggle_02; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_btn_toggle_02 extends fgui.GButton {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "btn_toggle_02"));
     }
@@ -6660,9 +6569,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_hot_game; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_hot_game extends fgui.GButton {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "hot_game"));
     }
@@ -6688,9 +6594,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_side_ads; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_side_ads extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "side_ads"));
     }
@@ -6716,9 +6619,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_slideAds; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_slideAds extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "slideAds"));
     }
@@ -6745,9 +6645,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_sliderADs; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_sliderADs extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "sliderADs"));
     }
@@ -6772,9 +6669,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_common_sign; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_common_sign extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_common_sign"));
     }
@@ -6805,9 +6699,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_end_games; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_end_games extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_end_games"));
     }
@@ -6832,9 +6723,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_endshare; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_endshare extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_endshare"));
     }
@@ -6864,9 +6752,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_fly_coin; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_fly_coin extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_fly_coin"));
     }
@@ -6891,9 +6776,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_game_icon; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_game_icon extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_game_icon"));
     }
@@ -6919,9 +6801,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_game; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_item_game extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_item_game"));
     }
@@ -6947,9 +6826,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_game140; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_item_game140 extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_item_game140"));
     }
@@ -6975,9 +6851,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_roll; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_item_roll extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_item_roll"));
     }
@@ -7003,9 +6876,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_sign; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_item_sign extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_item_sign"));
     }
@@ -7033,9 +6903,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_sign_02; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_item_sign_02 extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_item_sign_02"));
     }
@@ -7064,9 +6931,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_sign_big; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_item_sign_big extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_item_sign_big"));
     }
@@ -7094,9 +6958,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_item_try_skin; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_item_try_skin extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_item_try_skin"));
     }
@@ -7121,9 +6982,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_load; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_load extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_load"));
     }
@@ -7149,9 +7007,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_one_more; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_one_more extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_one_more"));
     }
@@ -7180,9 +7035,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_roll_bg; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_roll_bg extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_roll_bg"));
     }
@@ -7214,9 +7066,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_set; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_set extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_set"));
     }
@@ -7243,9 +7092,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_sharegames_big; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_sharegames_big extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_sharegames_big"));
     }
@@ -7271,9 +7117,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_title; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_title extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_title"));
     }
@@ -7298,9 +7141,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_view_toast; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_view_toast extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("LTGame", "view_toast"));
     }
@@ -8228,6 +8068,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
 /* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
 /* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
+
 
 
 
@@ -8248,6 +8090,19 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
         }
         return this._instance;
     }
+    get _needWatchAd() {
+        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
+                if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode == 0) {
+                    return this._isChecked;
+                }
+                else {
+                    return !this._isChecked;
+                }
+            default:
+                return this._isChecked;
+        }
+    }
     _OnShow() {
         super._OnShow();
         // your code
@@ -8260,16 +8115,24 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
                 this._openData[key] = this._openParam[key];
             }
         }
+        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode = 1 - _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode;
+        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].SaveToDisk();
         switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
-                this.ui.m_btn_toggle_check.visible = false;
+                // 肖张飞策划案修改
+                // this.ui.m_btn_toggle_check.visible = false;
                 this._isChecked = false;
                 break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
-                this._isChecked = false;
+                this._isChecked = true;
                 break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
-                this._isChecked = true;
+                if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode == 0) {
+                    this._isChecked = true;
+                }
+                else {
+                    this._isChecked = false;
+                }
                 break;
         }
         if (this._openData.iconPaths == null || this._openData.iconPaths.length != 4) {
@@ -8284,13 +8147,25 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
         }
         this.ui.m_btn_thanks.onClick(this, this._OnClickNoThanks);
         this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
-        this.ui.m_btn_toggle_check.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-        this.ui.m_btn_thanks.text = this._isChecked ? "暂时试用" : "暂不试用";
+        this._UpdateToggle();
     }
     _OnClickToggle() {
         this._isChecked = !this._isChecked;
+        this._UpdateToggle();
+    }
+    _UpdateToggle() {
+        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
+                this.ui.m_btn_toggle_check.text = this._needWatchAd ? "看视频随机试用皮肤" : "不要视频皮肤";
+                this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
+                break;
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
+                this.ui.m_btn_toggle_check.text = "随机体验皮肤";
+                this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
+                break;
+        }
         this.ui.m_btn_toggle_check.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-        this.ui.m_btn_thanks.text = this._isChecked ? "暂时试用" : "暂不试用";
     }
     _OnClickTrySkin(index) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -8308,7 +8183,7 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
     }
     _OnClickNoThanks() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this._isChecked) {
+            if (this._needWatchAd) {
                 let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowRewardVideoAdAsync();
                 if (result) {
                     if (this._openData.onClose) {
@@ -11142,6 +11017,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Fsm/BaseState */ "./src/LTGame/Fsm/BaseState.ts");
 /* harmony import */ var _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/Start/ESceneType */ "./src/LTGame/Start/ESceneType.ts");
 /* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+
+
 
 
 
@@ -11150,6 +11029,8 @@ class MainScene extends _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["defa
         super(_LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_1__["ESceneType"].Main);
     }
     _DoEnter() {
+        _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_3__["default"].instance.checkState = _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_4__["ECheckState"].NoGame;
+        console.error("[测试功能]强制设置checkstate", _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_3__["default"].instance.checkState);
         _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__["UI_MainMediator"].instance.Show();
     }
 }
