@@ -62,8 +62,4 @@ export default class ColorEx {
         return new Laya.Vector4(nr / 255, ng / 255, nb / 255, na);
     }
 
-    private static _Hex(num: number): string {
-        return ("0" + num.toString(16)).slice(-2);
-    }
-
 }

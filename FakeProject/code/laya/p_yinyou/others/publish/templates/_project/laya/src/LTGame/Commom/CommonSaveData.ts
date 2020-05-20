@@ -31,6 +31,25 @@ export class SaveData {
      * 原生插屏展示次数
      */
     public interstitialCount: number = 0;
+
+    /**
+     * 皮肤试用误点
+     * 0 勾中看视频
+     * 1 勾中不看视频
+     */
+    public trySignMissMode: number = 0;
+
+    /**
+     * 结算界面误点
+     * 0 勾中看视频
+     * 1 勾中不看视频
+     */
+    public endRewardMissMode: number = 0;
+
+    /**
+     * 免费抽奖次数
+     */
+    public freeRollCount: number = 1;
 }
 
 export default class CommonSaveData {
@@ -71,6 +90,7 @@ export default class CommonSaveData {
 
         if (this._saveData.isNewDay) {
             this._saveData.isSigned = false;
+            this._saveData.freeRollCount = 1;
         }
 
         CommonSaveData.SaveToDisk();

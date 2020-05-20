@@ -10,23 +10,18 @@ export default class UI_CommonEndLose extends fgui.GComponent {
 	public m_btn_no:fgui.GButton;
 	public m_btn_watchad:fgui.GButton;
 	public m_anim_enter:fgui.Transition;
-
 	public static URL:string = "ui://75kiu87krk935i";
 
 	public static createInstance():UI_CommonEndLose {
-		return <UI_CommonEndLose><any>(fgui.UIPackage.createObject("LTGame","CommonEndLose"));
+		return <UI_CommonEndLose>(fgui.UIPackage.createObject("LTGame", "CommonEndLose"));
 	}
 
-	public constructor() {
-		super();
-	}
-
-	protected onConstruct(): void {
+	protected onConstruct():void {
 		this.m_c1 = this.getControllerAt(0);
-		this.m_view_othergames = <UI_view_sharegames_big><any>(this.getChildAt(2));
-		this.m_text_str = <fgui.GTextField><any>(this.getChildAt(3));
-		this.m_btn_no = <fgui.GButton><any>(this.getChildAt(4));
-		this.m_btn_watchad = <fgui.GButton><any>(this.getChildAt(5));
+		this.m_view_othergames = <UI_view_sharegames_big>(this.getChildAt(2));
+		this.m_text_str = <fgui.GTextField>(this.getChildAt(3));
+		this.m_btn_no = <fgui.GButton>(this.getChildAt(4));
+		this.m_btn_watchad = <fgui.GButton>(this.getChildAt(5));
 		this.m_anim_enter = this.getTransitionAt(0);
 	}
 }

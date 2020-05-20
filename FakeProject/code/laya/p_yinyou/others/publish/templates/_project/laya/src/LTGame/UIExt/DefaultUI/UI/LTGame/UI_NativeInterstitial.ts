@@ -10,22 +10,17 @@ export default class UI_NativeInterstitial extends fgui.GComponent {
 	public m_btn_return:UI_btn_native;
 	public m_btn_pay:UI_btn_native;
 	public m_t0:fgui.Transition;
-
 	public static URL:string = "ui://75kiu87kl2ax4j";
 
 	public static createInstance():UI_NativeInterstitial {
-		return <UI_NativeInterstitial><any>(fgui.UIPackage.createObject("LTGame","NativeInterstitial"));
+		return <UI_NativeInterstitial>(fgui.UIPackage.createObject("LTGame", "NativeInterstitial"));
 	}
 
-	public constructor() {
-		super();
-	}
-
-	protected onConstruct(): void {
+	protected onConstruct():void {
 		this.m_landscape = this.getControllerAt(0);
-		this.m_ad = <UI_NativeBigAd><any>(this.getChildAt(1));
-		this.m_btn_return = <UI_btn_native><any>(this.getChildAt(2));
-		this.m_btn_pay = <UI_btn_native><any>(this.getChildAt(3));
+		this.m_ad = <UI_NativeBigAd>(this.getChildAt(1));
+		this.m_btn_return = <UI_btn_native>(this.getChildAt(2));
+		this.m_btn_pay = <UI_btn_native>(this.getChildAt(3));
 		this.m_t0 = this.getTransitionAt(0);
 	}
 }
