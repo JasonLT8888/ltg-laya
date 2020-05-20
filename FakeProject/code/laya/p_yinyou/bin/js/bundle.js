@@ -6118,12 +6118,9 @@ class UI_CommonUnlockProgress extends fgui.GComponent {
     onConstruct() {
         this.m_check_state = this.getControllerAt(0);
         this.m_bg = (this.getChildAt(0));
-        this.m_toggle_watchad = (this.getChildAt(2));
-        this.m_btn_get = (this.getChildAt(3));
-        this.m_icon_bg = (this.getChildAt(4));
-        this.m_text_progress = (this.getChildAt(5));
-        this.m_btn_ok = (this.getChildAt(6));
-        this.m_btn_watchad = (this.getChildAt(7));
+        this.m_btn_get = (this.getChildAt(2));
+        this.m_icon_bg = (this.getChildAt(3));
+        this.m_text_progress = (this.getChildAt(4));
     }
 }
 UI_CommonUnlockProgress.URL = "ui://75kiu87krk935n";
@@ -8295,32 +8292,22 @@ class UI_CommonUnlockProgressMediator extends _FGui_BaseUIMediator__WEBPACK_IMPO
         this._TweenProgress();
         switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkState) {
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].InCheck:
-                this._isChecked = false;
                 this.ui.m_check_state.selectedIndex = 1;
                 break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].NoGame:
-                this._isChecked = true;
                 this.ui.m_check_state.selectedIndex = 0;
                 break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].Normal:
-                this._isChecked = false;
                 this.ui.m_check_state.selectedIndex = 0;
                 break;
         }
-        this.ui.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         if (this._openData.endProgress >= 100) {
-            this.ui.m_toggle_watchad.visible = false;
             this.ui.m_btn_get.visible = true;
-            this.ui.m_btn_watchad.visible = false;
-            this.ui.m_btn_ok.visible = false;
         }
         else {
             this.ui.m_btn_get.visible = false;
         }
-        this.ui.m_toggle_watchad.onClick(this, this._OnClickToggle);
-        this.ui.m_btn_ok.onClick(this, this._OnClickOk);
-        this.ui.m_btn_watchad.onClick(this, this._OnClickWatchAd);
-        this.ui.m_btn_get.onClick(this, this._OnClickGetReward);
+        this.ui.m_btn_get.onClick(this, this._OnClickGet);
     }
     _TweenProgress() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -8332,14 +8319,16 @@ class UI_CommonUnlockProgressMediator extends _FGui_BaseUIMediator__WEBPACK_IMPO
                 this._imgFront.fillAmount = 0.01 * progress;
                 this.ui.m_text_progress.text = progress.toFixed(0) + "%";
             }
+            if (this._openData.endProgress >= 0) {
+                if (this._openData.onClose) {
+                    this._openData.onClose.runWith([0]);
+                }
+                this.Hide();
+            }
         });
     }
-    _OnClickToggle() {
-        this._isChecked = !this._isChecked;
-        this.ui.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-    }
-    _OnClickOk() {
-        if (this._isChecked) {
+    _OnClickGet() {
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].NoGame) {
             this._OnClickWatchAd();
         }
         else {
@@ -8348,12 +8337,6 @@ class UI_CommonUnlockProgressMediator extends _FGui_BaseUIMediator__WEBPACK_IMPO
             }
             this.Hide();
         }
-    }
-    _OnClickGetReward() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([2]);
-        }
-        this.Hide();
     }
     _OnClickWatchAd() {
         return __awaiter(this, void 0, void 0, function* () {

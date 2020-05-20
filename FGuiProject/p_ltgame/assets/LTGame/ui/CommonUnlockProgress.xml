@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImage="ui://75kiu87krk935q" designImageAlpha="0" designImageLayer="1">
-  <controller name="check_state" pages="0,非审核状态,1,审核状态" selected="0"/>
+  <controller name="check_state" pages="0,非审核状态,1,审核状态" selected="1"/>
   <displayList>
     <graph id="n0_rk93" name="bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -8,13 +8,9 @@
     <image id="n1_rk93" name="n1" src="rk935p" fileName="img/sp_jiesuoxindaoju.png" xy="253,198">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <component id="n2_rk93" name="toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="238,702">
-      <gearDisplay controller="check_state" pages="0"/>
+    <component id="n3_rk93" name="btn_get" src="it2iq" fileName="cmp/btn_double_get.xml" xy="250,795">
       <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="观看视频直接解锁道具"/>
-    </component>
-    <component id="n3_rk93" name="btn_get" src="q0fh4t" fileName="cmp/btn_get_01.xml" xy="238,790">
-      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kit2it"/>
     </component>
     <image id="n4_rk93" name="icon_bg" src="bg001q" fileName="img/sp_guang.png" xy="165,277" size="420,420" grayed="true" fillMethod="vt" fillOrigin="1">
       <relation target="" sidePair="center-center,middle-middle"/>
@@ -22,15 +18,5 @@
     <text id="n6_rk93" name="text_progress" xy="374,486" pivot="0.5,0.5" anchor="true" size="94,56" fontSize="42" align="center" vAlign="middle" bold="true" text="66%">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <component id="n7_rk93" name="btn_ok" src="q0fh4t" fileName="cmp/btn_get_01.xml" xy="238,790">
-      <gearXY controller="check_state" pages="0,1" values="238,790|68,790"/>
-      <relation target="" sidePair="center-center,middle-middle"/>
-      <Button icon="ui://75kiu87krk935r"/>
-    </component>
-    <component id="n8_rk93" name="btn_watchad" src="q0fh55" fileName="cmp/btn_5scale.xml" xy="405,790">
-      <gearDisplay controller="check_state" pages="1"/>
-      <relation target="" sidePair="center-center,middle-middle"/>
-      <Button icon="ui://75kiu87krk935s"/>
-    </component>
   </displayList>
 </component>

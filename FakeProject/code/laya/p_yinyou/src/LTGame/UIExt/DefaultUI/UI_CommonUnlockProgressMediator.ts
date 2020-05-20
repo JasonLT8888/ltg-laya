@@ -22,7 +22,6 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
     private _openData: UnlockProgressOpenData;
 
     private _imgFront: fgui.GImage;
-    private _isChecked: boolean;
 
     _OnShow() {
         super._OnShow();
@@ -62,33 +61,23 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
 
         switch (LTSDK.instance.checkState) {
             case ECheckState.InCheck:
-                this._isChecked = false;
                 this.ui.m_check_state.selectedIndex = 1;
                 break;
             case ECheckState.NoGame:
-                this._isChecked = true;
                 this.ui.m_check_state.selectedIndex = 0;
                 break;
             case ECheckState.Normal:
-                this._isChecked = false;
                 this.ui.m_check_state.selectedIndex = 0;
                 break;
         }
 
-        this.ui.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         if (this._openData.endProgress >= 100) {
-            this.ui.m_toggle_watchad.visible = false;
             this.ui.m_btn_get.visible = true;
-            this.ui.m_btn_watchad.visible = false;
-            this.ui.m_btn_ok.visible = false;
         } else {
             this.ui.m_btn_get.visible = false;
         }
 
-        this.ui.m_toggle_watchad.onClick(this, this._OnClickToggle);
-        this.ui.m_btn_ok.onClick(this, this._OnClickOk);
-        this.ui.m_btn_watchad.onClick(this, this._OnClickWatchAd);
-        this.ui.m_btn_get.onClick(this, this._OnClickGetReward);
+        this.ui.m_btn_get.onClick(this, this._OnClickGet);
     }
 
     private async _TweenProgress() {
@@ -101,15 +90,17 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
             this._imgFront.fillAmount = 0.01 * progress;
             this.ui.m_text_progress.text = progress.toFixed(0) + "%";
         }
+        if (this._openData.endProgress >= 0) {
+            if (this._openData.onClose) {
+                this._openData.onClose.runWith([0]);
+            }
+            this.Hide();
+        }
     }
 
-    private _OnClickToggle() {
-        this._isChecked = !this._isChecked;
-        this.ui.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-    }
 
-    private _OnClickOk() {
-        if (this._isChecked) {
+    private _OnClickGet() {
+        if (LTSDK.instance.checkState == ECheckState.NoGame) {
             this._OnClickWatchAd();
         } else {
             if (this._openData.onClose) {
@@ -117,13 +108,6 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
             }
             this.Hide();
         }
-    }
-
-    private _OnClickGetReward() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([2]);
-        }
-        this.Hide();
     }
 
     private async _OnClickWatchAd() {
