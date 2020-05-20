@@ -192,6 +192,12 @@ class SaveData {
          */
         this.trySignMissMode = 0;
         /**
+         * 结算界面误点
+         * 0 勾中看视频
+         * 1 勾中不看视频
+         */
+        this.endRewardMissMode = 0;
+        /**
          * 免费抽奖次数
          */
         this.freeRollCount = 1;
@@ -5775,14 +5781,12 @@ class UI_CommonEndReward extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "CommonEndReward"));
     }
     onConstruct() {
-        this.m_c1 = this.getControllerAt(0);
         this.m_btn_toggle_watchad = (this.getChildAt(2));
-        this.m_view_othergames = (this.getChildAt(3));
-        this.m_text_str = (this.getChildAt(4));
-        this.m_btn_get = (this.getChildAt(5));
-        this.m_btn_back = (this.getChildAt(6));
-        this.m_icon_reward = (this.getChildAt(7));
-        this.m_text_add = (this.getChildAt(8));
+        this.m_text_str = (this.getChildAt(3));
+        this.m_btn_get = (this.getChildAt(4));
+        this.m_icon_reward = (this.getChildAt(5));
+        this.m_text_add = (this.getChildAt(6));
+        this.m___bottomgames = (this.getChildAt(7));
         this.m_anim_enter = this.getTransitionAt(0);
     }
 }
@@ -7308,7 +7312,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
 /* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Cmp/View_OtherGames */ "./src/LTGame/UIExt/DefaultUI/Cmp/View_OtherGames.ts");
+/* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
 
 
 
@@ -7325,6 +7329,19 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         }
         return this._instance;
     }
+    get _needWatchAd() {
+        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
+                if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.endRewardMissMode == 0) {
+                    return this._isChecked;
+                }
+                else {
+                    return !this._isChecked;
+                }
+            default:
+                return this._isChecked;
+        }
+    }
     _OnShow() {
         super._OnShow();
         // your code
@@ -7337,17 +7354,25 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
                 this._openData[key] = this._openParam[key];
             }
         }
+        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.endRewardMissMode = 1 - _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.endRewardMissMode;
+        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].SaveToDisk();
         this._openData.enableShowGames = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSupportJumpOther && this._openData.enableShowGames;
         switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
-                this.ui.m_btn_toggle_watchad.visible = false;
+                // 肖张飞策划案修改
+                // this.ui.m_btn_toggle_watchad.visible = false;
                 this._isChecked = false;
                 break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
-                this._isChecked = false;
+                this._isChecked = true;
                 break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
-                this._isChecked = true;
+                if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.endRewardMissMode == 0) {
+                    this._isChecked = true;
+                }
+                else {
+                    this._isChecked = false;
+                }
                 break;
         }
         if (this._openData.showText != null) {
@@ -7357,18 +7382,25 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
             this.ui.m_icon_reward.url = this._openData.iconPath;
         }
         this.ui.m_text_add.text = "+" + this._openData.rewardCount;
-        this.ui.m_c1.selectedIndex = this._openData.enableShowGames ? 0 : 1;
         this.ui.m_btn_get.onClick(this, this._OnClickNormalGet);
-        this.ui.m_btn_back.onClick(this, this._OnClickBack);
-        if (this._openData.enableShowGames) {
-            _Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_7__["default"].CreateView(this.ui.m_view_othergames);
-        }
-        this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
+        this._UpdateToggle();
     }
     _OnClickToggle() {
         this._isChecked = !this._isChecked;
+        this._UpdateToggle();
+    }
+    _UpdateToggle() {
+        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
+            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
+                this.ui.m_btn_toggle_watchad.text = this._needWatchAd ? "观看视频五倍领取奖励" : "不看视频领取奖励";
+                break;
+            default:
+                this.ui.m_btn_toggle_watchad.text = this._isChecked ? "观看视频五倍领取奖励" : "不看视频领取奖励";
+                break;
+        }
         this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        this.ui.m_btn_get.m_btn_type.selectedIndex = this._needWatchAd ? 0 : 3;
     }
     _OnClickBack() {
         if (this._openData.onClose) {
@@ -7377,7 +7409,7 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         this.Hide();
     }
     _OnClickNormalGet() {
-        if (this._isChecked) {
+        if (this._needWatchAd) {
             this._OnClickDoubleGet();
             return;
         }

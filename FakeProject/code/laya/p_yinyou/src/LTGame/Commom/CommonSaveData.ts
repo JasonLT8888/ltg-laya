@@ -40,6 +40,13 @@ export class SaveData {
     public trySignMissMode: number = 0;
 
     /**
+     * 结算界面误点
+     * 0 勾中看视频
+     * 1 勾中不看视频
+     */
+    public endRewardMissMode: number = 0;
+
+    /**
      * 免费抽奖次数
      */
     public freeRollCount: number = 1;
