@@ -9154,12 +9154,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DefaultUI_UI_CommonRollMediator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./DefaultUI/UI_CommonRollMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonRollMediator.ts");
 /* harmony import */ var _DefaultUI_UI_CommonLockScreenMediator__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./DefaultUI/UI_CommonLockScreenMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonLockScreenMediator.ts");
 /* harmony import */ var _DefaultUI_UI_CommonOneMoreMediator__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./DefaultUI/UI_CommonOneMoreMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonOneMoreMediator.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _DefaultUI_UI_CommonEndLoseMediator__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./DefaultUI/UI_CommonEndLoseMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonEndLoseMediator.ts");
-/* harmony import */ var _DefaultUI_UI_CommonUnlockProgressMediator__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./DefaultUI/UI_CommonUnlockProgressMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonUnlockProgressMediator.ts");
-
-
+/* harmony import */ var _DefaultUI_UI_CommonEndLoseMediator__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./DefaultUI/UI_CommonEndLoseMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonEndLoseMediator.ts");
+/* harmony import */ var _DefaultUI_UI_CommonUnlockProgressMediator__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./DefaultUI/UI_CommonUnlockProgressMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonUnlockProgressMediator.ts");
 
 
 
@@ -9224,18 +9220,17 @@ class LTUI {
         _DefaultUI_UI_CommonOneMoreMediator__WEBPACK_IMPORTED_MODULE_11__["default"].instance.Show(openData);
     }
     static ShowEndShare(openData) {
-        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_12__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_13__["EPlatformType"].TT) {
-            _DefaultUI_UI_CommonEndShareMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show(openData);
-        }
+        // 不在内部进行平台判断,防止开发过程中功能遗漏
+        _DefaultUI_UI_CommonEndShareMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show(openData);
     }
     static ShowEndReward(openData) {
         _DefaultUI_UI_CommonEndRewardMediator__WEBPACK_IMPORTED_MODULE_5__["default"].instance.Show(openData);
     }
     static ShowEndLose(openData) {
-        _DefaultUI_UI_CommonEndLoseMediator__WEBPACK_IMPORTED_MODULE_14__["default"].instance.Show(openData);
+        _DefaultUI_UI_CommonEndLoseMediator__WEBPACK_IMPORTED_MODULE_12__["default"].instance.Show(openData);
     }
     static ShowUnlockProgress(openData) {
-        _DefaultUI_UI_CommonUnlockProgressMediator__WEBPACK_IMPORTED_MODULE_15__["default"].instance.Show(openData);
+        _DefaultUI_UI_CommonUnlockProgressMediator__WEBPACK_IMPORTED_MODULE_13__["default"].instance.Show(openData);
     }
     static ShowOffline(openData) {
         _DefaultUI_UI_CommonOfflineMediator__WEBPACK_IMPORTED_MODULE_6__["default"].instance.Show(openData);
