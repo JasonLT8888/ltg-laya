@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImage="ui://75kiu87krk935q" designImageAlpha="0" designImageLayer="1">
-  <controller name="check_state" pages="0,非审核状态,1,审核状态" selected="1"/>
+  <controller name="check_state" pages="0,非审核状态,1,审核状态" selected="0"/>
   <displayList>
     <graph id="n0_rk93" name="bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -18,5 +18,13 @@
     <text id="n6_rk93" name="text_progress" xy="374,486" pivot="0.5,0.5" anchor="true" size="94,56" fontSize="42" align="center" vAlign="middle" bold="true" text="66%">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
+    <component id="n9_dn6n" name="btn_nothanks" src="htjj33" fileName="cmp/btn_text.xml" xy="297,919" visible="false">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
   </displayList>
+  <transition name="show_close">
+    <item time="0" type="Visible" target="n9_dn6n" value="false"/>
+    <item time="48" type="Alpha" target="n9_dn6n" tween="true" startValue="0" endValue="1" duration="12"/>
+    <item time="48" type="Visible" target="n9_dn6n" value="true"/>
+  </transition>
 </component>

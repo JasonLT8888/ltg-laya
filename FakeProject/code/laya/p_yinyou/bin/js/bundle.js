@@ -6121,6 +6121,8 @@ class UI_CommonUnlockProgress extends fgui.GComponent {
         this.m_btn_get = (this.getChildAt(2));
         this.m_icon_bg = (this.getChildAt(3));
         this.m_text_progress = (this.getChildAt(4));
+        this.m_btn_nothanks = (this.getChildAt(5));
+        this.m_show_close = this.getTransitionAt(0);
     }
 }
 UI_CommonUnlockProgress.URL = "ui://75kiu87krk935n";
@@ -8301,13 +8303,9 @@ class UI_CommonUnlockProgressMediator extends _FGui_BaseUIMediator__WEBPACK_IMPO
                 this.ui.m_check_state.selectedIndex = 0;
                 break;
         }
-        if (this._openData.endProgress >= 100) {
-            this.ui.m_btn_get.visible = true;
-        }
-        else {
-            this.ui.m_btn_get.visible = false;
-        }
+        this.ui.m_btn_get.visible = false;
         this.ui.m_btn_get.onClick(this, this._OnClickGet);
+        this.ui.m_btn_nothanks.onClick(this, this._OnClickClose);
     }
     _TweenProgress() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -8319,13 +8317,22 @@ class UI_CommonUnlockProgressMediator extends _FGui_BaseUIMediator__WEBPACK_IMPO
                 this._imgFront.fillAmount = 0.01 * progress;
                 this.ui.m_text_progress.text = progress.toFixed(0) + "%";
             }
-            if (this._openData.endProgress >= 0) {
-                if (this._openData.onClose) {
-                    this._openData.onClose.runWith([0]);
-                }
-                this.Hide();
+            if (this._openData.endProgress < 100) {
+                this._OnClickClose();
+            }
+            else {
+                this.ui.m_btn_get.m_bg_type.selectedIndex = 1;
+                this.ui.m_btn_get.m_btn_type.selectedIndex = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].NoGame ? 0 : 3;
+                this.ui.m_btn_get.visible = true;
+                this.ui.m_show_close.play();
             }
         });
+    }
+    _OnClickClose() {
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith([0]);
+        }
+        this.Hide();
     }
     _OnClickGet() {
         if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].NoGame) {
@@ -11477,7 +11484,7 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
     }
     _OnClickUnlockProgress() {
         let openData = new _LTGame_UIExt_DefaultUI_Data_UnlockProgressOpenData__WEBPACK_IMPORTED_MODULE_9__["UnlockProgressOpenData"]();
-        openData.endProgress = 50;
+        openData.endProgress = 100;
         openData.onClose = Laya.Handler.create(null, (type) => {
             switch (type) {
                 case 0:

@@ -201,7 +201,7 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
     private _OnClickUnlockProgress() {
         let openData = new UnlockProgressOpenData();
-        openData.endProgress = 50;
+        openData.endProgress = 100;
 
         openData.onClose = Laya.Handler.create(null, (type: number) => {
             switch (type) {
