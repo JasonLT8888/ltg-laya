@@ -37,7 +37,12 @@ export class SaveData {
      * 0 勾中看视频
      * 1 勾中不看视频
      */
-    public trySignMissMode: number = 0
+    public trySignMissMode: number = 0;
+
+    /**
+     * 免费抽奖次数
+     */
+    public freeRollCount: number = 1;
 }
 
 export default class CommonSaveData {
@@ -78,6 +83,7 @@ export default class CommonSaveData {
 
         if (this._saveData.isNewDay) {
             this._saveData.isSigned = false;
+            this._saveData.freeRollCount = 1;
         }
 
         CommonSaveData.SaveToDisk();

@@ -191,6 +191,10 @@ class SaveData {
          * 1 勾中不看视频
          */
         this.trySignMissMode = 0;
+        /**
+         * 免费抽奖次数
+         */
+        this.freeRollCount = 1;
     }
 }
 class CommonSaveData {
@@ -227,6 +231,7 @@ class CommonSaveData {
         this._saveData.lastOpenTick = Date.now();
         if (this._saveData.isNewDay) {
             this._saveData.isSigned = false;
+            this._saveData.freeRollCount = 1;
         }
         CommonSaveData.SaveToDisk();
     }
@@ -7721,6 +7726,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
+
 
 
 
@@ -7754,6 +7761,7 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
                 this._openData[key] = this._openParam[key];
             }
         }
+        this.ui.m_btn_roll.m_btn_type.selectedIndex = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__["default"].instance.freeRollCount > 0 ? 3 : 0;
         this.ui.m_btn_close.onClick(this, this._OnClickClose);
         this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
         for (let i = 0; i < 8; ++i) {
@@ -7771,6 +7779,12 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
     }
     _OnClickRoll() {
         return __awaiter(this, void 0, void 0, function* () {
+            if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__["default"].instance.freeRollCount > 0) {
+                _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__["default"].instance.freeRollCount--;
+                _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__["default"].SaveToDisk();
+                this._DoRoll();
+                return;
+            }
             let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
             if (result) {
                 this._DoRoll();
@@ -7793,6 +7807,7 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         if (this._openData.onRolled) {
             this._openData.onRolled.runWith([this._cacheIndex, this.ui.m_pointer]);
         }
+        this.ui.m_btn_roll.m_btn_type.selectedIndex = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__["default"].instance.freeRollCount > 0 ? 3 : 0;
         _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].UnlockScreen();
     }
     _OnClickClose() {
