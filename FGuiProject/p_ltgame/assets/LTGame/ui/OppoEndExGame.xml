@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <controller name="step" exported="true" pages="0,reward,1,ad" selected="0"/>
+  <displayList>
+    <graph id="n1_ocvx" name="n1" xy="0,0" size="750,1334" alpha="0.8" type="rect" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n11_ocvx" name="win" src="rk935c" fileName="img/sp_shenglitonguan.png" xy="243,113">
+      <relation target="" sidePair="center-center,top-top"/>
+    </image>
+    <graph id="n6_ocvx" name="__nativeinpage" xy="55,448" size="640,450" type="rect" lineColor="#ffffffff">
+      <gearDisplay controller="step" pages="1"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </graph>
+    <graph id="n0_ocvx" name="__bottomgames" xy="0,231" size="750,200" type="rect" lineColor="#ffffffff">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </graph>
+    <component id="n2_ocvx" name="btn_next" src="ocvx6q" fileName="ad_res/btn_ad.xml" xy="206,992" size="210,80" controller="type,0">
+      <gearDisplay controller="step" pages="0"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="下一关"/>
+    </component>
+    <component id="n3_ocvx" name="btn_reward" src="ocvx6q" fileName="ad_res/btn_ad.xml" xy="553,992" controller="type,2">
+      <gearDisplay controller="step" pages="0"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="五倍领取"/>
+    </component>
+    <component id="n4_ocvx" name="btn_continue" src="ocvx6q" fileName="ad_res/btn_ad.xml" xy="554,990" size="206,94" controller="type,1">
+      <gearDisplay controller="step" pages="1"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="下一关"/>
+    </component>
+    <component id="n5_ocvx" name="btn_adpay" src="ocvx6q" fileName="ad_res/btn_ad.xml" xy="224,993" size="248,90" controller="type,0">
+      <gearDisplay controller="step" pages="1"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button title="查看广告"/>
+    </component>
+    <loader id="n7_ocvx" name="icon_reward" xy="258,700" pivot="0.5,0.5" anchor="true" size="192,162" url="ui://75kiu87kbg0016" align="center" vAlign="middle" fill="scale">
+      <gearDisplay controller="step" pages="0"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </loader>
+    <text id="n8_ocvx" name="text_add" xy="387,656" size="132,71" fontSize="60" color="#ffcc00" letterSpacing="-2" text="+100">
+      <gearDisplay controller="step" pages="0"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </text>
+  </displayList>
+</component>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="320,210" pivot="0.5,0.5" anchor="true" opaque="false">
   <displayList>
-    <loader id="n2_aqhv" name="img" xy="160,105" pivot="0.5,0.5" anchor="true" size="320,210" align="center" vAlign="middle" fill="scaleMatchWidth">
+    <loader id="n2_aqhv" name="img" xy="160,105" pivot="0.5,0.5" anchor="true" size="320,210" align="center" vAlign="middle" fill="scaleFree">
       <relation target="" sidePair="width-width,height-height"/>
     </loader>
     <loader id="n4_ilml" name="tag" xy="206,161" pivot="0.5,0.5" size="114,48" align="center" vAlign="middle" fill="scale">

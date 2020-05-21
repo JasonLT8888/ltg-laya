@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87krk935b" designImageLayer="1">
+<component size="750,1334" designImageLayer="1">
   <controller name="c1" pages="0,有导流,1,无导流" selected="0"/>
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
@@ -8,29 +8,33 @@
     <image id="n12_rk93" name="n12" src="rk935c" fileName="img/sp_shenglitonguan.png" xy="243,124">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <component id="n11_htjj" name="btn_toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="239,774">
-      <relation target="" sidePair="center-center,middle-middle"/>
+    <component id="n11_htjj" name="btn_toggle_watchad" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="239,836">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
     </component>
-    <component id="n13_rk93" name="view_othergames" src="wjpo4i" fileName="cache/view_sharegames_big.xml" xy="35,213">
+    <component id="n13_rk93" name="view_othergames" src="wjpo4i" fileName="cache/view_sharegames_big.xml" xy="35,284">
       <gearDisplay controller="c1" pages="0"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <text id="n14_rk93" name="text_str" xy="173,647" size="404,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="成功解锁下一关卡请前往挑战!">
-      <gearXY controller="c1" pages="0,1" values="173,647|173,393"/>
+    <text id="n14_rk93" name="text_str" xy="173,718" size="404,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="成功解锁下一关卡请前往挑战!">
+      <gearXY controller="c1" pages="0,1" values="173,718|173,273"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <component id="n15_rk93" name="btn_get" src="rk935d" fileName="cmp/btn_get_02.xml" xy="226,846" size="297,122">
-      <relation target="" sidePair="center-center,middle-middle"/>
+    <component id="n15_rk93" name="btn_get" src="rk935d" fileName="cmp/btn_get_02.xml" xy="226,908" size="297,122">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
     </component>
-    <component id="n16_rk93" name="btn_back" src="rk935h" fileName="cmp/btn_back_01.xml" xy="25,129">
+    <component id="n16_rk93" name="btn_back" src="rk935h" fileName="cmp/btn_back_01.xml" xy="25,129" visible="false">
       <relation target="" sidePair="middle-middle,left-left"/>
     </component>
-    <loader id="n17_rk93" name="icon_reward" xy="331,725" pivot="0.5,0.5" anchor="true" size="52,56" url="ui://75kiu87kbg0016" align="center" vAlign="middle" fill="scale">
+    <loader id="n17_rk93" name="icon_reward" xy="320,234" pivot="0.5,0.5" anchor="true" size="52,56" url="ui://75kiu87kbg0016" align="center" vAlign="middle" fill="scale">
       <relation target="" sidePair="center-center,middle-middle"/>
     </loader>
-    <text id="n18_rk93" name="text_add" xy="364,702" size="86,49" fontSize="40" color="#ffffff" letterSpacing="-2" text="+100">
+    <text id="n18_rk93" name="text_add" xy="353,211" size="86,49" fontSize="40" color="#ffffff" letterSpacing="-2" text="+100">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
+    <graph id="n19_xobv" name="__nativeinpage" xy="0,384" size="750,450" type="rect">
+      <gearDisplay controller="c1" pages="1"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </graph>
   </displayList>
   <transition name="anim_enter"/>
 </component>

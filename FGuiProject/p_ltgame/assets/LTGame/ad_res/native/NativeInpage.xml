@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,450">
+  <displayList>
+    <graph id="n7_9248" name="bg1" xy="0,0" size="640,450" alpha="0.8" type="rect" lineSize="0" fillColor="#ff000000" corner="10">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n15_9248" name="ad" src="92486w" fileName="ad_res/native/AdInpageComp.xml" xy="0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n14_9248" name="btn_close" src="l2ax4l" fileName="ad_res/btn_normal.xml" xy="580,0" size="60,60">
+      <relation target="" sidePair="right-right,top-top"/>
+      <Button titleFontSize="30" icon="ui://75kiu87kl2ax4m"/>
+    </component>
+  </displayList>
+</component>
