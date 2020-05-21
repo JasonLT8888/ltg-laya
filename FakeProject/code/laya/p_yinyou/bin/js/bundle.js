@@ -9370,7 +9370,7 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_4__["default"] {
                 if (ad != undefined) {
                     this.isADEnable = (1 == ad);
                 }
-                if (check != undefined) {
+                if (check != undefined && !isNaN(check)) {
                     this.checkState = check;
                 }
                 else {
@@ -12182,6 +12182,7 @@ class UI_Main extends fgui.GComponent {
         this.m_btn_others = (this.getChildAt(5));
         this.m_btn_common = (this.getChildAt(6));
         this.m_btn_performance = (this.getChildAt(7));
+        this.m_btn_feature = (this.getChildAt(8));
     }
 }
 UI_Main.URL = "ui://kk7g5mmmjhmq1";

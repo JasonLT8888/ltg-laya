@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87kq0fh57" designImageLayer="1">
+<component size="750,1334" designImage="ui://75kiu87kq0fh57" designImageAlpha="0" designImageLayer="1">
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -10,7 +10,7 @@
     </component>
     <component id="n2_bg00" name="btn_thanks" src="htjj33" fileName="cmp/btn_text.xml" xy="375,956" pivot="0.5,0.5" anchor="true" size="156,62">
       <relation target="" sidePair="center-center,middle-middle"/>
-      <Button title="随机使用"/>
+      <Button title="不了, 谢谢"/>
     </component>
     <list id="n8_bg00" name="list_item" xy="144,336" size="515,507" layout="flow_hz" overflow="scroll" lineGap="58" colGap="41" defaultItem="ui://75kiu87kbg0022">
       <relation target="" sidePair="center-center,middle-middle"/>

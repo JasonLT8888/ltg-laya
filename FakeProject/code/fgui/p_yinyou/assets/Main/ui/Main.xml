@@ -31,5 +31,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="性能相关"/>
     </component>
+    <component id="n9_ln3t" name="btn_feature" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="87,796">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="功能相关"/>
+    </component>
   </displayList>
 </component>
