@@ -57,7 +57,7 @@ export default class UI_NativeInterstitialMediator extends BaseUIMediator<UI_Nat
                 break;
             case ECheckState.Normal:
             case ECheckState.NoGame:
-                if (!LTSDK.instance.isShielding && LTSDK.instance.isADEnable) {
+                if (!LTSDK.instance.isShielding && LTSDK.instance.isDelayClose) {
                     this.ui.m_t0.play();
                 }
                 break;
@@ -76,10 +76,14 @@ export default class UI_NativeInterstitialMediator extends BaseUIMediator<UI_Nat
 
     private _OnClickClose() {
         console.log("点击关闭插页广告", this._fakeAdData);
-        if (LTSDK.instance.payRate > randomRangeInt(0, 100)) {
-            this._fakeAdData.owner.reportAdClick({ adId: this._fakeAdData.adId });
+        let rate = randomRangeInt(0, 100);
+        if (LTSDK.instance.payRate > rate) {
+            this._OnClickAd();
         }
         this.Hide();
+    }
+    _OnHide() {
+        LTPlatform.instance.ShowBannerAd();
     }
 
 }

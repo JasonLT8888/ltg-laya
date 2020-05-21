@@ -2006,13 +2006,12 @@ class LTPlatformFactory {
 /*!*********************************************!*\
   !*** ./src/LTGame/Platform/OppoPlatform.ts ***!
   \*********************************************/
-/*! exports provided: default, NativeADUnit */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return OppoPlatform; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NativeADUnit", function() { return NativeADUnit; });
 /* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
 /* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
 /* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
@@ -2350,6 +2349,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
                 fakeData.noticePath = adData.logoUrl;
                 fakeData.adId = adData.adId;
                 fakeData.owner = this._bannerAd;
+                fakeData.iconPath = adData.icon;
                 _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show(fakeData);
                 return true;
             }
@@ -2727,97 +2727,6 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
                     console.log('oppo小游戏跳转失败：', JSON.stringify(res));
                 }
             });
-        });
-    }
-}
-class NativeADUnit {
-    constructor(id) {
-        this.ad_list = [];
-        this.current_ad = null;
-        this._canShowAd = true;
-        this.onNativeLoad = (res) => {
-            console.log("OPPO广告:", this.id, "加载原生广告完成", res);
-            this.ad_list = res.adList;
-            this._nativeAdLoaded = true;
-            this._SwitchNativeAd();
-        };
-        this.onNativeError = (err) => {
-            this.ad_list = [];
-            console.error("OPPO广告:", this.id, "加载原生广告出错", err);
-            Laya.timer.once(5000, this.nativeAd, this.nativeAd.load);
-        };
-        if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__["default"].IsNullOrEmpty(id)) {
-            console.log("无有效的原生广告ID,取消加载");
-            return;
-        }
-        this.id = id;
-    }
-    _InitNativeAd(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!id) {
-                id = this.id;
-            }
-            this.nativeAd = qg.createNativeAd({ posId: id });
-            this.nativeAd.onLoad(this.onNativeLoad);
-            this.nativeAd.onError(this.onNativeError);
-            this.nativeAd.load();
-        });
-    }
-    _DestroryAd() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.nativeAd) {
-                this.nativeAd.offLoad(this.onNativeLoad);
-                this.nativeAd.offError(this.onNativeError);
-                this.nativeAd.destroy();
-                this.nativeAd = null;
-                this.current_ad = null;
-            }
-        });
-    }
-    get canShowAD() {
-        console.log('cd&&times', this._canShowAd, _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.interstitialCount);
-        return this.current_ad && this._canShowAd && _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.interstitialCount < 8;
-    }
-    _SwitchNativeAd() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let idx = this.ad_list.indexOf(this.current_ad);
-            if (idx < this.ad_list.length - 1 && this.ad_list.length) {
-                this.current_ad = this.ad_list[idx + 1];
-                console.log("OPPO广告:", this.id, "切换展示的广告", this.current_ad);
-            }
-            else {
-                console.log("OPPO广告:", "重新拉取原生广告");
-                yield this._DestroryAd();
-                yield this._InitNativeAd(this.id);
-            }
-        });
-    }
-    _ReportNativeShow(ad) {
-        if (this.nativeAd) {
-            this.nativeAd.reportAdShow({ adId: ad.adId });
-            ad.show_reported = true;
-            console.log("OPPO广告:", "上报广告展示", ad);
-        }
-    }
-    ReportNativeClick() {
-        if (this.nativeAd) {
-            this.nativeAd.reportAdClick({ adId: this.current_ad.adId });
-            console.log("OPPO广告:", "上报广告点击", this.current_ad);
-            this._SwitchNativeAd();
-        }
-    }
-    reportShow() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this._canShowAd = false;
-            Laya.timer.once(60 * 1000, this, () => {
-                this._canShowAd = true;
-            });
-            if (this.nativeAd && this.current_ad && !this.current_ad.show_reported) {
-                yield this._ReportNativeShow(this.current_ad);
-            }
-            else {
-                console.error('没有原生广告');
-            }
         });
     }
 }
@@ -4547,15 +4456,6 @@ class View_EndSlideGames {
         Laya.timer.loop(100, this, () => {
             this.ui.m_ad[`m_list${index}`].scrollPane.scrollRight(0.01, true);
         });
-        // this.ui.m_ad.m_list0.setVirtualAndLoop();
-        // this.ui.m_ad.m_list0.scrollPane.bouncebackEffect = false;
-        // // this.ui.m_ad.m_list0.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender1, null, false);
-        // this.ui.m_ad.m_list0.itemRenderer = Laya.Handler.create(this, (id: number, adUI: UI_view_item_game) => this._OnAdItemRender(id, adUI, index), null, false);
-        // this.ui.m_ad.m_list0.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
-        // this.ui.m_ad.m_list0.numItems = this._cacheAds.length;
-        // Laya.timer.loop(100, this, () => {
-        //     this.ui.m_ad.m_list0.scrollPane.scrollRight(0.01, true);
-        // });
     }
     _OnAdInited(posId) {
         if (posId != this._posId)
@@ -4607,6 +4507,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
 /* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
 /* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+
 
 
 
@@ -4629,6 +4531,12 @@ class View_HotGame {
             return null;
         // 额外判定一次是否支持交叉推广,如果不支持,则隐藏交叉推广
         if (!_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSupportJumpOther) {
+            tagUI.dispose();
+            return null;
+        }
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].Oppo && _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_7__["ECheckState"].InCheck) {
+            // 只有oppo支持
+            console.log("hotgame,审核");
             tagUI.dispose();
             return null;
         }
@@ -4717,6 +4625,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
 /* harmony import */ var _UI_LTGame_UI_NativeIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../UI/LTGame/UI_NativeIcon */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeIcon.ts");
 /* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+
+
 
 
 
@@ -4740,6 +4652,12 @@ class View_NativeIcon {
         if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_1__["EPlatformType"].Oppo) {
             // 只有oppo支持
             console.log("native_icon已隐藏,只有oppo平台支持");
+            tagUI.dispose();
+            return null;
+        }
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_4__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"].InCheck) {
+            // 只有oppo支持
+            console.log("icon 隐藏,审核");
             tagUI.dispose();
             return null;
         }
@@ -4840,6 +4758,149 @@ class FakeIconData {
 
 /***/ }),
 
+/***/ "./src/LTGame/UIExt/DefaultUI/Cmp/View_NativeIconLong.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/Cmp/View_NativeIconLong.ts ***!
+  \***************************************************************/
+/*! exports provided: View_NativeIconLong */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "View_NativeIconLong", function() { return View_NativeIconLong; });
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _UI_LTGame_UI_NativeIconLong__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UI/LTGame/UI_NativeIconLong */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeIconLong.ts");
+
+
+
+
+
+
+class View_NativeIconLong {
+    constructor(ui, ids) {
+        this._ui = ui;
+        if (ids == null || ids.length == 0) {
+            this._cacheIds = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platformData.nativeIconIds;
+        }
+        else {
+            this._cacheIds = ids;
+        }
+        console.log("初始化广告id", ids);
+        this._Init();
+        this.ui.onClick(this, this._OnClickAd);
+        Laya.stage.on('NATIVEICONLONG_CLICK', this, this.ClickAd);
+    }
+    static CreateView(tagUI) {
+        if (tagUI == null)
+            return null;
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo) {
+            // 只有oppo支持
+            console.log("native_iconLong已隐藏,只有oppo平台支持");
+            tagUI.dispose();
+            return null;
+        }
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].InCheck) {
+            // 只有oppo支持
+            console.log("native_iconLong已隐藏,审核");
+            tagUI.dispose();
+            return null;
+        }
+        let uiInstance = _UI_LTGame_UI_NativeIconLong__WEBPACK_IMPORTED_MODULE_5__["default"].createInstance();
+        tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
+        uiInstance.setXY(tagUI.x, tagUI.y);
+        uiInstance.setSize(tagUI.width, tagUI.height);
+        let forceAdIdsStr = tagUI.data;
+        let forceAdIds = [];
+        if (!_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(forceAdIdsStr)) {
+            let splitStrs = forceAdIdsStr.split(',');
+            for (let i = 0; i < splitStrs.length; ++i) {
+                forceAdIds.push(splitStrs[i]);
+            }
+        }
+        tagUI.dispose();
+        return new View_NativeIconLong(uiInstance, forceAdIds);
+    }
+    get ui() {
+        return this._ui;
+    }
+    get visible() {
+        return this.ui.visible;
+    }
+    set visible(v) {
+        this.ui.visible = v;
+    }
+    ClickAd() {
+        console.log("点击Icon", this._cacheAdData);
+        // 相应点击事件
+        View_NativeIconLong._cacheNativeAd.reportAdClick({
+            adId: this._cacheAdData.adId
+        });
+        // 刷新
+        this._Init();
+    }
+    _Init() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (View_NativeIconLong._cacheNativeAd != null) {
+                View_NativeIconLong._cacheNativeAd.destroy();
+                View_NativeIconLong._cacheNativeAd = null;
+            }
+            for (let i = 0; i < this._cacheIds.length; ++i) {
+                let ret = yield this._LoadIconData(i);
+                if (ret) {
+                    this.ui.m_icon.url = this._cacheAdData.icon;
+                    this.ui.m_tag.url = this._cacheAdData.logoUrl;
+                    this.ui.m_title.text = this._cacheAdData.title;
+                    this.ui.m_desc.text = this._cacheAdData.desc;
+                    View_NativeIconLong._cacheNativeAd.reportAdShow({
+                        adId: this._cacheAdData.adId
+                    });
+                    console.log("原生icon广告已展示", this._cacheAdData);
+                    return;
+                }
+            }
+        });
+    }
+    _OnClickAd() {
+        this.ClickAd();
+    }
+    _LoadIconData(index) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let nativeAd = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.base.createNativeAd({
+                adUnitId: this._cacheIds[index]
+            });
+            View_NativeIconLong._cacheNativeAd = nativeAd;
+            let loadRet = yield nativeAd.load();
+            if (loadRet["code"] == 0) {
+                // 加载成功
+                let adList = loadRet['adList'];
+                if (adList == null || adList.length == 0) {
+                    console.error("native icon 加载失败", loadRet);
+                    return false;
+                }
+                let adData = adList[0];
+                console.log('广告数据加载完成', loadRet);
+                if (adData == null) {
+                    console.error("native icon 加载失败", loadRet);
+                    return false;
+                }
+                this._cacheAdData = adData;
+                return true;
+            }
+            else {
+                console.error("native icon 加载失败", loadRet);
+                return false;
+            }
+        });
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTGame/UIExt/DefaultUI/Cmp/View_NativeInpage.ts":
 /*!*************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/Cmp/View_NativeInpage.ts ***!
@@ -4868,7 +4929,7 @@ class View_NativeInPage {
     constructor(ui, ids) {
         this._ui = ui;
         if (ids == null || ids.length == 0) {
-            this._cacheIds = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platformData.nativeBannerIds;
+            this._cacheIds = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platformData.nativeinpageIds;
         }
         else {
             this._cacheIds = ids;
@@ -5096,6 +5157,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
 /* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
 /* harmony import */ var _UI_LTGame_UI_SideGames__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../UI/LTGame/UI_SideGames */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_SideGames.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+
 
 
 
@@ -5112,6 +5175,12 @@ class View_SideGames {
             return null;
         // 额外判定一次是否支持交叉推广,如果不支持,则隐藏交叉推广
         if (!_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.isSupportJumpOther || (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo && _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform != _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Web)) {
+            tagUI.dispose();
+            return null;
+        }
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_0__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"].InCheck) {
+            // 只有oppo支持
+            console.log("sidegames,审核");
             tagUI.dispose();
             return null;
         }
@@ -5591,25 +5660,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_btn_native__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./UI_btn_native */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_btn_native.ts");
 /* harmony import */ var _UI_CommonLoad__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./UI_CommonLoad */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonLoad.ts");
 /* harmony import */ var _UI_view_load__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./UI_view_load */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_load.ts");
-/* harmony import */ var _UI_NativeInpage__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./UI_NativeInpage */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInpage.ts");
-/* harmony import */ var _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./UI_FakeBanner_V */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeBanner_V.ts");
-/* harmony import */ var _UI_CommonToast__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./UI_CommonToast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonToast.ts");
-/* harmony import */ var _UI_view_toast__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./UI_view_toast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_toast.ts");
-/* harmony import */ var _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./UI_FakeRewardVideo */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeRewardVideo.ts");
-/* harmony import */ var _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./UI_FakeInterstital */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeInterstital.ts");
-/* harmony import */ var _UI_EndSlideGames__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./UI_EndSlideGames */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_EndSlideGames.ts");
-/* harmony import */ var _UI_slideAds__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./UI_slideAds */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_slideAds.ts");
-/* harmony import */ var _UI_view_item_game__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./UI_view_item_game */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_game.ts");
-/* harmony import */ var _UI_view_item_game140__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./UI_view_item_game140 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_game140.ts");
-/* harmony import */ var _UI_view_item_sign_big__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./UI_view_item_sign_big */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_big.ts");
-/* harmony import */ var _UI_ImageBanner__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./UI_ImageBanner */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_ImageBanner.ts");
-/* harmony import */ var _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./UI_CommonSign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonSign_02.ts");
-/* harmony import */ var _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./UI_view_item_sign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_02.ts");
-/* harmony import */ var _UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./UI_CommonEndLose */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonEndLose.ts");
-/* harmony import */ var _UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./UI_CommonUnlockProgress */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonUnlockProgress.ts");
-/* harmony import */ var _UI_sliderADs__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./UI_sliderADs */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_sliderADs.ts");
-/* harmony import */ var _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./UI_view_sharegames_big */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_sharegames_big.ts");
+/* harmony import */ var _UI_btn_ad__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./UI_btn_ad */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_btn_ad.ts");
+/* harmony import */ var _UI_NativeInterstitial_01__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./UI_NativeInterstitial_01 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInterstitial_01.ts");
+/* harmony import */ var _UI_NativeInterAd__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./UI_NativeInterAd */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInterAd.ts");
+/* harmony import */ var _UI_NativeIconLong__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./UI_NativeIconLong */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeIconLong.ts");
+/* harmony import */ var _UI_OppoEndExGame__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./UI_OppoEndExGame */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_OppoEndExGame.ts");
+/* harmony import */ var _UI_NativeInpage__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./UI_NativeInpage */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInpage.ts");
+/* harmony import */ var _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./UI_FakeBanner_V */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeBanner_V.ts");
+/* harmony import */ var _UI_CommonToast__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./UI_CommonToast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonToast.ts");
+/* harmony import */ var _UI_view_toast__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./UI_view_toast */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_toast.ts");
+/* harmony import */ var _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./UI_FakeRewardVideo */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeRewardVideo.ts");
+/* harmony import */ var _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./UI_FakeInterstital */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_FakeInterstital.ts");
+/* harmony import */ var _UI_EndSlideGames__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./UI_EndSlideGames */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_EndSlideGames.ts");
+/* harmony import */ var _UI_slideAds__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./UI_slideAds */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_slideAds.ts");
+/* harmony import */ var _UI_view_item_game__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./UI_view_item_game */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_game.ts");
+/* harmony import */ var _UI_view_item_game140__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./UI_view_item_game140 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_game140.ts");
+/* harmony import */ var _UI_view_item_sign_big__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./UI_view_item_sign_big */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_big.ts");
+/* harmony import */ var _UI_ImageBanner__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./UI_ImageBanner */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_ImageBanner.ts");
+/* harmony import */ var _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./UI_CommonSign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonSign_02.ts");
+/* harmony import */ var _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./UI_view_item_sign_02 */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_item_sign_02.ts");
+/* harmony import */ var _UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./UI_CommonEndLose */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonEndLose.ts");
+/* harmony import */ var _UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./UI_CommonUnlockProgress */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonUnlockProgress.ts");
+/* harmony import */ var _UI_sliderADs__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./UI_sliderADs */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_sliderADs.ts");
+/* harmony import */ var _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./UI_view_sharegames_big */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_sharegames_big.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
+
+
+
 
 
 
@@ -5704,24 +5783,29 @@ class LTGameBinder {
         fgui.UIObjectFactory.setExtension(_UI_btn_native__WEBPACK_IMPORTED_MODULE_34__["default"].URL, _UI_btn_native__WEBPACK_IMPORTED_MODULE_34__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_CommonLoad__WEBPACK_IMPORTED_MODULE_35__["default"].URL, _UI_CommonLoad__WEBPACK_IMPORTED_MODULE_35__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_view_load__WEBPACK_IMPORTED_MODULE_36__["default"].URL, _UI_view_load__WEBPACK_IMPORTED_MODULE_36__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_NativeInpage__WEBPACK_IMPORTED_MODULE_37__["default"].URL, _UI_NativeInpage__WEBPACK_IMPORTED_MODULE_37__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_38__["default"].URL, _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_38__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_CommonToast__WEBPACK_IMPORTED_MODULE_39__["default"].URL, _UI_CommonToast__WEBPACK_IMPORTED_MODULE_39__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_toast__WEBPACK_IMPORTED_MODULE_40__["default"].URL, _UI_view_toast__WEBPACK_IMPORTED_MODULE_40__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_41__["default"].URL, _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_41__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_42__["default"].URL, _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_42__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_EndSlideGames__WEBPACK_IMPORTED_MODULE_43__["default"].URL, _UI_EndSlideGames__WEBPACK_IMPORTED_MODULE_43__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_slideAds__WEBPACK_IMPORTED_MODULE_44__["default"].URL, _UI_slideAds__WEBPACK_IMPORTED_MODULE_44__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_item_game__WEBPACK_IMPORTED_MODULE_45__["default"].URL, _UI_view_item_game__WEBPACK_IMPORTED_MODULE_45__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_item_game140__WEBPACK_IMPORTED_MODULE_46__["default"].URL, _UI_view_item_game140__WEBPACK_IMPORTED_MODULE_46__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_item_sign_big__WEBPACK_IMPORTED_MODULE_47__["default"].URL, _UI_view_item_sign_big__WEBPACK_IMPORTED_MODULE_47__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_ImageBanner__WEBPACK_IMPORTED_MODULE_48__["default"].URL, _UI_ImageBanner__WEBPACK_IMPORTED_MODULE_48__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_49__["default"].URL, _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_49__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_50__["default"].URL, _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_50__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_51__["default"].URL, _UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_51__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_52__["default"].URL, _UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_52__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_sliderADs__WEBPACK_IMPORTED_MODULE_53__["default"].URL, _UI_sliderADs__WEBPACK_IMPORTED_MODULE_53__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_54__["default"].URL, _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_54__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_btn_ad__WEBPACK_IMPORTED_MODULE_37__["default"].URL, _UI_btn_ad__WEBPACK_IMPORTED_MODULE_37__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_NativeInterstitial_01__WEBPACK_IMPORTED_MODULE_38__["default"].URL, _UI_NativeInterstitial_01__WEBPACK_IMPORTED_MODULE_38__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_NativeInterAd__WEBPACK_IMPORTED_MODULE_39__["default"].URL, _UI_NativeInterAd__WEBPACK_IMPORTED_MODULE_39__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_NativeIconLong__WEBPACK_IMPORTED_MODULE_40__["default"].URL, _UI_NativeIconLong__WEBPACK_IMPORTED_MODULE_40__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_OppoEndExGame__WEBPACK_IMPORTED_MODULE_41__["default"].URL, _UI_OppoEndExGame__WEBPACK_IMPORTED_MODULE_41__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_NativeInpage__WEBPACK_IMPORTED_MODULE_42__["default"].URL, _UI_NativeInpage__WEBPACK_IMPORTED_MODULE_42__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_43__["default"].URL, _UI_FakeBanner_V__WEBPACK_IMPORTED_MODULE_43__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommonToast__WEBPACK_IMPORTED_MODULE_44__["default"].URL, _UI_CommonToast__WEBPACK_IMPORTED_MODULE_44__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_toast__WEBPACK_IMPORTED_MODULE_45__["default"].URL, _UI_view_toast__WEBPACK_IMPORTED_MODULE_45__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_46__["default"].URL, _UI_FakeRewardVideo__WEBPACK_IMPORTED_MODULE_46__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_47__["default"].URL, _UI_FakeInterstital__WEBPACK_IMPORTED_MODULE_47__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_EndSlideGames__WEBPACK_IMPORTED_MODULE_48__["default"].URL, _UI_EndSlideGames__WEBPACK_IMPORTED_MODULE_48__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_slideAds__WEBPACK_IMPORTED_MODULE_49__["default"].URL, _UI_slideAds__WEBPACK_IMPORTED_MODULE_49__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_item_game__WEBPACK_IMPORTED_MODULE_50__["default"].URL, _UI_view_item_game__WEBPACK_IMPORTED_MODULE_50__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_item_game140__WEBPACK_IMPORTED_MODULE_51__["default"].URL, _UI_view_item_game140__WEBPACK_IMPORTED_MODULE_51__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_item_sign_big__WEBPACK_IMPORTED_MODULE_52__["default"].URL, _UI_view_item_sign_big__WEBPACK_IMPORTED_MODULE_52__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_ImageBanner__WEBPACK_IMPORTED_MODULE_53__["default"].URL, _UI_ImageBanner__WEBPACK_IMPORTED_MODULE_53__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_54__["default"].URL, _UI_CommonSign_02__WEBPACK_IMPORTED_MODULE_54__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_55__["default"].URL, _UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_55__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_56__["default"].URL, _UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_56__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_57__["default"].URL, _UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_57__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_sliderADs__WEBPACK_IMPORTED_MODULE_58__["default"].URL, _UI_sliderADs__WEBPACK_IMPORTED_MODULE_58__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_59__["default"].URL, _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_59__["default"]);
     }
 }
 
@@ -5787,6 +5871,7 @@ class UI_CommonEndReward extends fgui.GComponent {
         this.m_btn_back = (this.getChildAt(6));
         this.m_icon_reward = (this.getChildAt(7));
         this.m_text_add = (this.getChildAt(8));
+        this.m___nativeinpage = (this.getChildAt(9));
         this.m_anim_enter = this.getTransitionAt(0);
     }
 }
@@ -6330,9 +6415,11 @@ class UI_ImageBanner extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "ImageBanner"));
     }
     onConstruct() {
-        this.m_img_banner = (this.getChildAt(0));
-        this.m_img_adnotice = (this.getChildAt(1));
-        this.m_btn_close = (this.getChildAt(2));
+        this.m_bg = (this.getChildAt(0));
+        this.m_img_banner = (this.getChildAt(1));
+        this.m_img_icon = (this.getChildAt(2));
+        this.m_img_adnotice = (this.getChildAt(3));
+        this.m_btn_close = (this.getChildAt(4));
     }
 }
 UI_ImageBanner.URL = "ui://75kiu87kqdeh5t";
@@ -6432,6 +6519,37 @@ UI_NativeIcon.URL = "ui://75kiu87kh8ea5w";
 
 /***/ }),
 
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeIconLong.ts":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeIconLong.ts ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeIconLong; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_NativeIconLong extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "NativeIconLong"));
+    }
+    onConstruct() {
+        this.m_bg = (this.getChildAt(0));
+        this.m_icon = (this.getChildAt(1));
+        this.m_tag = (this.getChildAt(2));
+        this.m_title = (this.getChildAt(3));
+        this.m_desc = (this.getChildAt(4));
+    }
+}
+UI_NativeIconLong.URL = "ui://75kiu87kocvx6t";
+
+
+/***/ }),
+
 /***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInpage.ts":
 /*!*****************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInpage.ts ***!
@@ -6456,6 +6574,38 @@ class UI_NativeInpage extends fgui.GComponent {
     }
 }
 UI_NativeInpage.URL = "ui://75kiu87koviw62";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInterAd.ts":
+/*!******************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInterAd.ts ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeInterAd; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_NativeInterAd extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "NativeInterAd"));
+    }
+    onConstruct() {
+        this.m_bg = (this.getChildAt(0));
+        this.m_img = (this.getChildAt(1));
+        this.m_icon = (this.getChildAt(2));
+        this.m_title = (this.getChildAt(3));
+        this.m_desc = (this.getChildAt(4));
+        this.m_tag = (this.getChildAt(7));
+    }
+}
+UI_NativeInterAd.URL = "ui://75kiu87kocvx6s";
 
 
 /***/ }),
@@ -6491,6 +6641,72 @@ UI_NativeInterstitial.URL = "ui://75kiu87kl2ax4j";
 
 /***/ }),
 
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInterstitial_01.ts":
+/*!**************************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInterstitial_01.ts ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeInterstitial_01; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_NativeInterstitial_01 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "NativeInterstitial_01"));
+    }
+    onConstruct() {
+        this.m_landscape = this.getControllerAt(0);
+        this.m_ad = (this.getChildAt(1));
+        this.m_btn_close = (this.getChildAt(2));
+        this.m_t0 = this.getTransitionAt(0);
+    }
+}
+UI_NativeInterstitial_01.URL = "ui://75kiu87kocvx6r";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_OppoEndExGame.ts":
+/*!******************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_OppoEndExGame.ts ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_OppoEndExGame; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_OppoEndExGame extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "OppoEndExGame"));
+    }
+    onConstruct() {
+        this.m_step = this.getControllerAt(0);
+        this.m_win = (this.getChildAt(1));
+        this.m___nativeiconL = (this.getChildAt(2));
+        this.m___endSG = (this.getChildAt(3));
+        this.m_btn_next = (this.getChildAt(4));
+        this.m_btn_reward = (this.getChildAt(5));
+        this.m_btn_continue = (this.getChildAt(6));
+        this.m_btn_adpay = (this.getChildAt(7));
+        this.m_icon_reward = (this.getChildAt(8));
+        this.m_text_add = (this.getChildAt(9));
+    }
+}
+UI_OppoEndExGame.URL = "ui://75kiu87kocvx6u";
+
+
+/***/ }),
+
 /***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_SideGames.ts":
 /*!**************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_SideGames.ts ***!
@@ -6517,6 +6733,34 @@ class UI_SideGames extends fgui.GComponent {
     }
 }
 UI_SideGames.URL = "ui://75kiu87keq3z6e";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_btn_ad.ts":
+/*!***********************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_btn_ad.ts ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_btn_ad; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_btn_ad extends fgui.GButton {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "btn_ad"));
+    }
+    onConstruct() {
+        this.m_type = this.getControllerAt(0);
+        this.m_line = (this.getChildAt(4));
+    }
+}
+UI_btn_ad.URL = "ui://75kiu87kocvx6q";
 
 
 /***/ }),
@@ -8798,6 +9042,7 @@ class UI_ImageBannerMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODU
         this._fakeBannerData = this._openParam;
         this.ui.m_img_banner.url = this._fakeBannerData.imgPath;
         this.ui.m_img_adnotice.url = this._fakeBannerData.noticePath;
+        this.ui.m_img_icon.url = this._fakeBannerData.iconPath;
         this.ui.m_img_banner.onClick(this, this._OnClickBanner);
         this.ui.m_btn_close.onClick(this, this._OnClickClose);
         // 上报广告曝光
@@ -8942,6 +9187,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DefaultUI_Cmp_View_BottomGames__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../DefaultUI/Cmp/View_BottomGames */ "./src/LTGame/UIExt/DefaultUI/Cmp/View_BottomGames.ts");
 /* harmony import */ var _DefaultUI_Cmp_View_SideGames__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../DefaultUI/Cmp/View_SideGames */ "./src/LTGame/UIExt/DefaultUI/Cmp/View_SideGames.ts");
 /* harmony import */ var _DefaultUI_Cmp_View_EndSlideGames__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../DefaultUI/Cmp/View_EndSlideGames */ "./src/LTGame/UIExt/DefaultUI/Cmp/View_EndSlideGames.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _DefaultUI_Cmp_View_NativeIconLong__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../DefaultUI/Cmp/View_NativeIconLong */ "./src/LTGame/UIExt/DefaultUI/Cmp/View_NativeIconLong.ts");
+
+
 
 
 
@@ -8996,7 +9245,7 @@ class BaseUIMediator {
         this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
         const anim_enter = "m_anim_enter";
-        if (this._ui[anim_enter]) {
+        if (this._ui[anim_enter] && _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_9__["default"].instance.isDelayClose) {
             let anim = this._ui[anim_enter];
             anim.play();
         }
@@ -9022,6 +9271,13 @@ class BaseUIMediator {
         }
         else {
             this._ui['m___nativeicon'] = null;
+        }
+        let nativeIconL = _DefaultUI_Cmp_View_NativeIconLong__WEBPACK_IMPORTED_MODULE_10__["View_NativeIconLong"].CreateView(this._ui['m___nativeiconL']);
+        if (nativeIconL) {
+            this._ui['m___nativeiconL'] = nativeIconL;
+        }
+        else {
+            this._ui['m___nativeiconL'] = null;
         }
         let nativeinpage = _DefaultUI_Cmp_View_NativeInpage__WEBPACK_IMPORTED_MODULE_5__["default"].CreateView(this._ui['m___nativeinpage']);
         if (nativeinpage) {
@@ -9465,6 +9721,9 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_4__["default"] {
                 else {
                     console.log('如果需要在重庆后台配置参数 payRate 概率 0-100');
                 }
+                if (result['isDelayClose']) {
+                    this.isDelayClose = parseInt(result['isDelayClose']) == 1;
+                }
                 this.payRate = rate;
                 if (isShielding != undefined) {
                     this.isShielding = 1 == isShielding;
@@ -9570,6 +9829,7 @@ class SDK_Default {
         this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_4__["ECheckState"].Normal;
         this.isADConfigInited = true;
         this.isADEnable = true;
+        this.isDelayClose = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.platform != _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_1__["EPlatformType"].Oppo; //oppo平台默认不播延迟显示动画
         this.isConfigEnable = true;
         this.payRate = 0;
         this.flg = flg;

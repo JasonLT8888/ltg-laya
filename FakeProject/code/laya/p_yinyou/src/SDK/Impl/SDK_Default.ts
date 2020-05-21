@@ -8,6 +8,7 @@ import { ISDK } from "../Interface/ISDK";
 import SDKADManager from "../SDKADManager";
 
 export default class SDK_Default implements ISDK {
+    isDelayClose: boolean;
     payRate: number;
     isShielding: boolean = false;
     checkState: ECheckState;
@@ -25,6 +26,7 @@ export default class SDK_Default implements ISDK {
         this.checkState = ECheckState.Normal;
         this.isADConfigInited = true;
         this.isADEnable = true;
+        this.isDelayClose = LTPlatform.instance.platform != EPlatformType.Oppo;//oppo平台默认不播延迟显示动画
         this.isConfigEnable = true;
         this.payRate = 0;
         this.flg = flg;

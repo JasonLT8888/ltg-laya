@@ -5,6 +5,8 @@ import ShareManager from "../../LTGame/Platform/ShareManager";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
 import { ECheckState } from "../common/ECheckState";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -99,27 +101,26 @@ export default class SDK_CQ extends SDK_Default {
             // 成功
             let result = res.data;
             if (result) {
-                let ad = parseInt(result["isADEnable"]);
-                let isShielding = parseInt(result['isShielding']);
-                let check = parseInt(result['checkState']);
                 let rate = 0;
                 if (result['payRate']) {
                     rate = parseInt(result['payRate']);
                 } else {
                     console.log('如果需要在重庆后台配置参数 payRate 概率 0-100')
                 }
+                if (result['isDelayClose']) {
+                    this.isDelayClose = parseInt(result['isDelayClose']) == 1;
+                }
                 this.payRate = rate;
-                if (isShielding != undefined) {
-                    this.isShielding = 1 == isShielding;
+                if (result['isShielding']) {
+                    this.isShielding = 1 == parseInt(result['isShielding']);
                 }
-                if (ad != undefined) {
-                    this.isADEnable = (1 == ad);
+                if (result["isADEnable"]) {
+                    this.isADEnable = (1 == parseInt(result["isADEnable"]));
                 }
-
-                if (check != undefined) {
-                    this.checkState = check as ECheckState;
+                if (result['checkState']) {
+                    this.checkState = parseInt(result['checkState']) as ECheckState;
                 } else {
-                    this.checkState = ECheckState.Normal;
+                    this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
             } else {
                 console.log("未读取到后台信息,默认为打开状态");

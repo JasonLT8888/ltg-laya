@@ -4,7 +4,9 @@
 
 export default class UI_ImageBanner extends fgui.GComponent {
 
+	public m_bg:fgui.GGraph;
 	public m_img_banner:fgui.GLoader;
+	public m_img_icon:fgui.GLoader;
 	public m_img_adnotice:fgui.GLoader;
 	public m_btn_close:fgui.GButton;
 
@@ -19,8 +21,10 @@ export default class UI_ImageBanner extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_img_banner = <fgui.GLoader><any>(this.getChildAt(0));
-		this.m_img_adnotice = <fgui.GLoader><any>(this.getChildAt(1));
-		this.m_btn_close = <fgui.GButton><any>(this.getChildAt(2));
+		this.m_bg = <fgui.GGraph><any>(this.getChildAt(0));
+		this.m_img_banner = <fgui.GLoader><any>(this.getChildAt(1));
+		this.m_img_icon = <fgui.GLoader><any>(this.getChildAt(2));
+		this.m_img_adnotice = <fgui.GLoader><any>(this.getChildAt(3));
+		this.m_btn_close = <fgui.GButton><any>(this.getChildAt(4));
 	}
 }

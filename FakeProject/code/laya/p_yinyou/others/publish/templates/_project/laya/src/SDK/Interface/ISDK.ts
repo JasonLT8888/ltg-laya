@@ -61,6 +61,10 @@ export interface ISDK {
      * 用于控制特殊操作,比如广告提拉等违规操作
      */
     isADEnable: boolean;
+    /**
+     * 延迟关闭按钮
+     */
+    isDelayClose: boolean;
 
     /**
      * config 代表游戏开关
