@@ -8,8 +8,6 @@
     "colors": "^1.4.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "imagemin": "^7.0.1",
-    "imagemin-jpegtran": "^6.0.0",
     "raw-loader": "^4.0.1",
     "shelljs": "0.8.3",
     "ts-loader": "^6.2.2",
