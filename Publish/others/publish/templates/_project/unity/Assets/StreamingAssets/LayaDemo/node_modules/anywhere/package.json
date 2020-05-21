@@ -1,0 +1,63 @@
+{
+  "_from": "anywhere",
+  "_id": "anywhere@1.5.0",
+  "_inBundle": false,
+  "_integrity": "sha512-YrSvwc2/+qqdL5/XBT6juSFwkWmJDHaO7j6Yl11rtjZVvdNj1a+3UT+rk9sitNOEWhFbBufc4Oct7AAPsmJq7g==",
+  "_location": "/anywhere",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "anywhere",
+    "name": "anywhere",
+    "escapedName": "anywhere",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/anywhere/-/anywhere-1.5.0.tgz",
+  "_shasum": "8e00797690708dd3142339cb9b5b3f4dd5663008",
+  "_spec": "anywhere",
+  "_where": "E:\\layaair_demo\\layaair-demo\\h5",
+  "author": {
+    "name": "Jackson Tian"
+  },
+  "bin": {
+    "anywhere": "./bin/anywhere"
+  },
+  "bugs": {
+    "url": "https://github.com/JacksonTian/anywhere/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "connect": "^3.6.6",
+    "connect-history-api-fallback": "^1.2.0",
+    "debug": "^2.2.0",
+    "minimist": "^1.2.0",
+    "serve-index": "^1.9.1",
+    "serve-static": "^1.13.2"
+  },
+  "deprecated": false,
+  "description": "Run static file server anywhere",
+  "files": [
+    "bin",
+    "keys"
+  ],
+  "homepage": "https://github.com/JacksonTian/anywhere",
+  "keywords": [
+    "Static",
+    "file",
+    "server",
+    "Assets"
+  ],
+  "license": "MIT",
+  "name": "anywhere",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/JacksonTian/anywhere.git"
+  },
+  "version": "1.5.0"
+}
