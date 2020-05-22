@@ -11290,7 +11290,12 @@ class EffectManager {
                 let configItem = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList[i];
                 if (configItem.need_preload) {
                     let effectPath = _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__["default"].FixPath(configItem.model_path);
-                    let effectObj = this._effectRoot.addChild(_LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(effectPath, true));
+                    let getObj = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(effectPath, true);
+                    if (getObj == null) {
+                        console.log("特效", configItem, "不存在");
+                        continue;
+                    }
+                    let effectObj = this._effectRoot.addChild(getObj);
                     preloadEffects.push(effectObj);
                     this._effectMap.set(configItem.id, effectObj);
                 }
