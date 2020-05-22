@@ -67,8 +67,7 @@ export class View_NativeIconLong {
 
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
-        this.ui.m_btn_close.onClick(this, this.clickClose)
-        this['ClickAd'] = this.ClickAd;
+        this.ui.m_btn_close.onClick(this, this.clickClose) 
     }
 
     public ClickAd() {

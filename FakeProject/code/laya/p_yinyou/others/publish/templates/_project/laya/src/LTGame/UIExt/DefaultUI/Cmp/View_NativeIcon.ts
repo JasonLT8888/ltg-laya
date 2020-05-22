@@ -66,10 +66,7 @@ export class View_NativeIcon {
         }
         console.log("初始化广告id", ids);
 
-        this._Init();
-        // this.ui.m_bg.onClick(this, this._OnClickAd);
-        // this.ui.m_btn_close.onClick(this, this.clickClose);
-        this['ClickAd'] = this.ClickAd;
+        this._Init(); 
     }
 
     public ClickAd() {
