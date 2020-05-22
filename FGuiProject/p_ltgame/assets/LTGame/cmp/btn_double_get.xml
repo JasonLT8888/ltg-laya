@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="250,100" extention="Button">
-  <controller name="btn_type" pages="0,看视频,1,分享,2,礼物" selected="2"/>
+  <controller name="btn_type" pages="0,看视频,1,分享,2,礼物,3,无" selected="0"/>
   <controller name="bg_type" pages="0,yellow,1,blue" selected="0"/>
   <displayList>
-    <image id="n8_bg00" name="n8" src="ovsy2" fileName="img/btn_anniuhuang.png" xy="0,0" size="250,100">
+    <image id="n8_bg00" name="n8" src="q0fh52" fileName="img/btn_anniuhuang(1).png" xy="0,0" size="250,100">
       <gearDisplay controller="bg_type" pages="0"/>
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <image id="n4_it2i" name="n4" src="ovsy3" fileName="img/btn_anniulan.png" xy="0,0" size="250,100">
+    <image id="n4_it2i" name="n4" src="q0fh4r" fileName="img/btn_anniulan2.png" xy="0,0" size="250,100">
       <gearDisplay controller="bg_type" pages="1"/>
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <image id="n5_it2i" name="n5" src="it2io" fileName="img/sp_shipin.png" xy="21,33">
+    <image id="n5_it2i" name="n5" src="q0fh59" fileName="img/sp_shipin1.png" xy="25,34">
       <gearDisplay controller="btn_type" pages="0"/>
       <relation target="" sidePair="center-center%,middle-middle"/>
     </image>
-    <loader id="n6_it2i" name="icon" xy="72,31" size="151,39" url="ui://75kiu87kit2ip" align="center" vAlign="middle">
+    <loader id="n6_it2i" name="icon" xy="72,27" size="151,39" url="ui://75kiu87kit2ip" align="center" vAlign="middle">
+      <gearXY controller="btn_type" pages="3" values="49,27" default="72,27"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </loader>
-    <image id="n7_bg00" name="n7" src="bg0018" fileName="img/sp_fenxiangl.png" xy="19,31">
+    <image id="n7_bg00" name="n7" src="bg0018" fileName="img/sp_fenxiangl.png" xy="19,27">
       <gearDisplay controller="btn_type" pages="1"/>
       <relation target="" sidePair="center-center%,middle-middle"/>
     </image>
-    <image id="n9_bg00" name="n9" src="bg001i" fileName="img/sp_lipin.png" xy="17,28">
+    <image id="n9_bg00" name="n9" src="bg001i" fileName="img/sp_lipin.png" xy="17,24">
       <gearDisplay controller="btn_type" pages="2"/>
       <relation target="" sidePair="center-center%,middle-middle"/>
     </image>

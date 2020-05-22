@@ -6,7 +6,7 @@
     </image>
     <loader id="n8_bg00" name="icon" xy="17,6" size="176,176" url="ui://75kiu87kbg001q" align="center" vAlign="middle" fill="scale"/>
     <image id="n5_bg00" name="n5" src="bg001z" fileName="img/btn_shiwananniu.png" xy="4,163" size="202,51"/>
-    <image id="n6_bg00" name="n6" src="q0fh59" fileName="img/sp_shipin1.png" xy="27,172"/>
-    <image id="n7_bg00" name="n7" src="q0fh5a" fileName="img/sp_shiwan(1).png" xy="84,172"/>
+    <image id="n6_bg00" name="n6" src="q0fh59" fileName="img/sp_shipin1.png" xy="29,175"/>
+    <image id="n7_bg00" name="n7" src="q0fh5a" fileName="img/sp_shiwan(1).png" xy="73,172"/>
   </displayList>
 </component>
