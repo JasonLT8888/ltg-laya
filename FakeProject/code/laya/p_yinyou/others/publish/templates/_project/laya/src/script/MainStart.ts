@@ -25,7 +25,7 @@ export default class MainStart extends LTStart {
         switch (ePlatform) {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
-                this._gameVersion = '1.0.0';
+                this._gameVersion = '1.0.0';//1.0.1 为全策略模式
                 this._resVersion = '';
                 this._appId = '88888888';
                 break;
