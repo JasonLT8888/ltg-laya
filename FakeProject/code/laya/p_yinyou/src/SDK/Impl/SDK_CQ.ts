@@ -11,7 +11,6 @@ import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 export default class SDK_CQ extends SDK_Default {
 
     isADConfigInited: boolean;
-    isADEnable: boolean;
     isConfigEnable: boolean;
     flg: string;
     channel: string;
@@ -19,7 +18,6 @@ export default class SDK_CQ extends SDK_Default {
     controlVersion: string;
     adManager: SDKADManager;
     uid: string = "sdk_test";
-    isShielding: boolean = false;
     enableDebug: boolean = true;
 
 
@@ -95,7 +93,7 @@ export default class SDK_CQ extends SDK_Default {
         }
         if (this.enableDebug)
             console.log("云控返回消息:", res);
-        this.isADEnable = true;
+        this.isADEnable = false;
         this.isConfigEnable = true;
         if (res.code == 1) {
             // 成功
@@ -107,10 +105,10 @@ export default class SDK_CQ extends SDK_Default {
                 } else {
                     console.log('如果需要在重庆后台配置参数 payRate 概率 0-100')
                 }
+                this.payRate = rate;
                 if (result['isDelayClose']) {
                     this.isDelayClose = parseInt(result['isDelayClose']) == 1;
                 }
-                this.payRate = rate;
                 if (result['isShielding']) {
                     this.isShielding = 1 == parseInt(result['isShielding']);
                 }
@@ -122,6 +120,7 @@ export default class SDK_CQ extends SDK_Default {
                 } else {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
+
             } else {
                 console.log("未读取到后台信息,默认为打开状态");
             }
@@ -130,7 +129,7 @@ export default class SDK_CQ extends SDK_Default {
             // 失败
             console.error("云控消息返回失败", res);
         }
-        console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, "ad:", this.isADEnable);
+        console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         if (this.controlVersion) {
             this.RequestADList();
         }

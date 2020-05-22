@@ -10,10 +10,10 @@ import SDKADManager from "../SDKADManager";
 export default class SDK_Default implements ISDK {
     isDelayClose: boolean;
     payRate: number;
-    isShielding: boolean = false;
     checkState: ECheckState;
-    isADConfigInited: boolean;
+    isShielding: boolean = false;
     isADEnable: boolean;
+    isADConfigInited: boolean;
     isConfigEnable: boolean;
     flg: string;
     channel: string;
@@ -25,10 +25,12 @@ export default class SDK_Default implements ISDK {
     Init(flg: string, channel: string, controlVersion: string, appid: string) {
         this.checkState = ECheckState.Normal;
         this.isADConfigInited = true;
-        this.isADEnable = true;
-        this.isDelayClose = LTPlatform.instance.platform != EPlatformType.Oppo;//oppo平台默认不播延迟显示动画
-        this.isConfigEnable = true;
+        this.isADEnable = false;
+        this.isDelayClose = false;
+        this.isShielding = false;
         this.payRate = 0;
+        this.checkState = ECheckState.InCheck;
+        this.isConfigEnable = true;
         this.flg = flg;
         this.channel = channel;
         this.controlVersion = controlVersion;
@@ -80,14 +82,15 @@ export default class SDK_Default implements ISDK {
             console.log("无cdn路径,跳过检测版本信息");
             return;
         }
-        let packConfigUrl = LTRespackManager.instance.baseUrl + "res/config/PackConst.json";
-        LTHttp.Send(packConfigUrl, Laya.Handler.create(null, (res) => {
-            let parseData = JSON.parse(res);
-            this.checkState = parseData['check_type'];
-            console.log("检查状态更新", this.checkState);
-        }), Laya.Handler.create(null, (res) => {
-            console.log("获取版本状态失败", res);
-        }), true);
+        console.log('审核状态由重庆后台配置');
+        // let packConfigUrl = LTRespackManager.instance.baseUrl + "res/config/PackConst.json";
+        // LTHttp.Send(packConfigUrl, Laya.Handler.create(null, (res) => {
+        //     let parseData = JSON.parse(res);
+        //     this.checkState = parseData['check_type'];
+        //     console.log("检查状态更新", this.checkState);
+        // }), Laya.Handler.create(null, (res) => {
+        //     console.log("获取版本状态失败", res);
+        // }), true);
     }
 
     Login(code: string, fromAppId: string) {
