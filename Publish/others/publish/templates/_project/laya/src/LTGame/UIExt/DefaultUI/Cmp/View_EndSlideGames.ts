@@ -66,6 +66,16 @@ export default class View_EndSlideGames {
         Laya.timer.loop(100, this, () => {
             this.ui.m_ad[`m_list${index}`].scrollPane.scrollRight(0.01, true);
         });
+        // this.ui.m_ad.m_list0.setVirtualAndLoop();
+        // this.ui.m_ad.m_list0.scrollPane.bouncebackEffect = false;
+        // // this.ui.m_ad.m_list0.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender1, null, false);
+        // this.ui.m_ad.m_list0.itemRenderer = Laya.Handler.create(this, (id: number, adUI: UI_view_item_game) => this._OnAdItemRender(id, adUI, index), null, false);
+        // this.ui.m_ad.m_list0.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
+        // this.ui.m_ad.m_list0.numItems = this._cacheAds.length;
+        // Laya.timer.loop(100, this, () => {
+        //     this.ui.m_ad.m_list0.scrollPane.scrollRight(0.01, true);
+        // });
+
     }
 
     private _OnAdInited(posId: number) {
@@ -82,6 +92,7 @@ export default class View_EndSlideGames {
         adUI.data = ind;
         adUI.m_icon.m_icon.url = adData.ad_img;
         adUI.m_text_name.text = '';
+
     }
 
     private _OnClickGameItem(item: UI_view_item_game140) {

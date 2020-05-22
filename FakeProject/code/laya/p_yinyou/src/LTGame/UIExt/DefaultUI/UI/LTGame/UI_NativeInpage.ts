@@ -1,20 +1,27 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
-import UI_Native320 from "./UI_Native320";
-import UI_btn_native from "./UI_btn_native";
+import UI_AdInpageComp from "./UI_AdInpageComp";
+import UI_btn_normal from "./UI_btn_normal";
 
-export default class UI_NativeInpage extends fgui.GComponent {
+export default class UI_NativeInPage extends fgui.GComponent {
 
-	public m_ad:UI_Native320;
-	public m_btn_pay:UI_btn_native;
-	public static URL:string = "ui://75kiu87koviw62";
+	public m_bg1:fgui.GGraph;
+	public m_ad:UI_AdInpageComp;
+	public m_btn_close:UI_btn_normal;
 
-	public static createInstance():UI_NativeInpage {
-		return <UI_NativeInpage>(fgui.UIPackage.createObject("LTGame", "NativeInpage"));
+	public static URL:string = "ui://75kiu87k92486v";
+
+	public static createInstance():UI_NativeInPage {
+		return <UI_NativeInPage><any>(fgui.UIPackage.createObject("LTGame","NativeInPage"));
 	}
 
-	protected onConstruct():void {
-		this.m_ad = <UI_Native320>(this.getChildAt(0));
-		this.m_btn_pay = <UI_btn_native>(this.getChildAt(1));
+	public constructor() {
+		super();
+	}
+
+	protected onConstruct(): void {
+		this.m_bg1 = <fgui.GGraph><any>(this.getChildAt(0));
+		this.m_ad = <UI_AdInpageComp><any>(this.getChildAt(1));
+		this.m_btn_close = <UI_btn_normal><any>(this.getChildAt(2));
 	}
 }

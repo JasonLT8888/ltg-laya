@@ -116,7 +116,7 @@ export default class SDK_CQ extends SDK_Default {
                     this.isADEnable = (1 == ad);
                 }
 
-                if (check != undefined && !isNaN(check)) {
+                if (check != undefined) {
                     this.checkState = check as ECheckState;
                 } else {
                     this.checkState = ECheckState.Normal;

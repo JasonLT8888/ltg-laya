@@ -5,7 +5,6 @@ import UI_view_item_roll from "./UI/LTGame/UI_view_item_roll";
 import MathEx from "../../LTUtils/MathEx";
 import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
-import CommonSaveData from "../../Commom/CommonSaveData";
 
 export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll> {
 
@@ -38,7 +37,6 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
             }
         }
 
-        this.ui.m_btn_roll.m_btn_type.selectedIndex = CommonSaveData.instance.freeRollCount > 0 ? 3 : 0;
         this.ui.m_btn_close.onClick(this, this._OnClickClose);
         this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
 
@@ -57,12 +55,6 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
     }
 
     private async _OnClickRoll() {
-        if (CommonSaveData.instance.freeRollCount > 0) {
-            CommonSaveData.instance.freeRollCount--;
-            CommonSaveData.SaveToDisk();
-            this._DoRoll();
-            return;
-        }
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             this._DoRoll();
@@ -86,8 +78,6 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
         if (this._openData.onRolled) {
             this._openData.onRolled.runWith([this._cacheIndex, this.ui.m_pointer]);
         }
-
-        this.ui.m_btn_roll.m_btn_type.selectedIndex = CommonSaveData.instance.freeRollCount > 0 ? 3 : 0;
         LTUI.UnlockScreen();
     }
 

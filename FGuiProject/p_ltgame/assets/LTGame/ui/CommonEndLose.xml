@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://75kiu87krk935j" designImageLayer="1">
+<component size="750,1334" designImageLayer="1">
   <controller name="c1" pages="0,有导流,1,无导流" selected="0"/>
   <displayList>
     <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
@@ -12,7 +12,7 @@
       <gearDisplay controller="c1" pages="0"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <text id="n14_rk93" name="text_str" xy="153,653" size="443,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="这个关卡解锁30%，继续努力哦！">
+    <text id="n14_rk93" name="text_str" xy="153,653" size="453,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="这个关卡解锁30%，继续努力哦！">
       <gearXY controller="c1" pages="0,1" values="153,653|153,396"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>

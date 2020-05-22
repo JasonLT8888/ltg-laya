@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" opaque="false">
   <displayList>
-    <loader id="n0_qdeh" name="img_banner" xy="0,1215" size="750,119" url="ui://75kiu87kbg001p" align="center" vAlign="bottom" fill="scaleFree">
+    <graph id="n5_ocvx" name="bg" xy="0,1215" size="750,119" type="rect" lineColor="#ff333333" fillColor="#ff333333">
+      <relation target="" sidePair="width-width,bottom-bottom"/>
+    </graph>
+    <loader id="n0_qdeh" name="img_banner" xy="0,1215" size="750,119" align="center" vAlign="bottom" fill="scaleFree">
       <relation target="" sidePair="width-width,bottom-bottom"/>
     </loader>
-    <loader id="n1_qdeh" name="img_adnotice" xy="659,1277" size="71,37" touchable="false" url="ui://75kiu87kbg001i" align="right" vAlign="bottom">
+    <loader id="n4_ocvx" name="img_icon" xy="582,1230" size="80,80" touchable="false" align="right" vAlign="bottom" fill="scale">
       <relation target="" sidePair="right-right,bottom-bottom"/>
     </loader>
-    <component id="n3_qdeh" name="btn_close" src="qdeh5u" fileName="cmp/btn_close_02.xml" xy="7,1237">
+    <loader id="n1_qdeh" name="img_adnotice" xy="672,1219" size="74,37" align="right" vAlign="bottom" fill="scale">
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </loader>
+    <component id="n3_qdeh" name="btn_close" src="qdeh5u" fileName="cmp/btn_close_02.xml" xy="0,1216" size="30,30">
       <relation target="" sidePair="left-left,bottom-bottom"/>
     </component>
   </displayList>

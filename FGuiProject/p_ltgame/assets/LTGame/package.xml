@@ -171,8 +171,8 @@
     <component id="74v84c" name="side_ads.xml" path="/ad_res/"/>
     <component id="74v84g" name="hot_game.xml" path="/ui/" exported="true"/>
     <image id="74v84h" name="爆款游戏.png" path="/ad_res/"/>
-    <component id="l2ax4j" name="NativeInterstitial.xml" path="/ad_res/" exported="true"/>
-    <component id="l2ax4k" name="NativeBigAd.xml" path="/ad_res/" exported="true"/>
+    <component id="l2ax4j" name="NativeInterstitial.xml" path="/ad_res/native/" exported="true"/>
+    <component id="l2ax4k" name="NativeBigAd.xml" path="/ad_res/native/" exported="true"/>
     <component id="l2ax4l" name="btn_normal.xml" path="/ad_res/" exported="true"/>
     <image id="l2ax4m" name="sp_guanbi.png" path="/ad_res/res/"/>
     <component id="l2ax4n" name="btn_native.xml" path="/ad_res/"/>
@@ -183,22 +183,28 @@
     <component id="qdeh5t" name="ImageBanner.xml" path="/ad_res/" exported="true"/>
     <component id="qdeh5u" name="btn_close_02.xml" path="/cmp/"/>
     <image id="qdeh5v" name="n4.png" path="/img/"/>
-    <component id="h8ea5w" name="NativeIcon.xml" path="/ad_res/" exported="true"/>
+    <component id="h8ea5w" name="NativeIcon.xml" path="/ad_res/native/" exported="true"/>
     <component id="ulgb5x" name="sliderADs.xml" path="/ad_res/" exported="true"/>
     <image id="ulgb5y" name="sp_yuan2.png" path="/img/new/"/>
     <image id="ulgb5z" name="sp_yuan1.png" path="/img/new/"/>
     <image id="ulgb60" name="sp_fanhui.png" path="/img/new/"/>
-    <component id="oviw62" name="NativeInpage.xml" path="/ad_res/" exported="true"/>
     <component id="eq3z6e" name="SideGames.xml" path="/ad_res/" exported="true"/>
     <image id="eq3z6h" name="红点小@2x.png" path="/ad_res/res/"/>
-    <component id="k7jc6i" name="Native320.xml" path="/ad_res/" exported="true"/>
+    <component id="k7jc6i" name="Native320.xml" path="/ad_res/native/" exported="true"/>
     <component id="j9at6j" name="CommonEndSliderADs.xml" path="/ad_res/" exported="true"/>
     <component id="p2ld6k" name="EndSlideGames.xml" path="/ad_res/" exported="true"/>
     <component id="p2ld6l" name="GameIcon.xml" path="/cmp/"/>
     <component id="p2ld6n" name="slideAds.xml" path="/ui/"/>
     <component id="p2ld6o" name="view_item_game.xml" path="/cache/" exported="true"/>
     <component id="p2ld6p" name="view_item_game140.xml" path="/cache/" exported="true"/>
-    <image id="dn6n6q" name="sp_shipin0.png" path="/img/"/>
+    <component id="ocvx6q" name="btn_ad.xml" path="/ad_res/"/>
+    <component id="ocvx6r" name="NativeInterstitial_01.xml" path="/ad_res/native/" exported="true"/>
+    <component id="ocvx6s" name="NativeInterAd.xml" path="/ad_res/native/"/>
+    <component id="ocvx6t" name="NativeIconLong.xml" path="/ad_res/native/" exported="true"/>
+    <component id="ocvx6u" name="OppoEndExGame.xml" path="/ui/" exported="true"/>
+    <component id="92486v" name="NativeInPage.xml" path="/ad_res/native/" exported="true"/>
+    <component id="92486w" name="AdInpageComp.xml" path="/ad_res/native/"/>
+    <component id="92486x" name="iconLongComp.xml" path="/ad_res/native/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

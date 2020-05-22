@@ -1,31 +1,30 @@
+import { ECheckState } from "../../../../SDK/common/ECheckState";
 import LTSDK from "../../../../SDK/LTSDK";
-import { randomRangeInt } from "../../../LTUtils/LTUtils";
 import StringEx from "../../../LTUtils/StringEx";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
-import { OppoNativeAdItem } from "../../../Platform/OppoPlatform";
-import UI_NativeInpage from "../UI/LTGame/UI_NativeInpage";
-import { ECheckState } from "../../../../SDK/common/ECheckState";
+import { OppoAdData } from "../../../Platform/OppoPlatform";
+import UI_NativeInPage from "../UI/LTGame/UI_NativeInPage";
+import { randomRangeInt } from "../../../LTUtils/LTUtils";
 
-export default class View_NativeInPage {
+export class View_NativeInPage {
 
     static CreateView(tagUI: fgui.GComponent): View_NativeInPage {
-
         if (tagUI == null) return null;
         if (LTPlatform.instance.platform != EPlatformType.Oppo) {
             // 只有oppo支持
-            console.log("NativeInPage已隐藏,只有oppo平台支持");
+            console.log("内嵌 native已隐藏,只有oppo平台支持");
+
             tagUI.dispose();
             return null;
         }
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
             // 只有oppo支持
-            console.log("NativeInPage已隐藏,审核");
-
+            console.log("内嵌 native已隐藏,审核");
             tagUI.dispose();
             return null;
         }
-        let uiInstance = UI_NativeInpage.createInstance();
+        let uiInstance = UI_NativeInPage.createInstance();
         tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
         uiInstance.setSize(tagUI.width, tagUI.height);
@@ -41,102 +40,111 @@ export default class View_NativeInPage {
         return new View_NativeInPage(uiInstance, forceAdIds);
     }
 
-    private _ui: UI_NativeInpage;
-    public get ui(): UI_NativeInpage {
+    private _ui: UI_NativeInPage;
+    public get ui(): UI_NativeInPage {
         return this._ui;
     }
 
-    /**
-     * 储存的广告
-     */
-    private static _cacheAd: any;
-    private _cacheAdData: OppoNativeAdItem;
+    public static _cacheNativeAd: any;
+
+    private _cacheAdData: OppoAdData;
     private _cacheIds: string[];
-    private constructor(ui: UI_NativeInpage, ids: string[]) {
+
+    public get visible(): boolean {
+        return this.ui.visible;
+    }
+    public set visible(v: boolean) {
+        this.ui.visible = v;
+    }
+
+    private constructor(ui: UI_NativeInPage, ids: string[]) {
         this._ui = ui;
         if (ids == null || ids.length == 0) {
-            this._cacheIds = LTPlatform.instance.platformData.nativeBannerIds;
+            this._cacheIds = LTPlatform.instance.platformData.nativeIconIds;
         } else {
             this._cacheIds = ids;
         }
-        console.log("初始化广告id", this._cacheIds);
+        console.log("初始化 内嵌 native广告id", this._cacheIds);
+
+        this._Init();
+        this.ui.m_ad.onClick(this, this._OnClickAd);
+        this.ui.m_btn_close.onClick(this, this.clickClose); 
+    }
+
+    public ClickAd() {
+        console.log(" 点击 内嵌 native", this._cacheAdData);
+        // 相应点击事件
+        View_NativeInPage._cacheNativeAd.reportAdClick({
+            adId: this._cacheAdData.adId
+        });
+        // 刷新
         this._Init();
     }
 
-
-
     private async _Init() {
-        if (View_NativeInPage._cacheAd != null) {
-            View_NativeInPage._cacheAd.destroy();
-            View_NativeInPage._cacheAd = null;
+        if (View_NativeInPage._cacheNativeAd != null) {
+            View_NativeInPage._cacheNativeAd.destroy();
+            View_NativeInPage._cacheNativeAd = null;
         }
         for (let i = 0; i < this._cacheIds.length; ++i) {
-            let ret = await this._LoadNativeData(i);
+            let ret = await this._LoadIconData(i);
             if (ret) {
-                this._UpdateUI();
-                break;
+                this.ui.m_ad.m_icon.url = this._cacheAdData.icon;
+                this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
+                this.ui.m_ad.m_title.text = this._cacheAdData.title;
+                this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
+                this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+                View_NativeInPage._cacheNativeAd.reportAdShow({
+                    adId: this._cacheAdData.adId
+                });
+                console.log("内嵌 native广告已展示", this._cacheAdData);
+                return;
             }
+            console.log("内嵌 native加载失败", this._cacheIds[i]);
         }
+        this.visible = false;
+        this.ui.visible = false;
     }
-    private async _LoadNativeData(index: number) {
+    clickClose() {
+        let rate = randomRangeInt(0, 100);
+        if (LTSDK.instance.payRate > rate) {
+            this._OnClickAd();
+        }
+        this.visible = false;
+        this.ui.visible = false;
+    }
+    private _OnClickAd() {
+        this.ClickAd();
+    }
+
+    private async _LoadIconData(index: number): Promise<boolean> {
         let nativeAd = LTPlatform.instance.base.createNativeAd({
             adUnitId: this._cacheIds[index]
         });
-        View_NativeInPage._cacheAd = nativeAd;
+        View_NativeInPage._cacheNativeAd = nativeAd;
         let loadRet = await nativeAd.load();
         if (loadRet["code"] == 0) {
             // 加载成功
             let adList = loadRet['adList'] as any[];
             if (adList == null || adList.length == 0) {
-                console.error("native 插页 加载失败", loadRet);
+                console.error("内嵌 原生 加载失败", loadRet);
                 return false;
             }
-            let adData = adList[0] as OppoNativeAdItem
+            let adData = adList[0] as OppoAdData
+            console.log('广告数据加载完成', loadRet);
+
             if (adData == null) {
-                console.error("native 插页 加载失败", loadRet);
+                console.error("内嵌 原生 加载失败", loadRet);
                 return false;
             }
 
             this._cacheAdData = adData;
             return true;
         } else {
-            console.error("native 插页 加载失败", loadRet);
+            console.error("内嵌 原生 加载失败", loadRet);
             return false;
         }
     }
 
-
-    private _UpdateUI() {
-        this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
-        this.ui.m_ad.m_title.text = this._cacheAdData.title;
-        if (this._cacheAdData.imgUrlList && this._cacheAdData.imgUrlList.length > 0) {
-            this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
-            this.ui.visible = true;
-        } else if (this._cacheAdData.icon) {
-            this._ui.m_ad.m_img.url = this._cacheAdData.icon;
-            this._ui.visible = true;
-        } else {
-            this._ui.visible = false;
-        }
-        this.ui.m_btn_pay.onClick(this, this._OnClickAD);
-        this.ui.m_ad.m_btn_close.onClick(this, () => {
-            this._ui.visible = false;
-            let v = randomRangeInt(0, 100);
-            if (!LTSDK.instance.isShielding && LTSDK.instance.payRate > v) {
-                this._OnClickAD();
-            }
-        });
-        this.ui.m_ad.m_img.onClick(this, this._OnClickAD);
-        View_NativeInPage._cacheAd.reportAdShow({
-            adId: this._cacheAdData.adId
-        });
-        console.log("原生广告已展示", this._cacheAdData);
-    }
-
-    async _OnClickAD() {
-        await View_NativeInPage._cacheAd.reportAdClick({
-            adId: this._cacheAdData.adId
-        });
-    }
-
 }
+

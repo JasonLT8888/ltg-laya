@@ -79,8 +79,9 @@ export default class LTUI {
     }
 
     public static ShowEndShare(openData: EndShareOpenData) {
-        // 不在内部进行平台判断,防止开发过程中功能遗漏
-        UI_CommonEndShareMediator.instance.Show(openData);
+        if (LTPlatform.instance.platform == EPlatformType.TT) {
+            UI_CommonEndShareMediator.instance.Show(openData);
+        }
     }
 
     public static ShowEndReward(openData: EndRewardOpenData) {

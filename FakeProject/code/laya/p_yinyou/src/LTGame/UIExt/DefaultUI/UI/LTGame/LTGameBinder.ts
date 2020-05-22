@@ -2,6 +2,9 @@
 
 import UI_side_ads from "./UI_side_ads";
 import UI_hot_game from "./UI_hot_game";
+import UI_NativeInPage from "./UI_NativeInPage";
+import UI_AdInpageComp from "./UI_AdInpageComp";
+import UI_iconLongComp from "./UI_iconLongComp";
 import UI_view_endshare from "./UI_view_endshare";
 import UI_CommonEndReward from "./UI_CommonEndReward";
 import UI_view_game_icon from "./UI_view_game_icon";
@@ -37,7 +40,11 @@ import UI_btn_normal from "./UI_btn_normal";
 import UI_btn_native from "./UI_btn_native";
 import UI_CommonLoad from "./UI_CommonLoad";
 import UI_view_load from "./UI_view_load";
-import UI_NativeInpage from "./UI_NativeInpage";
+import UI_btn_ad from "./UI_btn_ad";
+import UI_NativeInterstitial_01 from "./UI_NativeInterstitial_01";
+import UI_NativeInterAd from "./UI_NativeInterAd";
+import UI_NativeIconLong from "./UI_NativeIconLong";
+import UI_OppoEndExGame from "./UI_OppoEndExGame";
 import UI_FakeBanner_V from "./UI_FakeBanner_V";
 import UI_CommonToast from "./UI_CommonToast";
 import UI_view_toast from "./UI_view_toast";
@@ -56,10 +63,13 @@ import UI_CommonUnlockProgress from "./UI_CommonUnlockProgress";
 import UI_sliderADs from "./UI_sliderADs";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
-export default class LTGameBinder {
+export default class LTGameBinder{
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(UI_side_ads.URL, UI_side_ads);
 		fgui.UIObjectFactory.setExtension(UI_hot_game.URL, UI_hot_game);
+		fgui.UIObjectFactory.setExtension(UI_NativeInPage.URL, UI_NativeInPage);
+		fgui.UIObjectFactory.setExtension(UI_AdInpageComp.URL, UI_AdInpageComp);
+		fgui.UIObjectFactory.setExtension(UI_iconLongComp.URL, UI_iconLongComp);
 		fgui.UIObjectFactory.setExtension(UI_view_endshare.URL, UI_view_endshare);
 		fgui.UIObjectFactory.setExtension(UI_CommonEndReward.URL, UI_CommonEndReward);
 		fgui.UIObjectFactory.setExtension(UI_view_game_icon.URL, UI_view_game_icon);
@@ -95,7 +105,11 @@ export default class LTGameBinder {
 		fgui.UIObjectFactory.setExtension(UI_btn_native.URL, UI_btn_native);
 		fgui.UIObjectFactory.setExtension(UI_CommonLoad.URL, UI_CommonLoad);
 		fgui.UIObjectFactory.setExtension(UI_view_load.URL, UI_view_load);
-		fgui.UIObjectFactory.setExtension(UI_NativeInpage.URL, UI_NativeInpage);
+		fgui.UIObjectFactory.setExtension(UI_btn_ad.URL, UI_btn_ad);
+		fgui.UIObjectFactory.setExtension(UI_NativeInterstitial_01.URL, UI_NativeInterstitial_01);
+		fgui.UIObjectFactory.setExtension(UI_NativeInterAd.URL, UI_NativeInterAd);
+		fgui.UIObjectFactory.setExtension(UI_NativeIconLong.URL, UI_NativeIconLong);
+		fgui.UIObjectFactory.setExtension(UI_OppoEndExGame.URL, UI_OppoEndExGame);
 		fgui.UIObjectFactory.setExtension(UI_FakeBanner_V.URL, UI_FakeBanner_V);
 		fgui.UIObjectFactory.setExtension(UI_CommonToast.URL, UI_CommonToast);
 		fgui.UIObjectFactory.setExtension(UI_view_toast.URL, UI_view_toast);

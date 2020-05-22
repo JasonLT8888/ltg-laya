@@ -41,7 +41,12 @@ class CopyProject {
         // D:\Work_Projects\ltg-laya\Publish\others
         let publishPath = path.join(rootPath, './../../../../Publish/others');
         LTUtils.DeleteDir(publishPath);
-        LTUtils.CopyDir(othersPath, publishPath);
+        LTUtils.CopyDir(othersPath, publishPath, function (fileName: string) {
+            if (fileName.endsWith('node_modules')) {
+                return false;
+            }
+            return true;
+        });
         // 拷贝package.json
         let packageJsonPath = path.join(rootPath, 'package.json');
         let targetPackageJsonPath = path.join(rootPath, './../../../../Publish/package.json');

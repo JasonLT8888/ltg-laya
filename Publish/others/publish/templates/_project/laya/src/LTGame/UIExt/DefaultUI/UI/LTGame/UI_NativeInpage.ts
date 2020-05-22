@@ -7,14 +7,19 @@ export default class UI_NativeInpage extends fgui.GComponent {
 
 	public m_ad:UI_Native320;
 	public m_btn_pay:UI_btn_native;
+
 	public static URL:string = "ui://75kiu87koviw62";
 
 	public static createInstance():UI_NativeInpage {
-		return <UI_NativeInpage>(fgui.UIPackage.createObject("LTGame", "NativeInpage"));
+		return <UI_NativeInpage><any>(fgui.UIPackage.createObject("LTGame","NativeInpage"));
 	}
 
-	protected onConstruct():void {
-		this.m_ad = <UI_Native320>(this.getChildAt(0));
-		this.m_btn_pay = <UI_btn_native>(this.getChildAt(1));
+	public constructor() {
+		super();
+	}
+
+	protected onConstruct(): void {
+		this.m_ad = <UI_Native320><any>(this.getChildAt(0));
+		this.m_btn_pay = <UI_btn_native><any>(this.getChildAt(1));
 	}
 }

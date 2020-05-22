@@ -7,7 +7,6 @@ import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
 import LTSDK from "../../../SDK/LTSDK";
 import { ECheckState } from "../../../SDK/common/ECheckState";
-import { EPlatformType } from "../../Platform/EPlatformType";
 
 export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_CommonUnlockProgress> {
 
@@ -23,6 +22,7 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
     private _openData: UnlockProgressOpenData;
 
     private _imgFront: fgui.GImage;
+    private _isChecked: boolean;
 
     _OnShow() {
         super._OnShow();
@@ -62,20 +62,33 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
 
         switch (LTSDK.instance.checkState) {
             case ECheckState.InCheck:
+                this._isChecked = false;
                 this.ui.m_check_state.selectedIndex = 1;
                 break;
             case ECheckState.NoGame:
+                this._isChecked = true;
                 this.ui.m_check_state.selectedIndex = 0;
                 break;
             case ECheckState.Normal:
+                this._isChecked = false;
                 this.ui.m_check_state.selectedIndex = 0;
                 break;
         }
 
-        this.ui.m_btn_get.visible = false;
+        this.ui.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        if (this._openData.endProgress >= 100) {
+            this.ui.m_toggle_watchad.visible = false;
+            this.ui.m_btn_get.visible = true;
+            this.ui.m_btn_watchad.visible = false;
+            this.ui.m_btn_ok.visible = false;
+        } else {
+            this.ui.m_btn_get.visible = false;
+        }
 
-        this.ui.m_btn_get.onClick(this, this._OnClickGet);
-        this.ui.m_btn_nothanks.onClick(this, this._OnClickClose);
+        this.ui.m_toggle_watchad.onClick(this, this._OnClickToggle);
+        this.ui.m_btn_ok.onClick(this, this._OnClickOk);
+        this.ui.m_btn_watchad.onClick(this, this._OnClickWatchAd);
+        this.ui.m_btn_get.onClick(this, this._OnClickGetReward);
     }
 
     private async _TweenProgress() {
@@ -88,26 +101,15 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
             this._imgFront.fillAmount = 0.01 * progress;
             this.ui.m_text_progress.text = progress.toFixed(0) + "%";
         }
-        if (this._openData.endProgress < 100) {
-            this._OnClickClose();
-        } else {
-            this.ui.m_btn_get.m_bg_type.selectedIndex = 1;
-            this.ui.m_btn_get.m_btn_type.selectedIndex = LTSDK.instance.checkState == ECheckState.NoGame ? 0 : 3;
-            this.ui.m_btn_get.visible = true;
-            this.ui.m_show_close.play();
-        }
     }
 
-    private _OnClickClose() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([0]);
-        }
-        this.Hide();
+    private _OnClickToggle() {
+        this._isChecked = !this._isChecked;
+        this.ui.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
     }
 
-
-    private _OnClickGet() {
-        if (LTSDK.instance.checkState == ECheckState.NoGame) {
+    private _OnClickOk() {
+        if (this._isChecked) {
             this._OnClickWatchAd();
         } else {
             if (this._openData.onClose) {
@@ -115,6 +117,13 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
             }
             this.Hide();
         }
+    }
+
+    private _OnClickGetReward() {
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith([2]);
+        }
+        this.Hide();
     }
 
     private async _OnClickWatchAd() {

@@ -14,6 +14,8 @@ import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
+import LTSDK from "../../SDK/LTSDK";
+import { ECheckState } from "../../SDK/common/ECheckState";
 
 export default class OppoPlatform extends WXPlatform {
 
@@ -38,10 +40,6 @@ export default class OppoPlatform extends WXPlatform {
 
     protected _bannerAd;
     protected _rewardVideo;
-    intersitialAd: NativeADUnit;
-    nativeAd: NativeADUnit;
-    iconNative: NativeADUnit;
-
     protected _isBannerLoaded: boolean = false;
     protected _isVideoLoaded: boolean = false;
     protected _isInterstitialLoaded: boolean = false;
@@ -92,7 +90,7 @@ export default class OppoPlatform extends WXPlatform {
                     // this.nativeAd = new NativeADUnit(platformData.nativeId);
                 },
                 fail: () => {
-                    console.error("oppo广告", "初始化广告服务失败")
+                    console.error("oppo广告", "初始化广告服务失败");
                 }
             });
         }
@@ -293,16 +291,25 @@ export default class OppoPlatform extends WXPlatform {
         return this._isVideoLoaded;
     }
     IsInterstitalAvaliable() {
-        return this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 8;
+        return LTSDK.instance.isADEnable && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 888;
     }
     IsNativeAvaliable() {
         return this._nativeAdLoaded;
     }
-
+    canRefreshBanner: boolean = false;
     async ShowBannerAd() {
         // 先尝试展示普通banner
+        if (LTSDK.instance.checkState == ECheckState.InCheck) {
+            console.log('审核中');
+            return;
+        }
         if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
+            return;
+        }
+        if (this._bannerAd && !this.canRefreshBanner) {
+            this._bannerAd.show();
+            console.log('展示已有banner');
             return;
         }
         this.HideBannerAd();
@@ -320,6 +327,9 @@ export default class OppoPlatform extends WXPlatform {
                 loadSuccess = true;
             }
             isBannerLoading = false;
+            this.canRefreshBanner = false;
+            Laya.timer.clear(this, this.refreshBanner);
+            Laya.timer.once(15 * 1000, this, this.refreshBanner);
         }).catch((res) => {
             console.error("banner加载失败", res);
             isBannerLoading = false;
@@ -333,6 +343,7 @@ export default class OppoPlatform extends WXPlatform {
         // 销毁广告
         if (this._bannerAd) {
             this._bannerAd.destroy();
+            this._bannerAd = null;
         }
 
         // 没有则展示原生
@@ -343,6 +354,9 @@ export default class OppoPlatform extends WXPlatform {
             }
             this._bannerAd.destroy();
         }
+    }
+    refreshBanner() {
+        this.canRefreshBanner = true;
     }
 
     private async _ShowNativeBanner(index: number) {
@@ -363,7 +377,8 @@ export default class OppoPlatform extends WXPlatform {
             let adData = adList[0] as {
                 adId: string,
                 imgUrlList: string[],
-                logoUrl: string
+                logoUrl: string,
+                icon: string
             };
             if (adData == null) {
                 console.error("native banner加载失败", loadRet);
@@ -374,6 +389,7 @@ export default class OppoPlatform extends WXPlatform {
             fakeData.noticePath = adData.logoUrl;
             fakeData.adId = adData.adId;
             fakeData.owner = this._bannerAd;
+            fakeData.iconPath = adData.icon;
             UI_ImageBannerMediator.instance.Show(fakeData);
             return true;
         } else {
@@ -384,9 +400,14 @@ export default class OppoPlatform extends WXPlatform {
 
     HideBannerAd() {
         if (this._bannerAd) {
-            this._bannerAd.destroy();
+            // this._bannerAd.destroy();
+            this._bannerAd.hide();
+            if (this.canRefreshBanner) {
+                this._bannerAd.destroy();
+                this._bannerAd = null;
+                Laya.timer.clear(this, this.refreshBanner);
+            }
         }
-        this._bannerAd = null;
         UI_ImageBannerMediator.instance.Hide();
     }
     async  ShowNativeAd() {
@@ -529,7 +550,7 @@ export default class OppoPlatform extends WXPlatform {
         }
     }
 
-    private async _ShowNormalInterstitalAd(): Promise<boolean> {
+    public async _ShowNormalInterstitalAd(): Promise<boolean> {
         if (this._intersitialAd) {
             this._intersitialAd.destroy();
         }
@@ -778,7 +799,7 @@ export default class OppoPlatform extends WXPlatform {
 
 
 }
-export interface OppoNativeAdItem {
+export interface OppoAdData {
     adId: string;
     clickBtnTxt: string;
     creativeType: number;
@@ -793,93 +814,5 @@ export interface OppoNativeAdItem {
     show_reported?: boolean,
     /** 是否已上报点击 */
     click_reported?: boolean,
-}
-export class NativeADUnit {
-    private ad_list: OppoNativeAdItem[] = [];
-    public current_ad: OppoNativeAdItem = null;
-    private nativeAd;
-    private id: string;
-    _nativeAdLoaded: boolean;
-    _canShowAd: boolean = true;
-    constructor(id: string) {
-        if (StringEx.IsNullOrEmpty(id)) {
-            console.log("无有效的原生广告ID,取消加载");
-            return;
-        }
-        this.id = id;
-    }
-
-    async  _InitNativeAd(id?: string) {
-        if (!id) {
-            id = this.id;
-        }
-        this.nativeAd = qg.createNativeAd({ posId: id });
-        this.nativeAd.onLoad(this.onNativeLoad);
-        this.nativeAd.onError(this.onNativeError);
-        this.nativeAd.load();
-    }
-    async _DestroryAd() {
-        if (this.nativeAd) {
-            this.nativeAd.offLoad(this.onNativeLoad);
-            this.nativeAd.offError(this.onNativeError);
-            this.nativeAd.destroy();
-            this.nativeAd = null;
-            this.current_ad = null;
-        }
-    }
-    protected onNativeLoad = (res) => {
-        console.log("OPPO广告:", this.id, "加载原生广告完成", res);
-        this.ad_list = res.adList;
-        this._nativeAdLoaded = true;
-        this._SwitchNativeAd();
-    }
-    get canShowAD() {
-        console.log('cd&&times', this._canShowAd, CommonSaveData.instance.interstitialCount);
-        return this.current_ad && this._canShowAd && CommonSaveData.instance.interstitialCount < 8;
-    }
-    protected onNativeError = (err) => {
-        this.ad_list = [];
-        console.error("OPPO广告:", this.id, "加载原生广告出错", err);
-        Laya.timer.once(5000, this.nativeAd, this.nativeAd.load);
-    }
-    protected async _SwitchNativeAd() {
-        let idx = this.ad_list.indexOf(this.current_ad);
-        if (idx < this.ad_list.length - 1 && this.ad_list.length) {
-            this.current_ad = this.ad_list[idx + 1];
-            console.log("OPPO广告:", this.id, "切换展示的广告", this.current_ad);
-        } else {
-            console.log("OPPO广告:", "重新拉取原生广告");
-            await this._DestroryAd();
-            await this._InitNativeAd(this.id);
-        }
-    }
-
-    protected _ReportNativeShow(ad: OppoNativeAdItem) {
-        if (this.nativeAd) {
-            this.nativeAd.reportAdShow({ adId: ad.adId } as any);
-            ad.show_reported = true;
-            console.log("OPPO广告:", "上报广告展示", ad);
-        }
-    }
-
-    ReportNativeClick() {
-        if (this.nativeAd) {
-            this.nativeAd.reportAdClick({ adId: this.current_ad.adId } as any);
-            console.log("OPPO广告:", "上报广告点击", this.current_ad);
-            this._SwitchNativeAd();
-        }
-    }
-    async reportShow() {
-        this._canShowAd = false;
-        Laya.timer.once(60 * 1000, this, () => {
-            this._canShowAd = true;
-        });
-        if (this.nativeAd && this.current_ad && !this.current_ad.show_reported) {
-            await this._ReportNativeShow(this.current_ad);
-        } else {
-            console.error('没有原生广告');
-        }
-    }
-
 }
 

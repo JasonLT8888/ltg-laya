@@ -11,7 +11,7 @@
       <gearDisplay controller="bg_type" pages="1"/>
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <image id="n5_it2i" name="n5" src="dn6n6q" fileName="img/sp_shipin0.png" xy="25,34">
+    <image id="n5_it2i" name="n5" src="q0fh59" fileName="img/sp_shipin1.png" xy="25,34">
       <gearDisplay controller="btn_type" pages="0"/>
       <relation target="" sidePair="center-center%,middle-middle"/>
     </image>
@@ -28,5 +28,5 @@
       <relation target="" sidePair="center-center%,middle-middle"/>
     </image>
   </displayList>
-  <Button downEffect="dark" downEffectValue=".8"/>
+  <Button downEffect="dark" downEffectValue="0.80"/>
 </component>

@@ -8,8 +8,8 @@
     <IgnoreVerticesNormal>False</IgnoreVerticesNormal>
     <IgnoreVerticesTangent>False</IgnoreVerticesTangent>
     <IgnoreVerticesColor>True</IgnoreVerticesColor>
-    <CompressMesh>True</CompressMesh>
-    <AnimatorCompress>True</AnimatorCompress>
+    <CompressMesh>False</CompressMesh>
+    <AnimatorCompress>False</AnimatorCompress>
     <TerrainSetting>False</TerrainSetting>
     <TextureSetting>False</TextureSetting>
     <JPGQuality>75</JPGQuality>
