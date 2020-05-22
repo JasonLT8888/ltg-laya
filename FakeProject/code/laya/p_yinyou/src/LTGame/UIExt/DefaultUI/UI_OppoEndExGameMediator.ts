@@ -47,7 +47,7 @@ export class UI_OppoEndExGameMediator extends BaseUIMediator<UI_OppoEndExGame> {
         this.ui.m_btn_adpay.onClick(this, this.onAdClick);
         this.ui.m_btn_continue.onClick(this, this.onContinue);
         if (this.ui.m___nativeinpage) {
-            this.ui.m___nativeinpage.visible = false;
+            this.ui.m___nativeinpage.visible = false; 
         }
 
         let plat = LTPlatform.instance as OppoPlatform;
