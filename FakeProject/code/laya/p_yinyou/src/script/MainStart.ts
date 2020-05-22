@@ -36,7 +36,7 @@ export default class MainStart extends LTStart {
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
-                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}__tt/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_tt/`);
                 break;
             case EPlatformType.WX:
                 this._gameVersion = "v0.0.1";
@@ -45,7 +45,7 @@ export default class MainStart extends LTStart {
                 platformData.bannerId = "adunit-11a2571806b5fc5c";
                 platformData.rewardVideoId = "adunit-fa6dd5b431c41ceb";
                 platformData.interstitialId = "adunit-abe9d252f3a3956c";
-                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}__wx/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
                 break;
             case EPlatformType.Oppo:
                 this._gameVersion = "v0.0.1";
