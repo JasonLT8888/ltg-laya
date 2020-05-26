@@ -17,16 +17,18 @@ export default class MainStart extends LTStart {
     }
 
     private _appId: string = "ttbe90c82d21ba845b";
-    private _gameVersion = "v0.0.1";
+    /**云控版本 A B 版本轮换（1.0.0 1.0.1） 一个为线上版本 领一个为审核版本，提审时 两个版本轮换使用 */
+    private _gameVersion = "1.0.0";
+    /**资源版本 */
     private _resVersion = "0515";
-    private _gameName = "p_ltg";//基础框架
+    /**项目名 */
+    private _gameName = "p_ltg";
 
     _HandleInitPlatform(ePlatform: EPlatformType, platformData: LTPlatformData) {
         switch (ePlatform) {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
-                this._gameVersion = '1.0.0';//1.0.1 为全策略模式
-                this._resVersion = '';
+                this._gameVersion = '1.0.0';//1.0.1 为全策略模式 
                 this._appId = '88888888';
                 break;
             case EPlatformType.TT:

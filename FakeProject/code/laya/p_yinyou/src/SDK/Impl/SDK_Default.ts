@@ -22,8 +22,7 @@ export default class SDK_Default implements ISDK {
     adManager: SDKADManager;
     uid: string = "sdk_test";
 
-    Init(flg: string, channel: string, controlVersion: string, appid: string) {
-        this.checkState = ECheckState.Normal;
+    Init(flg: string, channel: string, controlVersion: string, appid: string) { 
         this.isADConfigInited = true;
         this.isADEnable = false;
         this.isDelayClose = false;
