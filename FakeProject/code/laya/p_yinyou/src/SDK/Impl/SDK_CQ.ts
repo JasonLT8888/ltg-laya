@@ -123,16 +123,17 @@ export default class SDK_CQ extends SDK_Default {
                 //工作时间屏蔽
                 let nowtime = new Date();
                 let h = nowtime.getHours();
-                let timeArr: number[] = [];
+                let timeArr: string[] = [];
                 if (result['nowtime']) {
                     nowtime = new Date(result['nowtime']);
                     h = nowtime.getHours();
                 }
                 if (result['shieldHours']) {
-                    timeArr = result['shieldHours'] as number[];
+                    timeArr = result['shieldHours'].split(',');
                 }
+                console.error(timeArr)
                 if (this.checkState == ECheckState.NoGame) {
-                    if (timeArr.indexOf(h) >= 0) {
+                    if (timeArr.indexOf(h.toString()) >= 0) {
                         console.log('校准时间', timeArr, h);
                         this.checkState = ECheckState.Normal;
                     }
