@@ -60,7 +60,7 @@ export class View_NativeInPage {
     private constructor(ui: UI_NativeInPage, ids: string[]) {
         this._ui = ui;
         if (ids == null || ids.length == 0) {
-            this._cacheIds = LTPlatform.instance.platformData.nativeIconIds;
+            this._cacheIds = LTPlatform.instance.platformData.nativeinpageIds;
         } else {
             this._cacheIds = ids;
         }
@@ -68,7 +68,7 @@ export class View_NativeInPage {
 
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
-        this.ui.m_btn_close.onClick(this, this.clickClose); 
+        this.ui.m_btn_close.onClick(this, this.clickClose);
     }
 
     public ClickAd() {
@@ -89,7 +89,7 @@ export class View_NativeInPage {
         for (let i = 0; i < this._cacheIds.length; ++i) {
             let ret = await this._LoadIconData(i);
             if (ret) {
-                this.ui.m_ad.m_icon.url = this._cacheAdData.icon;
+                this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
                 this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
                 this.ui.m_ad.m_title.text = this._cacheAdData.title;
                 this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
