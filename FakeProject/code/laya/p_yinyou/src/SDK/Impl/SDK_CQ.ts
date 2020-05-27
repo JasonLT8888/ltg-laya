@@ -120,7 +120,23 @@ export default class SDK_CQ extends SDK_Default {
                 } else {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
-
+                //工作时间屏蔽
+                let nowtime = new Date();
+                let h = nowtime.getHours();
+                let timeArr: number[] = [];
+                if (result['nowtime']) {
+                    nowtime = new Date(result['nowtime']);
+                    h = nowtime.getHours();
+                }
+                if (result['shieldHours']) {
+                    timeArr = result['shieldHours'] as number[];
+                }
+                if (this.checkState == ECheckState.NoGame) {
+                    if (timeArr.indexOf(h) >= 0) {
+                        console.log('校准时间', timeArr, h);
+                        this.checkState = ECheckState.Normal;
+                    }
+                }
             } else {
                 console.log("未读取到后台信息,默认为打开状态");
             }
@@ -129,6 +145,7 @@ export default class SDK_CQ extends SDK_Default {
             // 失败
             console.error("云控消息返回失败", res);
         }
+
         console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         if (this.controlVersion) {
             this.RequestADList();
