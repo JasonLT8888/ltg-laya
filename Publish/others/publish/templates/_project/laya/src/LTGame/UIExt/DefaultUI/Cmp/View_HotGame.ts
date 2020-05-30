@@ -5,6 +5,7 @@ import LTPlatform from "../../../Platform/LTPlatform";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import MathEx from "../../../LTUtils/MathEx";
 import { CommonEventId } from "../../../Commom/CommonEventId";
+import { ECheckState } from "../../../../SDK/common/ECheckState";
 
 export default class View_HotGame {
 
@@ -16,7 +17,12 @@ export default class View_HotGame {
             tagUI.dispose();
             return null;
         }
-
+        if (LTPlatform.instance.platform == EPlatformType.Oppo && LTSDK.instance.checkState == ECheckState.InCheck) {
+            // 只有oppo支持
+            console.log("hotgame,审核");
+            tagUI.dispose();
+            return null;
+        }
         if (tagUI instanceof UI_hot_game) {
             return new View_HotGame(tagUI);
         }

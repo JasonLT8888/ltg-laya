@@ -6,6 +6,7 @@ import QTTPlatform from "./QTTPlatform";
 import QQPlatform from "./QQPlatform";
 import DefaultPlatform from "./DefaultPlatform";
 import OppoPlatform from "./OppoPlatform";
+import { NativeIOSPlatform } from "./Impl/Native_IOS/NativeIOSPlatform";
 
 export default class LTPlatformFactory {
 
@@ -27,6 +28,8 @@ export default class LTPlatformFactory {
             result = new QQPlatform();
         } else if (Laya.Browser.onQGMiniGame) {
             result = new OppoPlatform();
+        } else if (window['conch']) {
+            result = new NativeIOSPlatform();
         } else {
             console.log("未识别平台,默认创建为web", Laya.Browser.userAgent);
             result = new DefaultPlatform();

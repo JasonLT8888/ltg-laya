@@ -3,10 +3,12 @@ import FGuiData from "./FGuiData";
 import View_OtherGames from "../DefaultUI/Cmp/View_OtherGames";
 import View_HotGame from "../DefaultUI/Cmp/View_HotGame";
 import { View_NativeIcon } from "../DefaultUI/Cmp/View_NativeIcon";
-import View_NativeInPage from "../DefaultUI/Cmp/View_NativeInpage";
 import View_BottomGames from "../DefaultUI/Cmp/View_BottomGames";
 import View_SideGames from "../DefaultUI/Cmp/View_SideGames";
 import View_EndSlideGames from "../DefaultUI/Cmp/View_EndSlideGames";
+import LTSDK from "../../../SDK/LTSDK";
+import { View_NativeIconLong } from "../DefaultUI/Cmp/View_NativeIconLong";
+import { View_NativeInPage } from "../DefaultUI/Cmp/View_NativeInpage";
 
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
@@ -65,7 +67,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         this._ui.sortingOrder = this._sortOrder;
 
         const anim_enter = "m_anim_enter";
-        if (this._ui[anim_enter]) {
+        if (this._ui[anim_enter] && LTSDK.instance.isDelayClose) {
             let anim = this._ui[anim_enter] as fgui.Transition;
             anim.play();
         }
@@ -92,6 +94,12 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
             this._ui['m___nativeicon'] = nativeIcon;
         } else {
             this._ui['m___nativeicon'] = null;
+        }
+        let nativeIconL = View_NativeIconLong.CreateView(this._ui['m___nativeiconL']);
+        if (nativeIconL) {
+            this._ui['m___nativeiconL'] = nativeIconL;
+        } else {
+            this._ui['m___nativeiconL'] = null;
         }
         let nativeinpage = View_NativeInPage.CreateView(this._ui['m___nativeinpage']);
         if (nativeinpage) {
