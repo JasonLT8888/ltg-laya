@@ -1655,7 +1655,32 @@ var EPlatformType;
     EPlatformType[EPlatformType["Vivo"] = 6] = "Vivo";
     EPlatformType[EPlatformType["TT"] = 7] = "TT";
     EPlatformType[EPlatformType["QTT"] = 8] = "QTT";
+    EPlatformType[EPlatformType["Native_IOS"] = 9] = "Native_IOS";
 })(EPlatformType || (EPlatformType = {}));
+
+
+/***/ }),
+
+/***/ "./src/LTGame/Platform/Impl/Native_IOS/NativeIOSPlatform.ts":
+/*!******************************************************************!*\
+  !*** ./src/LTGame/Platform/Impl/Native_IOS/NativeIOSPlatform.ts ***!
+  \******************************************************************/
+/*! exports provided: NativeIOSPlatform */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NativeIOSPlatform", function() { return NativeIOSPlatform; });
+/* harmony import */ var _DefaultPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../DefaultPlatform */ "./src/LTGame/Platform/DefaultPlatform.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+
+
+class NativeIOSPlatform extends _DefaultPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor() {
+        super(...arguments);
+        this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_1__["EPlatformType"].Native_IOS;
+    }
+}
 
 
 /***/ }),
@@ -1952,8 +1977,10 @@ class LTPlatform {
                 return "微信";
             case _EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].QTT:
                 return "趣头条";
+            case _EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].Native_IOS:
+                return "IOS原生";
             default:
-                return "未定义";
+                return "未定义" + platformEnum;
         }
     }
 }
@@ -1978,6 +2005,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _QQPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./QQPlatform */ "./src/LTGame/Platform/QQPlatform.ts");
 /* harmony import */ var _DefaultPlatform__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DefaultPlatform */ "./src/LTGame/Platform/DefaultPlatform.ts");
 /* harmony import */ var _OppoPlatform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./OppoPlatform */ "./src/LTGame/Platform/OppoPlatform.ts");
+/* harmony import */ var _Impl_Native_IOS_NativeIOSPlatform__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Impl/Native_IOS/NativeIOSPlatform */ "./src/LTGame/Platform/Impl/Native_IOS/NativeIOSPlatform.ts");
+
 
 
 
@@ -2007,6 +2036,9 @@ class LTPlatformFactory {
         }
         else if (Laya.Browser.onQGMiniGame) {
             result = new _OppoPlatform__WEBPACK_IMPORTED_MODULE_6__["default"]();
+        }
+        else if (window['conch']) {
+            result = new _Impl_Native_IOS_NativeIOSPlatform__WEBPACK_IMPORTED_MODULE_7__["NativeIOSPlatform"]();
         }
         else {
             console.log("未识别平台,默认创建为web", Laya.Browser.userAgent);
@@ -2074,7 +2106,6 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         this._isInterstitialCanShow = true;
         this._nativeAdLoaded = false;
         this._cacheVideoAD = false;
-        this.canRefreshBanner = false;
     }
     Init(platformData) {
         this._base = window["qg"];
@@ -2313,13 +2344,12 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
                 console.log("无有效的banner广告ID,取消加载");
                 return;
             }
-            if (this._bannerAd && !this.canRefreshBanner) {
+            if (this._bannerAd) {
                 this._bannerAd.show();
                 console.log('展示已有banner');
                 return;
             }
             this.HideBannerAd();
-            console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "创建banner", this.platformData.bannerId);
             this._bannerAd = this._base.createBannerAd({
                 adUnitId: this.platformData.bannerId
             });
@@ -2331,9 +2361,6 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
                     loadSuccess = true;
                 }
                 isBannerLoading = false;
-                this.canRefreshBanner = false;
-                Laya.timer.clear(this, this.refreshBanner);
-                Laya.timer.once(15 * 1000, this, this.refreshBanner);
             }).catch((res) => {
                 console.error("banner加载失败", res);
                 isBannerLoading = false;
@@ -2358,9 +2385,6 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
                 this._bannerAd.destroy();
             }
         });
-    }
-    refreshBanner() {
-        this.canRefreshBanner = true;
     }
     _ShowNativeBanner(index) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -2399,13 +2423,8 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
     }
     HideBannerAd() {
         if (this._bannerAd) {
-            // this._bannerAd.destroy();
-            this._bannerAd.hide();
-            if (this.canRefreshBanner) {
-                this._bannerAd.destroy();
-                this._bannerAd = null;
-                Laya.timer.clear(this, this.refreshBanner);
-            }
+            this._bannerAd.destroy();
+            this._bannerAd = null;
         }
         _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Hide();
     }
@@ -5065,7 +5084,7 @@ class View_NativeInPage {
             for (let i = 0; i < this._cacheIds.length; ++i) {
                 let ret = yield this._LoadIconData(i);
                 if (ret) {
-                    this.ui.m_ad.m_icon.url = this._cacheAdData.icon;
+                    this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
                     this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
                     this.ui.m_ad.m_title.text = this._cacheAdData.title;
                     this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
@@ -9823,12 +9842,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SDK_CQ; });
 /* harmony import */ var _LTGame_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
 /* harmony import */ var _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/Net/LTHttp */ "./src/LTGame/Net/LTHttp.ts");
-/* harmony import */ var _LTGame_Platform_ShareInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Platform/ShareInfo */ "./src/LTGame/Platform/ShareInfo.ts");
-/* harmony import */ var _LTGame_Platform_ShareManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Platform/ShareManager */ "./src/LTGame/Platform/ShareManager.ts");
-/* harmony import */ var _SDK_Default__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
-/* harmony import */ var _common_ECheckState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTGame/Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTGame_Platform_ShareInfo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Platform/ShareInfo */ "./src/LTGame/Platform/ShareInfo.ts");
+/* harmony import */ var _LTGame_Platform_ShareManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/Platform/ShareManager */ "./src/LTGame/Platform/ShareManager.ts");
+/* harmony import */ var _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+/* harmony import */ var _SDK_Default__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
 
 
 
@@ -9837,16 +9856,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
     constructor() {
         super(...arguments);
         this.uid = "sdk_test";
         this.enableDebug = true;
+        this.dateInfo = [];
         this._headPrefix = "https://gamer.api.gugudang.com";
     }
     Init(flg, channel, controlVersion, appId) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
+        this._RequestSelfDateInfo();
     }
     _RequestShareInfo() {
         let sendData = {
@@ -9867,15 +9888,27 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_4__["default"] {
                 console.log("未获取到配置的分享信息");
                 return;
             }
-            let wrapShareInfo = new _LTGame_Platform_ShareInfo__WEBPACK_IMPORTED_MODULE_2__["ShareInfo"]();
+            let wrapShareInfo = new _LTGame_Platform_ShareInfo__WEBPACK_IMPORTED_MODULE_4__["ShareInfo"]();
             wrapShareInfo.shareId = shareInfo.id;
             wrapShareInfo.shareImg = shareInfo.picurl;
             wrapShareInfo.shareTitle = shareInfo.title;
-            _LTGame_Platform_ShareManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.AddShareInfo(wrapShareInfo);
+            _LTGame_Platform_ShareManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.AddShareInfo(wrapShareInfo);
         }
         else {
             console.error("分享接口返回错误", getObj);
         }
+    }
+    /**CDN 节假日信息配置 年底需更新次年数据 */
+    _RequestSelfDateInfo() {
+        _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(`https://hs.yz061.com/res/down/public/configs/Dates.json`, Laya.Handler.create(this, this.onGetDatesInfo), Laya.Handler.create(this, this.onGetDatesError), true);
+    }
+    onGetDatesError(res) {
+        console.error('云 获取日历信息失败', res);
+    }
+    onGetDatesInfo(res) {
+        let days = JSON.parse(res);
+        this.dateInfo = days;
+        console.log('云 获取日历信息', this.dateInfo);
     }
     RecordShowAd(adList) {
         console.log("功能暂未实现");
@@ -9933,7 +9966,34 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_4__["default"] {
                     this.checkState = parseInt(result['checkState']);
                 }
                 else {
-                    this.checkState = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_7__["EPlatformType"].Oppo ? _common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"].InCheck : _common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"].Normal;
+                    this.checkState = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo ? _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck : _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal;
+                }
+                if (this.checkState == _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+                    //工作时时段屏蔽
+                    let nowtime = new Date();
+                    let h = nowtime.getHours();
+                    let date = nowtime.toLocaleDateString();
+                    let shieldHours = [];
+                    if (result['nowtime']) {
+                        nowtime = new Date(result['nowtime']);
+                        h = nowtime.getHours();
+                    }
+                    if (result['shieldHours']) {
+                        shieldHours = result['shieldHours'].split(',');
+                    }
+                    let today = this.dateInfo.filter(e => e.date == date);
+                    let isWorkday = true;
+                    if (today && today.length) {
+                        isWorkday = today[0].type == 0; //type：0 工作日 1 周末  2 节假日 
+                    }
+                    //工作  时段  
+                    if (isWorkday && shieldHours.indexOf(h.toString()) >= 0) {
+                        console.log('工作', shieldHours, h);
+                        this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal;
+                    }
+                    else {
+                        console.log('休息', date, h);
+                    }
                 }
             }
             else {
@@ -9944,7 +10004,7 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_4__["default"] {
             // 失败
             console.error("云控消息返回失败", res);
         }
-        console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"][this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
+        console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"][this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         if (this.controlVersion) {
             this.RequestADList();
         }
@@ -10024,7 +10084,6 @@ class SDK_Default {
         this.uid = "sdk_test";
     }
     Init(flg, channel, controlVersion, appid) {
-        this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_4__["ECheckState"].Normal;
         this.isADConfigInited = true;
         this.isADEnable = false;
         this.isDelayClose = false;
@@ -11139,17 +11198,19 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
     constructor() {
         super();
         this._appId = "ttbe90c82d21ba845b";
-        this._gameVersion = "v0.0.1";
+        /**云控版本 A B 版本轮换（1.0.0 1.0.1） 一个为线上版本 领一个为审核版本，提审时 两个版本轮换使用 */
+        this._gameVersion = "1.0.0";
+        /**资源版本 */
         this._resVersion = "0515";
-        this._gameName = "p_ltg"; //基础框架
+        /**项目名 */
+        this._gameName = "p_ltg";
         // this.enableStat = true;
     }
     _HandleInitPlatform(ePlatform, platformData) {
         switch (ePlatform) {
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Web:
                 console.log("web平台,默认框架测试数据");
-                this._gameVersion = '1.0.0'; //1.0.1 为全策略模式
-                this._resVersion = '';
+                this._gameVersion = '1.0.0'; //1.0.1 为全策略模式 
                 this._appId = '88888888';
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].TT:
@@ -11159,7 +11220,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
-                _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}__tt/`);
+                _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_tt/`);
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].WX:
                 this._gameVersion = "v0.0.1";
@@ -11168,7 +11229,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
                 platformData.bannerId = "adunit-11a2571806b5fc5c";
                 platformData.rewardVideoId = "adunit-fa6dd5b431c41ceb";
                 platformData.interstitialId = "adunit-abe9d252f3a3956c";
-                _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}__wx/`);
+                _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo:
                 this._gameVersion = "v0.0.1";

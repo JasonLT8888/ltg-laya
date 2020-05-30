@@ -9,5 +9,6 @@ export enum EPlatformType {
     Vivo, // vivo平台
     TT, // 头条平台
     QTT, // 趣头条
+    Native_IOS, // 原生IOS
 
 }
