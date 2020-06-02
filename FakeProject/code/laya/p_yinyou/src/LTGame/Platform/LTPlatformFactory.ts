@@ -29,7 +29,15 @@ export default class LTPlatformFactory {
         } else if (Laya.Browser.onQGMiniGame) {
             result = new OppoPlatform();
         } else if (window['conch']) {
-            result = new NativeIOSPlatform();
+            let conchConfig = window['conchConfig'];
+            let os = conchConfig.getOS();
+            if (os == 'Conch-ios') {
+                result = new NativeIOSPlatform();
+            } else if (os == 'Conch-android') {
+                result = new DefaultPlatform();
+                console.error("android native平台暂未接入");
+            }
+
         } else {
             console.log("未识别平台,默认创建为web", Laya.Browser.userAgent);
             result = new DefaultPlatform();
