@@ -1,11 +1,10 @@
-import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_OppoEndExGame from "./UI/LTGame/UI_OppoEndExGame";
-import EndRewardOpenData from "./Data/EndRewardOpenData";
-import LTUI from "../LTUI";
 import GameData from "../../../script/common/GameData";
 import LTPlatform from "../../Platform/LTPlatform";
 import OppoPlatform from "../../Platform/OppoPlatform";
-import AudioManager from "../../../script/manager/AudioManager";
+import BaseUIMediator from "../FGui/BaseUIMediator";
+import LTUI from "../LTUI";
+import EndRewardOpenData from "./Data/EndRewardOpenData";
+import UI_OppoEndExGame from "./UI/LTGame/UI_OppoEndExGame";
 
 
 

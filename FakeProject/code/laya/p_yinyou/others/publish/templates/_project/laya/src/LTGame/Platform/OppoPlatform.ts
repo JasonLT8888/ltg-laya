@@ -296,7 +296,6 @@ export default class OppoPlatform extends WXPlatform {
     IsNativeAvaliable() {
         return this._nativeAdLoaded;
     }
-    canRefreshBanner: boolean = false;
     async ShowBannerAd() {
         // 先尝试展示普通banner
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
@@ -307,14 +306,12 @@ export default class OppoPlatform extends WXPlatform {
             console.log("无有效的banner广告ID,取消加载");
             return;
         }
-        if (this._bannerAd && !this.canRefreshBanner) {
+        if (this._bannerAd) {
             this._bannerAd.show();
             console.log('展示已有banner');
             return;
         }
         this.HideBannerAd();
-
-        console.log(LTPlatform.platformStr, "创建banner", this.platformData.bannerId)
         this._bannerAd = this._base.createBannerAd(
             {
                 adUnitId: this.platformData.bannerId
@@ -327,9 +324,6 @@ export default class OppoPlatform extends WXPlatform {
                 loadSuccess = true;
             }
             isBannerLoading = false;
-            this.canRefreshBanner = false;
-            Laya.timer.clear(this, this.refreshBanner);
-            Laya.timer.once(15 * 1000, this, this.refreshBanner);
         }).catch((res) => {
             console.error("banner加载失败", res);
             isBannerLoading = false;
@@ -355,9 +349,7 @@ export default class OppoPlatform extends WXPlatform {
             this._bannerAd.destroy();
         }
     }
-    refreshBanner() {
-        this.canRefreshBanner = true;
-    }
+
 
     private async _ShowNativeBanner(index: number) {
         let nativeBanner = this.base.createNativeAd({
@@ -400,13 +392,8 @@ export default class OppoPlatform extends WXPlatform {
 
     HideBannerAd() {
         if (this._bannerAd) {
-            // this._bannerAd.destroy();
-            this._bannerAd.hide();
-            if (this.canRefreshBanner) {
-                this._bannerAd.destroy();
-                this._bannerAd = null;
-                Laya.timer.clear(this, this.refreshBanner);
-            }
+            this._bannerAd.destroy();
+            this._bannerAd = null;
         }
         UI_ImageBannerMediator.instance.Hide();
     }

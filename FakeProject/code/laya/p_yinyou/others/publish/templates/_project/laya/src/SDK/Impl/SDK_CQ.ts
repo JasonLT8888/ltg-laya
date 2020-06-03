@@ -1,12 +1,12 @@
 import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
 import LTHttp from "../../LTGame/Net/LTHttp";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import ShareManager from "../../LTGame/Platform/ShareManager";
+import { ECheckState } from "../common/ECheckState";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
-import { ECheckState } from "../common/ECheckState";
-import LTPlatform from "../../LTGame/Platform/LTPlatform";
-import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -19,7 +19,7 @@ export default class SDK_CQ extends SDK_Default {
     adManager: SDKADManager;
     uid: string = "sdk_test";
     enableDebug: boolean = true;
-
+    dateInfo: DateInfo[] = [];
 
     private _headPrefix = "https://gamer.api.gugudang.com";
 
@@ -58,6 +58,7 @@ export default class SDK_CQ extends SDK_Default {
             console.error("分享接口返回错误", getObj);
         }
     }
+
 
     RecordShowAd(adList: SDK.ADRecordShowData[]) {
         console.log("功能暂未实现");
@@ -120,7 +121,12 @@ export default class SDK_CQ extends SDK_Default {
                 } else {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
-
+                if (result['nowtime']) {
+                    this.severTime = new Date(result['nowtime']);
+                }
+                if (result['shieldHours']) {
+                    this.shieldHours = result['shieldHours'].split(',');
+                }
             } else {
                 console.log("未读取到后台信息,默认为打开状态");
             }
@@ -129,10 +135,10 @@ export default class SDK_CQ extends SDK_Default {
             // 失败
             console.error("云控消息返回失败", res);
         }
-        console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         if (this.controlVersion) {
             this.RequestADList();
         }
+        this.RequestRemoteDateInfo();
         this.isADConfigInited = true;
         Laya.stage.event(CommonEventId.AD_CONFIG_GETTED);
     }
@@ -182,4 +188,8 @@ export default class SDK_CQ extends SDK_Default {
         console.log("功能暂未实现");
     }
 
+}
+export interface DateInfo {
+    dayStr: string;
+    type: number;
 }

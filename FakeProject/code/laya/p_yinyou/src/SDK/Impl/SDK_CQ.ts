@@ -26,7 +26,6 @@ export default class SDK_CQ extends SDK_Default {
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
-        this._RequestSelfDateInfo();
     }
 
     private _RequestShareInfo() {
@@ -59,19 +58,8 @@ export default class SDK_CQ extends SDK_Default {
             console.error("分享接口返回错误", getObj);
         }
     }
-    /**CDN 节假日信息配置 年底需更新次年数据 */
-    private _RequestSelfDateInfo() {
-        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/Dates.json`, Laya.Handler.create(this, this.onGetDatesInfo),
-            Laya.Handler.create(this, this.onGetDatesError), true);
-    }
-    onGetDatesError(res: string) {
-        console.error('云 获取日历信息失败', res);
-    }
-    onGetDatesInfo(res: string) {
-        let days = JSON.parse(res);
-        this.dateInfo = days as DateInfo[];
-        console.log('云 获取日历信息', this.dateInfo);
-    }
+
+
     RecordShowAd(adList: SDK.ADRecordShowData[]) {
         console.log("功能暂未实现");
     }
@@ -133,32 +121,11 @@ export default class SDK_CQ extends SDK_Default {
                 } else {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
-                if (this.checkState == ECheckState.NoGame) {
-                    //工作时时段屏蔽
-                    let nowtime = new Date();
-                    let h = nowtime.getHours();
-                    let date = nowtime.toLocaleDateString();
-
-                    let shieldHours: string[] = [];
-                    if (result['nowtime']) {
-                        nowtime = new Date(result['nowtime']);
-                        h = nowtime.getHours();
-                    }
-                    if (result['shieldHours']) {
-                        shieldHours = result['shieldHours'].split(',');
-                    }
-                    let today = this.dateInfo.filter(e => e.date == date);
-                    let isWorkday = true;
-                    if (today && today.length) {
-                        isWorkday = today[0].type == 0;//type：0 工作日 1 周末  2 节假日 
-                    }
-                    //工作  时段  
-                    if (isWorkday && shieldHours.indexOf(h.toString()) >= 0) {
-                        console.log('工作', shieldHours, h);
-                        this.checkState = ECheckState.Normal;
-                    } else {
-                        console.log('休息', date, h);
-                    }
+                if (result['nowtime']) {
+                    this.severTime = new Date(result['nowtime']);
+                }
+                if (result['shieldHours']) {
+                    this.shieldHours = result['shieldHours'].split(',');
                 }
             } else {
                 console.log("未读取到后台信息,默认为打开状态");
@@ -168,13 +135,10 @@ export default class SDK_CQ extends SDK_Default {
             // 失败
             console.error("云控消息返回失败", res);
         }
-
-
-
-        console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         if (this.controlVersion) {
             this.RequestADList();
         }
+        this.RequestRemoteDateInfo();
         this.isADConfigInited = true;
         Laya.stage.event(CommonEventId.AD_CONFIG_GETTED);
     }
@@ -226,6 +190,6 @@ export default class SDK_CQ extends SDK_Default {
 
 }
 export interface DateInfo {
-    date: string;
+    dayStr: string;
     type: number;
 }

@@ -57,9 +57,14 @@ export default class LTDebug {
         }
     }
 
-    public static CreateSphere(s3d: Laya.Scene3D, pos: Laya.Vector3, scale: number = 0.5, color: Laya.Color = Laya.Color.WHITE): Laya.Sprite3D {
+    public static CreateSphere(pos: Laya.Vector3, scale: number = 0.5, color: Laya.Color = Laya.Color.WHITE): Laya.Sprite3D {
+        let s3d = window['s3d'] as Laya.Sprite3D;
+        if (s3d == null) {
+            console.error("无s3d对象,无法drawline");
+            return;
+        }
         //添加自定义模型
-        var sphere: Laya.MeshSprite3D = new Laya.MeshSprite3D(Laya.PrimitiveMesh.createSphere(scale));
+        let sphere: Laya.MeshSprite3D = new Laya.MeshSprite3D(Laya.PrimitiveMesh.createSphere(scale));
         let mat = new Laya.BlinnPhongMaterial();
         mat.albedoColor = new Laya.Vector4(color.r, color.g, color.b, 1);
         sphere.meshRenderer.material = mat;

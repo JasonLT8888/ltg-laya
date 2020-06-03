@@ -13,8 +13,7 @@ export class View_NativeInPage {
         if (tagUI == null) return null;
         if (LTPlatform.instance.platform != EPlatformType.Oppo) {
             // 只有oppo支持
-            console.log("内嵌 native已隐藏,只有oppo平台支持");
-
+            console.log("内嵌 native已隐藏,只有oppo平台支持"); 
             tagUI.dispose();
             return null;
         }

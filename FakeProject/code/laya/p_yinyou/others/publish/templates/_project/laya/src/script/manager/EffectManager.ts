@@ -49,7 +49,12 @@ export class EffectManager {
             let configItem = EffectConfig.dataList[i];
             if (configItem.need_preload) {
                 let effectPath = ResDefine.FixPath(configItem.model_path);
-                let effectObj = this._effectRoot.addChild(LTRes.Get(effectPath, true)) as Laya.Sprite3D;
+                let getObj = LTRes.Get(effectPath, true);
+                if (getObj == null) {
+                    console.log("特效", configItem, "不存在");
+                    continue;
+                }
+                let effectObj = this._effectRoot.addChild(getObj) as Laya.Sprite3D;
                 preloadEffects.push(effectObj);
                 this._effectMap.set(configItem.id, effectObj);
             }

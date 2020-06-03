@@ -1,18 +1,18 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
-import UI_AdInpageComp from "./UI_AdInpageComp";
+import UI_iconLongComp from "./UI_iconLongComp";
 import UI_btn_normal from "./UI_btn_normal";
 
-export default class UI_NativeInPage extends fgui.GComponent {
+export default class UI_NativeIconLong extends fgui.GComponent {
 
 	public m_bg1:fgui.GGraph;
-	public m_ad:UI_AdInpageComp;
+	public m_ad:UI_iconLongComp;
 	public m_btn_close:UI_btn_normal;
 
-	public static URL:string = "ui://75kiu87k92486v";
+	public static URL:string = "ui://75kiu87kocvx6t";
 
-	public static createInstance():UI_NativeInPage {
-		return <UI_NativeInPage><any>(fgui.UIPackage.createObject("LTGame","NativeInPage"));
+	public static createInstance():UI_NativeIconLong {
+		return <UI_NativeIconLong><any>(fgui.UIPackage.createObject("LTGame","NativeIconLong"));
 	}
 
 	public constructor() {
@@ -21,7 +21,7 @@ export default class UI_NativeInPage extends fgui.GComponent {
 
 	protected onConstruct(): void {
 		this.m_bg1 = <fgui.GGraph><any>(this.getChildAt(0));
-		this.m_ad = <UI_AdInpageComp><any>(this.getChildAt(1));
+		this.m_ad = <UI_iconLongComp><any>(this.getChildAt(1));
 		this.m_btn_close = <UI_btn_normal><any>(this.getChildAt(2));
 	}
 }

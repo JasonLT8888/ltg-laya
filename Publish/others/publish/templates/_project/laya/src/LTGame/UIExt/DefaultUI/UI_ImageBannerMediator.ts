@@ -54,5 +54,6 @@ export class FakeBannerData {
     owner: any;
     imgPath: string;
     noticePath: string;
+    iconPath: string;
     adId: string;
 }

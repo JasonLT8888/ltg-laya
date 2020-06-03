@@ -5,6 +5,7 @@ import LTPlatform from "../../../Platform/LTPlatform";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_SideGames from "../UI/LTGame/UI_SideGames";
+import { ECheckState } from "../../../../SDK/common/ECheckState";
 
 export default class View_SideGames {
 
@@ -16,7 +17,12 @@ export default class View_SideGames {
             tagUI.dispose();
             return null;
         }
-
+        if (LTSDK.instance.checkState == ECheckState.InCheck) {
+            // 只有oppo支持
+            console.log("sidegames,审核");
+            tagUI.dispose();
+            return null;
+        }
         if (tagUI instanceof UI_SideGames) {
             return new View_SideGames(tagUI);
         }
