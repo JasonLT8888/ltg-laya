@@ -12,10 +12,10 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87kit2it"/>
     </component>
-    <image id="n4_rk93" name="icon_bg" src="bg001q" fileName="img/sp_guang.png" xy="165,277" size="420,420" grayed="true" fillMethod="vt" fillOrigin="1">
+    <image id="n4_rk93" name="icon_bg" src="bg001q" fileName="img/sp_guang.png" xy="375,487" pivot="0.5,0.5" anchor="true" size="420,420" grayed="true" fillMethod="vt" fillOrigin="1">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <text id="n6_rk93" name="text_progress" xy="374,486" pivot="0.5,0.5" anchor="true" size="94,56" fontSize="42" align="center" vAlign="middle" bold="true" text="66%">
+    <text id="n6_rk93" name="text_progress" xy="374,486" pivot="0.5,0.5" anchor="true" size="86,53" fontSize="42" align="center" vAlign="middle" bold="true" text="66%">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <component id="n9_dn6n" name="btn_nothanks" src="htjj33" fileName="cmp/btn_text.xml" xy="297,919" visible="false">

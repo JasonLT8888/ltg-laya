@@ -1673,12 +1673,71 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NativeIOSPlatform", function() { return NativeIOSPlatform; });
 /* harmony import */ var _DefaultPlatform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../DefaultPlatform */ "./src/LTGame/Platform/DefaultPlatform.ts");
 /* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+
 
 
 class NativeIOSPlatform extends _DefaultPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
         super(...arguments);
         this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_1__["EPlatformType"].Native_IOS;
+        this.isSupportJumpOther = false;
+        this._isDebug = true;
+    }
+    ;
+    Init(platformData) {
+        this.platformData = platformData;
+        let conchConfig = window['conchConfig'];
+        let PlatformClass = window['PlatformClass'];
+        let os = conchConfig.getOS();
+        if (os == "Conch-ios") {
+            this.base = PlatformClass.createClass("JSBridge"); //创建脚步代理
+        }
+        console.log("平台初始化完成", _LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].platformStr, this);
+        if (this._isDebug) {
+            console.log("js 调用 InitAppId");
+        }
+        this.base.call("InitAppId", platformData.appId);
+    }
+    ShowBannerAd() {
+        if (this._isDebug) {
+            console.log("js 调用 ShowBannerAd");
+        }
+        this.base.call("ShowBannerAd");
+    }
+    HideBannerAd() {
+        if (this._isDebug) {
+            console.log("js 调用 HideBannerAd");
+        }
+        this.base.call("HideBannerAd");
+    }
+    ShowRewardVideoAd(onSuccess, onSkipped) {
+        if (this._isDebug) {
+            console.log("js 调用 ShowRewardVideoAd");
+        }
+        this.base.call("ShowRewardVideoAd");
+    }
+    ShowInterstitalAd() {
+        if (this._isDebug) {
+            console.log("js 调用 ShowInterstitalAd");
+        }
+        this.base.call("ShowInterstitalAd");
+    }
+    RecordEvent(eventId, param) {
+        let paramStr = "";
+        if (param != null) {
+            paramStr = JSON.stringify(param);
+        }
+        if (this._isDebug) {
+            console.log("js 调用 RecordEvent");
+        }
+        this.base.call("RecordEvent", eventId, paramStr);
+    }
+    ShowNormalVideoAd() {
+        if (this._isDebug) {
+            console.log("js 调用 ShowNormalVideoAd");
+        }
+        this.base.call("ShowNormalVideoAd");
     }
 }
 
@@ -2038,7 +2097,15 @@ class LTPlatformFactory {
             result = new _OppoPlatform__WEBPACK_IMPORTED_MODULE_6__["default"]();
         }
         else if (window['conch']) {
-            result = new _Impl_Native_IOS_NativeIOSPlatform__WEBPACK_IMPORTED_MODULE_7__["NativeIOSPlatform"]();
+            let conchConfig = window['conchConfig'];
+            let os = conchConfig.getOS();
+            if (os == 'Conch-ios') {
+                result = new _Impl_Native_IOS_NativeIOSPlatform__WEBPACK_IMPORTED_MODULE_7__["NativeIOSPlatform"]();
+            }
+            else if (os == 'Conch-android') {
+                result = new _DefaultPlatform__WEBPACK_IMPORTED_MODULE_5__["default"]();
+                console.error("android native平台暂未接入");
+            }
         }
         else {
             console.log("未识别平台,默认创建为web", Laya.Browser.userAgent);
