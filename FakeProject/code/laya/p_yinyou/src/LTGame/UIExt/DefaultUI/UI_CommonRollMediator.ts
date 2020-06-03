@@ -53,7 +53,7 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
                 getUI.m_text_title.text = "测试数据" + i;
             }
         }
-
+        LTPlatform.instance.ShowBannerAd();
     }
 
     private async _OnClickRoll() {
@@ -94,5 +94,7 @@ export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll>
     private _OnClickClose() {
         this.Hide();
     }
-
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
+    }
 }
