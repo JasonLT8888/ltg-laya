@@ -41,6 +41,7 @@ export default class UI_CommonEndLoseMediator extends BaseUIMediator<UI_CommonEn
 
         this.ui.m_btn_no.onClick(this, this._OnClickRestart);
         this.ui.m_btn_watchad.onClick(this, this._OnClickWatchAd);
+        LTPlatform.instance.ShowBannerAd();
     }
 
     private async _OnClickWatchAd() {
@@ -63,5 +64,7 @@ export default class UI_CommonEndLoseMediator extends BaseUIMediator<UI_CommonEn
 
         this.Hide();
     }
-
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
+    }
 }

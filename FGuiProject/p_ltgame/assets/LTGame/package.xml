@@ -168,7 +168,7 @@
     <image id="74v83s" name="dot.png" path="/ad_res/res/"/>
     <image id="74v83u" name="sp_celabg.png" path="/ad_res/res/" scale="9grid" scale9grid="41,53,82,106"/>
     <image id="74v83v" name="btn_shoula.png" path="/ad_res/res/"/>
-    <component id="74v84c" name="side_ads.xml" path="/ad_res/"/>
+    <component id="74v84c" name="side_ads.xml" path="/cmp/"/>
     <component id="74v84g" name="hot_game.xml" path="/ui/" exported="true"/>
     <image id="74v84h" name="爆款游戏.png" path="/ad_res/"/>
     <component id="l2ax4j" name="NativeInterstitial.xml" path="/ad_res/native/" exported="true"/>
@@ -194,7 +194,7 @@
     <component id="j9at6j" name="CommonEndSliderADs.xml" path="/ad_res/" exported="true"/>
     <component id="p2ld6k" name="EndSlideGames.xml" path="/ad_res/" exported="true"/>
     <component id="p2ld6l" name="GameIcon.xml" path="/cmp/"/>
-    <component id="p2ld6n" name="slideAds.xml" path="/ui/"/>
+    <component id="p2ld6n" name="slideAds.xml" path="/cmp/"/>
     <component id="p2ld6o" name="view_item_game.xml" path="/cache/" exported="true"/>
     <component id="p2ld6p" name="view_item_game140.xml" path="/cache/" exported="true"/>
     <component id="ocvx6q" name="btn_ad.xml" path="/ad_res/"/>

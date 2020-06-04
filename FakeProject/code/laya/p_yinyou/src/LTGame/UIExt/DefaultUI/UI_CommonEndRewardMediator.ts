@@ -82,6 +82,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
         this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
         this._UpdateToggle();
+        LTPlatform.instance.ShowBannerAd();
     }
 
     private _OnClickToggle() {
@@ -135,5 +136,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         }
     }
 
-
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
+    }
 }

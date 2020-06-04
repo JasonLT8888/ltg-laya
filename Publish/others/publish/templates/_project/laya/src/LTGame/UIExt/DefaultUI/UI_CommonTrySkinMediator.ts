@@ -87,7 +87,7 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
 
 
         this._UpdateToggle();
-
+        LTPlatform.instance.ShowBannerAd();
     }
 
     private _OnClickToggle() {
@@ -102,7 +102,12 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
                 this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
                 break;
             case ECheckState.InCheck:
+                this.ui.m_btn_toggle_check.text = "随机体验皮肤";
+                this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
+                this.ui.m_btn_toggle_check.m_selected.selectedIndex = 0;
+                break;
             case ECheckState.Normal:
+            default:
                 this.ui.m_btn_toggle_check.text = "随机体验皮肤";
                 this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
                 break;
@@ -143,5 +148,7 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
             this.Hide();
         }
     }
-
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
+    }
 }

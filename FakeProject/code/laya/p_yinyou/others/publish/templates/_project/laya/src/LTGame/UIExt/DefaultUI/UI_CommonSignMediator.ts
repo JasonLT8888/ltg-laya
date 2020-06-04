@@ -59,6 +59,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
 
         this._UpdateUI();
+        LTPlatform.instance.ShowBannerAd();
     }
 
     private _UpdateUI() {
@@ -166,6 +167,9 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
         }
 
         this.Hide();
+    }
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
     }
 
 }
