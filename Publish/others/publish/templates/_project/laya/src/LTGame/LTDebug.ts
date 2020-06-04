@@ -73,4 +73,33 @@ export default class LTDebug {
         return sphere;
     }
 
+    public static async DrawMesh(mesh: Laya.Mesh, pos: Laya.Vector3, rot: Laya.Quaternion, 
+        color: Laya.Color = Laya.Color.GREEN, during: number = null) {
+        
+        let posList = [];
+        mesh.getPositions(posList);
+        let indices = mesh.getIndices();
+        let triangleCount = indices.length / 3;
+        let pix = new Laya.PixelLineSprite3D(indices.length);
+        for (let i = 0; i < triangleCount; ++i) {
+            let p1 = indices[i * 3];
+            let p2 = indices[i * 3 + 1];
+            let p3 = indices[i * 3 + 2];
+            pix.addLine(posList[p1], posList[p2], color, color);
+            pix.addLine(posList[p2], posList[p3], color, color);
+            pix.addLine(posList[p1], posList[p3], color, color);
+        }
+
+        let s3d = window['s3d'] as Laya.Sprite3D;
+        s3d.addChild(pix);
+        pix.transform.position = pos;
+        pix.transform.rotation = rot;
+
+        if (during) {
+            await Awaiters.Seconds(during);
+        } else {
+            await Awaiters.NextFrame();
+        }
+        pix.destroy();
+    }
 }

@@ -5084,7 +5084,7 @@ class View_NativeInPage {
     constructor(ui, ids) {
         this._ui = ui;
         if (ids == null || ids.length == 0) {
-            this._cacheIds = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platformData.nativeIconIds;
+            this._cacheIds = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platformData.nativeinpageIds;
         }
         else {
             this._cacheIds = ids;
@@ -7896,6 +7896,7 @@ class UI_CommonEndLoseMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
         }
         this.ui.m_btn_no.onClick(this, this._OnClickRestart);
         this.ui.m_btn_watchad.onClick(this, this._OnClickWatchAd);
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowBannerAd();
     }
     _OnClickWatchAd() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -7916,6 +7917,9 @@ class UI_CommonEndLoseMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
             this._openData.onClose.runWith([0]);
         }
         this.Hide();
+    }
+    _OnHide() {
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.HideBannerAd();
     }
 }
 
@@ -8012,6 +8016,7 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         this.ui.m_btn_get.onClick(this, this._OnClickNormalGet);
         this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
         this._UpdateToggle();
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowBannerAd();
     }
     _OnClickToggle() {
         this._isChecked = !this._isChecked;
@@ -8058,6 +8063,9 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
                 _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过广告无法获得奖励");
             }
         });
+    }
+    _OnHide() {
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.HideBannerAd();
     }
 }
 
@@ -8434,6 +8442,7 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
                 getUI.m_text_title.text = "测试数据" + i;
             }
         }
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowBannerAd();
     }
     _OnClickRoll() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -8470,6 +8479,9 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
     }
     _OnClickClose() {
         this.Hide();
+    }
+    _OnHide() {
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.HideBannerAd();
     }
 }
 
@@ -8621,6 +8633,7 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickWatchAd);
         this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
         this._UpdateUI();
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowBannerAd();
     }
     _UpdateUI() {
         let isSigned = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSigned;
@@ -8717,6 +8730,9 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
             this._openData.onClose.runWith(0);
         }
         this.Hide();
+    }
+    _OnHide() {
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.HideBannerAd();
     }
 }
 
@@ -8821,6 +8837,7 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
         this.ui.m_btn_thanks.onClick(this, this._OnClickNoThanks);
         this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
         this._UpdateToggle();
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowBannerAd();
     }
     _OnClickToggle() {
         this._isChecked = !this._isChecked;
@@ -8833,7 +8850,12 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
                 this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
                 break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
+                this.ui.m_btn_toggle_check.text = "随机体验皮肤";
+                this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
+                this.ui.m_btn_toggle_check.m_selected.selectedIndex = 0;
+                break;
             case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
+            default:
                 this.ui.m_btn_toggle_check.text = "随机体验皮肤";
                 this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
                 break;
@@ -8875,6 +8897,9 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
                 this.Hide();
             }
         });
+    }
+    _OnHide() {
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.HideBannerAd();
     }
 }
 
@@ -9934,7 +9959,6 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
     Init(flg, channel, controlVersion, appId) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
-        this._RequestSelfDateInfo();
     }
     _RequestShareInfo() {
         let sendData = {
@@ -9964,18 +9988,6 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
         else {
             console.error("分享接口返回错误", getObj);
         }
-    }
-    /**CDN 节假日信息配置 年底需更新次年数据 */
-    _RequestSelfDateInfo() {
-        _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(`https://hs.yz061.com/res/down/public/configs/Dates.json`, Laya.Handler.create(this, this.onGetDatesInfo), Laya.Handler.create(this, this.onGetDatesError), true);
-    }
-    onGetDatesError(res) {
-        console.error('云 获取日历信息失败', res);
-    }
-    onGetDatesInfo(res) {
-        let days = JSON.parse(res);
-        this.dateInfo = days;
-        console.log('云 获取日历信息', this.dateInfo);
     }
     RecordShowAd(adList) {
         console.log("功能暂未实现");
@@ -10035,32 +10047,11 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
                 else {
                     this.checkState = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo ? _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck : _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal;
                 }
-                if (this.checkState == _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
-                    //工作时时段屏蔽
-                    let nowtime = new Date();
-                    let h = nowtime.getHours();
-                    let date = nowtime.toLocaleDateString();
-                    let shieldHours = [];
-                    if (result['nowtime']) {
-                        nowtime = new Date(result['nowtime']);
-                        h = nowtime.getHours();
-                    }
-                    if (result['shieldHours']) {
-                        shieldHours = result['shieldHours'].split(',');
-                    }
-                    let today = this.dateInfo.filter(e => e.date == date);
-                    let isWorkday = true;
-                    if (today && today.length) {
-                        isWorkday = today[0].type == 0; //type：0 工作日 1 周末  2 节假日 
-                    }
-                    //工作  时段  
-                    if (isWorkday && shieldHours.indexOf(h.toString()) >= 0) {
-                        console.log('工作', shieldHours, h);
-                        this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal;
-                    }
-                    else {
-                        console.log('休息', date, h);
-                    }
+                if (result['nowtime']) {
+                    this.severTime = new Date(result['nowtime']);
+                }
+                if (result['shieldHours']) {
+                    this.shieldHours = result['shieldHours'].split(',');
                 }
             }
             else {
@@ -10071,10 +10062,10 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
             // 失败
             console.error("云控消息返回失败", res);
         }
-        console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"][this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         if (this.controlVersion) {
             this.RequestADList();
         }
+        this.RequestRemoteDateInfo();
         this.isADConfigInited = true;
         Laya.stage.event(_LTGame_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_0__["CommonEventId"].AD_CONFIG_GETTED);
     }
@@ -10136,10 +10127,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Net/LTHttp */ "./src/LTGame/Net/LTHttp.ts");
 /* harmony import */ var _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
 /* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Res/LTRespackManager */ "./src/LTGame/Res/LTRespackManager.ts");
-/* harmony import */ var _common_ECheckState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _SDKADManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../SDKADManager */ "./src/SDK/SDKADManager.ts");
-
+/* harmony import */ var _common_ECheckState__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+/* harmony import */ var _SDKADManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../SDKADManager */ "./src/SDK/SDKADManager.ts");
 
 
 
@@ -10156,16 +10145,30 @@ class SDK_Default {
         this.isDelayClose = false;
         this.isShielding = false;
         this.payRate = 0;
-        this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_4__["ECheckState"].InCheck;
+        this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"].InCheck;
         this.isConfigEnable = true;
         this.flg = flg;
         this.channel = channel;
         this.controlVersion = controlVersion;
         this.appId = appid;
-        this.adManager = new _SDKADManager__WEBPACK_IMPORTED_MODULE_5__["default"]();
-        this._RequestCheckState();
+        this.severTime = new Date();
+        this.adManager = new _SDKADManager__WEBPACK_IMPORTED_MODULE_4__["default"]();
         this._RequestSelfAdInfo();
         console.log("SDK:Init", this);
+    }
+    /**CDN 节假日信息配置 年底需更新次年数据 */
+    RequestRemoteDateInfo() {
+        _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_0__["default"].Send(`https://hs.yz061.com/res/down/public/configs/DateInfo.json`, Laya.Handler.create(this, this.onGetDatesInfo), Laya.Handler.create(this, this.onGetDatesError), true);
+    }
+    onGetDatesError(res) {
+        console.error('云 获取日历信息失败', res);
+    }
+    onGetDatesInfo(res) {
+        let days = JSON.parse(res);
+        let data = days;
+        this.dateInfo = data.filter(e => e.type != 0);
+        console.log('云 获取休息日信息', this.dateInfo);
+        this._RequestCheckState();
     }
     _RequestSelfAdInfo() {
         let configFile = 'SelfAdConfig.json';
@@ -10196,11 +10199,11 @@ class SDK_Default {
         this.adManager.InitADs(fakePosId, adList);
     }
     _RequestCheckState() {
-        if (_LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.baseUrl == null) {
-            console.log("无cdn路径,跳过检测版本信息");
-            return;
-        }
-        console.log('审核状态由重庆后台配置');
+        // if (LTRespackManager.instance.baseUrl == null) {
+        //     console.log("无cdn路径,跳过检测版本信息");
+        //     return;
+        // }
+        console.log('审核状态由重庆后台配置', `审核状态:${_common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"][this.checkState]}`);
         // let packConfigUrl = LTRespackManager.instance.baseUrl + "res/config/PackConst.json";
         // LTHttp.Send(packConfigUrl, Laya.Handler.create(null, (res) => {
         //     let parseData = JSON.parse(res);
@@ -10209,6 +10212,27 @@ class SDK_Default {
         // }), Laya.Handler.create(null, (res) => {
         //     console.log("获取版本状态失败", res);
         // }), true);
+        if (this.checkState == _common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"].NoGame) {
+            //工作时时段屏蔽
+            let nowtime = this.severTime;
+            let date = nowtime.toISOString().substring(0, 10).replace(/\-/g, '');
+            let h = nowtime.getHours();
+            h = nowtime.getHours();
+            let today = this.dateInfo.filter(e => e.dayStr == date);
+            let isWorkday = true;
+            if (today && today.length) {
+                isWorkday = today[0].type == 0; //type：0 工作日 1 周末  2 节假日 
+            }
+            //工作  时段  
+            if (isWorkday && this.shieldHours.indexOf(h.toString()) >= 0) {
+                console.log('工作', this.shieldHours, h);
+                this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"].Normal;
+            }
+            else {
+                console.log('休息', date, h);
+            }
+        }
+        console.log("---云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${_common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"][this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
     Login(code, fromAppId) {
         console.log("SDK:Login", code, fromAppId);
