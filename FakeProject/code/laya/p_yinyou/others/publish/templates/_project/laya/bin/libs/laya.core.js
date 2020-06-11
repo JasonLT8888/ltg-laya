@@ -3416,6 +3416,14 @@ window.Laya= (function (exports) {
             }
             return null;
         }
+        static getFilecompatibleExtension(path) {
+            var result = path.split(".");
+            var resultlen = result.length;
+            if (result.length > 2)
+                return result[resultlen - 2] + "." + result[resultlen - 1];
+            else
+                return null;
+        }
         static getTransformRelativeToWindow(coordinateSpace, x, y) {
             var stage = Utils.gStage;
             var globalTransform = Utils.getGlobalPosAndScale(coordinateSpace);
@@ -7098,17 +7106,26 @@ window.Laya= (function (exports) {
             if (u.indexOf('AlipayMiniGame') > -1 && "my" in Browser.window) {
                 window.aliPayMiniGame(Laya, Laya);
                 if (!Laya["ALIMiniAdapter"]) {
-                    console.error("请先添加阿里小游戏适配库");
+                    console.error("请先添加阿里小游戏适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-6-0");
                 }
                 else {
                     Laya["ALIMiniAdapter"].enable();
                 }
             }
             if (u.indexOf('OPPO') == -1 && u.indexOf("MiniGame") > -1 && "wx" in Browser.window) {
-                if ("bl" in Browser.window) {
+                if ("tt" in Browser.window && window['ttMiniGame']) {
+                    window.ttMiniGame(Laya, Laya);
+                    if (!Laya["TTMiniAdapter"]) {
+                        console.error("请引入字节跳动小游戏的适配库");
+                    }
+                    else {
+                        Laya["TTMiniAdapter"].enable();
+                    }
+                }
+                else if ("bl" in Browser.window) {
                     window.biliMiniGame(Laya, Laya);
                     if (!Laya["BLMiniAdapter"]) {
-                        console.error("请引入bilibili小游戏的适配库：https://ldc2.layabox.com/doc/?nav=zh-ts-5-0-0");
+                        console.error("请引入bilibili小游戏的适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-7-0");
                     }
                     else {
                         Laya["BLMiniAdapter"].enable();
@@ -7117,7 +7134,7 @@ window.Laya= (function (exports) {
                 else if ("qq" in Browser.window) {
                     window.qqMiniGame(Laya, Laya);
                     if (!Laya["QQMiniAdapter"]) {
-                        console.error("请引入手机QQ小游戏的适配库：https://ldc2.layabox.com/doc/?nav=zh-ts-5-0-0");
+                        console.error("请引入手机QQ小游戏的适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-0-0");
                     }
                     else {
                         Laya["QQMiniAdapter"].enable();
@@ -7133,19 +7150,19 @@ window.Laya= (function (exports) {
                     }
                 }
             }
-            if (u.indexOf("MiniGame") > -1 && "qq" in Browser.window) {
-                window.qqMiniGame(Laya, Laya);
-                if (!Laya["QQMiniAdapter"]) {
-                    console.error("请先添加小游戏适配库,详细教程");
+            if ("hbs" in Browser.window) {
+                window.hwMiniGame(Laya, Laya);
+                if (!Laya["HWMiniAdapter"]) {
+                    console.error("请先添加小游戏适配库!");
                 }
                 else {
-                    Laya["QQMiniAdapter"].enable();
+                    Laya["HWMiniAdapter"].enable();
                 }
             }
             if (u.indexOf("SwanGame") > -1) {
                 window.bdMiniGame(Laya, Laya);
                 if (!Laya["BMiniAdapter"]) {
-                    console.error("请先添加百度小游戏适配库,详细教程：https://ldc2.layabox.com/doc/?nav=zh-ts-5-0-0");
+                    console.error("请先添加百度小游戏适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-1-0");
                 }
                 else {
                     Laya["BMiniAdapter"].enable();
@@ -7154,7 +7171,7 @@ window.Laya= (function (exports) {
             if (u.indexOf('QuickGame') > -1) {
                 window.miMiniGame(Laya, Laya);
                 if (!Laya["KGMiniAdapter"]) {
-                    console.error("请先添加小米小游戏适配库,详细教程：https://ldc2.layabox.com/doc/?nav=zh-ts-5-0-0");
+                    console.error("请先添加小米小游戏适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-2-0");
                 }
                 else {
                     Laya["KGMiniAdapter"].enable();
@@ -7163,7 +7180,7 @@ window.Laya= (function (exports) {
             if (u.indexOf('OPPO') > -1 && u.indexOf('MiniGame') > -1) {
                 window.qgMiniGame(Laya, Laya);
                 if (!Laya["QGMiniAdapter"]) {
-                    console.error("请先添加OPPO小游戏适配库");
+                    console.error("请先添加OPPO小游戏适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-3-0");
                 }
                 else {
                     Laya["QGMiniAdapter"].enable();
@@ -7172,7 +7189,7 @@ window.Laya= (function (exports) {
             if (u.indexOf('VVGame') > -1) {
                 window.vvMiniGame(Laya, Laya);
                 if (!Laya["VVMiniAdapter"]) {
-                    console.error("请先添加VIVO小游戏适配库");
+                    console.error("请先添加VIVO小游戏适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-4-0");
                 }
                 else {
                     Laya["VVMiniAdapter"].enable();
@@ -7229,8 +7246,13 @@ window.Laya= (function (exports) {
             }
             else if ("bl" in Browser.window && u.indexOf('MiniGame') > -1) {
                 Browser.onBLMiniGame = true;
-                Browser.onMiniGame = true;
+                Browser.onMiniGame = false;
             }
+            else if ("tt" in Browser.window && u.indexOf('MiniGame') > -1) {
+                Browser.onTTMiniGame = true;
+                Browser.onMiniGame = false;
+            }
+            Browser.onHWMiniGame = "hbs" in Browser.window;
             Browser.onVVMiniGame = u.indexOf('VVGame') > -1;
             Browser.onKGMiniGame = u.indexOf('QuickGame') > -1;
             if (u.indexOf('AlipayMiniGame') > -1) {
@@ -7555,7 +7577,7 @@ window.Laya= (function (exports) {
             }
             if (ILaya.Browser.onMiniGame && !bugIOS)
                 TextRender.isWan1Wan = true;
-            this.charRender = ILaya.Render.isConchApp ? (new CharRender_Native()) : (new CharRender_Canvas(TextRender.atlasWidth, TextRender.atlasWidth, TextRender.scaleFontWithCtx, !TextRender.isWan1Wan, false));
+            this.charRender = ILaya.Render.isConchApp ? (new CharRender_Native()) : (new CharRender_Canvas(2048, 2048, TextRender.scaleFontWithCtx, !TextRender.isWan1Wan, false));
             TextRender.textRenderInst = this;
             ILaya.Laya['textRender'] = this;
             TextRender.atlasWidth2 = TextRender.atlasWidth * TextRender.atlasWidth;
@@ -7685,9 +7707,6 @@ window.Laya= (function (exports) {
                 if (this.hasFreedText(sameTexData)) {
                     sameTexData = wt.pageChars = [];
                 }
-                if (isWT && (this.fontScaleX != wt.scalex || this.fontScaleY != wt.scaley)) {
-                    sameTexData = wt.pageChars = [];
-                }
             }
             var ri = null;
             var splitTex = this.renderPerChar = (!isWT) || TextRender.forceSplitRender || isHtmlChar || (isWT && wt.splitRender);
@@ -7739,7 +7758,8 @@ window.Laya= (function (exports) {
                     }
                 }
                 else {
-                    var isotex = TextRender.noAtlas || strWidth * this.fontScaleX > TextRender.atlasWidth;
+                    var margin = ILaya.Render.isConchApp ? 0 : (font._size / 3 | 0);
+                    var isotex = TextRender.noAtlas || (strWidth + margin + margin) * this.fontScaleX > TextRender.atlasWidth;
                     ri = this.getCharRenderInfo(str, font, color, strokeColor, lineWidth, isotex);
                     sameTexData[0] = { texgen: ri.tex.genID, tex: ri.tex, words: [{ ri: ri, x: 0, y: 0, w: ri.bmpWidth / this.fontScaleX, h: ri.bmpHeight / this.fontScaleY }] };
                 }
@@ -8974,7 +8994,6 @@ window.Laya= (function (exports) {
                 mesh.vertNum += 4;
                 return true;
             }
-            return false;
         }
         transform4Points(a, m, out) {
             var tx = m.tx;
@@ -10638,6 +10657,23 @@ window.Laya= (function (exports) {
     }
     Draw9GridTexture.ID = "Draw9GridTexture";
 
+    class SaveCmd {
+        static create() {
+            var cmd = Pool.getItemByClass("SaveCmd", SaveCmd);
+            return cmd;
+        }
+        recover() {
+            Pool.recover("SaveCmd", this);
+        }
+        run(context, gx, gy) {
+            context.save();
+        }
+        get cmdID() {
+            return SaveCmd.ID;
+        }
+    }
+    SaveCmd.ID = "Save";
+
     class GraphicsBounds {
         constructor() {
             this._cacheBoundsType = false;
@@ -10696,6 +10732,7 @@ window.Laya= (function (exports) {
                 cmd = cmds[i];
                 switch (cmd.cmdID) {
                     case AlphaCmd.ID:
+                    case SaveCmd.ID:
                         matrixs.push(tMatrix);
                         tMatrix = tMatrix.clone();
                         break;
@@ -11102,23 +11139,6 @@ window.Laya= (function (exports) {
     }
     FillTextCmd.ID = "FillText";
     FillTextCmd._defFontObj = new FontInfo(null);
-
-    class SaveCmd {
-        static create() {
-            var cmd = Pool.getItemByClass("SaveCmd", SaveCmd);
-            return cmd;
-        }
-        recover() {
-            Pool.recover("SaveCmd", this);
-        }
-        run(context, gx, gy) {
-            context.save();
-        }
-        get cmdID() {
-            return SaveCmd.ID;
-        }
-    }
-    SaveCmd.ID = "Save";
 
     class CacheManger {
         constructor() {
@@ -11637,7 +11657,17 @@ window.Laya= (function (exports) {
             var tex = sprite.texture;
             context.saveTransform(LayaGLQuickRunner.curMat);
             context.transformByMatrix(sprite.transform, x, y);
-            context.drawTexture(tex, -sprite.pivotX, -sprite.pivotY, sprite._width || tex.width, sprite._height || tex.height);
+            var width = sprite._width || tex.sourceWidth;
+            var height = sprite._height || tex.sourceHeight;
+            var wRate = width / tex.sourceWidth;
+            var hRate = height / tex.sourceHeight;
+            width = tex.width * wRate;
+            height = tex.height * hRate;
+            if (width <= 0 || height <= 0)
+                return null;
+            var px = -sprite.pivotX + tex.offsetX * wRate;
+            var py = -sprite.pivotY + tex.offsetY * hRate;
+            context.drawTexture(tex, px, py, width, height);
             context.restoreTransform(LayaGLQuickRunner.curMat);
         }
         static alpha_drawTexture(sprite, context, x, y) {
@@ -11847,7 +11877,7 @@ window.Laya= (function (exports) {
         }
         _custom(sprite, context, x, y) {
             sprite.customRender(context, x, y);
-            this._next._fun.call(this._next, sprite, context, x - sprite.pivotX, y - sprite.pivotY);
+            this._next._fun.call(this._next, sprite, context, 0, 0);
         }
         _clip(sprite, context, x, y) {
             var next = this._next;
@@ -11866,8 +11896,19 @@ window.Laya= (function (exports) {
         }
         _texture(sprite, context, x, y) {
             var tex = sprite.texture;
-            if (tex._getSource())
-                context.drawTexture(tex, x - sprite.pivotX + tex.offsetX, y - sprite.pivotY + tex.offsetY, sprite._width || tex.width, sprite._height || tex.height);
+            if (tex._getSource()) {
+                var width = sprite._width || tex.sourceWidth;
+                var height = sprite._height || tex.sourceHeight;
+                var wRate = width / tex.sourceWidth;
+                var hRate = height / tex.sourceHeight;
+                width = tex.width * wRate;
+                height = tex.height * hRate;
+                if (width <= 0 || height <= 0)
+                    return null;
+                var px = x - sprite.pivotX + tex.offsetX * wRate;
+                var py = y - sprite.pivotY + tex.offsetY * hRate;
+                context.drawTexture(tex, px, py, width, height);
+            }
             var next = this._next;
             if (next != RenderSprite.NORENDER)
                 next._fun.call(next, sprite, context, x, y);
@@ -13246,7 +13287,7 @@ window.Laya= (function (exports) {
             if (this._components) {
                 for (var i = 0, n = this._components.length; i < n; i++) {
                     var item = this._components[i];
-                    item._destroy();
+                    item && item._destroy();
                 }
                 this._components.length = 0;
             }
@@ -15155,7 +15196,7 @@ window.Laya= (function (exports) {
             Input._createInputElement();
             if (ILaya.Browser.onMobile) {
                 var isTrue = false;
-                if (ILaya.Browser.onMiniGame || ILaya.Browser.onBDMiniGame || ILaya.Browser.onQGMiniGame || ILaya.Browser.onKGMiniGame || ILaya.Browser.onVVMiniGame || ILaya.Browser.onAlipayMiniGame || ILaya.Browser.onQQMiniGame || ILaya.Browser.onBLMiniGame) {
+                if (ILaya.Browser.onMiniGame || ILaya.Browser.onBDMiniGame || ILaya.Browser.onQGMiniGame || ILaya.Browser.onKGMiniGame || ILaya.Browser.onVVMiniGame || ILaya.Browser.onAlipayMiniGame || ILaya.Browser.onQQMiniGame || ILaya.Browser.onBLMiniGame || ILaya.Browser.onTTMiniGame || ILaya.Browser.onHWMiniGame) {
                     isTrue = true;
                 }
                 ILaya.Render.canvas.addEventListener(Input.IOS_IFRAME ? (isTrue ? "touchend" : "click") : "touchend", Input._popupInputMethod);
@@ -15318,7 +15359,7 @@ window.Laya= (function (exports) {
             this.event(Event.FOCUS);
             if (ILaya.Browser.onPC)
                 input.focus();
-            if (!ILaya.Browser.onMiniGame && !ILaya.Browser.onBDMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame) {
+            if (!ILaya.Browser.onMiniGame && !ILaya.Browser.onBDMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame && !ILaya.Browser.onTTMiniGame && !ILaya.Browser.onHWMiniGame) {
                 var temp = this._text;
                 this._text = null;
             }
@@ -17221,17 +17262,8 @@ window.Laya= (function (exports) {
             }
         }
         _tryClearBuffer(sourceNode) {
-            if (!Browser.onMac) {
-                try {
-                    sourceNode.buffer = null;
-                }
-                catch (e) {
-                    WebAudioSoundChannel._tryCleanFailed = true;
-                }
-                return;
-            }
             try {
-                sourceNode.buffer = ILaya.WebAudioSound._miniBuffer;
+                sourceNode.buffer = null;
             }
             catch (e) {
                 WebAudioSoundChannel._tryCleanFailed = true;
@@ -17416,7 +17448,7 @@ window.Laya= (function (exports) {
             }
             channel.url = this.url;
             channel.loops = loops;
-            channel["audioBuffer"] = this.audioBuffer;
+            channel.audioBuffer = this.audioBuffer;
             channel.startTime = startTime;
             channel.play();
             ILaya.SoundManager.addChannel(channel);
@@ -17647,7 +17679,7 @@ window.Laya= (function (exports) {
                     return null;
             }
             var tSound;
-            if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame) {
+            if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame && !ILaya.Browser.onTTMiniGame && !ILaya.Browser.onHWMiniGame) {
                 tSound = ILaya.loader.getRes(url);
             }
             if (!soundClass)
@@ -17655,7 +17687,7 @@ window.Laya= (function (exports) {
             if (!tSound) {
                 tSound = new soundClass();
                 tSound.load(url);
-                if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame) {
+                if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame && !ILaya.Browser.onTTMiniGame && !ILaya.Browser.onHWMiniGame) {
                     ILaya.Loader.cacheRes(url, tSound);
                 }
             }
@@ -18331,7 +18363,7 @@ window.Laya= (function (exports) {
         send(url, data = null, method = "get", responseType = "text", headers = null) {
             this._responseType = responseType;
             this._data = null;
-            if (Browser.onVVMiniGame || Browser.onQGMiniGame || Browser.onQQMiniGame || Browser.onAlipayMiniGame || Browser.onBLMiniGame) {
+            if (Browser.onVVMiniGame || Browser.onQGMiniGame || Browser.onQQMiniGame || Browser.onAlipayMiniGame || Browser.onBLMiniGame || Browser.onHWMiniGame || Browser.onTTMiniGame) {
                 url = HttpRequest._urlEncode(url);
             }
             this._url = url;
@@ -18519,7 +18551,7 @@ window.Laya= (function (exports) {
             }
         }
         _loadHttpRequest(url, contentType, onLoadCaller, onLoad, onProcessCaller, onProcess, onErrorCaller, onError) {
-            if (Browser.onVVMiniGame) {
+            if (Browser.onVVMiniGame || Browser.onHWMiniGame) {
                 this._http = new HttpRequest();
             }
             else {
@@ -18623,6 +18655,7 @@ window.Laya= (function (exports) {
                 this.complete(data);
             }
             else if (type === Loader.IMAGE) {
+                let tex;
                 if (data instanceof ArrayBuffer) {
                     var ext = Utils.getFileExtension(this._url);
                     let format;
@@ -18638,18 +18671,21 @@ window.Laya= (function (exports) {
                             return;
                         }
                     }
-                    var tex = new Texture2D(0, 0, format, false, false);
+                    tex = new Texture2D(0, 0, format, false, false);
                     tex.wrapModeU = exports.WarpMode.Clamp;
                     tex.wrapModeV = exports.WarpMode.Clamp;
                     tex.setCompressData(data);
                     tex._setCreateURL(this.url);
                 }
                 else if (!(data instanceof Texture2D)) {
-                    var tex = new Texture2D(data.width, data.height, 1, false, false);
+                    tex = new Texture2D(data.width, data.height, 1, false, false);
                     tex.wrapModeU = exports.WarpMode.Clamp;
                     tex.wrapModeV = exports.WarpMode.Clamp;
                     tex.loadImageSource(data, true);
                     tex._setCreateURL(data.src);
+                }
+                else {
+                    tex = data;
                 }
                 var texture = new Texture(tex);
                 texture.url = this._url;
@@ -18659,7 +18695,7 @@ window.Laya= (function (exports) {
                 this.complete(data);
             }
             else if (type === "htmlimage") {
-                var tex = new Texture2D(data.width, data.height, 1, false, false);
+                let tex = new Texture2D(data.width, data.height, 1, false, false);
                 tex.wrapModeU = exports.WarpMode.Clamp;
                 tex.wrapModeV = exports.WarpMode.Clamp;
                 tex.loadImageSource(data, true);
@@ -18704,7 +18740,7 @@ window.Laya= (function (exports) {
                 }
                 else {
                     if (!(data instanceof Texture2D)) {
-                        var tex = new Texture2D(data.width, data.height, 1, false, false);
+                        let tex = new Texture2D(data.width, data.height, 1, false, false);
                         tex.wrapModeU = BaseTexture.WARPMODE_CLAMP;
                         tex.wrapModeV = BaseTexture.WARPMODE_CLAMP;
                         tex.loadImageSource(data, true);
@@ -19081,7 +19117,7 @@ window.Laya= (function (exports) {
         _createOne(url, mainResou, complete = null, progress = null, type = null, constructParams = null, propertyParams = null, priority = 1, cache = true) {
             var item = this.getRes(url);
             if (!item) {
-                var extension = Utils.getFileExtension(url);
+                var extension = (LoaderManager.createMap[Utils.getFilecompatibleExtension(url)]) ? Utils.getFilecompatibleExtension(url) : Utils.getFileExtension(url);
                 (type) || (type = LoaderManager.createMap[extension] ? LoaderManager.createMap[extension][0] : null);
                 if (!type) {
                     this.load(url, complete, progress, type, priority, cache);
@@ -19119,7 +19155,7 @@ window.Laya= (function (exports) {
             else
                 content = Loader.loadedMap[URL.formatURL(url)];
             if (!ignoreCache && content != null) {
-                ILaya.systemTimer.frameOnce(1, this, function () {
+                ILaya.systemTimer.callLater(this, function () {
                     progress && progress.runWith(1);
                     complete && complete.runWith(content instanceof Array ? [content] : content);
                     this._loaderCount || this.event(Event.COMPLETE);
@@ -20257,7 +20293,9 @@ window.Laya= (function (exports) {
         }
         onReset() {
         }
-        _parse(data) {
+        _parse(data, interactMap = null) {
+        }
+        _parseInteractive(data = null, spriteMap = null) {
         }
         _cloneTo(dest) {
         }
@@ -21060,6 +21098,9 @@ window.Laya= (function (exports) {
         addLoadRes(url, type = null) {
             if (!this._loadList)
                 this._loadList = [];
+            if (ILaya.loader.getRes(url)) {
+                return;
+            }
             if (!type) {
                 this._loadList.push(url);
             }
@@ -21173,7 +21214,7 @@ window.Laya= (function (exports) {
             this._view = [];
         }
         show(x = 0, y = 0) {
-            if (!Browser.onMiniGame && !ILaya.Render.isConchApp && !Browser.onBDMiniGame && !Browser.onKGMiniGame && !Browser.onQGMiniGame && !Browser.onQQMiniGame && !Browser.onAlipayMiniGame && !Browser.onBLMiniGame)
+            if (!Browser.onMiniGame && !ILaya.Render.isConchApp && !Browser.onBDMiniGame && !Browser.onKGMiniGame && !Browser.onQGMiniGame && !Browser.onQQMiniGame && !Browser.onAlipayMiniGame && !Browser.onBLMiniGame && !Browser.onTTMiniGame && !Browser.onHWMiniGame)
                 this._useCanvas = true;
             this._show = true;
             Stat._fpsData.length = 60;
@@ -22096,6 +22137,7 @@ window.Laya= (function (exports) {
             return Mouse._style.cursor;
         }
         static __init__() {
+            Mouse._style = Browser.document.body.style;
         }
         static hide() {
             if (Mouse.cursor != "none") {
@@ -22365,7 +22407,7 @@ window.Laya= (function (exports) {
     Laya.lateTimer = null;
     Laya.timer = null;
     Laya.loader = null;
-    Laya.version = "2.6.1beta";
+    Laya.version = "2.7.0beta";
     Laya._isinit = false;
     Laya.isWXOpenDataContext = false;
     Laya.isWXPosMsg = false;
@@ -24605,6 +24647,8 @@ window.Laya= (function (exports) {
             }
         }
     }
+    ClassUtils.regClass("laya.media.SoundNode", SoundNode);
+    ClassUtils.regClass("Laya.SoundNode", SoundNode);
 
     class ResourceVersion {
         static enable(manifestFile, callback, type = 2) {
