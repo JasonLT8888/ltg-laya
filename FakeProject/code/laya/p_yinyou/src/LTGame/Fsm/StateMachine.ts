@@ -50,6 +50,14 @@ export default class StateMachine<T extends BaseState> {
         return false;
     }
 
+    public LogicUpdate(dt: number) {
+        let nextState = this.currState.GetNextState();
+        if (nextState != 0) {
+            this.ChangeState(nextState);
+        }
+        this.OnRunning(null, dt);
+    }
+
     public OnRunning(param: any, dt: number): void {
         if (null == this.currState) {
             return;

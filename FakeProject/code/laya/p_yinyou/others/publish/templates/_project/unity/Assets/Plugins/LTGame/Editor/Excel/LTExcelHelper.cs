@@ -352,60 +352,70 @@ namespace LTGame
 
             if (isTs)
             {
-                var codeSb = new StringBuilder();
-                // 写入命名空间
-                codeSb.AppendLine("export namespace {0} {".ReplaceAll("{0}", code.className));
-
-                // 写入结构体
-                codeSb.AppendLine(code.GetTSClass());
-
-                var tsSavePath = LTEditorData.instance.ts_configCodeSavePath;
-                if (tsSavePath.StartsWith("/"))
-                {
-                    tsSavePath = Application.dataPath + tsSavePath;
-                }
-                tsSavePath = tsSavePath + "/" + code.className + ".ts";
-                WriteStrToFile(codeSb.ToString(), tsSavePath);
-
-                // 写入数据
-                var minJson = _GenJson(code, rows, isTs);
-                var jsonSavePath = LTEditorData.instance.ts_configJsonSavePath;
-                if (jsonSavePath.StartsWith("/"))
-                {
-                    jsonSavePath = Application.dataPath + jsonSavePath;
-                }
-                jsonSavePath = jsonSavePath + "/" + code.className + ".json";
-                WriteStrToFile(minJson, jsonSavePath);
-
-                Debug.Log("[TS模式]配置生成完成");
-                Debug.LogFormat("ts:{0},json:{1}", tsSavePath, jsonSavePath);
+                _GenTs(isTs, code, rows);
             }
             else
             {
-                var minJson = _GenJson(code, rows, isTs);
-                var formatJson = JsonFormatterPlus.JsonFormatter.Format(minJson);
-                var jsonSavePath = LTEditorData.instance.configDataSavePath;
-                if (jsonSavePath.StartsWith("/"))
-                {
-                    jsonSavePath = Application.dataPath + jsonSavePath;
-                }
-                var jsonPath = jsonSavePath + "/" + code.className + ".json";
-                WriteStrToFile(formatJson, jsonPath);
-
-                var codeSavePath = LTEditorData.instance.configCodeSavePath;
-                if (codeSavePath.StartsWith("/"))
-                {
-                    codeSavePath = Application.dataPath + codeSavePath;
-                }
-                var codePath = codeSavePath + "/" + code.className + ".cs";
-
-                var cachePath = jsonPath.Replace(Application.dataPath, "Assets");
-                WriteStrToFile(code.GetString(cachePath), codePath);
-
-                Debug.Log("[C#模式]配置生成完成");
-                Debug.LogFormat("code:{0}", codePath);
-                Debug.LogFormat("json:{0}", jsonPath);
+                _GenCSharp(isTs, code, rows);
             }
+        }
+
+        private static void _GenTs(bool isTs, CSStruct code, List<IRow> rows)
+        {
+            var codeSb = new StringBuilder();
+            // 写入命名空间
+            codeSb.AppendLine("export namespace {0} {".ReplaceAll("{0}", code.className));
+
+            // 写入结构体
+            codeSb.AppendLine(code.GetTSClass());
+
+            var tsSavePath = LTEditorData.instance.ts_configCodeSavePath;
+            if (tsSavePath.StartsWith("/"))
+            {
+                tsSavePath = Application.dataPath + tsSavePath;
+            }
+            tsSavePath = tsSavePath + "/" + code.className + ".ts";
+            WriteStrToFile(codeSb.ToString(), tsSavePath);
+
+            // 写入数据
+            var minJson = _GenJson(code, rows, isTs);
+            var jsonSavePath = LTEditorData.instance.ts_configJsonSavePath;
+            if (jsonSavePath.StartsWith("/"))
+            {
+                jsonSavePath = Application.dataPath + jsonSavePath;
+            }
+            jsonSavePath = jsonSavePath + "/" + code.className + ".json";
+            WriteStrToFile(minJson, jsonSavePath);
+
+            Debug.Log("[TS模式]配置生成完成");
+            Debug.LogFormat("ts:{0},json:{1}", tsSavePath, jsonSavePath);
+        }
+
+        private static void _GenCSharp(bool isTs, CSStruct code, List<IRow> rows)
+        {
+            var minJson = _GenJson(code, rows, isTs);
+            var formatJson = JsonFormatterPlus.JsonFormatter.Format(minJson);
+            var jsonSavePath = LTEditorData.instance.configDataSavePath;
+            if (jsonSavePath.StartsWith("/"))
+            {
+                jsonSavePath = Application.dataPath + jsonSavePath;
+            }
+            var jsonPath = jsonSavePath + "/" + code.className + ".json";
+            WriteStrToFile(formatJson, jsonPath);
+
+            var codeSavePath = LTEditorData.instance.configCodeSavePath;
+            if (codeSavePath.StartsWith("/"))
+            {
+                codeSavePath = Application.dataPath + codeSavePath;
+            }
+            var codePath = codeSavePath + "/" + code.className + ".cs";
+
+            var cachePath = jsonPath.Replace(Application.dataPath, "Assets");
+            WriteStrToFile(code.GetString(cachePath), codePath);
+
+            Debug.Log("[C#模式]配置生成完成");
+            Debug.LogFormat("code:{0}", codePath);
+            Debug.LogFormat("json:{0}", jsonPath);
         }
 
         public static void GenCodeWithDir(string dirPath, bool isTs)

@@ -33,6 +33,9 @@ export class ConfigManager {
                         configName.dataList.push(value);
                     }
                 }
+                if (configName.dataList.length > 0) {
+                    configName.lastData = configName.dataList[configName.dataList.length - 1];
+                }
             }
             if (onFinished) {
                 onFinished.run();

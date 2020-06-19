@@ -320,6 +320,9 @@ class ConfigManager {
                         configName.dataList.push(value);
                     }
                 }
+                if (configName.dataList.length > 0) {
+                    configName.lastData = configName.dataList[configName.dataList.length - 1];
+                }
             }
             if (onFinished) {
                 onFinished.run();
@@ -454,6 +457,13 @@ class StateMachine {
         }
         console.error("不存在的状态ID:" + id);
         return false;
+    }
+    LogicUpdate(dt) {
+        let nextState = this.currState.GetNextState();
+        if (nextState != 0) {
+            this.ChangeState(nextState);
+        }
+        this.OnRunning(null, dt);
     }
     OnRunning(param, dt) {
         if (null == this.currState) {
@@ -3886,6 +3896,12 @@ class LTRes {
             return null;
         }
         return noClone ? getRes : getRes.clone();
+    }
+    static LoadAndGet(resUrl, noClone = false) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield LTRes.LoadAsync(resUrl);
+            return LTRes.Get(resUrl, noClone);
+        });
     }
     static Unload(resUrl) {
         Laya.loader.clearRes(resUrl);
@@ -11377,6 +11393,7 @@ __webpack_require__.r(__webpack_exports__);
 class GlobalUnit {
     static InitAll() {
         this.s3d = Laya.stage.addChildAt(new Laya.Scene3D(), 0);
+        window['s3d'] = this.s3d;
     }
 }
 
