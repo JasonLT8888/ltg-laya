@@ -6,6 +6,7 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_sliderADs from "../UI/LTGame/UI_sliderADs";
 
+export const ON_BANNER_SHOWN = "ON_BANNER_RESIZE";
 export default class View_BottomGames {
 
     static CreateView(tagUI: fgui.GComponent): View_BottomGames {
@@ -45,9 +46,13 @@ export default class View_BottomGames {
     }
 
     private _Init() {
+        if (LTPlatform.instance.platform == EPlatformType.WX) {
+            this._posId = 23;
+        }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
+            this.ui.visible = false;
         } else {
             this.ui.m_list.setVirtualAndLoop();
             this.ui.m_list.scrollPane.bouncebackEffect = false;
@@ -58,15 +63,19 @@ export default class View_BottomGames {
                 this.ui.m_list.scrollPane.scrollRight(1, true);
             });
         }
+        Laya.stage.on(ON_BANNER_SHOWN, this, this.resetPos)
 
     }
-
+    resetPos(bannerHight: number) {
+        this.ui.y = Laya.stage.height - bannerHight - this.ui.height;
+    }
     private _OnAdInited(posId: number) {
         if (posId != this._posId) return;
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         this.ui.m_list.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
         this.ui.m_list.numItems = this._cacheAds.length;
         this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
+        this.ui.visible = true;
 
     }
 

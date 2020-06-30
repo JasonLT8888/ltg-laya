@@ -48,7 +48,7 @@ export class LTStart {
     }
 
     constructor() {
-
+        
     }
 
     public InitGame() {

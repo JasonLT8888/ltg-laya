@@ -144,10 +144,10 @@ export default class OppoPlatform extends WXPlatform {
         this._base.login(loginData);
     }
 
-    protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
+    protected _OnLoginSuccess(res: any) {
         console.log(LTPlatform.platformStr, "登录成功", res);
         this.loginState.isLogin = true;
-        this.loginState.code = res.code;
+        this.loginState.code = res.uid;
     }
     ShareAppMessage(obj: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
 
@@ -397,7 +397,7 @@ export default class OppoPlatform extends WXPlatform {
         }
         UI_ImageBannerMediator.instance.Hide();
     }
-    async  ShowNativeAd() {
+    async ShowNativeAd() {
         if (!this.IsNativeAvaliable()) {
             return;
         }
