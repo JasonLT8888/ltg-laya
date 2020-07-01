@@ -9,6 +9,8 @@ import UI_BoneAnimTest from "./UI_BoneAnimTest";
 import UI_MoudleDemo from "./UI_MoudleDemo";
 import UI_RecordDemo from "./UI_RecordDemo";
 import UI_Others from "./UI_Others";
+import UI_FunctionTest from "./UI_FunctionTest";
+import UI_Test from "./UI_Test";
 
 export default class MainBinder{
 	public static bindAll():void {
@@ -21,5 +23,7 @@ export default class MainBinder{
 		fgui.UIObjectFactory.setExtension(UI_MoudleDemo.URL, UI_MoudleDemo);
 		fgui.UIObjectFactory.setExtension(UI_RecordDemo.URL, UI_RecordDemo);
 		fgui.UIObjectFactory.setExtension(UI_Others.URL, UI_Others);
+		fgui.UIObjectFactory.setExtension(UI_FunctionTest.URL, UI_FunctionTest);
+		fgui.UIObjectFactory.setExtension(UI_Test.URL, UI_Test);
 	}
 }

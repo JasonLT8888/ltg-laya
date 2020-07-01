@@ -11875,6 +11875,86 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
 
 /***/ }),
 
+/***/ "./src/script/test/PBRTest.ts":
+/*!************************************!*\
+  !*** ./src/script/test/PBRTest.ts ***!
+  \************************************/
+/*! exports provided: PBRTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PBRTest", function() { return PBRTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+
+const scene_path = "res/export/pbr_test/EmptyScene.ls";
+class PBRTest {
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            let sphereMesh = Laya.PrimitiveMesh.createSphere(0.25, 32, 32);
+            const row = 6;
+            this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, 1.5, 2), this._s3d, row, new Laya.Vector4(186 / 255, 110 / 255, 64 / 255, 1.0), 1.0);
+            this.addSpheresSmoothnessMetallic(sphereMesh, new Laya.Vector3(0, 0, 2), this._s3d, 3, row, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
+            this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, -1.5, 2), this._s3d, row, new Laya.Vector4(0.0, 0.0, 0.0, 1.0), 0.0);
+        });
+    }
+    /**
+     * Add some different smoothness with special metallic sphere.
+     */
+    addSpheresSpecialMetallic(sphereMesh, offset, scene, col, color, metallic = 0) {
+        const width = col * 0.5;
+        for (var i = 0, n = col; i < n; i++) { //diffenent smoothness
+            var smoothness = i / (n - 1);
+            // var metallic: number = metallic;
+            var pos = new Laya.Vector3();
+            pos.setValue(-width / 2 + i * width / (n - 1), 0, 3.0);
+            Laya.Vector3.add(offset, pos, pos);
+            this.addPBRSphere(sphereMesh, pos, scene, color, smoothness, metallic);
+        }
+    }
+    /**
+     * Add some different smoothness and metallic sphere.
+     */
+    addSpheresSmoothnessMetallic(sphereMesh, offset, scene, row, col, color) {
+        const width = col * 0.5;
+        const height = row * 0.5;
+        for (var i = 0, n = col; i < n; i++) { //diffenent smoothness
+            for (var j = 0, m = row; j < m; j++) { //diffenent metallic
+                var smoothness = i / (n - 1);
+                var metallic = 1.0 - j / (m - 1);
+                var pos = new Laya.Vector3();
+                pos.setValue(-width / 2 + i * width / (n - 1), height / 2 - j * height / (m - 1), 3.0);
+                Laya.Vector3.add(offset, pos, pos);
+                this.addPBRSphere(sphereMesh, pos, scene, color, smoothness, metallic);
+            }
+        }
+    }
+    /**
+     * Add one with smoothness and metallic sphere.
+     */
+    addPBRSphere(sphereMesh, position, scene, color, smoothness, metallic) {
+        var mat = new Laya.PBRStandardMaterial();
+        mat.albedoColor = color;
+        mat.smoothness = smoothness;
+        mat.metallic = metallic;
+        var meshSprite = new Laya.MeshSprite3D(sphereMesh);
+        meshSprite.meshRenderer.sharedMaterial = mat;
+        var transform = meshSprite.transform;
+        transform.localPosition = position;
+        scene.addChild(meshSprite);
+        return mat;
+    }
+    Clear() {
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_ADDemoMediator.ts":
 /*!********************************************!*\
   !*** ./src/script/ui/UI_ADDemoMediator.ts ***!
@@ -12275,6 +12355,60 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
 
 /***/ }),
 
+/***/ "./src/script/ui/UI_FunctionTestMediator.ts":
+/*!**************************************************!*\
+  !*** ./src/script/ui/UI_FunctionTestMediator.ts ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FunctionTestMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
+/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _UI_TestMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _test_PBRTest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../test/PBRTest */ "./src/script/test/PBRTest.ts");
+
+
+
+
+
+class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_FunctionTestMediator();
+            this._instance._classDefine = _ui_Main_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this.ui.m_btn_back.onClick(this, this._OnClickClose);
+        this.ui.m_btn_pbr.onClick(this, this._OnClickPBR);
+    }
+    _OnClickPBR() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.Hide();
+            let test = new _test_PBRTest__WEBPACK_IMPORTED_MODULE_4__["PBRTest"]();
+            yield test.Create();
+            _UI_TestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show(Laya.Handler.create(null, () => {
+                test.Clear();
+                UI_FunctionTestMediator.instance.Show();
+            }));
+        });
+    }
+    _OnClickClose() {
+        this.Hide();
+        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__["UI_MainMediator"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_MainMediator.ts":
 /*!******************************************!*\
   !*** ./src/script/ui/UI_MainMediator.ts ***!
@@ -12293,6 +12427,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_CommonUIMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_CommonUIMediator */ "./src/script/ui/UI_CommonUIMediator.ts");
 /* harmony import */ var _UI_PerfomanceMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_PerfomanceMediator */ "./src/script/ui/UI_PerfomanceMediator.ts");
 /* harmony import */ var _UI_OthersMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_OthersMediator */ "./src/script/ui/UI_OthersMediator.ts");
+/* harmony import */ var _UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
 
 
 
@@ -12317,6 +12453,11 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
         this.ui.m_btn_common.onClick(this, this._OnClickCommon);
         this.ui.m_btn_others.onClick(this, this._OnClickOthers);
         this.ui.m_btn_performance.onClick(this, this._OnClickPerfomance);
+        this.ui.m_btn_feature.onClick(this, this._OnClickFunctionTest);
+    }
+    _OnClickFunctionTest() {
+        this.Hide();
+        _UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_8__["default"].instance.Show();
     }
     _OnClickPerfomance() {
         _UI_PerfomanceMediator__WEBPACK_IMPORTED_MODULE_6__["default"].instance.Show();
@@ -12631,6 +12772,44 @@ class UI_RecordDemoMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_I
 
 /***/ }),
 
+/***/ "./src/script/ui/UI_TestMediator.ts":
+/*!******************************************!*\
+  !*** ./src/script/ui/UI_TestMediator.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_Test__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Test */ "./src/ui/Main/UI_Test.ts");
+
+
+class UI_TestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_TestMediator();
+            this._instance._classDefine = _ui_Main_UI_Test__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._onCloseAction = this._openParam;
+        this.ui.m_btn_back.onClick(this, this._OnClickClose);
+    }
+    _OnClickClose() {
+        var _a;
+        this.Hide();
+        (_a = this._onCloseAction) === null || _a === void 0 ? void 0 : _a.run();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_UIDemoMediator.ts":
 /*!********************************************!*\
   !*** ./src/script/ui/UI_UIDemoMediator.ts ***!
@@ -12764,7 +12943,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_MoudleDemo */ "./src/ui/Main/UI_MoudleDemo.ts");
 /* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
 /* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
+/* harmony import */ var _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
+/* harmony import */ var _UI_Test__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./UI_Test */ "./src/ui/Main/UI_Test.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
 
 
 
@@ -12785,6 +12968,8 @@ class MainBinder {
         fgui.UIObjectFactory.setExtension(_UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_8__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_9__["default"].URL, _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_9__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Test__WEBPACK_IMPORTED_MODULE_10__["default"].URL, _UI_Test__WEBPACK_IMPORTED_MODULE_10__["default"]);
     }
 }
 
@@ -12892,6 +13077,34 @@ class UI_CommonUI extends fgui.GComponent {
     }
 }
 UI_CommonUI.URL = "ui://kk7g5mmmfkl1g";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_FunctionTest.ts":
+/*!****************************************!*\
+  !*** ./src/ui/Main/UI_FunctionTest.ts ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FunctionTest; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_FunctionTest extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "FunctionTest"));
+    }
+    onConstruct() {
+        this.m_btn_pbr = (this.getChildAt(1));
+        this.m_btn_back = (this.getChildAt(2));
+    }
+}
+UI_FunctionTest.URL = "ui://kk7g5mmmyllkk";
 
 
 /***/ }),
@@ -13063,6 +13276,33 @@ class UI_RecordDemo extends fgui.GComponent {
     }
 }
 UI_RecordDemo.URL = "ui://kk7g5mmmx62be";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_Test.ts":
+/*!********************************!*\
+  !*** ./src/ui/Main/UI_Test.ts ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Test; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_Test extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "Test"));
+    }
+    onConstruct() {
+        this.m_btn_back = (this.getChildAt(0));
+    }
+}
+UI_Test.URL = "ui://kk7g5mmmyllkl";
 
 
 /***/ }),
