@@ -13,7 +13,7 @@ export class View_NativeInPage {
         if (tagUI == null) return null;
         if (LTPlatform.instance.platform != EPlatformType.Oppo) {
             // 只有oppo支持
-            console.log("内嵌 native已隐藏,只有oppo平台支持"); 
+            console.log("内嵌 native已隐藏,只有oppo平台支持");
             tagUI.dispose();
             return null;
         }
@@ -85,22 +85,23 @@ export class View_NativeInPage {
             View_NativeInPage._cacheNativeAd.destroy();
             View_NativeInPage._cacheNativeAd = null;
         }
-        for (let i = 0; i < this._cacheIds.length; ++i) {
-            let ret = await this._LoadIconData(i);
-            if (ret) {
-                this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
-                this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
-                this.ui.m_ad.m_title.text = this._cacheAdData.title;
-                this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
-                this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
-                View_NativeInPage._cacheNativeAd.reportAdShow({
-                    adId: this._cacheAdData.adId
-                });
-                console.log("内嵌 native广告已展示", this._cacheAdData);
-                return;
-            }
-            console.log("内嵌 native加载失败", this._cacheIds[i]);
+        // for (let i = 0; i < this._cacheIds.length; ++i) {
+        let i = randomRangeInt(0, this._cacheIds.length)
+        let ret = await this._LoadIconData(i);
+        if (ret) {
+            this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
+            this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
+            this.ui.m_ad.m_title.text = this._cacheAdData.title;
+            this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
+            this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+            View_NativeInPage._cacheNativeAd.reportAdShow({
+                adId: this._cacheAdData.adId
+            });
+            console.log("内嵌 native广告已展示", this._cacheAdData);
+            return;
         }
+        console.log("内嵌 native加载失败", this._cacheIds[i]);
+        // }
         this.visible = false;
         this.ui.visible = false;
     }
