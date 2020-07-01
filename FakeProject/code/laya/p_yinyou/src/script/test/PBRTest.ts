@@ -1,6 +1,6 @@
 import LTRes from "../../LTGame/Res/LTRes";
 
-const scene_path = "res/export/pbr_test/EmptyScene.ls";
+const scene_path = "res/export/Conventional/SkyBox.ls";
 
 export class PBRTest {
 
@@ -9,6 +9,7 @@ export class PBRTest {
     public async Create() {
         this._s3d = await LTRes.LoadAndGet(scene_path, true);
         Laya.stage.addChildAt(this._s3d, 1);
+        this._s3d.reflection = (this._s3d.skyRenderer.material as Laya.SkyBoxMaterial).textureCube;
 
         let sphereMesh: Laya.Mesh = Laya.PrimitiveMesh.createSphere(0.25, 32, 32);
         const row: number = 6;

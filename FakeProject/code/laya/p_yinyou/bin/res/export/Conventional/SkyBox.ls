@@ -3,53 +3,19 @@
 	"data":{
 		"type":"Scene3D",
 		"props":{
-			"name":"EmptyScene",
+			"name":"SkyBox",
 			"sky":{
 				"material":{
-					"type":"Laya.SkyPanoramicMaterial",
-					"path":"Assets/DamagedHelmet/SkyMaterial.lmat"
+					"type":"Laya.SkyBoxMaterial",
+					"path":"Assets/_res/mat/test_skybox.lmat"
 				},
-				"mesh":"SkyDome"
+				"mesh":"SkyBox"
 			},
 			"ambientColor":[
-				1,
-				1,
-				1
+				0.212,
+				0.227,
+				0.259
 			],
-			"reflectionDecodingFormat":1,
-			"reflection":"Assets/EmptySceneGIReflection.bin",
-			"reflectionIntensity":1,
-			"ambientMode":1,
-			"ambientSphericalHarmonics":[
-				0.6806948,
-				0.3144366,
-				0.1824573,
-				-0.5429527,
-				-0.2919062,
-				0.1494765,
-				-0.04785053,
-				-0.32478,
-				0.2409932,
-				0.7215599,
-				0.4042486,
-				0.1672212,
-				-0.5533049,
-				-0.2830718,
-				0.1361479,
-				-0.03835218,
-				-0.3057748,
-				0.2289081,
-				0.6896445,
-				0.49126,
-				0.1181568,
-				-0.4735765,
-				-0.234496,
-				0.1025661,
-				-0.0187978,
-				-0.2453711,
-				0.1690685
-			],
-			"ambientSphericalHarmonicsIntensity":1,
 			"lightmaps":[],
 			"enableFog":false,
 			"fogStart":0,
@@ -72,7 +38,7 @@
 					"position":[
 						0,
 						0,
-						-3
+						-5
 					],
 					"rotation":[
 						0,
@@ -89,7 +55,7 @@
 					"orthographic":false,
 					"orthographicVerticalSize":10,
 					"fieldOfView":60,
-					"enableHDR":false,
+					"enableHDR":true,
 					"nearPlane":0.3,
 					"farPlane":1000,
 					"viewport":[
@@ -103,6 +69,47 @@
 						0.3019608,
 						0.4745098,
 						0
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"DirectionLight",
+				"instanceID":1,
+				"props":{
+					"name":"Directional Light",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0,
+						3,
+						0
+					],
+					"rotation":[
+						0.1093816,
+						0.8754261,
+						0.4082179,
+						-0.2345697
+					],
+					"scale":[
+						1,
+						1,
+						1
+					],
+					"intensity":1,
+					"shadowMode":2,
+					"shadowDistance":40,
+					"shadowNearPlane":3,
+					"shadowCascadesMode":2,
+					"shadowResolution":2048,
+					"shadowStrength":1,
+					"lightmapBakedType":0,
+					"color":[
+						1,
+						0.9568627,
+						0.8392157
 					]
 				},
 				"components":[],
