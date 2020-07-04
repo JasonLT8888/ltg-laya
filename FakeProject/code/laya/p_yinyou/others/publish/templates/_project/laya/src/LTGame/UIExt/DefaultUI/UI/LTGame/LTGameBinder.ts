@@ -61,6 +61,7 @@ import UI_view_item_sign_02 from "./UI_view_item_sign_02";
 import UI_CommonEndLose from "./UI_CommonEndLose";
 import UI_CommonUnlockProgress from "./UI_CommonUnlockProgress";
 import UI_sliderADs from "./UI_sliderADs";
+import UI_rewardPannel from "./UI_rewardPannel";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
 export default class LTGameBinder{
@@ -126,6 +127,7 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_CommonEndLose.URL, UI_CommonEndLose);
 		fgui.UIObjectFactory.setExtension(UI_CommonUnlockProgress.URL, UI_CommonUnlockProgress);
 		fgui.UIObjectFactory.setExtension(UI_sliderADs.URL, UI_sliderADs);
+		fgui.UIObjectFactory.setExtension(UI_rewardPannel.URL, UI_rewardPannel);
 		fgui.UIObjectFactory.setExtension(UI_view_sharegames_big.URL, UI_view_sharegames_big);
 	}
 }

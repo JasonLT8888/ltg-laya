@@ -5,7 +5,6 @@ import LTPlatform from "../../Platform/LTPlatform";
 import LTUI from "../LTUI";
 import LTSDK from "../../../SDK/LTSDK";
 import { ECheckState } from "../../../SDK/common/ECheckState";
-import View_OtherGames from "./Cmp/View_OtherGames";
 import CommonSaveData from "../../Commom/CommonSaveData";
 
 export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_CommonEndReward> {
@@ -21,6 +20,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
     private _openData: EndRewardOpenData;
 
+    checkFlag: boolean = true;
     private _isChecked: boolean;
 
     private get _needWatchAd(): boolean {
@@ -39,6 +39,7 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
     _OnShow() {
         super._OnShow();
         // your code
+        this.checkFlag = CommonSaveData.instance.checkFlag;
         this._openData = new EndRewardOpenData();
         if (this._openParam == null) {
             console.error("请传入EndRewardOpenData用于初始化结算分享界面");
@@ -47,27 +48,14 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
                 this._openData[key] = this._openParam[key];
             }
         }
-        CommonSaveData.instance.endRewardMissMode = 1 - CommonSaveData.instance.endRewardMissMode;
-        CommonSaveData.SaveToDisk();
+
 
         this._openData.enableShowGames = LTPlatform.instance.isSupportJumpOther && this._openData.enableShowGames;
-
-        switch (LTSDK.instance.checkState) {
-            case ECheckState.InCheck:
-                // 肖张飞策划案修改
-                // this.ui.m_btn_toggle_watchad.visible = false;
-                this._isChecked = false;
-                break;
-            case ECheckState.Normal:
-                this._isChecked = true;
-                break;
-            case ECheckState.NoGame:
-                if (CommonSaveData.instance.endRewardMissMode == 0) {
-                    this._isChecked = true;
-                } else {
-                    this._isChecked = false;
-                }
-                break;
+        this.ui.m_btn_get.m_btn_type.selectedIndex = 3;
+        if (LTSDK.instance.checkState == ECheckState.NoGame) {
+            this.changeCheck();
+        } else {
+            this.ui.m_btn_toggle_check.m_selected.selectedIndex = 0;
         }
 
         if (this._openData.showText != null) {
@@ -80,28 +68,22 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
         this.ui.m_btn_get.onClick(this, this._OnClickNormalGet);
 
-        this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
-        this._UpdateToggle();
+        this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
+
         LTPlatform.instance.ShowBannerAd();
     }
 
     private _OnClickToggle() {
-        this._isChecked = !this._isChecked;
-        this._UpdateToggle();
+        this.ui.m_btn_toggle_check.m_selected.selectedIndex = (this.ui.m_btn_toggle_check.m_selected.selectedIndex + 1) % 2;
+    }
+    changeCheck() {
+        if (LTSDK.instance.checkState == ECheckState.NoGame) {
+            this.ui.m_btn_toggle_check.title = CommonSaveData.instance.checkFlag ? '观看五倍奖励视频' : '不看五倍奖励视频';
+            this.ui.m_btn_toggle_check.m_selected.selectedIndex = CommonSaveData.instance.checkFlag ? 1 : 0;
+        }
     }
 
-    private _UpdateToggle() {
-        switch (LTSDK.instance.checkState) {
-            case ECheckState.NoGame:
-                this.ui.m_btn_toggle_watchad.text = this._needWatchAd ? "观看视频五倍领取奖励" : "不看视频领取奖励";
-                break;
-            default:
-                this.ui.m_btn_toggle_watchad.text = this._isChecked ? "观看视频五倍领取奖励" : "不看视频领取奖励";
-                break;
-        }
-        this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-        this.ui.m_btn_get.m_btn_type.selectedIndex = this._needWatchAd ? 0 : 3;
-    }
+
 
     private _OnClickBack() {
         if (this._openData.onClose) {
@@ -109,18 +91,36 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
         }
         this.Hide();
     }
-
-    private _OnClickNormalGet() {
-
-        if (this._needWatchAd) {
-            this._OnClickDoubleGet();
-            return;
+    private async _OnClickNormalGet() {
+        if (LTSDK.instance.checkState != ECheckState.NoGame) {
+            if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
+                await this._OnClickDoubleGet();
+            } else {
+                this.noPayClose();
+            }
+        } else {
+            if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
+                if (this.checkFlag) {
+                    await this._OnClickDoubleGet();
+                } else {
+                    this.noPayClose();
+                }
+            } else {
+                if (this.checkFlag) {
+                    this.noPayClose();
+                } else {
+                    await this._OnClickDoubleGet();
+                }
+            }
         }
+    }
 
+
+    private noPayClose() {
         if (this._openData.onClose) {
             this._openData.onClose.runWith([0, this.ui.m_icon_reward]);
         }
-
+        this.checkFlag = !this.checkFlag;
         this.Hide();
     }
 
@@ -138,5 +138,9 @@ export default class UI_CommonEndRewardMediator extends BaseUIMediator<UI_Common
 
     _OnHide() {
         LTPlatform.instance.HideBannerAd();
+        if (LTSDK.instance.checkState == ECheckState.NoGame) {
+            CommonSaveData.instance.checkFlag = this.checkFlag;
+            CommonSaveData.SaveToDisk();
+        }
     }
 }

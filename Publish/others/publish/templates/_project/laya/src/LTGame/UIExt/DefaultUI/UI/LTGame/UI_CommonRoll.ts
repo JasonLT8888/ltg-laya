@@ -2,6 +2,7 @@
 
 import UI_view_roll_bg from "./UI_view_roll_bg";
 import UI_btn_double_get from "./UI_btn_double_get";
+import UI_rewardPannel from "./UI_rewardPannel";
 
 export default class UI_CommonRoll extends fgui.GComponent {
 
@@ -9,6 +10,7 @@ export default class UI_CommonRoll extends fgui.GComponent {
 	public m_pointer:fgui.GImage;
 	public m_btn_close:fgui.GButton;
 	public m_btn_roll:UI_btn_double_get;
+	public m_rewardPannel:UI_rewardPannel;
 
 	public static URL:string = "ui://75kiu87kbg002d";
 
@@ -25,5 +27,6 @@ export default class UI_CommonRoll extends fgui.GComponent {
 		this.m_pointer = <fgui.GImage><any>(this.getChildAt(2));
 		this.m_btn_close = <fgui.GButton><any>(this.getChildAt(4));
 		this.m_btn_roll = <UI_btn_double_get><any>(this.getChildAt(5));
+		this.m_rewardPannel = <UI_rewardPannel><any>(this.getChildAt(6));
 	}
 }

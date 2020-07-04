@@ -38,7 +38,10 @@ export class SaveData {
      * 1 勾中不看视频
      */
     public trySignMissMode: number = 0;
-
+    /**
+    * 界面开关 误点套路
+    */
+    public checkFlag: boolean = true;
     /**
      * 结算界面误点
      * 0 勾中看视频

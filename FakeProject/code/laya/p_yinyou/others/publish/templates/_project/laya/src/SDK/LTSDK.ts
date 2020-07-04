@@ -30,7 +30,12 @@ export default class LTSDK {
         this._instance = new sdkClass();
 
         // 初始化sdk
-        this._instance.Init(identifyId, "own", controlVersion, appId);
+        let channel = "own";
+        let options = LTPlatform.instance.lauchOption as any;
+        if (options && options.query && options.query.channel) {
+            channel = options.query.channel;
+        }
+        this._instance.Init(identifyId, channel, controlVersion, appId);
 
         // 请求云控信息
         this._instance.RequestRemoteConfig();
