@@ -1,8 +1,13 @@
 import LTRes from "../../LTGame/Res/LTRes";
+import { ITest } from "./ITest";
+import UI_TestMediator from "../ui/UI_TestMediator";
+import UI_FunctionTestMediator from "../ui/UI_FunctionTestMediator";
 
 const scene_path = "res/export/Conventional/SkyBox.ls";
 
-export class PBRTest {
+export class PBRTest implements ITest {
+
+    name: string = "PBR测试";
 
     private _s3d: Laya.Scene3D;
 
@@ -16,6 +21,8 @@ export class PBRTest {
         this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, 1.5, 2), this._s3d, row, new Laya.Vector4(186 / 255, 110 / 255, 64 / 255, 1.0), 1.0);
         this.addSpheresSmoothnessMetallic(sphereMesh, new Laya.Vector3(0, 0, 2), this._s3d, 3, row, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
         this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, -1.5, 2), this._s3d, row, new Laya.Vector4(0.0, 0.0, 0.0, 1.0), 0.0);
+
+        UI_TestMediator.instance.Show(Laya.Handler.create(this, this.Clear));
     }
 
     /**
@@ -78,6 +85,9 @@ export class PBRTest {
     public Clear() {
         this._s3d.destroy();
         LTRes.Unload(scene_path);
+
+        UI_FunctionTestMediator.instance.Show();
+
     }
 
 }

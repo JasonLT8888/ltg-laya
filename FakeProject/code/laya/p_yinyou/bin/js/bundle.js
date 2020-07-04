@@ -1163,6 +1163,283 @@ class StringEx {
 
 /***/ }),
 
+/***/ "./src/LTGame/LTUtils/Vector3Ex.ts":
+/*!*****************************************!*\
+  !*** ./src/LTGame/LTUtils/Vector3Ex.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Vector3Ex; });
+/* harmony import */ var _MathEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+
+class Vector3Ex {
+    static get temp() {
+        if (!Vector3Ex.__temp__) {
+            Vector3Ex.__temp__ = Vector3Ex.zero;
+        }
+        Vector3Ex.__temp__.setValue(0, 0, 0);
+        return Vector3Ex.__temp__;
+    }
+    static get s_up() {
+        if (!Vector3Ex.__up__) {
+            Vector3Ex.__up__ = Vector3Ex.up;
+        }
+        Vector3Ex.__up__.setValue(0, 1, 0);
+        return Vector3Ex.__up__;
+    }
+    static get s_down() {
+        if (!Vector3Ex.__down__) {
+            Vector3Ex.__down__ = Vector3Ex.down;
+        }
+        Vector3Ex.__down__.setValue(0, -1, 0);
+        return Vector3Ex.__down__;
+    }
+    static get s_forward() {
+        if (!Vector3Ex.__forward__) {
+            Vector3Ex.__forward__ = Vector3Ex.forward;
+        }
+        Vector3Ex.__forward__.setValue(0, 0, 1);
+        return Vector3Ex.__forward__;
+    }
+    static get s_zero() {
+        if (!Vector3Ex.__zero__) {
+            Vector3Ex.__zero__ = Vector3Ex.zero;
+        }
+        Vector3Ex.__zero__.setValue(0, 0, 0);
+        return Vector3Ex.__zero__;
+    }
+    static get s_one() {
+        if (!Vector3Ex.__one__) {
+            Vector3Ex.__one__ = Vector3Ex.one;
+        }
+        Vector3Ex.__one__.setValue(1, 1, 1);
+        return Vector3Ex.__one__;
+    }
+    static get up() {
+        return new Laya.Vector3(0, 1, 0);
+    }
+    static get down() {
+        return new Laya.Vector3(0, -1, 0);
+    }
+    static get forward() {
+        return new Laya.Vector3(0, 0, 1);
+    }
+    static get zero() {
+        return new Laya.Vector3(0, 0, 0);
+    }
+    static get one() {
+        return new Laya.Vector3(1, 1, 1);
+    }
+    static get back() {
+        return new Laya.Vector3(0, 0, -1);
+    }
+    static get left() {
+        return new Laya.Vector3(-1, 0, 0);
+    }
+    static get right() {
+        return new Laya.Vector3(1, 0, 0);
+    }
+    static Cross(right, left) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.cross(right, left, result);
+        return result;
+    }
+    static Subtract(right, left) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.subtract(right, left, result);
+        return result;
+    }
+    static ClampMagnitude(vector, maxLength) {
+        var result = new Laya.Vector3(0, 0, 0);
+        var sqrMagnitude = 0;
+        if (Laya.Vector3.distanceSquared(vector, result) > maxLength * maxLength) {
+            result = Vector3Ex.Scale(Vector3Ex.Normalize(vector), maxLength);
+        }
+        else {
+            result = vector;
+        }
+        return result;
+    }
+    static Normalize(vec) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.normalize(vec, result);
+        return result;
+    }
+    static Add(...vecs) {
+        var result = new Laya.Vector3(0, 0, 0);
+        for (var i = 0; i < vecs.length; ++i) {
+            var vec = vecs[i];
+            result.x += vec.x;
+            result.y += vec.y;
+            result.z += vec.z;
+        }
+        return result;
+    }
+    static Scale(vec, scale) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.scale(vec, scale, result);
+        return result;
+    }
+    static ScaleV3(vec, scale) {
+        var result = new Laya.Vector3(vec.x * scale.x, vec.y * scale.y, vec.z * scale.z);
+        return result;
+    }
+    static Dot(left, right) {
+        return Laya.Vector3.dot(left, right);
+    }
+    static Lerp(from, to, v) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.lerp(from, to, v, result);
+        return result;
+    }
+    static MagnitudeSqrt(v3) {
+        return v3.x * v3.x + v3.y * v3.y + v3.z * v3.z;
+    }
+    static Magnitude(v3) {
+        return Math.sqrt(this.MagnitudeSqrt(v3));
+    }
+    static Magnitude2D(v3) {
+        return Math.sqrt(v3.x * v3.x + v3.z * v3.z);
+    }
+    static Distance(from, to) {
+        var offset = Vector3Ex.Subtract(from, to);
+        return Vector3Ex.Magnitude(offset);
+    }
+    static Distance2D(from, to) {
+        let xOffset = from.x - to.x;
+        let zOffset = from.z - to.z;
+        return Math.sqrt(xOffset * xOffset + zOffset * zOffset);
+    }
+    static DistanceSqrt(from, to) {
+        let offset = Vector3Ex.Subtract(from, to);
+        return offset.x * offset.x + offset.y * offset.y + offset.z * offset.z;
+    }
+    static DistanceSqrt2D(from, to) {
+        let offset = Vector3Ex.Subtract(from, to);
+        return offset.x * offset.x + offset.z * offset.z;
+    }
+    /**
+     * 计算在指定轴上的旋转,带符号
+     * @param from
+     * @param to
+     * @param asix
+     */
+    static SignAngleAsix(from, to, asix) {
+        let normalAsix = Vector3Ex.Normalize(asix);
+        let dotFrom = Vector3Ex.Dot(from, normalAsix);
+        let wrapFrom = Vector3Ex.Subtract(from, Vector3Ex.Scale(normalAsix, dotFrom));
+        let dotTo = Vector3Ex.Dot(to, normalAsix);
+        let wrapTo = Vector3Ex.Subtract(to, Vector3Ex.Scale(normalAsix, dotTo));
+        let normalized = Vector3Ex.Normalize(wrapFrom);
+        let normalized2 = Vector3Ex.Normalize(wrapTo);
+        let num = Math.acos(_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Clamp(Laya.Vector3.dot(normalized, normalized2), -1, 1)) * 57.29578;
+        let cross = Vector3Ex.Cross(normalized, normalized2);
+        let num2 = _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Sign(Laya.Vector3.dot(asix, cross));
+        return num * num2;
+    }
+    static SignedAngle(from, to, asix) {
+        var normalized = Vector3Ex.Normalize(from);
+        var normalized2 = Vector3Ex.Normalize(to);
+        var num = Math.acos(_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Clamp(Laya.Vector3.dot(normalized, normalized2), -1, 1)) * 57.29578;
+        var cross = Vector3Ex.Cross(normalized, normalized2);
+        var num2 = _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Sign(Laya.Vector3.dot(asix, cross));
+        return num * num2;
+    }
+    static Angle(from, to, asix) {
+        var normalized = Vector3Ex.Normalize(from);
+        var normalized2 = Vector3Ex.Normalize(to);
+        var num = Math.acos(_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Clamp(Laya.Vector3.dot(normalized, normalized2), -1, 1)) * 57.29578;
+        return num;
+    }
+    static SmoothDamp(current, target, currentVelocity, smoothTime, maxSpeed, deltaTime) {
+        var num = 2 / smoothTime;
+        var num2 = num * deltaTime;
+        var d = 1 / (1 + num2 + 0.48 * num2 * num2 + 0.235 * num2 * num2 * num2);
+        var vector = Vector3Ex.Subtract(current, target);
+        var vector2 = target.clone();
+        var maxLength = maxSpeed * smoothTime;
+        vector = Vector3Ex.ClampMagnitude(vector, maxLength);
+        var target2 = Vector3Ex.Subtract(current, vector);
+        var vector3 = Vector3Ex.Scale(Vector3Ex.Add(currentVelocity, Vector3Ex.Scale(vector, num)), deltaTime);
+        var cacheV = Vector3Ex.Scale(Vector3Ex.Subtract(currentVelocity, Vector3Ex.Scale(vector3, num)), d);
+        currentVelocity.x = cacheV.x;
+        currentVelocity.y = cacheV.y;
+        currentVelocity.z = cacheV.z;
+        var vector4 = Vector3Ex.Add(target2, Vector3Ex.Scale(Vector3Ex.Add(vector, vector3), d));
+        if (Vector3Ex.Dot(Vector3Ex.Subtract(vector2, current), Vector3Ex.Subtract(vector4, vector2)) > 0) {
+            vector4 = vector2;
+            currentVelocity.x = 0;
+            currentVelocity.y = 0;
+            currentVelocity.z = 0;
+        }
+        return vector4;
+    }
+    static Fix(vec, limit) {
+        if (Math.abs(vec.x) < limit) {
+            vec.x = 0;
+        }
+        if (Math.abs(vec.y) < limit) {
+            vec.y = 0;
+        }
+        if (Math.abs(vec.z) < limit) {
+            vec.z = 0;
+        }
+    }
+    static IsSame(v1, v2) {
+        return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+    }
+    static WrapFromUnity(x, y, z) {
+        return new Laya.Vector3(-x, y, z);
+    }
+    /**
+     * 计算带加速度的移动位置
+     * @param time
+     * @param startVelocity
+     * @param aSpeed
+     * @param startPos
+     */
+    static CalcPosWithASpeed(time, startVelocity, aSpeed, startPos) {
+        let xt = Vector3Ex.Scale(startVelocity, time);
+        let at2 = Vector3Ex.Scale(aSpeed, time * time / 2);
+        return Vector3Ex.Add(xt, at2, startPos);
+    }
+    /**
+     * 重置空间信息
+     * @param trs
+     */
+    static InitialTransform(trs) {
+        trs.localPosition = Vector3Ex.s_zero;
+        trs.localScale = Vector3Ex.s_one;
+        trs.rotationEuler = Vector3Ex.s_zero;
+    }
+    /**
+     * 判定目标点，是否在以中心点为扇心，指定扇形内
+     * @param center 扇形中心点
+     * @param target 目标点
+     * @param range 扇形半径
+     * @param halfAngle 扇形半角
+     * @param forward 扇形正向
+     * @param axis 垂直于扇面的轴向
+     */
+    static InSector(center, target, range, halfAngle, forward, axis) {
+        let dir = Vector3Ex.temp;
+        dir.setValue((target.x - center.x) * (1 - axis.x), (target.y - center.y) * (1 - axis.y), (target.z - center.z) * (1 - axis.z));
+        if (Vector3Ex.MagnitudeSqrt(dir) <= range * range) {
+            let angle = Vector3Ex.Angle(forward, dir, axis);
+            if (angle <= halfAngle) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTGame/LTVersion.ts":
 /*!*********************************!*\
   !*** ./src/LTGame/LTVersion.ts ***!
@@ -1177,6 +1454,857 @@ class LTVersion {
 }
 LTVersion.version = "0.0.1";
 
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/HeightFogManager.ts":
+/*!*************************************************!*\
+  !*** ./src/LTGame/Material/HeightFogManager.ts ***!
+  \*************************************************/
+/*! exports provided: HeightFogManager */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeightFogManager", function() { return HeightFogManager; });
+/* harmony import */ var _LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+
+class HeightFogManager {
+    constructor() {
+        this._fogColor = new Laya.Vector3(0, 0, 0);
+        this._fogStartHeight = 5;
+        this._fogDistance = 5;
+        this._matList = [];
+    }
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new HeightFogManager();
+        }
+        return this._instance;
+    }
+    get fogColor() {
+        return this._fogColor;
+    }
+    set fogColor(value) {
+        if (_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].IsSame(this._fogColor, value))
+            return;
+        this._fogColor = value;
+        for (let i = 0; i < this._matList.length; ++i) {
+            let mat = this._matList[i];
+            if (mat != null) {
+                mat.heightFogColor = this._fogColor;
+            }
+        }
+    }
+    get fogStartHeight() {
+        return this._fogStartHeight;
+    }
+    set fogStartHeight(value) {
+        if (this._fogStartHeight == value)
+            return;
+        this._fogStartHeight = value;
+        for (let i = 0; i < this._matList.length; ++i) {
+            let mat = this._matList[i];
+            if (mat != null) {
+                mat.heightFogStartY = this._fogStartHeight;
+            }
+        }
+    }
+    get fogDistance() {
+        return this._fogDistance;
+    }
+    set fogDistance(value) {
+        if (this._fogDistance == value)
+            return;
+        this._fogDistance = value;
+        for (let i = 0; i < this._matList.length; ++i) {
+            let mat = this._matList[i];
+            if (mat != null) {
+                mat.heightFogDistance = this._fogDistance;
+            }
+        }
+    }
+    RegistFogMat(mat) {
+        this._matList.push(mat);
+        mat.heightFogColor = this._fogColor;
+        mat.heightFogStartY = this._fogStartHeight;
+        mat.heightFogDistance = this._fogDistance;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/LTBlinnPhong_HeightFog.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTGame/Material/LTBlinnPhong_HeightFog.ts ***!
+  \*******************************************************/
+/*! exports provided: LTBlinnPhong_HeightFog */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTBlinnPhong_HeightFog", function() { return LTBlinnPhong_HeightFog; });
+/* harmony import */ var _shader_LT_Mesh_BlinnPhong_DepthFog_vs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader/LT-Mesh-BlinnPhong-DepthFog.vs */ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.vs");
+/* harmony import */ var _shader_LT_Mesh_BlinnPhong_DepthFog_fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shader/LT-Mesh-BlinnPhong-DepthFog.fs */ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.fs");
+/* harmony import */ var _shader_Mesh_BlinnPhongShadowCaster_vs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shader/Mesh-BlinnPhongShadowCaster.vs */ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.vs");
+/* harmony import */ var _shader_Mesh_BlinnPhongShadowCaster_fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./shader/Mesh-BlinnPhongShadowCaster.fs */ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.fs");
+/* harmony import */ var _HeightFogManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./HeightFogManager */ "./src/LTGame/Material/HeightFogManager.ts");
+
+
+
+
+
+class LTBlinnPhong_HeightFog extends Laya.Material {
+    /**
+     * 创建一个 <code>BlinnPhongMaterial</code> 实例。
+     */
+    constructor() {
+        super();
+        this._enableVertexColor = false;
+        LTBlinnPhong_HeightFog.InitShader();
+        this.setShaderName(LTBlinnPhong_HeightFog._shaderName);
+        this._albedoIntensity = 1.0;
+        this._albedoColor = new Laya.Vector4(1.0, 1.0, 1.0, 1.0);
+        let sv = this._shaderValues;
+        sv.setVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
+        sv.setVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
+        sv.setNumber(LTBlinnPhong_HeightFog.SHININESS, 0.078125);
+        sv.setNumber(Laya.Material.ALPHATESTVALUE, 0.5);
+        sv.setVector(LTBlinnPhong_HeightFog.TILING_OFFSET, new Laya.Vector4(1.0, 1.0, 0.0, 0.0));
+        this._enableLighting = true;
+        this.renderMode = LTBlinnPhong_HeightFog.RENDERMODE_OPAQUE;
+        _HeightFogManager__WEBPACK_IMPORTED_MODULE_4__["HeightFogManager"].instance.RegistFogMat(this);
+    }
+    /**
+     * @internal
+     */
+    static __initDefine__() {
+        LTBlinnPhong_HeightFog.SHADERDEFINE_DIFFUSEMAP = Laya.Shader3D.getDefineByName("DIFFUSEMAP");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_NORMALMAP = Laya.Shader3D.getDefineByName("NORMALMAP");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_SPECULARMAP = Laya.Shader3D.getDefineByName("SPECULARMAP");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET = Laya.Shader3D.getDefineByName("TILINGOFFSET");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_ENABLEVERTEXCOLOR = Laya.Shader3D.getDefineByName("ENABLEVERTEXCOLOR");
+    }
+    /**
+     * 高度雾范围
+     */
+    get heightFogDistance() {
+        return this._heightFogDistance;
+    }
+    set heightFogDistance(value) {
+        this._heightFogDistance = value;
+        this._shaderValues.setNumber(LTBlinnPhong_HeightFog.HEIGHT_FOG_DISTANCE, value);
+    }
+    /**
+     * 高度雾开始高度
+     */
+    get heightFogStartY() {
+        return this._heightFogStartY;
+    }
+    set heightFogStartY(value) {
+        this._heightFogStartY = value;
+        this._shaderValues.setNumber(LTBlinnPhong_HeightFog.HEIGHT_FOG_STARTY, value);
+    }
+    /**
+     * 高度雾颜色
+     */
+    get heightFogColor() {
+        return this._heightFogColor;
+    }
+    set heightFogColor(value) {
+        this._heightFogColor = value;
+        this._shaderValues.setVector3(LTBlinnPhong_HeightFog.HEIGHT_FOG_COLOR, value);
+    }
+    /**
+     * @internal
+     */
+    get _ColorR() {
+        return this._albedoColor.x;
+    }
+    set _ColorR(value) {
+        this._albedoColor.x = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _ColorG() {
+        return this._albedoColor.y;
+    }
+    set _ColorG(value) {
+        this._albedoColor.y = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _ColorB() {
+        return this._albedoColor.z;
+    }
+    set _ColorB(value) {
+        this._albedoColor.z = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _ColorA() {
+        return this._albedoColor.w;
+    }
+    set _ColorA(value) {
+        this._albedoColor.w = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _Color() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR);
+    }
+    set _Color(value) {
+        this.albedoColor = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorR() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).x;
+    }
+    set _SpecColorR(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).x = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorG() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).y;
+    }
+    set _SpecColorG(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).y = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorB() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).z;
+    }
+    set _SpecColorB(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).z = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorA() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).w;
+    }
+    set _SpecColorA(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).w = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColor() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR);
+    }
+    set _SpecColor(value) {
+        this.specularColor = value;
+    }
+    /**
+     * @internal
+     */
+    get _AlbedoIntensity() {
+        return this._albedoIntensity;
+    }
+    set _AlbedoIntensity(value) {
+        if (this._albedoIntensity !== value) {
+            var finalAlbedo = this._shaderValues.getVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR);
+            Laya.Vector4.scale(this._albedoColor, value, finalAlbedo);
+            this._albedoIntensity = value;
+            this._shaderValues.setVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR, finalAlbedo); //修改值后必须调用此接口,否则NATIVE不生效
+        }
+    }
+    /**
+     * @internal
+     */
+    get _Shininess() {
+        return this._shaderValues.getNumber(LTBlinnPhong_HeightFog.SHININESS);
+    }
+    set _Shininess(value) {
+        value = Math.max(0.0, Math.min(1.0, value));
+        this._shaderValues.setNumber(LTBlinnPhong_HeightFog.SHININESS, value);
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STX() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).x;
+    }
+    set _MainTex_STX(x) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.x = x;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STY() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).y;
+    }
+    set _MainTex_STY(y) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.y = y;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STZ() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).z;
+    }
+    set _MainTex_STZ(z) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.z = z;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STW() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).w;
+    }
+    set _MainTex_STW(w) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.w = w;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_ST() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+    }
+    set _MainTex_ST(value) {
+        this.tilingOffset = value;
+    }
+    /**
+     * @internal
+     */
+    get _Cutoff() {
+        return this.alphaTestValue;
+    }
+    set _Cutoff(value) {
+        this.alphaTestValue = value;
+    }
+    /**
+     * 设置渲染模式。
+     */
+    set renderMode(value) {
+        switch (value) {
+            case LTBlinnPhong_HeightFog.RENDERMODE_OPAQUE:
+                this.alphaTest = false;
+                this.renderQueue = Laya.Material.RENDERQUEUE_OPAQUE;
+                this.depthWrite = true;
+                this.cull = Laya.RenderState.CULL_BACK;
+                this.blend = Laya.RenderState.BLEND_DISABLE;
+                this.depthTest = Laya.RenderState.DEPTHTEST_LESS;
+                break;
+            case LTBlinnPhong_HeightFog.RENDERMODE_CUTOUT:
+                this.renderQueue = Laya.Material.RENDERQUEUE_ALPHATEST;
+                this.alphaTest = true;
+                this.depthWrite = true;
+                this.cull = Laya.RenderState.CULL_BACK;
+                this.blend = Laya.RenderState.BLEND_DISABLE;
+                this.depthTest = Laya.RenderState.DEPTHTEST_LESS;
+                break;
+            case LTBlinnPhong_HeightFog.RENDERMODE_TRANSPARENT:
+                this.renderQueue = Laya.Material.RENDERQUEUE_TRANSPARENT;
+                this.alphaTest = false;
+                this.depthWrite = false;
+                this.cull = Laya.RenderState.CULL_BACK;
+                this.blend = Laya.RenderState.BLEND_ENABLE_ALL;
+                this.blendSrc = Laya.RenderState.BLENDPARAM_SRC_ALPHA;
+                this.blendDst = Laya.RenderState.BLENDPARAM_ONE_MINUS_SRC_ALPHA;
+                this.depthTest = Laya.RenderState.DEPTHTEST_LESS;
+                break;
+            default:
+                throw new Error("Material:renderMode value error.");
+        }
+    }
+    /**
+     * 是否支持顶点色。
+     */
+    get enableVertexColor() {
+        return this._enableVertexColor;
+    }
+    set enableVertexColor(value) {
+        this._enableVertexColor = value;
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_ENABLEVERTEXCOLOR);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_ENABLEVERTEXCOLOR);
+    }
+    /**
+     * 纹理平铺和偏移X分量。
+     */
+    get tilingOffsetX() {
+        return this._MainTex_STX;
+    }
+    set tilingOffsetX(x) {
+        this._MainTex_STX = x;
+    }
+    /**
+     * 纹理平铺和偏移Y分量。
+     */
+    get tilingOffsetY() {
+        return this._MainTex_STY;
+    }
+    set tilingOffsetY(y) {
+        this._MainTex_STY = y;
+    }
+    /**
+     * 纹理平铺和偏移Z分量。
+     */
+    get tilingOffsetZ() {
+        return this._MainTex_STZ;
+    }
+    set tilingOffsetZ(z) {
+        this._MainTex_STZ = z;
+    }
+    /**
+     * 纹理平铺和偏移W分量。
+     */
+    get tilingOffsetW() {
+        return this._MainTex_STW;
+    }
+    set tilingOffsetW(w) {
+        this._MainTex_STW = w;
+    }
+    /**
+     * 纹理平铺和偏移。
+     */
+    get tilingOffset() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+    }
+    set tilingOffset(value) {
+        if (value) {
+            if (value.x != 1 || value.y != 1 || value.z != 0 || value.w != 0)
+                this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET);
+            else
+                this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET);
+        }
+        else {
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET);
+        }
+        this._shaderValues.setVector(LTBlinnPhong_HeightFog.TILING_OFFSET, value);
+    }
+    /**
+     * 反照率颜色R分量。
+     */
+    get albedoColorR() {
+        return this._ColorR;
+    }
+    set albedoColorR(value) {
+        this._ColorR = value;
+    }
+    /**
+     * 反照率颜色G分量。
+     */
+    get albedoColorG() {
+        return this._ColorG;
+    }
+    set albedoColorG(value) {
+        this._ColorG = value;
+    }
+    /**
+     * 反照率颜色B分量。
+     */
+    get albedoColorB() {
+        return this._ColorB;
+    }
+    set albedoColorB(value) {
+        this._ColorB = value;
+    }
+    /**
+     * 反照率颜色Z分量。
+     */
+    get albedoColorA() {
+        return this._ColorA;
+    }
+    set albedoColorA(value) {
+        this._ColorA = value;
+    }
+    /**
+     * 反照率颜色。
+     */
+    get albedoColor() {
+        return this._albedoColor;
+    }
+    set albedoColor(value) {
+        var finalAlbedo = this._shaderValues.getVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR);
+        Laya.Vector4.scale(value, this._albedoIntensity, finalAlbedo);
+        this._albedoColor = value;
+        this._shaderValues.setVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR, finalAlbedo); //修改值后必须调用此接口,否则NATIVE不生效
+    }
+    /**
+     * 反照率强度。
+     */
+    get albedoIntensity() {
+        return this._albedoIntensity;
+    }
+    set albedoIntensity(value) {
+        this._AlbedoIntensity = value;
+    }
+    /**
+     * 高光颜色R轴分量。
+     */
+    get specularColorR() {
+        return this._SpecColorR;
+    }
+    set specularColorR(value) {
+        this._SpecColorR = value;
+    }
+    /**
+     * 高光颜色G分量。
+     */
+    get specularColorG() {
+        return this._SpecColorG;
+    }
+    set specularColorG(value) {
+        this._SpecColorG = value;
+    }
+    /**
+     * 高光颜色B分量。
+     */
+    get specularColorB() {
+        return this._SpecColorB;
+    }
+    set specularColorB(value) {
+        this._SpecColorB = value;
+    }
+    /**
+     * 高光颜色A分量。
+     */
+    get specularColorA() {
+        return this._SpecColorA;
+    }
+    set specularColorA(value) {
+        this._SpecColorA = value;
+    }
+    /**
+     * 高光颜色。
+     */
+    get specularColor() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR);
+    }
+    set specularColor(value) {
+        this._shaderValues.setVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR, value);
+    }
+    /**
+     * 高光强度,范围为0到1。
+     */
+    get shininess() {
+        return this._Shininess;
+    }
+    set shininess(value) {
+        this._Shininess = value;
+    }
+    /**
+     * 反照率贴图。
+     */
+    get albedoTexture() {
+        return this._shaderValues.getTexture(LTBlinnPhong_HeightFog.DIFFUSE_TEXTURE);
+    }
+    set albedoTexture(value) {
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_DIFFUSEMAP);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_DIFFUSEMAP);
+        this._shaderValues.setTexture(LTBlinnPhong_HeightFog.DIFFUSE_TEXTURE, value);
+    }
+    /**
+     * 法线贴图。
+     */
+    get normalTexture() {
+        return this._shaderValues.getTexture(LTBlinnPhong_HeightFog.NORMAL_TEXTURE);
+    }
+    set normalTexture(value) {
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_NORMALMAP);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_NORMALMAP);
+        this._shaderValues.setTexture(LTBlinnPhong_HeightFog.NORMAL_TEXTURE, value);
+    }
+    /**
+     * 高光贴图。
+     */
+    get specularTexture() {
+        return this._shaderValues.getTexture(LTBlinnPhong_HeightFog.SPECULAR_TEXTURE);
+    }
+    set specularTexture(value) {
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_SPECULARMAP);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_SPECULARMAP);
+        this._shaderValues.setTexture(LTBlinnPhong_HeightFog.SPECULAR_TEXTURE, value);
+    }
+    /**
+     * 是否写入深度。
+     */
+    get depthWrite() {
+        return this._shaderValues.getBool(LTBlinnPhong_HeightFog.DEPTH_WRITE);
+    }
+    set depthWrite(value) {
+        this._shaderValues.setBool(LTBlinnPhong_HeightFog.DEPTH_WRITE, value);
+    }
+    /**
+     * 剔除方式。
+     */
+    get cull() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.CULL);
+    }
+    set cull(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.CULL, value);
+    }
+    /**
+     * 混合方式。
+     */
+    get blend() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.BLEND);
+    }
+    set blend(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.BLEND, value);
+    }
+    /**
+     * 混合源。
+     */
+    get blendSrc() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.BLEND_SRC);
+    }
+    set blendSrc(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.BLEND_SRC, value);
+    }
+    /**
+     * 混合目标。
+     */
+    get blendDst() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.BLEND_DST);
+    }
+    set blendDst(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.BLEND_DST, value);
+    }
+    /**
+     * 深度测试方式。
+     */
+    get depthTest() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.DEPTH_TEST);
+    }
+    set depthTest(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.DEPTH_TEST, value);
+    }
+    static InitShader() {
+        if (this._isInited)
+            return;
+        this._isInited = true;
+        this.__initDefine__();
+        //BLINNPHONG
+        let attributeMap = {
+            'a_Position': Laya.VertexMesh.MESH_POSITION0,
+            'a_Color': Laya.VertexMesh.MESH_COLOR0,
+            'a_Normal': Laya.VertexMesh.MESH_NORMAL0,
+            'a_Texcoord0': Laya.VertexMesh.MESH_TEXTURECOORDINATE0,
+            'a_Texcoord1': Laya.VertexMesh.MESH_TEXTURECOORDINATE1,
+            'a_BoneWeights': Laya.VertexMesh.MESH_BLENDWEIGHT0,
+            'a_BoneIndices': Laya.VertexMesh.MESH_BLENDINDICES0,
+            'a_Tangent0': Laya.VertexMesh.MESH_TANGENT0,
+            'a_MvpMatrix': Laya.VertexMesh.MESH_MVPMATRIX_ROW0,
+            'a_WorldMat': Laya.VertexMesh.MESH_WORLDMATRIX_ROW0
+        };
+        let uniformMap = {
+            'u_HeightFogColor': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_HeightFogStartY': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_HeightFogDistance': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_Bones': Laya.Shader3D.PERIOD_CUSTOM,
+            'u_DiffuseTexture': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_SpecularTexture': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_NormalTexture': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_AlphaTestValue': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_DiffuseColor': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_MaterialSpecular': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_Shininess': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_TilingOffset': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_WorldMat': Laya.Shader3D.PERIOD_SPRITE,
+            'u_MvpMatrix': Laya.Shader3D.PERIOD_SPRITE,
+            'u_LightmapScaleOffset': Laya.Shader3D.PERIOD_SPRITE,
+            'u_LightMap': Laya.Shader3D.PERIOD_SPRITE,
+            'u_LightMapDirection': Laya.Shader3D.PERIOD_SPRITE,
+            'u_CameraPos': Laya.Shader3D.PERIOD_CAMERA,
+            'u_Viewport': Laya.Shader3D.PERIOD_CAMERA,
+            'u_ProjectionParams': Laya.Shader3D.PERIOD_CAMERA,
+            'u_View': Laya.Shader3D.PERIOD_CAMERA,
+            'u_ViewProjection': Laya.Shader3D.PERIOD_CAMERA,
+            'u_ReflectTexture': Laya.Shader3D.PERIOD_SCENE,
+            'u_ReflectIntensity': Laya.Shader3D.PERIOD_SCENE,
+            'u_FogStart': Laya.Shader3D.PERIOD_SCENE,
+            'u_FogRange': Laya.Shader3D.PERIOD_SCENE,
+            'u_FogColor': Laya.Shader3D.PERIOD_SCENE,
+            'u_DirationLightCount': Laya.Shader3D.PERIOD_SCENE,
+            'u_LightBuffer': Laya.Shader3D.PERIOD_SCENE,
+            'u_LightClusterBuffer': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientColor': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowBias': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowLightDirection': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowMap': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowParams': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowSplitSpheres': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowMatrices': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowMapSize': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotShadowMap': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotViewProjectMatrix': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowLightPosition': Laya.Shader3D.PERIOD_SCENE,
+            //GI
+            'u_AmbientSHAr': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHAg': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHAb': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHBr': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHBg': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHBb': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHC': Laya.Shader3D.PERIOD_SCENE,
+            //legacy lighting
+            'u_DirectionLight.color': Laya.Shader3D.PERIOD_SCENE,
+            'u_DirectionLight.direction': Laya.Shader3D.PERIOD_SCENE,
+            'u_PointLight.position': Laya.Shader3D.PERIOD_SCENE,
+            'u_PointLight.range': Laya.Shader3D.PERIOD_SCENE,
+            'u_PointLight.color': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.position': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.direction': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.range': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.spot': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.color': Laya.Shader3D.PERIOD_SCENE
+        };
+        let stateMap = {
+            's_Cull': Laya.Shader3D.RENDER_STATE_CULL,
+            's_Blend': Laya.Shader3D.RENDER_STATE_BLEND,
+            's_BlendSrc': Laya.Shader3D.RENDER_STATE_BLEND_SRC,
+            's_BlendDst': Laya.Shader3D.RENDER_STATE_BLEND_DST,
+            's_DepthTest': Laya.Shader3D.RENDER_STATE_DEPTH_TEST,
+            's_DepthWrite': Laya.Shader3D.RENDER_STATE_DEPTH_WRITE
+        };
+        let customShader = Laya.Shader3D.add(LTBlinnPhong_HeightFog._shaderName, null, null, true);
+        let subShader = new Laya.SubShader(attributeMap, uniformMap);
+        customShader.addSubShader(subShader);
+        subShader.addShaderPass(_shader_LT_Mesh_BlinnPhong_DepthFog_vs__WEBPACK_IMPORTED_MODULE_0__["default"], _shader_LT_Mesh_BlinnPhong_DepthFog_fs__WEBPACK_IMPORTED_MODULE_1__["default"], stateMap, "Forward");
+        let shaderPass = subShader.addShaderPass(_shader_Mesh_BlinnPhongShadowCaster_vs__WEBPACK_IMPORTED_MODULE_2__["default"], _shader_Mesh_BlinnPhongShadowCaster_fs__WEBPACK_IMPORTED_MODULE_3__["default"], stateMap, "ShadowCaster");
+    }
+    static CreateFromBlinnPhong(mat) {
+        let newMat = new LTBlinnPhong_HeightFog();
+        newMat.albedoColor = mat.albedoColor;
+        newMat.albedoIntensity = mat.albedoIntensity;
+        newMat.albedoTexture = mat.albedoTexture;
+        newMat.normalTexture = mat.normalTexture;
+        newMat.specularColor = mat.specularColor;
+        newMat.specularTexture = mat.specularTexture;
+        return newMat;
+    }
+    /**
+     * 克隆。
+     * @return	 克隆副本。
+     * @override
+     */
+    clone() {
+        var dest = new LTBlinnPhong_HeightFog();
+        this.cloneTo(dest);
+        return dest;
+    }
+    /**
+     * @inheritDoc
+     * @override
+     */
+    cloneTo(destObject) {
+        super.cloneTo(destObject);
+        var destMaterial = destObject;
+        destMaterial._enableLighting = this._enableLighting;
+        destMaterial._albedoIntensity = this._albedoIntensity;
+        destMaterial._enableVertexColor = this._enableVertexColor;
+        this._albedoColor.cloneTo(destMaterial._albedoColor);
+    }
+}
+/**渲染状态_不透明。*/
+LTBlinnPhong_HeightFog.RENDERMODE_OPAQUE = 0;
+/**渲染状态_阿尔法测试。*/
+LTBlinnPhong_HeightFog.RENDERMODE_CUTOUT = 1;
+/**渲染状态_透明混合。*/
+LTBlinnPhong_HeightFog.RENDERMODE_TRANSPARENT = 2;
+LTBlinnPhong_HeightFog.DIFFUSE_TEXTURE = Laya.Shader3D.propertyNameToID("u_DiffuseTexture");
+LTBlinnPhong_HeightFog.NORMAL_TEXTURE = Laya.Shader3D.propertyNameToID("u_NormalTexture");
+LTBlinnPhong_HeightFog.SPECULAR_TEXTURE = Laya.Shader3D.propertyNameToID("u_SpecularTexture");
+LTBlinnPhong_HeightFog.ALBEDO_COLOR = Laya.Shader3D.propertyNameToID("u_DiffuseColor");
+LTBlinnPhong_HeightFog.MATERIAL_SPECULAR = Laya.Shader3D.propertyNameToID("u_MaterialSpecular");
+LTBlinnPhong_HeightFog.SHININESS = Laya.Shader3D.propertyNameToID("u_Shininess");
+LTBlinnPhong_HeightFog.TILING_OFFSET = Laya.Shader3D.propertyNameToID("u_TilingOffset");
+LTBlinnPhong_HeightFog.CULL = Laya.Shader3D.propertyNameToID("s_Cull");
+LTBlinnPhong_HeightFog.BLEND = Laya.Shader3D.propertyNameToID("s_Blend");
+LTBlinnPhong_HeightFog.BLEND_SRC = Laya.Shader3D.propertyNameToID("s_BlendSrc");
+LTBlinnPhong_HeightFog.BLEND_DST = Laya.Shader3D.propertyNameToID("s_BlendDst");
+LTBlinnPhong_HeightFog.DEPTH_TEST = Laya.Shader3D.propertyNameToID("s_DepthTest");
+LTBlinnPhong_HeightFog.DEPTH_WRITE = Laya.Shader3D.propertyNameToID("s_DepthWrite");
+LTBlinnPhong_HeightFog.HEIGHT_FOG_COLOR = Laya.Shader3D.propertyNameToID("u_HeightFogColor");
+LTBlinnPhong_HeightFog.HEIGHT_FOG_STARTY = Laya.Shader3D.propertyNameToID("u_HeightFogStartY");
+LTBlinnPhong_HeightFog.HEIGHT_FOG_DISTANCE = Laya.Shader3D.propertyNameToID("u_HeightFogDistance");
+LTBlinnPhong_HeightFog._shaderName = "LTBlinnPhong_HeightFog";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.fs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.fs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n\tprecision highp int;\r\n#else\r\n\tprecision mediump float;\r\n\tprecision mediump int;\r\n#endif\r\n\r\n#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\"\r\n\r\nuniform vec4 u_DiffuseColor;\r\n\r\n#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef ALPHATEST\r\n\tuniform float u_AlphaTestValue;\r\n#endif\r\n\r\n#ifdef DIFFUSEMAP\r\n\tuniform sampler2D u_DiffuseTexture;\r\n#endif\r\n\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tvarying vec2 v_LightMapUV;\r\n\tuniform sampler2D u_LightMap;\r\n#endif\r\n\r\nvarying vec3 v_Normal;\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\tvarying vec3 v_ViewDir; \r\n\r\n\tuniform vec3 u_MaterialSpecular;\r\n\tuniform float u_Shininess;\r\n\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tuniform DirectionLight u_DirectionLight;\r\n\t\t#endif\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tuniform PointLight u_PointLight;\r\n\t\t#endif\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tuniform SpotLight u_SpotLight;\r\n\t\t#endif\r\n\t#else\r\n\t\tuniform mat4 u_View;\r\n\t\tuniform vec4 u_ProjectionParams;\r\n\t\tuniform vec4 u_Viewport;\r\n\t\tuniform int u_DirationLightCount;\r\n\t\tuniform sampler2D u_LightBuffer;\r\n\t\tuniform sampler2D u_LightClusterBuffer;\r\n\t#endif\r\n\r\n\t#ifdef SPECULARMAP \r\n\t\tuniform sampler2D u_SpecularTexture;\r\n\t#endif\r\n#endif\r\n\r\n#ifdef NORMALMAP \r\n\tuniform sampler2D u_NormalTexture;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef FOG\r\n\tuniform float u_FogStart;\r\n\tuniform float u_FogRange;\r\n\tuniform vec3 u_FogColor;\r\n#endif\r\n\r\n#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n\r\n#include \"GlobalIllumination.glsl\";//\"GlobalIllumination.glsl use uniform should at front of this\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\nvarying vec3 v_WolrdPos;\r\nuniform vec3 u_HeightFogColor;\r\nuniform float u_HeightFogStartY;\r\nuniform float u_HeightFogDistance;\r\n\r\nvoid main()\r\n{\r\n\tvec3 normal;//light and SH maybe use normal\r\n\t#if defined(NORMALMAP)\r\n\t\tvec3 normalMapSample = texture2D(u_NormalTexture, v_Texcoord0).rgb;\r\n\t\tnormal = normalize(NormalSampleToWorldSpace(normalMapSample, v_Normal, v_Tangent,v_Binormal));\r\n\t#else\r\n\t\tnormal = normalize(v_Normal);\r\n\t#endif\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tvec3 viewDir= normalize(v_ViewDir);\r\n\t#endif\r\n\r\n\tLayaGIInput giInput;\r\n\t#ifdef LIGHTMAP\t\r\n\t\tgiInput.lightmapUV=v_LightMapUV;\r\n\t#endif\r\n\tvec3 globalDiffuse=layaGIBase(giInput,1.0,normal);\r\n\t\r\n\tvec4 mainColor=u_DiffuseColor;\r\n\t#ifdef DIFFUSEMAP\r\n\t\tvec4 difTexColor=texture2D(u_DiffuseTexture, v_Texcoord0);\r\n\t\tmainColor=mainColor*difTexColor;\r\n\t#endif \r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tmainColor=mainColor*v_Color;\r\n\t#endif \r\n    \r\n\t#ifdef ALPHATEST\r\n\t\tif(mainColor.a<u_AlphaTestValue)\r\n\t\t\tdiscard;\r\n\t#endif\r\n  \r\n\t\r\n\tvec3 diffuse = vec3(0.0);\r\n\tvec3 specular= vec3(0.0);\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tvec3 dif,spe;\r\n\t\t#ifdef SPECULARMAP\r\n\t\t\tvec3 gloss=texture2D(u_SpecularTexture, v_Texcoord0).rgb;\r\n\t\t#else\r\n\t\t\t#ifdef DIFFUSEMAP\r\n\t\t\t\tvec3 gloss=vec3(difTexColor.a);\r\n\t\t\t#else\r\n\t\t\t\tvec3 gloss=vec3(1.0);\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t\r\n\t\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tLayaAirBlinnPhongDiectionLight(u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_DirectionLight,dif,spe);\r\n\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t#else\r\n\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t#endif\r\n\t\t\t\tfloat shadowAttenuation=sampleShadowmap(shadowCoord);\r\n\t\t\t\tdif *= shadowAttenuation;\r\n\t\t\t\tspe *= shadowAttenuation;\r\n\t\t\t#endif\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_PointLight,dif,spe);\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_SpotLight,dif,spe);\r\n\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\tfloat spotShadowAttenuation = sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t\tdif *= shadowAttenuation;\r\n\t\t\t\tspe *= shadowAttenuation;\r\n\t\t\t#endif\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t#else\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t{\r\n\t\t\t\tif(i >= u_DirationLightCount)\r\n\t\t\t\t\tbreak;\r\n\t\t\t\tDirectionLight directionLight = getDirectionLight(u_LightBuffer,i);\r\n\t\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t\t\t#else\r\n\t\t\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t\t\t#endif\r\n\t\t\t\t\t\tdirectionLight.color *= sampleShadowmap(shadowCoord);\r\n\t\t\t\t\t}\r\n\t\t\t\t#endif\r\n\t\t\t\tLayaAirBlinnPhongDiectionLight(u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,directionLight,dif,spe);\r\n\t\t\t\tdiffuse+=dif;\r\n\t\t\t\tspecular+=spe;\r\n\t\t\t}\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tivec4 clusterInfo =getClusterInfo(u_LightClusterBuffer,u_View,u_Viewport, v_PositionWorld,gl_FragCoord,u_ProjectionParams);\r\n\t\t\t#ifdef POINTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.x)//PointLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tPointLight pointLight = getPointLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,pointLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t\t#ifdef SPOTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.y)//SpotLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tSpotLight spotLight = getSpotLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\t\t\t\tspotLight.color *= sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t#endif\r\n\t\t\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,spotLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t#endif\r\n\r\n\tgl_FragColor =vec4(mainColor.rgb*(globalDiffuse + diffuse),mainColor.a);\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tgl_FragColor.rgb+=specular;\r\n\t#endif\r\n\t  \r\n\t#ifdef FOG\r\n\t\tfloat lerpFact=clamp((1.0/gl_FragCoord.w-u_FogStart)/u_FogRange,0.0,1.0);\r\n\t\tgl_FragColor.rgb=mix(gl_FragColor.rgb,u_FogColor,lerpFact);\r\n\t#endif\r\n\r\n    float heightLerp = clamp((u_HeightFogStartY - v_WolrdPos.y) / u_HeightFogDistance, 0.0, 1.0);\r\n    gl_FragColor.rgb = mix(gl_FragColor.rgb, u_HeightFogColor, heightLerp);\r\n}\r\n\r\n");
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.vs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.vs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\";\r\n\r\nattribute vec4 a_Position;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#if defined(LIGHTMAP)&&defined(UV1)\r\n\tattribute vec2 a_Texcoord1;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tuniform vec4 u_LightmapScaleOffset;\r\n\tvarying vec2 v_LightMapUV;\r\n#endif\r\n\r\n#ifdef COLOR\r\n\tattribute vec4 a_Color;\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nattribute vec3 a_Normal;\r\nvarying vec3 v_Normal; \r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\tuniform vec3 u_CameraPos;\r\n\tvarying vec3 v_ViewDir; \r\n#endif\r\n\r\n#if defined(NORMALMAP)\r\n\tattribute vec4 a_Tangent0;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\n#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\nvarying vec3 v_WolrdPos;\r\n\r\nvoid main()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform = u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\tposition=skinTransform*a_Position;\r\n\t#else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\r\n    \r\n\t\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\r\n\tmat3 worldInvMat;\r\n\t#ifdef BONE\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat*skinTransform));\r\n\t#else\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat));\r\n\t#endif  \r\n\tv_Normal=normalize(a_Normal*worldInvMat);\r\n\t#if defined(NORMALMAP)\r\n\t\tv_Tangent=normalize(a_Tangent0.xyz*worldInvMat);\r\n\t\tv_Binormal=cross(v_Normal,v_Tangent)*a_Tangent0.w;\r\n\t#endif\r\n\r\n    v_WolrdPos = (worldMat*position).xyz;\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\tvec3 positionWS = v_WolrdPos;\r\n\t\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tv_ViewDir = u_CameraPos-positionWS;\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\t\tv_PositionWorld = positionWS;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n\t\t#ifdef TILINGOFFSET\r\n\t\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t\t#else\r\n\t\t\tv_Texcoord0=a_Texcoord0;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#ifdef LIGHTMAP\r\n\t\t#ifdef UV1\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord1.x,1.0-a_Texcoord1.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#else\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord0.x,1.0-a_Texcoord0.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#endif \r\n\t\tv_LightMapUV.y=1.0-v_LightMapUV.y;\r\n\t#endif\r\n\r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tv_Color=a_Color;\r\n\t#endif\r\n\r\n\t#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\t\tv_ShadowCoord =getShadowCoord(vec4(positionWS,1.0));\r\n\t#endif\r\n\r\n\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\tv_SpotShadowCoord = u_SpotViewProjectMatrix*vec4(positionWS,1.0);\r\n\t#endif\r\n\r\n\tgl_Position = remapGLPositionZ(gl_Position);\r\n}");
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.fs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.fs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n\tprecision highp int;\r\n#else\r\n\tprecision mediump float;\r\n\tprecision mediump int;\r\n#endif\r\n\r\n#include \"ShadowCasterFS.glsl\"\r\n\r\nvoid main()\r\n{\r\n\tgl_FragColor = shadowCasterFragment();\r\n}");
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.vs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.vs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#include \"ShadowCasterVS.glsl\"\r\n\r\nvoid main()\r\n{\r\n\tvec4 positionCS = shadowCasterVertex();\r\n\tgl_Position = remapGLPositionZ(positionCS);\r\n}");
 
 /***/ }),
 
@@ -12224,6 +13352,71 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
 
 /***/ }),
 
+/***/ "./src/script/test/HeightFogTest.ts":
+/*!******************************************!*\
+  !*** ./src/script/test/HeightFogTest.ts ***!
+  \******************************************/
+/*! exports provided: HeightFogTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeightFogTest", function() { return HeightFogTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_Material_LTBlinnPhong_HeightFog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Material/LTBlinnPhong_HeightFog */ "./src/LTGame/Material/LTBlinnPhong_HeightFog.ts");
+/* harmony import */ var _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Material/HeightFogManager */ "./src/LTGame/Material/HeightFogManager.ts");
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+
+
+
+
+
+
+const scene_path = "res/export/Conventional/HeightFog.ls";
+class HeightFogTest {
+    constructor() {
+        this.name = "高度雾测试";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            Laya.Shader3D.debugMode = true;
+            _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__["HeightFogManager"].instance.fogColor = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(0, 1), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(0, 1), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(0, 1));
+            _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__["HeightFogManager"].instance.fogDistance = 10;
+            _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__["HeightFogManager"].instance.fogStartHeight = 10;
+            let shareMat = null;
+            let cubes = this._s3d.getChildByName("cubes");
+            for (let i = 0; i < cubes.numChildren; ++i) {
+                let getChild = cubes.getChildAt(i).getChildAt(0);
+                if (shareMat == null) {
+                    shareMat = _LTGame_Material_LTBlinnPhong_HeightFog__WEBPACK_IMPORTED_MODULE_2__["LTBlinnPhong_HeightFog"].CreateFromBlinnPhong(getChild.meshRenderer.sharedMaterial);
+                }
+                getChild.meshRenderer.sharedMaterial = shareMat;
+            }
+            let panel = this._s3d.getChildByName("Plane");
+            panel.meshRenderer.material
+                = _LTGame_Material_LTBlinnPhong_HeightFog__WEBPACK_IMPORTED_MODULE_2__["LTBlinnPhong_HeightFog"].CreateFromBlinnPhong(panel.meshRenderer.sharedMaterial);
+            /*
+            HeightFogManager.instance.fogColor = new Laya.Vector3(1, 0, 0);
+            HeightFogManager.instance.fogDistance = 5;
+            HeightFogManager.instance.fogStartHeight = 10;
+            */
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        });
+    }
+    Clear() {
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/test/PBRTest.ts":
 /*!************************************!*\
   !*** ./src/script/test/PBRTest.ts ***!
@@ -12235,9 +13428,16 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PBRTest", function() { return PBRTest; });
 /* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
+
 
 const scene_path = "res/export/Conventional/SkyBox.ls";
 class PBRTest {
+    constructor() {
+        this.name = "PBR测试";
+    }
     Create() {
         return __awaiter(this, void 0, void 0, function* () {
             this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
@@ -12248,6 +13448,7 @@ class PBRTest {
             this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, 1.5, 2), this._s3d, row, new Laya.Vector4(186 / 255, 110 / 255, 64 / 255, 1.0), 1.0);
             this.addSpheresSmoothnessMetallic(sphereMesh, new Laya.Vector3(0, 0, 2), this._s3d, 3, row, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
             this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, -1.5, 2), this._s3d, row, new Laya.Vector4(0.0, 0.0, 0.0, 1.0), 0.0);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
         });
     }
     /**
@@ -12299,6 +13500,7 @@ class PBRTest {
     Clear() {
         this._s3d.destroy();
         _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show();
     }
 }
 
@@ -12720,14 +13922,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
 /* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
-/* harmony import */ var _UI_TestMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
-/* harmony import */ var _test_PBRTest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../test/PBRTest */ "./src/script/test/PBRTest.ts");
+/* harmony import */ var _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../test/PBRTest */ "./src/script/test/PBRTest.ts");
+/* harmony import */ var _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../test/HeightFogTest */ "./src/script/test/HeightFogTest.ts");
 
 
 
 
 
 class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor() {
+        super(...arguments);
+        this._sampleList = [
+            new _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__["PBRTest"](),
+            new _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__["HeightFogTest"]()
+        ];
+    }
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_FunctionTestMediator();
@@ -12739,18 +13948,19 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickClose);
-        this.ui.m_btn_pbr.onClick(this, this._OnClickPBR);
+        this.ui.m_list_btns.setVirtual();
+        this.ui.m_list_btns.itemRenderer = Laya.Handler.create(this, this._OnItemBtnsRender, null, false);
+        this.ui.m_list_btns.numItems = this._sampleList.length;
     }
-    _OnClickPBR() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.Hide();
-            let test = new _test_PBRTest__WEBPACK_IMPORTED_MODULE_4__["PBRTest"]();
-            yield test.Create();
-            _UI_TestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show(Laya.Handler.create(null, () => {
-                test.Clear();
-                UI_FunctionTestMediator.instance.Show();
-            }));
-        });
+    _OnItemBtnsRender(index, itemUI) {
+        let data = this._sampleList[index];
+        itemUI.text = data.name;
+        itemUI.onClick(this, this._OnClickBtns, [index]);
+    }
+    _OnClickBtns(index) {
+        this.Hide();
+        let data = this._sampleList[index];
+        data.Create();
     }
     _OnClickClose() {
         this.Hide();
@@ -13452,8 +14662,8 @@ class UI_FunctionTest extends fgui.GComponent {
         return (fgui.UIPackage.createObject("Main", "FunctionTest"));
     }
     onConstruct() {
-        this.m_btn_pbr = (this.getChildAt(1));
-        this.m_btn_back = (this.getChildAt(2));
+        this.m_btn_back = (this.getChildAt(1));
+        this.m_list_btns = (this.getChildAt(2));
     }
 }
 UI_FunctionTest.URL = "ui://kk7g5mmmyllkk";

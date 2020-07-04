@@ -1,8 +1,9 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_FunctionTest from "../../ui/Main/UI_FunctionTest";
 import { UI_MainMediator } from "./UI_MainMediator";
-import UI_TestMediator from "./UI_TestMediator";
 import { PBRTest } from "../test/PBRTest";
+import { ITest } from "../test/ITest";
+import { HeightFogTest } from "../test/HeightFogTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
 
@@ -15,22 +16,30 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
         return this._instance;
     }
 
+    private _sampleList: ITest[] = [
+        new PBRTest(),
+        new HeightFogTest()
+    ];
+
     _OnShow() {
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickClose);
-        this.ui.m_btn_pbr.onClick(this, this._OnClickPBR);
+        this.ui.m_list_btns.setVirtual();
+        this.ui.m_list_btns.itemRenderer = Laya.Handler.create(this, this._OnItemBtnsRender, null, false);
+        this.ui.m_list_btns.numItems = this._sampleList.length;
     }
 
-    private async _OnClickPBR() {
-        this.Hide();
+    private _OnItemBtnsRender(index: number, itemUI: fgui.GButton) {
+        let data = this._sampleList[index];
+        itemUI.text = data.name;
+        itemUI.onClick(this, this._OnClickBtns, [index]);
+    }
 
-        let test = new PBRTest();
-        await test.Create();
-        UI_TestMediator.instance.Show(Laya.Handler.create(null, () => {
-            test.Clear();
-            UI_FunctionTestMediator.instance.Show();
-        }));
+    private _OnClickBtns(index: number) {
+        this.Hide()
+        let data = this._sampleList[index];
+        data.Create();
     }
 
     private _OnClickClose() {
