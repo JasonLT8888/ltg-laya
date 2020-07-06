@@ -530,6 +530,40 @@ class ArrayEx {
 
 /***/ }),
 
+/***/ "./src/LTGame/LTUtils/CameraEx.ts":
+/*!****************************************!*\
+  !*** ./src/LTGame/LTUtils/CameraEx.ts ***!
+  \****************************************/
+/*! exports provided: CameraEx */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CameraEx", function() { return CameraEx; });
+/* harmony import */ var _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+
+class CameraEx {
+    static ScreenPosToWorldPos(camera, screenPos, fakeYPos) {
+        let ray = new Laya.Ray(_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero, _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero);
+        camera.viewportPointToRay(screenPos, ray);
+        let downVec = _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].s_down;
+        let dotValue = _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].Dot(downVec, ray.direction);
+        let heightValue = ray.origin.y;
+        let scaleValue = heightValue / dotValue;
+        let finalDir = _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].Scale(ray.direction, scaleValue);
+        return _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].Add(ray.origin, finalDir);
+    }
+    static ScreenPosToRay(camera, screenPos) {
+        let ray = new Laya.Ray(_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero, _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero);
+        let clickPoint = new Laya.Vector2(screenPos.x / Laya.stage.width, screenPos.y / Laya.stage.height);
+        camera.normalizedViewportPointToRay(clickPoint, ray);
+        return ray;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTGame/LTUtils/LTDictionary.ts":
 /*!********************************************!*\
   !*** ./src/LTGame/LTUtils/LTDictionary.ts ***!
@@ -12799,8 +12833,8 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
                 this._appId = '88888888';
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].TT:
-                this._gameVersion = "v0.0.1";
-                this._resVersion = 'v0.0.1';
+                this._gameVersion = "v0.0.2";
+                this._resVersion = 'v0.0.2';
                 platformData.appId = "ttd60ba0b64931e10f";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
@@ -13105,6 +13139,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
 /* harmony import */ var _LTGame_LTUtils_ArrayEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/ArrayEx */ "./src/LTGame/LTUtils/ArrayEx.ts");
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _LTGame_LTUtils_CameraEx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTGame/LTUtils/CameraEx */ "./src/LTGame/LTUtils/CameraEx.ts");
+/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+
+
 
 
 
@@ -13121,6 +13159,12 @@ class EffectManager {
             this._instance = new EffectManager();
         }
         return this._instance;
+    }
+    get uiEffectScene() {
+        return this._uiEffectScene;
+    }
+    get uiEffectCamera() {
+        return this._uiEffectCamera;
     }
     _Init() {
         this._effectRoot = new Laya.Sprite3D("EffectManager");
@@ -13139,6 +13183,11 @@ class EffectManager {
     }
     WarmEffects() {
         return __awaiter(this, void 0, void 0, function* () {
+            this._uiEffectScene = new Laya.Scene3D();
+            Laya.stage.addChild(this._uiEffectScene);
+            this._uiEffectCamera = new Laya.Camera();
+            this._uiEffectCamera.clearFlag = Laya.CameraClearFlags.DepthOnly;
+            this._uiEffectScene.addChild(this._uiEffectCamera);
             let preloadEffects = [];
             for (let i = 0; i < _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList.length; ++i) {
                 let configItem = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList[i];
@@ -13196,7 +13245,17 @@ class EffectManager {
                 showData.parent.addChild(instEffect);
             }
             else {
-                this._effectRoot.addChild(instEffect);
+                let effectConfig = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].data[showData.effectId];
+                if (effectConfig.isUIEffect) {
+                    this._uiEffectScene.addChild(instEffect);
+                    if (showData.setPos != null) {
+                        let ray = _LTGame_LTUtils_CameraEx__WEBPACK_IMPORTED_MODULE_7__["CameraEx"].ScreenPosToRay(this.uiEffectCamera, new Laya.Vector2(showData.setPos.x, showData.setPos.y));
+                        showData.setPos = _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_8__["default"].Add(ray.origin, _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_8__["default"].Scale(ray.origin, 100));
+                    }
+                }
+                else {
+                    this._effectRoot.addChild(instEffect);
+                }
             }
             if (showData.setPos != null) {
                 instEffect.transform.position = showData.setPos.clone();
@@ -13563,6 +13622,51 @@ class RenderTextureTest {
         this._s3d.destroy();
         _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
         _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Hide();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/UIEffectTest.ts":
+/*!*****************************************!*\
+  !*** ./src/script/test/UIEffectTest.ts ***!
+  \*****************************************/
+/*! exports provided: UIEffectTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIEffectTest", function() { return UIEffectTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
+
+
+
+const scene_path = "res/export/Conventional/HeightFog.ls";
+class UIEffectTest {
+    constructor() {
+        this.name = "UI特效测试";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnPressDown);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ui.m_img_bg.color = "ffffffff";
+        });
+    }
+    _OnPressDown(event) {
+        _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__["EffectManager"].instance.PlayEffectById(2, 2, new Laya.Vector3(event.stageX, event.stageY));
+    }
+    Clear() {
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
         _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
     }
 }
@@ -13988,6 +14092,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../test/PBRTest */ "./src/script/test/PBRTest.ts");
 /* harmony import */ var _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../test/HeightFogTest */ "./src/script/test/HeightFogTest.ts");
 /* harmony import */ var _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../test/RenderTextureTest */ "./src/script/test/RenderTextureTest.ts");
+/* harmony import */ var _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../test/UIEffectTest */ "./src/script/test/UIEffectTest.ts");
+
 
 
 
@@ -14000,7 +14106,8 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
         this._sampleList = [
             new _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__["PBRTest"](),
             new _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__["HeightFogTest"](),
-            new _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__["RenderTextureTest"]()
+            new _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__["RenderTextureTest"](),
+            new _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__["UIEffectTest"]()
         ];
     }
     static get instance() {
@@ -14961,7 +15068,8 @@ class UI_Test extends fgui.GComponent {
         return (fgui.UIPackage.createObject("Main", "Test"));
     }
     onConstruct() {
-        this.m_btn_back = (this.getChildAt(0));
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_btn_back = (this.getChildAt(1));
     }
 }
 UI_Test.URL = "ui://kk7g5mmmyllkl";
