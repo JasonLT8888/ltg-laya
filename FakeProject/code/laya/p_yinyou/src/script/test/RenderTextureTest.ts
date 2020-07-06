@@ -25,9 +25,10 @@ export class RenderTextureTest implements ITest {
         let getCamera = this._s3d.getChildByName("Main Camera") as Laya.Camera;
         this._renderCamera = getCamera.clone() as Laya.Camera;
         this._s3d.addChild(this._renderCamera);
+        // 注意格式只能用r8g8b8a8否则ip6不支持
         this._cacheRT = new Laya.RenderTexture(UI_TestRTMediator.instance.ui.m_img_display.width,
-            UI_TestRTMediator.instance.ui.m_img_display.height, Laya.RenderTextureFormat.R16G16B16A16,
-            Laya.RenderTextureDepthFormat.DEPTHSTENCIL_24_8);
+            UI_TestRTMediator.instance.ui.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8,
+            Laya.RenderTextureDepthFormat.DEPTH_16);
         this._renderCamera.renderTarget = this._cacheRT;
         this._renderCamera.enableRender = false;
 

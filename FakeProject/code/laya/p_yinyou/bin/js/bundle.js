@@ -13538,7 +13538,8 @@ class RenderTextureTest {
             let getCamera = this._s3d.getChildByName("Main Camera");
             this._renderCamera = getCamera.clone();
             this._s3d.addChild(this._renderCamera);
-            this._cacheRT = new Laya.RenderTexture(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.width, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.height, Laya.RenderTextureFormat.R16G16B16A16, Laya.RenderTextureDepthFormat.DEPTHSTENCIL_24_8);
+            // 注意格式只能用r8g8b8a8否则ip6不支持
+            this._cacheRT = new Laya.RenderTexture(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.width, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8, Laya.RenderTextureDepthFormat.DEPTH_16);
             this._renderCamera.renderTarget = this._cacheRT;
             this._renderCamera.enableRender = false;
             this._cacheImage = new fgui.GImage();
