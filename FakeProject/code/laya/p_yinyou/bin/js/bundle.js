@@ -13507,6 +13507,68 @@ class PBRTest {
 
 /***/ }),
 
+/***/ "./src/script/test/RenderTextureTest.ts":
+/*!**********************************************!*\
+  !*** ./src/script/test/RenderTextureTest.ts ***!
+  \**********************************************/
+/*! exports provided: RenderTextureTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RenderTextureTest", function() { return RenderTextureTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_TestRTMediator */ "./src/script/ui/UI_TestRTMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
+
+
+
+const scene_path = "res/export/Conventional/HeightFog.ls";
+class RenderTextureTest {
+    constructor() {
+        this.name = "RT测试";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
+            let getCamera = this._s3d.getChildByName("Main Camera");
+            this._renderCamera = getCamera.clone();
+            this._s3d.addChild(this._renderCamera);
+            this._cacheRT = new Laya.RenderTexture(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.width, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.height, Laya.RenderTextureFormat.R16G16B16A16, Laya.RenderTextureDepthFormat.DEPTHSTENCIL_24_8);
+            this._renderCamera.renderTarget = this._cacheRT;
+            this._renderCamera.enableRender = false;
+            this._cacheImage = new fgui.GImage();
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.addChildAt(this._cacheImage, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.getChildIndex(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display) + 1);
+            this._cacheImage.image.texture = new Laya.Texture(this._cacheRT);
+            this._cacheImage.setPivot(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.pivotX, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.pivotY, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.pivotAsAnchor);
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.draggable = true;
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_btn_back.onClick(this, this.Clear);
+            _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        });
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta / 1000;
+        this._renderCamera.transform.localRotationEulerY += dt * 10;
+        this._renderCamera.render();
+        this._cacheImage.setXY(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.x, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.y);
+    }
+    Clear() {
+        this._cacheRT.destroy();
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+        _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Hide();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_ADDemoMediator.ts":
 /*!********************************************!*\
   !*** ./src/script/ui/UI_ADDemoMediator.ts ***!
@@ -13924,6 +13986,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
 /* harmony import */ var _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../test/PBRTest */ "./src/script/test/PBRTest.ts");
 /* harmony import */ var _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../test/HeightFogTest */ "./src/script/test/HeightFogTest.ts");
+/* harmony import */ var _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../test/RenderTextureTest */ "./src/script/test/RenderTextureTest.ts");
+
 
 
 
@@ -13934,7 +13998,8 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
         super(...arguments);
         this._sampleList = [
             new _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__["PBRTest"](),
-            new _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__["HeightFogTest"]()
+            new _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__["HeightFogTest"](),
+            new _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__["RenderTextureTest"]()
         ];
     }
     static get instance() {
@@ -14372,6 +14437,37 @@ class UI_TestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
 
 /***/ }),
 
+/***/ "./src/script/ui/UI_TestRTMediator.ts":
+/*!********************************************!*\
+  !*** ./src/script/ui/UI_TestRTMediator.ts ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestRTMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_TestRT__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_TestRT */ "./src/ui/Main/UI_TestRT.ts");
+
+
+class UI_TestRTMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_TestRTMediator();
+            this._instance._classDefine = _ui_Main_UI_TestRT__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_UIDemoMediator.ts":
 /*!********************************************!*\
   !*** ./src/script/ui/UI_UIDemoMediator.ts ***!
@@ -14499,15 +14595,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_CommonUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UI_CommonUI */ "./src/ui/Main/UI_CommonUI.ts");
 /* harmony import */ var _UI_ADDemo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI_ADDemo */ "./src/ui/Main/UI_ADDemo.ts");
 /* harmony import */ var _UI_UIDemo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_UIDemo */ "./src/ui/Main/UI_UIDemo.ts");
-/* harmony import */ var _UI_Main__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_Main */ "./src/ui/Main/UI_Main.ts");
-/* harmony import */ var _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_PerfomanceDemo */ "./src/ui/Main/UI_PerfomanceDemo.ts");
-/* harmony import */ var _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_BoneAnimTest */ "./src/ui/Main/UI_BoneAnimTest.ts");
-/* harmony import */ var _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_MoudleDemo */ "./src/ui/Main/UI_MoudleDemo.ts");
-/* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
-/* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
-/* harmony import */ var _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
-/* harmony import */ var _UI_Test__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./UI_Test */ "./src/ui/Main/UI_Test.ts");
+/* harmony import */ var _UI_TestRT__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_TestRT */ "./src/ui/Main/UI_TestRT.ts");
+/* harmony import */ var _UI_Main__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_Main */ "./src/ui/Main/UI_Main.ts");
+/* harmony import */ var _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_PerfomanceDemo */ "./src/ui/Main/UI_PerfomanceDemo.ts");
+/* harmony import */ var _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_BoneAnimTest */ "./src/ui/Main/UI_BoneAnimTest.ts");
+/* harmony import */ var _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_MoudleDemo */ "./src/ui/Main/UI_MoudleDemo.ts");
+/* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
+/* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
+/* harmony import */ var _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
+/* harmony import */ var _UI_Test__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./UI_Test */ "./src/ui/Main/UI_Test.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
 
 
 
@@ -14524,14 +14622,15 @@ class MainBinder {
         fgui.UIObjectFactory.setExtension(_UI_CommonUI__WEBPACK_IMPORTED_MODULE_0__["default"].URL, _UI_CommonUI__WEBPACK_IMPORTED_MODULE_0__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_ADDemo__WEBPACK_IMPORTED_MODULE_1__["default"].URL, _UI_ADDemo__WEBPACK_IMPORTED_MODULE_1__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_UIDemo__WEBPACK_IMPORTED_MODULE_2__["default"].URL, _UI_UIDemo__WEBPACK_IMPORTED_MODULE_2__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_Main__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_Main__WEBPACK_IMPORTED_MODULE_3__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_4__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_5__["default"].URL, _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_5__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_8__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_9__["default"].URL, _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_9__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_Test__WEBPACK_IMPORTED_MODULE_10__["default"].URL, _UI_Test__WEBPACK_IMPORTED_MODULE_10__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_TestRT__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_TestRT__WEBPACK_IMPORTED_MODULE_3__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Main__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _UI_Main__WEBPACK_IMPORTED_MODULE_4__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_5__["default"].URL, _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_5__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_7__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_8__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_9__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_9__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_10__["default"].URL, _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_10__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Test__WEBPACK_IMPORTED_MODULE_11__["default"].URL, _UI_Test__WEBPACK_IMPORTED_MODULE_11__["default"]);
     }
 }
 
@@ -14865,6 +14964,34 @@ class UI_Test extends fgui.GComponent {
     }
 }
 UI_Test.URL = "ui://kk7g5mmmyllkl";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_TestRT.ts":
+/*!**********************************!*\
+  !*** ./src/ui/Main/UI_TestRT.ts ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestRT; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_TestRT extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "TestRT"));
+    }
+    onConstruct() {
+        this.m_img_display = (this.getChildAt(0));
+        this.m_btn_back = (this.getChildAt(1));
+    }
+}
+UI_TestRT.URL = "ui://kk7g5mmmhlhem";
 
 
 /***/ }),

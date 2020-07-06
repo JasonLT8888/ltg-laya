@@ -4,6 +4,7 @@ import { UI_MainMediator } from "./UI_MainMediator";
 import { PBRTest } from "../test/PBRTest";
 import { ITest } from "../test/ITest";
 import { HeightFogTest } from "../test/HeightFogTest";
+import { RenderTextureTest } from "../test/RenderTextureTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
 
@@ -18,7 +19,8 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
 
     private _sampleList: ITest[] = [
         new PBRTest(),
-        new HeightFogTest()
+        new HeightFogTest(),
+        new RenderTextureTest()
     ];
 
     _OnShow() {

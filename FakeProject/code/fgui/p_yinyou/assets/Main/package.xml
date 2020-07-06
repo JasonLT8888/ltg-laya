@@ -18,6 +18,7 @@
     <component id="sgapj" name="MoudleDemo.xml" path="/ui/" exported="true"/>
     <component id="yllkk" name="FunctionTest.xml" path="/ui/" exported="true"/>
     <component id="yllkl" name="Test.xml" path="/ui/" exported="true"/>
+    <component id="hlhem" name="TestRT.xml" path="/ui/Function/" exported="true"/>
   </resources>
   <publish name="Main" genCode="true"/>
 </packageDescription>

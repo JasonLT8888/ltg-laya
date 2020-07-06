@@ -28,7 +28,7 @@
     <Android>False</Android>
     <Conventional>True</Conventional>
     <SavePath>D:/Work_Projects/ltg-laya/FakeProject/code/laya/p_yinyou/bin/res</SavePath>
-    <ScrollPositionY>8</ScrollPositionY>
+    <ScrollPositionY>0</ScrollPositionY>
   </config1>
   <config2>
     <FirstlevelMenu>0</FirstlevelMenu>
