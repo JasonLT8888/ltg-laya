@@ -7,6 +7,7 @@ export namespace AudioConfig {
     }
     export var data : {[key: number]: AudioConfig.config};
     export var dataList : AudioConfig.config[];
+    export var lastData : AudioConfig.config;
     export const path = "res/config/AudioConfig.json";
 }
 

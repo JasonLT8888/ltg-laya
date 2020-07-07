@@ -1,5 +1,6 @@
 import Vector3Ex from "../LTUtils/Vector3Ex";
 import { LTBlinnPhong_HeightFog } from "./LTBlinnPhong_HeightFog";
+import { LTUnlit_HeightFog } from "./LTUnlit_HeightFog";
 
 export class HeightFogManager {
 
@@ -59,14 +60,14 @@ export class HeightFogManager {
         }
     }
 
-    private _matList: LTBlinnPhong_HeightFog[];
+    private _matList: LTBlinnPhong_HeightFog[] | LTUnlit_HeightFog[];
 
     private constructor() {
         this._matList = [];
     }
 
-    public RegistFogMat(mat: LTBlinnPhong_HeightFog) {
-        this._matList.push(mat);
+    public RegistFogMat(mat: LTBlinnPhong_HeightFog | LTUnlit_HeightFog) {
+        this._matList.push(mat as any);
         mat.heightFogColor = this._fogColor;
         mat.heightFogStartY = this._fogStartHeight;
         mat.heightFogDistance = this._fogDistance;
