@@ -1,12 +1,12 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Main from "../../ui/Main/UI_Main";
-import UI_UIDemoMediator from "./UI_UIDemoMediator";
 import UI_ADDemoMediator from "./UI_ADDemoMediator";
-import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_CommonUIMediator from "./UI_CommonUIMediator";
-import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
-import UI_OthersMediator from "./UI_OthersMediator";
 import UI_FunctionTestMediator from "./UI_FunctionTestMediator";
+import UI_OthersMediator from "./UI_OthersMediator";
+import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
+import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
+import UI_UIDemoMediator from "./UI_UIDemoMediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 

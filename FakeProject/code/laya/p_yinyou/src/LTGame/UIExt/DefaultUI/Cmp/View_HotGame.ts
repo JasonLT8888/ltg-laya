@@ -60,7 +60,7 @@ export default class View_HotGame {
 
     private _Init() {
         if (LTPlatform.instance.platform == EPlatformType.WX) {
-            this._posId = 41;
+            this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {

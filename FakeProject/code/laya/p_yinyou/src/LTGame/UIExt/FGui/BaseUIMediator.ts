@@ -9,6 +9,7 @@ import View_EndSlideGames from "../DefaultUI/Cmp/View_EndSlideGames";
 import LTSDK from "../../../SDK/LTSDK";
 import { View_NativeIconLong } from "../DefaultUI/Cmp/View_NativeIconLong";
 import { View_NativeInPage } from "../DefaultUI/Cmp/View_NativeInpage";
+import View_WxSideGames from "../DefaultUI/Cmp/View_WxSideGames";
 
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
@@ -124,6 +125,13 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
             this._ui['m___endSG'] = endslide.ui;
         } else {
             this._ui['m___endSG'] = null;
+        }
+
+        let m___wxSG = View_WxSideGames.CreateView(this._ui['m___wxSG']);
+        if (m___wxSG) {
+            this._ui['m___wxSG'] = m___wxSG.ui;
+        } else {
+            this._ui['m___wxSG'] = null;
         }
 
     }

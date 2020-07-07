@@ -12,6 +12,7 @@ import LTUI from "../UIExt/LTUI";
 import Awaiters from "../Async/Awaiters";
 import { IDevice } from "./IDevice";
 import DefaultDevice from "./DefaultDevice";
+import { UI_SelfBannerMediator } from "../UIExt/DefaultUI/UI_SelfBannerMediator";
 
 export default class WXPlatform implements IPlatform {
     base: any;
@@ -327,12 +328,13 @@ export default class WXPlatform implements IPlatform {
     }
     ShowBannerAd() {
         if (!this.IsBannerAvaliable()) {
+            UI_SelfBannerMediator.instance.Show();
             return;
         }
         this._bannerAd.show();
     }
     HideBannerAd() {
-        if (!this.IsBannerAvaliable()) return;
+        UI_SelfBannerMediator.instance.Hide();
         this._bannerAd.hide();
     }
 

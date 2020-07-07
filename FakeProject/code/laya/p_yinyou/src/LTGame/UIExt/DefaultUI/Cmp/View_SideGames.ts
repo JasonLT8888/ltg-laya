@@ -6,7 +6,7 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_SideGames from "../UI/LTGame/UI_SideGames";
 import { ECheckState } from "../../../../SDK/common/ECheckState";
-
+/** __sidegames 100*100 */
 export default class View_SideGames {
 
     static CreateView(tagUI: fgui.GComponent): View_SideGames {
@@ -57,6 +57,9 @@ export default class View_SideGames {
                 LTPlatform.instance.OpenGameBox([]);
             });
             return;
+        }
+        if (LTPlatform.instance.platform == EPlatformType.WX) {
+            this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
