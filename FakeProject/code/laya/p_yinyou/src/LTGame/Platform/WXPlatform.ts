@@ -374,6 +374,7 @@ export default class WXPlatform implements IPlatform {
         this._rewardVideo.onError((res) => {
             this._videoFailedCount++;
             console.error("视频广告加载失败", res, this._videoFailedCount);
+            LTUI.HideLoading();
         });
         this._rewardVideo.onClose((res) => {
 
@@ -393,17 +394,18 @@ export default class WXPlatform implements IPlatform {
             LTUI.HideLoading();
         }).catch(err => {
             console.log("广告组件出现问题", err);
-            // 可以手动加载一次
-            this._rewardVideo.load().then(() => {
-                console.log("手动加载成功");
-                // 加载成功后需要再显示广告
-                return this._rewardVideo.show().then(() => {
-                    LTUI.HideLoading();
-                }).catch((err) => {
-                    console.error(err);
-                    LTUI.HideLoading();
-                });;
-            });
+            LTUI.HideLoading();
+            // 可以手动加载一次  delete 微信平台会出现后台播放广告
+            // this._rewardVideo.load().then(() => {
+            //     console.log("手动加载成功");
+            //     // 加载成功后需要再显示广告
+            //     return this._rewardVideo.show().then(() => {
+            //         LTUI.HideLoading();
+            //     }).catch((err) => {
+            //         console.error(err);
+            //         LTUI.HideLoading();
+            //     });;
+            // });
         });;
     }
 

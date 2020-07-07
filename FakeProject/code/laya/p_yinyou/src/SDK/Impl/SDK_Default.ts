@@ -39,7 +39,7 @@ export default class SDK_Default implements ISDK {
         this.controlVersion = controlVersion;
         this.appId = appid;
         this.severTime = new Date();
-
+        this.shieldHours = [];
         this.adManager = new SDKADManager();
         this._RequestSelfAdInfo();
         console.log("SDK:Init", this);
@@ -120,7 +120,7 @@ export default class SDK_Default implements ISDK {
                 isWorkday = today[0].type == 0;//type：0 工作日 1 周末  2 节假日 
             }
             //工作  时段  
-            if (isWorkday && this.shieldHours.indexOf(h.toString()) >= 0) {
+            if (isWorkday && this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
                 console.log('工作', this.shieldHours, h);
                 this.checkState = ECheckState.Normal;
             } else {

@@ -51,6 +51,13 @@ export default class View_SideGames {
     }
 
     private _Init() {
+        if (LTPlatform.instance.platform == EPlatformType.TT) {
+            this.ui.m_ads.dispose();
+            this.ui.m_btn_show.onClick(this, () => {
+                LTPlatform.instance.OpenGameBox([]);
+            });
+            return;
+        }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);

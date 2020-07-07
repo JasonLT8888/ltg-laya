@@ -291,7 +291,7 @@ export default class OppoPlatform extends WXPlatform {
         return this._isVideoLoaded;
     }
     IsInterstitalAvaliable() {
-        return LTSDK.instance.isADEnable && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 888;
+        return false;// LTSDK.instance.isADEnable && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 888;
     }
     IsNativeAvaliable() {
         return this._nativeAdLoaded;
@@ -493,6 +493,7 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     private async _ShowNativeInterstital(index: number): Promise<boolean> {
+        return;
         let nativeAd = this._base.createNativeAd({
             adUnitId: this.platformData.nativeinterstitialIds[index]
         });
@@ -538,6 +539,7 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     public async _ShowNormalInterstitalAd(): Promise<boolean> {
+        return;
         if (this._intersitialAd) {
             this._intersitialAd.destroy();
         }
@@ -590,6 +592,7 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     async ShowInterstitalAd() {
+        return;
         if (!this.IsInterstitalAvaliable()) {
             console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${CommonSaveData.instance.interstitialCount}`);
             return;

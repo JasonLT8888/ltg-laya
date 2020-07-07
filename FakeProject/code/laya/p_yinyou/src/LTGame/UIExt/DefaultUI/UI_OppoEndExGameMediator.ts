@@ -48,9 +48,7 @@ export class UI_OppoEndExGameMediator extends BaseUIMediator<UI_OppoEndExGame> {
         if (this.ui.m___nativeinpage) {
             this.ui.m___nativeinpage.visible = false; 
         }
-
-        let plat = LTPlatform.instance as OppoPlatform;
-        plat._ShowNormalInterstitalAd(); 
+ 
     }
     onAdClick() {
         this._ui['m___nativeinpage']['ClickAd']();
@@ -87,6 +85,6 @@ export class UI_OppoEndExGameMediator extends BaseUIMediator<UI_OppoEndExGame> {
         }
     }
     protected _OnHide() {
-        LTPlatform.instance.ShowInterstitalAd();
+        
     }
 }

@@ -39,6 +39,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
 
         switch (LTSDK.instance.checkState) {
             case ECheckState.InCheck:
+            default:
                 this.ui.m_view.m_toggle_watchad.visible = false;
                 this._isChecked = false;
                 this.ui.m_view.m_check_state.selectedIndex = 0;
