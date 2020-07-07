@@ -41,6 +41,7 @@ export default class UI_CommonEndShareMediator extends BaseUIMediator<UI_CommonE
         this.ui.m_view.m_btn_nothanks.onClick(this, this._OnClickClose);
         this.ui.m_view.m_btn_share.onClick(this, this._OnClickShare);
         this.ui.m_view.m_btn_share.m_btn_type.selectedIndex = 1;
+        LTPlatform.instance.ShowBannerAd();
     }
 
     private _OnClickShare() {
@@ -61,5 +62,9 @@ export default class UI_CommonEndShareMediator extends BaseUIMediator<UI_CommonE
             this._openData.onClose.runWith([0, this.ui.m_view.m_icon_reward]);
         }
         this.Hide();
+    }
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
+
     }
 }

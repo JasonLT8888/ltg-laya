@@ -8,6 +8,7 @@ import LTRespackManager from "../LTGame/Res/LTRespackManager";
 import LTSDK from "../SDK/LTSDK";
 import SDK_CQ from "../SDK/Impl/SDK_CQ";
 import SDK_YQ from "../SDK/Impl/SDK_YQ";
+import SDK_Default from "../SDK/Impl/SDK_Default";
 
 export default class MainStart extends LTStart {
 
@@ -28,13 +29,13 @@ export default class MainStart extends LTStart {
         switch (ePlatform) {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
-                this._gameVersion = '1.0.0';//1.0.1 为全策略模式 
+                this._gameVersion = '1.0.1';//1.0.1 为全策略模式 
                 this._appId = '88888888';
                 break;
             case EPlatformType.TT:
-                this._gameVersion = "v0.0.1";
-                this._resVersion = 'v0.0.1';
-                platformData.appId = "ttbe90c82d21ba845b";
+                this._gameVersion = "v0.0.2";
+                this._resVersion = 'v0.0.2';
+                platformData.appId = "ttd60ba0b64931e10f";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
@@ -75,6 +76,9 @@ export default class MainStart extends LTStart {
         switch (LTPlatform.instance.platform) {
             case EPlatformType.WX:
                 LTSDK.CreateInstace(SDK_YQ, this._gameName, this._gameVersion, this._appId);
+                break;
+            case EPlatformType.Web:
+                LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
                 break;
             case EPlatformType.Oppo:
             case EPlatformType.TT:

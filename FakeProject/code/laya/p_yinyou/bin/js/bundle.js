@@ -192,6 +192,10 @@ class SaveData {
          */
         this.trySignMissMode = 0;
         /**
+        * 界面开关 误点套路
+        */
+        this.checkFlag = true;
+        /**
          * 结算界面误点
          * 0 勾中看视频
          * 1 勾中不看视频
@@ -520,6 +524,40 @@ class ArrayEx {
             result.push(arr[i]);
         }
         return result;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTGame/LTUtils/CameraEx.ts":
+/*!****************************************!*\
+  !*** ./src/LTGame/LTUtils/CameraEx.ts ***!
+  \****************************************/
+/*! exports provided: CameraEx */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CameraEx", function() { return CameraEx; });
+/* harmony import */ var _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+
+class CameraEx {
+    static ScreenPosToWorldPos(camera, screenPos, fakeYPos) {
+        let ray = new Laya.Ray(_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero, _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero);
+        camera.viewportPointToRay(screenPos, ray);
+        let downVec = _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].s_down;
+        let dotValue = _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].Dot(downVec, ray.direction);
+        let heightValue = ray.origin.y;
+        let scaleValue = heightValue / dotValue;
+        let finalDir = _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].Scale(ray.direction, scaleValue);
+        return _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].Add(ray.origin, finalDir);
+    }
+    static ScreenPosToRay(camera, screenPos) {
+        let ray = new Laya.Ray(_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero, _Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].zero);
+        let clickPoint = new Laya.Vector2(screenPos.x / Laya.stage.width, screenPos.y / Laya.stage.height);
+        camera.normalizedViewportPointToRay(clickPoint, ray);
+        return ray;
     }
 }
 
@@ -1159,6 +1197,283 @@ class StringEx {
 
 /***/ }),
 
+/***/ "./src/LTGame/LTUtils/Vector3Ex.ts":
+/*!*****************************************!*\
+  !*** ./src/LTGame/LTUtils/Vector3Ex.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Vector3Ex; });
+/* harmony import */ var _MathEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+
+class Vector3Ex {
+    static get temp() {
+        if (!Vector3Ex.__temp__) {
+            Vector3Ex.__temp__ = Vector3Ex.zero;
+        }
+        Vector3Ex.__temp__.setValue(0, 0, 0);
+        return Vector3Ex.__temp__;
+    }
+    static get s_up() {
+        if (!Vector3Ex.__up__) {
+            Vector3Ex.__up__ = Vector3Ex.up;
+        }
+        Vector3Ex.__up__.setValue(0, 1, 0);
+        return Vector3Ex.__up__;
+    }
+    static get s_down() {
+        if (!Vector3Ex.__down__) {
+            Vector3Ex.__down__ = Vector3Ex.down;
+        }
+        Vector3Ex.__down__.setValue(0, -1, 0);
+        return Vector3Ex.__down__;
+    }
+    static get s_forward() {
+        if (!Vector3Ex.__forward__) {
+            Vector3Ex.__forward__ = Vector3Ex.forward;
+        }
+        Vector3Ex.__forward__.setValue(0, 0, 1);
+        return Vector3Ex.__forward__;
+    }
+    static get s_zero() {
+        if (!Vector3Ex.__zero__) {
+            Vector3Ex.__zero__ = Vector3Ex.zero;
+        }
+        Vector3Ex.__zero__.setValue(0, 0, 0);
+        return Vector3Ex.__zero__;
+    }
+    static get s_one() {
+        if (!Vector3Ex.__one__) {
+            Vector3Ex.__one__ = Vector3Ex.one;
+        }
+        Vector3Ex.__one__.setValue(1, 1, 1);
+        return Vector3Ex.__one__;
+    }
+    static get up() {
+        return new Laya.Vector3(0, 1, 0);
+    }
+    static get down() {
+        return new Laya.Vector3(0, -1, 0);
+    }
+    static get forward() {
+        return new Laya.Vector3(0, 0, 1);
+    }
+    static get zero() {
+        return new Laya.Vector3(0, 0, 0);
+    }
+    static get one() {
+        return new Laya.Vector3(1, 1, 1);
+    }
+    static get back() {
+        return new Laya.Vector3(0, 0, -1);
+    }
+    static get left() {
+        return new Laya.Vector3(-1, 0, 0);
+    }
+    static get right() {
+        return new Laya.Vector3(1, 0, 0);
+    }
+    static Cross(right, left) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.cross(right, left, result);
+        return result;
+    }
+    static Subtract(right, left) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.subtract(right, left, result);
+        return result;
+    }
+    static ClampMagnitude(vector, maxLength) {
+        var result = new Laya.Vector3(0, 0, 0);
+        var sqrMagnitude = 0;
+        if (Laya.Vector3.distanceSquared(vector, result) > maxLength * maxLength) {
+            result = Vector3Ex.Scale(Vector3Ex.Normalize(vector), maxLength);
+        }
+        else {
+            result = vector;
+        }
+        return result;
+    }
+    static Normalize(vec) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.normalize(vec, result);
+        return result;
+    }
+    static Add(...vecs) {
+        var result = new Laya.Vector3(0, 0, 0);
+        for (var i = 0; i < vecs.length; ++i) {
+            var vec = vecs[i];
+            result.x += vec.x;
+            result.y += vec.y;
+            result.z += vec.z;
+        }
+        return result;
+    }
+    static Scale(vec, scale) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.scale(vec, scale, result);
+        return result;
+    }
+    static ScaleV3(vec, scale) {
+        var result = new Laya.Vector3(vec.x * scale.x, vec.y * scale.y, vec.z * scale.z);
+        return result;
+    }
+    static Dot(left, right) {
+        return Laya.Vector3.dot(left, right);
+    }
+    static Lerp(from, to, v) {
+        var result = new Laya.Vector3(0, 0, 0);
+        Laya.Vector3.lerp(from, to, v, result);
+        return result;
+    }
+    static MagnitudeSqrt(v3) {
+        return v3.x * v3.x + v3.y * v3.y + v3.z * v3.z;
+    }
+    static Magnitude(v3) {
+        return Math.sqrt(this.MagnitudeSqrt(v3));
+    }
+    static Magnitude2D(v3) {
+        return Math.sqrt(v3.x * v3.x + v3.z * v3.z);
+    }
+    static Distance(from, to) {
+        var offset = Vector3Ex.Subtract(from, to);
+        return Vector3Ex.Magnitude(offset);
+    }
+    static Distance2D(from, to) {
+        let xOffset = from.x - to.x;
+        let zOffset = from.z - to.z;
+        return Math.sqrt(xOffset * xOffset + zOffset * zOffset);
+    }
+    static DistanceSqrt(from, to) {
+        let offset = Vector3Ex.Subtract(from, to);
+        return offset.x * offset.x + offset.y * offset.y + offset.z * offset.z;
+    }
+    static DistanceSqrt2D(from, to) {
+        let offset = Vector3Ex.Subtract(from, to);
+        return offset.x * offset.x + offset.z * offset.z;
+    }
+    /**
+     * 计算在指定轴上的旋转,带符号
+     * @param from
+     * @param to
+     * @param asix
+     */
+    static SignAngleAsix(from, to, asix) {
+        let normalAsix = Vector3Ex.Normalize(asix);
+        let dotFrom = Vector3Ex.Dot(from, normalAsix);
+        let wrapFrom = Vector3Ex.Subtract(from, Vector3Ex.Scale(normalAsix, dotFrom));
+        let dotTo = Vector3Ex.Dot(to, normalAsix);
+        let wrapTo = Vector3Ex.Subtract(to, Vector3Ex.Scale(normalAsix, dotTo));
+        let normalized = Vector3Ex.Normalize(wrapFrom);
+        let normalized2 = Vector3Ex.Normalize(wrapTo);
+        let num = Math.acos(_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Clamp(Laya.Vector3.dot(normalized, normalized2), -1, 1)) * 57.29578;
+        let cross = Vector3Ex.Cross(normalized, normalized2);
+        let num2 = _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Sign(Laya.Vector3.dot(asix, cross));
+        return num * num2;
+    }
+    static SignedAngle(from, to, asix) {
+        var normalized = Vector3Ex.Normalize(from);
+        var normalized2 = Vector3Ex.Normalize(to);
+        var num = Math.acos(_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Clamp(Laya.Vector3.dot(normalized, normalized2), -1, 1)) * 57.29578;
+        var cross = Vector3Ex.Cross(normalized, normalized2);
+        var num2 = _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Sign(Laya.Vector3.dot(asix, cross));
+        return num * num2;
+    }
+    static Angle(from, to, asix) {
+        var normalized = Vector3Ex.Normalize(from);
+        var normalized2 = Vector3Ex.Normalize(to);
+        var num = Math.acos(_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Clamp(Laya.Vector3.dot(normalized, normalized2), -1, 1)) * 57.29578;
+        return num;
+    }
+    static SmoothDamp(current, target, currentVelocity, smoothTime, maxSpeed, deltaTime) {
+        var num = 2 / smoothTime;
+        var num2 = num * deltaTime;
+        var d = 1 / (1 + num2 + 0.48 * num2 * num2 + 0.235 * num2 * num2 * num2);
+        var vector = Vector3Ex.Subtract(current, target);
+        var vector2 = target.clone();
+        var maxLength = maxSpeed * smoothTime;
+        vector = Vector3Ex.ClampMagnitude(vector, maxLength);
+        var target2 = Vector3Ex.Subtract(current, vector);
+        var vector3 = Vector3Ex.Scale(Vector3Ex.Add(currentVelocity, Vector3Ex.Scale(vector, num)), deltaTime);
+        var cacheV = Vector3Ex.Scale(Vector3Ex.Subtract(currentVelocity, Vector3Ex.Scale(vector3, num)), d);
+        currentVelocity.x = cacheV.x;
+        currentVelocity.y = cacheV.y;
+        currentVelocity.z = cacheV.z;
+        var vector4 = Vector3Ex.Add(target2, Vector3Ex.Scale(Vector3Ex.Add(vector, vector3), d));
+        if (Vector3Ex.Dot(Vector3Ex.Subtract(vector2, current), Vector3Ex.Subtract(vector4, vector2)) > 0) {
+            vector4 = vector2;
+            currentVelocity.x = 0;
+            currentVelocity.y = 0;
+            currentVelocity.z = 0;
+        }
+        return vector4;
+    }
+    static Fix(vec, limit) {
+        if (Math.abs(vec.x) < limit) {
+            vec.x = 0;
+        }
+        if (Math.abs(vec.y) < limit) {
+            vec.y = 0;
+        }
+        if (Math.abs(vec.z) < limit) {
+            vec.z = 0;
+        }
+    }
+    static IsSame(v1, v2) {
+        return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+    }
+    static WrapFromUnity(x, y, z) {
+        return new Laya.Vector3(-x, y, z);
+    }
+    /**
+     * 计算带加速度的移动位置
+     * @param time
+     * @param startVelocity
+     * @param aSpeed
+     * @param startPos
+     */
+    static CalcPosWithASpeed(time, startVelocity, aSpeed, startPos) {
+        let xt = Vector3Ex.Scale(startVelocity, time);
+        let at2 = Vector3Ex.Scale(aSpeed, time * time / 2);
+        return Vector3Ex.Add(xt, at2, startPos);
+    }
+    /**
+     * 重置空间信息
+     * @param trs
+     */
+    static InitialTransform(trs) {
+        trs.localPosition = Vector3Ex.s_zero;
+        trs.localScale = Vector3Ex.s_one;
+        trs.rotationEuler = Vector3Ex.s_zero;
+    }
+    /**
+     * 判定目标点，是否在以中心点为扇心，指定扇形内
+     * @param center 扇形中心点
+     * @param target 目标点
+     * @param range 扇形半径
+     * @param halfAngle 扇形半角
+     * @param forward 扇形正向
+     * @param axis 垂直于扇面的轴向
+     */
+    static InSector(center, target, range, halfAngle, forward, axis) {
+        let dir = Vector3Ex.temp;
+        dir.setValue((target.x - center.x) * (1 - axis.x), (target.y - center.y) * (1 - axis.y), (target.z - center.z) * (1 - axis.z));
+        if (Vector3Ex.MagnitudeSqrt(dir) <= range * range) {
+            let angle = Vector3Ex.Angle(forward, dir, axis);
+            if (angle <= halfAngle) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTGame/LTVersion.ts":
 /*!*********************************!*\
   !*** ./src/LTGame/LTVersion.ts ***!
@@ -1173,6 +1488,857 @@ class LTVersion {
 }
 LTVersion.version = "0.0.1";
 
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/HeightFogManager.ts":
+/*!*************************************************!*\
+  !*** ./src/LTGame/Material/HeightFogManager.ts ***!
+  \*************************************************/
+/*! exports provided: HeightFogManager */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeightFogManager", function() { return HeightFogManager; });
+/* harmony import */ var _LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+
+class HeightFogManager {
+    constructor() {
+        this._fogColor = new Laya.Vector3(0, 0, 0);
+        this._fogStartHeight = 5;
+        this._fogDistance = 5;
+        this._matList = [];
+    }
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new HeightFogManager();
+        }
+        return this._instance;
+    }
+    get fogColor() {
+        return this._fogColor;
+    }
+    set fogColor(value) {
+        if (_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_0__["default"].IsSame(this._fogColor, value))
+            return;
+        this._fogColor = value;
+        for (let i = 0; i < this._matList.length; ++i) {
+            let mat = this._matList[i];
+            if (mat != null) {
+                mat.heightFogColor = this._fogColor;
+            }
+        }
+    }
+    get fogStartHeight() {
+        return this._fogStartHeight;
+    }
+    set fogStartHeight(value) {
+        if (this._fogStartHeight == value)
+            return;
+        this._fogStartHeight = value;
+        for (let i = 0; i < this._matList.length; ++i) {
+            let mat = this._matList[i];
+            if (mat != null) {
+                mat.heightFogStartY = this._fogStartHeight;
+            }
+        }
+    }
+    get fogDistance() {
+        return this._fogDistance;
+    }
+    set fogDistance(value) {
+        if (this._fogDistance == value)
+            return;
+        this._fogDistance = value;
+        for (let i = 0; i < this._matList.length; ++i) {
+            let mat = this._matList[i];
+            if (mat != null) {
+                mat.heightFogDistance = this._fogDistance;
+            }
+        }
+    }
+    RegistFogMat(mat) {
+        this._matList.push(mat);
+        mat.heightFogColor = this._fogColor;
+        mat.heightFogStartY = this._fogStartHeight;
+        mat.heightFogDistance = this._fogDistance;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/LTBlinnPhong_HeightFog.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTGame/Material/LTBlinnPhong_HeightFog.ts ***!
+  \*******************************************************/
+/*! exports provided: LTBlinnPhong_HeightFog */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTBlinnPhong_HeightFog", function() { return LTBlinnPhong_HeightFog; });
+/* harmony import */ var _shader_LT_Mesh_BlinnPhong_DepthFog_vs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shader/LT-Mesh-BlinnPhong-DepthFog.vs */ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.vs");
+/* harmony import */ var _shader_LT_Mesh_BlinnPhong_DepthFog_fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shader/LT-Mesh-BlinnPhong-DepthFog.fs */ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.fs");
+/* harmony import */ var _shader_Mesh_BlinnPhongShadowCaster_vs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shader/Mesh-BlinnPhongShadowCaster.vs */ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.vs");
+/* harmony import */ var _shader_Mesh_BlinnPhongShadowCaster_fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./shader/Mesh-BlinnPhongShadowCaster.fs */ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.fs");
+/* harmony import */ var _HeightFogManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./HeightFogManager */ "./src/LTGame/Material/HeightFogManager.ts");
+
+
+
+
+
+class LTBlinnPhong_HeightFog extends Laya.Material {
+    /**
+     * 创建一个 <code>BlinnPhongMaterial</code> 实例。
+     */
+    constructor() {
+        super();
+        this._enableVertexColor = false;
+        LTBlinnPhong_HeightFog.InitShader();
+        this.setShaderName(LTBlinnPhong_HeightFog._shaderName);
+        this._albedoIntensity = 1.0;
+        this._albedoColor = new Laya.Vector4(1.0, 1.0, 1.0, 1.0);
+        let sv = this._shaderValues;
+        sv.setVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
+        sv.setVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
+        sv.setNumber(LTBlinnPhong_HeightFog.SHININESS, 0.078125);
+        sv.setNumber(Laya.Material.ALPHATESTVALUE, 0.5);
+        sv.setVector(LTBlinnPhong_HeightFog.TILING_OFFSET, new Laya.Vector4(1.0, 1.0, 0.0, 0.0));
+        this._enableLighting = true;
+        this.renderMode = LTBlinnPhong_HeightFog.RENDERMODE_OPAQUE;
+        _HeightFogManager__WEBPACK_IMPORTED_MODULE_4__["HeightFogManager"].instance.RegistFogMat(this);
+    }
+    /**
+     * @internal
+     */
+    static __initDefine__() {
+        LTBlinnPhong_HeightFog.SHADERDEFINE_DIFFUSEMAP = Laya.Shader3D.getDefineByName("DIFFUSEMAP");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_NORMALMAP = Laya.Shader3D.getDefineByName("NORMALMAP");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_SPECULARMAP = Laya.Shader3D.getDefineByName("SPECULARMAP");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET = Laya.Shader3D.getDefineByName("TILINGOFFSET");
+        LTBlinnPhong_HeightFog.SHADERDEFINE_ENABLEVERTEXCOLOR = Laya.Shader3D.getDefineByName("ENABLEVERTEXCOLOR");
+    }
+    /**
+     * 高度雾范围
+     */
+    get heightFogDistance() {
+        return this._heightFogDistance;
+    }
+    set heightFogDistance(value) {
+        this._heightFogDistance = value;
+        this._shaderValues.setNumber(LTBlinnPhong_HeightFog.HEIGHT_FOG_DISTANCE, value);
+    }
+    /**
+     * 高度雾开始高度
+     */
+    get heightFogStartY() {
+        return this._heightFogStartY;
+    }
+    set heightFogStartY(value) {
+        this._heightFogStartY = value;
+        this._shaderValues.setNumber(LTBlinnPhong_HeightFog.HEIGHT_FOG_STARTY, value);
+    }
+    /**
+     * 高度雾颜色
+     */
+    get heightFogColor() {
+        return this._heightFogColor;
+    }
+    set heightFogColor(value) {
+        this._heightFogColor = value;
+        this._shaderValues.setVector3(LTBlinnPhong_HeightFog.HEIGHT_FOG_COLOR, value);
+    }
+    /**
+     * @internal
+     */
+    get _ColorR() {
+        return this._albedoColor.x;
+    }
+    set _ColorR(value) {
+        this._albedoColor.x = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _ColorG() {
+        return this._albedoColor.y;
+    }
+    set _ColorG(value) {
+        this._albedoColor.y = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _ColorB() {
+        return this._albedoColor.z;
+    }
+    set _ColorB(value) {
+        this._albedoColor.z = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _ColorA() {
+        return this._albedoColor.w;
+    }
+    set _ColorA(value) {
+        this._albedoColor.w = value;
+        this.albedoColor = this._albedoColor;
+    }
+    /**
+     * @internal
+     */
+    get _Color() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR);
+    }
+    set _Color(value) {
+        this.albedoColor = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorR() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).x;
+    }
+    set _SpecColorR(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).x = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorG() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).y;
+    }
+    set _SpecColorG(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).y = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorB() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).z;
+    }
+    set _SpecColorB(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).z = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColorA() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).w;
+    }
+    set _SpecColorA(value) {
+        this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR).w = value;
+    }
+    /**
+     * @internal
+     */
+    get _SpecColor() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR);
+    }
+    set _SpecColor(value) {
+        this.specularColor = value;
+    }
+    /**
+     * @internal
+     */
+    get _AlbedoIntensity() {
+        return this._albedoIntensity;
+    }
+    set _AlbedoIntensity(value) {
+        if (this._albedoIntensity !== value) {
+            var finalAlbedo = this._shaderValues.getVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR);
+            Laya.Vector4.scale(this._albedoColor, value, finalAlbedo);
+            this._albedoIntensity = value;
+            this._shaderValues.setVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR, finalAlbedo); //修改值后必须调用此接口,否则NATIVE不生效
+        }
+    }
+    /**
+     * @internal
+     */
+    get _Shininess() {
+        return this._shaderValues.getNumber(LTBlinnPhong_HeightFog.SHININESS);
+    }
+    set _Shininess(value) {
+        value = Math.max(0.0, Math.min(1.0, value));
+        this._shaderValues.setNumber(LTBlinnPhong_HeightFog.SHININESS, value);
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STX() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).x;
+    }
+    set _MainTex_STX(x) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.x = x;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STY() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).y;
+    }
+    set _MainTex_STY(y) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.y = y;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STZ() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).z;
+    }
+    set _MainTex_STZ(z) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.z = z;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_STW() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET).w;
+    }
+    set _MainTex_STW(w) {
+        var tilOff = this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+        tilOff.w = w;
+        this.tilingOffset = tilOff;
+    }
+    /**
+     * @internal
+     */
+    get _MainTex_ST() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+    }
+    set _MainTex_ST(value) {
+        this.tilingOffset = value;
+    }
+    /**
+     * @internal
+     */
+    get _Cutoff() {
+        return this.alphaTestValue;
+    }
+    set _Cutoff(value) {
+        this.alphaTestValue = value;
+    }
+    /**
+     * 设置渲染模式。
+     */
+    set renderMode(value) {
+        switch (value) {
+            case LTBlinnPhong_HeightFog.RENDERMODE_OPAQUE:
+                this.alphaTest = false;
+                this.renderQueue = Laya.Material.RENDERQUEUE_OPAQUE;
+                this.depthWrite = true;
+                this.cull = Laya.RenderState.CULL_BACK;
+                this.blend = Laya.RenderState.BLEND_DISABLE;
+                this.depthTest = Laya.RenderState.DEPTHTEST_LESS;
+                break;
+            case LTBlinnPhong_HeightFog.RENDERMODE_CUTOUT:
+                this.renderQueue = Laya.Material.RENDERQUEUE_ALPHATEST;
+                this.alphaTest = true;
+                this.depthWrite = true;
+                this.cull = Laya.RenderState.CULL_BACK;
+                this.blend = Laya.RenderState.BLEND_DISABLE;
+                this.depthTest = Laya.RenderState.DEPTHTEST_LESS;
+                break;
+            case LTBlinnPhong_HeightFog.RENDERMODE_TRANSPARENT:
+                this.renderQueue = Laya.Material.RENDERQUEUE_TRANSPARENT;
+                this.alphaTest = false;
+                this.depthWrite = false;
+                this.cull = Laya.RenderState.CULL_BACK;
+                this.blend = Laya.RenderState.BLEND_ENABLE_ALL;
+                this.blendSrc = Laya.RenderState.BLENDPARAM_SRC_ALPHA;
+                this.blendDst = Laya.RenderState.BLENDPARAM_ONE_MINUS_SRC_ALPHA;
+                this.depthTest = Laya.RenderState.DEPTHTEST_LESS;
+                break;
+            default:
+                throw new Error("Material:renderMode value error.");
+        }
+    }
+    /**
+     * 是否支持顶点色。
+     */
+    get enableVertexColor() {
+        return this._enableVertexColor;
+    }
+    set enableVertexColor(value) {
+        this._enableVertexColor = value;
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_ENABLEVERTEXCOLOR);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_ENABLEVERTEXCOLOR);
+    }
+    /**
+     * 纹理平铺和偏移X分量。
+     */
+    get tilingOffsetX() {
+        return this._MainTex_STX;
+    }
+    set tilingOffsetX(x) {
+        this._MainTex_STX = x;
+    }
+    /**
+     * 纹理平铺和偏移Y分量。
+     */
+    get tilingOffsetY() {
+        return this._MainTex_STY;
+    }
+    set tilingOffsetY(y) {
+        this._MainTex_STY = y;
+    }
+    /**
+     * 纹理平铺和偏移Z分量。
+     */
+    get tilingOffsetZ() {
+        return this._MainTex_STZ;
+    }
+    set tilingOffsetZ(z) {
+        this._MainTex_STZ = z;
+    }
+    /**
+     * 纹理平铺和偏移W分量。
+     */
+    get tilingOffsetW() {
+        return this._MainTex_STW;
+    }
+    set tilingOffsetW(w) {
+        this._MainTex_STW = w;
+    }
+    /**
+     * 纹理平铺和偏移。
+     */
+    get tilingOffset() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.TILING_OFFSET);
+    }
+    set tilingOffset(value) {
+        if (value) {
+            if (value.x != 1 || value.y != 1 || value.z != 0 || value.w != 0)
+                this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET);
+            else
+                this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET);
+        }
+        else {
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_TILINGOFFSET);
+        }
+        this._shaderValues.setVector(LTBlinnPhong_HeightFog.TILING_OFFSET, value);
+    }
+    /**
+     * 反照率颜色R分量。
+     */
+    get albedoColorR() {
+        return this._ColorR;
+    }
+    set albedoColorR(value) {
+        this._ColorR = value;
+    }
+    /**
+     * 反照率颜色G分量。
+     */
+    get albedoColorG() {
+        return this._ColorG;
+    }
+    set albedoColorG(value) {
+        this._ColorG = value;
+    }
+    /**
+     * 反照率颜色B分量。
+     */
+    get albedoColorB() {
+        return this._ColorB;
+    }
+    set albedoColorB(value) {
+        this._ColorB = value;
+    }
+    /**
+     * 反照率颜色Z分量。
+     */
+    get albedoColorA() {
+        return this._ColorA;
+    }
+    set albedoColorA(value) {
+        this._ColorA = value;
+    }
+    /**
+     * 反照率颜色。
+     */
+    get albedoColor() {
+        return this._albedoColor;
+    }
+    set albedoColor(value) {
+        var finalAlbedo = this._shaderValues.getVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR);
+        Laya.Vector4.scale(value, this._albedoIntensity, finalAlbedo);
+        this._albedoColor = value;
+        this._shaderValues.setVector(LTBlinnPhong_HeightFog.ALBEDO_COLOR, finalAlbedo); //修改值后必须调用此接口,否则NATIVE不生效
+    }
+    /**
+     * 反照率强度。
+     */
+    get albedoIntensity() {
+        return this._albedoIntensity;
+    }
+    set albedoIntensity(value) {
+        this._AlbedoIntensity = value;
+    }
+    /**
+     * 高光颜色R轴分量。
+     */
+    get specularColorR() {
+        return this._SpecColorR;
+    }
+    set specularColorR(value) {
+        this._SpecColorR = value;
+    }
+    /**
+     * 高光颜色G分量。
+     */
+    get specularColorG() {
+        return this._SpecColorG;
+    }
+    set specularColorG(value) {
+        this._SpecColorG = value;
+    }
+    /**
+     * 高光颜色B分量。
+     */
+    get specularColorB() {
+        return this._SpecColorB;
+    }
+    set specularColorB(value) {
+        this._SpecColorB = value;
+    }
+    /**
+     * 高光颜色A分量。
+     */
+    get specularColorA() {
+        return this._SpecColorA;
+    }
+    set specularColorA(value) {
+        this._SpecColorA = value;
+    }
+    /**
+     * 高光颜色。
+     */
+    get specularColor() {
+        return this._shaderValues.getVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR);
+    }
+    set specularColor(value) {
+        this._shaderValues.setVector(LTBlinnPhong_HeightFog.MATERIAL_SPECULAR, value);
+    }
+    /**
+     * 高光强度,范围为0到1。
+     */
+    get shininess() {
+        return this._Shininess;
+    }
+    set shininess(value) {
+        this._Shininess = value;
+    }
+    /**
+     * 反照率贴图。
+     */
+    get albedoTexture() {
+        return this._shaderValues.getTexture(LTBlinnPhong_HeightFog.DIFFUSE_TEXTURE);
+    }
+    set albedoTexture(value) {
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_DIFFUSEMAP);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_DIFFUSEMAP);
+        this._shaderValues.setTexture(LTBlinnPhong_HeightFog.DIFFUSE_TEXTURE, value);
+    }
+    /**
+     * 法线贴图。
+     */
+    get normalTexture() {
+        return this._shaderValues.getTexture(LTBlinnPhong_HeightFog.NORMAL_TEXTURE);
+    }
+    set normalTexture(value) {
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_NORMALMAP);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_NORMALMAP);
+        this._shaderValues.setTexture(LTBlinnPhong_HeightFog.NORMAL_TEXTURE, value);
+    }
+    /**
+     * 高光贴图。
+     */
+    get specularTexture() {
+        return this._shaderValues.getTexture(LTBlinnPhong_HeightFog.SPECULAR_TEXTURE);
+    }
+    set specularTexture(value) {
+        if (value)
+            this._shaderValues.addDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_SPECULARMAP);
+        else
+            this._shaderValues.removeDefine(LTBlinnPhong_HeightFog.SHADERDEFINE_SPECULARMAP);
+        this._shaderValues.setTexture(LTBlinnPhong_HeightFog.SPECULAR_TEXTURE, value);
+    }
+    /**
+     * 是否写入深度。
+     */
+    get depthWrite() {
+        return this._shaderValues.getBool(LTBlinnPhong_HeightFog.DEPTH_WRITE);
+    }
+    set depthWrite(value) {
+        this._shaderValues.setBool(LTBlinnPhong_HeightFog.DEPTH_WRITE, value);
+    }
+    /**
+     * 剔除方式。
+     */
+    get cull() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.CULL);
+    }
+    set cull(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.CULL, value);
+    }
+    /**
+     * 混合方式。
+     */
+    get blend() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.BLEND);
+    }
+    set blend(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.BLEND, value);
+    }
+    /**
+     * 混合源。
+     */
+    get blendSrc() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.BLEND_SRC);
+    }
+    set blendSrc(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.BLEND_SRC, value);
+    }
+    /**
+     * 混合目标。
+     */
+    get blendDst() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.BLEND_DST);
+    }
+    set blendDst(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.BLEND_DST, value);
+    }
+    /**
+     * 深度测试方式。
+     */
+    get depthTest() {
+        return this._shaderValues.getInt(LTBlinnPhong_HeightFog.DEPTH_TEST);
+    }
+    set depthTest(value) {
+        this._shaderValues.setInt(LTBlinnPhong_HeightFog.DEPTH_TEST, value);
+    }
+    static InitShader() {
+        if (this._isInited)
+            return;
+        this._isInited = true;
+        this.__initDefine__();
+        //BLINNPHONG
+        let attributeMap = {
+            'a_Position': Laya.VertexMesh.MESH_POSITION0,
+            'a_Color': Laya.VertexMesh.MESH_COLOR0,
+            'a_Normal': Laya.VertexMesh.MESH_NORMAL0,
+            'a_Texcoord0': Laya.VertexMesh.MESH_TEXTURECOORDINATE0,
+            'a_Texcoord1': Laya.VertexMesh.MESH_TEXTURECOORDINATE1,
+            'a_BoneWeights': Laya.VertexMesh.MESH_BLENDWEIGHT0,
+            'a_BoneIndices': Laya.VertexMesh.MESH_BLENDINDICES0,
+            'a_Tangent0': Laya.VertexMesh.MESH_TANGENT0,
+            'a_MvpMatrix': Laya.VertexMesh.MESH_MVPMATRIX_ROW0,
+            'a_WorldMat': Laya.VertexMesh.MESH_WORLDMATRIX_ROW0
+        };
+        let uniformMap = {
+            'u_HeightFogColor': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_HeightFogStartY': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_HeightFogDistance': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_Bones': Laya.Shader3D.PERIOD_CUSTOM,
+            'u_DiffuseTexture': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_SpecularTexture': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_NormalTexture': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_AlphaTestValue': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_DiffuseColor': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_MaterialSpecular': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_Shininess': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_TilingOffset': Laya.Shader3D.PERIOD_MATERIAL,
+            'u_WorldMat': Laya.Shader3D.PERIOD_SPRITE,
+            'u_MvpMatrix': Laya.Shader3D.PERIOD_SPRITE,
+            'u_LightmapScaleOffset': Laya.Shader3D.PERIOD_SPRITE,
+            'u_LightMap': Laya.Shader3D.PERIOD_SPRITE,
+            'u_LightMapDirection': Laya.Shader3D.PERIOD_SPRITE,
+            'u_CameraPos': Laya.Shader3D.PERIOD_CAMERA,
+            'u_Viewport': Laya.Shader3D.PERIOD_CAMERA,
+            'u_ProjectionParams': Laya.Shader3D.PERIOD_CAMERA,
+            'u_View': Laya.Shader3D.PERIOD_CAMERA,
+            'u_ViewProjection': Laya.Shader3D.PERIOD_CAMERA,
+            'u_ReflectTexture': Laya.Shader3D.PERIOD_SCENE,
+            'u_ReflectIntensity': Laya.Shader3D.PERIOD_SCENE,
+            'u_FogStart': Laya.Shader3D.PERIOD_SCENE,
+            'u_FogRange': Laya.Shader3D.PERIOD_SCENE,
+            'u_FogColor': Laya.Shader3D.PERIOD_SCENE,
+            'u_DirationLightCount': Laya.Shader3D.PERIOD_SCENE,
+            'u_LightBuffer': Laya.Shader3D.PERIOD_SCENE,
+            'u_LightClusterBuffer': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientColor': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowBias': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowLightDirection': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowMap': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowParams': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowSplitSpheres': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowMatrices': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowMapSize': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotShadowMap': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotViewProjectMatrix': Laya.Shader3D.PERIOD_SCENE,
+            'u_ShadowLightPosition': Laya.Shader3D.PERIOD_SCENE,
+            //GI
+            'u_AmbientSHAr': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHAg': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHAb': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHBr': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHBg': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHBb': Laya.Shader3D.PERIOD_SCENE,
+            'u_AmbientSHC': Laya.Shader3D.PERIOD_SCENE,
+            //legacy lighting
+            'u_DirectionLight.color': Laya.Shader3D.PERIOD_SCENE,
+            'u_DirectionLight.direction': Laya.Shader3D.PERIOD_SCENE,
+            'u_PointLight.position': Laya.Shader3D.PERIOD_SCENE,
+            'u_PointLight.range': Laya.Shader3D.PERIOD_SCENE,
+            'u_PointLight.color': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.position': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.direction': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.range': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.spot': Laya.Shader3D.PERIOD_SCENE,
+            'u_SpotLight.color': Laya.Shader3D.PERIOD_SCENE
+        };
+        let stateMap = {
+            's_Cull': Laya.Shader3D.RENDER_STATE_CULL,
+            's_Blend': Laya.Shader3D.RENDER_STATE_BLEND,
+            's_BlendSrc': Laya.Shader3D.RENDER_STATE_BLEND_SRC,
+            's_BlendDst': Laya.Shader3D.RENDER_STATE_BLEND_DST,
+            's_DepthTest': Laya.Shader3D.RENDER_STATE_DEPTH_TEST,
+            's_DepthWrite': Laya.Shader3D.RENDER_STATE_DEPTH_WRITE
+        };
+        let customShader = Laya.Shader3D.add(LTBlinnPhong_HeightFog._shaderName, null, null, true);
+        let subShader = new Laya.SubShader(attributeMap, uniformMap);
+        customShader.addSubShader(subShader);
+        subShader.addShaderPass(_shader_LT_Mesh_BlinnPhong_DepthFog_vs__WEBPACK_IMPORTED_MODULE_0__["default"], _shader_LT_Mesh_BlinnPhong_DepthFog_fs__WEBPACK_IMPORTED_MODULE_1__["default"], stateMap, "Forward");
+        let shaderPass = subShader.addShaderPass(_shader_Mesh_BlinnPhongShadowCaster_vs__WEBPACK_IMPORTED_MODULE_2__["default"], _shader_Mesh_BlinnPhongShadowCaster_fs__WEBPACK_IMPORTED_MODULE_3__["default"], stateMap, "ShadowCaster");
+    }
+    static CreateFromBlinnPhong(mat) {
+        let newMat = new LTBlinnPhong_HeightFog();
+        newMat.albedoColor = mat.albedoColor;
+        newMat.albedoIntensity = mat.albedoIntensity;
+        newMat.albedoTexture = mat.albedoTexture;
+        newMat.normalTexture = mat.normalTexture;
+        newMat.specularColor = mat.specularColor;
+        newMat.specularTexture = mat.specularTexture;
+        return newMat;
+    }
+    /**
+     * 克隆。
+     * @return	 克隆副本。
+     * @override
+     */
+    clone() {
+        var dest = new LTBlinnPhong_HeightFog();
+        this.cloneTo(dest);
+        return dest;
+    }
+    /**
+     * @inheritDoc
+     * @override
+     */
+    cloneTo(destObject) {
+        super.cloneTo(destObject);
+        var destMaterial = destObject;
+        destMaterial._enableLighting = this._enableLighting;
+        destMaterial._albedoIntensity = this._albedoIntensity;
+        destMaterial._enableVertexColor = this._enableVertexColor;
+        this._albedoColor.cloneTo(destMaterial._albedoColor);
+    }
+}
+/**渲染状态_不透明。*/
+LTBlinnPhong_HeightFog.RENDERMODE_OPAQUE = 0;
+/**渲染状态_阿尔法测试。*/
+LTBlinnPhong_HeightFog.RENDERMODE_CUTOUT = 1;
+/**渲染状态_透明混合。*/
+LTBlinnPhong_HeightFog.RENDERMODE_TRANSPARENT = 2;
+LTBlinnPhong_HeightFog.DIFFUSE_TEXTURE = Laya.Shader3D.propertyNameToID("u_DiffuseTexture");
+LTBlinnPhong_HeightFog.NORMAL_TEXTURE = Laya.Shader3D.propertyNameToID("u_NormalTexture");
+LTBlinnPhong_HeightFog.SPECULAR_TEXTURE = Laya.Shader3D.propertyNameToID("u_SpecularTexture");
+LTBlinnPhong_HeightFog.ALBEDO_COLOR = Laya.Shader3D.propertyNameToID("u_DiffuseColor");
+LTBlinnPhong_HeightFog.MATERIAL_SPECULAR = Laya.Shader3D.propertyNameToID("u_MaterialSpecular");
+LTBlinnPhong_HeightFog.SHININESS = Laya.Shader3D.propertyNameToID("u_Shininess");
+LTBlinnPhong_HeightFog.TILING_OFFSET = Laya.Shader3D.propertyNameToID("u_TilingOffset");
+LTBlinnPhong_HeightFog.CULL = Laya.Shader3D.propertyNameToID("s_Cull");
+LTBlinnPhong_HeightFog.BLEND = Laya.Shader3D.propertyNameToID("s_Blend");
+LTBlinnPhong_HeightFog.BLEND_SRC = Laya.Shader3D.propertyNameToID("s_BlendSrc");
+LTBlinnPhong_HeightFog.BLEND_DST = Laya.Shader3D.propertyNameToID("s_BlendDst");
+LTBlinnPhong_HeightFog.DEPTH_TEST = Laya.Shader3D.propertyNameToID("s_DepthTest");
+LTBlinnPhong_HeightFog.DEPTH_WRITE = Laya.Shader3D.propertyNameToID("s_DepthWrite");
+LTBlinnPhong_HeightFog.HEIGHT_FOG_COLOR = Laya.Shader3D.propertyNameToID("u_HeightFogColor");
+LTBlinnPhong_HeightFog.HEIGHT_FOG_STARTY = Laya.Shader3D.propertyNameToID("u_HeightFogStartY");
+LTBlinnPhong_HeightFog.HEIGHT_FOG_DISTANCE = Laya.Shader3D.propertyNameToID("u_HeightFogDistance");
+LTBlinnPhong_HeightFog._shaderName = "LTBlinnPhong_HeightFog";
+
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.fs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.fs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n\tprecision highp int;\r\n#else\r\n\tprecision mediump float;\r\n\tprecision mediump int;\r\n#endif\r\n\r\n#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\"\r\n\r\nuniform vec4 u_DiffuseColor;\r\n\r\n#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef ALPHATEST\r\n\tuniform float u_AlphaTestValue;\r\n#endif\r\n\r\n#ifdef DIFFUSEMAP\r\n\tuniform sampler2D u_DiffuseTexture;\r\n#endif\r\n\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tvarying vec2 v_LightMapUV;\r\n\tuniform sampler2D u_LightMap;\r\n#endif\r\n\r\nvarying vec3 v_Normal;\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\tvarying vec3 v_ViewDir; \r\n\r\n\tuniform vec3 u_MaterialSpecular;\r\n\tuniform float u_Shininess;\r\n\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tuniform DirectionLight u_DirectionLight;\r\n\t\t#endif\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tuniform PointLight u_PointLight;\r\n\t\t#endif\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tuniform SpotLight u_SpotLight;\r\n\t\t#endif\r\n\t#else\r\n\t\tuniform mat4 u_View;\r\n\t\tuniform vec4 u_ProjectionParams;\r\n\t\tuniform vec4 u_Viewport;\r\n\t\tuniform int u_DirationLightCount;\r\n\t\tuniform sampler2D u_LightBuffer;\r\n\t\tuniform sampler2D u_LightClusterBuffer;\r\n\t#endif\r\n\r\n\t#ifdef SPECULARMAP \r\n\t\tuniform sampler2D u_SpecularTexture;\r\n\t#endif\r\n#endif\r\n\r\n#ifdef NORMALMAP \r\n\tuniform sampler2D u_NormalTexture;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef FOG\r\n\tuniform float u_FogStart;\r\n\tuniform float u_FogRange;\r\n\tuniform vec3 u_FogColor;\r\n#endif\r\n\r\n#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n\r\n#include \"GlobalIllumination.glsl\";//\"GlobalIllumination.glsl use uniform should at front of this\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\nvarying vec3 v_WolrdPos;\r\nuniform vec3 u_HeightFogColor;\r\nuniform float u_HeightFogStartY;\r\nuniform float u_HeightFogDistance;\r\n\r\nvoid main()\r\n{\r\n\tvec3 normal;//light and SH maybe use normal\r\n\t#if defined(NORMALMAP)\r\n\t\tvec3 normalMapSample = texture2D(u_NormalTexture, v_Texcoord0).rgb;\r\n\t\tnormal = normalize(NormalSampleToWorldSpace(normalMapSample, v_Normal, v_Tangent,v_Binormal));\r\n\t#else\r\n\t\tnormal = normalize(v_Normal);\r\n\t#endif\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tvec3 viewDir= normalize(v_ViewDir);\r\n\t#endif\r\n\r\n\tLayaGIInput giInput;\r\n\t#ifdef LIGHTMAP\t\r\n\t\tgiInput.lightmapUV=v_LightMapUV;\r\n\t#endif\r\n\tvec3 globalDiffuse=layaGIBase(giInput,1.0,normal);\r\n\t\r\n\tvec4 mainColor=u_DiffuseColor;\r\n\t#ifdef DIFFUSEMAP\r\n\t\tvec4 difTexColor=texture2D(u_DiffuseTexture, v_Texcoord0);\r\n\t\tmainColor=mainColor*difTexColor;\r\n\t#endif \r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tmainColor=mainColor*v_Color;\r\n\t#endif \r\n    \r\n\t#ifdef ALPHATEST\r\n\t\tif(mainColor.a<u_AlphaTestValue)\r\n\t\t\tdiscard;\r\n\t#endif\r\n  \r\n\t\r\n\tvec3 diffuse = vec3(0.0);\r\n\tvec3 specular= vec3(0.0);\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tvec3 dif,spe;\r\n\t\t#ifdef SPECULARMAP\r\n\t\t\tvec3 gloss=texture2D(u_SpecularTexture, v_Texcoord0).rgb;\r\n\t\t#else\r\n\t\t\t#ifdef DIFFUSEMAP\r\n\t\t\t\tvec3 gloss=vec3(difTexColor.a);\r\n\t\t\t#else\r\n\t\t\t\tvec3 gloss=vec3(1.0);\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t\r\n\t\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tLayaAirBlinnPhongDiectionLight(u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_DirectionLight,dif,spe);\r\n\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t#else\r\n\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t#endif\r\n\t\t\t\tfloat shadowAttenuation=sampleShadowmap(shadowCoord);\r\n\t\t\t\tdif *= shadowAttenuation;\r\n\t\t\t\tspe *= shadowAttenuation;\r\n\t\t\t#endif\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_PointLight,dif,spe);\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_SpotLight,dif,spe);\r\n\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\tfloat spotShadowAttenuation = sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t\tdif *= shadowAttenuation;\r\n\t\t\t\tspe *= shadowAttenuation;\r\n\t\t\t#endif\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t#else\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t{\r\n\t\t\t\tif(i >= u_DirationLightCount)\r\n\t\t\t\t\tbreak;\r\n\t\t\t\tDirectionLight directionLight = getDirectionLight(u_LightBuffer,i);\r\n\t\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t\t\t#else\r\n\t\t\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t\t\t#endif\r\n\t\t\t\t\t\tdirectionLight.color *= sampleShadowmap(shadowCoord);\r\n\t\t\t\t\t}\r\n\t\t\t\t#endif\r\n\t\t\t\tLayaAirBlinnPhongDiectionLight(u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,directionLight,dif,spe);\r\n\t\t\t\tdiffuse+=dif;\r\n\t\t\t\tspecular+=spe;\r\n\t\t\t}\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tivec4 clusterInfo =getClusterInfo(u_LightClusterBuffer,u_View,u_Viewport, v_PositionWorld,gl_FragCoord,u_ProjectionParams);\r\n\t\t\t#ifdef POINTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.x)//PointLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tPointLight pointLight = getPointLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,pointLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t\t#ifdef SPOTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.y)//SpotLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tSpotLight spotLight = getSpotLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\t\t\t\tspotLight.color *= sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t#endif\r\n\t\t\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,spotLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t#endif\r\n\r\n\tgl_FragColor =vec4(mainColor.rgb*(globalDiffuse + diffuse),mainColor.a);\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tgl_FragColor.rgb+=specular;\r\n\t#endif\r\n\t  \r\n\t#ifdef FOG\r\n\t\tfloat lerpFact=clamp((1.0/gl_FragCoord.w-u_FogStart)/u_FogRange,0.0,1.0);\r\n\t\tgl_FragColor.rgb=mix(gl_FragColor.rgb,u_FogColor,lerpFact);\r\n\t#endif\r\n\r\n    float heightLerp = clamp((u_HeightFogStartY - v_WolrdPos.y) / u_HeightFogDistance, 0.0, 1.0);\r\n    gl_FragColor.rgb = mix(gl_FragColor.rgb, u_HeightFogColor, heightLerp);\r\n}\r\n\r\n");
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.vs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/LT-Mesh-BlinnPhong-DepthFog.vs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\";\r\n\r\nattribute vec4 a_Position;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#if defined(LIGHTMAP)&&defined(UV1)\r\n\tattribute vec2 a_Texcoord1;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tuniform vec4 u_LightmapScaleOffset;\r\n\tvarying vec2 v_LightMapUV;\r\n#endif\r\n\r\n#ifdef COLOR\r\n\tattribute vec4 a_Color;\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nattribute vec3 a_Normal;\r\nvarying vec3 v_Normal; \r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\tuniform vec3 u_CameraPos;\r\n\tvarying vec3 v_ViewDir; \r\n#endif\r\n\r\n#if defined(NORMALMAP)\r\n\tattribute vec4 a_Tangent0;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\n#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\nvarying vec3 v_WolrdPos;\r\n\r\nvoid main()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform = u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\tposition=skinTransform*a_Position;\r\n\t#else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\r\n    \r\n\t\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\r\n\tmat3 worldInvMat;\r\n\t#ifdef BONE\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat*skinTransform));\r\n\t#else\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat));\r\n\t#endif  \r\n\tv_Normal=normalize(a_Normal*worldInvMat);\r\n\t#if defined(NORMALMAP)\r\n\t\tv_Tangent=normalize(a_Tangent0.xyz*worldInvMat);\r\n\t\tv_Binormal=cross(v_Normal,v_Tangent)*a_Tangent0.w;\r\n\t#endif\r\n\r\n    v_WolrdPos = (worldMat*position).xyz;\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\tvec3 positionWS = v_WolrdPos;\r\n\t\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tv_ViewDir = u_CameraPos-positionWS;\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\t\tv_PositionWorld = positionWS;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n\t\t#ifdef TILINGOFFSET\r\n\t\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t\t#else\r\n\t\t\tv_Texcoord0=a_Texcoord0;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#ifdef LIGHTMAP\r\n\t\t#ifdef UV1\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord1.x,1.0-a_Texcoord1.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#else\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord0.x,1.0-a_Texcoord0.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#endif \r\n\t\tv_LightMapUV.y=1.0-v_LightMapUV.y;\r\n\t#endif\r\n\r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tv_Color=a_Color;\r\n\t#endif\r\n\r\n\t#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\t\tv_ShadowCoord =getShadowCoord(vec4(positionWS,1.0));\r\n\t#endif\r\n\r\n\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\tv_SpotShadowCoord = u_SpotViewProjectMatrix*vec4(positionWS,1.0);\r\n\t#endif\r\n\r\n\tgl_Position = remapGLPositionZ(gl_Position);\r\n}");
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.fs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.fs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n\tprecision highp int;\r\n#else\r\n\tprecision mediump float;\r\n\tprecision mediump int;\r\n#endif\r\n\r\n#include \"ShadowCasterFS.glsl\"\r\n\r\nvoid main()\r\n{\r\n\tgl_FragColor = shadowCasterFragment();\r\n}");
+
+/***/ }),
+
+/***/ "./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.vs":
+/*!*******************************************************************!*\
+  !*** ./src/LTGame/Material/shader/Mesh-BlinnPhongShadowCaster.vs ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("#include \"ShadowCasterVS.glsl\"\r\n\r\nvoid main()\r\n{\r\n\tvec4 positionCS = shadowCasterVertex();\r\n\tgl_Position = remapGLPositionZ(positionCS);\r\n}");
 
 /***/ }),
 
@@ -2264,7 +3430,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
     _OnLoginSuccess(res) {
         console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "登录成功", res);
         this.loginState.isLogin = true;
-        this.loginState.code = res.code;
+        this.loginState.code = res.uid;
     }
     ShareAppMessage(obj, onSuccess, onFailed) {
     }
@@ -2887,6 +4053,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
 /* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
+/* harmony import */ var _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+
+
 
 
 
@@ -2895,6 +4065,7 @@ class QQPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
         super(...arguments);
         this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_1__["EPlatformType"].QQ;
+        this.isBannerShowing = false;
     }
     Init(platformData) {
         this._base = window["qq"];
@@ -2911,6 +4082,7 @@ class QQPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this._CreateVideoAd();
         this._CreateInterstitalAd();
         window["iplatform"] = this;
+        console.error("平台初始化完成", _LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].platformStr);
     }
     _InitSystemInfo() {
         try {
@@ -2929,7 +4101,7 @@ class QQPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this.safeArea = null;
         }
     }
-    _CreateBannerAd() {
+    _CreateBannerAd(show) {
         if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__["default"].IsNullOrEmpty(this.platformData.bannerId)) {
             console.log("无有效的banner广告ID,取消加载");
             return;
@@ -2939,24 +4111,217 @@ class QQPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
         let bannerObj = {};
         bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         let styleObj = {};
-        styleObj["left"] = 0;
-        styleObj["top"] = 0;
+        styleObj["top"] = windowHeight - 80;
         styleObj["width"] = 300;
+        styleObj["left"] = (windowWidth - styleObj["width"]) / 2;
         bannerObj["style"] = styleObj;
         this._bannerAd = this._base.createBannerAd(bannerObj);
         this._isBannerLoaded = false;
         this._bannerAd.onLoad(() => {
-            console.log("banner加载成功", this._bannerAd);
+            console.log("qq banner加载成功", this._bannerAd);
             this._isBannerLoaded = true;
+            if (show) {
+                this._bannerAd.show();
+            }
         });
         this._bannerAd.onError((res) => {
             console.error("banner广告加载失败", res);
         });
         this._bannerAd.onResize((size) => {
-            console.log("onResize");
-            this._bannerAd.style.top = windowHeight - size.height;
-            this._bannerAd.style.left = (windowWidth - size.width) / 2;
+            console.log("onResize", size);
+            this._bannerAd.style.top = windowHeight - 80;
+            this._bannerAd.style.left = (windowWidth - 300) / 2;
+            console.log("onResize", this._bannerAd);
         });
+        // super._CreateBannerAd();
+    }
+    IsBannerAvaliable() {
+        return this._isBannerLoaded;
+    }
+    IsVideoAvaliable() {
+        return this._isVideoLoaded;
+    }
+    IsInterstitalAvaliable() {
+        return this._isInterstitialLoaded;
+    }
+    ShowBannerAd() {
+        if (!this.IsBannerAvaliable()) {
+            return;
+        }
+        this._bannerAd.show();
+        this.isBannerShowing = true;
+        Laya.timer.loop(15 * 1000, this, this.refreshBanner);
+    }
+    refreshBanner() {
+        if (this.isBannerShowing) {
+            console.log('refresh banner');
+            this._bannerAd.hide();
+            this._CreateBannerAd(true);
+        }
+    }
+    HideBannerAd() {
+        if (!this.IsBannerAvaliable())
+            return;
+        if (this._bannerAd) {
+            this._bannerAd.hide();
+            Laya.timer.clear(this, this.refreshBanner);
+            this.isBannerShowing = false;
+        }
+        this._CreateBannerAd();
+    }
+    _DoCacheShowVideo(onSuccess, onSkipped) {
+        if (!this._isVideoLoaded) {
+            console.error("视频广告尚未加载好");
+            return;
+        }
+        this._rewardSuccessed = onSuccess;
+        this._rewardSkipped = onSkipped;
+        this._isVideoLoaded = false;
+        Laya.stage.event(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_4__["CommonEventId"].PAUSE_AUDIO);
+        this._rewardVideo.show();
+    }
+    _DoNoCacheShowVideo(onSuccess, onSkipped) {
+        this._rewardSuccessed = onSuccess;
+        this._rewardSkipped = onSkipped;
+        if (!this._isVideoLoaded || !this._rewardVideo) {
+            if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__["default"].IsNullOrEmpty(this.platformData.rewardVideoId)) {
+                console.log("无有效的视频广告ID,取消加载");
+                onSkipped.run();
+                return;
+            }
+            let createRewardedVideoAd = this._base["createRewardedVideoAd"];
+            if (createRewardedVideoAd == null) {
+                console.error("无createRewardedVideoAd方法,跳过初始化");
+                onSkipped.run();
+                return;
+            }
+            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].ShowLoading("广告拉取中...");
+            this._videoFailedCount = 0;
+            let videoObj = {};
+            videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+            this._rewardVideo = createRewardedVideoAd(videoObj);
+            this._rewardVideo.onLoad(() => {
+                console.log("视频广告加载成功");
+                this._isVideoLoaded = true;
+            });
+            this._rewardVideo.onError((res) => {
+                this._videoFailedCount++;
+                console.error("视频广告加载失败", res, this._videoFailedCount);
+            });
+            this._rewardVideo.onClose((res) => {
+                Laya.stage.event(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_4__["CommonEventId"].RESUM_AUDIO);
+                console.log(" NoCache - 视频回调", res);
+                let isEnd = res["isEnded"];
+                console.log("noCache---", isEnd, "----", !!this._rewardSuccessed, "-----", !!this._rewardSkipped);
+                if (isEnd) {
+                    if (this._rewardSuccessed)
+                        this._rewardSuccessed.run();
+                }
+                else {
+                    if (this._rewardSkipped)
+                        this._rewardSkipped.run();
+                }
+            });
+        }
+        this._rewardVideo.show().then(() => {
+            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].HideLoading();
+        }).catch(err => {
+            console.log("广告组件出现问题", err);
+            // 可以手动加载一次
+            this._rewardVideo.load().then(() => {
+                console.log("手动加载成功");
+                // 加载成功后需要再显示广告
+                return this._rewardVideo.show().then(() => {
+                    _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].HideLoading();
+                });
+            });
+        });
+        ;
+    }
+    ShowRewardVideoAd(onSuccess, onSkipped) {
+        if (this._cacheVideoAD) {
+            this._DoCacheShowVideo(onSuccess, onSkipped);
+        }
+        else {
+            this._DoNoCacheShowVideo(onSuccess, onSkipped);
+        }
+    }
+    ShowRewardVideoAdAsync() {
+        return new Promise(function (resolve) {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
+                resolve(true);
+            }, null, true), Laya.Handler.create(this, () => {
+                resolve(false);
+            }, null, true));
+        });
+    }
+    ShowInterstitalAd() {
+        if (!this._isInterstitialLoaded) {
+            console.error("插页广告尚未加载好");
+            return;
+        }
+        this._intersitialAd.show();
+    }
+    OpenGameBox(appIds = []) {
+        this.showAppBox();
+    }
+    /**
+     * 盒子广告
+     */
+    showAppBox() {
+        if (this.appBox) {
+            this.appBox.show();
+        }
+    }
+    createAppBox(show) {
+        if (!this.appBox) {
+            this.appBox = this._base.createAppBox({
+                adUnitId: '54b23210b2bf2e85c874beb4bae96003'
+            });
+        }
+        this.appBox.load().then(() => {
+            if (show) {
+                this.appBox.show();
+            }
+        });
+        this.appBox.onClose(() => {
+            console.log('关闭盒子');
+        });
+    }
+    hideAppBox() {
+        if (this.appBox) {
+            this.appBox.destroy();
+        }
+    }
+    /**
+     * 积木广告 1-5
+     */
+    showBlockAd(count = 1) {
+        let obj = {
+            adUnitId: "2f0aa99d54d9aedb40bbca4c21065c03",
+            style: { left: 55, top: Laya.stage.height / 2 },
+            size: count,
+            orientation: 'vertical' //landscape 或者 vertical，积木广告横向展示或者竖向展示
+        };
+        this.blockAd = this._base.createBlockAd(obj);
+        this.blockAd.onLoad(() => {
+            console.log('积木广告加载完成');
+            this.blockAd.show().then(() => { console.log('积木展示成功'); }).catch(e => {
+                console.error('积木展示失败', e);
+            });
+        });
+        this.blockAd.onError((err) => {
+            console.error('积木广告加载错误', err);
+        });
+        this.blockAd.onResize((res) => {
+            console.log('积木resize', res);
+        });
+    }
+    hideBlockAd() {
+        if (this.blockAd) {
+            this.blockAd.hide();
+            this.blockAd.destroy();
+        }
     }
 }
 
@@ -3418,6 +4783,7 @@ class WXPlatform {
     }
     _OnLoginSuccess(res) {
         console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].platformStr, "登录成功", res);
+        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].Toast('登录成功');
         this.loginState.isLogin = true;
         this.loginState.code = res.code;
     }
@@ -3832,18 +5198,20 @@ class WXPlatform {
     }
     NavigateToApp(appid, path, extra) {
         return new Promise((resolve, reject) => {
-            Laya.Browser.window.qg.navigateToMiniProgram({
+            wx.navigateToMiniProgram({
                 appId: appid,
                 path: path,
                 extraData: extra,
-                success: function () {
-                    console.log('小游戏跳转成功');
+                envVersion: '',
+                success: (res) => {
+                    console.log('小游戏跳转成功', res);
                     resolve(true);
                 },
-                fail: function (res) {
-                    console.log('小游戏跳转失败：', JSON.stringify(res));
+                fail: () => {
+                    console.log('小游戏跳转失败：');
                     reject(false);
-                }
+                },
+                complete: () => { }
             });
         });
     }
@@ -4442,11 +5810,12 @@ class LTStart {
 /*!************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/Cmp/View_BottomGames.ts ***!
   \************************************************************/
-/*! exports provided: default */
+/*! exports provided: ON_BANNER_SHOWN, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ON_BANNER_SHOWN", function() { return ON_BANNER_SHOWN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return View_BottomGames; });
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
@@ -4458,6 +5827,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const ON_BANNER_SHOWN = "ON_BANNER_RESIZE";
 class View_BottomGames {
     constructor(ui) {
         this._posId = 0;
@@ -4485,9 +5855,13 @@ class View_BottomGames {
         return this._ui;
     }
     _Init() {
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].WX) {
+            this._posId = 23;
+        }
         this._cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_0__["default"].instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_3__["CommonEventId"].SELF_AD_INITED, this, this._OnAdInited);
+            this.ui.visible = false;
         }
         else {
             this.ui.m_list.setVirtualAndLoop();
@@ -4499,6 +5873,10 @@ class View_BottomGames {
                 this.ui.m_list.scrollPane.scrollRight(1, true);
             });
         }
+        Laya.stage.on(ON_BANNER_SHOWN, this, this.resetPos);
+    }
+    resetPos(bannerHight) {
+        this.ui.y = Laya.stage.height - bannerHight - this.ui.height;
     }
     _OnAdInited(posId) {
         if (posId != this._posId)
@@ -4507,6 +5885,7 @@ class View_BottomGames {
         this.ui.m_list.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
         this.ui.m_list.numItems = this._cacheAds.length;
         this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
+        this.ui.visible = true;
     }
     _OnAdItemRender(index, adUI) {
         let adData = this._cacheAds[index];
@@ -4582,6 +5961,9 @@ class View_EndSlideGames {
         return this._ui;
     }
     _Init() {
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].WX) {
+            this._posId = 39;
+        }
         this._cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_0__["default"].instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_1__["CommonEventId"].SELF_AD_INITED, this, this._OnAdInited);
@@ -4698,6 +6080,9 @@ class View_HotGame {
         return this._ui;
     }
     _Init() {
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].WX) {
+            this._posId = 41;
+        }
         this._cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_6__["CommonEventId"].SELF_AD_INITED, this, this._OnAdInited);
@@ -5164,22 +6549,23 @@ class View_NativeInPage {
                 View_NativeInPage._cacheNativeAd.destroy();
                 View_NativeInPage._cacheNativeAd = null;
             }
-            for (let i = 0; i < this._cacheIds.length; ++i) {
-                let ret = yield this._LoadIconData(i);
-                if (ret) {
-                    this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
-                    this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
-                    this.ui.m_ad.m_title.text = this._cacheAdData.title;
-                    this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
-                    this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
-                    View_NativeInPage._cacheNativeAd.reportAdShow({
-                        adId: this._cacheAdData.adId
-                    });
-                    console.log("内嵌 native广告已展示", this._cacheAdData);
-                    return;
-                }
-                console.log("内嵌 native加载失败", this._cacheIds[i]);
+            // for (let i = 0; i < this._cacheIds.length; ++i) {
+            let i = Object(_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_6__["randomRangeInt"])(0, this._cacheIds.length);
+            let ret = yield this._LoadIconData(i);
+            if (ret) {
+                this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
+                this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
+                this.ui.m_ad.m_title.text = this._cacheAdData.title;
+                this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
+                this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+                View_NativeInPage._cacheNativeAd.reportAdShow({
+                    adId: this._cacheAdData.adId
+                });
+                console.log("内嵌 native广告已展示", this._cacheAdData);
+                return;
             }
+            console.log("内嵌 native加载失败", this._cacheIds[i]);
+            // }
             this.visible = false;
             this.ui.visible = false;
         });
@@ -5276,6 +6662,9 @@ class View_OtherGames {
         return this._ui;
     }
     _Init() {
+        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].WX) {
+            this._posId = 45;
+        }
         this._cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_4__["CommonEventId"].SELF_AD_INITED, this, this._OnAdInited);
@@ -5860,8 +7249,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./UI_CommonEndLose */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonEndLose.ts");
 /* harmony import */ var _UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./UI_CommonUnlockProgress */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_CommonUnlockProgress.ts");
 /* harmony import */ var _UI_sliderADs__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./UI_sliderADs */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_sliderADs.ts");
-/* harmony import */ var _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./UI_view_sharegames_big */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_sharegames_big.ts");
+/* harmony import */ var _UI_rewardPannel__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./UI_rewardPannel */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_rewardPannel.ts");
+/* harmony import */ var _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./UI_view_sharegames_big */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_view_sharegames_big.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
 
 
 
@@ -5987,7 +7378,8 @@ class LTGameBinder {
         fgui.UIObjectFactory.setExtension(_UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_58__["default"].URL, _UI_CommonEndLose__WEBPACK_IMPORTED_MODULE_58__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_59__["default"].URL, _UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_59__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_sliderADs__WEBPACK_IMPORTED_MODULE_60__["default"].URL, _UI_sliderADs__WEBPACK_IMPORTED_MODULE_60__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_61__["default"].URL, _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_61__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_rewardPannel__WEBPACK_IMPORTED_MODULE_61__["default"].URL, _UI_rewardPannel__WEBPACK_IMPORTED_MODULE_61__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_62__["default"].URL, _UI_view_sharegames_big__WEBPACK_IMPORTED_MODULE_62__["default"]);
     }
 }
 
@@ -6076,12 +7468,13 @@ class UI_CommonEndReward extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "CommonEndReward"));
     }
     onConstruct() {
-        this.m_btn_toggle_watchad = (this.getChildAt(2));
+        this.m_btn_toggle_check = (this.getChildAt(2));
         this.m_text_str = (this.getChildAt(3));
         this.m_btn_get = (this.getChildAt(4));
         this.m_icon_reward = (this.getChildAt(5));
         this.m_text_add = (this.getChildAt(6));
         this.m___bottomgames = (this.getChildAt(7));
+        this.m___nativeinpage = (this.getChildAt(8));
         this.m_anim_enter = this.getTransitionAt(0);
     }
 }
@@ -6284,6 +7677,7 @@ class UI_CommonRoll extends fgui.GComponent {
         this.m_pointer = (this.getChildAt(2));
         this.m_btn_close = (this.getChildAt(4));
         this.m_btn_roll = (this.getChildAt(5));
+        this.m_rewardPannel = (this.getChildAt(6));
     }
 }
 UI_CommonRoll.URL = "ui://75kiu87kbg002d";
@@ -6428,7 +7822,7 @@ class UI_CommonTrySkin extends fgui.GComponent {
         this.m_btn_thanks = (this.getChildAt(2));
         this.m_list_item = (this.getChildAt(3));
         this.m_btn_toggle_check = (this.getChildAt(4));
-        this.m_anim_enter = this.getTransitionAt(0);
+        this.m_anim_enter1 = this.getTransitionAt(0);
     }
 }
 UI_CommonTrySkin.URL = "ui://75kiu87kbg001v";
@@ -7167,6 +8561,38 @@ UI_iconLongComp.URL = "ui://75kiu87k92486x";
 
 /***/ }),
 
+/***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_rewardPannel.ts":
+/*!*****************************************************************!*\
+  !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_rewardPannel.ts ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_rewardPannel; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_rewardPannel extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTGame", "rewardPannel"));
+    }
+    onConstruct() {
+        this.m_c1 = this.getControllerAt(0);
+        this.m_btn_get = (this.getChildAt(2));
+        this.m_btn_close = (this.getChildAt(3));
+        this.m_img = (this.getChildAt(4));
+        this.m_txt_reward = (this.getChildAt(5));
+        this.m_t0 = this.getTransitionAt(0);
+    }
+}
+UI_rewardPannel.URL = "ui://75kiu87kvkou6z";
+
+
+/***/ }),
+
 /***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_side_ads.ts":
 /*!*************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_side_ads.ts ***!
@@ -7271,6 +8697,7 @@ class UI_view_common_sign extends fgui.GComponent {
     }
     onConstruct() {
         this.m_check_state = this.getControllerAt(0);
+        this.m_signed = this.getControllerAt(1);
         this.m_view_day7 = (this.getChildAt(3));
         this.m_list_day = (this.getChildAt(4));
         this.m_toggle_watchad = (this.getChildAt(5));
@@ -7969,6 +9396,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor() {
+        super(...arguments);
+        this.checkFlag = true;
+    }
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_CommonEndRewardMediator();
@@ -7992,6 +9423,7 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
     _OnShow() {
         super._OnShow();
         // your code
+        this.checkFlag = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkFlag;
         this._openData = new _Data_EndRewardOpenData__WEBPACK_IMPORTED_MODULE_2__["default"]();
         if (this._openParam == null) {
             console.error("请传入EndRewardOpenData用于初始化结算分享界面");
@@ -8001,26 +9433,13 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
                 this._openData[key] = this._openParam[key];
             }
         }
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.endRewardMissMode = 1 - _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.endRewardMissMode;
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].SaveToDisk();
         this._openData.enableShowGames = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.isSupportJumpOther && this._openData.enableShowGames;
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
-                // 肖张飞策划案修改
-                // this.ui.m_btn_toggle_watchad.visible = false;
-                this._isChecked = false;
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
-                this._isChecked = true;
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
-                if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.endRewardMissMode == 0) {
-                    this._isChecked = true;
-                }
-                else {
-                    this._isChecked = false;
-                }
-                break;
+        this.ui.m_btn_get.m_btn_type.selectedIndex = 3;
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+            this.changeCheck();
+        }
+        else {
+            this.ui.m_btn_toggle_check.m_selected.selectedIndex = 0;
         }
         if (this._openData.showText != null) {
             this.ui.m_text_str.text = this._openData.showText;
@@ -8030,25 +9449,17 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         }
         this.ui.m_text_add.text = "+" + this._openData.rewardCount;
         this.ui.m_btn_get.onClick(this, this._OnClickNormalGet);
-        this.ui.m_btn_toggle_watchad.onClick(this, this._OnClickToggle);
-        this._UpdateToggle();
+        this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowBannerAd();
     }
     _OnClickToggle() {
-        this._isChecked = !this._isChecked;
-        this._UpdateToggle();
+        this.ui.m_btn_toggle_check.m_selected.selectedIndex = (this.ui.m_btn_toggle_check.m_selected.selectedIndex + 1) % 2;
     }
-    _UpdateToggle() {
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
-                this.ui.m_btn_toggle_watchad.text = this._needWatchAd ? "观看视频五倍领取奖励" : "不看视频领取奖励";
-                break;
-            default:
-                this.ui.m_btn_toggle_watchad.text = this._isChecked ? "观看视频五倍领取奖励" : "不看视频领取奖励";
-                break;
+    changeCheck() {
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+            this.ui.m_btn_toggle_check.title = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkFlag ? '观看五倍奖励视频' : '不看五倍奖励视频';
+            this.ui.m_btn_toggle_check.m_selected.selectedIndex = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkFlag ? 1 : 0;
         }
-        this.ui.m_btn_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-        this.ui.m_btn_get.m_btn_type.selectedIndex = this._needWatchAd ? 0 : 3;
     }
     _OnClickBack() {
         if (this._openData.onClose) {
@@ -8057,13 +9468,40 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
         this.Hide();
     }
     _OnClickNormalGet() {
-        if (this._needWatchAd) {
-            this._OnClickDoubleGet();
-            return;
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState != _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+                if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
+                    yield this._OnClickDoubleGet();
+                }
+                else {
+                    this.noPayClose();
+                }
+            }
+            else {
+                if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
+                    if (this.checkFlag) {
+                        yield this._OnClickDoubleGet();
+                    }
+                    else {
+                        this.noPayClose();
+                    }
+                }
+                else {
+                    if (this.checkFlag) {
+                        this.noPayClose();
+                    }
+                    else {
+                        yield this._OnClickDoubleGet();
+                    }
+                }
+            }
+        });
+    }
+    noPayClose() {
         if (this._openData.onClose) {
             this._openData.onClose.runWith([0, this.ui.m_icon_reward]);
         }
+        this.checkFlag = !this.checkFlag;
         this.Hide();
     }
     _OnClickDoubleGet() {
@@ -8082,6 +9520,10 @@ class UI_CommonEndRewardMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_
     }
     _OnHide() {
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.HideBannerAd();
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkFlag = this.checkFlag;
+            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_7__["default"].SaveToDisk();
+        }
     }
 }
 
@@ -8140,6 +9582,7 @@ class UI_CommonEndShareMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_M
         this.ui.m_view.m_btn_nothanks.onClick(this, this._OnClickClose);
         this.ui.m_view.m_btn_share.onClick(this, this._OnClickShare);
         this.ui.m_view.m_btn_share.m_btn_type.selectedIndex = 1;
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowBannerAd();
     }
     _OnClickShare() {
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.recordManager.ShareVideo(Laya.Handler.create(null, () => {
@@ -8158,6 +9601,9 @@ class UI_CommonEndShareMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_M
             this._openData.onClose.runWith([0, this.ui.m_view.m_icon_reward]);
         }
         this.Hide();
+    }
+    _OnHide() {
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.HideBannerAd();
     }
 }
 
@@ -8409,6 +9855,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
 /* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+/* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+
+
+
 
 
 
@@ -8434,6 +9886,7 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
     _OnShow() {
         super._OnShow();
         // your code
+        this.isFake = false;
         this._openData = new _Data_RollOpenData__WEBPACK_IMPORTED_MODULE_2__["default"]();
         if (this._openParam == null) {
             console.error("请传入RollOpenData用于初始化大转盘界面");
@@ -8443,22 +9896,65 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
                 this._openData[key] = this._openParam[key];
             }
         }
+        this.ui.m_rewardPannel.visible = false;
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].NoGame) {
+            this.ui.m_rewardPannel.m_c1.selectedIndex = 1;
+        }
         this.ui.m_btn_roll.m_btn_type.selectedIndex = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__["default"].instance.freeRollCount > 0 ? 3 : 0;
         this.ui.m_btn_close.onClick(this, this._OnClickClose);
         this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
+        this.ui.m_rewardPannel.m_btn_get.onClick(this, this.onGetReward);
         for (let i = 0; i < 8; ++i) {
             let getUI = this.ui.m_view_roll.getChildAt(i + 1);
             if (this._openData.iconList[i]) {
                 getUI.m_icon.url = this._openData.iconList[i];
+            }
+            else {
+                getUI.m_icon.url = 'ui://75kiu87kbg002p';
+                this._openData.iconList[i] = 'ui://75kiu87kbg002p';
             }
             if (this._openData.titleList[i]) {
                 getUI.m_text_title.text = this._openData.titleList[i];
             }
             else {
                 getUI.m_text_title.text = "测试数据" + i;
+                this._openData.titleList[i] = "测试数据" + i;
             }
         }
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowBannerAd();
+    }
+    onGetReward() {
+        // if (LTSDK.instance.checkState == ECheckState.NoGame) {
+        //     this._fakeGet();
+        // } else {
+        //     this.onRewardGot();
+        // }
+        if (this.isFake) {
+            this.onRewardGot();
+            this._OnClickRoll();
+            return;
+        }
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_8__["ECheckState"].NoGame) {
+            this._fakeGet();
+        }
+        else {
+            this.onRewardGot();
+        }
+    }
+    onRewardGot() {
+        this.ui.m_view_roll.rotation = this._cacheDegree;
+        this.ui.m_rewardPannel.visible = false;
+        if (this._openData.onRolled) {
+            this._openData.onRolled.runWith([this._cacheIndex, this.ui.m_pointer]);
+        }
+        this.isFake = false;
+    }
+    _fakeGet() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.isFake = true;
+            yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_9__["default"].Seconds(1);
+            this.onRewardGot();
+        });
     }
     _OnClickRoll() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -8486,10 +9982,9 @@ class UI_CommonRollMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         Laya.Tween.to(this.ui.m_view_roll, { rotation: targetDegree }, this._rotateTime, Laya.Ease.quadOut, Laya.Handler.create(this, this._OnRollEnd));
     }
     _OnRollEnd() {
-        this.ui.m_view_roll.rotation = this._cacheDegree;
-        if (this._openData.onRolled) {
-            this._openData.onRolled.runWith([this._cacheIndex, this.ui.m_pointer]);
-        }
+        this.ui.m_rewardPannel.visible = true;
+        this.ui.m_rewardPannel.m_img.url = this._openData.iconList[this._cacheIndex];
+        this.ui.m_rewardPannel.m_txt_reward.text = this._openData.titleList[this._cacheIndex];
         this.ui.m_btn_roll.m_btn_type.selectedIndex = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_6__["default"].instance.freeRollCount > 0 ? 3 : 0;
         _LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].UnlockScreen();
     }
@@ -8657,6 +10152,7 @@ class UI_CommonSignMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
             isSigned = this._openData.isSigned;
         }
         this.ui.m_view.m_btn_get.enabled = !isSigned;
+        this.ui.m_view.m_signed.selectedIndex = isSigned ? 1 : 0;
         let currentSignDay = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.signDayCount;
         if (this._openData.currentDayCount != null) {
             currentSignDay = this._openData.currentDayCount;
@@ -8786,7 +10282,7 @@ __webpack_require__.r(__webpack_exports__);
 class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
         super(...arguments);
-        this._isChecked = true;
+        this.checkFlag = true;
     }
     static get instance() {
         if (this._instance == null) {
@@ -8795,22 +10291,13 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
         }
         return this._instance;
     }
-    get _needWatchAd() {
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
-                if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode == 0) {
-                    return this._isChecked;
-                }
-                else {
-                    return !this._isChecked;
-                }
-            default:
-                return this._isChecked;
-        }
-    }
     _OnShow() {
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState != _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal) {
+            _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.isDelayClose = false;
+        }
         super._OnShow();
         // your code
+        this.checkFlag = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.checkFlag;
         this._openData = new _Data_TrySkinOpenData__WEBPACK_IMPORTED_MODULE_2__["default"]();
         if (this._openParam == null) {
             console.error("请传入TrySkinOpenData用于初始化皮肤试用界面");
@@ -8822,23 +10309,12 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
         }
         _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode = 1 - _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode;
         _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].SaveToDisk();
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
-                // 肖张飞策划案修改
-                // this.ui.m_btn_toggle_check.visible = false;
-                this._isChecked = false;
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
-                this._isChecked = true;
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
-                if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.trySignMissMode == 0) {
-                    this._isChecked = true;
-                }
-                else {
-                    this._isChecked = false;
-                }
-                break;
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+            this.changeCheck();
+            this.ui.m_btn_thanks.text = "暂时试用";
+        }
+        else {
+            this.ui.m_btn_thanks.text = "暂不试用";
         }
         if (this._openData.iconPaths == null || this._openData.iconPaths.length != 4) {
             console.error("请传入试用皮肤图标");
@@ -8851,32 +10327,26 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
             getUI.onClick(this, this._OnClickTrySkin, [i]);
         }
         this.ui.m_btn_thanks.onClick(this, this._OnClickNoThanks);
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck) {
+            this.ui.m_btn_toggle_check.visible = false;
+        }
         this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
-        this._UpdateToggle();
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowBannerAd();
     }
     _OnClickToggle() {
-        this._isChecked = !this._isChecked;
-        this._UpdateToggle();
-    }
-    _UpdateToggle() {
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame:
-                this.ui.m_btn_toggle_check.text = this._needWatchAd ? "看视频随机试用皮肤" : "不要视频皮肤";
-                this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck:
-                this.ui.m_btn_toggle_check.text = "随机体验皮肤";
-                this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
-                this.ui.m_btn_toggle_check.m_selected.selectedIndex = 0;
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].Normal:
-            default:
-                this.ui.m_btn_toggle_check.text = "随机体验皮肤";
-                this.ui.m_btn_thanks.text = this._needWatchAd ? "暂时试用" : "暂不试用";
-                break;
+        this.ui.m_btn_toggle_check.m_selected.selectedIndex = (this.ui.m_btn_toggle_check.m_selected.selectedIndex + 1) % 2;
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+            this.ui.m_btn_thanks.text = this.checkFlag ? (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1 ? "暂时试用" : "暂不试用") : (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 0 ? "暂时试用" : "暂不试用");
         }
-        this.ui.m_btn_toggle_check.m_selected.selectedIndex = this._isChecked ? 1 : 0;
+        else {
+            this.ui.m_btn_thanks.text = this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1 ? "暂时试用" : "暂不试用";
+        }
+    }
+    changeCheck() {
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+            this.ui.m_btn_toggle_check.title = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.checkFlag ? '观看随机试用皮肤视频' : '不看随机试用皮肤视频';
+            this.ui.m_btn_toggle_check.m_selected.selectedIndex = _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.checkFlag ? 1 : 0;
+        }
     }
     _OnClickTrySkin(index) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -8894,28 +10364,61 @@ class UI_CommonTrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MO
     }
     _OnClickNoThanks() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this._needWatchAd) {
-                let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowRewardVideoAdAsync();
-                if (result) {
-                    if (this._openData.onClose) {
-                        this._openData.onClose.runWith(_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__["default"].RandomInt(0, 4));
-                    }
-                    this.Hide();
+            if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState != _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+                if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
+                    yield this.randomRewardVideo();
                 }
                 else {
-                    _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过视频无法获得奖励");
+                    this.noPayClose();
                 }
             }
             else {
+                if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
+                    if (this.checkFlag) {
+                        yield this.randomRewardVideo();
+                    }
+                    else {
+                        this.noPayClose();
+                    }
+                }
+                else {
+                    if (this.checkFlag) {
+                        this.noPayClose();
+                    }
+                    else {
+                        yield this.randomRewardVideo();
+                    }
+                }
+            }
+        });
+    }
+    noPayClose() {
+        if (this._openData.onClose) {
+            this._openData.onClose.runWith(-1);
+        }
+        this.checkFlag = !this.checkFlag;
+        this.Hide();
+    }
+    randomRewardVideo() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowRewardVideoAdAsync();
+            if (result) {
                 if (this._openData.onClose) {
-                    this._openData.onClose.runWith(-1);
+                    this._openData.onClose.runWith(_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__["default"].RandomInt(0, 4));
                 }
                 this.Hide();
+            }
+            else {
+                _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过视频无法获得奖励");
             }
         });
     }
     _OnHide() {
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.HideBannerAd();
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].NoGame) {
+            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].instance.checkFlag = this.checkFlag;
+            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_8__["default"].SaveToDisk();
+        }
     }
 }
 
@@ -10458,7 +11961,7 @@ class SDK_YQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
                 }
                 for (let key in ad) {
                     if (key == this.controlVersion) {
-                        this.isADEnable = ad[key] == "1";
+                        this.isADEnable = (ad[key] == "1" && this.channel != "own");
                         break;
                     }
                 }
@@ -10500,6 +12003,8 @@ class SDK_YQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
         else {
             this._OnLoginFailed(res);
         }
+    }
+    canShowAds() {
     }
     RecordDaily() {
         let recordData = {};
@@ -10580,7 +12085,12 @@ class LTSDK {
         }
         this._instance = new sdkClass();
         // 初始化sdk
-        this._instance.Init(identifyId, "own", controlVersion, appId);
+        let channel = "own";
+        let options = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"].instance.lauchOption;
+        if (options && options.query && options.query.channel) {
+            channel = options.query.channel;
+        }
+        this._instance.Init(identifyId, channel, controlVersion, appId);
         // 请求云控信息
         this._instance.RequestRemoteConfig();
         // 自动sdk登录
@@ -11292,6 +12802,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
 /* harmony import */ var _SDK_Impl_SDK_CQ__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../SDK/Impl/SDK_CQ */ "./src/SDK/Impl/SDK_CQ.ts");
 /* harmony import */ var _SDK_Impl_SDK_YQ__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../SDK/Impl/SDK_YQ */ "./src/SDK/Impl/SDK_YQ.ts");
+/* harmony import */ var _SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../SDK/Impl/SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
+
 
 
 
@@ -11317,13 +12829,13 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
         switch (ePlatform) {
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Web:
                 console.log("web平台,默认框架测试数据");
-                this._gameVersion = '1.0.0'; //1.0.1 为全策略模式 
+                this._gameVersion = '1.0.1'; //1.0.1 为全策略模式 
                 this._appId = '88888888';
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].TT:
-                this._gameVersion = "v0.0.1";
-                this._resVersion = 'v0.0.1';
-                platformData.appId = "ttbe90c82d21ba845b";
+                this._gameVersion = "v0.0.2";
+                this._resVersion = 'v0.0.2';
+                platformData.appId = "ttd60ba0b64931e10f";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
@@ -11363,6 +12875,9 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
         switch (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platform) {
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].WX:
                 _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_YQ__WEBPACK_IMPORTED_MODULE_8__["default"], this._gameName, this._gameVersion, this._appId);
+                break;
+            case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Web:
+                _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__["default"], this._gameName, this._gameVersion, this._appId);
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo:
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].TT:
@@ -11624,6 +13139,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
 /* harmony import */ var _LTGame_LTUtils_ArrayEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/ArrayEx */ "./src/LTGame/LTUtils/ArrayEx.ts");
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _LTGame_LTUtils_CameraEx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTGame/LTUtils/CameraEx */ "./src/LTGame/LTUtils/CameraEx.ts");
+/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+
+
 
 
 
@@ -11640,6 +13159,12 @@ class EffectManager {
             this._instance = new EffectManager();
         }
         return this._instance;
+    }
+    get uiEffectScene() {
+        return this._uiEffectScene;
+    }
+    get uiEffectCamera() {
+        return this._uiEffectCamera;
     }
     _Init() {
         this._effectRoot = new Laya.Sprite3D("EffectManager");
@@ -11658,6 +13183,11 @@ class EffectManager {
     }
     WarmEffects() {
         return __awaiter(this, void 0, void 0, function* () {
+            this._uiEffectScene = new Laya.Scene3D();
+            Laya.stage.addChild(this._uiEffectScene);
+            this._uiEffectCamera = new Laya.Camera();
+            this._uiEffectCamera.clearFlag = Laya.CameraClearFlags.DepthOnly;
+            this._uiEffectScene.addChild(this._uiEffectCamera);
             let preloadEffects = [];
             for (let i = 0; i < _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList.length; ++i) {
                 let configItem = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].dataList[i];
@@ -11715,7 +13245,17 @@ class EffectManager {
                 showData.parent.addChild(instEffect);
             }
             else {
-                this._effectRoot.addChild(instEffect);
+                let effectConfig = _config_EffectConfig__WEBPACK_IMPORTED_MODULE_2__["EffectConfig"].data[showData.effectId];
+                if (effectConfig.isUIEffect) {
+                    this._uiEffectScene.addChild(instEffect);
+                    if (showData.setPos != null) {
+                        let ray = _LTGame_LTUtils_CameraEx__WEBPACK_IMPORTED_MODULE_7__["CameraEx"].ScreenPosToRay(this.uiEffectCamera, new Laya.Vector2(showData.setPos.x, showData.setPos.y));
+                        showData.setPos = _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_8__["default"].Add(ray.origin, _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_8__["default"].Scale(ray.origin, 100));
+                    }
+                }
+                else {
+                    this._effectRoot.addChild(instEffect);
+                }
             }
             if (showData.setPos != null) {
                 instEffect.transform.position = showData.setPos.clone();
@@ -11789,10 +13329,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Fsm/BaseState */ "./src/LTGame/Fsm/BaseState.ts");
 /* harmony import */ var _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/Start/ESceneType */ "./src/LTGame/Start/ESceneType.ts");
 /* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-
-
 
 
 
@@ -11801,8 +13337,8 @@ class MainScene extends _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["defa
         super(_LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_1__["ESceneType"].Main);
     }
     _DoEnter() {
-        _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_3__["default"].instance.checkState = _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_4__["ECheckState"].NoGame;
-        console.error("[测试功能]强制设置checkstate", _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_3__["default"].instance.checkState);
+        //     LTSDK.instance.checkState = ECheckState.NoGame;
+        //     console.error("[测试功能]强制设置checkstate", LTSDK.instance.checkState);
         _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__["UI_MainMediator"].instance.Show();
     }
 }
@@ -11869,6 +13405,269 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
             this.isFinished = true;
             this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_7__["ESceneType"].Main;
         });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/HeightFogTest.ts":
+/*!******************************************!*\
+  !*** ./src/script/test/HeightFogTest.ts ***!
+  \******************************************/
+/*! exports provided: HeightFogTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeightFogTest", function() { return HeightFogTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_Material_LTBlinnPhong_HeightFog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Material/LTBlinnPhong_HeightFog */ "./src/LTGame/Material/LTBlinnPhong_HeightFog.ts");
+/* harmony import */ var _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Material/HeightFogManager */ "./src/LTGame/Material/HeightFogManager.ts");
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+
+
+
+
+
+
+const scene_path = "res/export/Conventional/HeightFog.ls";
+class HeightFogTest {
+    constructor() {
+        this.name = "高度雾测试";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            Laya.Shader3D.debugMode = true;
+            _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__["HeightFogManager"].instance.fogColor = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(0, 1), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(0, 1), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(0, 1));
+            _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__["HeightFogManager"].instance.fogDistance = 10;
+            _LTGame_Material_HeightFogManager__WEBPACK_IMPORTED_MODULE_3__["HeightFogManager"].instance.fogStartHeight = 10;
+            let shareMat = null;
+            let cubes = this._s3d.getChildByName("cubes");
+            for (let i = 0; i < cubes.numChildren; ++i) {
+                let getChild = cubes.getChildAt(i).getChildAt(0);
+                if (shareMat == null) {
+                    shareMat = _LTGame_Material_LTBlinnPhong_HeightFog__WEBPACK_IMPORTED_MODULE_2__["LTBlinnPhong_HeightFog"].CreateFromBlinnPhong(getChild.meshRenderer.sharedMaterial);
+                }
+                getChild.meshRenderer.sharedMaterial = shareMat;
+            }
+            let panel = this._s3d.getChildByName("Plane");
+            panel.meshRenderer.material
+                = _LTGame_Material_LTBlinnPhong_HeightFog__WEBPACK_IMPORTED_MODULE_2__["LTBlinnPhong_HeightFog"].CreateFromBlinnPhong(panel.meshRenderer.sharedMaterial);
+            /*
+            HeightFogManager.instance.fogColor = new Laya.Vector3(1, 0, 0);
+            HeightFogManager.instance.fogDistance = 5;
+            HeightFogManager.instance.fogStartHeight = 10;
+            */
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        });
+    }
+    Clear() {
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/PBRTest.ts":
+/*!************************************!*\
+  !*** ./src/script/test/PBRTest.ts ***!
+  \************************************/
+/*! exports provided: PBRTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PBRTest", function() { return PBRTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
+
+
+const scene_path = "res/export/Conventional/SkyBox.ls";
+class PBRTest {
+    constructor() {
+        this.name = "PBR测试";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            this._s3d.reflection = this._s3d.skyRenderer.material.textureCube;
+            let sphereMesh = Laya.PrimitiveMesh.createSphere(0.25, 32, 32);
+            const row = 6;
+            this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, 1.5, 2), this._s3d, row, new Laya.Vector4(186 / 255, 110 / 255, 64 / 255, 1.0), 1.0);
+            this.addSpheresSmoothnessMetallic(sphereMesh, new Laya.Vector3(0, 0, 2), this._s3d, 3, row, new Laya.Vector4(1.0, 1.0, 1.0, 1.0));
+            this.addSpheresSpecialMetallic(sphereMesh, new Laya.Vector3(0, -1.5, 2), this._s3d, row, new Laya.Vector4(0.0, 0.0, 0.0, 1.0), 0.0);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        });
+    }
+    /**
+     * Add some different smoothness with special metallic sphere.
+     */
+    addSpheresSpecialMetallic(sphereMesh, offset, scene, col, color, metallic = 0) {
+        const width = col * 0.5;
+        for (var i = 0, n = col; i < n; i++) { //diffenent smoothness
+            var smoothness = i / (n - 1);
+            // var metallic: number = metallic;
+            var pos = new Laya.Vector3();
+            pos.setValue(-width / 2 + i * width / (n - 1), 0, 3.0);
+            Laya.Vector3.add(offset, pos, pos);
+            this.addPBRSphere(sphereMesh, pos, scene, color, smoothness, metallic);
+        }
+    }
+    /**
+     * Add some different smoothness and metallic sphere.
+     */
+    addSpheresSmoothnessMetallic(sphereMesh, offset, scene, row, col, color) {
+        const width = col * 0.5;
+        const height = row * 0.5;
+        for (var i = 0, n = col; i < n; i++) { //diffenent smoothness
+            for (var j = 0, m = row; j < m; j++) { //diffenent metallic
+                var smoothness = i / (n - 1);
+                var metallic = 1.0 - j / (m - 1);
+                var pos = new Laya.Vector3();
+                pos.setValue(-width / 2 + i * width / (n - 1), height / 2 - j * height / (m - 1), 3.0);
+                Laya.Vector3.add(offset, pos, pos);
+                this.addPBRSphere(sphereMesh, pos, scene, color, smoothness, metallic);
+            }
+        }
+    }
+    /**
+     * Add one with smoothness and metallic sphere.
+     */
+    addPBRSphere(sphereMesh, position, scene, color, smoothness, metallic) {
+        var mat = new Laya.PBRStandardMaterial();
+        mat.albedoColor = color;
+        mat.smoothness = smoothness;
+        mat.metallic = metallic;
+        var meshSprite = new Laya.MeshSprite3D(sphereMesh);
+        meshSprite.meshRenderer.sharedMaterial = mat;
+        var transform = meshSprite.transform;
+        transform.localPosition = position;
+        scene.addChild(meshSprite);
+        return mat;
+    }
+    Clear() {
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/RenderTextureTest.ts":
+/*!**********************************************!*\
+  !*** ./src/script/test/RenderTextureTest.ts ***!
+  \**********************************************/
+/*! exports provided: RenderTextureTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RenderTextureTest", function() { return RenderTextureTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_TestRTMediator */ "./src/script/ui/UI_TestRTMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
+
+
+
+const scene_path = "res/export/Conventional/HeightFog.ls";
+class RenderTextureTest {
+    constructor() {
+        this.name = "RT测试";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
+            let getCamera = this._s3d.getChildByName("Main Camera");
+            this._renderCamera = getCamera.clone();
+            this._s3d.addChild(this._renderCamera);
+            // 注意格式只能用r8g8b8a8否则ip6不支持
+            this._cacheRT = new Laya.RenderTexture(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.width, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8, Laya.RenderTextureDepthFormat.DEPTH_16);
+            this._renderCamera.renderTarget = this._cacheRT;
+            this._renderCamera.enableRender = false;
+            this._cacheImage = new fgui.GImage();
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.addChildAt(this._cacheImage, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.getChildIndex(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display) + 1);
+            this._cacheImage.image.texture = new Laya.Texture(this._cacheRT);
+            this._cacheImage.setPivot(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.pivotX, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.pivotY, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.pivotAsAnchor);
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.draggable = true;
+            _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_btn_back.onClick(this, this.Clear);
+            _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        });
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta / 1000;
+        this._renderCamera.transform.localRotationEulerY += dt * 10;
+        this._renderCamera.render();
+        this._cacheImage.setXY(_ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.x, _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.ui.m_img_display.y);
+    }
+    Clear() {
+        this._cacheRT.destroy();
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+        _ui_UI_TestRTMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Hide();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/UIEffectTest.ts":
+/*!*****************************************!*\
+  !*** ./src/script/test/UIEffectTest.ts ***!
+  \*****************************************/
+/*! exports provided: UIEffectTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIEffectTest", function() { return UIEffectTest; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
+
+
+
+const scene_path = "res/export/Conventional/HeightFog.ls";
+class UIEffectTest {
+    constructor() {
+        this.name = "UI特效测试";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].LoadAndGet(scene_path, true);
+            Laya.stage.addChildAt(this._s3d, 1);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnPressDown);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ui.m_img_bg.color = "ffffffff";
+        });
+    }
+    _OnPressDown(event) {
+        _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__["EffectManager"].instance.PlayEffectById(2, 2, new Laya.Vector3(event.stageX, event.stageY));
+    }
+    Clear() {
+        this._s3d.destroy();
+        _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
     }
 }
 
@@ -12101,6 +13900,8 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
         this.ui.m_btn_unlockprogress.onClick(this, this._OnClickUnlockProgress);
     }
     _OnClickModule() {
+        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_11__["default"].Toast('完善中');
+        return;
         _UI_MoudleDemoMediator__WEBPACK_IMPORTED_MODULE_13__["default"].instance.Show();
     }
     _OnClickRoll() {
@@ -12275,6 +14076,74 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
 
 /***/ }),
 
+/***/ "./src/script/ui/UI_FunctionTestMediator.ts":
+/*!**************************************************!*\
+  !*** ./src/script/ui/UI_FunctionTestMediator.ts ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FunctionTestMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
+/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../test/PBRTest */ "./src/script/test/PBRTest.ts");
+/* harmony import */ var _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../test/HeightFogTest */ "./src/script/test/HeightFogTest.ts");
+/* harmony import */ var _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../test/RenderTextureTest */ "./src/script/test/RenderTextureTest.ts");
+/* harmony import */ var _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../test/UIEffectTest */ "./src/script/test/UIEffectTest.ts");
+
+
+
+
+
+
+
+class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor() {
+        super(...arguments);
+        this._sampleList = [
+            new _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__["PBRTest"](),
+            new _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__["HeightFogTest"](),
+            new _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__["RenderTextureTest"](),
+            new _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__["UIEffectTest"]()
+        ];
+    }
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_FunctionTestMediator();
+            this._instance._classDefine = _ui_Main_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this.ui.m_btn_back.onClick(this, this._OnClickClose);
+        this.ui.m_list_btns.setVirtual();
+        this.ui.m_list_btns.itemRenderer = Laya.Handler.create(this, this._OnItemBtnsRender, null, false);
+        this.ui.m_list_btns.numItems = this._sampleList.length;
+    }
+    _OnItemBtnsRender(index, itemUI) {
+        let data = this._sampleList[index];
+        itemUI.text = data.name;
+        itemUI.onClick(this, this._OnClickBtns, [index]);
+    }
+    _OnClickBtns(index) {
+        this.Hide();
+        let data = this._sampleList[index];
+        data.Create();
+    }
+    _OnClickClose() {
+        this.Hide();
+        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__["UI_MainMediator"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_MainMediator.ts":
 /*!******************************************!*\
   !*** ./src/script/ui/UI_MainMediator.ts ***!
@@ -12293,6 +14162,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_CommonUIMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_CommonUIMediator */ "./src/script/ui/UI_CommonUIMediator.ts");
 /* harmony import */ var _UI_PerfomanceMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_PerfomanceMediator */ "./src/script/ui/UI_PerfomanceMediator.ts");
 /* harmony import */ var _UI_OthersMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_OthersMediator */ "./src/script/ui/UI_OthersMediator.ts");
+/* harmony import */ var _UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+
 
 
 
@@ -12317,6 +14188,11 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
         this.ui.m_btn_common.onClick(this, this._OnClickCommon);
         this.ui.m_btn_others.onClick(this, this._OnClickOthers);
         this.ui.m_btn_performance.onClick(this, this._OnClickPerfomance);
+        this.ui.m_btn_feature.onClick(this, this._OnClickFunctionTest);
+    }
+    _OnClickFunctionTest() {
+        this.Hide();
+        _UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_8__["default"].instance.Show();
     }
     _OnClickPerfomance() {
         _UI_PerfomanceMediator__WEBPACK_IMPORTED_MODULE_6__["default"].instance.Show();
@@ -12631,6 +14507,75 @@ class UI_RecordDemoMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_I
 
 /***/ }),
 
+/***/ "./src/script/ui/UI_TestMediator.ts":
+/*!******************************************!*\
+  !*** ./src/script/ui/UI_TestMediator.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_Test__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Test */ "./src/ui/Main/UI_Test.ts");
+
+
+class UI_TestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_TestMediator();
+            this._instance._classDefine = _ui_Main_UI_Test__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._onCloseAction = this._openParam;
+        this.ui.m_btn_back.onClick(this, this._OnClickClose);
+    }
+    _OnClickClose() {
+        var _a;
+        this.Hide();
+        (_a = this._onCloseAction) === null || _a === void 0 ? void 0 : _a.run();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/ui/UI_TestRTMediator.ts":
+/*!********************************************!*\
+  !*** ./src/script/ui/UI_TestRTMediator.ts ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestRTMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_TestRT__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_TestRT */ "./src/ui/Main/UI_TestRT.ts");
+
+
+class UI_TestRTMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_TestRTMediator();
+            this._instance._classDefine = _ui_Main_UI_TestRT__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_UIDemoMediator.ts":
 /*!********************************************!*\
   !*** ./src/script/ui/UI_UIDemoMediator.ts ***!
@@ -12758,13 +14703,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_CommonUI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UI_CommonUI */ "./src/ui/Main/UI_CommonUI.ts");
 /* harmony import */ var _UI_ADDemo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI_ADDemo */ "./src/ui/Main/UI_ADDemo.ts");
 /* harmony import */ var _UI_UIDemo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_UIDemo */ "./src/ui/Main/UI_UIDemo.ts");
-/* harmony import */ var _UI_Main__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_Main */ "./src/ui/Main/UI_Main.ts");
-/* harmony import */ var _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_PerfomanceDemo */ "./src/ui/Main/UI_PerfomanceDemo.ts");
-/* harmony import */ var _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_BoneAnimTest */ "./src/ui/Main/UI_BoneAnimTest.ts");
-/* harmony import */ var _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_MoudleDemo */ "./src/ui/Main/UI_MoudleDemo.ts");
-/* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
-/* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
+/* harmony import */ var _UI_TestRT__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_TestRT */ "./src/ui/Main/UI_TestRT.ts");
+/* harmony import */ var _UI_Main__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UI_Main */ "./src/ui/Main/UI_Main.ts");
+/* harmony import */ var _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./UI_PerfomanceDemo */ "./src/ui/Main/UI_PerfomanceDemo.ts");
+/* harmony import */ var _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_BoneAnimTest */ "./src/ui/Main/UI_BoneAnimTest.ts");
+/* harmony import */ var _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_MoudleDemo */ "./src/ui/Main/UI_MoudleDemo.ts");
+/* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
+/* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
+/* harmony import */ var _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
+/* harmony import */ var _UI_Test__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./UI_Test */ "./src/ui/Main/UI_Test.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
+
 
 
 
@@ -12779,12 +14730,15 @@ class MainBinder {
         fgui.UIObjectFactory.setExtension(_UI_CommonUI__WEBPACK_IMPORTED_MODULE_0__["default"].URL, _UI_CommonUI__WEBPACK_IMPORTED_MODULE_0__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_ADDemo__WEBPACK_IMPORTED_MODULE_1__["default"].URL, _UI_ADDemo__WEBPACK_IMPORTED_MODULE_1__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_UIDemo__WEBPACK_IMPORTED_MODULE_2__["default"].URL, _UI_UIDemo__WEBPACK_IMPORTED_MODULE_2__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_Main__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_Main__WEBPACK_IMPORTED_MODULE_3__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_4__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_5__["default"].URL, _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_5__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_6__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_7__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_8__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_TestRT__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_TestRT__WEBPACK_IMPORTED_MODULE_3__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Main__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _UI_Main__WEBPACK_IMPORTED_MODULE_4__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_5__["default"].URL, _UI_PerfomanceDemo__WEBPACK_IMPORTED_MODULE_5__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_7__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_8__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_9__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_9__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_10__["default"].URL, _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_10__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Test__WEBPACK_IMPORTED_MODULE_11__["default"].URL, _UI_Test__WEBPACK_IMPORTED_MODULE_11__["default"]);
     }
 }
 
@@ -12892,6 +14846,34 @@ class UI_CommonUI extends fgui.GComponent {
     }
 }
 UI_CommonUI.URL = "ui://kk7g5mmmfkl1g";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_FunctionTest.ts":
+/*!****************************************!*\
+  !*** ./src/ui/Main/UI_FunctionTest.ts ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FunctionTest; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_FunctionTest extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "FunctionTest"));
+    }
+    onConstruct() {
+        this.m_btn_back = (this.getChildAt(1));
+        this.m_list_btns = (this.getChildAt(2));
+    }
+}
+UI_FunctionTest.URL = "ui://kk7g5mmmyllkk";
 
 
 /***/ }),
@@ -13063,6 +15045,62 @@ class UI_RecordDemo extends fgui.GComponent {
     }
 }
 UI_RecordDemo.URL = "ui://kk7g5mmmx62be";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_Test.ts":
+/*!********************************!*\
+  !*** ./src/ui/Main/UI_Test.ts ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Test; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_Test extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "Test"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_btn_back = (this.getChildAt(1));
+    }
+}
+UI_Test.URL = "ui://kk7g5mmmyllkl";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_TestRT.ts":
+/*!**********************************!*\
+  !*** ./src/ui/Main/UI_TestRT.ts ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestRT; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_TestRT extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "TestRT"));
+    }
+    onConstruct() {
+        this.m_img_display = (this.getChildAt(0));
+        this.m_btn_back = (this.getChildAt(1));
+    }
+}
+UI_TestRT.URL = "ui://kk7g5mmmhlhem";
 
 
 /***/ }),
