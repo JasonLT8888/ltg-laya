@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="280,673">
   <displayList>
-    <image id="n3_kvo6" name="n3" src="74v83u" fileName="ad_res/res/sp_celabg.png" xy="-1,0" size="220,659"/>
-    <image id="n1_kvo6" name="n1" src="74v83l" fileName="ad_res/res/sp_remenyouxi.png" xy="5,18"/>
+    <image id="n3_kvo6" name="n3" src="74v83u" fileName="ad_res/res/sp_celabg.png" xy="-1,0" size="220,659">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_kvo6" name="n1" src="74v83l" fileName="ad_res/res/sp_remenyouxi.png" xy="5,18">
+      <relation target="" sidePair="center-center,top-top"/>
+    </image>
     <list id="n0_kvo6" name="list" xy="102,335" pivot="0.5,0.5" anchor="true" size="152,613" scale="0.9,0.9" overflow="scroll" lineGap="13" colGap="19" defaultItem="ui://75kiu87kp2ld6o" align="center" autoClearItems="true">
+      <relation target="" sidePair="center-center,topext-top,bottomext-bottom"/>
       <item controllers="text_color,1"/>
       <item controllers="text_color,1"/>
       <item controllers="text_color,1"/>
@@ -14,6 +19,7 @@
       <item controllers="text_color,1"/>
     </list>
     <component id="n12_zutp" name="btn_return" src="74v83q" fileName="ad_res/btn.xml" xy="217,247" pivot="0.5,0.5" size="58,132">
+      <relation target="" sidePair="middle-middle,right-right"/>
       <Button icon="ui://75kiu87k74v83v"/>
     </component>
   </displayList>

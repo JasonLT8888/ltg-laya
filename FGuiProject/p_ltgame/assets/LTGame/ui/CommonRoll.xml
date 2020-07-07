@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImage="ui://75kiu87kbg002c" designImageAlpha="0" designImageLayer="1">
   <displayList>
-    <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+    <graph id="n0_bg00" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ff000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
     <component id="n5_bg00" name="view_roll" src="bg002r" fileName="cache/view_roll_bg.xml" xy="375,526" pivot="0.5,0.5" anchor="true">
@@ -13,12 +13,15 @@
     <image id="n1_bg00" name="n1" src="bg002e" fileName="img/sp_xinyundazhuanpan.png" xy="194,181">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <component id="n2_bg00" name="btn_close" src="it2in" fileName="cmp/btn_close_01.xml" xy="575,234">
+    <component id="n2_bg00" name="btn_close" src="it2in" fileName="cmp/btn_close_01.xml" xy="576,169">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <component id="n3_bg00" name="btn_roll" src="it2iq" fileName="cmp/btn_double_get.xml" xy="250,841">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87kbg002f"/>
+    </component>
+    <component id="n6_vkou" name="rewardPannel" src="vkou6z" fileName="cmp/rewardPannel.xml" xy="0,0" visible="false" controller="c1,0">
+      <relation target="" sidePair="width-width,height-height"/>
     </component>
   </displayList>
 </component>

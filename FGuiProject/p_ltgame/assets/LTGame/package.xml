@@ -205,6 +205,12 @@
     <component id="92486v" name="NativeInPage.xml" path="/ad_res/native/" exported="true"/>
     <component id="92486w" name="AdInpageComp.xml" path="/ad_res/native/"/>
     <component id="92486x" name="iconLongComp.xml" path="/ad_res/native/"/>
+    <image id="vkou6y" name="sp_light.png" path="/img/"/>
+    <component id="vkou6z" name="rewardPannel.xml" path="/cmp/"/>
+    <component id="r1gt70" name="btnGames.xml" path="/ad_res/"/>
+    <image id="r1gt71" name="btn_huang.png" path="/ad_res/res/"/>
+    <image id="r1gt72" name="sp_gengduo.png" path="/ad_res/res/"/>
+    <image id="r1gt73" name="sp_tips.png" path="/ad_res/res/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

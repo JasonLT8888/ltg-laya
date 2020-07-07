@@ -39,7 +39,7 @@
       <gearDisplay controller="step" pages="0"/>
       <relation target="" sidePair="center-center,bottom-bottom"/>
     </loader>
-    <text id="n8_ocvx" name="text_add" xy="387,656" size="132,71" fontSize="60" color="#ffcc00" letterSpacing="-2" text="+100">
+    <text id="n8_ocvx" name="text_add" xy="387,656" size="131,71" fontSize="60" color="#ffcc00" letterSpacing="-2" text="+100">
       <gearDisplay controller="step" pages="0"/>
       <relation target="" sidePair="center-center,bottom-bottom"/>
     </text>

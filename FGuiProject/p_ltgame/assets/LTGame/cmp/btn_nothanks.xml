@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="156,50" pivot="0.5,0.5" extention="Button">
   <displayList>
-    <text id="n5_bg00" name="title" xy="80,25" pivot="0.5,0.5" anchor="true" size="115,31" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="不了, 谢谢">
+    <loader id="n7_xawv" name="icon" xy="0,0" size="156,50" align="center" vAlign="middle">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <text id="n5_bg00" name="title" xy="78,25" pivot="0.5,0.5" anchor="true" size="156,50" font="DengXian" fontSize="24" color="#ffffff" align="center" vAlign="middle" autoSize="none" underline="true" text="不了, 谢谢">
       <relation target="" sidePair="width-width,height-height"/>
     </text>
   </displayList>
