@@ -1,14 +1,1 @@
-{
-    "1": {
-        "id": 1,
-        "name": "\u6D4B\u8BD5\u97F3\u6548",
-        "audio_type": 1,
-        "audio_path": "fantan.mp3"
-    },
-    "2": {
-        "id": 2,
-        "name": "\u6D4B\u8BD5\u80CC\u666F\u97F3\u4E50",
-        "audio_type": 0,
-        "audio_path": "mainbgm.mp3"
-    }
-}
+{"1":{"id":1,"name":"\u6D4B\u8BD5\u97F3\u6548","audio_type":1,"audio_path":"fantan.mp3"},"2":{"id":2,"name":"\u6D4B\u8BD5\u80CC\u666F\u97F3\u4E50","audio_type":0,"audio_path":"mainbgm.mp3"}}

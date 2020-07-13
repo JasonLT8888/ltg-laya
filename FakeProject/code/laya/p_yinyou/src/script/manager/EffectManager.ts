@@ -5,6 +5,8 @@ import LTRes from "../../LTGame/Res/LTRes";
 import Awaiters from "../../LTGame/Async/Awaiters";
 import ArrayEx from "../../LTGame/LTUtils/ArrayEx";
 import ResDefine from "../common/ResDefine";
+import { CameraEx } from "../../LTGame/LTUtils/CameraEx";
+import Vector3Ex from "../../LTGame/LTUtils/Vector3Ex";
 
 
 export class EffectManager {
@@ -20,6 +22,15 @@ export class EffectManager {
     private _effectRoot: Laya.Sprite3D;
     private _effectMap: LTDictionary<number, Laya.Sprite3D>;
     private _continueEffects: Laya.Sprite3D[];
+
+    private _uiEffectScene: Laya.Scene3D;
+    public get uiEffectScene(): Laya.Scene3D {
+        return this._uiEffectScene;
+    }
+    private _uiEffectCamera: Laya.Camera;
+    public get uiEffectCamera(): Laya.Camera {
+        return this._uiEffectCamera;
+    }
 
     private constructor() {
         this._Init();
@@ -44,6 +55,12 @@ export class EffectManager {
     }
 
     public async WarmEffects() {
+        this._uiEffectScene = new Laya.Scene3D();
+        Laya.stage.addChild(this._uiEffectScene);
+        this._uiEffectCamera = new Laya.Camera();
+        this._uiEffectCamera.clearFlag = Laya.CameraClearFlags.DepthOnly;
+        this._uiEffectScene.addChild(this._uiEffectCamera);
+
         let preloadEffects: Laya.Sprite3D[] = [];
         for (let i = 0; i < EffectConfig.dataList.length; ++i) {
             let configItem = EffectConfig.dataList[i];
@@ -96,7 +113,18 @@ export class EffectManager {
         if (showData.parent != null) {
             showData.parent.addChild(instEffect);
         } else {
-            this._effectRoot.addChild(instEffect);
+            let effectConfig = EffectConfig.data[showData.effectId];
+            if (effectConfig.isUIEffect) {
+                this._uiEffectScene.addChild(instEffect);
+
+                if (showData.setPos != null) {
+                    let ray = CameraEx.ScreenPosToRay(this.uiEffectCamera, new Laya.Vector2(showData.setPos.x, showData.setPos.y));
+                    showData.setPos = Vector3Ex.Add(ray.origin, Vector3Ex.Scale(ray.origin, 100));
+                }
+
+            } else {
+                this._effectRoot.addChild(instEffect);
+            }
         }
         if (showData.setPos != null) {
             instEffect.transform.position = showData.setPos.clone();

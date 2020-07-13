@@ -68,7 +68,7 @@ export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign>
             isSigned = this._openData.isSigned;
         }
         this.ui.m_view.m_btn_get.enabled = !isSigned;
-
+        this.ui.m_view.m_signed.selectedIndex = isSigned ? 1 : 0;
         let currentSignDay = CommonSaveData.instance.signDayCount;
         if (this._openData.currentDayCount != null) {
             currentSignDay = this._openData.currentDayCount;

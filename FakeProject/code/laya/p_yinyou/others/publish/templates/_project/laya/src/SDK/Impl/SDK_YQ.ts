@@ -15,18 +15,18 @@ export default class SDK_YQ extends SDK_Default {
     flg: string;
     channel: string;
     controlVersion: string;
-    appId : string;
+    appId: string;
     adManager: SDKADManager;
     uid: string = "sdk_test";
 
     enableDebug: boolean = false;
 
-    Init(flg: string, channel: string, controlVersion: string, appId : string) {
+    Init(flg: string, channel: string, controlVersion: string, appId: string) {
         this.flg = flg;
         this.channel = channel;
         this.controlVersion = controlVersion;
         this.appId = appId;
-        
+
         this.isADEnable = false;
         this.isConfigEnable = false;
 
@@ -181,7 +181,7 @@ export default class SDK_YQ extends SDK_Default {
                 }
                 for (let key in ad) {
                     if (key == this.controlVersion) {
-                        this.isADEnable = ad[key] == "1";
+                        this.isADEnable = (ad[key] == "1" && this.channel != "own");
                         break;
                     }
                 }
@@ -225,7 +225,9 @@ export default class SDK_YQ extends SDK_Default {
             this._OnLoginFailed(res);
         }
     }
+    private canShowAds() {
 
+    }
     public RecordDaily() {
         let recordData = {};
         recordData["flg"] = this.flg;

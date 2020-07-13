@@ -141,6 +141,7 @@ export default class WXPlatform implements IPlatform {
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
         console.log(LTPlatform.platformStr, "登录成功", res);
+        LTUI.Toast('登录成功');
         this.loginState.isLogin = true;
         this.loginState.code = res.code;
     }
@@ -586,18 +587,20 @@ export default class WXPlatform implements IPlatform {
 
     NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            Laya.Browser.window.qg.navigateToMiniProgram({
+            wx.navigateToMiniProgram({
                 appId: appid,
                 path: path,
                 extraData: extra,
-                success: function () {
-                    console.log('小游戏跳转成功');
+                envVersion: '',
+                success: (res) => {
+                    console.log('小游戏跳转成功', res);
                     resolve(true);
                 },
-                fail: function (res) {
-                    console.log('小游戏跳转失败：', JSON.stringify(res));
+                fail: () => {
+                    console.log('小游戏跳转失败：');
                     reject(false);
-                }
+                },
+                complete: () => { }
             });
         })
     }

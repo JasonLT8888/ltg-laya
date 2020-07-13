@@ -44,6 +44,9 @@ export default class View_OtherGames {
     }
 
     private _Init() {
+        if (LTPlatform.instance.platform == EPlatformType.WX) {
+            this._posId = 45;
+        }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);

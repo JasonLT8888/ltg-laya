@@ -11,10 +11,10 @@ export default class MainScene extends BaseState {
     }
 
     _DoEnter() {
-        LTSDK.instance.checkState = ECheckState.NoGame;
-        console.error("[测试功能]强制设置checkstate", LTSDK.instance.checkState);
-        
-        UI_MainMediator.instance.Show(); 
+        //     LTSDK.instance.checkState = ECheckState.NoGame;
+        //     console.error("[测试功能]强制设置checkstate", LTSDK.instance.checkState);
+
+        UI_MainMediator.instance.Show();
     }
 
 }
