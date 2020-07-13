@@ -40,6 +40,11 @@ export default class LTRes {
         return noClone ? getRes : getRes.clone();
     }
 
+    public static async LoadAndGet(resUrl: string, noClone: boolean = false): Promise<any> {
+        await LTRes.LoadAsync(resUrl);
+        return LTRes.Get(resUrl, noClone);
+    }
+
     public static Unload(resUrl: string) {
         Laya.loader.clearRes(resUrl);
     }
