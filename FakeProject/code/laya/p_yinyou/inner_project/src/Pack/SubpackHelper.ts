@@ -143,7 +143,7 @@ export class SubpackHelper {
             let subpack = this._subpacks[i];
             if (subpack.isNode) continue;
             let relativePath = subpack.fullPath.replace(upRootPath, "");
-            let checkRelativePath = relativePath.replace("\\", "/");
+            let checkRelativePath = LTUtils.ReplaceAll(relativePath, "\\", "/");
             let name = LTUtils.ReplaceAll(checkRelativePath, "/", "_");
             if (this._packConfig.packType == EPackResolveType.AutoSearch) {
                 if (this._packConfig.forceInPack.indexOf(checkRelativePath) >= 0) {

@@ -38,7 +38,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     protected _openParam: any;
 
-    protected _sortOrder: number = 0;
+    protected _sortOrder: number = 10;
 
     protected _InitBottom() {
         let bottomGroup = this.ui["m_bottom_group"];
@@ -71,8 +71,16 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter] && LTSDK.instance.isDelayClose) {
             let anim = this._ui[anim_enter] as fgui.Transition;
-            anim.play();
+            anim.play(Laya.Handler.create(this, this._CallEnterAnimEnd));
         }
+    }
+
+    private _CallEnterAnimEnd() {
+        this._OnEnterAnimEnd();
+    }
+
+    protected _OnEnterAnimEnd() {
+        
     }
 
     private _InitSelfAd() {
