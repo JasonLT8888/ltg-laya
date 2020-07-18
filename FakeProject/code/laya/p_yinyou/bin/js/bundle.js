@@ -12740,7 +12740,7 @@ class BaseUIMediator {
          */
         this._needFilScreen = false;
         this._isShow = false;
-        this._sortOrder = 0;
+        this._sortOrder = 10;
     }
     get ui() {
         return this._ui;
@@ -12778,8 +12778,13 @@ class BaseUIMediator {
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter] && _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__["default"].instance.isDelayClose) {
             let anim = this._ui[anim_enter];
-            anim.play();
+            anim.play(Laya.Handler.create(this, this._CallEnterAnimEnd));
         }
+    }
+    _CallEnterAnimEnd() {
+        this._OnEnterAnimEnd();
+    }
+    _OnEnterAnimEnd() {
     }
     _InitSelfAd() {
         let othergames = _DefaultUI_Cmp_View_OtherGames__WEBPACK_IMPORTED_MODULE_2__["default"].CreateView(this._ui['m___othergames']);
