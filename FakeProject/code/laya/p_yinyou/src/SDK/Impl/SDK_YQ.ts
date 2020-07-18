@@ -35,7 +35,7 @@ export default class SDK_YQ extends SDK_Default {
 
     }
 
-    ReportShowAd(adList: SDK.ADRecordShowData[]) {
+    ReportShowAd(adList: SDK.ADReportShowData[]) {
         let reportData = {};
         reportData["gflg"] = this.flg;
         reportData["channel"] = this.channel;

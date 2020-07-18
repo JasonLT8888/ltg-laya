@@ -7,6 +7,7 @@ import ShareManager from "../../LTGame/Platform/ShareManager";
 import { ECheckState } from "../common/ECheckState";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
+import LTPlatformData from "../../LTGame/Platform/Data/LTPlatformData";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -29,9 +30,12 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     private _RequestShareInfo() {
+        let uid = this.appId;
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            uid = LTPlatform.instance.platformData.appKey
+        }
         let sendData = {
-            appid: this.appId,
-
+            appid: uid,
         };
         LTHttp.Send(this._headPrefix + "/api/shares", Laya.Handler.create(this, this._OnRequestShareInfo), Laya.Handler.create(this, (res) => {
             console.log("获取分享接口访问失败", res);
@@ -60,11 +64,11 @@ export default class SDK_CQ extends SDK_Default {
     }
 
 
-    RecordShowAd(adList: SDK.ADRecordShowData[]) {
+    ReportShowAd(adList: SDK.ADReportShowData[]) {
         console.log("功能暂未实现");
     }
 
-    RecordClickAd(adid: number, locationId: number, jumpSuccess: boolean) {
+    ReportClickAd(adid: number, locationId: number, jumpSuccess: boolean) {
         console.log("功能暂未实现");
     }
 
@@ -73,8 +77,12 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     RequestRemoteConfig() {
+        let uid = this.appId;
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            uid = LTPlatform.instance.platformData.appKey;
+        }
         let sendData = {
-            appid: this.appId,
+            appid: uid,
             version: this.controlVersion
         }
 
@@ -100,13 +108,11 @@ export default class SDK_CQ extends SDK_Default {
             // 成功
             let result = res.data;
             if (result) {
-                let rate = 0;
+                console.log('如果需要在重庆后台配置参数 ')
+
                 if (result['payRate']) {
-                    rate = parseInt(result['payRate']);
-                } else {
-                    console.log('如果需要在重庆后台配置参数 payRate 概率 0-100')
+                    this.payRate = parseInt(result['payRate']);
                 }
-                this.payRate = rate;
                 if (result['isDelayClose']) {
                     this.isDelayClose = parseInt(result['isDelayClose']) == 1;
                 }
@@ -144,9 +150,14 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     Login(code: string, fromAppId: string) {
+        console.error('登录参数：code:', code);
+        let uid = LTPlatform.instance.platform == EPlatformType.Oppo ? LTPlatform.instance.platformData.appKey : this.appId;
         let sendData = {
-            flg: this.flg,
-            code: code
+            appid: uid,
+            // flg: this.flg,
+            code: code,
+            channel: 'own',
+            version: this.controlVersion
         };
         if (this.channel) {
             sendData["channel"] = this.channel;
@@ -159,12 +170,14 @@ export default class SDK_CQ extends SDK_Default {
         }), true, sendData);
     }
 
-    private _OnAuthSuccess(res: SDK.LoginResult) {
+    private _OnAuthSuccess(res: any) {
         if (this.enableDebug)
             console.log("SDK登录回调触发", res);
-        if (res.result == 1) {
+
+        res = JSON.parse(res);
+        if (res.code == 1) {
             // 成功
-            this._OnLoginSuccess(res.result);
+            this._OnLoginSuccess(res);
         } else {
             this._OnLoginFailed(res);
         }
@@ -173,19 +186,19 @@ export default class SDK_CQ extends SDK_Default {
     private _OnLoginSuccess(res: SDK.LoginSuccessParam) {
         console.log("SDK登录成功", res);
         this.uid = res.openid;
-        this.RecordDaily();
+        this.ReportDaily();
     }
 
     private _OnLoginFailed(res: SDK.LoginResult) {
-        console.error("SDK登录失败", res);
+        console.error("SDK登录失败", this.appId, LTPlatform.instance.platformData.appKey, res);
     }
 
-    RecordStat(isShare: boolean, sid: string) {
+    ReportStat(isShare: boolean, sid: string) {
         console.log("功能暂未实现");
     }
 
-    public RecordDaily() {
-        console.log("功能暂未实现");
+    public ReportDaily() {
+        console.log("上报日活 功能暂未实现");
     }
 
 }

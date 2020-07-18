@@ -100,7 +100,7 @@ export interface ISDK {
      * 记录广告展示
      * @param adList 
      */
-    ReportShowAd(adList: SDK.ADRecordShowData[]);
+    ReportShowAd(adList: SDK.ADReportShowData[]);
     /**
      * 上报登录平台
      */

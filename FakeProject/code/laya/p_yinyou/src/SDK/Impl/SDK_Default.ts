@@ -9,7 +9,8 @@ import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
 
 export default class SDK_Default implements ISDK {
- 
+   
+     
     shieldHours: string[];
     severTime: Date;
     isDelayClose: boolean;
@@ -32,7 +33,7 @@ export default class SDK_Default implements ISDK {
         this.isADEnable = false;
         this.isDelayClose = false;
         this.isShielding = false;
-        this.payRate = 0;
+        this.payRate = 0; 
         this.checkState = ECheckState.InCheck;
         this.isConfigEnable = true;
         this.flg = flg;
@@ -127,8 +128,13 @@ export default class SDK_Default implements ISDK {
             } else {
                 console.log('休息', date, h);
             }
+            if (this.isShielding) {
+                //屏蔽洗钱
+                this.checkState = ECheckState.Normal;
+                this.payRate = 0; 
+            }
         }
-        console.log("---云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
+        console.log(`${this.appId}---云控版本为:`, this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
     Login(code: string, fromAppId: string) {
         console.log("SDK:Login", code, fromAppId);
@@ -143,16 +149,17 @@ export default class SDK_Default implements ISDK {
     }
 
     ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean) {
-        console.log("SDK:RecordClickAd", ad_id, locationId, jumpSuccess);
+        console.log("SDK:ReportClickAd", ad_id);
     }
-    ReportLogin() {
-        console.log("SDK:ReportLogin");
-    }
-    ReportShowAd(adList: SDK.ADRecordShowData[]) {
-        console.log("SDK:RecordShowAd", adList);
+
+    ReportShowAd(adList: SDK.ADReportShowData[]) {
+        console.log("SDK:ReportShowAd", adList);
     }
 
     ReportStat(isShare: boolean, sid: string) {
-        console.log("SDK:RecordStat", isShare, sid);
+        console.log("SDK:ReportStat", isShare, sid);
+    }
+    ReportLogin() {
+         
     }
 }

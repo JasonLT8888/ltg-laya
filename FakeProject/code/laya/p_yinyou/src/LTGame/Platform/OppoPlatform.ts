@@ -147,7 +147,7 @@ export default class OppoPlatform extends WXPlatform {
     protected _OnLoginSuccess(res: any) {
         console.log(LTPlatform.platformStr, "登录成功", res);
         this.loginState.isLogin = true;
-        this.loginState.code = res.uid;
+        this.loginState.code = res.token;
     }
     ShareAppMessage(obj: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
 

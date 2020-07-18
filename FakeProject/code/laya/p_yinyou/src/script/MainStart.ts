@@ -51,16 +51,15 @@ export default class MainStart extends LTStart {
                 LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
                 break;
             case EPlatformType.Oppo:
-                this._gameVersion = "v0.0.1";
-                this._resVersion = 'v0.0.1';
-                platformData.appId = "30260170";
-                platformData.bannerId = "174341";
-                platformData.interstitialId = "174344";
-                platformData.rewardVideoId = "174349";
-                platformData.nativeId = "174348";
-                platformData.nativeBannerIds = ["178853"];
-                platformData.nativeinterstitialIds = ["178854"];
-                platformData.nativeIconIds = ["178855"];
+                this._gameVersion = "1.0.2";
+                this._resVersion = "0710";
+                platformData.appId = "30302891";
+                platformData.appKey = "6fyGQ6x2pzk8W84c0s04ows00";
+                platformData.bannerId = "195984";
+                platformData.rewardVideoId = "195985";
+                platformData.nativeBannerIds = ['195994', '195995', '195998'];
+                platformData.nativeIconIds = ['195986', '196003'];
+                platformData.nativeinpageIds = ['195999', '196002', '196003'];
                 LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
             default:

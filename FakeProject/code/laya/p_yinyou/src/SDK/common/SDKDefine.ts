@@ -30,7 +30,7 @@ module SDK {
     /**
      * 广告展示上报数据
      */
-    export class ADRecordShowData {
+    export class ADReportShowData {
         /**
          * 广告ID
          */
