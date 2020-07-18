@@ -75,7 +75,7 @@ export default class MainStart extends LTStart {
     _HandleSDK() {
         switch (LTPlatform.instance.platform) {
             case EPlatformType.WX:
-            case EPlatformType.Web:
+            // case EPlatformType.Web:
                 LTSDK.CreateInstace(SDK_YQ, 'yfct', this._gameVersion, this._appId);//
                 break;
             // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);

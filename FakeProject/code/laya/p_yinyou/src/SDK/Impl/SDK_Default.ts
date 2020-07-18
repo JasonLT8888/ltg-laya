@@ -9,6 +9,7 @@ import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
 
 export default class SDK_Default implements ISDK {
+ 
     shieldHours: string[];
     severTime: Date;
     isDelayClose: boolean;
@@ -141,15 +142,17 @@ export default class SDK_Default implements ISDK {
         console.log("SDK:RequestADList");
     }
 
-    RecordClickAd(adInfo: SDK.ADInfoData, locationId: number, jumpSuccess: boolean) {
-        console.log("SDK:RecordClickAd", adInfo, locationId, jumpSuccess);
+    ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean) {
+        console.log("SDK:RecordClickAd", ad_id, locationId, jumpSuccess);
     }
-
-    RecordShowAd(adList: SDK.ADRecordShowData[]) {
+    ReportLogin() {
+        console.log("SDK:ReportLogin");
+    }
+    ReportShowAd(adList: SDK.ADRecordShowData[]) {
         console.log("SDK:RecordShowAd", adList);
     }
 
-    RecordStat(isShare: boolean, sid: string) {
+    ReportStat(isShare: boolean, sid: string) {
         console.log("SDK:RecordStat", isShare, sid);
     }
 }

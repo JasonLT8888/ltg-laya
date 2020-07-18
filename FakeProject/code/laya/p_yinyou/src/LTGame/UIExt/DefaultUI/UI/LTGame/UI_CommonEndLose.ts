@@ -1,6 +1,6 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
-import UI_view_sharegames_big from "./UI_view_sharegames_big";
+
 
 export default class UI_CommonEndLose extends fgui.GComponent {
 
@@ -8,7 +8,7 @@ export default class UI_CommonEndLose extends fgui.GComponent {
 	public m_text_str:fgui.GTextField;
 	public m_btn_no:fgui.GButton;
 	public m_btn_watchad:fgui.GButton;
-	public m_view_othergames:UI_view_sharegames_big;
+	public m___othergames:fgui.GGraph;
 	public m___wxSG:fgui.GGraph;
 	public m_anim_enter:fgui.Transition;
 
@@ -27,7 +27,7 @@ export default class UI_CommonEndLose extends fgui.GComponent {
 		this.m_text_str = <fgui.GTextField><any>(this.getChildAt(2));
 		this.m_btn_no = <fgui.GButton><any>(this.getChildAt(3));
 		this.m_btn_watchad = <fgui.GButton><any>(this.getChildAt(4));
-		this.m_view_othergames = <UI_view_sharegames_big><any>(this.getChildAt(5));
+		this.m___othergames = <fgui.GGraph><any>(this.getChildAt(5));
 		this.m___wxSG = <fgui.GGraph><any>(this.getChildAt(6));
 		this.m_anim_enter = this.getTransitionAt(0);
 	}

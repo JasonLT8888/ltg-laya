@@ -1,28 +1,30 @@
-import UI_CommomToastMediator from "./DefaultUI/UI_CommomToastMediator";
-import UI_CommondLoadMediator from "./DefaultUI/UI_CommonLoadMediator";
-import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
-import SignOpenData from "./DefaultUI/Data/SignOpenData";
-import UI_CommonSignMediator from "./DefaultUI/UI_CommonSignMediator";
-import EndShareOpenData from "./DefaultUI/Data/EndShareOpenData";
-import UI_CommonEndShareMediator from "./DefaultUI/UI_CommonEndShareMediator";
-import EndRewardOpenData from "./DefaultUI/Data/EndRewardOpenData";
-import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
-import OfflineOpenData from "./DefaultUI/Data/OfflineOpenData";
-import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
-import TrySkinOpenData from "./DefaultUI/Data/TrySkinOpenData";
-import UI_CommonTrySkinMediator from "./DefaultUI/UI_CommonTrySkinMediator";
-import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
-import SetOpenData from "./DefaultUI/Data/SetOpenData";
-import RollOpenData from "./DefaultUI/Data/RollOpenData";
-import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
-import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
-import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
-import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
-import LTPlatform from "../Platform/LTPlatform"; import { EPlatformType } from "../Platform/EPlatformType";
+import { CommonRewardData } from "./DefaultUI/Data/CommonRewardData";
 import { EndLoseOpenData } from "./DefaultUI/Data/EndLoseOpenData";
-import UI_CommonEndLoseMediator from "./DefaultUI/UI_CommonEndLoseMediator";
+import EndRewardOpenData from "./DefaultUI/Data/EndRewardOpenData";
+import EndShareOpenData from "./DefaultUI/Data/EndShareOpenData";
+import OfflineOpenData from "./DefaultUI/Data/OfflineOpenData";
+import OneMoreOpenData from "./DefaultUI/Data/OneMoreOpenData";
+import RollOpenData from "./DefaultUI/Data/RollOpenData";
+import SetOpenData from "./DefaultUI/Data/SetOpenData";
+import SignOpenData from "./DefaultUI/Data/SignOpenData";
+import TrySkinOpenData from "./DefaultUI/Data/TrySkinOpenData";
 import { UnlockProgressOpenData } from "./DefaultUI/Data/UnlockProgressOpenData";
+import UI_CommomToastMediator from "./DefaultUI/UI_CommomToastMediator";
+import UI_CommonEndLoseMediator from "./DefaultUI/UI_CommonEndLoseMediator";
+import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
+import UI_CommonEndShareMediator from "./DefaultUI/UI_CommonEndShareMediator";
+import UI_CommondLoadMediator from "./DefaultUI/UI_CommonLoadMediator";
+import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
+import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
+import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
+import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
+import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
+import { UI_CommonSignMediator } from "./DefaultUI/UI_CommonSignMediator";
+import UI_CommonTrySkinMediator from "./DefaultUI/UI_CommonTrySkinMediator";
 import UI_CommonUnlockProgressMediator from "./DefaultUI/UI_CommonUnlockProgressMediator";
+import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
+import { UI_BonusBoxMediator } from "./DefaultUI/UI_BonusBoxMediator";
+import { UI_ExSkinMediator } from "./DefaultUI/UI_ExSkinMediator";
 
 export default class LTUI {
 
@@ -118,5 +120,33 @@ export default class LTUI {
     public static UnlockScreen() {
         UI_CommonLockScreenMediator.instance.Hide();
     }
-
+    /**展示九宫宝箱 demo */
+    public static ShowBonusBox() {
+        console.error('demo 数据');
+        let openData = new CommonRewardData();
+        openData.datas = [
+            { type: 0, value: 10, icon: 'ui://75kiu87kbg0016' },
+            { type: 0, value: 20, icon: 'ui://75kiu87kbg0016' },
+            { type: 0, value: 30, icon: 'ui://75kiu87kbg0016' },
+            { type: 0, value: 40, icon: 'ui://75kiu87kbg0016' },
+            { type: 0, value: 50, icon: 'ui://75kiu87kbg0016' },
+            { type: 0, value: 60, icon: 'ui://75kiu87kbg0016' },
+            { type: 0, value: 70, icon: 'ui://75kiu87kbg0016' },
+            { type: 0, value: 80, icon: 'ui://75kiu87kbg0016' },
+            { type: 1, value: 9, icon: 'test/test.png' }
+        ];
+        openData.onGetSkin = () => { LTUI.Toast('恭喜获得皮肤') };
+        UI_BonusBoxMediator.instance.Show(openData);
+    }
+    /**展示限定皮肤 demo */
+    public static ShowExSKin() {
+        console.error('demo 数据');
+        let openData = new CommonRewardData();
+        openData.datas = [
+            { type: 1, value: 9, icon: 'test/test.png' }
+        ];
+        openData.onGetSkin = () => { LTUI.Toast(`恭喜获得限定 皮肤 ${openData.datas[0].value}`) };
+        UI_ExSkinMediator.instance.Show(openData);
+    }
+   
 }

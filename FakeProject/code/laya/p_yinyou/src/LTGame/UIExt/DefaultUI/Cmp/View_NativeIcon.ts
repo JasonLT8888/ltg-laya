@@ -84,9 +84,13 @@ export class View_NativeIcon {
             View_NativeIcon._cacheNativeAd.destroy();
             View_NativeIcon._cacheNativeAd = null;
         }
+        this.visible = false;
+        this.ui.visible = false;
         for (let i = 0; i < this._cacheIds.length; ++i) {
             let ret = await this._LoadIconData(i);
             if (ret) {
+                this.visible = true;
+                this.ui.visible = true;
                 let icon = this._cacheAdData.icon;
                 if (!icon) {
                     icon = this._cacheAdData.imgUrlList[0];
@@ -102,8 +106,7 @@ export class View_NativeIcon {
                 return;
             }
         }
-        this.ui.visible = false;
-        this.visible = false;
+
     }
 
     private _OnClickAd() {

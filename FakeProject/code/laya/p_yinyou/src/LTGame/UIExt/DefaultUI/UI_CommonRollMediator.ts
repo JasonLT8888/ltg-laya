@@ -1,14 +1,14 @@
-import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_CommonRoll from "./UI/LTGame/UI_CommonRoll";
-import RollOpenData from "./Data/RollOpenData";
-import UI_view_item_roll from "./UI/LTGame/UI_view_item_roll";
+import { ECheckState } from "../../../SDK/common/ECheckState";
+import LTSDK from "../../../SDK/LTSDK";
+import Awaiters from "../../Async/Awaiters";
+import CommonSaveData from "../../Commom/CommonSaveData";
 import MathEx from "../../LTUtils/MathEx";
 import LTPlatform from "../../Platform/LTPlatform";
+import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
-import CommonSaveData from "../../Commom/CommonSaveData";
-import LTSDK from "../../../SDK/LTSDK";
-import { ECheckState } from "../../../SDK/common/ECheckState";
-import Awaiters from "../../Async/Awaiters";
+import RollOpenData from "./Data/RollOpenData"; 
+import UI_CommonRoll from "./UI/LTGame/UI_CommonRoll";
+import UI_view_item_roll from "./UI/LTGame/UI_view_item_roll";
 
 export default class UI_CommonRollMediator extends BaseUIMediator<UI_CommonRoll> {
 

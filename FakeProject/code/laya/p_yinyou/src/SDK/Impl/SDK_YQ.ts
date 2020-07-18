@@ -7,6 +7,7 @@ import md5 from "./../Libs/md5.js";
 import ShareManager from "../../LTGame/Platform/ShareManager";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import SDK_Default from "./SDK_Default";
+import { ECheckState } from "../common/ECheckState";
 
 export default class SDK_YQ extends SDK_Default {
 
@@ -29,36 +30,43 @@ export default class SDK_YQ extends SDK_Default {
 
         this.isADEnable = false;
         this.isConfigEnable = false;
-
+        this.checkState = ECheckState.Normal;
         this.adManager = new SDKADManager();
 
     }
 
-    RecordShowAd(adList: SDK.ADRecordShowData[]) {
+    ReportShowAd(adList: SDK.ADRecordShowData[]) {
         let reportData = {};
         reportData["gflg"] = this.flg;
         reportData["channel"] = this.channel;
         reportData["data"] = adList;
-        LTHttp.Send("https://api.yz061.com/exposure", null, null, false, reportData);
+        LTHttp.Send("https://api.yz061.com/exposure", Laya.Handler.create(this, (res) => { console.log('ad SHow', reportData, res) }), null, false, reportData);
     }
 
-    RecordClickAd(adInfo: SDK.ADInfoData, locationId: number, jumpSuccess: boolean) {
+    ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean) {
         let reportData = {};
         reportData["gflg"] = this.flg;
         reportData["uid"] = this.uid;
-        reportData["ad_id"] = adInfo.ad_id;
+        reportData["ad_id"] = ad_id;
         reportData["location_id"] = locationId;
         reportData["channel"] = this.channel;
         if (jumpSuccess) {
             reportData["status"] = "cb";
         }
-        LTHttp.Send("https://api.yz061.com/reportad", null, null, false, reportData);
+        LTHttp.Send("https://api.yz061.com/reportad", Laya.Handler.create(this, (res) => { console.log('ad click', reportData, res) }), null, false, reportData);
     }
 
     RequestADList() {
         LTHttp.Send("https://api.yz061.com/game/" + this.flg, Laya.Handler.create(this, this._OnGetADList), Laya.Handler.create(this, (res) => {
             console.log("请求广告位HTTP访问失败", res);
         }), true);
+    }
+    ReportLogin() {
+        let reportData = {};
+        reportData["flg"] = this.flg;
+        reportData["uid"] = this.uid;
+        LTHttp.Send("https://api.yz061.com/matter/report", Laya.Handler.create(this, (res) => { console.log('report login', reportData, res) }), null, false, reportData);
+
     }
 
     /**
@@ -121,7 +129,7 @@ export default class SDK_YQ extends SDK_Default {
         } else if (adPosData.matter_type == 2) {
             // 分享
             LTHttp.Send(adPosData.url, Laya.Handler.create(this, (res) => {
-                if (res.status == null) {
+                if (res != null) {
                     res = JSON.parse(res);
                 }
                 if (this.enableDebug)
@@ -161,26 +169,26 @@ export default class SDK_YQ extends SDK_Default {
      */
     private _OnRemoteConfigBack(res: any) {
         // 防止后台配置错误
-        if (res.status == null) {
+        if (res) {
             res = JSON.parse(res as string);
         }
-        if (this.enableDebug)
-            console.log("云控返回消息:", res);
+        console.log("云控返回消息:", res);
 
         if (res.status == 1) {
             // 成功
             let result = res.result;
             if (result != null) {
                 let config = result["config"];
-                let ad = result["ad"];
-                for (let key in config) {
-                    if (key == this.controlVersion) {
-                        this.isConfigEnable = config[key] == "1";
-                        break;
-                    }
-                }
+                let ad = result["config"];
+                // for (let key in config) {
+                //     if (key == this.controlVersion) {
+                //         this.isConfigEnable = config[key] == "1";
+                //         break;
+                //     }
+                // }
                 for (let key in ad) {
                     if (key == this.controlVersion) {
+                        console.log('YQ ad:', key, ad[key]);
                         this.isADEnable = (ad[key] == "1" && this.channel != "own");
                         break;
                     }
@@ -193,6 +201,9 @@ export default class SDK_YQ extends SDK_Default {
             this.isADEnable = false;
             this.isConfigEnable = false;
         }
+        if (!this.isADEnable) {
+            this.checkState = ECheckState.Normal;
+        }
         console.log("云控版本为:", this.controlVersion, "config:", this.isConfigEnable, "ad:", this.isADEnable);
         if (this.controlVersion) {
             this.RequestADList();
@@ -200,6 +211,7 @@ export default class SDK_YQ extends SDK_Default {
     }
 
     Login(code: string, fromAppId: string) {
+        console.log('登录YQ', code, fromAppId);
         let sendData = {
             flg: this.flg,
             code: code
@@ -215,12 +227,14 @@ export default class SDK_YQ extends SDK_Default {
         }), true, sendData);
     }
 
-    private _OnAuthSuccess(res: SDK.LoginResult) {
+    private _OnAuthSuccess(res: any) {
+        res = JSON.parse(res);
         if (this.enableDebug)
             console.log("SDK登录回调触发", res);
-        if (res.result == 1) {
+        if (res.status == 1) {
             // 成功
             this._OnLoginSuccess(res.result);
+            this.ReportLogin();
         } else {
             this._OnLoginFailed(res);
         }
@@ -228,7 +242,7 @@ export default class SDK_YQ extends SDK_Default {
     private canShowAds() {
 
     }
-    public RecordDaily() {
+    public ReportDaily() {
         let recordData = {};
         recordData["flg"] = this.flg;
         recordData["uid"] = this.uid;
@@ -236,7 +250,7 @@ export default class SDK_YQ extends SDK_Default {
         LTHttp.Send("https://api.yz061.com/daily", null, null, false, recordData);
     }
 
-    RecordStat(isShare: boolean, sid: string) {
+    ReportStat(isShare: boolean, sid: string) {
         let recordData = {};
         recordData["flg"] = this.flg;
         recordData["channel"] = this.channel;
@@ -263,9 +277,10 @@ export default class SDK_YQ extends SDK_Default {
     }
 
     private _OnLoginSuccess(res: SDK.LoginSuccessParam) {
+
         console.log("SDK登录成功", res);
         this.uid = res.openid;
-        this.RecordDaily();
+        this.ReportDaily();
     }
 
     private _OnLoginFailed(res: SDK.LoginResult) {

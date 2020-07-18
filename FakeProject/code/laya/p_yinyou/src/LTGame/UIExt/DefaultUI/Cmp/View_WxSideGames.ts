@@ -6,6 +6,7 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_WxSideGames from "../UI/LTGame/UI_WxSideGames";
 import UI_item_gameSmall from "../UI/LTGame/UI_item_gameSmall";
+import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
 /**__wxSG 750*280  */
 export default class View_WxSideGames {
 
@@ -68,7 +69,15 @@ export default class View_WxSideGames {
                 this.refresh();
             });
             this.refresh();
-
+            let ads = [];
+            this._cacheAds.forEach(adData => {
+                let ad: any = {};
+                ad.ad_id = adData.ad_id;
+                ad.location_id = this._posId;
+                ad.num = 1;
+                ads.push(ad);
+            });
+            LTSDK.instance.ReportShowAd(ads);
         }
 
     }
@@ -89,12 +98,14 @@ export default class View_WxSideGames {
         this.ui.m_list.numItems = this._cacheAds.length;
         this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
         this.ui.visible = true;
+
     }
 
     clickItem(item: UI_item_gameSmall) {
         let uid = item.data['id'];
-        let path = item.data['path']
-        LTPlatform.instance.NavigateToApp(uid, path);
+        let path = item.data['path'];
+        let adid = item.data['adid'];
+        LTPlatform.instance.NavigateToApp(uid, path, null, true, false, adid);
 
     }
     renderItem(index: number, item: UI_item_gameSmall) {
@@ -102,14 +113,19 @@ export default class View_WxSideGames {
         let data = this._cacheAds[ind];
         let info = {
             id: data.ad_appid,
-            path: data.ad_path
+            path: data.ad_path,
+            adid: data.ad_id
         }
         item.data = info;
         item.m_title.text = data.ad_name;
         item.m_icon.m_icon.url = data.ad_img;
         item.m_red.visible = data.ad_dot == 1;
         item.m_shake.play();
-
+        // let ad: any = {};
+        // ad.ad_id = data.ad_id;
+        // ad.location_id = 5;
+        // ad.num = 1;
+        // LTSDK.instance.RecordShowAd([ad]);
     }
 
 }

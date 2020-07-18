@@ -10,6 +10,7 @@ import LTSDK from "../../../SDK/LTSDK";
 import { View_NativeIconLong } from "../DefaultUI/Cmp/View_NativeIconLong";
 import { View_NativeInPage } from "../DefaultUI/Cmp/View_NativeInpage";
 import View_WxSideGames from "../DefaultUI/Cmp/View_WxSideGames";
+import View_End3X3Games from "../DefaultUI/Cmp/View_End3X3Games";
 
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
@@ -132,6 +133,12 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
             this._ui['m___wxSG'] = m___wxSG.ui;
         } else {
             this._ui['m___wxSG'] = null;
+        }
+        let end3x3 = View_End3X3Games.CreateView(this._ui['m___end3x3']);
+        if (end3x3) {
+            this._ui['m___end3x3'] = end3x3.ui;
+        } else {
+            this._ui['m___end3x3'] = null;
         }
 
     }

@@ -13,6 +13,12 @@ import DefaultDevice from "./DefaultDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 
 export default class DefaultPlatform implements IPlatform {
+    GetStorage(key: string) {
+        
+    }
+    SetStorage(key: string, data: any): void {
+        
+    }
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;

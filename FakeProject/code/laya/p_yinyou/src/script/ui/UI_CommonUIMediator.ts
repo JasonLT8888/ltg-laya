@@ -39,7 +39,8 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         this.ui.m_btn_moudle.onClick(this, this._OnClickModule);
         this.ui.m_btn_endlose.onClick(this, this._OnClickEndLose);
         this.ui.m_btn_unlockprogress.onClick(this, this._OnClickUnlockProgress);
-
+        this.ui.m_btn_bonus.onClick(this, LTUI.ShowBonusBox);
+        this.ui.m_btn_exskin.onClick(this, LTUI.ShowExSKin);
     }
 
     private _OnClickModule() {
@@ -66,7 +67,9 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
 
     private _OnClickTrySkin() {
         let openData = new TrySkinOpenData();
-        openData.onClose = Laya.Handler.create(null, (type: number,) => {
+        console.error('demo 数据');
+        openData.iconPaths = ['test/test.png'];
+        openData.onClose = Laya.Handler.create(null, (type: number, ) => {
             if (type < 0) {
                 LTUI.Toast("不试用皮肤");
             } else {

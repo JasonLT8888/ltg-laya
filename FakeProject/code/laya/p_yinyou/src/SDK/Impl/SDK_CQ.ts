@@ -64,7 +64,7 @@ export default class SDK_CQ extends SDK_Default {
         console.log("功能暂未实现");
     }
 
-    RecordClickAd(adInfo: SDK.ADInfoData, locationId: number, jumpSuccess: boolean) {
+    RecordClickAd(adid: number, locationId: number, jumpSuccess: boolean) {
         console.log("功能暂未实现");
     }
 

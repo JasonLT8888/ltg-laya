@@ -1,11 +1,12 @@
 import { ECheckState } from "../../../../SDK/common/ECheckState";
 import LTSDK from "../../../../SDK/LTSDK";
+import { randomRangeInt } from "../../../LTUtils/LTUtils";
+import MathEx from "../../../LTUtils/MathEx";
 import StringEx from "../../../LTUtils/StringEx";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
 import { OppoAdData } from "../../../Platform/OppoPlatform";
 import UI_NativeInPage from "../UI/LTGame/UI_NativeInPage";
-import { randomRangeInt } from "../../../LTUtils/LTUtils";
 
 export class View_NativeInPage {
 
@@ -85,10 +86,14 @@ export class View_NativeInPage {
             View_NativeInPage._cacheNativeAd.destroy();
             View_NativeInPage._cacheNativeAd = null;
         }
+        this.visible = false;
+        this.ui.visible = false;
         // for (let i = 0; i < this._cacheIds.length; ++i) {
-        let i = randomRangeInt(0, this._cacheIds.length)
+        let i = MathEx.RandomInt(0, this._cacheIds.length)
         let ret = await this._LoadIconData(i);
         if (ret) {
+            this.visible = true;
+            this.ui.visible = true;
             this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
             this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
             this.ui.m_ad.m_title.text = this._cacheAdData.title;

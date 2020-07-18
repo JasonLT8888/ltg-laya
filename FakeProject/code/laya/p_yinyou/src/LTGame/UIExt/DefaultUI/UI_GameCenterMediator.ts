@@ -44,24 +44,38 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
         this.ui.m_centerList.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
         this.ui.m_centerList.numItems = this.cacheAds.length;
         this.ui.m_centerList.refreshVirtualList();
-        // Laya.timer.loop(100, this, () => {
-        //     this.ui.m_topList.scrollPane.scrollDown(0.01, true);
-        // });
+        Laya.timer.loop(100, this, () => {
+            this.ui.m_centerList.scrollPane.scrollDown(0.005, true);
+        });
         this.ui.m_btn_close.onClick(this, this.Hide);
         LTPlatform.instance.HideBannerAd();
+        this.ui.m_btn_close.visible = false;
+        Laya.timer.once(3000, this, () => {
+            this.ui.m_btn_close.visible = true;
+        });
+        let ads = [];
+        this.cacheAds.forEach(adData => {
+            let ad: any = {};
+            ad.ad_id = adData.ad_id;
+            ad.location_id = this._posId;
+            ad.num = 1;
+            ads.push(ad);
+        })
+        LTSDK.instance.ReportShowAd(ads);
 
     }
     clickItem(item: UI_item_gameBig | UI_item_game) {
         let uid = item.data['id'];
         let path = item.data['path']
-        LTPlatform.instance.NavigateToApp(uid, path);
-
+        let adid = item.data['adid']
+        LTPlatform.instance.NavigateToApp(uid, path, null, false, false, adid);
     }
     renderItem(index: number, item: UI_item_game | UI_item_gameBig) {
         let data = this.cacheAds[index];
         let info = {
             id: data.ad_appid,
-            path: data.ad_path
+            path: data.ad_path,
+            adid: data.ad_id
         }
         item.data = info;
         item.m_title.text = data.ad_name;
@@ -71,5 +85,7 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
             item.m_player.text = `${data.ad_count}人玩`;
         }
     }
-    protected _OnHide() { }
+    protected _OnHide() {
+        // LTPlatform.instance.ShowBannerAd();
+    }
 }

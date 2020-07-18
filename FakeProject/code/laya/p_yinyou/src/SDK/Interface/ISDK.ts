@@ -3,9 +3,10 @@ import { ECheckState } from "../common/ECheckState";
 
 export interface ISDK {
     /**
-     * 误触概率
+     * 误触概率 试用皮肤
      */
     payRate: number;
+    
     /**
      * 地区屏蔽
      */
@@ -76,6 +77,7 @@ export interface ISDK {
      * 游戏状态
      */
     checkState: ECheckState;
+    
 
     /**
      * 请求远程开关信息
@@ -92,17 +94,20 @@ export interface ISDK {
      * @param adInfo 广告数据
      * @param jumpSuccess 是否跳转成功
      */
-    RecordClickAd(adInfo: SDK.ADInfoData, locationId: number, jumpSuccess: boolean);
+    ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean);
 
     /**
      * 记录广告展示
      * @param adList 
      */
-    RecordShowAd(adList: SDK.ADRecordShowData[]);
+    ReportShowAd(adList: SDK.ADRecordShowData[]);
+    /**
+     * 上报登录平台
+     */
+    ReportLogin();
 
     /**
      * 记录看视频和分享
      */
-    RecordStat(isShare: boolean, sid: string);
-
+    ReportStat(isShare: boolean, sid: string);
 }

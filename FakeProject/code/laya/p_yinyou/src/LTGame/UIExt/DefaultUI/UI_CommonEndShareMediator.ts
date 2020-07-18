@@ -16,7 +16,7 @@ export default class UI_CommonEndShareMediator extends BaseUIMediator<UI_CommonE
     }
 
     private _openData: EndShareOpenData;
-
+    private clickCount: number = 0;
     _OnShow() {
         super._OnShow();
         // your code
@@ -37,7 +37,7 @@ export default class UI_CommonEndShareMediator extends BaseUIMediator<UI_CommonE
         if (this._openData.rewardText) {
             this.ui.m_view.m_text_reward.text = this._openData.rewardText;
         }
-
+        this.clickCount = 0;
         this.ui.m_view.m_btn_nothanks.onClick(this, this._OnClickClose);
         this.ui.m_view.m_btn_share.onClick(this, this._OnClickShare);
         this.ui.m_view.m_btn_share.m_btn_type.selectedIndex = 1;
@@ -58,6 +58,10 @@ export default class UI_CommonEndShareMediator extends BaseUIMediator<UI_CommonE
     }
 
     private _OnClickClose() {
+        if (this.clickCount == 0) {
+            this.clickCount++;
+            return;
+        }
         if (this._openData.onClose) {
             this._openData.onClose.runWith([0, this.ui.m_view.m_icon_reward]);
         }
