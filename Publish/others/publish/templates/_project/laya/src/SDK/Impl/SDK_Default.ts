@@ -9,6 +9,8 @@ import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
 
 export default class SDK_Default implements ISDK {
+   
+     
     shieldHours: string[];
     severTime: Date;
     isDelayClose: boolean;
@@ -31,7 +33,7 @@ export default class SDK_Default implements ISDK {
         this.isADEnable = false;
         this.isDelayClose = false;
         this.isShielding = false;
-        this.payRate = 0;
+        this.payRate = 0; 
         this.checkState = ECheckState.InCheck;
         this.isConfigEnable = true;
         this.flg = flg;
@@ -39,7 +41,7 @@ export default class SDK_Default implements ISDK {
         this.controlVersion = controlVersion;
         this.appId = appid;
         this.severTime = new Date();
-
+        this.shieldHours = [];
         this.adManager = new SDKADManager();
         this._RequestSelfAdInfo();
         console.log("SDK:Init", this);
@@ -120,14 +122,19 @@ export default class SDK_Default implements ISDK {
                 isWorkday = today[0].type == 0;//type：0 工作日 1 周末  2 节假日 
             }
             //工作  时段  
-            if (isWorkday && this.shieldHours.indexOf(h.toString()) >= 0) {
+            if (isWorkday && this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
                 console.log('工作', this.shieldHours, h);
                 this.checkState = ECheckState.Normal;
             } else {
                 console.log('休息', date, h);
             }
+            if (this.isShielding) {
+                //屏蔽洗钱
+                this.checkState = ECheckState.Normal;
+                this.payRate = 0; 
+            }
         }
-        console.log("---云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
+        console.log(`${this.appId}---云控版本为:`, this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
     Login(code: string, fromAppId: string) {
         console.log("SDK:Login", code, fromAppId);
@@ -141,15 +148,18 @@ export default class SDK_Default implements ISDK {
         console.log("SDK:RequestADList");
     }
 
-    RecordClickAd(adInfo: SDK.ADInfoData, locationId: number, jumpSuccess: boolean) {
-        console.log("SDK:RecordClickAd", adInfo, locationId, jumpSuccess);
+    ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean) {
+        console.log("SDK:ReportClickAd", ad_id);
     }
 
-    RecordShowAd(adList: SDK.ADRecordShowData[]) {
-        console.log("SDK:RecordShowAd", adList);
+    ReportShowAd(adList: SDK.ADReportShowData[]) {
+        console.log("SDK:ReportShowAd", adList);
     }
 
-    RecordStat(isShare: boolean, sid: string) {
-        console.log("SDK:RecordStat", isShare, sid);
+    ReportStat(isShare: boolean, sid: string) {
+        console.log("SDK:ReportStat", isShare, sid);
+    }
+    ReportLogin() {
+         
     }
 }

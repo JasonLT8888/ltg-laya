@@ -6,7 +6,8 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_SideGames from "../UI/LTGame/UI_SideGames";
 import { ECheckState } from "../../../../SDK/common/ECheckState";
-
+import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
+/** __sidegames 100*100 */
 export default class View_SideGames {
 
     static CreateView(tagUI: fgui.GComponent): View_SideGames {
@@ -51,11 +52,22 @@ export default class View_SideGames {
     }
 
     private _Init() {
+        if (LTPlatform.instance.platform == EPlatformType.TT) {
+            this.ui.m_ads.dispose();
+            this.ui.m_btn_show.onClick(this, () => {
+                this.ui.m_red.visible = false;
+                LTPlatform.instance.OpenGameBox([]);
+            });
+            return;
+        }
+        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
+            this._posId = 5;
+        }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
         } else {
-            this.ui.m_ads.m_list.setVirtualAndLoop();
+            this.ui.m_ads.m_list.setVirtual();
             this.ui.m_ads.m_list.scrollPane.bouncebackEffect = false;
             this.ui.m_ads.m_list.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
             this.ui.m_ads.m_list.numItems = this._cacheAds.length;
@@ -65,6 +77,7 @@ export default class View_SideGames {
             });
             this.ui.displayObject.zOrder = 99999;
             this.ui.m_btn_show.onClick(this, () => {
+                this.ui.m_red.visible = false;
                 this.ui.m_show.selectedIndex = 1;
             });
             this.ui.m_ads.m_btn_return.onClick(this, () => {
@@ -73,6 +86,15 @@ export default class View_SideGames {
             this.ui.m_bg.onClick(this, () => {
                 this.ui.m_show.selectedIndex = 0;
             });
+            let ads = [];
+            this._cacheAds.forEach(adData => {
+                let ad: any = {};
+                ad.ad_id = adData.ad_id;
+                ad.location_id = this._posId;
+                ad.num = 1;
+                ads.push(ad);
+            });
+            LTSDK.instance.ReportShowAd(ads);
         }
 
     }
@@ -104,7 +126,7 @@ export default class View_SideGames {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(uid);
+        LTPlatform.instance.NavigateToApp(uid, data.ad_path, null, true, false, data.ad_id);
     }
 
 }

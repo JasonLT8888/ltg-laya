@@ -21,10 +21,10 @@ export default class UI_AdInpageComp extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_img = <fgui.GLoader><any>(this.getChildAt(0));
-		this.m_icon = <fgui.GLoader><any>(this.getChildAt(1));
-		this.m_tag = <fgui.GLoader><any>(this.getChildAt(2));
-		this.m_title = <fgui.GTextField><any>(this.getChildAt(3));
-		this.m_desc = <fgui.GTextField><any>(this.getChildAt(4));
+		this.m_img = <fgui.GLoader><any>(this.getChildAt(1));
+		this.m_icon = <fgui.GLoader><any>(this.getChildAt(2));
+		this.m_tag = <fgui.GLoader><any>(this.getChildAt(3));
+		this.m_title = <fgui.GTextField><any>(this.getChildAt(4));
+		this.m_desc = <fgui.GTextField><any>(this.getChildAt(5));
 	}
 }

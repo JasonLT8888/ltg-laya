@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <controller name="noEgg" exported="true" pages="0,,1,noEgg" selected="0"/>
+  <displayList>
+    <image id="n2_dywv" name="bg" src="dywvaw" fileName="img/GameEgg/sp_bg.png" xy="0,0" size="750,1334">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n3_dywv" name="n3" src="dywvav" fileName="img/GameEgg/sp_biaoti.png" xy="247,142">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n4_dywv" name="n4" src="dywvat" fileName="img/GameEgg/sp_miyulan.png" xy="58,1016">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n8_dywv" name="n8" src="dywvak" fileName="img/GameEgg/font/sp_miyu.png" xy="316,1066">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n11_dywv" name="n11" src="dywvao" fileName="img/GameEgg/font/sp_anhao.png" xy="319,1151">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n25_dywv" name="n25" src="dywvar" fileName="img/GameEgg/sp_suo (2).png" xy="7,506">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n26_dywv" name="n26" src="dywvar" fileName="img/GameEgg/sp_suo (2).png" xy="13,755">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n17_dywv" name="n17" src="dywvar" fileName="img/GameEgg/sp_suo (2).png" xy="9,254">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <list id="n24_dywv" name="eggLsit" xy="12,246" size="680,805" layout="flow_hz" overflow="scroll" scroll="both" scrollBarFlags="32" colGap="5" lineItemCount="3" defaultItem="ui://75kiu87kdywvb6" align="center" vAlign="middle" autoClearItems="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <component id="n5_dywv" name="info" src="dywvb2" fileName="img/GameEgg/info.xml" xy="102,1057">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n1_dywv" name="btn_close" src="dywvb1" fileName="cmp/btn_simple.xml" xy="25,136" size="94,100">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kdywvax"/>
+    </component>
+    <text id="n28_dywv" name="txt_eggName" xy="104,1161" size="90,27" font="DengXian" fontSize="20" color="#ffffff" align="center" vAlign="middle" autoSize="none" bold="true" strokeColor="#984b00" strokeSize="3" text="彩蛋名字">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n29_dywv" name="txt_getState" xy="104,1193" size="90,27" font="DengXian" fontSize="20" color="#ffffff" align="center" vAlign="middle" autoSize="none" bold="true" strokeColor="#da3f3f" strokeSize="3" text="(未获得)">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n7_dywv" name="btn_getSec" src="dywvb3" fileName="img/GameEgg/btn_getegg.xml" xy="397,1061">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n13_dywv" name="btn_getPass" src="dywvb3" fileName="img/GameEgg/btn_getegg.xml" xy="398,1145">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <image id="n30_dywv" name="n30" src="dywvau" fileName="img/GameEgg/sp_miyu.png" xy="314,1060" size="351,137">
+      <gearDisplay controller="noEgg" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <text id="n31_dywv" name="txt_disable" xy="360,1087" size="271,89" font="DengXian" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" bold="true" strokeColor="#984b00" text="正在路上...">
+      <gearDisplay controller="noEgg" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+</component>

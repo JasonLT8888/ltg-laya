@@ -48,7 +48,7 @@ export class LTStart {
     }
 
     constructor() {
-        
+
     }
 
     public InitGame() {
@@ -61,11 +61,12 @@ export class LTStart {
         let platformData = new LTPlatformData();
 
         this._HandleInitPlatform(LTPlatform.instance.platform, platformData);
+        LTPlatform.instance.Init(platformData);
+        
         this._HandleSDK();
         if (!LTSDK.isInited) {
             LTSDK.CreateInstace(SDK_Default, "default", "default", "default");
         }
-        LTPlatform.instance.Init(platformData);
 
         /* 2.6.0 版本之后 该设置已经变为默认false,无需手动禁用,如果后期调整,再进行打开
         // 非web平台禁用debug模式

@@ -1,37 +1,29 @@
-import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_CommonTrySkin from "./UI/LTGame/UI_CommonTrySkin";
-import TrySkinOpenData from "./Data/TrySkinOpenData";
-import UI_view_item_try_skin from "./UI/LTGame/UI_view_item_try_skin";
-import LTPlatform from "../../Platform/LTPlatform";
-import LTUI from "../LTUI";
-import LTSDK from "../../../SDK/LTSDK";
 import { ECheckState } from "../../../SDK/common/ECheckState";
+import LTSDK from "../../../SDK/LTSDK";
 import MathEx from "../../LTUtils/MathEx";
-import CommonSaveData from "../../Commom/CommonSaveData";
+import { EPlatformType } from "../../Platform/EPlatformType";
+import LTPlatform from "../../Platform/LTPlatform";
+import BaseUIMediator from "../FGui/BaseUIMediator";
+import LTUI from "../LTUI";
+import TrySkinOpenData from "./Data/TrySkinOpenData";
+import UI_TrySkin from "./UI/LTGame/UI_TrySkin";
 
-export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTrySkin> {
 
-    private static _instance: UI_CommonTrySkinMediator;
-    public static get instance(): UI_CommonTrySkinMediator {
+
+export default class UI_TrySkinMediator extends BaseUIMediator<UI_TrySkin>{
+    private static _instance;
+    needPay: boolean = false;
+    private _openData: TrySkinOpenData;
+    public static get instance(): UI_TrySkinMediator {
         if (this._instance == null) {
-            this._instance = new UI_CommonTrySkinMediator();
-            this._instance._classDefine = UI_CommonTrySkin;
+            this._instance = new UI_TrySkinMediator();
+            this._instance._classDefine = UI_TrySkin;
         }
+
         return this._instance;
     }
-
-    private _openData: TrySkinOpenData;
-
-    checkFlag: boolean = true;
-
-
     _OnShow() {
-        if (LTSDK.instance.checkState != ECheckState.Normal) {
-            LTSDK.instance.isDelayClose = false;
-        }
         super._OnShow();
-        // your code
-        this.checkFlag = CommonSaveData.instance.checkFlag;
         this._openData = new TrySkinOpenData();
         if (this._openParam == null) {
             console.error("请传入TrySkinOpenData用于初始化皮肤试用界面");
@@ -40,115 +32,82 @@ export default class UI_CommonTrySkinMediator extends BaseUIMediator<UI_CommonTr
                 this._openData[key] = this._openParam[key];
             }
         }
-        CommonSaveData.instance.trySignMissMode = 1 - CommonSaveData.instance.trySignMissMode;
-        CommonSaveData.SaveToDisk();
+        this.Init();
+        //LTPlatform.instance.ShowBannerAd();
+    }
+    Init() {
+        switch (LTSDK.instance.checkState) {
+            case ECheckState.InCheck:
+            case ECheckState.Normal:
+            default:
+                this.ui.m_check_type.selectedIndex = 1;
+                this.ui.m_btn_no.title = '不了，谢谢';
+                this.ui.m_btn_watch.title = "点击试用";
+                if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+                    this.ui.m_check_type.selectedIndex = 1;
+                    this.ui.m_btn_pay.m_select.selectedIndex = 0;
+                    this.ui.m_btn_no.title = '不了，谢谢';
+                    this.ui.m_btn_watch.title = "点击试用";
+                    this.ui.m_oppo.selectedIndex = 1;
+                }
+                break;
+            case ECheckState.NoGame:
+                this.ui.m_check_type.selectedIndex = 2;
+                this.ui.m_btn_no.title = '试用，谢谢';
+                break;
+        }
+        this.ui.m_btn_close.onClick(this, this.Hide);
+        this.ui.m_btn_watch.onClick(this, this.onVideoClick);
+        this.ui.m_btn_try.onClick(this, this.onVideoClick);
+        this.ui.m_btn_pay.onClick(this, this._onToggleClick);
+        this.ui.m_btn_no.onClick(this, this._onClickNo);
+        if (this._openData && this._openData.iconPaths) {
+            this._ui.m_icon.url = this._openData.iconPaths[0];
+        }
 
-        if (LTSDK.instance.checkState == ECheckState.NoGame) {
-            this.changeCheck();
-            this.ui.m_btn_thanks.text = "暂时试用";
+
+    }
+    _onClickNo() {
+        if (LTSDK.instance.checkState == ECheckState.InCheck || LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this.Hide();
         } else {
-            this.ui.m_btn_thanks.text = "暂不试用";
-        }
-        if (this._openData.iconPaths == null || this._openData.iconPaths.length != 4) {
-            console.error("请传入试用皮肤图标");
-        }
-        for (let i = 0; i < this.ui.m_list_item.numChildren; ++i) {
-            let getUI = this.ui.m_list_item.getChildAt(i) as UI_view_item_try_skin;
-            if (this._openData.iconPaths && this._openData.iconPaths[i]) {
-                getUI.m_icon.url = this._openData.iconPaths[i];
+            if (this.ui.m_btn_pay.m_select.selectedIndex == 1) {
+                this.onVideoClick();
+            } else {
+                this.Hide();
             }
-            getUI.onClick(this, this._OnClickTrySkin, [i]);
         }
-
-        this.ui.m_btn_thanks.onClick(this, this._OnClickNoThanks);
+    }
+    _onToggleClick() {
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
-            this.ui.m_btn_toggle_check.visible = false;
+            // this.ui.m_btn_pay
+            return;
+        } else if (LTSDK.instance.checkState == ECheckState.Normal) {
+            this.ui.m_btn_pay.m_select.selectedIndex = (this.ui.m_btn_pay.m_select.selectedIndex + 1) % 2;
+            return;
         }
-        this.ui.m_btn_toggle_check.onClick(this, this._OnClickToggle);
-
-        LTPlatform.instance.ShowBannerAd();
-    }
-
-    private _OnClickToggle() {
-        this.ui.m_btn_toggle_check.m_selected.selectedIndex = (this.ui.m_btn_toggle_check.m_selected.selectedIndex + 1) % 2;
-        if (LTSDK.instance.checkState == ECheckState.NoGame) {
-            this.ui.m_btn_thanks.text = this.checkFlag ? (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1 ? "暂时试用" : "暂不试用") : (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 0 ? "暂时试用" : "暂不试用");
+        let rand = MathEx.RandomInt(0, 100);
+        this.needPay = rand < LTSDK.instance.payRate;
+        if (this.needPay) {
+            this.onVideoClick();
         } else {
-            this.ui.m_btn_thanks.text = this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1 ? "暂时试用" : "暂不试用";
+            this.ui.m_btn_pay.m_select.selectedIndex = (this.ui.m_btn_pay.m_select.selectedIndex + 1) % 2;
+            this.ui.m_btn_no.title = this.ui.m_btn_pay.m_select.selectedIndex == 1 ? '试用，谢谢' : '不用，谢谢';
         }
+
     }
-
-
-    changeCheck() {
-        if (LTSDK.instance.checkState == ECheckState.NoGame) {
-            this.ui.m_btn_toggle_check.title = CommonSaveData.instance.checkFlag ? '观看随机试用皮肤视频' : '不看随机试用皮肤视频';
-            this.ui.m_btn_toggle_check.m_selected.selectedIndex = CommonSaveData.instance.checkFlag ? 1 : 0;
-        }
-    }
-
-    private async _OnClickTrySkin(index: number) {
-        let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
-        if (result) {
-
-            if (this._openData.onClose) {
-                this._openData.onClose.runWith(index);
-            }
-
-            this.Hide();
-        } else {
-            LTUI.Toast("跳过视频无法获得奖励");
-        }
-    }
-
-    private async _OnClickNoThanks() {
-        if (LTSDK.instance.checkState != ECheckState.NoGame) {
-            if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
-                await this.randomRewardVideo();
-            } else {
-                this.noPayClose();
+    async onVideoClick() {
+        let res = await LTPlatform.instance.ShowRewardVideoAdAsync();
+        if (res) {
+            if (this._openData && this._openData.onClose) {
+                this._openData.onClose.runWith(0);
+                this.Hide();
             }
         } else {
-            if (this.ui.m_btn_toggle_check.m_selected.selectedIndex == 1) {
-                if (this.checkFlag) {
-                    await this.randomRewardVideo();
-                } else {
-                    this.noPayClose();
-                }
-            } else {
-                if (this.checkFlag) {
-                    this.noPayClose();
-                } else {
-                    await this.randomRewardVideo();
-                }
-            }
+            LTUI.Toast('完整观看视频可获得奖励');
         }
     }
-    private noPayClose() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith(-1);
-        }
-        this.checkFlag = !this.checkFlag;
-        this.Hide();
-    }
-
-    private async randomRewardVideo() {
-        let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
-        if (result) {
-            if (this._openData.onClose) {
-                this._openData.onClose.runWith(MathEx.RandomInt(0, 4));
-            }
-            this.Hide();
-        }
-        else {
-            LTUI.Toast("跳过视频无法获得奖励");
-        }
-    }
-
     _OnHide() {
-        LTPlatform.instance.HideBannerAd();
-        if (LTSDK.instance.checkState == ECheckState.NoGame) {
-            CommonSaveData.instance.checkFlag = this.checkFlag;
-            CommonSaveData.SaveToDisk();
-        }
+
     }
 }

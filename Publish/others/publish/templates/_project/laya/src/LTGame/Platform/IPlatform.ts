@@ -79,7 +79,16 @@ export default interface IPlatform {
      * 初始化
      */
     Init(platformData: LTPlatformData);
-
+    /**
+     * 读取本地存储数据
+     * @param key 键
+     */
+    GetStorage(key: string): any;
+    /**
+     * 设置本地存储数据
+     * @param key 键
+     */
+    SetStorage(key: string, data: any): void;
     /**
      * banner广告是否可以展示
      */
@@ -174,6 +183,6 @@ export default interface IPlatform {
      * 跳转到其他小程序
      * appid蓝绿厂的传包名
      */
-    NavigateToApp(appId: string, path?: string, extra?: any): Promise<boolean>;
+    NavigateToApp(appId: string, path?: string, extra?: any, showGameCenter?: boolean, isBanner?: boolean, adid?: number): Promise<boolean>;
 
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="300,300" pivot="0.5,0.5" anchor="true" extention="Button">
+  <controller name="ad" exported="true" pages="0,,1,show" selected="1"/>
+  <displayList>
+    <loader id="n4_xoi5" name="icon" xy="0,0" pivot="0.5,0.5" size="300,300" align="center" vAlign="middle">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <text id="n3_xoi5" name="title" xy="0,100" pivot="0.5,0.5" size="300,100" font="DengXian" fontSize="36" color="#ffffff" align="center" vAlign="middle" autoSize="none" underline="true" bold="true" singleLine="true" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <image id="n6_il31" name="n6" src="kj717r" fileName="imgnew/sp_xiaoshipin.png" xy="27,37">
+      <gearDisplay controller="ad" pages="1"/>
+      <relation target="" sidePair="left-left,top-top"/>
+    </image>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

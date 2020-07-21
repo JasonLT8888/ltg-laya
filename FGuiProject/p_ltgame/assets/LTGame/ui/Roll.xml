@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://75kiu87kkj719v">
+  <displayList>
+    <image id="n5_gln0" name="bg" src="kj718z" fileName="img/roll/sp_beijing.png" xy="0,0" size="750,1334">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <component id="n1_gln0" name="view_roll" src="kj7190" fileName="cmp/view_roll_bg.xml" xy="74,225" pivot="0.5,0.5">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <image id="n2_gln0" name="pointer" src="kj7194" fileName="img/roll/sp_zhizhen.png" xy="293,396">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <component id="n6_gln0" name="btn_close" src="kj7195" fileName="cmp/btn_rollClose.xml" xy="28,183"/>
+    <component id="n10_gln0" name="btn_roll" src="kj7197" fileName="cmp/btn_roll.xml" xy="206,965">
+      <relation target="" sidePair="center-center"/>
+      <relation target="n14_jqbs" sidePair="bottom-top"/>
+    </component>
+    <component id="n13_gln0" name="player" src="kj719b" fileName="cmp/player.xml" xy="13,105">
+      <relation target="" sidePair="left-left,top-top"/>
+    </component>
+    <component id="n7_gln0" name="progress_roll" src="kj719e" fileName="cmp/progress_roll.xml" xy="182,892" group="n14_jqbs">
+      <ProgressBar max="100"/>
+    </component>
+    <component id="n9_gln0" name="btn_reward" src="kj719h" fileName="cmp/btn_rollReward.xml" xy="499,872" group="n14_jqbs"/>
+    <group id="n14_jqbs" name="progress" xy="182,872" size="396,86" advanced="true">
+      <relation target="" sidePair="center-center"/>
+      <relation target="n3_gln0" sidePair="bottom-top"/>
+    </group>
+    <image id="n3_gln0" name="n3" src="kj719j" fileName="img/roll/sp_guanggao.png" xy="178,836" group="n15_jqbs"/>
+    <text id="n4_gln0" name="lbl_count" xy="269,837" size="34,31" group="n15_jqbs" font="ui://75kiu87kkj719k" fontSize="7" color="#ffffff" align="center" vAlign="middle" autoSize="none" singleLine="true" text="1"/>
+    <group id="n15_jqbs" name="text" xy="178,836" size="408,32" advanced="true">
+      <relation target="" sidePair="center-center"/>
+      <relation target="n1_gln0" sidePair="bottom-top"/>
+    </group>
+  </displayList>
+  <transition name="tween_rotate">
+    <item time="0" type="Rotation" target="n9_gln0" tween="true" startValue="-20" endValue="20" duration="24" ease="Bounce.Out" repeat="-1" yoyo="true"/>
+    <item time="0" type="Scale" target="n9_gln0" tween="true" startValue="0.8,0.8" endValue="1,1" duration="24" ease="Bounce.Out" repeat="-1" yoyo="true"/>
+  </transition>
+</component>

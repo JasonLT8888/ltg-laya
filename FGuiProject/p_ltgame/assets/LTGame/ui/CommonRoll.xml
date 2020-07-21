@@ -16,12 +16,15 @@
     <component id="n2_bg00" name="btn_close" src="it2in" fileName="cmp/btn_close_01.xml" xy="576,169">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n3_bg00" name="btn_roll" src="it2iq" fileName="cmp/btn_double_get.xml" xy="250,841">
+    <component id="n3_bg00" name="btn_roll" src="it2iq" fileName="cmp/btn_double_get.xml" xy="250,828">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://75kiu87kbg002f"/>
     </component>
     <component id="n6_vkou" name="rewardPannel" src="vkou6z" fileName="cmp/rewardPannel.xml" xy="0,0" visible="false" controller="c1,0">
       <relation target="" sidePair="width-width,height-height"/>
     </component>
+    <graph id="n9_i816" name="__nativeinpage" xy="55,953" size="640,360" type="rect">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </graph>
   </displayList>
 </component>

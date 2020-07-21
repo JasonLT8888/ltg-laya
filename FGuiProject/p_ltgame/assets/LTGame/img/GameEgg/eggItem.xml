@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="220,253">
+  <controller name="type" exported="true" pages="0,mid,1,left,2,r" selected="0"/>
+  <displayList>
+    <component id="n24_dywv" name="icon" src="dywvb8" fileName="img/GameEgg/eggIcon.xml" xy="123,58" pivot="0.5,0" anchor="true" controller="lockState,0,selected,0">
+      <gearXY controller="type" pages="0,2" values="123,58|85,58" default="137,58" tween="true"/>
+      <gearLook controller="type" pages="1,2" values="1,4.6,0,1|1,-7.4,0,1" default="1,0,0,1" tween="true"/>
+    </component>
+    <image id="n18_dywv" name="n18" src="dywvas" fileName="img/GameEgg/sp_suo (1).png" xy="94,0"/>
+  </displayList>
+  <transition name="shake">
+    <item time="0" type="Rotation" target="n24_dywv" tween="true" startValue="0" endValue="15" duration="3" ease="Linear"/>
+    <item time="3" type="Rotation" target="n24_dywv" tween="true" startValue="15" endValue="0" duration="3" ease="Linear"/>
+    <item time="6" type="Rotation" target="n24_dywv" tween="true" startValue="0" endValue="-15" duration="3" ease="Linear"/>
+    <item time="9" type="Rotation" target="n24_dywv" tween="true" startValue="-15" endValue="0" duration="3" ease="Linear"/>
+  </transition>
+</component>

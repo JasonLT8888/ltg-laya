@@ -1,5 +1,6 @@
 import StringEx from "../LTUtils/StringEx";
 import { LTUtils } from "../LTUtils/LTUtils";
+import { EggConfig } from "../../script/config/EggConfig";
 
 export class SaveData {
 
@@ -53,6 +54,11 @@ export class SaveData {
      * 免费抽奖次数
      */
     public freeRollCount: number = 1;
+    /**
+     * 限定皮肤观看广告次数
+     */
+    public ExSkinAdCount: number;
+
 }
 
 export default class CommonSaveData {

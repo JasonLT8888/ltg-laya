@@ -35,27 +35,25 @@ export class UI_OppoEndExGameMediator extends BaseUIMediator<UI_OppoEndExGame> {
                 this._openData[key] = this._openParam[key];
             }
         }
-        this.ui.m_step.selectedIndex = 0;
         if (this._openData.iconPath != null) {
             this.ui.m_icon_reward.url = this._openData.iconPath;
         }
         this.ui.m_text_add.text = "+" + this._openData.rewardCount;
 
-        this.ui.m_btn_next.onClick(this, this._OnClickNormalGet);
+        this.ui.m_btn_next.onClick(this, this.onContinue);
         this.ui.m_btn_reward.onClick(this, this._OnClickReward);
         this.ui.m_btn_adpay.onClick(this, this.onAdClick);
-        this.ui.m_btn_continue.onClick(this, this.onContinue);
-        if (this.ui.m___nativeinpage) {
-            this.ui.m___nativeinpage.visible = false; 
-        }
+        // this.ui.m_btn_continue.onClick(this, this.onContinue);
+        // if (this.ui.m___nativeinpage) {
+        //     this.ui.m___nativeinpage.visible = false; 
+        // }
 
-        let plat = LTPlatform.instance as OppoPlatform;
-        plat._ShowNormalInterstitalAd(); 
     }
     onAdClick() {
         this._ui['m___nativeinpage']['ClickAd']();
     }
     onContinue() {
+        this.addMoney(1);
         if (this._openData.onClose) {
             this._openData.onClose.runWith([0, this.ui.m_icon_reward]);
         }
@@ -67,7 +65,6 @@ export class UI_OppoEndExGameMediator extends BaseUIMediator<UI_OppoEndExGame> {
         this.addMoney(1);
     }
     onNext() {
-        this.ui.m_step.selectedIndex = 1;
         if (this.ui.m___nativeinpage) {
             this.ui.m___nativeinpage.visible = true;
         }
@@ -87,6 +84,6 @@ export class UI_OppoEndExGameMediator extends BaseUIMediator<UI_OppoEndExGame> {
         }
     }
     protected _OnHide() {
-        LTPlatform.instance.ShowInterstitalAd();
+
     }
 }

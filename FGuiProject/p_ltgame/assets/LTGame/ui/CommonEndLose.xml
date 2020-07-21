@@ -8,10 +8,6 @@
     <image id="n12_rk93" name="n12" src="rk935k" fileName="img/sp_tonguanshibai.png" xy="243,124">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <component id="n13_rk93" name="view_othergames" src="wjpo4i" fileName="cache/view_sharegames_big.xml" xy="35,213">
-      <gearDisplay controller="c1" pages="0"/>
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </component>
     <text id="n14_rk93" name="text_str" xy="153,653" size="453,40" fontSize="32" color="#ffffff" letterSpacing="-2" text="这个关卡解锁30%，继续努力哦！">
       <gearXY controller="c1" pages="0,1" values="153,653|153,396"/>
       <relation target="" sidePair="center-center,middle-middle"/>
@@ -23,6 +19,11 @@
     <component id="n20_rk93" name="btn_watchad" src="rk935m" fileName="cmp/btn_watchad.xml" xy="227,742">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
+    <graph id="n13_rk93" name="__othergames" xy="35,213" size="680,408" type="rect">
+      <gearDisplay controller="c1" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <graph id="n22_r3yg" name="__wxSG" xy="0,722" size="750,280" type="rect"/>
   </displayList>
   <transition name="anim_enter"/>
 </component>

@@ -11,6 +11,7 @@ export default class UI_CommonRoll extends fgui.GComponent {
 	public m_btn_close:fgui.GButton;
 	public m_btn_roll:UI_btn_double_get;
 	public m_rewardPannel:UI_rewardPannel;
+	public m___nativeinpage:fgui.GGraph;
 
 	public static URL:string = "ui://75kiu87kbg002d";
 
@@ -28,5 +29,6 @@ export default class UI_CommonRoll extends fgui.GComponent {
 		this.m_btn_close = <fgui.GButton><any>(this.getChildAt(4));
 		this.m_btn_roll = <UI_btn_double_get><any>(this.getChildAt(5));
 		this.m_rewardPannel = <UI_rewardPannel><any>(this.getChildAt(6));
+		this.m___nativeinpage = <fgui.GGraph><any>(this.getChildAt(7));
 	}
 }

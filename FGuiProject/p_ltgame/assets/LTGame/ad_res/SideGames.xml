@@ -9,11 +9,11 @@
     <component id="n13_zutp" name="btn_show" src="r1gt70" fileName="ad_res/btnGames.xml" xy="0,0" pivot="0.5,0.5" size="108,120">
       <relation target="" sidePair="middle-middle,left-left"/>
     </component>
-    <image id="n15_gsbn" name="n15" src="r1gt73" fileName="ad_res/res/sp_tips.png" xy="72,-25" pivot="0.5,0.5">
+    <image id="n15_gsbn" name="red" src="r1gt73" fileName="ad_res/res/sp_tips.png" xy="72,-25" pivot="0.5,0.5">
       <relation target="n13_zutp" sidePair="left-right,top-top"/>
     </image>
-    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="-320,-248" pivot="0.5,0.5" size="280,680">
-      <gearXY controller="show" pages="1,0" values="-320,-248|0,-248" tween="true"/>
+    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="-545,-255" pivot="0.5,0.5" size="542,680">
+      <gearXY controller="show" pages="1,0" values="-545,-255|0,-248" tween="true"/>
     </component>
   </displayList>
 </component>

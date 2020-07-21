@@ -91,13 +91,15 @@ export class View_NativeInPage {
         // for (let i = 0; i < this._cacheIds.length; ++i) {
         let i = MathEx.RandomInt(0, this._cacheIds.length)
         let ret = await this._LoadIconData(i);
-        if (ret) {
+        if (ret && this._cacheAdData) {
             this.visible = true;
             this.ui.visible = true;
-            this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
+            if (this._cacheAdData.imgUrlList.length) {
+                this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
+                this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
+            }
             this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
             this.ui.m_ad.m_title.text = this._cacheAdData.title;
-            this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
             this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
             View_NativeInPage._cacheNativeAd.reportAdShow({
                 adId: this._cacheAdData.adId

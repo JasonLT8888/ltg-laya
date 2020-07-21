@@ -83,7 +83,7 @@ export default class OppoPlatform extends WXPlatform {
                     console.log("oppo广告", "初始化广告服务成功", platformData);
                     // 不提前进行预加载
                     // this._CreateBannerAd();
-                    // this._CreateVideoAd();
+                      this._CreateVideoAd();
                     // this._CreateInterstitalAd();
                     // this.intersitialAd = new NativeADUnit(platformData.interstitialId);
                     // this.iconNative = new NativeADUnit(platformData.nativeId);
@@ -147,7 +147,7 @@ export default class OppoPlatform extends WXPlatform {
     protected _OnLoginSuccess(res: any) {
         console.log(LTPlatform.platformStr, "登录成功", res);
         this.loginState.isLogin = true;
-        this.loginState.code = res.uid;
+        this.loginState.code = res.token;
     }
     ShareAppMessage(obj: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
 
@@ -291,7 +291,7 @@ export default class OppoPlatform extends WXPlatform {
         return this._isVideoLoaded;
     }
     IsInterstitalAvaliable() {
-        return LTSDK.instance.isADEnable && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 888;
+        return false;// LTSDK.instance.isADEnable && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 888;
     }
     IsNativeAvaliable() {
         return this._nativeAdLoaded;
@@ -493,6 +493,7 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     private async _ShowNativeInterstital(index: number): Promise<boolean> {
+        return;
         let nativeAd = this._base.createNativeAd({
             adUnitId: this.platformData.nativeinterstitialIds[index]
         });
@@ -538,6 +539,7 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     public async _ShowNormalInterstitalAd(): Promise<boolean> {
+        return;
         if (this._intersitialAd) {
             this._intersitialAd.destroy();
         }
@@ -590,6 +592,7 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     async ShowInterstitalAd() {
+        return;
         if (!this.IsInterstitalAvaliable()) {
             console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${CommonSaveData.instance.interstitialCount}`);
             return;

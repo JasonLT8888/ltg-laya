@@ -9,6 +9,8 @@ import View_EndSlideGames from "../DefaultUI/Cmp/View_EndSlideGames";
 import LTSDK from "../../../SDK/LTSDK";
 import { View_NativeIconLong } from "../DefaultUI/Cmp/View_NativeIconLong";
 import { View_NativeInPage } from "../DefaultUI/Cmp/View_NativeInpage";
+import View_WxSideGames from "../DefaultUI/Cmp/View_WxSideGames";
+import View_End3X3Games from "../DefaultUI/Cmp/View_End3X3Games";
 
 export default class BaseUIMediator<T extends fgui.GComponent> {
     protected _scaleSmall: number = 0.8;
@@ -36,7 +38,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     protected _openParam: any;
 
-    protected _sortOrder: number = 0;
+    protected _sortOrder: number = 10;
 
     protected _InitBottom() {
         let bottomGroup = this.ui["m_bottom_group"];
@@ -69,8 +71,16 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter] && LTSDK.instance.isDelayClose) {
             let anim = this._ui[anim_enter] as fgui.Transition;
-            anim.play();
+            anim.play(Laya.Handler.create(this, this._CallEnterAnimEnd));
         }
+    }
+
+    private _CallEnterAnimEnd() {
+        this._OnEnterAnimEnd();
+    }
+
+    protected _OnEnterAnimEnd() {
+        
     }
 
     private _InitSelfAd() {
@@ -124,6 +134,19 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
             this._ui['m___endSG'] = endslide.ui;
         } else {
             this._ui['m___endSG'] = null;
+        }
+
+        let m___wxSG = View_WxSideGames.CreateView(this._ui['m___wxSG']);
+        if (m___wxSG) {
+            this._ui['m___wxSG'] = m___wxSG.ui;
+        } else {
+            this._ui['m___wxSG'] = null;
+        }
+        let end3x3 = View_End3X3Games.CreateView(this._ui['m___end3x3']);
+        if (end3x3) {
+            this._ui['m___end3x3'] = end3x3.ui;
+        } else {
+            this._ui['m___end3x3'] = null;
         }
 
     }

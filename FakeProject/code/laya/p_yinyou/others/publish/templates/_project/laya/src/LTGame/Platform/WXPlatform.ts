@@ -12,6 +12,10 @@ import LTUI from "../UIExt/LTUI";
 import Awaiters from "../Async/Awaiters";
 import { IDevice } from "./IDevice";
 import DefaultDevice from "./DefaultDevice";
+import { UI_SelfBannerMediator } from "../UIExt/DefaultUI/UI_SelfBannerMediator";
+import { UI_GameCenterMediator } from "../UIExt/DefaultUI/UI_GameCenterMediator";
+import GlobalUnit from "../../script/common/GlobalUnit";
+import LTSDK from "../../SDK/LTSDK";
 
 export default class WXPlatform implements IPlatform {
     base: any;
@@ -27,7 +31,7 @@ export default class WXPlatform implements IPlatform {
     recordManager: IRecordManager = new DefaultRecordManager();
     device: IDevice = new DefaultDevice();
     systemInfo: any;
-
+    loginCode: string = null;
     /**
      * 是否支持直接跳转到其他小程序
      */
@@ -124,21 +128,41 @@ export default class WXPlatform implements IPlatform {
         };
         let loginData = {} as LTGame.LoginData;
         loginData.success = (res) => {
+            this.loginCode = res.code;
             this._OnLoginSuccess(res);
+            console.error(this.loginState);
         };
         loginData.fail = (res) => {
             console.error(LTPlatform.platformStr, "登录失败", res);
             this.loginState.isLogin = false;
             this.loginState.code = "";
         };
-        loginData.complete = (res) => {
+        loginData.complete = () => {
             if (this.onLoginEnd != null) {
                 this.onLoginEnd.run();
             }
         };
         this._base.login(loginData);
     }
-
+    public GetStorage(key: string): any {
+        if (this.base && this.base.getStorageSync && key) {
+            try {
+                return this.base.getStorageSync(key);
+            } catch (error) {
+                console.log('getStorageSync error: ', JSON.stringify(error));
+                return null;
+            }
+        }
+    }
+    public SetStorage(key: string, data: any) {
+        if (this.base && this.base.getStorageSync && key) {
+            try {
+                return this.base.setStorageSync(key, data);
+            } catch (error) {
+                console.log('setStorageSync error: ', JSON.stringify(error));
+            }
+        }
+    }
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
         console.log(LTPlatform.platformStr, "登录成功", res);
         LTUI.Toast('登录成功');
@@ -327,12 +351,13 @@ export default class WXPlatform implements IPlatform {
     }
     ShowBannerAd() {
         if (!this.IsBannerAvaliable()) {
+            UI_SelfBannerMediator.instance.Show();
             return;
         }
         this._bannerAd.show();
     }
     HideBannerAd() {
-        if (!this.IsBannerAvaliable()) return;
+        UI_SelfBannerMediator.instance.Hide();
         this._bannerAd.hide();
     }
 
@@ -366,6 +391,9 @@ export default class WXPlatform implements IPlatform {
         this._videoFailedCount = 0;
         let videoObj = {};
         videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
+        if (this._rewardVideo) {
+            this._rewardVideo.offClose(this.onVideoClose);
+        }
         this._rewardVideo = createRewardedVideoAd(videoObj);
         this._rewardVideo.onLoad(() => {
             console.log("视频广告加载成功");
@@ -374,6 +402,7 @@ export default class WXPlatform implements IPlatform {
         this._rewardVideo.onError((res) => {
             this._videoFailedCount++;
             console.error("视频广告加载失败", res, this._videoFailedCount);
+            LTUI.HideLoading();
         });
         this._rewardVideo.onClose((res) => {
 
@@ -389,22 +418,33 @@ export default class WXPlatform implements IPlatform {
             });
         });
 
-        this._rewardVideo.show().then(() => {
-            LTUI.HideLoading();
-        }).catch(err => {
-            console.log("广告组件出现问题", err);
-            // 可以手动加载一次
-            this._rewardVideo.load().then(() => {
-                console.log("手动加载成功");
-                // 加载成功后需要再显示广告
-                return this._rewardVideo.show().then(() => {
-                    LTUI.HideLoading();
-                }).catch((err) => {
-                    console.error(err);
-                    LTUI.HideLoading();
-                });;
-            });
-        });;
+        this._rewardVideo.load().then(() => {
+            console.log("激励视频 加载成功");
+            // 加载成功后 再显示广告
+            return this._rewardVideo.show().then(() => {
+                LTUI.HideLoading();
+            }).catch((err) => {
+                console.error(err);
+                LTUI.Toast('视频加载失败，请稍后再试！');
+                LTUI.HideLoading();
+            });;
+        });
+    }
+
+    private onVideoClose(res): any {
+        Laya.stage.event(CommonEventId.RESUM_AUDIO);
+        console.log("视频回调", res);
+        let isEnd = res["isEnded"] as boolean;
+        Awaiters.NextFrame().then(() => {
+            if (isEnd) {
+                if (this._rewardSuccessed)
+                    this._rewardSuccessed.run();
+            }
+            else {
+                if (this._rewardSkipped)
+                    this._rewardSkipped.run();
+            }
+        });
     }
 
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
@@ -449,7 +489,7 @@ export default class WXPlatform implements IPlatform {
         console.log(LTPlatform.platformStr, "OnShow", res);
         LTPlatform.instance.lauchOption = res;
         LTPlatform.instance._CheckUpdate();
-
+        this.NavigateToAppSuccess = null;
         Awaiters.NextFrame().then(() => {
             if (LTPlatform.instance.onResume) {
                 LTPlatform.instance.onResume.runWith(res);
@@ -460,8 +500,6 @@ export default class WXPlatform implements IPlatform {
                 LTPlatform.instance["_cacheOnShowHandle"] = null;
             }
         });
-
-
     }
 
     /**
@@ -471,6 +509,9 @@ export default class WXPlatform implements IPlatform {
         console.log(LTPlatform.platformStr, "OnHide", res);
         if (LTPlatform.instance.onPause) {
             LTPlatform.instance.onPause.runWith(res);
+        }
+        if (this.NavigateToAppSuccess) {
+            this.NavigateToAppSuccess();
         }
     }
 
@@ -584,21 +625,40 @@ export default class WXPlatform implements IPlatform {
     OpenGameBox(appIds: string[]) {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
-
-    NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
+    NavigateToAppSuccess: () => void = null;
+    NavigateToApp(appid: string, path?: string, extra?: any, showGC?: boolean, isbanner?: boolean, adid?: number): Promise<boolean> {
         return new Promise((resolve, reject) => {
+            if (showGC) {
+                // GlobalUnit.gameManager.GameOver();
+            }
+            // this.NavigateToAppSuccess = null;
             wx.navigateToMiniProgram({
                 appId: appid,
                 path: path,
                 extraData: extra,
                 envVersion: '',
                 success: (res) => {
+                    if (isbanner) {
+                        LTSDK.instance.ReportClickAd(adid, 19, true);
+                    } else {
+                        LTSDK.instance.ReportClickAd(adid, 5, true);
+                    }
                     console.log('小游戏跳转成功', res);
+                    // this.NavigateToAppSuccess = () => {
+                    // };
                     resolve(true);
                 },
                 fail: () => {
                     console.log('小游戏跳转失败：');
+                    if (isbanner) {
+                        LTSDK.instance.ReportClickAd(adid, 19, false);
+                    } else {
+                        LTSDK.instance.ReportClickAd(adid, 5, false);
+                    }
                     reject(false);
+                    if (showGC) {
+                        UI_GameCenterMediator.instance.Show();
+                    }
                 },
                 complete: () => { }
             });

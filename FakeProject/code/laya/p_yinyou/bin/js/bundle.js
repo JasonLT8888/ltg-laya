@@ -2609,6 +2609,7 @@ __webpack_require__.r(__webpack_exports__);
 class LTPlatformData {
     constructor() {
         this.appId = "";
+        this.appKey = "";
         this.bannerId = "";
         this.rewardVideoId = "";
         this.interstitialId = "";
@@ -3434,7 +3435,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
     _OnLoginSuccess(res) {
         console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "登录成功", res);
         this.loginState.isLogin = true;
-        this.loginState.code = res.uid;
+        this.loginState.code = res.token;
     }
     ShareAppMessage(obj, onSuccess, onFailed) {
     }
@@ -5822,11 +5823,11 @@ class LTStart {
     _Init() {
         let platformData = new _Platform_Data_LTPlatformData__WEBPACK_IMPORTED_MODULE_2__["default"]();
         this._HandleInitPlatform(_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform, platformData);
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Init(platformData);
         this._HandleSDK();
         if (!_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].isInited) {
             _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_7__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_8__["default"], "default", "default", "default");
         }
-        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Init(platformData);
         /* 2.6.0 版本之后 该设置已经变为默认false,无需手动禁用,如果后期调整,再进行打开
         // 非web平台禁用debug模式
         if (LTPlatform.instance.platform != EPlatformType.Web) {
@@ -13231,8 +13232,12 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
         this._RequestShareInfo();
     }
     _RequestShareInfo() {
+        let uid = this.appId;
+        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
+            uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+        }
         let sendData = {
-            appid: this.appId,
+            appid: uid,
         };
         _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/shares", Laya.Handler.create(this, this._OnRequestShareInfo), Laya.Handler.create(this, (res) => {
             console.log("获取分享接口访问失败", res);
@@ -13259,18 +13264,22 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
             console.error("分享接口返回错误", getObj);
         }
     }
-    RecordShowAd(adList) {
+    ReportShowAd(adList) {
         console.log("功能暂未实现");
     }
-    RecordClickAd(adid, locationId, jumpSuccess) {
+    ReportClickAd(adid, locationId, jumpSuccess) {
         console.log("功能暂未实现");
     }
     RequestADList() {
         console.log("功能暂未实现");
     }
     RequestRemoteConfig() {
+        let uid = this.appId;
+        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
+            uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+        }
         let sendData = {
-            appid: this.appId,
+            appid: uid,
             version: this.controlVersion
         };
         _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/game/config", Laya.Handler.create(this, this._OnRemoteConfigBack), Laya.Handler.create(this, (res) => {
@@ -13294,14 +13303,10 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
             // 成功
             let result = res.data;
             if (result) {
-                let rate = 0;
+                console.log('如果需要在重庆后台配置参数 ');
                 if (result['payRate']) {
-                    rate = parseInt(result['payRate']);
+                    this.payRate = parseInt(result['payRate']);
                 }
-                else {
-                    console.log('如果需要在重庆后台配置参数 payRate 概率 0-100');
-                }
-                this.payRate = rate;
                 if (result['isDelayClose']) {
                     this.isDelayClose = parseInt(result['isDelayClose']) == 1;
                 }
@@ -13340,9 +13345,14 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
         Laya.stage.event(_LTGame_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_0__["CommonEventId"].AD_CONFIG_GETTED);
     }
     Login(code, fromAppId) {
+        console.error('登录参数：code:', code);
+        let uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo ? _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey : this.appId;
         let sendData = {
-            flg: this.flg,
-            code: code
+            appid: uid,
+            // flg: this.flg,
+            code: code,
+            channel: 'own',
+            version: this.controlVersion
         };
         if (this.channel) {
             sendData["channel"] = this.channel;
@@ -13357,9 +13367,10 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
     _OnAuthSuccess(res) {
         if (this.enableDebug)
             console.log("SDK登录回调触发", res);
-        if (res.result == 1) {
+        res = JSON.parse(res);
+        if (res.code == 1) {
             // 成功
-            this._OnLoginSuccess(res.result);
+            this._OnLoginSuccess(res);
         }
         else {
             this._OnLoginFailed(res);
@@ -13368,16 +13379,16 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
     _OnLoginSuccess(res) {
         console.log("SDK登录成功", res);
         this.uid = res.openid;
-        this.RecordDaily();
+        this.ReportDaily();
     }
     _OnLoginFailed(res) {
-        console.error("SDK登录失败", res);
+        console.error("SDK登录失败", this.appId, _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey, res);
     }
-    RecordStat(isShare, sid) {
+    ReportStat(isShare, sid) {
         console.log("功能暂未实现");
     }
-    RecordDaily() {
-        console.log("功能暂未实现");
+    ReportDaily() {
+        console.log("上报日活 功能暂未实现");
     }
 }
 
@@ -13502,8 +13513,13 @@ class SDK_Default {
             else {
                 console.log('休息', date, h);
             }
+            if (this.isShielding) {
+                //屏蔽洗钱
+                this.checkState = _common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"].Normal;
+                this.payRate = 0;
+            }
         }
-        console.log("---云控版本为:", this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${_common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"][this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
+        console.log(`${this.appId}---云控版本为:`, this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${_common_ECheckState__WEBPACK_IMPORTED_MODULE_3__["ECheckState"][this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
     Login(code, fromAppId) {
         console.log("SDK:Login", code, fromAppId);
@@ -13515,16 +13531,15 @@ class SDK_Default {
         console.log("SDK:RequestADList");
     }
     ReportClickAd(ad_id, locationId, jumpSuccess) {
-        console.log("SDK:RecordClickAd", ad_id, locationId, jumpSuccess);
-    }
-    ReportLogin() {
-        console.log("SDK:ReportLogin");
+        console.log("SDK:ReportClickAd", ad_id);
     }
     ReportShowAd(adList) {
-        console.log("SDK:RecordShowAd", adList);
+        console.log("SDK:ReportShowAd", adList);
     }
     ReportStat(isShare, sid) {
-        console.log("SDK:RecordStat", isShare, sid);
+        console.log("SDK:ReportStat", isShare, sid);
+    }
+    ReportLogin() {
     }
 }
 
@@ -14646,16 +14661,15 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
                 _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
                 break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo:
-                this._gameVersion = "v0.0.1";
-                this._resVersion = 'v0.0.1';
-                platformData.appId = "30260170";
-                platformData.bannerId = "174341";
-                platformData.interstitialId = "174344";
-                platformData.rewardVideoId = "174349";
-                platformData.nativeId = "174348";
-                platformData.nativeBannerIds = ["178853"];
-                platformData.nativeinterstitialIds = ["178854"];
-                platformData.nativeIconIds = ["178855"];
+                this._gameVersion = "1.0.2";
+                this._resVersion = "0710";
+                platformData.appId = "30302891";
+                platformData.appKey = "6fyGQ6x2pzk8W84c0s04ows00";
+                platformData.bannerId = "195984";
+                platformData.rewardVideoId = "195985";
+                platformData.nativeBannerIds = ['195994', '195995', '195998'];
+                platformData.nativeIconIds = ['195986', '196003'];
+                platformData.nativeinpageIds = ['195999', '196002', '196003'];
                 _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_5__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
             default:

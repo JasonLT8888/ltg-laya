@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="121,45" extention="Button">
+  <displayList>
+    <text id="n18_il31" name="title" xy="0,0" size="121,45" font="DengXian" fontSize="24" color="#ffffff" align="center" vAlign="middle" autoSize="none" underline="true" bold="true" text="暂不试用"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

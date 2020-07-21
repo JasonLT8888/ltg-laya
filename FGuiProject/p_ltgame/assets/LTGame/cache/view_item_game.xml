@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="150,180">
   <displayList>
+    <graph id="n7_r3yg" name="n7" xy="0,0" size="150,180" type="rect" lineSize="0" corner="8">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
     <component id="n5_bg00" name="icon" src="bg001h" fileName="cache/view_game_icon.xml" xy="3,0" size="144,144" aspect="true">
       <relation target="" sidePair="width-width"/>
     </component>
-    <text id="n6_bg00" name="text_name" xy="76,166" pivot="0.5,0.5" anchor="true" size="93,29" fontSize="22" color="#ffffff" align="center" vAlign="middle" text="快来划水">
+    <text id="n6_bg00" name="text_name" xy="76,166" pivot="0.5,0.5" anchor="true" size="93,27" font="DengXian" fontSize="22" align="center" vAlign="middle" text="快来划水">
       <relation target="" sidePair="center-center"/>
     </text>
   </displayList>

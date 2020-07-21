@@ -7,6 +7,7 @@ export default class UI_SideGames extends fgui.GComponent {
 	public m_show:fgui.Controller;
 	public m_bg:fgui.GGraph;
 	public m_btn_show:fgui.GButton;
+	public m_red:fgui.GImage;
 	public m_ads:UI_side_ads;
 
 	public static URL:string = "ui://75kiu87keq3z6e";
@@ -23,6 +24,7 @@ export default class UI_SideGames extends fgui.GComponent {
 		this.m_show = this.getControllerAt(0);
 		this.m_bg = <fgui.GGraph><any>(this.getChildAt(0));
 		this.m_btn_show = <fgui.GButton><any>(this.getChildAt(1));
+		this.m_red = <fgui.GImage><any>(this.getChildAt(2));
 		this.m_ads = <UI_side_ads><any>(this.getChildAt(3));
 	}
 }

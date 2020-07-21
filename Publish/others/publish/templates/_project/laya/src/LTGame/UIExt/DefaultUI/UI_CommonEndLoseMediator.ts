@@ -35,9 +35,7 @@ export default class UI_CommonEndLoseMediator extends BaseUIMediator<UI_CommonEn
         }
 
         this.ui.m_c1.selectedIndex = this._openData.enableShowGames ? 0 : 1;
-        if (this._openData.enableShowGames) {
-            View_OtherGames.CreateView(this.ui.m_view_othergames);
-        }
+
 
         this.ui.m_btn_no.onClick(this, this._OnClickRestart);
         this.ui.m_btn_watchad.onClick(this, this._OnClickWatchAd);

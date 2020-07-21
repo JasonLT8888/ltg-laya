@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="186,198">
+  <controller name="lockState" exported="true" pages="0,Lock,1,unlock" selected="0"/>
+  <controller name="selected" exported="true" pages="0,,1,select" selected="0"/>
+  <displayList>
+    <image id="n24_dywv" name="n24" src="dywvaq" fileName="img/GameEgg/sp_suo (3).png" xy="0,0"/>
+    <image id="n25_dywv" name="n25" src="dywvay" fileName="img/GameEgg/sp_xuanzhong.png" xy="137,150">
+      <gearDisplay controller="selected" pages="1"/>
+    </image>
+    <image id="n26_dywv" name="n26" src="dywvay" fileName="img/GameEgg/sp_xuanzhong.png" xy="26,36" rotation="180">
+      <gearDisplay controller="selected" pages="1"/>
+    </image>
+    <graph id="n28_dywv" name="n28" xy="20,25" size="128,128" type="rect" lineSize="0" fillColor="#ffbebebe">
+      <gearDisplay controller="lockState" pages="0"/>
+      <gearColor controller="selected" pages="1" values="#75d9fe" default="#bebebe"/>
+    </graph>
+    <loader id="n29_dywv" name="icon" xy="86,89" pivot="0.5,0.5" anchor="true" size="148,148" aspect="true" align="center" vAlign="middle" fill="scale">
+      <gearDisplay controller="lockState" pages="1"/>
+    </loader>
+    <image id="n27_dywv" name="n27" src="dywvap" fileName="img/GameEgg/sp_wenhao.png" xy="67,58">
+      <gearDisplay controller="lockState" pages="0"/>
+    </image>
+  </displayList>
+</component>

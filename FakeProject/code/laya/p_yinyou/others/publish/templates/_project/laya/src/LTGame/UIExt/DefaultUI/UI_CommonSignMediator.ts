@@ -1,175 +1,142 @@
-import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_CommonSign from "./UI/LTGame/UI_CommonSign";
-import SignOpenData from "./Data/SignOpenData";
-import UI_view_item_sign from "./UI/LTGame/UI_view_item_sign";
+import GameData from "../../../script/common/GameData";
+import { SignConfig } from "../../../script/config/SignConfig";
+import { ECheckState } from "../../../SDK/common/ECheckState";
+import LTSDK from "../../../SDK/LTSDK";
 import CommonSaveData from "../../Commom/CommonSaveData";
 import LTPlatform from "../../Platform/LTPlatform";
+import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
-import LTSDK from "../../../SDK/LTSDK";
-import { ECheckState } from "../../../SDK/common/ECheckState";
-import UI_view_item_sign_big from "./UI/LTGame/UI_view_item_sign_big";
+import { CommonRewardData } from "./Data/CommonRewardData";
+import UI_CommonSign2 from "./UI/LTGame/UI_CommonSign2";
+import UI_SignItem from "./UI/LTGame/UI_SignItem";
 
-export default class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign> {
 
+/** 签到 */
+export class UI_CommonSignMediator extends BaseUIMediator<UI_CommonSign2> {
     private static _instance: UI_CommonSignMediator;
+    _openData: CommonRewardData;
+    public get ui(): UI_CommonSign2 {
+        return this._ui;
+    }
+
     public static get instance(): UI_CommonSignMediator {
         if (this._instance == null) {
             this._instance = new UI_CommonSignMediator();
-            this._instance._classDefine = UI_CommonSign;
+            this._instance._classDefine = UI_CommonSign2;
         }
         return this._instance;
     }
-
-    private _openData: SignOpenData;
-    private _cacheRewardItem: UI_view_item_sign | UI_view_item_sign_big;
-
-    private _isChecked: boolean = true;
-
+    todayData: SignConfig.config;
     _OnShow() {
         super._OnShow();
-        // your code
-        this._openData = new SignOpenData();
+        this._openData = new CommonRewardData();
         if (this._openParam == null) {
-            console.error("请传入SignOpenData用于初始化签到界面");
+            console.error("请传入 CommonRewardData  onGetSkin  onGetMoney 用于初始化签到界面");
         } else {
             for (let key in this._openParam) {
                 this._openData[key] = this._openParam[key];
             }
         }
 
-        switch (LTSDK.instance.checkState) {
-            case ECheckState.InCheck:
-                this.ui.m_view.m_toggle_watchad.visible = false;
-                this._isChecked = false;
-                this.ui.m_view.m_check_state.selectedIndex = 0;
-                break;
-            case ECheckState.Normal:
-                this._isChecked = false;
-                this.ui.m_view.m_check_state.selectedIndex = 1;
-                break;
-            case ECheckState.NoGame:
-                this._isChecked = true;
-                this.ui.m_view.m_check_state.selectedIndex = 1;
-                break;
+        if (!CommonSaveData.instance.isSigned && CommonSaveData.instance.signDayCount == 7) {
+            CommonSaveData.instance.signDayCount = 0;
+            CommonSaveData.SaveToDisk();
         }
-        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
-        this.ui.m_view.m_btn_get.onClick(this, this._OnClickGet);
-        this.ui.m_view.m_toggle_watchad.onClick(this, this._OnClickToggle);
-        this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickWatchAd);
-        this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
 
-        this._UpdateUI();
-        LTPlatform.instance.ShowBannerAd();
+        this.ui.m_isSigned.selectedIndex = CommonSaveData.instance.isSigned ? 1 : 0;
+        this.ui.m_btn_close.onClick(this, this.Hide);
+        this.ui.m_btn_nornalRwd.onClick(this, this.onNormalGet);
+        this.ui.m_btn_videoRwd.onClick(this, this.onVideoGet);
+        this.ui.m_dayList.setVirtual();
+        this.ui.m_dayList.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
+        this.ui.m_dayList.on(fairygui.Events.CLICK_ITEM, this, this.onItemClick);
+        this.ui.m_dayList.numItems = 7;
+        LTPlatform.instance.HideBannerAd();
+
     }
+    onItemClick(item: UI_SignItem) {
 
-    private _UpdateUI() {
-        let isSigned = CommonSaveData.instance.isSigned;
-        if (this._openData.isSigned != null) {
-            isSigned = this._openData.isSigned;
-        }
-        this.ui.m_view.m_btn_get.enabled = !isSigned;
-        this.ui.m_view.m_signed.selectedIndex = isSigned ? 1 : 0;
-        let currentSignDay = CommonSaveData.instance.signDayCount;
-        if (this._openData.currentDayCount != null) {
-            currentSignDay = this._openData.currentDayCount;
-        }
-        let displayDay = currentSignDay % 7;
-
-        // 更新6天内
-        for (let i = 0; i < this.ui.m_view.m_list_day.numChildren; ++i) {
-            let itemUI = this.ui.m_view.m_list_day.getChildAt(i) as UI_view_item_sign;
-            itemUI.m_text_day.text = "第" + (i + 1) + "天";
-            if (this._openData.iconPaths && this._openData.iconPaths[i]) {
-                itemUI.m_icon_reward.url = this._openData.iconPaths[i];
-            }
-            if (i < displayDay || (displayDay == 0 && isSigned)) {
-                itemUI.m_c1.selectedIndex = 1;
-            } else {
-                itemUI.m_c1.selectedIndex = 0;
-            }
-            itemUI.m_text_reward.text = this._openData.rewardStrs[i];
-        }
-
-        if (this._openData.iconPaths && this._openData.iconPaths[6]) {
-            this.ui.m_view.m_view_day7.m_icon_reward.url = this._openData.iconPaths[6];
-        }
-        // 更新第七天
-        this.ui.m_view.m_view_day7.m_text_day.text = "第七天";
-        this.ui.m_view.m_view_day7.m_text_reward.text = this._openData.rewardStrs[6];
-        if (displayDay == 0 && isSigned) {
-            this.ui.m_view.m_view_day7.m_c1.selectedIndex = 1;
+    }
+    renderItem(index: number, item: UI_SignItem) {
+        if (index == 6) {
+            item.m_type.selectedIndex = 2;
+        } else if (index % 2 == 0) {
+            item.m_type.selectedIndex = 1;
         } else {
-            this.ui.m_view.m_view_day7.m_c1.selectedIndex = 0;
+            item.m_type.selectedIndex = 0;
         }
-
-        if (!isSigned) {
-            if (displayDay < 6) {
-                this._cacheRewardItem = this.ui.m_view.m_list_day.getChildAt(displayDay) as UI_view_item_sign;
-                this._cacheRewardItem.m_c1.selectedIndex = 2;
+        let data = SignConfig.dataList[index];
+        item.m_day.text = `第${data.id}天`;
+        item.m_icon.url = data.icon;
+        let showDesc = LTSDK.instance.checkState != ECheckState.InCheck || data.type == 1;
+        item.m_title.text = showDesc ? data.title : `+${data.value}`;
+        if (CommonSaveData.instance.isSigned) {
+            if (index < CommonSaveData.instance.signDayCount) {
+                item.m_state.selectedIndex = 2;
             } else {
-                this._cacheRewardItem = this.ui.m_view.m_view_day7;
-                this._cacheRewardItem.m_c1.selectedIndex = 2;
+                item.m_state.selectedIndex = 0;
+            }
+        } else {
+            if (index == CommonSaveData.instance.signDayCount) {
+
+                item.m_state.selectedIndex = 1;
+                this.todayData = data;
+                this.ui.m_btn_nornalRwd.title = data.type == 1 ? '只拿皮肤' : '只拿金币';
+            } else if (index < CommonSaveData.instance.signDayCount) {
+                item.m_state.selectedIndex = 2;
+            } else {
+                item.m_state.selectedIndex = 0;
             }
         }
     }
-
-    private _OnClickToggle() {
-        this._isChecked = !this._isChecked;
-        this.ui.m_view.m_toggle_watchad.m_selected.selectedIndex = this._isChecked ? 1 : 0;
-    }
-
-    private _OnClickGet() {
-        if (this._isChecked) {
-            this._OnClickDoubleGet();
-        } else {
-            this._OnClickNormalGet();
-        }
-    }
-
-    private _OnClickWatchAd() {
-        this._OnClickDoubleGet();
-    }
-
-    private _OnClickNormalGet() {
-        CommonSaveData.instance.isSigned = true;
-        CommonSaveData.instance.signDayCount++;
-        CommonSaveData.SaveToDisk();
-
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([1, this._cacheRewardItem.m_icon_reward, (CommonSaveData.instance.signDayCount - 1) % 7]);
-        }
-
-        this.Hide();
-    }
-
-    private async _OnClickDoubleGet() {
+    async onVideoGet() {
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
-            CommonSaveData.instance.isSigned = true;
             CommonSaveData.instance.signDayCount++;
-            CommonSaveData.SaveToDisk();
-
-            if (this._openData.onClose) {
-                this._openData.onClose.runWith([2, this._cacheRewardItem.m_icon_reward, (CommonSaveData.instance.signDayCount - 1) % 7]);
+            CommonSaveData.instance.isSigned = true;
+            this.ui.m_isSigned.selectedIndex = 1;
+            this.ui.m_dayList.refreshVirtualList();
+            let rewd = this.todayData.type == 1 ? `${this.todayData.title}+${this.todayData.money}金币` : `${this.todayData.value + this.todayData.money}金币`;
+            LTUI.Toast(`恭喜获得 ${rewd}`);
+            if (this.todayData.type == 1) {
+                this.getSkin(this.todayData.value);
+                GameData.instance.coinCount += (this.todayData.money);
+                GameData.SaveToDisk();
+            } else {
+                GameData.instance.coinCount += (this.todayData.money + this.todayData.value);
+                GameData.SaveToDisk();
             }
-
+            CommonSaveData.SaveToDisk();
             this.Hide();
         } else {
             LTUI.Toast("跳过广告无法获得奖励");
         }
-
     }
-
-    private _OnClickClose() {
-
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith(0);
+    private getSkin(id: number) {
+        // CommonSaveData.instance.skinAdCount = 0;
+        if (this._openData) {
+            this._openData.onGetSkin(id);
         }
-
+    }
+    onNormalGet() {
+        if (this.todayData.type == 1) {
+            this.getSkin(this.todayData.value);
+        } else {
+            LTUI.Toast(`恭喜获得 ${this.todayData.money}金币`);
+            GameData.instance.coinCount += this.todayData.money;
+            GameData.SaveToDisk();
+        }
+        CommonSaveData.instance.signDayCount++;
+        CommonSaveData.instance.isSigned = true;
+        CommonSaveData.SaveToDisk();
         this.Hide();
+        // if (LTSDK.instance.checkState == ECheckState.InCheck) {
+        // }
+        // else {
+        //     this.onVideoGet();
+        // }
     }
-    _OnHide() {
-        LTPlatform.instance.HideBannerAd();
-    }
+    protected _OnHide() {
 
+    }
 }

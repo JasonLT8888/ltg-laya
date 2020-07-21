@@ -24,9 +24,10 @@
     "publish-tt": "node others/publish/bin/publish.js -p tt",
     "publish-qq": "node others/publish/bin/publish.js -p qq",
     "publish-oppo": "node others/publish/bin/publish.js -p oppo",
+    "publish-vivo": "node others/publish/bin/publish.js -p vivo",
     "publish-bd": "node others/publish/bin/publish.js -p bd",
     "update-ltg": "node others/publish/bin/update.js",
-    "test": "node others/publish/bin/test.js",
+    "test": "python others/publish/templates/tools/upadteAppIds.py",
     "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js oppogame/quickgame debug"
   },
   "author": "lt",

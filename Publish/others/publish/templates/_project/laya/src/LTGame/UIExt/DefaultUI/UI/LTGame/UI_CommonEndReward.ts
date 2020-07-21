@@ -12,6 +12,7 @@ export default class UI_CommonEndReward extends fgui.GComponent {
 	public m_text_add:fgui.GTextField;
 	public m___bottomgames:fgui.GGraph;
 	public m___nativeinpage:fgui.GGraph;
+	public m___endSG:fgui.GGraph;
 	public m_anim_enter:fgui.Transition;
 
 	public static URL:string = "ui://75kiu87kbg0019";
@@ -32,6 +33,7 @@ export default class UI_CommonEndReward extends fgui.GComponent {
 		this.m_text_add = <fgui.GTextField><any>(this.getChildAt(6));
 		this.m___bottomgames = <fgui.GGraph><any>(this.getChildAt(7));
 		this.m___nativeinpage = <fgui.GGraph><any>(this.getChildAt(8));
+		this.m___endSG = <fgui.GGraph><any>(this.getChildAt(9));
 		this.m_anim_enter = this.getTransitionAt(0);
 	}
 }

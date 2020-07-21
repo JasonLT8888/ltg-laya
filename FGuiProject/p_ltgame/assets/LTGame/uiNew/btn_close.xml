@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="84,100" extention="Button">
+  <displayList>
+    <image id="n13_ank9" name="n13" src="kj71a9" fileName="img/TrySkin/sp_anniubg0.png" xy="0,0"/>
+    <image id="n14_ank9" name="n14" src="kj71aa" fileName="img/TrySkin/sp_cha.png" xy="25,30"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

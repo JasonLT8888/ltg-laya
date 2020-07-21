@@ -18,7 +18,7 @@ export default class UI_view_item_game extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_icon = <UI_view_game_icon><any>(this.getChildAt(0));
-		this.m_text_name = <fgui.GTextField><any>(this.getChildAt(1));
+		this.m_icon = <UI_view_game_icon><any>(this.getChildAt(1));
+		this.m_text_name = <fgui.GTextField><any>(this.getChildAt(2));
 	}
 }

@@ -1,15 +1,17 @@
-import UI_splash from "../../ui/Load/UI_splash";
+import { ConfigManager } from "../../LTGame/Config/ConfigManager";
+import { ESceneType } from "../../LTGame/Start/ESceneType";
 import LTSplashScene from "../../LTGame/Start/LTSplashScene";
 import LoadBinder from "../../ui/Load/LoadBinder";
+import UI_splash from "../../ui/Load/UI_splash";
 import MainBinder from "../../ui/Main/MainBinder";
-import { ConfigManager } from "../../LTGame/Config/ConfigManager";
 import GlobalUnit from "../common/GlobalUnit";
 import { AudioConfig } from "../config/AudioConfig";
-import { ESceneType } from "../../LTGame/Start/ESceneType";
 import { EffectConfig } from "../config/EffectConfig";
+import { EggConfig } from "../config/EggConfig";
 import { GameConst } from "../config/GameConst";
-import { EffectManager } from "../manager/EffectManager";
 import { PackConst } from "../config/PackConst";
+import { SignConfig } from "../config/SignConfig";
+import { EffectManager } from "../manager/EffectManager";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -28,6 +30,8 @@ export default class SplashScene extends LTSplashScene {
         ConfigManager.AddConfig(EffectConfig);
         ConfigManager.AddConfig(GameConst);
         ConfigManager.AddConfig(PackConst);
+        ConfigManager.AddConfig(EggConfig);
+        ConfigManager.AddConfig(SignConfig); 
     }
 
     _OnGameResPrepared(urls: string[]) {

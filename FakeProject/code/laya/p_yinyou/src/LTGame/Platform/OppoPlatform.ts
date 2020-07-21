@@ -83,7 +83,7 @@ export default class OppoPlatform extends WXPlatform {
                     console.log("oppo广告", "初始化广告服务成功", platformData);
                     // 不提前进行预加载
                     // this._CreateBannerAd();
-                    // this._CreateVideoAd();
+                      this._CreateVideoAd();
                     // this._CreateInterstitalAd();
                     // this.intersitialAd = new NativeADUnit(platformData.interstitialId);
                     // this.iconNative = new NativeADUnit(platformData.nativeId);

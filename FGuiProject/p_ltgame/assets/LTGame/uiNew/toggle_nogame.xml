@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="76,29" extention="Button">
+  <controller name="select" exported="true" pages="0,,1," selected="1"/>
+  <controller name="type" exported="true" pages="0,double,1,single" selected="1"/>
+  <displayList>
+    <graph id="n3_ctbz" name="n3" xy="-6,-5" size="40,40" type="rect" lineSize="0" fillColor="#03ffffff"/>
+    <image id="n0_xoi5" name="n0" src="kj71a3" fileName="img/TrySkin/sp_dian0.png" xy="0,0" size="29,29">
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </image>
+    <image id="n1_xoi5" name="n1" src="kj71a4" fileName="img/TrySkin/sp_diandian.png" xy="0,0" size="29,29">
+      <gearDisplay controller="select" pages="1"/>
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </image>
+    <text id="n2_xoi5" name="title" xy="38,15" pivot="0.5,0.5" anchor="true" size="10,21" font="DengXian" fontSize="16" color="#ffffff" vAlign="middle" singleLine="true" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <image id="n4_t6jo" name="n4" src="kj71a3" fileName="img/TrySkin/sp_dian0.png" xy="47,0" size="29,29">
+      <gearDisplay controller="type" pages="0"/>
+      <relation target="" sidePair="middle-middle,right-right"/>
+    </image>
+    <image id="n5_t6jo" name="n5" src="kj71a4" fileName="img/TrySkin/sp_diandian.png" xy="47,0" size="29,29">
+      <gearDisplay controller="select" pages="1"/>
+      <gearDisplay2 controller="type" pages="0" condition="0"/>
+      <relation target="" sidePair="middle-middle,right-right"/>
+    </image>
+  </displayList>
+  <Button mode="Radio"/>
+  <relation target="n2_xoi5" sidePair="width-width"/>
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,300" opaque="false">
+  <displayList>
+    <list id="n1_r3yg" name="list" xy="0,0" size="750,300" layout="flow_hz" overflow="scroll" lineGap="20" colGap="530" lineItemCount="2" defaultItem="ui://75kiu87kr3yg7i" align="center" vAlign="middle">
+      <relation target="" sidePair="width-width,height-height"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

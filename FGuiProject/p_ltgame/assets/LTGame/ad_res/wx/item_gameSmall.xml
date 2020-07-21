@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="100,130" pivot="0.5,0.5">
+  <displayList>
+    <graph id="n9_r3yg" name="n9" xy="0,0" size="100,130" type="rect" lineSize="0" corner="8">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n10_r3yg" name="icon" src="r3yg7g" fileName="ad_res/GameIconF.xml" xy="50,50" pivot="0.5,0.5" anchor="true" size="96,96"/>
+    <text id="n11_r3yg" name="title" xy="51,117" pivot="0.5,0.5" anchor="true" size="69,21" font="DengXian" fontSize="16" align="center" vAlign="middle" bold="true" text="带我上车"/>
+    <image id="n12_r3yg" name="red" src="r3yg7a" fileName="ad_res/wx/红点大@2x.png" xy="82,-2" size="20,20" aspect="true"/>
+  </displayList>
+  <transition name="shake">
+    <item time="0" type="Rotation" tween="true" startValue="0" endValue="10" duration="3" ease="Bounce.InOut"/>
+    <item time="3" type="Rotation" tween="true" startValue="10" endValue="0" duration="3"/>
+    <item time="6" type="Rotation" tween="true" startValue="0" endValue="-10" duration="3"/>
+    <item time="9" type="Rotation" tween="true" startValue="-10" endValue="0" duration="3"/>
+  </transition>
+</component>

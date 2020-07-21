@@ -6,6 +6,8 @@ import LTPlatform from "../../../Platform/LTPlatform";
 import { OppoAdData } from "../../../Platform/OppoPlatform";
 import UI_NativeIconLong from "../UI/LTGame/UI_NativeIconLong";
 import { randomRangeInt } from "../../../LTUtils/LTUtils";
+import MathEx from "../../../LTUtils/MathEx";
+import LTUI from "../../LTUI";
 
 export class View_NativeIconLong {
     static CreateView(tagUI: fgui.GComponent): View_NativeIconLong {
@@ -67,17 +69,24 @@ export class View_NativeIconLong {
 
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
-        this.ui.m_btn_close.onClick(this, this.clickClose) 
+        this.ui.m_btn_close.onClick(this, this.clickClose)
     }
 
     public ClickAd() {
         console.log("点击Icon", this._cacheAdData);
-        // 相应点击事件
-        View_NativeIconLong._cacheNativeAd.reportAdClick({
-            adId: this._cacheAdData.adId
-        });
-        // 刷新
-        this._Init();
+
+        if (this._cacheAdData) {
+            // 相应点击事件
+            View_NativeIconLong._cacheNativeAd.reportAdClick({
+                adId: this._cacheAdData.adId
+            });
+            // 刷新
+            this._Init();
+        } else {
+            this.ui.visible = false;
+            LTUI.Toast('暂时没有广告');
+        }
+
     }
     clickClose() {
         let rate = randomRangeInt(0, 100);
@@ -93,26 +102,30 @@ export class View_NativeIconLong {
             View_NativeIconLong._cacheNativeAd.destroy();
             View_NativeIconLong._cacheNativeAd = null;
         }
-        for (let i = 0; i < this._cacheIds.length; ++i) {
-            let ret = await this._LoadIconData(i);
-            if (ret) {
-                let icon = this._cacheAdData.icon;
-                if (!icon) {
-                    icon = this._cacheAdData.imgUrlList[0];
-                }
-                this.ui.m_ad.m_icon.url = icon;
-                this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
-                this.ui.m_ad.m_title.text = this._cacheAdData.title;
-                this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
-                View_NativeIconLong._cacheNativeAd.reportAdShow({
-                    adId: this._cacheAdData.adId
-                });
-                console.log("原生icon广告已展示", this._cacheAdData);
-                return;
-            }
-        }
         this.visible = false;
         this.ui.visible = false;
+        let i = MathEx.RandomInt(0, this._cacheIds.length);
+        // for (let i = 0; i < this._cacheIds.length; ++i) {
+        let ret = await this._LoadIconData(i);
+        if (ret && this._cacheAdData) {
+            this.visible = true;
+            this.ui.visible = true;
+            let icon = this._cacheAdData.icon;
+            if (!icon && this._cacheAdData.imgUrlList.length) {
+                icon = this._cacheAdData.imgUrlList[0];
+            }
+            this.ui.m_ad.m_icon.url = icon;
+            this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
+            this.ui.m_ad.m_title.text = this._cacheAdData.title;
+            this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+            View_NativeIconLong._cacheNativeAd.reportAdShow({
+                adId: this._cacheAdData.adId
+            });
+            console.log("原生icon广告已展示", this._cacheAdData);
+            return;
+        }
+        // }
+
     }
 
     private _OnClickAd() {

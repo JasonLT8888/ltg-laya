@@ -6,6 +6,7 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 import MathEx from "../../../LTUtils/MathEx";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import { ECheckState } from "../../../../SDK/common/ECheckState";
+import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
 
 export default class View_HotGame {
 
@@ -59,8 +60,8 @@ export default class View_HotGame {
     private _posId: number = 0;
 
     private _Init() {
-        if (LTPlatform.instance.platform == EPlatformType.WX) {
-            this._posId = 41;
+        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
+            this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
@@ -101,6 +102,11 @@ export default class View_HotGame {
         }
         this.ui.m_ic.m_icon.url = this._showAd.ad_img;
         this._remainUpdateTime = this._updateTime;
+        let ad: any = {};
+        ad.ad_id = this._showAd.ad_id;
+        ad.location_id = this._posId;
+        ad.num = 1;
+        LTSDK.instance.ReportShowAd([ad]);
     }
 
     private _OnClickAD() {
@@ -113,7 +119,7 @@ export default class View_HotGame {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(uid);
+        LTPlatform.instance.NavigateToApp(uid, this._showAd.ad_path, null, true, false, this._showAd.ad_id);
         this._UpdateUI();
     }
 

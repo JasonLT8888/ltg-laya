@@ -211,6 +211,164 @@
     <image id="r1gt71" name="btn_huang.png" path="/ad_res/res/"/>
     <image id="r1gt72" name="sp_gengduo.png" path="/ad_res/res/"/>
     <image id="r1gt73" name="sp_tips.png" path="/ad_res/res/"/>
+    <component id="r3yg74" name="SelfBanner.xml" path="/ad_res/wx/" exported="true"/>
+    <component id="r3yg75" name="GameCenter.xml" path="/ad_res/wx/" exported="true"/>
+    <image id="r3yg76" name="未命名_第二盒子2.png" path="/ad_res/wx/"/>
+    <image id="r3yg77" name="游戏中心@2x.png" path="/ad_res/wx/"/>
+    <image id="r3yg78" name="热门推荐@2x.png" path="/ad_res/wx/"/>
+    <image id="r3yg79" name="好友热玩@2x.png" path="/ad_res/wx/"/>
+    <image id="r3yg7a" name="红点大@2x.png" path="/ad_res/wx/"/>
+    <component id="r3yg7b" name="item_game.xml" path="/ad_res/wx/"/>
+    <image id="r3yg7c" name="bg1@2x.png" path="/ad_res/wx/"/>
+    <component id="r3yg7d" name="item_gameBig.xml" path="/ad_res/wx/"/>
+    <image id="r3yg7e" name="img_3.png" path="/ad_res/wx/"/>
+    <image id="r3yg7f" name="img_return.png" path="/ad_res/wx/"/>
+    <component id="r3yg7g" name="GameIconF.xml" path="/ad_res/"/>
+    <component id="r3yg7h" name="WxSideGames.xml" path="/ad_res/wx/" exported="true"/>
+    <component id="r3yg7i" name="item_gameSmall.xml" path="/ad_res/wx/"/>
+    <component id="kj717j" name="CommonSign2.xml" path="/ui/" exported="true"/>
+    <image id="kj717k" name="sp_diban.png" path="/uiNew/签到界面/" scale="9grid" scale9grid="54,57,25,31"/>
+    <image id="kj717l" name="sp_diban1.png" path="/uiNew/签到界面/"/>
+    <component id="kj717m" name="btn_sign.xml" path="/uiNew/签到界面/"/>
+    <image id="kj717n" name="btn_lingqu.png" path="/uiNew/签到界面/"/>
+    <image id="kj717o" name="sp_haiyap.png" path="/uiNew/签到界面/"/>
+    <image id="kj717p" name="sp_ship.png" path="/uiNew/签到界面/"/>
+    <component id="kj717q" name="btn_normal0.xml" path="/uiNew/comp/"/>
+    <image id="kj717r" name="sp_xiaoshipin.png" path="/uiNew/"/>
+    <image id="kj717s" name="btn_guanbi.png" path="/uiNew/签到界面/"/>
+    <component id="kj717t" name="SignItem.xml" path="/uiNew/comp/"/>
+    <image id="kj717u" name="sp_kuang2.png" path="/uiNew/签到界面/"/>
+    <image id="kj717v" name="sp_kuang3.png" path="/uiNew/签到界面/"/>
+    <image id="kj717w" name="sp_kuang1.png" path="/uiNew/签到界面/"/>
+    <image id="kj717x" name="sp_di7.png" path="/uiNew/签到界面/"/>
+    <image id="kj717y" name="sp_ylingqu.png" path="/uiNew/签到界面/"/>
+    <image id="kj717z" name="sp_keling1.png" path="/uiNew/签到界面/"/>
+    <image id="kj7180" name="sp_keling.png" path="/uiNew/签到界面/"/>
+    <image id="kj7181" name="sp_yifeichongtian.png" path="/uiNew/签到界面/"/>
+    <image id="kj7182" name="sp_yiling.png" path="/uiNew/签到界面/"/>
+    <image id="kj7183" name="sp_leiji.png" path="/uiNew/签到界面/"/>
+    <component id="kj7184" name="ExSkin.xml" path="/ui/" exported="true"/>
+    <image id="kj7185" name="sp_bgguang.png" path="/uiNew/share/"/>
+    <component id="kj7186" name="btn_twoIcon.xml" path="/uiNew/comp/"/>
+    <image id="kj7187" name="btn_lvad.png" path="/uiNew/ExSkin/" scale="9grid" scale9grid="72,0,142,120"/>
+    <image id="kj7188" name="sp_shipin.png" path="/uiNew/ExSkin/"/>
+    <component id="kj7189" name="tog_progress.xml" path="/uiNew/comp/"/>
+    <image id="kj718a" name="sp_juxing.png" path="/uiNew/ExSkin/"/>
+    <image id="kj718b" name="sp_juxing1.png" path="/uiNew/ExSkin/"/>
+    <image id="kj718c" name="sp_biaoti.png" path="/uiNew/ExSkin/"/>
+    <image id="kj718d" name="sp_tuichu.png" path="/uiNew/ExSkin/"/>
+    <component id="kj718e" name="btn_normal1.xml" path="/uiNew/comp/"/>
+    <image id="kj718f" name="btn_annniulv.png" path="/uiNew/newRank/" scale="9grid" scale9grid="34,30,68,60"/>
+    <component id="kj718g" name="BonusBox.xml" path="/ui/" exported="true"/>
+    <image id="kj718h" name="bglan.png" path="/uiNew/gift/" scale="9grid" scale9grid="5,5,10,10"/>
+    <image id="kj718i" name="sp_xuanzhuangguang.png" path="/uiNew/gift/"/>
+    <image id="kj718j" name="sp_baoxiangbg.png" path="/uiNew/gift/" scale="9grid" scale9grid="61,65,122,130"/>
+    <component id="kj718k" name="item_gift.xml" path="/uiNew/"/>
+    <image id="kj718l" name="sp_baobg2.png" path="/uiNew/gift/" scale="9grid" scale9grid="28,25,56,50"/>
+    <image id="kj718m" name="sp_baoxiang.png" path="/uiNew/gift/"/>
+    <image id="kj718n" name="sp_baoxiangsuo.png" path="/uiNew/gift/"/>
+    <image id="kj718o" name="sp_shipinsuo.png" path="/uiNew/gift/"/>
+    <image id="kj718p" name="gem.png" path="/uiNew/gift/"/>
+    <component id="kj718q" name="btn_giftClose.xml" path="/uiNew/"/>
+    <image id="kj718r" name="brn_guanbi.png" path="/uiNew/gift/"/>
+    <component id="kj718s" name="btn_watch.xml" path="/uiNew/"/>
+    <image id="kj718t" name="sp_zaikaiyici.png" path="/uiNew/gift/"/>
+    <image id="kj718u" name="sp_biaoti00.png" path="/uiNew/TrySkin/" scale="9grid" scale9grid="70,25,140,50"/>
+    <image id="kj718v" name="sp_xuanzesangeliwu.png" path="/uiNew/gift/"/>
+    <component id="kj718w" name="btn_trySkinNo.xml" path="/uiNew/"/>
+    <image id="kj718x" name="选择礼物.jpg" path="/uiNew/gift/"/>
+    <component id="kj718y" name="Roll.xml" path="/ui/"/>
+    <image id="kj718z" name="sp_beijing.png" path="/uiNew/roll/" scale="9grid" scale9grid="80,80,160,160"/>
+    <component id="kj7190" name="view_roll_bg_new.xml" path="/uiNew/"/>
+    <image id="kj7191" name="sp_zhuanpan.png" path="/uiNew/roll/"/>
+    <component id="kj7192" name="item_roll.xml" path="/uiNew/"/>
+    <image id="kj7193" name="18.png" path="/uiNew/wing/"/>
+    <image id="kj7194" name="sp_zhizhen.png" path="/uiNew/roll/"/>
+    <component id="kj7195" name="btn_rollClose.xml" path="/uiNew/"/>
+    <image id="kj7196" name="sp_fanhui.png" path="/uiNew/roll/"/>
+    <component id="kj7197" name="btn_roll.xml" path="/uiNew/"/>
+    <image id="kj7198" name="btn_h.png" path="/uiNew/roll/" scale="9grid" scale9grid="29,26,58,52"/>
+    <image id="kj7199" name="sp_sp7.png" path="/uiNew/roll/"/>
+    <image id="kj719a" name="sp_choujiang.png" path="/uiNew/roll/"/>
+    <component id="kj719b" name="player.xml" path="/uiNew/"/>
+    <image id="kj719c" name="sp_jinbilan.png" path="/uiNew/main/"/>
+    <image id="kj719d" name="sp_zuanshi.png" path="/uiNew/main/"/>
+    <component id="kj719e" name="progress_roll.xml" path="/uiNew/"/>
+    <image id="kj719f" name="sp_juxing.png" path="/uiNew/roll/"/>
+    <image id="kj719g" name="sp_juxing1.png" path="/uiNew/roll/"/>
+    <component id="kj719h" name="btn_rollReward.xml" path="/uiNew/"/>
+    <image id="kj719i" name="icon_box.png" path="/uiNew/roll/"/>
+    <image id="kj719j" name="sp_guanggao.png" path="/uiNew/roll/"/>
+    <font id="kj719k" name="roll_font.fnt" path="/uiNew/roll/" exported="true"/>
+    <image id="kj719l" name="sp_0.png" path="/uiNew/roll/"/>
+    <image id="kj719m" name="sp_1.png" path="/uiNew/roll/"/>
+    <image id="kj719n" name="sp_2.png" path="/uiNew/roll/"/>
+    <image id="kj719o" name="sp_3.png" path="/uiNew/roll/"/>
+    <image id="kj719p" name="sp_4.png" path="/uiNew/roll/"/>
+    <image id="kj719q" name="sp_5.png" path="/uiNew/roll/"/>
+    <image id="kj719r" name="sp_6.png" path="/uiNew/roll/"/>
+    <image id="kj719s" name="sp_7.png" path="/uiNew/roll/"/>
+    <image id="kj719t" name="sp_8.png" path="/uiNew/roll/"/>
+    <image id="kj719u" name="sp_9.png" path="/uiNew/roll/"/>
+    <image id="kj719v" name="效果图.jpg" path="/uiNew/roll/"/>
+    <component id="kj719w" name="TrySkin.xml" path="/ui/" exported="true"/>
+    <image id="kj719x" name="bg0.png" path="/uiNew/TrySkin/" scale="9grid" scale9grid="6,6,12,12"/>
+    <component id="kj719y" name="haro.xml" path="/uiNew/"/>
+    <image id="kj719z" name="sp_guang00.png" path="/uiNew/TrySkin/"/>
+    <image id="kj71a0" name="sp_mianfeishiyong.png" path="/uiNew/TrySkin/"/>
+    <image id="kj71a1" name="12.png" path="/uiNew/wing/"/>
+    <component id="kj71a2" name="toggle_nogame.xml" path="/uiNew/"/>
+    <image id="kj71a3" name="sp_dian0.png" path="/uiNew/TrySkin/"/>
+    <image id="kj71a4" name="sp_diandian.png" path="/uiNew/TrySkin/"/>
+    <component id="kj71a5" name="btn_trySkinWatch.xml" path="/uiNew/"/>
+    <image id="kj71a6" name="btn_anniuhuang.png" path="/uiNew/TrySkin/" scale="9grid" scale9grid="49,28,98,56"/>
+    <image id="kj71a7" name="sp_shipin.png" path="/uiNew/TrySkin/"/>
+    <component id="kj71a8" name="btn_close.xml" path="/uiNew/"/>
+    <image id="kj71a9" name="sp_anniubg0.png" path="/uiNew/TrySkin/"/>
+    <image id="kj71aa" name="sp_cha.png" path="/uiNew/TrySkin/"/>
+    <image id="kj71ab" name="btn_shiyoing.png" path="/uiNew/"/>
+    <image id="kj71ac" name="免费试用.jpg" path="/uiNew/TrySkin/"/>
+    <component id="i816ad" name="NativeInPageOld.xml" path="/ad_res/native/"/>
+    <component id="i816ae" name="End3X3Ad.xml" path="/ad_res/" exported="true"/>
+    <image id="9vu5af" name="热门游戏.png" path="/img/"/>
+    <component id="9vu5ag" name="OpenAds.xml" path="/cache/" exported="true"/>
+    <image id="9vu5ah" name="热门游戏2.png" path="/img/" scale="9grid" scale9grid="70,138,616,52"/>
+    <component id="dywvai" name="CommonGameEgg.xml" path="/ui/" exported="true"/>
+    <image id="dywvaj" name="sp_sikai.png" path="/img/GameEgg/font/"/>
+    <image id="dywvak" name="sp_miyu.png" path="/img/GameEgg/font/"/>
+    <image id="dywval" name="sp_kaka.png" path="/img/GameEgg/font/"/>
+    <image id="dywvam" name="sp_huode.png" path="/img/GameEgg/font/"/>
+    <image id="dywvan" name="sp_bofang.png" path="/img/GameEgg/font/"/>
+    <image id="dywvao" name="sp_anhao.png" path="/img/GameEgg/font/"/>
+    <image id="dywvap" name="sp_wenhao.png" path="/img/GameEgg/"/>
+    <image id="dywvaq" name="sp_suo (3).png" path="/img/GameEgg/"/>
+    <image id="dywvar" name="sp_suo (2).png" path="/img/GameEgg/"/>
+    <image id="dywvas" name="sp_suo (1).png" path="/img/GameEgg/"/>
+    <image id="dywvat" name="sp_miyulan.png" path="/img/GameEgg/"/>
+    <image id="dywvau" name="sp_miyu.png" path="/img/GameEgg/" scale="9grid" scale9grid="0,18,258,11"/>
+    <image id="dywvav" name="sp_biaoti.png" path="/img/GameEgg/"/>
+    <image id="dywvaw" name="sp_bg.png" path="/img/GameEgg/"/>
+    <image id="dywvax" name="btn_tuichu.png" path="/img/GameEgg/"/>
+    <image id="dywvay" name="sp_xuanzhong.png" path="/img/GameEgg/"/>
+    <image id="dywvaz" name="sp_wupingkuang.png" path="/img/GameEgg/"/>
+    <image id="dywvb0" name="示意图.png" path="/img/GameEgg/"/>
+    <component id="dywvb1" name="btn_simple.xml" path="/cmp/"/>
+    <component id="dywvb2" name="info.xml" path="/img/GameEgg/"/>
+    <component id="dywvb3" name="btn_getegg.xml" path="/img/GameEgg/"/>
+    <image id="dywvb4" name="sp_zhuangshi.png" path="/img/GameEgg/"/>
+    <component id="dywvb6" name="eggItem.xml" path="/img/GameEgg/"/>
+    <component id="dywvb8" name="eggIcon.xml" path="/img/GameEgg/"/>
+    <image id="dywvb9" name="sp_biaoti.png" path="/img/Qualified/"/>
+    <image id="dywvba" name="btn_lv.png" path="/uiNew/comp/" scale="9grid" scale9grid="57,0,42,120"/>
+    <image id="dywvbb" name="sp_shipin0.png" path="/img/"/>
+    <image id="dywvbc" name="btn_anniufen.png" path="/uiNew/gift/" scale="9grid" scale9grid="42,0,42,104"/>
+    <component id="pknzbd" name="BonusItem.xml" path="/cmp/"/>
+    <image id="pknzbe" name="sp_kuang1.png" path="/imgNew/sign/" scale="9grid" scale9grid="40,47,80,86"/>
+    <image id="pknzbf" name="sp_baoxiang.png" path="/imgNew/bunus/"/>
+    <image id="pknzbg" name="sp_shipin.png" path="/imgNew/bunus/"/>
+    <component id="pknzbh" name="tog_key.xml" path="/cmp/"/>
+    <image id="pknzbi" name="sp_yaoshi1.png" path="/imgNew/bunus/"/>
+    <image id="pknzbj" name="sp_yaoshi.png" path="/imgNew/bunus/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
