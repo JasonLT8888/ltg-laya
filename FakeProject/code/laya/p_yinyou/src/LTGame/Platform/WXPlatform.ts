@@ -17,7 +17,7 @@ import { UI_GameCenterMediator } from "../UIExt/DefaultUI/UI_GameCenterMediator"
 import GlobalUnit from "../../script/common/GlobalUnit";
 import LTSDK from "../../SDK/LTSDK";
 
-export default class WXPlatform implements IPlatform {
+export default class WXPlatform implements IPlatform { 
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -663,6 +663,9 @@ export default class WXPlatform implements IPlatform {
                 complete: () => { }
             });
         })
+    }  
+    createShortcut() {
+       console.log('暂未实现');
     }
 
 }

@@ -16,6 +16,7 @@ export default class UI_MoudleDemoMediator extends BaseUIMediator<UI_MoudleDemo>
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
+        console.log(this.ui.m___wxSG);
     }
 
     private _OnClickBack() {

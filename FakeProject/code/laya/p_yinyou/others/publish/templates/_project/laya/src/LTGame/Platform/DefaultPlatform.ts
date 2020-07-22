@@ -13,12 +13,6 @@ import DefaultDevice from "./DefaultDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 
 export default class DefaultPlatform implements IPlatform {
-    GetStorage(key: string) {
-        
-    }
-    SetStorage(key: string, data: any): void {
-        
-    }
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -124,5 +118,17 @@ export default class DefaultPlatform implements IPlatform {
             // 这里使用resolve
             resolve(false);
         });
+    }
+    createShortcut() {
+        console.log('创建桌面图标');
+    }
+    GetStorage(key: string) {
+        console.log('读本地存储');
+        return Laya.LocalStorage.getItem(key);
+    }
+    SetStorage(key: string, data: any): void {
+        console.log('写本地存储');
+        Laya.LocalStorage.setItem(key, data);
+
     }
 }

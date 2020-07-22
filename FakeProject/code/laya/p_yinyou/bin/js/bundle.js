@@ -2682,10 +2682,6 @@ class DefaultPlatform {
          */
         this.isSupportJumpOther = true;
     }
-    GetStorage(key) {
-    }
-    SetStorage(key, data) {
-    }
     Init(platformData) {
         this.loginState = {
             isLogin: false,
@@ -2765,6 +2761,17 @@ class DefaultPlatform {
             // 这里使用resolve
             resolve(false);
         });
+    }
+    createShortcut() {
+        console.log('创建桌面图标');
+    }
+    GetStorage(key) {
+        console.log('读本地存储');
+        return Laya.LocalStorage.getItem(key);
+    }
+    SetStorage(key, data) {
+        console.log('写本地存储');
+        Laya.LocalStorage.setItem(key, data);
     }
 }
 
@@ -3377,7 +3384,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
                     console.log("oppo广告", "初始化广告服务成功", platformData);
                     // 不提前进行预加载
                     // this._CreateBannerAd();
-                    // this._CreateVideoAd();
+                    this._CreateVideoAd();
                     // this._CreateInterstitalAd();
                     // this.intersitialAd = new NativeADUnit(platformData.interstitialId);
                     // this.iconNative = new NativeADUnit(platformData.nativeId);
@@ -3751,9 +3758,10 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         this._rewardVideo.onLoad((res) => {
             console.log("广告加载成功", res);
             _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].HideLoading();
+        });
+        this._rewardVideo.load().then(() => {
             this._rewardVideo.show();
         });
-        this._rewardVideo.load();
     }
     ShowRewardVideoAd(onSuccess, onSkipped) {
         if (this._cacheVideoAD) {
@@ -5292,6 +5300,9 @@ class WXPlatform {
             });
         });
     }
+    createShortcut() {
+        console.log('暂未实现');
+    }
 }
 
 
@@ -6381,6 +6392,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _UI_LTGame_UI_NativeIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UI/LTGame/UI_NativeIcon */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeIcon.ts");
 /* harmony import */ var _LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+
+
 
 
 
@@ -6441,12 +6456,18 @@ class View_NativeIcon {
     }
     ClickAd() {
         console.log("点击Icon", this._cacheAdData);
-        // 相应点击事件
-        View_NativeIcon._cacheNativeAd.reportAdClick({
-            adId: this._cacheAdData.adId
-        });
-        // 刷新
-        this._Init();
+        if (this._cacheAdData) {
+            // 相应点击事件
+            View_NativeIcon._cacheNativeAd.reportAdClick({
+                adId: this._cacheAdData.adId
+            });
+            // 刷新
+            this._Init();
+        }
+        else {
+            this.ui.visible = false;
+            _LTUI__WEBPACK_IMPORTED_MODULE_8__["default"].Toast('暂时没有广告');
+        }
     }
     _Init() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -6456,26 +6477,27 @@ class View_NativeIcon {
             }
             this.visible = false;
             this.ui.visible = false;
-            for (let i = 0; i < this._cacheIds.length; ++i) {
-                let ret = yield this._LoadIconData(i);
-                if (ret) {
-                    this.visible = true;
-                    this.ui.visible = true;
-                    let icon = this._cacheAdData.icon;
-                    if (!icon) {
-                        icon = this._cacheAdData.imgUrlList[0];
-                    }
-                    this.ui.m_icon_img.url = icon;
-                    this.ui.m_icon_tip.url = this._cacheAdData.logoUrl;
-                    // this.ui.m_title.text = this._cacheAdData.title;
-                    // this.ui.m_desc.text = this._cacheAdData.desc;
-                    View_NativeIcon._cacheNativeAd.reportAdShow({
-                        adId: this._cacheAdData.adId
-                    });
-                    console.log("原生icon广告已展示", this._cacheAdData);
-                    return;
+            let i = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__["default"].RandomInt(0, this._cacheIds.length);
+            // for (let i = 0; i < this._cacheIds.length; ++i) {
+            let ret = yield this._LoadIconData(i);
+            if (ret && this._cacheAdData) {
+                this.visible = true;
+                this.ui.visible = true;
+                let icon = this._cacheAdData.icon;
+                if (!icon && this._cacheAdData.imgUrlList.length) {
+                    icon = this._cacheAdData.imgUrlList[0];
                 }
+                this.ui.m_icon_img.url = icon;
+                this.ui.m_icon_tip.url = this._cacheAdData.logoUrl;
+                // this.ui.m_title.text = this._cacheAdData.title;
+                // this.ui.m_desc.text = this._cacheAdData.desc;
+                View_NativeIcon._cacheNativeAd.reportAdShow({
+                    adId: this._cacheAdData.adId
+                });
+                console.log("原生icon广告已展示", this._cacheAdData);
+                return;
             }
+            // }
         });
     }
     _OnClickAd() {
@@ -6540,6 +6562,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _UI_LTGame_UI_NativeIconLong__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UI/LTGame/UI_NativeIconLong */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeIconLong.ts");
 /* harmony import */ var _LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+
+
 
 
 
@@ -6602,12 +6628,18 @@ class View_NativeIconLong {
     }
     ClickAd() {
         console.log("点击Icon", this._cacheAdData);
-        // 相应点击事件
-        View_NativeIconLong._cacheNativeAd.reportAdClick({
-            adId: this._cacheAdData.adId
-        });
-        // 刷新
-        this._Init();
+        if (this._cacheAdData) {
+            // 相应点击事件
+            View_NativeIconLong._cacheNativeAd.reportAdClick({
+                adId: this._cacheAdData.adId
+            });
+            // 刷新
+            this._Init();
+        }
+        else {
+            this.ui.visible = false;
+            _LTUI__WEBPACK_IMPORTED_MODULE_8__["default"].Toast('暂时没有广告');
+        }
     }
     clickClose() {
         let rate = Object(_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_6__["randomRangeInt"])(0, 100);
@@ -6625,26 +6657,27 @@ class View_NativeIconLong {
             }
             this.visible = false;
             this.ui.visible = false;
-            for (let i = 0; i < this._cacheIds.length; ++i) {
-                let ret = yield this._LoadIconData(i);
-                if (ret) {
-                    this.visible = true;
-                    this.ui.visible = true;
-                    let icon = this._cacheAdData.icon;
-                    if (!icon) {
-                        icon = this._cacheAdData.imgUrlList[0];
-                    }
-                    this.ui.m_ad.m_icon.url = icon;
-                    this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
-                    this.ui.m_ad.m_title.text = this._cacheAdData.title;
-                    this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
-                    View_NativeIconLong._cacheNativeAd.reportAdShow({
-                        adId: this._cacheAdData.adId
-                    });
-                    console.log("原生icon广告已展示", this._cacheAdData);
-                    return;
+            let i = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_7__["default"].RandomInt(0, this._cacheIds.length);
+            // for (let i = 0; i < this._cacheIds.length; ++i) {
+            let ret = yield this._LoadIconData(i);
+            if (ret && this._cacheAdData) {
+                this.visible = true;
+                this.ui.visible = true;
+                let icon = this._cacheAdData.icon;
+                if (!icon && this._cacheAdData.imgUrlList.length) {
+                    icon = this._cacheAdData.imgUrlList[0];
                 }
+                this.ui.m_ad.m_icon.url = icon;
+                this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
+                this.ui.m_ad.m_title.text = this._cacheAdData.title;
+                this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+                View_NativeIconLong._cacheNativeAd.reportAdShow({
+                    adId: this._cacheAdData.adId
+                });
+                console.log("原生icon广告已展示", this._cacheAdData);
+                return;
             }
+            // }
         });
     }
     _OnClickAd() {
@@ -6783,13 +6816,15 @@ class View_NativeInPage {
             // for (let i = 0; i < this._cacheIds.length; ++i) {
             let i = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].RandomInt(0, this._cacheIds.length);
             let ret = yield this._LoadIconData(i);
-            if (ret) {
+            if (ret && this._cacheAdData) {
                 this.visible = true;
                 this.ui.visible = true;
-                this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
+                if (this._cacheAdData.imgUrlList.length) {
+                    this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
+                    this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
+                }
                 this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
                 this.ui.m_ad.m_title.text = this._cacheAdData.title;
-                this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];
                 this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
                 View_NativeInPage._cacheNativeAd.reportAdShow({
                     adId: this._cacheAdData.adId
@@ -7154,14 +7189,14 @@ class View_WxSideGames {
             this.ui.visible = false;
         }
         else {
-            this.ui.m_list.setVirtual();
-            this.ui.m_list.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
-            this.ui.m_list.numItems = 4;
-            this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
             Laya.timer.loop(5000, this, () => {
                 this.refresh();
             });
             this.refresh();
+            for (let i = 0; i < this.showingIndexs.length; i++) {
+                this.renderItem(i, this.ui[`m_ad${i}`]);
+                this.ui[`m_ad${i}`].onClick(this, () => this.clickItem(i));
+            }
             let ads = [];
             this._cacheAds.forEach(adData => {
                 let ad = {};
@@ -7174,43 +7209,44 @@ class View_WxSideGames {
         }
     }
     refresh() {
-        const first = this.showingIndexs[this.showingIndexs.length - 1];
-        this.showingIndexs = [];
-        for (let i = 0; i < 4; i++) {
-            let ind = (first + i) % this._cacheAds.length;
-            this.showingIndexs.push(ind);
+        if (this.ui && !this.ui.isDisposed) {
+            this.ui.visible = true;
+            console.log('wxsg 刷新');
+            const first = this.showingIndexs[this.showingIndexs.length - 1];
+            this.showingIndexs = [];
+            for (let i = 0; i < 4; i++) {
+                let ind = (first + i) % this._cacheAds.length;
+                this.showingIndexs.push(ind);
+                this.renderItem(i, this.ui[`m_ad${i}`]);
+            }
         }
-        this.ui.m_list.numItems = 4;
-        this.ui.m_list.refreshVirtualList();
+        else {
+            Laya.timer.clearAll(this);
+        }
     }
     _OnAdInited(posId) {
         if (posId != this._posId)
             return;
         this._cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_0__["default"].instance.adManager.GetADListByLocationId(this._posId);
-        this.ui.m_list.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
-        this.ui.m_list.numItems = this._cacheAds.length;
-        this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
+        // this.ui.m_list.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
+        // this.ui.m_list.numItems = this._cacheAds.length;
+        // this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
         this.ui.visible = true;
     }
-    clickItem(item) {
-        let uid = item.data['id'];
-        let path = item.data['path'];
-        let adid = item.data['adid'];
-        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.NavigateToApp(uid, path, null, true, false, adid);
+    clickItem(index) {
+        let data = this._cacheAds[this.showingIndexs[index]];
+        ;
+        console.log(data.ad_name);
+        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.NavigateToApp(data.ad_appid, data.ad_path, null, true, false, data.ad_id);
     }
     renderItem(index, item) {
         let ind = this.showingIndexs[index];
         let data = this._cacheAds[ind];
-        let info = {
-            id: data.ad_appid,
-            path: data.ad_path,
-            adid: data.ad_id
-        };
-        item.data = info;
         item.m_title.text = data.ad_name;
         item.m_icon.m_icon.url = data.ad_img;
         item.m_red.visible = data.ad_dot == 1;
         item.m_shake.play();
+        // item.onClick(item, () => this.clickItem(index));
         // let ad: any = {};
         // ad.ad_id = data.ad_id;
         // ad.location_id = 5;
@@ -9242,7 +9278,10 @@ class UI_WxSideGames extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTGame", "WxSideGames"));
     }
     onConstruct() {
-        this.m_list = (this.getChildAt(0));
+        this.m_ad0 = (this.getChildAt(0));
+        this.m_ad1 = (this.getChildAt(1));
+        this.m_ad2 = (this.getChildAt(2));
+        this.m_ad3 = (this.getChildAt(3));
     }
 }
 UI_WxSideGames.URL = "ui://75kiu87kr3yg7h";
@@ -14683,7 +14722,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
     _HandleSDK() {
         switch (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platform) {
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].WX:
-                // case EPlatformType.Web:
+            case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Web:
                 _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_YQ__WEBPACK_IMPORTED_MODULE_8__["default"], 'yfct', this._gameVersion, this._appId); //
                 break;
             // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
@@ -15828,8 +15867,8 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
         this.ui.m_btn_exskin.onClick(this, _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_11__["default"].ShowExSKin);
     }
     _OnClickModule() {
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_11__["default"].Toast('完善中');
-        return;
+        // LTUI.Toast('完善中');
+        // return;
         _UI_MoudleDemoMediator__WEBPACK_IMPORTED_MODULE_13__["default"].instance.Show();
     }
     _OnClickRoll() {
@@ -16173,6 +16212,7 @@ class UI_MoudleDemoMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_I
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
+        console.log(this.ui.m___wxSG);
     }
     _OnClickBack() {
         this.Hide();
@@ -16870,6 +16910,7 @@ class UI_MoudleDemo extends fgui.GComponent {
         this.m___endSG = (this.getChildAt(5));
         this.m___bottomgames = (this.getChildAt(6));
         this.m_btn_back = (this.getChildAt(7));
+        this.m___wxSG = (this.getChildAt(8));
     }
 }
 UI_MoudleDemo.URL = "ui://kk7g5mmmsgapj";

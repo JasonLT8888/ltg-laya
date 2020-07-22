@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,300" opaque="false">
   <displayList>
-    <list id="n1_r3yg" name="list" xy="0,0" size="750,300" layout="flow_hz" overflow="scroll" lineGap="20" colGap="530" lineItemCount="2" defaultItem="ui://75kiu87kr3yg7i" align="center" vAlign="middle">
-      <relation target="" sidePair="width-width,height-height"/>
-      <item/>
-      <item/>
-      <item/>
-      <item/>
-    </list>
+    <component id="n2_dj6d" name="ad0" src="r3yg7i" fileName="ad_res/wx/item_gameSmall.xml" xy="10,11">
+      <relation target="" sidePair="left-left,top-top"/>
+    </component>
+    <component id="n3_dj6d" name="ad1" src="r3yg7i" fileName="ad_res/wx/item_gameSmall.xml" xy="11,159">
+      <relation target="" sidePair="left-left,bottom-bottom"/>
+    </component>
+    <component id="n4_dj6d" name="ad2" src="r3yg7i" fileName="ad_res/wx/item_gameSmall.xml" xy="641,9">
+      <relation target="" sidePair="right-right,top-top"/>
+    </component>
+    <component id="n5_dj6d" name="ad3" src="r3yg7i" fileName="ad_res/wx/item_gameSmall.xml" xy="641,159">
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </component>
   </displayList>
 </component>

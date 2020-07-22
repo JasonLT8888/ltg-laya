@@ -61,14 +61,14 @@ export default class View_WxSideGames {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
             this.ui.visible = false;
         } else {
-            this.ui.m_list.setVirtual();
-            this.ui.m_list.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
-            this.ui.m_list.numItems = 4;
-            this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
             Laya.timer.loop(5000, this, () => {
                 this.refresh();
             });
             this.refresh();
+            for (let i = 0; i < this.showingIndexs.length; i++) {
+                this.renderItem(i, this.ui[`m_ad${i}`]);
+                this.ui[`m_ad${i}`].onClick(this, () => this.clickItem(i))
+            }
             let ads = [];
             this._cacheAds.forEach(adData => {
                 let ad: any = {};
@@ -79,53 +79,52 @@ export default class View_WxSideGames {
             });
             LTSDK.instance.ReportShowAd(ads);
         }
-
     }
     refresh() {
-        const first = this.showingIndexs[this.showingIndexs.length - 1];
-        this.showingIndexs = [];
-        for (let i = 0; i < 4; i++) {
-            let ind = (first + i) % this._cacheAds.length;
-            this.showingIndexs.push(ind);
+        if (this.ui && !this.ui.isDisposed) {
+            this.ui.visible = true;
+            console.log('wxsg 刷新');
+            const first = this.showingIndexs[this.showingIndexs.length - 1];
+            this.showingIndexs = [];
+            for (let i = 0; i < 4; i++) {
+                let ind = (first + i) % this._cacheAds.length;
+                this.showingIndexs.push(ind);
+                this.renderItem(i, this.ui[`m_ad${i}`]);
+            }
+        } else {
+            Laya.timer.clearAll(this);
         }
-        this.ui.m_list.numItems = 4;
-        this.ui.m_list.refreshVirtualList();
     }
     private _OnAdInited(posId: number) {
         if (posId != this._posId) return;
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
-        this.ui.m_list.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
-        this.ui.m_list.numItems = this._cacheAds.length;
-        this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
+        // this.ui.m_list.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
+        // this.ui.m_list.numItems = this._cacheAds.length;
+        // this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
         this.ui.visible = true;
 
     }
 
-    clickItem(item: UI_item_gameSmall) {
-        let uid = item.data['id'];
-        let path = item.data['path'];
-        let adid = item.data['adid'];
-        LTPlatform.instance.NavigateToApp(uid, path, null, true, false, adid);
+    clickItem(index: number) {
+        let data = this._cacheAds[this.showingIndexs[index]];;
+        console.log(data.ad_name);
+        LTPlatform.instance.NavigateToApp(data.ad_appid, data.ad_path, null, true, false, data.ad_id);
 
     }
     renderItem(index: number, item: UI_item_gameSmall) {
         let ind = this.showingIndexs[index];
         let data = this._cacheAds[ind];
-        let info = {
-            id: data.ad_appid,
-            path: data.ad_path,
-            adid: data.ad_id
-        }
-        item.data = info;
         item.m_title.text = data.ad_name;
         item.m_icon.m_icon.url = data.ad_img;
         item.m_red.visible = data.ad_dot == 1;
         item.m_shake.play();
+        // item.onClick(item, () => this.clickItem(index));
         // let ad: any = {};
         // ad.ad_id = data.ad_id;
         // ad.location_id = 5;
         // ad.num = 1;
         // LTSDK.instance.RecordShowAd([ad]);
     }
+
 
 }

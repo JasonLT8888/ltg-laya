@@ -24,7 +24,7 @@
     "publish-tt": "node others/publish/bin/publish.js -p tt",
     "publish-qq": "node others/publish/bin/publish.js -p qq",
     "publish-oppo": "node others/publish/bin/publish.js -p oppo",
-    "publish-vivo": "node others/publish/bin/publish.js -p vivo",
+    "publish-vivo": "mg-service build",
     "publish-bd": "node others/publish/bin/publish.js -p bd",
     "update-ltg": "node others/publish/bin/update.js",
     "test": "python others/publish/templates/tools/upadteAppIds.py",

@@ -184,5 +184,8 @@ export default interface IPlatform {
      * appid蓝绿厂的传包名
      */
     NavigateToApp(appId: string, path?: string, extra?: any, showGameCenter?: boolean, isBanner?: boolean, adid?: number): Promise<boolean>;
-
+    /**
+     * 创建桌面图标
+     */
+    createShortcut();
 }

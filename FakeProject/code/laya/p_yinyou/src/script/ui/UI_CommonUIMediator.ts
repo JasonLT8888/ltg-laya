@@ -44,8 +44,8 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
     }
 
     private _OnClickModule() {
-        LTUI.Toast('完善中');
-        return;
+        // LTUI.Toast('完善中');
+        // return;
         UI_MoudleDemoMediator.instance.Show();
     }
 

@@ -11,6 +11,7 @@ export default class UI_MoudleDemo extends fgui.GComponent {
 	public m___endSG:fgui.GGraph;
 	public m___bottomgames:fgui.GGraph;
 	public m_btn_back:fgui.GButton;
+	public m___wxSG:fgui.GGraph;
 
 	public static URL:string = "ui://kk7g5mmmsgapj";
 
@@ -30,5 +31,6 @@ export default class UI_MoudleDemo extends fgui.GComponent {
 		this.m___endSG = <fgui.GGraph><any>(this.getChildAt(5));
 		this.m___bottomgames = <fgui.GGraph><any>(this.getChildAt(6));
 		this.m_btn_back = <fgui.GButton><any>(this.getChildAt(7));
+		this.m___wxSG = <fgui.GGraph><any>(this.getChildAt(8));
 	}
 }
