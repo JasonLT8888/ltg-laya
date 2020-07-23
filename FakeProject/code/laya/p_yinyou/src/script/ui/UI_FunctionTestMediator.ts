@@ -8,6 +8,7 @@ import { RenderTextureTest } from "../test/RenderTextureTest";
 import { UIEffectTest } from "../test/UIEffectTest";
 import { PhysicTest } from "../test/PhysicTest";
 import { OimoPhysicTest } from "../test/OimoPhysicTest";
+import { HybridPhysicTest } from "../test/HybridPhysicTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
 
@@ -26,7 +27,8 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
         new RenderTextureTest(),
         new UIEffectTest(),
         new PhysicTest(),
-        new OimoPhysicTest()
+        new OimoPhysicTest(),
+        new HybridPhysicTest(),
     ];
 
     _OnShow() {

@@ -215,15 +215,11 @@ export class RigidBody {
     }
 
     remove() {
-
         this.dispose();
-
     }
 
     dispose() {
-
         this.parent.removeRigidBody(this);
-
     }
 
     checkContact(name: string): boolean {
@@ -344,7 +340,11 @@ export class RigidBody {
 
     testWakeUp() {
 
-        if (this.linearVelocity.testZero() || this.angularVelocity.testZero() || this.position.testDiff(this.sleepPosition) || this.orientation.testDiff(this.sleepOrientation)) this.awake(); // awake the body
+        if (this.linearVelocity.testZero()
+            || this.angularVelocity.testZero()
+            || this.position.testDiff(this.sleepPosition)
+            || this.orientation.testDiff(this.sleepOrientation))
+            this.awake(); // awake the body
 
     }
 
@@ -412,7 +412,8 @@ export class RigidBody {
                 this.updateMesh();
 
                 break;
-            default: console.error("RigidBody", "Invalid type.");
+            default:
+                console.error("RigidBody", "无效rigbody类型", this.type);
         }
 
         this.syncShapes();

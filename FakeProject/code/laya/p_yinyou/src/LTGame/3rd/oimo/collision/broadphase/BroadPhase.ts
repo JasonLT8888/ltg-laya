@@ -71,17 +71,13 @@ export class BroadPhase {
     }
 
     collectPairs() {
-
-        console.error("BroadPhase", "Inheritance error.");
-
+        console.error("BroadPhase", "请在子类处理该方法");
     }
 
-    addPair(s1, s2) {
-
-        var pair = new Pair(s1, s2);
+    addPair(s1: Shape, s2: Shape) {
+        let pair = new Pair(s1, s2);
         this.pairs.push(pair);
         this.numPairs++;
-
     }
 
 }

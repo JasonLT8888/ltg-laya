@@ -3,15 +3,14 @@ import UI_TestMediator from "../ui/UI_TestMediator";
 import UI_FunctionTestMediator from "../ui/UI_FunctionTestMediator";
 import MonoHelper, { EActionType } from "../../LTGame/LTUtils/MonoHelper";
 import MathEx from "../../LTGame/LTUtils/MathEx";
-import Awaiters from "../../LTGame/Async/Awaiters";
 import Vector3Ex from "../../LTGame/LTUtils/Vector3Ex";
 import QuaternionEx from "../../LTGame/LTUtils/QuaternionEx";
 import { World } from "../../LTGame/3rd/oimo/core/World";
 import { RigidBody } from "../../LTGame/3rd/oimo/core/RigidBody";
 
-export class OimoPhysicTest implements ITest {
+export class HybridPhysicTest implements ITest {
 
-    name: string = "Oimo物理";
+    name: string = "混合物理";
 
     private _s3d: Laya.Scene3D;
     private _world: World;
@@ -47,7 +46,8 @@ export class OimoPhysicTest implements ITest {
         this._s3d.addChild(panelObj);
         panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
 
-        let collider = this._world.add({
+        // 增加oimo物理
+        this._world.add({
             type: 'box',
             size: [this._panelSize, 1, this._panelSize],
             pos: [0, 0, 0], // start position in degree
@@ -56,6 +56,9 @@ export class OimoPhysicTest implements ITest {
             belongsTo: 1, // The bits of the collision groups to which the shape belongs.
             collidesWith: 0xffffffff // The bits of the collision groups with which the shape collides.
         });
+        // 增加bullet物理
+        let colliderCmp = panelObj.addComponent(Laya.PhysicsCollider) as Laya.PhysicsCollider;
+        colliderCmp.colliderShape = new Laya.BoxColliderShape(this._panelSize, 1, this._panelSize);
 
         let camera = new Laya.Camera();
         camera.name = "camera";
@@ -137,6 +140,7 @@ export class OimoPhysicTest implements ITest {
         cubeObj.meshRenderer.castShadow = true;
         cubeObj.meshRenderer.receiveShadow = true;
 
+        // oimo物理
         let rig = this._world.add({
             type: 'box',
             size: [size.x, size.y, size.z],
@@ -149,6 +153,9 @@ export class OimoPhysicTest implements ITest {
             belongsTo: 1, // The bits of the collision groups to which the shape belongs.
             collidesWith: 0xffffffff // The bits of the collision groups with which the shape collides.
         });
+        // 增加bullet物理
+        let colliderCmp = cubeObj.addComponent(Laya.PhysicsCollider) as Laya.PhysicsCollider;
+        colliderCmp.colliderShape = new Laya.BoxColliderShape(1, 1, 1);
 
         this._cubeObjs.push(cubeObj);
         this._cubeRigs.push(rig);

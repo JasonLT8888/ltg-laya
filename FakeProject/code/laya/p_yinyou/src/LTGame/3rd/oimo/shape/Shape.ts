@@ -4,6 +4,7 @@ import { Mat33 } from "../math/Mat33";
 import { AABB } from "../math/AABB";
 import { ShapeConfig } from "./ShapeConfig";
 import { MassInfo } from "./MassInfo";
+import { ContactLink } from "../constraint/contact/ContactLink";
 
 var count = 0;
 function ShapeIdCount() { return count++; }
@@ -35,7 +36,7 @@ export class Shape {
     /**
      * linked list of the contacts with the shape.
      */
-    contactLink;
+    contactLink: ContactLink;
     /**
      * number of the contacts with the shape.
      */

@@ -19,6 +19,9 @@ import { Quat } from "../math/Quat";
 import { Contact } from "../constraint/contact/Contact";
 import { JointConfig } from "../constraint/joint/JointConfig";
 import { DistanceJoint } from "../constraint/joint/DistanceJoint";
+import { ContactLink } from "../constraint/contact/ContactLink";
+import { Joint } from "../constraint/joint/Joint";
+import { Constraint } from "../constraint/Constraint";
 
 export class World {
 
@@ -36,11 +39,9 @@ export class World {
     broadPhase: BroadPhase;
     Btypes: string[];
     broadPhaseType: any;
-    performance: any;
-    isStat: any;
     enableRandomizer: any;
-    rigidBodies: any;
-    contacts: any;
+    rigidBodies: RigidBody;
+    contacts: Contact;
     unusedContacts: any;
     numContacts: number;
     numContactPoints: number;
@@ -84,10 +85,6 @@ export class World {
         this.Btypes = ['None', 'BruteForce', 'Sweep & Prune', 'Bounding Volume Tree'];
         this.broadPhaseType = this.Btypes[o.broadphase || 2];
 
-        // This is the detailed information of the performance.
-        this.performance = null;
-        this.isStat = o.info === undefined ? false : o.info;
-
         /**
          * Whether the constraints randomizer is enabled or not.
          *
@@ -114,17 +111,14 @@ export class World {
         // The number of simulation islands.
         this.numIslands = 0;
 
-
         // The gravity in the world.
         this.gravity = new Vec3(0, - 9.8, 0);
         if (o.gravity !== undefined) this.gravity.fromArray(o.gravity);
 
-
-
-        var numShapeTypes = 5;//4;//3;
+        let numShapeTypes = 5;//4;//3;
         this.detectors = [];
         this.detectors.length = numShapeTypes;
-        var i = numShapeTypes;
+        let i = numShapeTypes;
         while (i--) {
             this.detectors[i] = [];
             this.detectors[i].length = numShapeTypes;
@@ -154,10 +148,8 @@ export class World {
         this.islandConstraints = [];
     }
 
-    setGravity(ar) {
-
+    setGravity(ar: Array<number>) {
         this.gravity.fromArray(ar);
-
     }
 
     clear() {
@@ -183,7 +175,7 @@ export class World {
     * Rigid body that has been added will be the operands of each step.
     * @param  rigidBody  Rigid body that you want to add
     */
-    addRigidBody(rigidBody) {
+    addRigidBody(rigidBody: RigidBody) {
 
         if (rigidBody.parent) {
             console.error("World", "It is not possible to be added to more than one world one of the rigid body");
@@ -192,7 +184,7 @@ export class World {
         rigidBody.setParent(this);
         //rigidBody.awake();
 
-        for (var shape = rigidBody.shapes; shape !== null; shape = shape.next) {
+        for (let shape = rigidBody.shapes; shape !== null; shape = shape.next) {
             this.addShape(shape);
         }
         if (this.rigidBodies !== null) (this.rigidBodies.prev = rigidBody).next = this.rigidBodies;
@@ -207,20 +199,20 @@ export class World {
     */
     removeRigidBody(rigidBody) {
 
-        var remove = rigidBody;
+        let remove = rigidBody;
         if (remove.parent !== this) return;
         remove.awake();
-        var js = remove.jointLink;
+        let js = remove.jointLink;
         while (js != null) {
-            var joint = js.joint;
+            let joint = js.joint;
             js = js.next;
             this.removeJoint(joint);
         }
-        for (var shape = rigidBody.shapes; shape !== null; shape = shape.next) {
+        for (let shape = rigidBody.shapes; shape !== null; shape = shape.next) {
             this.removeShape(shape);
         }
-        var prev = remove.prev;
-        var next = remove.next;
+        let prev = remove.prev;
+        let next = remove.next;
         if (prev !== null) prev.next = next;
         if (next !== null) next.prev = prev;
         if (this.rigidBodies == remove) this.rigidBodies = next;
@@ -233,13 +225,13 @@ export class World {
 
     getByName(name) {
 
-        var body = this.rigidBodies;
+        let body = this.rigidBodies;
         while (body !== null) {
             if (body.name === name) return body;
             body = body.next;
         }
 
-        var joint = this.joints;
+        let joint = this.joints;
         while (joint !== null) {
             if (joint.name === name) return joint;
             joint = joint.next;
@@ -255,7 +247,7 @@ export class World {
     * Shape will be added to the world automatically, please do not call from outside this method.
     * @param  shape  Shape you want to add
     */
-    addShape(shape) {
+    addShape(shape: Shape) {
 
         if (!shape.parent || !shape.parent.parent) {
             console.error("World", "It is not possible to be added alone to shape world");
@@ -306,9 +298,9 @@ export class World {
     */
     removeJoint(joint) {
 
-        var remove = joint;
-        var prev = remove.prev;
-        var next = remove.next;
+        let remove = joint;
+        let prev = remove.prev;
+        let next = remove.next;
         if (prev !== null) prev.next = next;
         if (next !== null) next.prev = prev;
         if (this.joints == remove) this.joints = next;
@@ -323,7 +315,7 @@ export class World {
 
     addContact(s1, s2) {
 
-        var newContact;
+        let newContact;
         if (this.unusedContacts !== null) {
             newContact = this.unusedContacts;
             this.unusedContacts = this.unusedContacts.next;
@@ -340,8 +332,8 @@ export class World {
 
     removeContact(contact) {
 
-        var prev = contact.prev;
-        var next = contact.next;
+        let prev = contact.prev;
+        let next = contact.next;
         if (next) next.prev = prev;
         if (prev) prev.next = next;
         if (this.contacts == contact) this.contacts = next;
@@ -359,8 +351,8 @@ export class World {
         b1 = b1.constructor === RigidBody ? b1.name : b1;
         b2 = b2.constructor === RigidBody ? b2.name : b2;
 
-        var n1, n2;
-        var contact = this.contacts;
+        let n1, n2;
+        let contact = this.contacts;
         while (contact !== null) {
             n1 = contact.body1.name;
             n2 = contact.body2.name;
@@ -371,21 +363,26 @@ export class World {
 
     }
 
-    checkContact(name1, name2) {
+    checkContact(name1: string, name2: string): boolean {
 
-        var n1, n2;
-        var contact = this.contacts;
+        let n1, n2;
+        let contact = this.contacts;
         while (contact !== null) {
             n1 = contact.body1.name || ' ';
             n2 = contact.body2.name || ' ';
-            if ((n1 == name1 && n2 == name2) || (n2 == name1 && n1 == name2)) { if (contact.touching) return true; else return false; }
+            if ((n1 == name1 && n2 == name2) || (n2 == name1 && n1 == name2)) {
+                if (contact.touching)
+                    return true;
+                else
+                    return false;
+            }
             else contact = contact.next;
         }
-        //return false;
+        return false;
 
     }
 
-    callSleep(body) {
+    callSleep(body: RigidBody): boolean {
 
         if (!body.allowSleep) return false;
         if (body.linearVelocity.lengthSq() > 0.04) return false;
@@ -399,11 +396,7 @@ export class World {
     */
     step() {
 
-        var stat = this.isStat;
-
-        if (stat) this.performance.setTime(0);
-
-        var body = this.rigidBodies;
+        let body = this.rigidBodies;
 
         while (body !== null) {
 
@@ -421,19 +414,14 @@ export class World {
         //   UPDATE BROADPHASE CONTACT
         //------------------------------------------------------
 
-        if (stat) this.performance.setTime(1);
-
         this.broadPhase.detectPairs();
-
-        var pairs = this.broadPhase.pairs;
-
-        var i = this.broadPhase.numPairs;
-        //do{
+        let pairs = this.broadPhase.pairs;
+        let i = this.broadPhase.numPairs;
+        let contact: Contact;
         while (i--) {
-            //for(var i=0, l=numPairs; i<l; i++){
-            var pair = pairs[i];
-            var s1;
-            var s2;
+            let pair = pairs[i];
+            let s1: Shape;
+            let s2: Shape;
             if (pair.shape1.id < pair.shape2.id) {
                 s1 = pair.shape1;
                 s2 = pair.shape2;
@@ -442,13 +430,15 @@ export class World {
                 s2 = pair.shape1;
             }
 
-            var link;
-            if (s1.numContacts < s2.numContacts) link = s1.contactLink;
-            else link = s2.contactLink;
+            let link: ContactLink;
+            if (s1.numContacts < s2.numContacts)
+                link = s1.contactLink;
+            else
+                link = s2.contactLink;
 
-            var exists = false;
+            let exists = false;
             while (link) {
-                var contact = link.contact;
+                contact = link.contact;
                 if (contact.shape1 == s1 && contact.shape2 == s2) {
                     contact.persisting = true;
                     exists = true;// contact already exists
@@ -459,9 +449,7 @@ export class World {
             if (!exists) {
                 this.addContact(s1, s2);
             }
-        }// while(i-- >0);
-
-        if (stat) this.performance.calcBroadPhase();
+        }
 
         //------------------------------------------------------
         //   UPDATE NARROWPHASE CONTACT
@@ -473,21 +461,14 @@ export class World {
         while (contact !== null) {
             if (!contact.persisting) {
                 if (contact.shape1.aabb.intersectTest(contact.shape2.aabb)) {
-                    /*var aabb1=contact.shape1.aabb;
-                var aabb2=contact.shape2.aabb;
-                if(
-                    aabb1.minX>aabb2.maxX || aabb1.maxX<aabb2.minX ||
-                    aabb1.minY>aabb2.maxY || aabb1.maxY<aabb2.minY ||
-                    aabb1.minZ>aabb2.maxZ || aabb1.maxZ<aabb2.minZ
-                ){*/
-                    var next = contact.next;
+                    let next = contact.next;
                     this.removeContact(contact);
                     contact = next;
                     continue;
                 }
             }
-            var b1 = contact.body1;
-            var b2 = contact.body2;
+            let b1 = contact.body1;
+            let b2 = contact.body2;
 
             if (b1.isDynamic && !b1.sleeping || b2.isDynamic && !b2.sleeping) contact.updateManifold();
 
@@ -498,15 +479,13 @@ export class World {
 
         }
 
-        if (stat) this.performance.calcNarrowPhase();
-
         //------------------------------------------------------
         //   SOLVE ISLANDS
         //------------------------------------------------------
 
-        var invTimeStep = 1 / this.timeStep;
-        var joint;
-        var constraint;
+        let invTimeStep = 1 / this.timeStep;
+        let joint: Joint;
+        let constraint: Constraint;
 
         for (joint = this.joints; joint !== null; joint = joint.next) {
             joint.addedToIsland = false;
@@ -518,22 +497,17 @@ export class World {
         this.islandConstraints = [];
         this.islandStack = [];
 
-        if (stat) this.performance.setTime(1);
-
         this.numIslands = 0;
 
         // build and solve simulation islands
 
-        for (var base = this.rigidBodies; base !== null; base = base.next) {
+        for (let base = this.rigidBodies; base !== null; base = base.next) {
 
             if (base.addedToIsland || base.isStatic || base.sleeping) continue;// ignore
 
             if (base.isLonely()) {// update single body
                 if (base.isDynamic) {
                     base.linearVelocity.addScaledVector(this.gravity, this.timeStep);
-                    /*base.linearVelocity.x+=this.gravity.x*this.timeStep;
-                    base.linearVelocity.y+=this.gravity.y*this.timeStep;
-                    base.linearVelocity.z+=this.gravity.z*this.timeStep;*/
                 }
                 if (this.callSleep(base)) {
                     base.sleepTime += this.timeStep;
@@ -547,13 +521,14 @@ export class World {
                 continue;
             }
 
-            var islandNumRigidBodies = 0;
-            var islandNumConstraints = 0;
-            var stackCount = 1;
+            let islandNumRigidBodies = 0;
+            let islandNumConstraints = 0;
+            let stackCount = 1;
             // add rigid body to stack
             this.islandStack[0] = base;
             base.addedToIsland = true;
 
+            let next;
             // build an island
             do {
                 // get rigid body from stack
@@ -565,15 +540,15 @@ export class World {
                 if (body.isStatic) continue;
 
                 // search connections
-                for (var cs = body.contactLink; cs !== null; cs = cs.next) {
-                    var contact = cs.contact;
+                for (let cs = body.contactLink; cs !== null; cs = cs.next) {
+                    let contact = cs.contact;
                     constraint = contact.constraint;
                     if (constraint.addedToIsland || !contact.touching) continue;// ignore
 
                     // add constraint to the island
                     this.islandConstraints[islandNumConstraints++] = constraint;
                     constraint.addedToIsland = true;
-                    var next = cs.body;
+                    next = cs.body;
 
                     if (next.addedToIsland) continue;
 
@@ -581,7 +556,7 @@ export class World {
                     this.islandStack[stackCount++] = next;
                     next.addedToIsland = true;
                 }
-                for (var js = body.jointLink; js !== null; js = js.next) {
+                for (let js = body.jointLink; js !== null; js = js.next) {
                     constraint = js.joint;
 
                     if (constraint.addedToIsland) continue;// ignore
@@ -599,13 +574,13 @@ export class World {
             } while (stackCount != 0);
 
             // update velocities
-            var gVel = new Vec3().addScaledVector(this.gravity, this.timeStep);
-            /*var gx=this.gravity.x*this.timeStep;
-            var gy=this.gravity.y*this.timeStep;
-            var gz=this.gravity.z*this.timeStep;*/
-            var j = islandNumRigidBodies;
+            let gVel = new Vec3().addScaledVector(this.gravity, this.timeStep);
+            /*let gx=this.gravity.x*this.timeStep;
+            let gy=this.gravity.y*this.timeStep;
+            let gz=this.gravity.z*this.timeStep;*/
+            let j = islandNumRigidBodies;
             while (j--) {
-                //or(var j=0, l=islandNumRigidBodies; j<l; j++){
+                //or(let j=0, l=islandNumRigidBodies; j<l; j++){
                 body = this.islandRigidBodies[j];
                 if (body.isDynamic) {
                     body.linearVelocity.addEqual(gVel);
@@ -617,11 +592,11 @@ export class World {
 
             // randomizing order
             if (this.enableRandomizer) {
-                //for(var j=1, l=islandNumConstraints; j<l; j++){
+                //for(let j=1, l=islandNumConstraints; j<l; j++){
                 j = islandNumConstraints;
                 while (j--) {
                     if (j !== 0) {
-                        var swap = (this.randX = (this.randX * this.randA + this.randB & 0x7fffffff)) / 2147483648.0 * j | 0;
+                        let swap = (this.randX = (this.randX * this.randA + this.randB & 0x7fffffff)) / 2147483648.0 * j | 0;
                         constraint = this.islandConstraints[j];
                         this.islandConstraints[j] = this.islandConstraints[swap];
                         this.islandConstraints[swap] = constraint;
@@ -636,9 +611,9 @@ export class World {
                 //for(j=0, l=islandNumConstraints; j<l; j++){
                 this.islandConstraints[j].preSolve(this.timeStep, invTimeStep);// pre-solve
             }
-            var k = this.numIterations;
+            let k = this.numIterations;
             while (k--) {
-                //for(var k=0, l=this.numIterations; k<l; k++){
+                //for(let k=0, l=this.numIterations; k<l; k++){
                 j = islandNumConstraints;
                 while (j--) {
                     //for(j=0, m=islandNumConstraints; j<m; j++){
@@ -654,7 +629,7 @@ export class World {
 
             // sleeping check
 
-            var sleepTime = 10;
+            let sleepTime = 10;
             j = islandNumRigidBodies;
             while (j--) {
                 //for(j=0, l=islandNumRigidBodies;j<l;j++){
@@ -692,8 +667,6 @@ export class World {
         //   END SIMULATION
         //------------------------------------------------------
 
-        if (stat) this.performance.calcEnd();
-
         if (this.postLoop !== null) this.postLoop();
 
     }
@@ -704,53 +677,55 @@ export class World {
 
     }
 
-    // add someting to world
-
     add(o) {
 
         o = o || {};
 
-        var type = o.type || "box";
+        let type = o.type || "box";
         if (type.constructor === String) type = [type];
-        var isJoint = type[0].substring(0, 5) === 'joint' ? true : false;
+        let isJoint = type[0].substring(0, 5) === 'joint' ? true : false;
 
-        if (isJoint) return this.initJoint(type[0], o);
-        else return this.initBody(type, o);
+        if (isJoint) {
+            return this.initJoint(type[0], o);
+        }
+        else {
+            return this.initBody(type, o);
+        }
 
     }
 
     initBody(type, o) {
 
-        var invScale = this.invScale;
+        let invScale = this.invScale;
 
         // body dynamic or static
-        var move = o.move || false;
-        var kinematic = o.kinematic || false;
+        let move = o.move || false;
+        let kinematic = o.kinematic || false;
 
         // POSITION
 
         // body position
-        var p = o.pos || [0, 0, 0];
+        let p = o.pos || [0, 0, 0];
         p = p.map(function (x) { return x * invScale; });
 
         // shape position
-        var p2 = o.posShape || [0, 0, 0];
+        let p2 = o.posShape || [0, 0, 0];
         p2 = p2.map(function (x) { return x * invScale; });
 
         // ROTATION
 
         // body rotation in degree
-        var r = o.rot || [0, 0, 0];
+        let r = o.rot || [0, 0, 0];
         r = r.map(function (x) { return x * _Math.degtorad; });
 
         // shape rotation in degree
-        var r2 = o.rotShape || [0, 0, 0];
+        let r2 = o.rotShape || [0, 0, 0];
         r2 = r.map(function (x) { return x * _Math.degtorad; });
 
         // SIZE
 
         // shape size
-        var s = o.size === undefined ? [1, 1, 1] : o.size;
+        let s = o.size === undefined ? [1, 1, 1] : o.size;
         if (s.length === 1) { s[1] = s[0]; }
         if (s.length === 2) { s[2] = s[0]; }
         s = s.map(function (x) { return x * invScale; });
@@ -758,7 +733,7 @@ export class World {
 
 
         // body physics settings
-        var sc = new ShapeConfig();
+        let sc = new ShapeConfig();
         // The density of the shape.
         if (o.density !== undefined) sc.density = o.density;
         // The coefficient of friction of the shape.
@@ -785,22 +760,22 @@ export class World {
         }
         if(o.massRot){
             o.massRot = o.massRot.map(function(x) { return x * _Math.degtorad; });
-            var q = new Quat().setFromEuler( o.massRot[0], o.massRot[1], o.massRot[2] );
+            let q = new Quat().setFromEuler( o.massRot[0], o.massRot[1], o.massRot[2] );
             sc.relativeRotation = new Mat33().setQuat( q );//_Math.EulerToMatrix( o.massRot[0], o.massRot[1], o.massRot[2] );
         }*/
 
-        var position = new Vec3(p[0], p[1], p[2]);
-        var rotation = new Quat().setFromEuler(r[0], r[1], r[2]);
+        let position = new Vec3(p[0], p[1], p[2]);
+        let rotation = new Quat().setFromEuler(r[0], r[1], r[2]);
 
         // rigidbody
-        var body = new RigidBody(position, rotation);
-        //var body = new RigidBody( p[0], p[1], p[2], r[0], r[1], r[2], r[3], this.scale, this.invScale );
+        let body = new RigidBody(position, rotation);
+        //let body = new RigidBody( p[0], p[1], p[2], r[0], r[1], r[2], r[3], this.scale, this.invScale );
 
         // SHAPES
 
-        var shape, n;
+        let shape, n;
 
-        for (var i = 0; i < type.length; i++) {
+        for (let i = 0; i < type.length; i++) {
 
             n = i * 3;
 
@@ -811,12 +786,10 @@ export class World {
                 case "box": shape = new Box(sc, s[n], s[n + 1], s[n + 2]); break;
                 default:
                     console.error("暂未实现的shape", type[i]);
-
                     break;
             }
 
             body.addShape(shape);
-
         }
 
         // body can sleep or not
@@ -860,18 +833,18 @@ export class World {
 
     initJoint(type, o) {
 
-        //var type = type;
-        var invScale = this.invScale;
+        //let type = type;
+        let invScale = this.invScale;
 
-        var axe1 = o.axe1 || [1, 0, 0];
-        var axe2 = o.axe2 || [1, 0, 0];
-        var pos1 = o.pos1 || [0, 0, 0];
-        var pos2 = o.pos2 || [0, 0, 0];
+        let axe1 = o.axe1 || [1, 0, 0];
+        let axe2 = o.axe2 || [1, 0, 0];
+        let pos1 = o.pos1 || [0, 0, 0];
+        let pos2 = o.pos2 || [0, 0, 0];
 
         pos1 = pos1.map(function (x) { return x * invScale; });
         pos2 = pos2.map(function (x) { return x * invScale; });
 
-        var min, max;
+        let min, max;
         if (type === "jointDistance") {
             min = o.min || 0;
             max = o.max || 10;
@@ -884,12 +857,12 @@ export class World {
             max = max * _Math.degtorad;
         }
 
-        var limit = o.limit || null;
-        var spring = o.spring || null;
-        var motor = o.motor || null;
+        let limit = o.limit || null;
+        let spring = o.spring || null;
+        let motor = o.motor || null;
 
         // joint setting
-        var jc = new JointConfig();
+        let jc = new JointConfig();
         jc.scale = this.scale;
         jc.invScale = this.invScale;
         jc.allowCollision = o.collision || false;
@@ -898,8 +871,8 @@ export class World {
         jc.localAnchorPoint1.set(pos1[0], pos1[1], pos1[2]);
         jc.localAnchorPoint2.set(pos2[0], pos2[1], pos2[2]);
 
-        var b1 = null;
-        var b2 = null;
+        let b1 = null;
+        let b2 = null;
 
         if (o.body1 === undefined || o.body2 === undefined) return console.error('World', "Can't add joint if attach rigidbodys not define !");
 
@@ -916,7 +889,7 @@ export class World {
         jc.body1 = b1;
         jc.body2 = b2;
 
-        var joint;
+        let joint;
         switch (type) {
             case "jointDistance": joint = new DistanceJoint(jc, min, max);
                 if (spring !== null) joint.limitMotor.setSpring(spring[0], spring[1]);

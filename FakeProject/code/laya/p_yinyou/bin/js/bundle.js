@@ -153,10 +153,10 @@ class BroadPhase {
         this.collectPairs();
     }
     collectPairs() {
-        console.error("BroadPhase", "Inheritance error.");
+        console.error("BroadPhase", "请在子类处理该方法");
     }
     addPair(s1, s2) {
-        var pair = new _Pair__WEBPACK_IMPORTED_MODULE_1__["Pair"](s1, s2);
+        let pair = new _Pair__WEBPACK_IMPORTED_MODULE_1__["Pair"](s1, s2);
         this.pairs.push(pair);
         this.numPairs++;
     }
@@ -7056,7 +7056,10 @@ class RigidBody {
         }
     }
     testWakeUp() {
-        if (this.linearVelocity.testZero() || this.angularVelocity.testZero() || this.position.testDiff(this.sleepPosition) || this.orientation.testDiff(this.sleepOrientation))
+        if (this.linearVelocity.testZero()
+            || this.angularVelocity.testZero()
+            || this.position.testDiff(this.sleepPosition)
+            || this.orientation.testDiff(this.sleepOrientation))
             this.awake(); // awake the body
     }
     /**
@@ -7109,7 +7112,8 @@ class RigidBody {
                 this.orientation.addTime(this.angularVelocity, timeStep);
                 this.updateMesh();
                 break;
-            default: console.error("RigidBody", "Invalid type.");
+            default:
+                console.error("RigidBody", "无效rigbody类型", this.type);
         }
         this.syncShapes();
         this.updateMesh();
@@ -7284,9 +7288,6 @@ class World {
         }
         this.Btypes = ['None', 'BruteForce', 'Sweep & Prune', 'Bounding Volume Tree'];
         this.broadPhaseType = this.Btypes[o.broadphase || 2];
-        // This is the detailed information of the performance.
-        this.performance = null;
-        this.isStat = o.info === undefined ? false : o.info;
         /**
          * Whether the constraints randomizer is enabled or not.
          *
@@ -7315,10 +7316,10 @@ class World {
         this.gravity = new _math_Vec3__WEBPACK_IMPORTED_MODULE_4__["Vec3"](0, -9.8, 0);
         if (o.gravity !== undefined)
             this.gravity.fromArray(o.gravity);
-        var numShapeTypes = 5; //4;//3;
+        let numShapeTypes = 5; //4;//3;
         this.detectors = [];
         this.detectors.length = numShapeTypes;
-        var i = numShapeTypes;
+        let i = numShapeTypes;
         while (i--) {
             this.detectors[i] = [];
             this.detectors[i].length = numShapeTypes;
@@ -7368,7 +7369,7 @@ class World {
         }
         rigidBody.setParent(this);
         //rigidBody.awake();
-        for (var shape = rigidBody.shapes; shape !== null; shape = shape.next) {
+        for (let shape = rigidBody.shapes; shape !== null; shape = shape.next) {
             this.addShape(shape);
         }
         if (this.rigidBodies !== null)
@@ -7382,21 +7383,21 @@ class World {
     * @param  rigidBody  Rigid body to be removed
     */
     removeRigidBody(rigidBody) {
-        var remove = rigidBody;
+        let remove = rigidBody;
         if (remove.parent !== this)
             return;
         remove.awake();
-        var js = remove.jointLink;
+        let js = remove.jointLink;
         while (js != null) {
-            var joint = js.joint;
+            let joint = js.joint;
             js = js.next;
             this.removeJoint(joint);
         }
-        for (var shape = rigidBody.shapes; shape !== null; shape = shape.next) {
+        for (let shape = rigidBody.shapes; shape !== null; shape = shape.next) {
             this.removeShape(shape);
         }
-        var prev = remove.prev;
-        var next = remove.next;
+        let prev = remove.prev;
+        let next = remove.next;
         if (prev !== null)
             prev.next = next;
         if (next !== null)
@@ -7409,13 +7410,13 @@ class World {
         this.numRigidBodies--;
     }
     getByName(name) {
-        var body = this.rigidBodies;
+        let body = this.rigidBodies;
         while (body !== null) {
             if (body.name === name)
                 return body;
             body = body.next;
         }
-        var joint = this.joints;
+        let joint = this.joints;
         while (joint !== null) {
             if (joint.name === name)
                 return joint;
@@ -7470,9 +7471,9 @@ class World {
     * @param  shape Joint to be deleted
     */
     removeJoint(joint) {
-        var remove = joint;
-        var prev = remove.prev;
-        var next = remove.next;
+        let remove = joint;
+        let prev = remove.prev;
+        let next = remove.next;
         if (prev !== null)
             prev.next = next;
         if (next !== null)
@@ -7487,7 +7488,7 @@ class World {
         remove.parent = null;
     }
     addContact(s1, s2) {
-        var newContact;
+        let newContact;
         if (this.unusedContacts !== null) {
             newContact = this.unusedContacts;
             this.unusedContacts = this.unusedContacts.next;
@@ -7503,8 +7504,8 @@ class World {
         this.numContacts++;
     }
     removeContact(contact) {
-        var prev = contact.prev;
-        var next = contact.next;
+        let prev = contact.prev;
+        let next = contact.next;
         if (next)
             next.prev = prev;
         if (prev)
@@ -7521,8 +7522,8 @@ class World {
     getContact(b1, b2) {
         b1 = b1.constructor === _RigidBody__WEBPACK_IMPORTED_MODULE_0__["RigidBody"] ? b1.name : b1;
         b2 = b2.constructor === _RigidBody__WEBPACK_IMPORTED_MODULE_0__["RigidBody"] ? b2.name : b2;
-        var n1, n2;
-        var contact = this.contacts;
+        let n1, n2;
+        let contact = this.contacts;
         while (contact !== null) {
             n1 = contact.body1.name;
             n2 = contact.body2.name;
@@ -7538,8 +7539,8 @@ class World {
         return null;
     }
     checkContact(name1, name2) {
-        var n1, n2;
-        var contact = this.contacts;
+        let n1, n2;
+        let contact = this.contacts;
         while (contact !== null) {
             n1 = contact.body1.name || ' ';
             n2 = contact.body2.name || ' ';
@@ -7552,7 +7553,7 @@ class World {
             else
                 contact = contact.next;
         }
-        //return false;
+        return false;
     }
     callSleep(body) {
         if (!body.allowSleep)
@@ -7567,10 +7568,7 @@ class World {
     * I will proceed only time step seconds time of World.
     */
     step() {
-        var stat = this.isStat;
-        if (stat)
-            this.performance.setTime(0);
-        var body = this.rigidBodies;
+        let body = this.rigidBodies;
         while (body !== null) {
             body.addedToIsland = false;
             if (body.sleeping)
@@ -7580,17 +7578,14 @@ class World {
         //------------------------------------------------------
         //   UPDATE BROADPHASE CONTACT
         //------------------------------------------------------
-        if (stat)
-            this.performance.setTime(1);
         this.broadPhase.detectPairs();
-        var pairs = this.broadPhase.pairs;
-        var i = this.broadPhase.numPairs;
-        //do{
+        let pairs = this.broadPhase.pairs;
+        let i = this.broadPhase.numPairs;
+        let contact;
         while (i--) {
-            //for(var i=0, l=numPairs; i<l; i++){
-            var pair = pairs[i];
-            var s1;
-            var s2;
+            let pair = pairs[i];
+            let s1;
+            let s2;
             if (pair.shape1.id < pair.shape2.id) {
                 s1 = pair.shape1;
                 s2 = pair.shape2;
@@ -7599,14 +7594,14 @@ class World {
                 s1 = pair.shape2;
                 s2 = pair.shape1;
             }
-            var link;
+            let link;
             if (s1.numContacts < s2.numContacts)
                 link = s1.contactLink;
             else
                 link = s2.contactLink;
-            var exists = false;
+            let exists = false;
             while (link) {
-                var contact = link.contact;
+                contact = link.contact;
                 if (contact.shape1 == s1 && contact.shape2 == s2) {
                     contact.persisting = true;
                     exists = true; // contact already exists
@@ -7617,9 +7612,7 @@ class World {
             if (!exists) {
                 this.addContact(s1, s2);
             }
-        } // while(i-- >0);
-        if (stat)
-            this.performance.calcBroadPhase();
+        }
         //------------------------------------------------------
         //   UPDATE NARROWPHASE CONTACT
         //------------------------------------------------------
@@ -7629,21 +7622,14 @@ class World {
         while (contact !== null) {
             if (!contact.persisting) {
                 if (contact.shape1.aabb.intersectTest(contact.shape2.aabb)) {
-                    /*var aabb1=contact.shape1.aabb;
-                var aabb2=contact.shape2.aabb;
-                if(
-                    aabb1.minX>aabb2.maxX || aabb1.maxX<aabb2.minX ||
-                    aabb1.minY>aabb2.maxY || aabb1.maxY<aabb2.minY ||
-                    aabb1.minZ>aabb2.maxZ || aabb1.maxZ<aabb2.minZ
-                ){*/
-                    var next = contact.next;
+                    let next = contact.next;
                     this.removeContact(contact);
                     contact = next;
                     continue;
                 }
             }
-            var b1 = contact.body1;
-            var b2 = contact.body2;
+            let b1 = contact.body1;
+            let b2 = contact.body2;
             if (b1.isDynamic && !b1.sleeping || b2.isDynamic && !b2.sleeping)
                 contact.updateManifold();
             this.numContactPoints += contact.manifold.numPoints;
@@ -7651,14 +7637,12 @@ class World {
             contact.constraint.addedToIsland = false;
             contact = contact.next;
         }
-        if (stat)
-            this.performance.calcNarrowPhase();
         //------------------------------------------------------
         //   SOLVE ISLANDS
         //------------------------------------------------------
-        var invTimeStep = 1 / this.timeStep;
-        var joint;
-        var constraint;
+        let invTimeStep = 1 / this.timeStep;
+        let joint;
+        let constraint;
         for (joint = this.joints; joint !== null; joint = joint.next) {
             joint.addedToIsland = false;
         }
@@ -7666,19 +7650,14 @@ class World {
         this.islandRigidBodies = [];
         this.islandConstraints = [];
         this.islandStack = [];
-        if (stat)
-            this.performance.setTime(1);
         this.numIslands = 0;
         // build and solve simulation islands
-        for (var base = this.rigidBodies; base !== null; base = base.next) {
+        for (let base = this.rigidBodies; base !== null; base = base.next) {
             if (base.addedToIsland || base.isStatic || base.sleeping)
                 continue; // ignore
             if (base.isLonely()) { // update single body
                 if (base.isDynamic) {
                     base.linearVelocity.addScaledVector(this.gravity, this.timeStep);
-                    /*base.linearVelocity.x+=this.gravity.x*this.timeStep;
-                    base.linearVelocity.y+=this.gravity.y*this.timeStep;
-                    base.linearVelocity.z+=this.gravity.z*this.timeStep;*/
                 }
                 if (this.callSleep(base)) {
                     base.sleepTime += this.timeStep;
@@ -7694,12 +7673,13 @@ class World {
                 this.numIslands++;
                 continue;
             }
-            var islandNumRigidBodies = 0;
-            var islandNumConstraints = 0;
-            var stackCount = 1;
+            let islandNumRigidBodies = 0;
+            let islandNumConstraints = 0;
+            let stackCount = 1;
             // add rigid body to stack
             this.islandStack[0] = base;
             base.addedToIsland = true;
+            let next;
             // build an island
             do {
                 // get rigid body from stack
@@ -7711,22 +7691,22 @@ class World {
                 if (body.isStatic)
                     continue;
                 // search connections
-                for (var cs = body.contactLink; cs !== null; cs = cs.next) {
-                    var contact = cs.contact;
+                for (let cs = body.contactLink; cs !== null; cs = cs.next) {
+                    let contact = cs.contact;
                     constraint = contact.constraint;
                     if (constraint.addedToIsland || !contact.touching)
                         continue; // ignore
                     // add constraint to the island
                     this.islandConstraints[islandNumConstraints++] = constraint;
                     constraint.addedToIsland = true;
-                    var next = cs.body;
+                    next = cs.body;
                     if (next.addedToIsland)
                         continue;
                     // add rigid body to stack
                     this.islandStack[stackCount++] = next;
                     next.addedToIsland = true;
                 }
-                for (var js = body.jointLink; js !== null; js = js.next) {
+                for (let js = body.jointLink; js !== null; js = js.next) {
                     constraint = js.joint;
                     if (constraint.addedToIsland)
                         continue; // ignore
@@ -7742,13 +7722,13 @@ class World {
                 }
             } while (stackCount != 0);
             // update velocities
-            var gVel = new _math_Vec3__WEBPACK_IMPORTED_MODULE_4__["Vec3"]().addScaledVector(this.gravity, this.timeStep);
-            /*var gx=this.gravity.x*this.timeStep;
-            var gy=this.gravity.y*this.timeStep;
-            var gz=this.gravity.z*this.timeStep;*/
-            var j = islandNumRigidBodies;
+            let gVel = new _math_Vec3__WEBPACK_IMPORTED_MODULE_4__["Vec3"]().addScaledVector(this.gravity, this.timeStep);
+            /*let gx=this.gravity.x*this.timeStep;
+            let gy=this.gravity.y*this.timeStep;
+            let gz=this.gravity.z*this.timeStep;*/
+            let j = islandNumRigidBodies;
             while (j--) {
-                //or(var j=0, l=islandNumRigidBodies; j<l; j++){
+                //or(let j=0, l=islandNumRigidBodies; j<l; j++){
                 body = this.islandRigidBodies[j];
                 if (body.isDynamic) {
                     body.linearVelocity.addEqual(gVel);
@@ -7759,11 +7739,11 @@ class World {
             }
             // randomizing order
             if (this.enableRandomizer) {
-                //for(var j=1, l=islandNumConstraints; j<l; j++){
+                //for(let j=1, l=islandNumConstraints; j<l; j++){
                 j = islandNumConstraints;
                 while (j--) {
                     if (j !== 0) {
-                        var swap = (this.randX = (this.randX * this.randA + this.randB & 0x7fffffff)) / 2147483648.0 * j | 0;
+                        let swap = (this.randX = (this.randX * this.randA + this.randB & 0x7fffffff)) / 2147483648.0 * j | 0;
                         constraint = this.islandConstraints[j];
                         this.islandConstraints[j] = this.islandConstraints[swap];
                         this.islandConstraints[swap] = constraint;
@@ -7776,9 +7756,9 @@ class World {
                 //for(j=0, l=islandNumConstraints; j<l; j++){
                 this.islandConstraints[j].preSolve(this.timeStep, invTimeStep); // pre-solve
             }
-            var k = this.numIterations;
+            let k = this.numIterations;
             while (k--) {
-                //for(var k=0, l=this.numIterations; k<l; k++){
+                //for(let k=0, l=this.numIterations; k<l; k++){
                 j = islandNumConstraints;
                 while (j--) {
                     //for(j=0, m=islandNumConstraints; j<m; j++){
@@ -7792,7 +7772,7 @@ class World {
                 this.islandConstraints[j] = null; // gc
             }
             // sleeping check
-            var sleepTime = 10;
+            let sleepTime = 10;
             j = islandNumRigidBodies;
             while (j--) {
                 //for(j=0, l=islandNumRigidBodies;j<l;j++){
@@ -7831,48 +7811,47 @@ class World {
         //------------------------------------------------------
         //   END SIMULATION
         //------------------------------------------------------
-        if (stat)
-            this.performance.calcEnd();
         if (this.postLoop !== null)
             this.postLoop();
     }
     // remove someting to world
     remove(obj) {
     }
-    // add someting to world
     add(o) {
         o = o || {};
-        var type = o.type || "box";
+        let type = o.type || "box";
         if (type.constructor === String)
             type = [type];
-        var isJoint = type[0].substring(0, 5) === 'joint' ? true : false;
-        if (isJoint)
+        let isJoint = type[0].substring(0, 5) === 'joint' ? true : false;
+        if (isJoint) {
             return this.initJoint(type[0], o);
-        else
+        }
+        else {
             return this.initBody(type, o);
+        }
     }
     initBody(type, o) {
-        var invScale = this.invScale;
+        let invScale = this.invScale;
         // body dynamic or static
-        var move = o.move || false;
-        var kinematic = o.kinematic || false;
+        let move = o.move || false;
+        let kinematic = o.kinematic || false;
         // POSITION
         // body position
-        var p = o.pos || [0, 0, 0];
+        let p = o.pos || [0, 0, 0];
         p = p.map(function (x) { return x * invScale; });
         // shape position
-        var p2 = o.posShape || [0, 0, 0];
+        let p2 = o.posShape || [0, 0, 0];
         p2 = p2.map(function (x) { return x * invScale; });
         // ROTATION
         // body rotation in degree
-        var r = o.rot || [0, 0, 0];
+        let r = o.rot || [0, 0, 0];
         r = r.map(function (x) { return x * _math_Math__WEBPACK_IMPORTED_MODULE_12__["_Math"].degtorad; });
         // shape rotation in degree
-        var r2 = o.rotShape || [0, 0, 0];
+        let r2 = o.rotShape || [0, 0, 0];
         r2 = r.map(function (x) { return x * _math_Math__WEBPACK_IMPORTED_MODULE_12__["_Math"].degtorad; });
         // SIZE
         // shape size
-        var s = o.size === undefined ? [1, 1, 1] : o.size;
+        let s = o.size === undefined ? [1, 1, 1] : o.size;
         if (s.length === 1) {
             s[1] = s[0];
         }
@@ -7881,7 +7860,7 @@ class World {
         }
         s = s.map(function (x) { return x * invScale; });
         // body physics settings
-        var sc = new _shape_ShapeConfig__WEBPACK_IMPORTED_MODULE_13__["ShapeConfig"]();
+        let sc = new _shape_ShapeConfig__WEBPACK_IMPORTED_MODULE_13__["ShapeConfig"]();
         // The density of the shape.
         if (o.density !== undefined)
             sc.density = o.density;
@@ -7915,17 +7894,17 @@ class World {
         }
         if(o.massRot){
             o.massRot = o.massRot.map(function(x) { return x * _Math.degtorad; });
-            var q = new Quat().setFromEuler( o.massRot[0], o.massRot[1], o.massRot[2] );
+            let q = new Quat().setFromEuler( o.massRot[0], o.massRot[1], o.massRot[2] );
             sc.relativeRotation = new Mat33().setQuat( q );//_Math.EulerToMatrix( o.massRot[0], o.massRot[1], o.massRot[2] );
         }*/
-        var position = new _math_Vec3__WEBPACK_IMPORTED_MODULE_4__["Vec3"](p[0], p[1], p[2]);
-        var rotation = new _math_Quat__WEBPACK_IMPORTED_MODULE_15__["Quat"]().setFromEuler(r[0], r[1], r[2]);
+        let position = new _math_Vec3__WEBPACK_IMPORTED_MODULE_4__["Vec3"](p[0], p[1], p[2]);
+        let rotation = new _math_Quat__WEBPACK_IMPORTED_MODULE_15__["Quat"]().setFromEuler(r[0], r[1], r[2]);
         // rigidbody
-        var body = new _RigidBody__WEBPACK_IMPORTED_MODULE_0__["RigidBody"](position, rotation);
-        //var body = new RigidBody( p[0], p[1], p[2], r[0], r[1], r[2], r[3], this.scale, this.invScale );
+        let body = new _RigidBody__WEBPACK_IMPORTED_MODULE_0__["RigidBody"](position, rotation);
+        //let body = new RigidBody( p[0], p[1], p[2], r[0], r[1], r[2], r[3], this.scale, this.invScale );
         // SHAPES
-        var shape, n;
-        for (var i = 0; i < type.length; i++) {
+        let shape, n;
+        for (let i = 0; i < type.length; i++) {
             n = i * 3;
             if (p2[n] !== undefined)
                 sc.relativePosition.set(p2[n], p2[n + 1], p2[n + 2]);
@@ -7975,15 +7954,15 @@ class World {
         return body;
     }
     initJoint(type, o) {
-        //var type = type;
-        var invScale = this.invScale;
-        var axe1 = o.axe1 || [1, 0, 0];
-        var axe2 = o.axe2 || [1, 0, 0];
-        var pos1 = o.pos1 || [0, 0, 0];
-        var pos2 = o.pos2 || [0, 0, 0];
+        //let type = type;
+        let invScale = this.invScale;
+        let axe1 = o.axe1 || [1, 0, 0];
+        let axe2 = o.axe2 || [1, 0, 0];
+        let pos1 = o.pos1 || [0, 0, 0];
+        let pos2 = o.pos2 || [0, 0, 0];
         pos1 = pos1.map(function (x) { return x * invScale; });
         pos2 = pos2.map(function (x) { return x * invScale; });
-        var min, max;
+        let min, max;
         if (type === "jointDistance") {
             min = o.min || 0;
             max = o.max || 10;
@@ -7996,11 +7975,11 @@ class World {
             min = min * _math_Math__WEBPACK_IMPORTED_MODULE_12__["_Math"].degtorad;
             max = max * _math_Math__WEBPACK_IMPORTED_MODULE_12__["_Math"].degtorad;
         }
-        var limit = o.limit || null;
-        var spring = o.spring || null;
-        var motor = o.motor || null;
+        let limit = o.limit || null;
+        let spring = o.spring || null;
+        let motor = o.motor || null;
         // joint setting
-        var jc = new _constraint_joint_JointConfig__WEBPACK_IMPORTED_MODULE_17__["JointConfig"]();
+        let jc = new _constraint_joint_JointConfig__WEBPACK_IMPORTED_MODULE_17__["JointConfig"]();
         jc.scale = this.scale;
         jc.invScale = this.invScale;
         jc.allowCollision = o.collision || false;
@@ -8008,8 +7987,8 @@ class World {
         jc.localAxis2.set(axe2[0], axe2[1], axe2[2]);
         jc.localAnchorPoint1.set(pos1[0], pos1[1], pos1[2]);
         jc.localAnchorPoint2.set(pos2[0], pos2[1], pos2[2]);
-        var b1 = null;
-        var b2 = null;
+        let b1 = null;
+        let b2 = null;
         if (o.body1 === undefined || o.body2 === undefined)
             return console.error('World', "Can't add joint if attach rigidbodys not define !");
         if (o.body1.constructor === String) {
@@ -8034,7 +8013,7 @@ class World {
             return console.error('World', "Can't add joint attach rigidbodys not find !");
         jc.body1 = b1;
         jc.body2 = b2;
-        var joint;
+        let joint;
         switch (type) {
             case "jointDistance":
                 joint = new _constraint_joint_DistanceJoint__WEBPACK_IMPORTED_MODULE_18__["DistanceJoint"](jc, min, max);
@@ -24704,6 +24683,175 @@ class HeightFogTest {
 
 /***/ }),
 
+/***/ "./src/script/test/HybridPhysicTest.ts":
+/*!*********************************************!*\
+  !*** ./src/script/test/HybridPhysicTest.ts ***!
+  \*********************************************/
+/*! exports provided: HybridPhysicTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HybridPhysicTest", function() { return HybridPhysicTest; });
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+/* harmony import */ var _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/QuaternionEx */ "./src/LTGame/LTUtils/QuaternionEx.ts");
+/* harmony import */ var _LTGame_3rd_oimo_core_World__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTGame/3rd/oimo/core/World */ "./src/LTGame/3rd/oimo/core/World.ts");
+
+
+
+
+
+
+
+class HybridPhysicTest {
+    constructor() {
+        this.name = "混合物理";
+        this._isPressed = false;
+        this._panelSize = 50;
+    }
+    Create() {
+        this._s3d = new Laya.Scene3D();
+        Laya.stage.addChildAt(this._s3d, 1);
+        this._world = new _LTGame_3rd_oimo_core_World__WEBPACK_IMPORTED_MODULE_6__["World"]({
+            timestep: 1 / 60,
+            iterations: 8,
+            broadphase: 3,
+            worldscale: 1,
+            random: false,
+            info: false,
+            gravity: [0, -9.8, 0]
+        });
+        let panelMesh = Laya.PrimitiveMesh.createPlane(this._panelSize, this._panelSize, 1, 1);
+        let panelMat = new Laya.BlinnPhongMaterial();
+        panelMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
+        let panelObj = new Laya.MeshSprite3D(panelMesh, "floor");
+        panelObj.meshRenderer.material = panelMat;
+        panelObj.meshRenderer.receiveShadow = true;
+        this._s3d.addChild(panelObj);
+        panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
+        // 增加oimo物理
+        this._world.add({
+            type: 'box',
+            size: [this._panelSize, 1, this._panelSize],
+            pos: [0, 0, 0],
+            rot: [0, 0, 0],
+            move: false,
+            belongsTo: 1,
+            collidesWith: 0xffffffff // The bits of the collision groups with which the shape collides.
+        });
+        // 增加bullet物理
+        let colliderCmp = panelObj.addComponent(Laya.PhysicsCollider);
+        colliderCmp.colliderShape = new Laya.BoxColliderShape(this._panelSize, 1, this._panelSize);
+        let camera = new Laya.Camera();
+        camera.name = "camera";
+        this._s3d.addChild(camera);
+        camera.transform.localPosition = new Laya.Vector3(0, this._panelSize * 1.2, this._panelSize * 1.2);
+        camera.transform.localRotationEuler = new Laya.Vector3(-45, 0, 0);
+        let light = new Laya.DirectionLight();
+        this._s3d.addChild(light);
+        light.transform.localRotationEuler = new Laya.Vector3(-75, 0, 0);
+        light.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
+        light.shadowMode = Laya.ShadowMode.SoftHigh;
+        light.shadowDistance = 200;
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
+        this._cacheMaterial = new Laya.BlinnPhongMaterial();
+        this._cacheMaterial.albedoColor = new Laya.Vector4(0.1, 0.1, 0.6, 1);
+        this._sleepMaterial = new Laya.BlinnPhongMaterial();
+        this._sleepMaterial.albedoColor = new Laya.Vector4(0.5, 0.5, 0, 1);
+        this._cacheMesh = Laya.PrimitiveMesh.createBox(1, 1, 1);
+        this._cubeRigs = [];
+        this._cubeObjs = [];
+        this._s3d.physicsSimulation.maxSubSteps = 2;
+        this._s3d.physicsSimulation.fixedTimeStep = 1 / 30;
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        if (this._isPressed) {
+            this._remainTime -= dt;
+            if (this._remainTime < 0) {
+                this._GenCube();
+                this._remainTime = 0.1;
+            }
+        }
+        this._world.timeStep = dt;
+        this._world.step();
+        for (let i = 0; i < this._cubeObjs.length; ++i) {
+            let cubeObj = this._cubeObjs[i];
+            let rig = this._cubeRigs[i];
+            let pos = rig.position;
+            _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0.setValue(pos.x, pos.y, pos.z);
+            cubeObj.transform.position = _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0;
+            let rot = rig.quaternion;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.x = rot.x;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.y = rot.y;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.z = rot.z;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.w = rot.w;
+            cubeObj.transform.rotation = _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0;
+            cubeObj.meshRenderer.sharedMaterial = rig.sleeping ? this._sleepMaterial : this._cacheMaterial;
+        }
+    }
+    _GenCube() {
+        let cubeObj = new Laya.MeshSprite3D(this._cacheMesh, "cube");
+        cubeObj.meshRenderer.sharedMaterial = this._cacheMaterial;
+        this._s3d.addChild(cubeObj);
+        let size = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2));
+        cubeObj.transform.localPosition = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5), this._panelSize, _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5));
+        cubeObj.transform.localRotationEuler = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360));
+        cubeObj.transform.localScale = size;
+        cubeObj.meshRenderer.castShadow = true;
+        cubeObj.meshRenderer.receiveShadow = true;
+        // oimo物理
+        let rig = this._world.add({
+            type: 'box',
+            size: [size.x, size.y, size.z],
+            pos: [cubeObj.transform.localPosition.x, cubeObj.transform.localPosition.y, cubeObj.transform.localPosition.z],
+            rot: [cubeObj.transform.localRotationEuler.x, cubeObj.transform.localRotationEuler.y, cubeObj.transform.localRotationEuler.z],
+            move: true,
+            density: 1,
+            friction: 0.8,
+            restitution: 0.2,
+            belongsTo: 1,
+            collidesWith: 0xffffffff // The bits of the collision groups with which the shape collides.
+        });
+        // 增加bullet物理
+        let colliderCmp = cubeObj.addComponent(Laya.PhysicsCollider);
+        colliderCmp.colliderShape = new Laya.BoxColliderShape(1, 1, 1);
+        this._cubeObjs.push(cubeObj);
+        this._cubeRigs.push(rig);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_text_notice.text = "物体数量:" + this._cubeObjs.length;
+    }
+    _OnMouseDown(event) {
+        if (this._isPressed)
+            return;
+        this._isPressed = true;
+        this._touchId = event.touchId;
+        this._remainTime = 0;
+    }
+    _OnMouseUp(event) {
+        if (!this._isPressed)
+            return;
+        if (this._touchId != event.touchId)
+            return;
+        this._isPressed = false;
+    }
+    Clear() {
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/test/OimoPhysicTest.ts":
 /*!*******************************************!*\
   !*** ./src/script/test/OimoPhysicTest.ts ***!
@@ -25615,6 +25763,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../test/UIEffectTest */ "./src/script/test/UIEffectTest.ts");
 /* harmony import */ var _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../test/PhysicTest */ "./src/script/test/PhysicTest.ts");
 /* harmony import */ var _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../test/OimoPhysicTest */ "./src/script/test/OimoPhysicTest.ts");
+/* harmony import */ var _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../test/HybridPhysicTest */ "./src/script/test/HybridPhysicTest.ts");
+
 
 
 
@@ -25633,7 +25783,8 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
             new _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__["RenderTextureTest"](),
             new _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__["UIEffectTest"](),
             new _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__["PhysicTest"](),
-            new _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["OimoPhysicTest"]()
+            new _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["OimoPhysicTest"](),
+            new _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__["HybridPhysicTest"](),
         ];
     }
     static get instance() {
