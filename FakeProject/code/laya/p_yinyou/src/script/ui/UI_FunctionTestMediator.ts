@@ -6,6 +6,8 @@ import { ITest } from "../test/ITest";
 import { HeightFogTest } from "../test/HeightFogTest";
 import { RenderTextureTest } from "../test/RenderTextureTest";
 import { UIEffectTest } from "../test/UIEffectTest";
+import { PhysicTest } from "../test/PhysicTest";
+import { OimoPhysicTest } from "../test/OimoPhysicTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
 
@@ -22,7 +24,9 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
         new PBRTest(),
         new HeightFogTest(),
         new RenderTextureTest(),
-        new UIEffectTest()
+        new UIEffectTest(),
+        new PhysicTest(),
+        new OimoPhysicTest()
     ];
 
     _OnShow() {

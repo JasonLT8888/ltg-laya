@@ -1152,6 +1152,105 @@ var EActionType;
 
 /***/ }),
 
+/***/ "./src/LTGame/LTUtils/QuaternionEx.ts":
+/*!********************************************!*\
+  !*** ./src/LTGame/LTUtils/QuaternionEx.ts ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return QuaternionEx; });
+/* harmony import */ var _MathEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _Vector3Ex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+
+
+class QuaternionEx {
+    static get identify() { return QuaternionEx.FromEulerAngle(0, 0, 0); }
+    static FromVector3(elurAngle) {
+        return this.FromEulerAngle(elurAngle.x, elurAngle.y, elurAngle.z);
+    }
+    static ToEulerAngle(q) {
+        var eulerE = new Laya.Vector3();
+        q.getYawPitchRoll(eulerE);
+        var rotationEulerE = new Laya.Vector3();
+        rotationEulerE.x = eulerE.y * QuaternionEx._angleToRandin;
+        rotationEulerE.y = eulerE.x * QuaternionEx._angleToRandin;
+        rotationEulerE.z = eulerE.z * QuaternionEx._angleToRandin;
+        return rotationEulerE;
+    }
+    static WrapFromUnity(x, y, z, w) {
+        return new Laya.Quaternion(-x, y, z, -w);
+    }
+    static ConvertFromUnity(q) {
+        return new Laya.Quaternion(-q.x, q.y, q.z, -q.w);
+    }
+    static Euler(x, y, z) {
+        return this.FromEulerAngle(x, y, z);
+    }
+    static FromEulerAngle(x, y, z) {
+        var eulerX = x / 2 * _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Deg2Rad;
+        var cX = Math.cos(eulerX);
+        var sX = Math.sin(eulerX);
+        var eulerY = y / 2 * _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Deg2Rad;
+        var cY = Math.cos(eulerY);
+        var sY = Math.sin(eulerY);
+        var eulerZ = z / 2 * _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Deg2Rad;
+        var cZ = Math.cos(eulerZ);
+        var sZ = Math.sin(eulerZ);
+        var ix = sX * cY * cZ - cX * sY * sZ;
+        var iy = cX * sY * cZ + sX * cY * sZ;
+        var iz = cX * cY * sZ - sX * sY * cZ;
+        var iw = cX * cY * cZ + sX * sY * sZ;
+        var q = new Laya.Quaternion(ix, iy, iz, iw);
+        return q;
+    }
+    static MultiplyQ(r1, r2) {
+        var result = Laya.Quaternion.DEFAULT;
+        Laya.Quaternion.multiply(r1, r2, result);
+        return result;
+    }
+    static Copy(src) {
+        return new Laya.Quaternion(src.x, src.y, src.z, src.w);
+    }
+    static Multiply(r, v) {
+        var x = r.x + r.x;
+        var y = r.y + r.y;
+        var z = r.z + r.z;
+        var xx = r.x * x;
+        var yy = r.y * y;
+        var zz = r.z * z;
+        var xy = r.x * y;
+        var xz = r.x * z;
+        var yz = r.y * z;
+        var wx = r.w * x;
+        var wy = r.w * y;
+        var wz = r.w * z;
+        var res = _Vector3Ex__WEBPACK_IMPORTED_MODULE_1__["default"].zero;
+        res.x = (((1 - (yy + zz)) * v.x
+            + (xy - wz) * v.y
+            + (xz + wy) * v.z));
+        res.y = (((xy + wz) * v.x
+            + (1 - (xx + zz)) * v.y
+            + (yz - wx) * v.z));
+        res.z = (((xz - wy) * v.x
+            + (yz + wx) * v.y
+            + (1 - (xx + yy)) * v.z));
+        return res;
+    }
+    static Lerp(from, to, value) {
+        var q = Laya.Quaternion.DEFAULT;
+        Laya.Quaternion.lerp(from, to, value, q);
+        return q;
+    }
+}
+QuaternionEx.cacheVec0 = new Laya.Quaternion();
+QuaternionEx._angleToRandin = 180 / Math.PI;
+
+
+/***/ }),
+
 /***/ "./src/LTGame/LTUtils/StringEx.ts":
 /*!****************************************!*\
   !*** ./src/LTGame/LTUtils/StringEx.ts ***!
@@ -1470,6 +1569,7 @@ class Vector3Ex {
         return false;
     }
 }
+Vector3Ex.cacheVec0 = new Laya.Vector3();
 
 
 /***/ }),
@@ -4902,6 +5002,10 @@ class WXPlatform {
         let intAdObj = {};
         intAdObj["adUnitId"] = this.platformData.interstitialId;
         this._intersitialAd = this._base.createInterstitialAd(intAdObj);
+        if (this._intersitialAd == null) {
+            console.error("createInterstitialAd返回值为null,取消初始化");
+            return;
+        }
         this._intersitialAd.onLoad(() => {
             console.log("插页广告加载成功");
             this._isInterstitialLoaded = true;
@@ -5554,7 +5658,7 @@ class LTMain {
             // if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
             // if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
             if (this._mainLogic.enableStat) {
-                Laya.Stat.show();
+                Laya.Stat.show(0, 100);
             }
             Laya.alertGlobalError(false);
             this._mainLogic.InitGame();
@@ -14672,7 +14776,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_0__["LTSt
         this._resVersion = "0515";
         /**项目名 */
         this._gameName = "p_ltg";
-        // this.enableStat = true;
+        this.enableStat = true;
     }
     _HandleInitPlatform(ePlatform, platformData) {
         switch (ePlatform) {
@@ -15441,6 +15545,165 @@ class HeightFogTest {
 
 /***/ }),
 
+/***/ "./src/script/test/OimoPhysicTest.ts":
+/*!*******************************************!*\
+  !*** ./src/script/test/OimoPhysicTest.ts ***!
+  \*******************************************/
+/*! exports provided: OimoPhysicTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OimoPhysicTest", function() { return OimoPhysicTest; });
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+/* harmony import */ var _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/QuaternionEx */ "./src/LTGame/LTUtils/QuaternionEx.ts");
+
+
+
+
+
+
+class OimoPhysicTest {
+    constructor() {
+        this.name = "Oimo物理";
+        this._isPressed = false;
+        this._panelSize = 50;
+    }
+    Create() {
+        this._s3d = new Laya.Scene3D();
+        Laya.stage.addChildAt(this._s3d, 1);
+        this._wolrd = new OIMO.World({
+            timestep: 1 / 60,
+            iterations: 8,
+            broadphase: 3,
+            worldscale: 1,
+            random: false,
+            info: false,
+            gravity: [0, -9.8, 0]
+        });
+        let panelMesh = Laya.PrimitiveMesh.createPlane(this._panelSize, this._panelSize, 1, 1);
+        let panelMat = new Laya.BlinnPhongMaterial();
+        panelMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
+        let panelObj = new Laya.MeshSprite3D(panelMesh, "floor");
+        panelObj.meshRenderer.material = panelMat;
+        panelObj.meshRenderer.receiveShadow = true;
+        this._s3d.addChild(panelObj);
+        panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
+        let collider = this._wolrd.add({
+            type: 'box',
+            size: [this._panelSize, 1, this._panelSize],
+            pos: [0, 0, 0],
+            rot: [0, 0, 0],
+            move: false,
+            belongsTo: 1,
+            collidesWith: 0xffffffff // The bits of the collision groups with which the shape collides.
+        });
+        let camera = new Laya.Camera();
+        camera.name = "camera";
+        this._s3d.addChild(camera);
+        camera.transform.localPosition = new Laya.Vector3(0, this._panelSize * 1.2, this._panelSize * 1.2);
+        camera.transform.localRotationEuler = new Laya.Vector3(-45, 0, 0);
+        let light = new Laya.DirectionLight();
+        this._s3d.addChild(light);
+        light.transform.localRotationEuler = new Laya.Vector3(-75, 0, 0);
+        light.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
+        light.shadowMode = Laya.ShadowMode.SoftHigh;
+        light.shadowDistance = 200;
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
+        this._cacheMaterial = new Laya.BlinnPhongMaterial();
+        this._cacheMaterial.albedoColor = new Laya.Vector4(0.1, 0.1, 0.6, 1);
+        this._sleepMaterial = new Laya.BlinnPhongMaterial();
+        this._sleepMaterial.albedoColor = new Laya.Vector4(0.5, 0.5, 0, 1);
+        this._cacheMesh = Laya.PrimitiveMesh.createBox(1, 1, 1);
+        this._cubeRigs = [];
+        this._cubeObjs = [];
+        this._s3d.physicsSimulation.maxSubSteps = 2;
+        this._s3d.physicsSimulation.fixedTimeStep = 1 / 30;
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        if (this._isPressed) {
+            this._remainTime -= dt;
+            if (this._remainTime < 0) {
+                this._GenCube();
+                this._remainTime = 0.1;
+            }
+        }
+        this._wolrd.timeStep = dt;
+        this._wolrd.step();
+        for (let i = 0; i < this._cubeObjs.length; ++i) {
+            let cubeObj = this._cubeObjs[i];
+            let rig = this._cubeRigs[i];
+            let pos = rig.position;
+            _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0.setValue(pos.x, pos.y, pos.z);
+            cubeObj.transform.position = _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0;
+            let rot = rig.quaternion;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.x = rot.x;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.y = rot.y;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.z = rot.z;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.w = rot.w;
+            cubeObj.transform.rotation = _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0;
+            cubeObj.meshRenderer.sharedMaterial = rig.sleeping ? this._sleepMaterial : this._cacheMaterial;
+        }
+    }
+    _GenCube() {
+        let cubeObj = new Laya.MeshSprite3D(this._cacheMesh, "cube");
+        cubeObj.meshRenderer.sharedMaterial = this._cacheMaterial;
+        this._s3d.addChild(cubeObj);
+        let size = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2));
+        cubeObj.transform.localPosition = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5), this._panelSize, _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5));
+        cubeObj.transform.localRotationEuler = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360));
+        cubeObj.transform.localScale = size;
+        cubeObj.meshRenderer.castShadow = true;
+        cubeObj.meshRenderer.receiveShadow = true;
+        let rig = this._wolrd.add({
+            type: 'box',
+            size: [size.x, size.y, size.z],
+            pos: [cubeObj.transform.localPosition.x, cubeObj.transform.localPosition.y, cubeObj.transform.localPosition.z],
+            rot: [cubeObj.transform.localRotationEuler.x, cubeObj.transform.localRotationEuler.y, cubeObj.transform.localRotationEuler.z],
+            move: true,
+            density: 1,
+            friction: 0.8,
+            restitution: 0.2,
+            belongsTo: 1,
+            collidesWith: 0xffffffff // The bits of the collision groups with which the shape collides.
+        });
+        this._cubeObjs.push(cubeObj);
+        this._cubeRigs.push(rig);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_text_notice.text = "物体数量:" + this._cubeObjs.length;
+    }
+    _OnMouseDown(event) {
+        if (this._isPressed)
+            return;
+        this._isPressed = true;
+        this._touchId = event.touchId;
+        this._remainTime = 0;
+    }
+    _OnMouseUp(event) {
+        if (!this._isPressed)
+            return;
+        if (this._touchId != event.touchId)
+            return;
+        this._isPressed = false;
+    }
+    Clear() {
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/test/PBRTest.ts":
 /*!************************************!*\
   !*** ./src/script/test/PBRTest.ts ***!
@@ -15525,6 +15788,133 @@ class PBRTest {
         this._s3d.destroy();
         _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Unload(scene_path);
         _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/PhysicTest.ts":
+/*!***************************************!*\
+  !*** ./src/script/test/PhysicTest.ts ***!
+  \***************************************/
+/*! exports provided: PhysicTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicTest", function() { return PhysicTest; });
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+
+
+
+
+
+class PhysicTest {
+    constructor() {
+        this.name = "Bullet物理";
+        this._isPressed = false;
+        this._panelSize = 50;
+    }
+    Create() {
+        this._s3d = new Laya.Scene3D();
+        Laya.stage.addChildAt(this._s3d, 1);
+        let panelMesh = Laya.PrimitiveMesh.createPlane(this._panelSize, this._panelSize, 1, 1);
+        let panelMat = new Laya.BlinnPhongMaterial();
+        panelMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
+        let panelObj = new Laya.MeshSprite3D(panelMesh, "floor");
+        panelObj.meshRenderer.material = panelMat;
+        panelObj.meshRenderer.receiveShadow = true;
+        this._s3d.addChild(panelObj);
+        panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
+        let colliderCmp = panelObj.addComponent(Laya.PhysicsCollider);
+        colliderCmp.colliderShape = new Laya.BoxColliderShape(this._panelSize, 1, this._panelSize);
+        colliderCmp.friction = 1;
+        let camera = new Laya.Camera();
+        camera.name = "camera";
+        this._s3d.addChild(camera);
+        camera.transform.localPosition = new Laya.Vector3(0, this._panelSize * 1.2, this._panelSize * 1.2);
+        camera.transform.localRotationEuler = new Laya.Vector3(-45, 0, 0);
+        let light = new Laya.DirectionLight();
+        this._s3d.addChild(light);
+        light.transform.localRotationEuler = new Laya.Vector3(-75, 0, 0);
+        light.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
+        light.shadowMode = Laya.ShadowMode.SoftHigh;
+        light.shadowDistance = 200;
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
+        this._cacheMaterial = new Laya.BlinnPhongMaterial();
+        this._cacheMaterial.albedoColor = new Laya.Vector4(0.1, 0.1, 0.6, 1);
+        this._sleepMaterial = new Laya.BlinnPhongMaterial();
+        this._sleepMaterial.albedoColor = new Laya.Vector4(0.5, 0.5, 0, 1);
+        this._cacheMesh = Laya.PrimitiveMesh.createBox(1, 1, 1);
+        this._cubeRigs = [];
+        this._cubeObjs = [];
+        this._s3d.physicsSimulation.maxSubSteps = 2;
+        this._s3d.physicsSimulation.fixedTimeStep = 1 / 30;
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        if (this._isPressed) {
+            this._remainTime -= dt;
+            if (this._remainTime < 0) {
+                this._GenCube();
+                this._remainTime = 0.1;
+            }
+        }
+        for (let i = 0; i < this._cubeObjs.length; ++i) {
+            let cubeObj = this._cubeObjs[i];
+            let rig = this._cubeRigs[i];
+            cubeObj.meshRenderer.sharedMaterial = rig.isSleeping ? this._sleepMaterial : this._cacheMaterial;
+        }
+    }
+    _GenCube() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let cubeObj = new Laya.MeshSprite3D(this._cacheMesh, "cube");
+            cubeObj.meshRenderer.sharedMaterial = this._cacheMaterial;
+            this._s3d.addChild(cubeObj);
+            cubeObj.transform.localPosition = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5), this._panelSize, _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5));
+            cubeObj.transform.localRotationEuler = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360));
+            cubeObj.transform.localScale = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2));
+            cubeObj.meshRenderer.castShadow = true;
+            cubeObj.meshRenderer.receiveShadow = true;
+            yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_4__["default"].NextFrame();
+            let rig = cubeObj.addComponent(Laya.Rigidbody3D);
+            rig.colliderShape = new Laya.BoxColliderShape(1, 1, 1);
+            rig.sleepAngularVelocity = 0.1;
+            rig.sleepLinearVelocity = 0.1;
+            rig.ccdMotionThreshold = 0;
+            rig.ccdSweptSphereRadius = 0;
+            this._cubeObjs.push(cubeObj);
+            this._cubeRigs.push(rig);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_text_notice.text = "物体数量:" + this._cubeObjs.length;
+        });
+    }
+    _OnMouseDown(event) {
+        if (this._isPressed)
+            return;
+        this._isPressed = true;
+        this._touchId = event.touchId;
+        this._remainTime = 0;
+    }
+    _OnMouseUp(event) {
+        if (!this._isPressed)
+            return;
+        if (this._touchId != event.touchId)
+            return;
+        this._isPressed = false;
+    }
+    Clear() {
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
     }
 }
 
@@ -16062,6 +16452,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../test/HeightFogTest */ "./src/script/test/HeightFogTest.ts");
 /* harmony import */ var _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../test/RenderTextureTest */ "./src/script/test/RenderTextureTest.ts");
 /* harmony import */ var _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../test/UIEffectTest */ "./src/script/test/UIEffectTest.ts");
+/* harmony import */ var _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../test/PhysicTest */ "./src/script/test/PhysicTest.ts");
+/* harmony import */ var _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../test/OimoPhysicTest */ "./src/script/test/OimoPhysicTest.ts");
+
+
 
 
 
@@ -16076,7 +16470,9 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
             new _test_PBRTest__WEBPACK_IMPORTED_MODULE_3__["PBRTest"](),
             new _test_HeightFogTest__WEBPACK_IMPORTED_MODULE_4__["HeightFogTest"](),
             new _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__["RenderTextureTest"](),
-            new _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__["UIEffectTest"]()
+            new _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__["UIEffectTest"](),
+            new _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__["PhysicTest"](),
+            new _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["OimoPhysicTest"]()
         ];
     }
     static get instance() {
@@ -16727,9 +17123,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_ADDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_ADDemo extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "ADDemo"));
     }
@@ -16763,9 +17156,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_BoneAnimTest; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_BoneAnimTest extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "BoneAnimTest"));
     }
@@ -16793,9 +17183,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonUI; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonUI extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "CommonUI"));
     }
@@ -16834,9 +17221,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FunctionTest; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_FunctionTest extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "FunctionTest"));
     }
@@ -16862,9 +17246,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Main; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_Main extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "Main"));
     }
@@ -16896,9 +17277,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_MoudleDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_MoudleDemo extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "MoudleDemo"));
     }
@@ -16930,9 +17308,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Others; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_Others extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "Others"));
     }
@@ -16967,9 +17342,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_PerfomanceDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_PerfomanceDemo extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "PerfomanceDemo"));
     }
@@ -16996,9 +17368,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_RecordDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_RecordDemo extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "RecordDemo"));
     }
@@ -17034,15 +17403,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Test; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_Test extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "Test"));
     }
     onConstruct() {
         this.m_img_bg = (this.getChildAt(0));
         this.m_btn_back = (this.getChildAt(1));
+        this.m_text_notice = (this.getChildAt(2));
     }
 }
 UI_Test.URL = "ui://kk7g5mmmyllkl";
@@ -17062,9 +17429,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestRT; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_TestRT extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "TestRT"));
     }
@@ -17090,9 +17454,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_UIDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_UIDemo extends fgui.GComponent {
-    constructor() {
-        super();
-    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "UIDemo"));
     }

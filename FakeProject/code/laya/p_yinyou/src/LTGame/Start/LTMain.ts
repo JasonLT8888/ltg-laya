@@ -37,7 +37,7 @@ export default class LTMain {
                 // if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
 
                 if (this._mainLogic.enableStat) {
-                    Laya.Stat.show();
+                    Laya.Stat.show(0, 100);
                 }
                 Laya.alertGlobalError(false);
 

@@ -17,7 +17,7 @@ import { UI_GameCenterMediator } from "../UIExt/DefaultUI/UI_GameCenterMediator"
 import GlobalUnit from "../../script/common/GlobalUnit";
 import LTSDK from "../../SDK/LTSDK";
 
-export default class WXPlatform implements IPlatform { 
+export default class WXPlatform implements IPlatform {
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -244,6 +244,11 @@ export default class WXPlatform implements IPlatform {
         let intAdObj = {};
         intAdObj["adUnitId"] = this.platformData.interstitialId;
         this._intersitialAd = this._base.createInterstitialAd(intAdObj);
+
+        if (this._intersitialAd == null) {
+            console.error("createInterstitialAd返回值为null,取消初始化");
+            return;
+        }
 
         this._intersitialAd.onLoad(() => {
             console.log("插页广告加载成功");
@@ -663,9 +668,9 @@ export default class WXPlatform implements IPlatform {
                 complete: () => { }
             });
         })
-    }  
+    }
     createShortcut() {
-       console.log('暂未实现');
+        console.log('暂未实现');
     }
 
 }
