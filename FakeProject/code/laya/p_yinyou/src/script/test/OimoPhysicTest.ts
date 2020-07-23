@@ -6,13 +6,15 @@ import MathEx from "../../LTGame/LTUtils/MathEx";
 import Awaiters from "../../LTGame/Async/Awaiters";
 import Vector3Ex from "../../LTGame/LTUtils/Vector3Ex";
 import QuaternionEx from "../../LTGame/LTUtils/QuaternionEx";
+import { World } from "../../LTGame/3rd/oimo/core/World";
+import { RigidBody } from "../../LTGame/3rd/oimo/core/RigidBody";
 
 export class OimoPhysicTest implements ITest {
 
     name: string = "Oimo物理";
 
     private _s3d: Laya.Scene3D;
-    private _wolrd: OIMO.World;
+    private _world: World;
 
     private _isPressed: boolean = false;
     private _touchId: number;
@@ -21,13 +23,12 @@ export class OimoPhysicTest implements ITest {
     private _panelSize: number = 50;
 
     private _cubeObjs: Laya.MeshSprite3D[];
-    private _cubeRigs: OIMO.RigidBody[];
+    private _cubeRigs: RigidBody[];
 
     Create() {
         this._s3d = new Laya.Scene3D();
         Laya.stage.addChildAt(this._s3d, 1);
-
-        this._wolrd = new OIMO.World({
+        this._world = new World({
             timestep: 1 / 60,
             iterations: 8,
             broadphase: 3, // 1 brute force, 2 sweep and prune, 3 volume tree
@@ -46,7 +47,7 @@ export class OimoPhysicTest implements ITest {
         this._s3d.addChild(panelObj);
         panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
 
-        let collider = this._wolrd.add({
+        let collider = this._world.add({
             type: 'box',
             size: [this._panelSize, 1, this._panelSize],
             pos: [0, 0, 0], // start position in degree
@@ -101,8 +102,8 @@ export class OimoPhysicTest implements ITest {
             }
         }
 
-        this._wolrd.timeStep = dt;
-        this._wolrd.step();
+        this._world.timeStep = dt;
+        this._world.step();
 
         for (let i = 0; i < this._cubeObjs.length; ++i) {
             let cubeObj = this._cubeObjs[i];
@@ -136,7 +137,7 @@ export class OimoPhysicTest implements ITest {
         cubeObj.meshRenderer.castShadow = true;
         cubeObj.meshRenderer.receiveShadow = true;
 
-        let rig = this._wolrd.add({
+        let rig = this._world.add({
             type: 'box',
             size: [size.x, size.y, size.z],
             pos: [cubeObj.transform.localPosition.x, cubeObj.transform.localPosition.y, cubeObj.transform.localPosition.z], // start position in degree
