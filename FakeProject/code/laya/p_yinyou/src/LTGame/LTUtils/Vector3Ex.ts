@@ -15,6 +15,8 @@ export default class Vector3Ex {
     protected static __zero__: Laya.Vector3;
     protected static __one__: Laya.Vector3;
 
+    static cacheVec0: Laya.Vector3 = new Laya.Vector3();
+
     public static get temp(): Laya.Vector3 {
         if (!Vector3Ex.__temp__) {
             Vector3Ex.__temp__ = Vector3Ex.zero;

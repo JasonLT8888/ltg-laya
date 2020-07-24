@@ -10,9 +10,6 @@
     <graph id="n3_ib3r" name="__hotgame" xy="168,422" size="139,176" type="rect">
       <relation target="" sidePair="middle-middle,left-left"/>
     </graph>
-    <graph id="n4_uz1x" name="__nativeicon" xy="607,458" size="108,108" customData="178855,123" type="rect">
-      <relation target="" sidePair="middle-middle,right-right"/>
-    </graph>
     <graph id="n5_tyg3" name="__sidegames" xy="0,457" size="120,120" type="rect">
       <relation target="" sidePair="middle-middle,left-left"/>
     </graph>
