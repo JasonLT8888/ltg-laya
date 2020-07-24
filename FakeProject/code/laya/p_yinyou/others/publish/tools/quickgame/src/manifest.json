@@ -23,5 +23,6 @@
     "orientation": "portrait",
     "thirdEngine": {
         "laya": "2.7.0beta"
-    }
+    },
+    "subpackages": []
 }
