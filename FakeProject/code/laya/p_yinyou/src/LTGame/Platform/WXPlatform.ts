@@ -90,22 +90,23 @@ export default class WXPlatform implements IPlatform {
             // 请求完新版本信息的回调
             console.log("onCheckForUpdate", res.hasUpdate);
             if (res.hasUpdate) {
-                this._base.showToast({
+                LTPlatform.instance.base.showToast({
                     title: "即将有更新请留意"
                 });
             }
         });
 
         updateManager.onUpdateReady(() => {
-            this._base.showModal({
+            LTPlatform.instance.base.showModal({
                 title: "更新提示",
                 content: "新版本已经准备好，是否立即使用？",
                 success: function (res) {
                     if (res.confirm) {
                         // 调用 applyUpdate 应用新版本并重启
+                        let updateManager = LTPlatform.instance.base.getUpdateManager();
                         updateManager.applyUpdate();
                     } else {
-                        this._base.showToast({
+                        LTPlatform.instance.base.showToast({
                             icon: "none",
                             title: "小程序下一次「冷启动」时会使用新版本"
                         });
@@ -115,7 +116,7 @@ export default class WXPlatform implements IPlatform {
         });
 
         updateManager.onUpdateFailed(() => {
-            this._base.showToast({
+            LTPlatform.instance.base.showToast({
                 title: "更新失败，下次启动继续..."
             });
         });
