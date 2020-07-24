@@ -19,5 +19,8 @@
     "babel-loader": "^8.0.6",
     "babel-eslint": "^8.2.1",
     "@vivo-minigame/cli-service": "^1.4.0"
-  }
+  },
+  "browserslist": [
+    "chrome 65"
+  ]
 }

@@ -68,15 +68,15 @@ export default class UI_TrySkinMediator extends BaseUIMediator<UI_TrySkin>{
 
     }
     _onClickNo() {
-        if (LTSDK.instance.checkState == ECheckState.InCheck || LTPlatform.instance.platform == EPlatformType.Oppo) {
-            this.Hide();
-        } else {
-            if (this.ui.m_btn_pay.m_select.selectedIndex == 1) {
-                this.onVideoClick();
-            } else {
-                this.Hide();
-            }
-        }
+        this.Hide();
+        // if (LTSDK.instance.checkState == ECheckState.InCheck || LTPlatform.instance.platform == EPlatformType.Oppo) {
+        // } else {
+        //     if (this.ui.m_btn_pay.m_select.selectedIndex == 1) {
+        //         this.onVideoClick();
+        //     } else {
+        //         this.Hide();
+        //     }
+        // }
     }
     _onToggleClick() {
         if (LTSDK.instance.checkState == ECheckState.InCheck) {

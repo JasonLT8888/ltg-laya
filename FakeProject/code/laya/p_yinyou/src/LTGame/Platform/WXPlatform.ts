@@ -90,22 +90,23 @@ export default class WXPlatform implements IPlatform {
             // 请求完新版本信息的回调
             console.log("onCheckForUpdate", res.hasUpdate);
             if (res.hasUpdate) {
-                this._base.showToast({
+                LTPlatform.instance.base.showToast({
                     title: "即将有更新请留意"
                 });
             }
         });
 
         updateManager.onUpdateReady(() => {
-            this._base.showModal({
+            LTPlatform.instance.base.showModal({
                 title: "更新提示",
                 content: "新版本已经准备好，是否立即使用？",
                 success: function (res) {
                     if (res.confirm) {
                         // 调用 applyUpdate 应用新版本并重启
+                        let updateManager = LTPlatform.instance.base.getUpdateManager();
                         updateManager.applyUpdate();
                     } else {
-                        this._base.showToast({
+                        LTPlatform.instance.base.showToast({
                             icon: "none",
                             title: "小程序下一次「冷启动」时会使用新版本"
                         });
@@ -115,7 +116,7 @@ export default class WXPlatform implements IPlatform {
         });
 
         updateManager.onUpdateFailed(() => {
-            this._base.showToast({
+            LTPlatform.instance.base.showToast({
                 title: "更新失败，下次启动继续..."
             });
         });
@@ -144,25 +145,7 @@ export default class WXPlatform implements IPlatform {
         };
         this._base.login(loginData);
     }
-    public GetStorage(key: string): any {
-        if (this.base && this.base.getStorageSync && key) {
-            try {
-                return this.base.getStorageSync(key);
-            } catch (error) {
-                console.log('getStorageSync error: ', JSON.stringify(error));
-                return null;
-            }
-        }
-    }
-    public SetStorage(key: string, data: any) {
-        if (this.base && this.base.getStorageSync && key) {
-            try {
-                return this.base.setStorageSync(key, data);
-            } catch (error) {
-                console.log('setStorageSync error: ', JSON.stringify(error));
-            }
-        }
-    }
+   
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
         console.log(LTPlatform.platformStr, "登录成功", res);
         LTUI.Toast('登录成功');
@@ -391,9 +374,6 @@ export default class WXPlatform implements IPlatform {
         this._videoFailedCount = 0;
         let videoObj = {};
         videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
-        if (this._rewardVideo) {
-            this._rewardVideo.offClose(this.onVideoClose);
-        }
         this._rewardVideo = createRewardedVideoAd(videoObj);
         this._rewardVideo.onLoad(() => {
             console.log("视频广告加载成功");
@@ -402,7 +382,6 @@ export default class WXPlatform implements IPlatform {
         this._rewardVideo.onError((res) => {
             this._videoFailedCount++;
             console.error("视频广告加载失败", res, this._videoFailedCount);
-            LTUI.HideLoading();
         });
         this._rewardVideo.onClose((res) => {
 
@@ -418,18 +397,24 @@ export default class WXPlatform implements IPlatform {
             });
         });
 
-        this._rewardVideo.load().then(() => {
-            console.log("激励视频 加载成功");
-            // 加载成功后 再显示广告
-            return this._rewardVideo.show().then(() => {
-                LTUI.HideLoading();
-            }).catch((err) => {
-                console.error(err);
-                LTUI.Toast('视频加载失败，请稍后再试！');
-                LTUI.HideLoading();
-            });;
-        });
+        this._rewardVideo.show().then(() => {
+            LTUI.HideLoading();
+        }).catch(err => {
+            console.log("广告组件出现问题", err);
+            // 可以手动加载一次
+            this._rewardVideo.load().then(() => {
+                console.log("手动加载成功");
+                // 加载成功后需要再显示广告
+                return this._rewardVideo.show().then(() => {
+                    LTUI.HideLoading();
+                }).catch((err) => {
+                    console.error(err);
+                    LTUI.HideLoading();
+                });;
+            });
+        });;
     }
+
 
     private onVideoClose(res): any {
         Laya.stage.event(CommonEventId.RESUM_AUDIO);
@@ -666,6 +651,25 @@ export default class WXPlatform implements IPlatform {
     }  
     createShortcut() {
        console.log('暂未实现');
+    }
+    public GetStorage(key: string): any {
+        if (this.base && this.base.getStorageSync && key) {
+            try {
+                return this.base.getStorageSync(key);
+            } catch (error) {
+                console.log('getStorageSync error: ', JSON.stringify(error));
+                return null;
+            }
+        }
+    }
+    public SetStorage(key: string, data: any) {
+        if (this.base && this.base.getStorageSync && key) {
+            try {
+                return this.base.setStorageSync(key, data);
+            } catch (error) {
+                console.log('setStorageSync error: ', JSON.stringify(error));
+            }
+        }
     }
 
 }

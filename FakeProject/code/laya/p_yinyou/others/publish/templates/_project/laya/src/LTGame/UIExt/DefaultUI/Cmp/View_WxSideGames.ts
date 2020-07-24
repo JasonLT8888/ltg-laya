@@ -61,7 +61,7 @@ export default class View_WxSideGames {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
             this.ui.visible = false;
         } else {
-            Laya.timer.loop(5000, this.ui, () => {
+            Laya.timer.loop(5000, this, () => {
                 this.refresh();
             });
             this.refresh();
@@ -91,6 +91,8 @@ export default class View_WxSideGames {
                 this.showingIndexs.push(ind);
                 this.renderItem(i, this.ui[`m_ad${i}`]);
             }
+        } else {
+            Laya.timer.clearAll(this);
         }
     }
     private _OnAdInited(posId: number) {

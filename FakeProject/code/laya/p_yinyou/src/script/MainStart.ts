@@ -1,14 +1,13 @@
-import { LTStart } from "../LTGame/Start/LTStart";
-import SplashScene from "./scene/SplashScene";
-import MainScene from "./scene/MainScene";
-import { EPlatformType } from "../LTGame/Platform/EPlatformType";
 import LTPlatformData from "../LTGame/Platform/Data/LTPlatformData";
+import { EPlatformType } from "../LTGame/Platform/EPlatformType";
 import LTPlatform from "../LTGame/Platform/LTPlatform";
 import LTRespackManager from "../LTGame/Res/LTRespackManager";
-import LTSDK from "../SDK/LTSDK";
+import { LTStart } from "../LTGame/Start/LTStart";
 import SDK_CQ from "../SDK/Impl/SDK_CQ";
 import SDK_YQ from "../SDK/Impl/SDK_YQ";
-import SDK_Default from "../SDK/Impl/SDK_Default";
+import LTSDK from "../SDK/LTSDK";
+import MainScene from "./scene/MainScene";
+import SplashScene from "./scene/SplashScene";
 
 export default class MainStart extends LTStart {
 
@@ -30,7 +29,8 @@ export default class MainStart extends LTStart {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
                 this._gameVersion = '1.0.1';//1.0.1 为全策略模式 
-                this._appId = '88888888';
+                platformData.appId = "100006589"//'88888888';
+                platformData.appKey = '100006589';
                 break;
             case EPlatformType.TT:
                 this._gameVersion = "v0.0.2";
@@ -62,6 +62,19 @@ export default class MainStart extends LTStart {
                 platformData.nativeinpageIds = ['195999', '196002', '196003'];
                 LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
+            case EPlatformType.Vivo:
+                this._gameVersion = "1.0.0";
+                this._resVersion = "0723";
+                platformData.appId = "100006589";
+                platformData.appKey = "100006589";// "4593206c07a95b1edf85";
+                platformData.bannerId = "792dc45d716346679aed674122b687c4";
+                platformData.rewardVideoId = "6f7ac05280f94772900d65f30b89b218";
+                platformData.interstitialId = "5c199af4a8244a3991a22c9debe32ca9";
+                platformData.nativeBannerIds = ['699d13284f5e4c769d59ba7ef2f4aa05', '9703bd90cbf74014853971a55cac7fe6'];
+                platformData.nativeIconIds = ['91686cf4a42a4144b884f8843d947727', 'd987f0a85f724700aa098631c751ca7e'];
+                platformData.nativeinpageIds = ['b82fb9b9d97d4a5c8281a943d41ea0aa', '4de349a96b6a432bb1b2f215493f1b07'];
+                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
+                break;
             default:
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");
                 break;
@@ -74,7 +87,7 @@ export default class MainStart extends LTStart {
     _HandleSDK() {
         switch (LTPlatform.instance.platform) {
             case EPlatformType.WX:
-            case EPlatformType.Web:
+                // case EPlatformType.Web:
                 LTSDK.CreateInstace(SDK_YQ, 'yfct', this._gameVersion, this._appId);//
                 break;
             // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);

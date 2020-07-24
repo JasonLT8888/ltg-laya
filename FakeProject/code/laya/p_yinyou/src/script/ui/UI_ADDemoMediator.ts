@@ -2,6 +2,7 @@ import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTUI from "../../LTGame/UIExt/LTUI";
 import UI_ADDemo from "../../ui/Main/UI_ADDemo";
+import UI_NativeDemoMediator from "./UI_NativeDemoMediator";
 
 export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
 
@@ -23,15 +24,13 @@ export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
         this.ui.m_btn_rewardvideo.onClick(this, this._OnClickRewardAd);
         this.ui.m_btn_intvideo.onClick(this, this._OnClickIntAd);
         this.ui.m_btn_native.onClick(this, this._OnClickNative);
-        this.ui.m_btn_native_close.onClick(this, this._OnClickHideNative);
     }
 
     _OnClickNative() {
         // (LTPlatform.instance as OppoPlatform).ShowNativeAd();
+        UI_NativeDemoMediator.instance.Show();
     }
-    _OnClickHideNative() {
-        // (LTPlatform.instance as OppoPlatform).HideNativeAd();
-    }
+
 
     private _OnClickBack() {
         this.Hide();

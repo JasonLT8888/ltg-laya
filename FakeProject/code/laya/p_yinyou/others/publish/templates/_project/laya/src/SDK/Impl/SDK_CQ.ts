@@ -78,7 +78,7 @@ export default class SDK_CQ extends SDK_Default {
 
     RequestRemoteConfig() {
         let uid = this.appId;
-        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+        if (LTPlatform.instance.platform == EPlatformType.Oppo || LTPlatform.instance.platform == EPlatformType.Vivo) {
             uid = LTPlatform.instance.platformData.appKey;
         }
         let sendData = {
@@ -151,7 +151,7 @@ export default class SDK_CQ extends SDK_Default {
 
     Login(code: string, fromAppId: string) {
         console.error('登录参数：code:', code);
-        let uid = LTPlatform.instance.platform == EPlatformType.Oppo ? LTPlatform.instance.platformData.appKey : this.appId;
+        let uid = (LTPlatform.instance.platform == EPlatformType.Oppo || LTPlatform.instance.platform == EPlatformType.Vivo) ? LTPlatform.instance.platformData.appKey : this.appId;
         let sendData = {
             appid: uid,
             // flg: this.flg,
@@ -190,7 +190,7 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     private _OnLoginFailed(res: SDK.LoginResult) {
-        console.error("SDK登录失败", this.appId, LTPlatform.instance.platformData.appKey, res);
+        console.error("SDK登录失败", this.appId, res);
     }
 
     ReportStat(isShare: boolean, sid: string) {

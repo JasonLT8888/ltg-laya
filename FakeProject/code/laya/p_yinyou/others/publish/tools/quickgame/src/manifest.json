@@ -1,6 +1,6 @@
 {
     "package": "com.ytlj.mianbao.vivominigame",
-    "name": "做个面包",
+    "name": "面包别跑",
     "icon": "/icon.png",
     "versionName": "1.0.0",
     "versionCode": 1,
@@ -14,7 +14,7 @@
         "downloadFile": 5000
     },
     "config": {
-        "logLevel": "off"
+        "logLevel": "debug"
     },
     "display": {
         "statusbar": "false",

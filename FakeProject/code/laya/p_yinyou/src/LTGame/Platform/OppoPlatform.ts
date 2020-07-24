@@ -98,11 +98,17 @@ export default class OppoPlatform extends WXPlatform {
         window["iplatform"] = this;
     }
 
-    private getSystemInfo() {
+    private async getSystemInfo() {
+        this.base = this._base;
         this._base.getSystemInfo({
             success: (res) => {
                 this.systemInfo = res;
-                console.log(this.systemInfo);
+                console.log('systeminfo', this.systemInfo);
+                if (!this.safeArea) {
+                    this.safeArea = { top: res['notchHeight'], bottom: res['screenHeight'] - res['notchHeight'], left: 0, right: res['screenWidth'], height: res['screenHeight'], width: res['screenWidth'] }
+                }
+                this._cacheScreenScale = this.systemInfo.screenWidth / Laya.stage.width;
+                console.log(this.safeArea);
             },
             fail: () => { },
             complete: () => { }

@@ -12,9 +12,8 @@ import LTUI from "../../LTUI";
 export class View_NativeIconLong {
     static CreateView(tagUI: fgui.GComponent): View_NativeIconLong {
         if (tagUI == null) return null;
-        if (LTPlatform.instance.platform != EPlatformType.Oppo) {
-            // 只有oppo支持
-            console.log("native_iconLong已隐藏,只有oppo平台支持");
+        if (LTPlatform.instance.platform != EPlatformType.Oppo && LTPlatform.instance.platform != EPlatformType.Vivo) {
+            console.log("native_iconLong已隐藏,只有oppo vivo平台支持");
 
             tagUI.dispose();
             return null;
@@ -65,7 +64,7 @@ export class View_NativeIconLong {
         } else {
             this._cacheIds = ids;
         }
-        console.log("初始化广告id", ids);
+        console.log("初始化广告id", this._cacheIds);
 
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
@@ -133,32 +132,50 @@ export class View_NativeIconLong {
     }
 
     private async _LoadIconData(index: number): Promise<boolean> {
-        let nativeAd = LTPlatform.instance.base.createNativeAd({
-            adUnitId: this._cacheIds[index]
-        });
-        View_NativeIconLong._cacheNativeAd = nativeAd;
-        let loadRet = await nativeAd.load();
-        if (loadRet["code"] == 0) {
-            // 加载成功
-            let adList = loadRet['adList'] as any[];
-            if (adList == null || adList.length == 0) {
+        let nativeAd = null;
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            nativeAd = LTPlatform.instance.base.createNativeAd({
+                adUnitId: this._cacheIds[index]
+            });
+            View_NativeIconLong._cacheNativeAd = nativeAd;
+            let loadRet = await nativeAd.load();
+            if (loadRet["code"] == 0) {
+                // 加载成功
+                let adList = loadRet['adList'] as any[];
+                if (adList == null || adList.length == 0) {
+                    console.error("native icon 加载失败", loadRet);
+                    return false;
+                }
+                let adData = adList[0] as OppoAdData
+                console.log('广告数据加载完成', loadRet);
+
+                if (adData == null) {
+                    console.error("native icon 加载失败", loadRet);
+                    return false;
+                }
+                this._cacheAdData = adData;
+                return true;
+            } else {
                 console.error("native icon 加载失败", loadRet);
                 return false;
             }
-            let adData = adList[0] as OppoAdData
-            console.log('广告数据加载完成', loadRet);
-
-            if (adData == null) {
-                console.error("native icon 加载失败", loadRet);
-                return false;
-            }
-
-            this._cacheAdData = adData;
-            return true;
         } else {
-            console.error("native icon 加载失败", loadRet);
-            return false;
+            nativeAd = LTPlatform.instance.base.createNativeAd({
+                posId: this._cacheIds[index],
+            });
+            View_NativeIconLong._cacheNativeAd = nativeAd;
+            nativeAd.onLoad((res) => {
+                console.log(' 原生广告加载完成 触发', JSON.stringify(res));
+                if (res && res.adList) {
+                    this._cacheAdData = res.adList[0];
+                }
+            })
+            nativeAd.onError(err => {
+                console.log("原生广告加载异常", err);
+            });
+            await nativeAd.load();
         }
+
     }
 
 }

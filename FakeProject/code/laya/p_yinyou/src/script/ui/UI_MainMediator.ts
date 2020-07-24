@@ -1,4 +1,3 @@
-import { UI_BonusBoxMediator } from "../../LTGame/UIExt/DefaultUI/UI_BonusBoxMediator";
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Main from "../../ui/Main/UI_Main";
 import UI_ADDemoMediator from "./UI_ADDemoMediator";
@@ -8,7 +7,6 @@ import UI_OthersMediator from "./UI_OthersMediator";
 import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
 import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_UIDemoMediator from "./UI_UIDemoMediator";
-import LTUI from "../../LTGame/UIExt/LTUI";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 

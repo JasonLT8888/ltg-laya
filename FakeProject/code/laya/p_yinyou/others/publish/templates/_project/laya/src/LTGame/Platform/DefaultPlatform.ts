@@ -35,8 +35,8 @@ export default class DefaultPlatform implements IPlatform {
 
     Init(platformData: LTPlatformData) {
         this.loginState = {
-            isLogin: false,
-            code: null
+            isLogin: true,
+            code: "716bfd1a322be5795636d8e7df50f9780372c3713a941e2bc5ba8823887c526c"
         };
         Laya.timer.once(500, this, this._FakeLoginEnd);
     }
