@@ -15,6 +15,7 @@ export default class UI_TrySkin extends fgui.GComponent {
 	public m_btn_close:fgui.GButton;
 	public m_btn_no:fgui.GButton;
 	public m_btn_try:UI_btn_normal0;
+	public m___bottomgames:fgui.GGraph;
 	public m_t0:fgui.Transition;
 	public m_anim_enter:fgui.Transition;
 
@@ -39,6 +40,7 @@ export default class UI_TrySkin extends fgui.GComponent {
 		this.m_btn_close = <fgui.GButton><any>(this.getChildAt(7));
 		this.m_btn_no = <fgui.GButton><any>(this.getChildAt(8));
 		this.m_btn_try = <UI_btn_normal0><any>(this.getChildAt(9));
+		this.m___bottomgames = <fgui.GGraph><any>(this.getChildAt(10));
 		this.m_t0 = this.getTransitionAt(0);
 		this.m_anim_enter = this.getTransitionAt(1);
 	}

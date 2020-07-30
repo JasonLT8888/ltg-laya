@@ -25,6 +25,7 @@ import UI_CommonUnlockProgressMediator from "./DefaultUI/UI_CommonUnlockProgress
 import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
 import { UI_BonusBoxMediator } from "./DefaultUI/UI_BonusBoxMediator";
 import { UI_ExSkinMediator } from "./DefaultUI/UI_ExSkinMediator";
+import LTPlatform from "../Platform/LTPlatform";
 
 export default class LTUI {
 
@@ -148,5 +149,5 @@ export default class LTUI {
         openData.onGetSkin = () => { LTUI.Toast(`恭喜获得限定 皮肤 ${openData.datas[0].value}`) };
         UI_ExSkinMediator.instance.Show(openData);
     }
-   
+
 }

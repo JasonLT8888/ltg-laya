@@ -57,6 +57,8 @@ import UI_btn_normal from "./UI_btn_normal";
 import UI_btn_native from "./UI_btn_native";
 import UI_CommonLoad from "./UI_CommonLoad";
 import UI_view_load from "./UI_view_load";
+import UI_BonusGame from "./UI_BonusGame";
+import UI_hander_grip from "./UI_hander_grip";
 import UI_btn_ad from "./UI_btn_ad";
 import UI_NativeInterstitial_01 from "./UI_NativeInterstitial_01";
 import UI_NativeInterAd from "./UI_NativeInterAd";
@@ -151,6 +153,8 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_btn_native.URL, UI_btn_native);
 		fgui.UIObjectFactory.setExtension(UI_CommonLoad.URL, UI_CommonLoad);
 		fgui.UIObjectFactory.setExtension(UI_view_load.URL, UI_view_load);
+		fgui.UIObjectFactory.setExtension(UI_BonusGame.URL, UI_BonusGame);
+		fgui.UIObjectFactory.setExtension(UI_hander_grip.URL, UI_hander_grip);
 		fgui.UIObjectFactory.setExtension(UI_btn_ad.URL, UI_btn_ad);
 		fgui.UIObjectFactory.setExtension(UI_NativeInterstitial_01.URL, UI_NativeInterstitial_01);
 		fgui.UIObjectFactory.setExtension(UI_NativeInterAd.URL, UI_NativeInterAd);

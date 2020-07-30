@@ -1,10 +1,10 @@
 
+import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 import LTSDK from "../../../../SDK/LTSDK";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
 import UI_End3X3Ad from "../UI/LTGame/UI_End3X3Ad";
-import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 import UI_item_gameSmall from "../UI/LTGame/UI_item_gameSmall";
 
 export const ON_BANNER_SHOWN = "ON_BANNER_RESIZE";
@@ -47,7 +47,7 @@ export default class View_End3X3Games {
     }
 
     private _Init() {
-        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
+        if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);

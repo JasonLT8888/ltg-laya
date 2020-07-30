@@ -65,9 +65,8 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         uiData.needFitScreen = this._needFilScreen;
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
         this._InitSelfAd();
-        this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
-
+        this._OnShow();
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter] && LTSDK.instance.isDelayClose) {
             let anim = this._ui[anim_enter] as fgui.Transition;
@@ -80,7 +79,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
     }
 
     protected _OnEnterAnimEnd() {
-        
+
     }
 
     private _InitSelfAd() {
@@ -151,7 +150,8 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     }
 
-    protected _OnShow() { }
+    protected _OnShow() {
+    }
 
     public Hide(dispose: boolean = true) {
         if (this._ui == null) return;

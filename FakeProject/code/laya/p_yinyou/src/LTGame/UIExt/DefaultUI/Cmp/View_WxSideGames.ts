@@ -7,6 +7,7 @@ import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_WxSideGames from "../UI/LTGame/UI_WxSideGames";
 import UI_item_gameSmall from "../UI/LTGame/UI_item_gameSmall";
 import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
+import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 /**__wxSG 750*280  */
 export default class View_WxSideGames {
 
@@ -53,7 +54,7 @@ export default class View_WxSideGames {
     }
 
     private _Init() {
-        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
+        if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);

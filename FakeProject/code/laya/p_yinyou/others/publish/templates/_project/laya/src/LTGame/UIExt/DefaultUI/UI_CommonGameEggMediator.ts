@@ -5,7 +5,6 @@ import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import UI_CommonGameEgg from "./UI/LTGame/UI_CommonGameEgg";
 import UI_eggItem from "./UI/LTGame/UI_eggItem";
-import GameData from "../../../script/common/GameData";
 
 
 
@@ -48,17 +47,17 @@ export class UI_CommonGameEggMediator extends BaseUIMediator<UI_CommonGameEgg> {
             let type = MathEx.RandomInt(0, 3);
             item.m_type.selectedIndex = type;
         }
-        let data = EggConfig.data[this.selectId];
-        let passState = GameData.instance.EggPassIds.indexOf(data.id) >= 0;
+        let data = EggConfig.dataList[index];
+        let passState = CommonSaveData.instance.EggPassIds.indexOf(data.id) >= 0;
         item.m_icon.m_selected.selectedIndex = (index == this.selectId - 1) ? 1 : 0;
         item.m_icon.m_icon.url = passState ? data.icon : data.lockIcon;;
         item.m_icon.m_lockState.selectedIndex = passState ? 1 : 0;
     }
     refreshShowInfo() {
         let data = EggConfig.data[this.selectId];
-        let pass = GameData.instance.EggPassIds.indexOf(data.id) >= 0;
-        let password = GameData.instance.EggPasswordIds.indexOf(data.id) >= 0;
-        let secret = GameData.instance.EggSecretIds.indexOf(data.id) >= 0;
+        let pass = CommonSaveData.instance.EggPassIds.indexOf(data.id) >= 0;
+        let password = CommonSaveData.instance.EggPasswordIds.indexOf(data.id) >= 0;
+        let secret = CommonSaveData.instance.EggSecretIds.indexOf(data.id) >= 0;
         this.ui.m_noEgg.selectedIndex = data.enable ? 0 : 1;
         this.ui.m_txt_eggName.text = data.name;
         this.ui.m_txt_getState.text = pass ? '(已获得)' : '(未获得)';
@@ -72,8 +71,8 @@ export class UI_CommonGameEggMediator extends BaseUIMediator<UI_CommonGameEgg> {
         if (this.ui.m_btn_getSec.m_lockState.selectedIndex == 0) {
             let res = await LTPlatform.instance.ShowRewardVideoAdAsync();
             if (res) {
-                GameData.instance.EggSecretIds.push(this.selectId);
-                GameData.SaveToDisk();
+                CommonSaveData.instance.EggSecretIds.push(this.selectId);
+                CommonSaveData.SaveToDisk();
                 this.refreshShowInfo();
             }
         }
@@ -82,8 +81,8 @@ export class UI_CommonGameEggMediator extends BaseUIMediator<UI_CommonGameEgg> {
         if (this.ui.m_btn_getPass.m_lockState.selectedIndex == 0) {
             let res = await LTPlatform.instance.ShowRewardVideoAdAsync();
             if (res) {
-                GameData.instance.EggPasswordIds.push(this.selectId);
-                GameData.SaveToDisk();
+                CommonSaveData.instance.EggPasswordIds.push(this.selectId);
+                CommonSaveData.SaveToDisk();
                 this.refreshShowInfo();
             }
         }
@@ -94,7 +93,7 @@ export class UI_CommonGameEggMediator extends BaseUIMediator<UI_CommonGameEgg> {
      * @param id 
      */
     public static PassEgg(id: number) {
-        GameData.instance.EggPassIds.push(id);
-        GameData.SaveToDisk();
+        CommonSaveData.instance.EggPassIds.push(id);
+        CommonSaveData.SaveToDisk();
     }
 }

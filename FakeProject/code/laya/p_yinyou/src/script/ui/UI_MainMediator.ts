@@ -28,7 +28,6 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
         this.ui.m_btn_others.onClick(this, this._OnClickOthers);
         this.ui.m_btn_performance.onClick(this, this._OnClickPerfomance);
         this.ui.m_btn_feature.onClick(this, this._OnClickFunctionTest); 
-         
     }
 
     private _OnClickFunctionTest() {

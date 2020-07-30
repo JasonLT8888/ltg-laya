@@ -13,7 +13,6 @@ export default class UI_BonusBox extends fgui.GComponent {
 	public m_keyList:fgui.GList;
 	public m_btn_ad:UI_btn_watch;
 	public m_txt_count:fgui.GTextField;
-	public m___bottomgames:fgui.GGraph;
 	public m_t1:fgui.Transition;
 	public m_delay:fgui.Transition;
 
@@ -36,7 +35,6 @@ export default class UI_BonusBox extends fgui.GComponent {
 		this.m_keyList = <fgui.GList><any>(this.getChildAt(8));
 		this.m_btn_ad = <UI_btn_watch><any>(this.getChildAt(9));
 		this.m_txt_count = <fgui.GTextField><any>(this.getChildAt(10));
-		this.m___bottomgames = <fgui.GGraph><any>(this.getChildAt(11));
 		this.m_t1 = this.getTransitionAt(0);
 		this.m_delay = this.getTransitionAt(1);
 	}
