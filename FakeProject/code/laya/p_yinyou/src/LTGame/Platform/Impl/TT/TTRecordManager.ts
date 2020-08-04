@@ -18,7 +18,9 @@ export default class TTRecordManager extends DefaultRecordManager {
     constructor(base: any) {
         super();
         this._base = base;
-
+        if (LTPlatform.instance.systemInfo['appName'] == "devtools") {
+            this.supportRecord = false;
+        }
         this.isRecording = false;
         this.isRecordSuccess = false;
         this.isPausing = false;
@@ -56,9 +58,14 @@ export default class TTRecordManager extends DefaultRecordManager {
             this.isPausing = false;
             this._cacheResumeHandle && this._cacheResumeHandle.run();
         });
+       
     }
 
     StartRecord(onStart: Laya.Handler, onOverTime: Laya.Handler) {
+        if (!this.supportRecord) {
+            console.log("不支持录屏");
+            return;
+        }
         console.log("调用开始录屏");
         this._cacheStartHandle = onStart;
         this._cacheOverTimeHandle = onOverTime;

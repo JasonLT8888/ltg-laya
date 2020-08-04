@@ -6,7 +6,7 @@ import UI_ImageBannerMediator, { FakeBannerData } from "../UIExt/DefaultUI/UI_Im
 import UI_NativeInterstitialMediator, { FakeInterstitalData } from "../UIExt/DefaultUI/UI_NativeInterstitialMediator";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
-import DefaultDevice from "./DefaultDevice";
+import DefaultDevice, { OppoDevice } from "./DefaultDevice";
 import DefaultRecordManager from "./DefaultRecordManager";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
@@ -28,7 +28,7 @@ export default class OppoPlatform extends WXPlatform {
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
     recordManager: IRecordManager = new DefaultRecordManager();
-    device: IDevice = new DefaultDevice();
+    device: IDevice = new OppoDevice();
     systemInfo: any;
 
     /**

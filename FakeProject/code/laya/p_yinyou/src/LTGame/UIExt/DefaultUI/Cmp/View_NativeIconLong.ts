@@ -107,24 +107,31 @@ export class View_NativeIconLong {
         // for (let i = 0; i < this._cacheIds.length; ++i) {
         let ret = await this._LoadIconData(i);
         if (ret && this._cacheAdData) {
-            this.visible = true;
-            this.ui.visible = true;
-            let icon = this._cacheAdData.icon;
-            if (!icon && this._cacheAdData.imgUrlList.length) {
-                icon = this._cacheAdData.imgUrlList[0];
-            }
-            this.ui.m_ad.m_icon.url = icon;
-            this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
-            this.ui.m_ad.m_title.text = this._cacheAdData.title;
-            this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
-            View_NativeIconLong._cacheNativeAd.reportAdShow({
-                adId: this._cacheAdData.adId
-            });
-            console.log("原生icon广告已展示", this._cacheAdData);
+            this.showInfo();
             return;
         }
         // }
 
+    }
+
+    private showInfo() {
+        this.visible = true;
+        this.ui.visible = true;
+        let icon = this._cacheAdData.icon;
+        if (!icon && this._cacheAdData.imgUrlList.length) {
+            icon = this._cacheAdData.imgUrlList[0];
+        }
+        this.ui.m_ad.m_icon.url = icon;
+        this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
+        this.ui.m_ad.m_title.text = this._cacheAdData.title;
+        this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+        if (!this._cacheAdData.show_reported) {
+            View_NativeIconLong._cacheNativeAd.reportAdShow({
+                adId: this._cacheAdData.adId
+            });
+            this._cacheAdData.show_reported = true;
+            console.log("原生icon广告已展示", this._cacheAdData);
+        }
     }
 
     private _OnClickAd() {
@@ -167,13 +174,16 @@ export class View_NativeIconLong {
             nativeAd.onLoad((res) => {
                 console.log(' 原生广告加载完成 触发', JSON.stringify(res));
                 if (res && res.adList) {
-                    this._cacheAdData = res.adList[0];
+                    this._cacheAdData = res.adList.pop();
+                    this.showInfo();
                 }
             })
             nativeAd.onError(err => {
                 console.log("原生广告加载异常", err);
+                this.ui.visible=false;
             });
             await nativeAd.load();
+            
         }
 
     }

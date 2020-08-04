@@ -2,7 +2,7 @@ import Awaiters from "../Async/Awaiters";
 import StringEx from "../LTUtils/StringEx";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
-import DefaultDevice from "./DefaultDevice";
+import DefaultDevice, { VivoDevice } from "./DefaultDevice";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
@@ -25,7 +25,7 @@ export default class VivoPlatform implements IPlatform {
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
     recordManager: IRecordManager = new WebRecordManager();
-    device: IDevice = new DefaultDevice();
+    device: IDevice = new VivoDevice();
     systemInfo: any = null;
     private _banner: any;
     private _rewardVideo: any;

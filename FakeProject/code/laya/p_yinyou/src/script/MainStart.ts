@@ -17,7 +17,7 @@ export default class MainStart extends LTStart {
     }
 
     private _appId: string = "ttbe90c82d21ba845b";
-    /**云控版本 A B 版本轮换（1.0.0 1.0.1） 一个为线上版本 领一个为审核版本，提审时 两个版本轮换使用 */
+    /**SDK云控版本名 */
     private _gameVersion = "1.0.0";
     /**资源版本 */
     private _resVersion = "0515";
