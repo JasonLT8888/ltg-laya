@@ -350,7 +350,7 @@
     <image id="dywvaw" name="sp_bg.png" path="/img/GameEgg/"/>
     <image id="dywvax" name="btn_tuichu.png" path="/img/GameEgg/"/>
     <image id="dywvay" name="sp_xuanzhong.png" path="/img/GameEgg/"/>
-    <image id="dywvaz" name="sp_wupingkuang.png" path="/img/GameEgg/"/>
+    <image id="dywvaz" name="sp_wupingkuang.png" path="/img/GameEgg/" scale="9grid" scale9grid="26,24,46,48"/>
     <image id="dywvb0" name="示意图.png" path="/img/GameEgg/"/>
     <component id="dywvb1" name="btn_simple.xml" path="/cmp/"/>
     <component id="dywvb2" name="info.xml" path="/img/GameEgg/"/>
@@ -363,12 +363,29 @@
     <image id="dywvbb" name="sp_shipin0.png" path="/img/"/>
     <image id="dywvbc" name="btn_anniufen.png" path="/uiNew/gift/" scale="9grid" scale9grid="42,0,42,104"/>
     <component id="pknzbd" name="BonusItem.xml" path="/cmp/"/>
-    <image id="pknzbe" name="sp_kuang1.png" path="/imgNew/sign/" scale="9grid" scale9grid="40,47,80,86"/>
     <image id="pknzbf" name="sp_baoxiang.png" path="/imgNew/bunus/"/>
     <image id="pknzbg" name="sp_shipin.png" path="/imgNew/bunus/"/>
     <component id="pknzbh" name="tog_key.xml" path="/cmp/"/>
     <image id="pknzbi" name="sp_yaoshi1.png" path="/imgNew/bunus/"/>
     <image id="pknzbj" name="sp_yaoshi.png" path="/imgNew/bunus/"/>
+    <component id="t3oybk" name="bottomGames.xml" path="/ad_res/" exported="true"/>
+    <component id="t3oybl" name="view_item_game128.xml" path="/cache/" exported="true"/>
+    <component id="nfrobm" name="BonusGame.xml" path="/ui/" exported="true"/>
+    <component id="nfrobo" name="ProgressGame.xml" path="/imgNew/GameAD/"/>
+    <image id="nfrobp" name="sp_jx1.png" path="/imgNew/GameAD/"/>
+    <image id="nfrobq" name="sp_jx2.png" path="/imgNew/GameAD/"/>
+    <component id="nfrobr" name="btn_game.xml" path="/imgNew/comp/"/>
+    <image id="nfrobs" name="btn_zhua.png" path="/imgNew/GameAD/"/>
+    <image id="nfrobt" name="sp_shou.png" path="/imgNew/GameAD/"/>
+    <image id="nfrobu" name="sp_wawaji1.png" path="/imgNew/GameAD/"/>
+    <component id="nfrobv" name="ProgressBar1.xml" path="/imgNew/GameAD/"/>
+    <image id="nfrobw" name="sp_zhuzi.png" path="/imgNew/GameAD/" scale="9grid" scale9grid="0,31,39,62"/>
+    <component id="nfrobx" name="hander_grip.xml" path="/imgNew/comp/"/>
+    <image id="nfroby" name="sp_qiu.png" path="/imgNew/GameAD/"/>
+    <image id="nfrobz" name="sp_zhua1.png" path="/imgNew/GameAD/"/>
+    <image id="nfroc0" name="sp_zhua2.png" path="/imgNew/GameAD/"/>
+    <image id="nfroc1" name="sp_wawaji.png" path="/imgNew/GameAD/"/>
+    <image id="nfroc2" name="sp_xingyun.png" path="/imgNew/GameAD/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

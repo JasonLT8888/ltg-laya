@@ -41,6 +41,9 @@
       <relation target="" sidePair="center-center,bottom-bottom"/>
       <Button icon="ui://75kiu87kkj71ab"/>
     </component>
+    <graph id="n32_t3oy" name="__bottomgames" xy="0,1134" size="750,200" type="rect">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </graph>
   </displayList>
   <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
     <item time="0" type="Rotation" target="n5_ank9" tween="true" startValue="0" endValue="180" duration="24" ease="Linear"/>

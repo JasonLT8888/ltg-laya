@@ -24,7 +24,7 @@
       <relation target="" sidePair="width-width,height-height"/>
     </component>
     <graph id="n9_i816" name="__nativeinpage" xy="55,953" size="640,360" type="rect">
-      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
     </graph>
   </displayList>
 </component>
