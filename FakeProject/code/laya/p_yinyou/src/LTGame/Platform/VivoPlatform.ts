@@ -10,6 +10,7 @@ import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
+import AudioManager from "../../script/manager/AudioManager";
 
 export default class VivoPlatform implements IPlatform {
 
@@ -147,6 +148,7 @@ export default class VivoPlatform implements IPlatform {
         }
         LTUI.ShowLoading("广告拉取中...");
         this.createVideo();
+        AudioManager.instance.Pause();
         this._rewardVideo.show().then(() => {
             LTUI.HideLoading();
         }).catch(err => {
@@ -238,7 +240,7 @@ export default class VivoPlatform implements IPlatform {
             resolve(false);
         });
     }
-    createShortcut() {
+    createShortcut(): any {
         console.log('创建桌面图标');
     }
     GetStorage(key: string) {
@@ -249,5 +251,11 @@ export default class VivoPlatform implements IPlatform {
         console.log('写本地存储');
         Laya.LocalStorage.setItem(key, data);
 
+    }
+    followOfficialAccount(): any {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
+    }
+    checkFollowState(): any {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
     }
 }

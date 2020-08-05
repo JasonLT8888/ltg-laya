@@ -26,7 +26,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
     /**
      * 是否适配顶部刘海屏
      */
-    protected _needFilScreen: boolean = false;
+    protected _needFilScreen: boolean = true;
 
     public owner: any;
 
