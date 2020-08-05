@@ -13,6 +13,7 @@ import DefaultDevice from "./DefaultDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 
 export default class DefaultPlatform implements IPlatform {
+
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -119,7 +120,7 @@ export default class DefaultPlatform implements IPlatform {
             resolve(false);
         });
     }
-    createShortcut() {
+    createShortcut(): any {
         console.log('创建桌面图标');
     }
     GetStorage(key: string) {
@@ -130,5 +131,11 @@ export default class DefaultPlatform implements IPlatform {
         console.log('写本地存储');
         Laya.LocalStorage.setItem(key, data);
 
+    }
+    followOfficialAccount(): any {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
+    }
+    checkFollowState(): any {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
     }
 }

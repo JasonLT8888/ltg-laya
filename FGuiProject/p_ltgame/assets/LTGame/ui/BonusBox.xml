@@ -17,13 +17,14 @@
     <image id="n17_il31" name="n17" src="kj718v" fileName="uiNew/gift/sp_xuanzesangeliwu.png" xy="227,88">
       <relation target="n16_il31" sidePair="center-center,middle-middle"/>
     </image>
-    <component id="n18_il31" name="btn_close" src="kj718w" fileName="uiNew/btn_trySkinNo.xml" xy="375,1072" pivot="0.5,0.5" anchor="true" size="121,44" visible="false">
+    <component id="n18_il31" name="btn_close" src="kj718w" fileName="uiNew/btn_trySkinNo.xml" xy="375,1072" pivot="0.5,0.5" anchor="true" size="121,44">
       <gearDisplay controller="canclose" pages="1"/>
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="不，谢谢"/>
     </component>
     <component id="n19_dywv" name="tog" src="gxi832" fileName="cmp/btn_toggle_02.xml" xy="225,863">
       <gearDisplay controller="canclose" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="观看视频获取开箱次数"/>
     </component>
     <list id="n20_pknz" name="boxList" xy="62,202" size="615,545" layout="flow_hz" overflow="scroll" scrollBarFlags="160" scrollBar="hidden" lineGap="15" colGap="30" lineItemCount="3" defaultItem="ui://75kiu87kpknzbd" align="center" vAlign="middle" scrollItemToViewOnClick="false">

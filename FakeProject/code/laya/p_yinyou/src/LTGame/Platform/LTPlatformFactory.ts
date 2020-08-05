@@ -30,7 +30,7 @@ export default class LTPlatformFactory {
         } else if (Laya.Browser.onQGMiniGame) {
             result = new OppoPlatform();
         } else if (Laya.Browser.onVVMiniGame) {
-            result = new VivoPlatform();
+            result = new VivoPlatform(); 
         } else if (window['conch']) {
             let conchConfig = window['conchConfig'];
             let os = conchConfig.getOS();
