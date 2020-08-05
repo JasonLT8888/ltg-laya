@@ -9,6 +9,7 @@ import { UIEffectTest } from "../test/UIEffectTest";
 import { PhysicTest } from "../test/PhysicTest";
 import { OimoPhysicTest } from "../test/OimoPhysicTest";
 import { HybridPhysicTest } from "../test/HybridPhysicTest";
+import { CannonPhysicTest } from "../test/CannonPhysicTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
 
@@ -29,6 +30,7 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
         new PhysicTest(),
         new OimoPhysicTest(),
         new HybridPhysicTest(),
+        new CannonPhysicTest(),
     ];
 
     _OnShow() {

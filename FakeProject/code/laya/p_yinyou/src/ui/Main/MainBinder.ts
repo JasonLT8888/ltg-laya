@@ -14,7 +14,7 @@ import UI_Others from "./UI_Others";
 import UI_FunctionTest from "./UI_FunctionTest";
 import UI_Test from "./UI_Test";
 
-export default class MainBinder {
+export default class MainBinder{
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(UI_CommonUI.URL, UI_CommonUI);
 		fgui.UIObjectFactory.setExtension(UI_ADDemo.URL, UI_ADDemo);

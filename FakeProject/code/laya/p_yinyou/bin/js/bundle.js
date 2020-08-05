@@ -9343,6 +9343,18 @@ class SaveData {
          * 免费抽奖次数
          */
         this.freeRollCount = 1;
+        /**
+    * 彩蛋获得数据
+    */
+        this.EggPassIds = [];
+        /**
+        * 彩蛋密语数据
+        */
+        this.EggSecretIds = [];
+        /**
+        * 彩蛋暗号数据
+        */
+        this.EggPasswordIds = [];
     }
 }
 class CommonSaveData {
@@ -11866,15 +11878,61 @@ class LTPlatformData {
 /*!**********************************************!*\
   !*** ./src/LTGame/Platform/DefaultDevice.ts ***!
   \**********************************************/
-/*! exports provided: default */
+/*! exports provided: default, OppoDevice, VivoDevice */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DefaultDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OppoDevice", function() { return OppoDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VivoDevice", function() { return VivoDevice; });
 class DefaultDevice {
     Vibrate(isLong) {
         console.log("调用震动", isLong);
+    }
+}
+class OppoDevice {
+    constructor() {
+        this.base = qg;
+        console.log('QGDIVCE INIT', this.base);
+    }
+    Vibrate(isLong) {
+        console.log('调用振动', isLong);
+        if (this.base) {
+            if (isLong) {
+                this.base.vibrateLong({
+                    success: (res) => {
+                        console.log('振动');
+                    },
+                    fail: (res) => { console.log('振动失败'); },
+                    complete: (res) => { }
+                });
+            }
+            else {
+                this.base.vibrateShort({
+                    success: (res) => { console.log('短振动'); },
+                    fail: (res) => { console.log('短振动失败'); },
+                    complete: (res) => { }
+                });
+            }
+        }
+    }
+}
+class VivoDevice {
+    constructor() {
+        this.base = qg;
+        console.log('QGDIVCE INIT', this.base);
+    }
+    Vibrate(isLong) {
+        console.log('调用振动', isLong);
+        if (this.base) {
+            if (isLong) {
+                this.base.vibrateLong();
+            }
+            else {
+                this.base.vibrateShort();
+            }
+        }
     }
 }
 
@@ -12234,6 +12292,9 @@ class TTRecordManager extends _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_1__
         super();
         this.supportRecord = true;
         this._base = base;
+        if (_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.systemInfo['appName'] == "devtools") {
+            this.supportRecord = false;
+        }
         this.isRecording = false;
         this.isRecordSuccess = false;
         this.isPausing = false;
@@ -12273,6 +12334,10 @@ class TTRecordManager extends _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_1__
         });
     }
     StartRecord(onStart, onOverTime) {
+        if (!this.supportRecord) {
+            console.log("不支持录屏");
+            return;
+        }
         console.log("调用开始录屏");
         this._cacheStartHandle = onStart;
         this._cacheOverTimeHandle = onOverTime;
@@ -12593,7 +12658,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_9__["EPlatformType"].Oppo;
         this.safeArea = null;
         this.recordManager = new _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_8__["default"]();
-        this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_7__["default"]();
+        this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_7__["OppoDevice"]();
         /**
          * 是否支持直接跳转到其他小程序
          */
@@ -13960,7 +14025,7 @@ class VivoPlatform {
         this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].Vivo;
         this.safeArea = null;
         this.recordManager = new _Impl_Web_WebRecordManager__WEBPACK_IMPORTED_MODULE_5__["WebRecordManager"]();
-        this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_3__["default"]();
+        this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_3__["VivoDevice"]();
         this.systemInfo = null;
         /**
          * 是否支持直接跳转到其他小程序
@@ -16211,24 +16276,30 @@ class View_NativeIconLong {
             // for (let i = 0; i < this._cacheIds.length; ++i) {
             let ret = yield this._LoadIconData(i);
             if (ret && this._cacheAdData) {
-                this.visible = true;
-                this.ui.visible = true;
-                let icon = this._cacheAdData.icon;
-                if (!icon && this._cacheAdData.imgUrlList.length) {
-                    icon = this._cacheAdData.imgUrlList[0];
-                }
-                this.ui.m_ad.m_icon.url = icon;
-                this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
-                this.ui.m_ad.m_title.text = this._cacheAdData.title;
-                this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
-                View_NativeIconLong._cacheNativeAd.reportAdShow({
-                    adId: this._cacheAdData.adId
-                });
-                console.log("原生icon广告已展示", this._cacheAdData);
+                this.showInfo();
                 return;
             }
             // }
         });
+    }
+    showInfo() {
+        this.visible = true;
+        this.ui.visible = true;
+        let icon = this._cacheAdData.icon;
+        if (!icon && this._cacheAdData.imgUrlList.length) {
+            icon = this._cacheAdData.imgUrlList[0];
+        }
+        this.ui.m_ad.m_icon.url = icon;
+        this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
+        this.ui.m_ad.m_title.text = this._cacheAdData.title;
+        this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+        if (!this._cacheAdData.show_reported) {
+            View_NativeIconLong._cacheNativeAd.reportAdShow({
+                adId: this._cacheAdData.adId
+            });
+            this._cacheAdData.show_reported = true;
+            console.log("原生icon广告已展示", this._cacheAdData);
+        }
     }
     _OnClickAd() {
         this.ClickAd();
@@ -16271,11 +16342,13 @@ class View_NativeIconLong {
                 nativeAd.onLoad((res) => {
                     console.log(' 原生广告加载完成 触发', JSON.stringify(res));
                     if (res && res.adList) {
-                        this._cacheAdData = res.adList[0];
+                        this._cacheAdData = res.adList.pop();
+                        this.showInfo();
                     }
                 });
                 nativeAd.onError(err => {
                     console.log("原生广告加载异常", err);
+                    this.ui.visible = false;
                 });
                 yield nativeAd.load();
             }
@@ -17589,7 +17662,6 @@ class UI_BonusBox extends fgui.GComponent {
         this.m_keyList = (this.getChildAt(8));
         this.m_btn_ad = (this.getChildAt(9));
         this.m_txt_count = (this.getChildAt(10));
-        this.m___bottomgames = (this.getChildAt(11));
         this.m_t1 = this.getTransitionAt(0);
         this.m_delay = this.getTransitionAt(1);
     }
@@ -20285,15 +20357,12 @@ UI_view_toast.URL = "ui://75kiu87kovsy8";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_BonusBoxMediator", function() { return UI_BonusBoxMediator; });
 /* harmony import */ var _script_common_GameData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../script/common/GameData */ "./src/script/common/GameData.ts");
-/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
-/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-/* harmony import */ var _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Data/CommonRewardData */ "./src/LTGame/UIExt/DefaultUI/Data/CommonRewardData.ts");
-/* harmony import */ var _UI_LTGame_UI_BonusBox__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI/LTGame/UI_BonusBox */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_BonusBox.ts");
+/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Data/CommonRewardData */ "./src/LTGame/UIExt/DefaultUI/Data/CommonRewardData.ts");
+/* harmony import */ var _UI_LTGame_UI_BonusBox__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI/LTGame/UI_BonusBox */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_BonusBox.ts");
 
 
 
@@ -20301,14 +20370,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_6__["default"] {
+class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_3__["default"] {
     constructor() {
         super(...arguments);
         this.keyCount = 3;
-        this.weight = [2, 2, 2, 5, 5, 5, 5, 5, 5];
+        this.weight = [20, 20, 20, 5, 5, 5, 5, 1, 1];
         this.adItems = [];
         this.datas = [];
     }
@@ -20318,13 +20384,14 @@ class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_BonusBoxMediator();
-            this._instance._classDefine = _UI_LTGame_UI_BonusBox__WEBPACK_IMPORTED_MODULE_9__["default"];
+            this._instance._classDefine = _UI_LTGame_UI_BonusBox__WEBPACK_IMPORTED_MODULE_6__["default"];
         }
         return this._instance;
     }
     _OnShow() {
         super._OnShow();
-        this._openData = new _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_8__["CommonRewardData"]();
+        this._ui.sortingOrder = this._sortOrder + 1;
+        this._openData = new _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_5__["CommonRewardData"]();
         if (this._openParam == null) {
             console.error("请传入CommonRewardData用于初始化宝箱界面");
         }
@@ -20337,8 +20404,8 @@ class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
         if (this._openData) {
             this.datas = this._openData.datas;
         }
-        this.adItems = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].RandomArrayFromArray([0, 1, 2, 3, 4, 5, 6, 7, 8], 3);
-        this.ui.m_btn_close.visible = _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].Oppo;
+        this.adItems = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__["default"].RandomArrayFromArray([0, 1, 2, 3, 4, 5, 6, 7, 8], 3);
+        this.ui.m_btn_close.visible = false; // LTPlatform.instance.platform == EPlatformType.Oppo;
         this.ui.m_keyList.setVirtual();
         this.ui.m_keyList.itemRenderer = Laya.Handler.create(this, this.renderKeyItem, null, false);
         this.ui.m_keyList.numItems = 3;
@@ -20351,24 +20418,27 @@ class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
         this.ui.m_btn_close.onClick(this, this.Hide);
         this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
         this.ui.m_btn_ad.onClick(this, this.addKey);
-        this.ui.m_tog.m_selected.selectedIndex = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_2__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_1__["ECheckState"].InCheck ? 0 : 1;
-        this.ui.m_tog.onClick(this, () => {
-            this.ui.m_tog.m_selected.selectedIndex = (this.ui.m_tog.m_selected.selectedIndex + 1) % 2;
-            this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
-        });
-        this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
+        this.ui.m_tog.visible = false;
+        this.ui.m_tog.m_selected.selectedIndex = 1;
+        // this.ui.m_tog.m_selected.selectedIndex = LTSDK.instance.checkState == ECheckState.InCheck ? 0 : 1;
+        // this.ui.m_tog.onClick(this, () => {
+        //     this.ui.m_tog.m_selected.selectedIndex = (this.ui.m_tog.m_selected.selectedIndex + 1) % 2;
+        //     this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
+        // });
+        this.ui.m_btn_ad.m_ad.selectedIndex = 1; //this.ui.m_tog.m_selected.selectedIndex;
+        console.error(this._sortOrder, this._ui.sortingOrder);
     }
     addKey() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.ui.m_tog.m_selected.selectedIndex == 1) {
-                let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.ShowRewardVideoAdAsync();
+                let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ShowRewardVideoAdAsync();
                 if (result) {
                     this.keyCount = 3;
                     this.ui.m_keyList.refreshVirtualList();
                     this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
                 }
                 else {
-                    _LTUI__WEBPACK_IMPORTED_MODULE_7__["default"].Toast("跳过广告无法获得奖励");
+                    _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过广告无法获得奖励");
                 }
             }
             else {
@@ -20377,6 +20447,9 @@ class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
         });
     }
     clickBox(item) {
+        if (item.m_isclicked.selectedIndex == 1) {
+            return;
+        }
         if (parseInt(item.data.toString()) == 1 || this.keyCount == 0) {
             this.getAdBonus(item);
         }
@@ -20386,20 +20459,20 @@ class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
     }
     getAdBonus(item) {
         return __awaiter(this, void 0, void 0, function* () {
-            let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.ShowRewardVideoAdAsync();
+            let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ShowRewardVideoAdAsync();
             if (result) {
                 this.getBonus(item);
             }
             else {
-                _LTUI__WEBPACK_IMPORTED_MODULE_7__["default"].Toast("跳过广告无法获得奖励");
+                _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过广告无法获得奖励");
             }
         });
     }
     getBonus(item) {
-        let data = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].RandomFromWithWeight(this.datas, this.weight);
+        let data = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__["default"].RandomFromWithWeight(this.datas, this.weight);
         item.m_title.text = `${data.type == 1 ? '皮肤' : '金币'}${data.value}`;
         item.m_icon.url = data.icon;
-        _LTUI__WEBPACK_IMPORTED_MODULE_7__["default"].Toast(`恭喜获得${data.type == 1 ? '皮肤' : '金币'}${data.value}`);
+        _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast(`恭喜获得${data.type == 1 ? '皮肤' : '金币'}${data.value}`);
         item.m_isclicked.selectedIndex = 1;
         if (data.type == 0) {
             _script_common_GameData__WEBPACK_IMPORTED_MODULE_0__["default"].instance.coinCount += data.value;
@@ -20411,7 +20484,13 @@ class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_
         if (this.keyCount > 0) {
             this.keyCount -= 1;
             this.ui.m_keyList.refreshVirtualList();
-            this.ui.m_canclose.selectedIndex = this.keyCount < 1 ? 1 : 0;
+            if (this.ui.m_canclose.selectedIndex == 0) {
+                this.ui.m_canclose.selectedIndex = this.keyCount < 1 ? 1 : 0;
+            }
+            if (!this.ui.m_btn_close.visible && this.ui.m_canclose.selectedIndex == 1) {
+                this.ui.m_btn_close.visible = true;
+                this.ui.m_delay.play();
+            }
         }
         this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
     }
@@ -22538,8 +22617,8 @@ class BaseUIMediator {
         uiData.needFitScreen = this._needFilScreen;
         this._ui = _FGuiEx__WEBPACK_IMPORTED_MODULE_0__["default"].AddUI(this._classDefine, uiData);
         this._InitSelfAd();
-        this._OnShow();
         this._ui.sortingOrder = this._sortOrder;
+        this._OnShow();
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter] && _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__["default"].instance.isDelayClose) {
             let anim = this._ui[anim_enter];
@@ -24392,7 +24471,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_3__["LTSt
     constructor() {
         super();
         this._appId = "ttbe90c82d21ba845b";
-        /**云控版本 A B 版本轮换（1.0.0 1.0.1） 一个为线上版本 领一个为审核版本，提审时 两个版本轮换使用 */
+        /**SDK云控版本名 */
         this._gameVersion = "1.0.0";
         /**资源版本 */
         this._resVersion = "0515";
@@ -24504,18 +24583,6 @@ class SaveData {
          * 金币数量
          */
         this.coinCount = 0;
-        /**
-     * 彩蛋获得数据
-     */
-        this.EggPassIds = [];
-        /**
-        * 彩蛋密语数据
-        */
-        this.EggSecretIds = [];
-        /**
-        * 彩蛋暗号数据
-        */
-        this.EggPasswordIds = [];
     }
 }
 class GameData {
@@ -25110,6 +25177,151 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_2
             this.isFinished = true;
             this.nextState = _LTGame_Start_ESceneType__WEBPACK_IMPORTED_MODULE_1__["ESceneType"].Main;
         });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/CannonPhysicTest.ts":
+/*!*********************************************!*\
+  !*** ./src/script/test/CannonPhysicTest.ts ***!
+  \*********************************************/
+/*! exports provided: CannonPhysicTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CannonPhysicTest", function() { return CannonPhysicTest; });
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+/* harmony import */ var _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/QuaternionEx */ "./src/LTGame/LTUtils/QuaternionEx.ts");
+
+
+
+
+
+
+class CannonPhysicTest {
+    constructor() {
+        this.name = "Cannon物理";
+        this._isPressed = false;
+        this._panelSize = 50;
+    }
+    Create() {
+        this._s3d = new Laya.Scene3D();
+        Laya.stage.addChildAt(this._s3d, 1);
+        this._world = new CANNON.World();
+        this._world.gravity.set(0, -9.82, 0);
+        this._world.allowSleep = true;
+        let panelMesh = Laya.PrimitiveMesh.createPlane(this._panelSize, this._panelSize, 1, 1);
+        let panelMat = new Laya.BlinnPhongMaterial();
+        panelMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
+        let panelObj = new Laya.MeshSprite3D(panelMesh, "floor");
+        panelObj.meshRenderer.material = panelMat;
+        panelObj.meshRenderer.receiveShadow = true;
+        this._s3d.addChild(panelObj);
+        panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
+        let panelBody = new CANNON.Body({
+            mass: 0,
+            position: new CANNON.Vec3(0, -1, 0),
+            quaternion: new CANNON.Quaternion(panelObj.transform.rotation.x, panelObj.transform.rotation.y, panelObj.transform.rotation.z, panelObj.transform.rotation.w)
+        });
+        let panelShape = new CANNON.Box(new CANNON.Vec3(this._panelSize / 2, 1, this._panelSize / 2));
+        panelBody.addShape(panelShape);
+        this._world.addBody(panelBody);
+        let camera = new Laya.Camera();
+        camera.name = "camera";
+        this._s3d.addChild(camera);
+        camera.transform.localPosition = new Laya.Vector3(0, this._panelSize * 1.2, this._panelSize * 1.2);
+        camera.transform.localRotationEuler = new Laya.Vector3(-45, 0, 0);
+        let light = new Laya.DirectionLight();
+        this._s3d.addChild(light);
+        light.transform.localRotationEuler = new Laya.Vector3(-75, 0, 0);
+        light.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
+        light.shadowMode = Laya.ShadowMode.SoftHigh;
+        light.shadowDistance = 200;
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
+        this._cacheMaterial = new Laya.BlinnPhongMaterial();
+        this._cacheMaterial.albedoColor = new Laya.Vector4(0.1, 0.1, 0.6, 1);
+        this._sleepMaterial = new Laya.BlinnPhongMaterial();
+        this._sleepMaterial.albedoColor = new Laya.Vector4(0.5, 0.5, 0, 1);
+        this._cacheMesh = Laya.PrimitiveMesh.createBox(1, 1, 1);
+        this._cubeRigs = [];
+        this._cubeObjs = [];
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        if (this._isPressed) {
+            this._remainTime -= dt;
+            if (this._remainTime < 0) {
+                this._GenCube();
+                this._remainTime = 0.1;
+            }
+        }
+        this._world.step(dt, 0, 1);
+        for (let i = 0; i < this._cubeObjs.length; ++i) {
+            let cubeObj = this._cubeObjs[i];
+            let rig = this._cubeRigs[i];
+            let pos = rig.position;
+            _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0.setValue(pos.x, pos.y, pos.z);
+            cubeObj.transform.position = _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0;
+            let rot = rig.quaternion;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.x = rot.x;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.y = rot.y;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.z = rot.z;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.w = rot.w;
+            cubeObj.transform.rotation = _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0;
+            cubeObj.meshRenderer.sharedMaterial = rig.sleepState == CANNON.Body.SLEEPING ? this._sleepMaterial : this._cacheMaterial;
+        }
+    }
+    _GenCube() {
+        let cubeObj = new Laya.MeshSprite3D(this._cacheMesh, "cube");
+        cubeObj.meshRenderer.sharedMaterial = this._cacheMaterial;
+        this._s3d.addChild(cubeObj);
+        let size = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2));
+        cubeObj.transform.localPosition = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5), this._panelSize, _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5));
+        cubeObj.transform.localRotationEuler = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360));
+        cubeObj.transform.localScale = size;
+        cubeObj.meshRenderer.castShadow = true;
+        cubeObj.meshRenderer.receiveShadow = true;
+        let rig = new CANNON.Body({
+            position: new CANNON.Vec3(cubeObj.transform.position.x, cubeObj.transform.position.y, cubeObj.transform.position.z),
+            quaternion: new CANNON.Quaternion(cubeObj.transform.rotation.x, cubeObj.transform.rotation.y, cubeObj.transform.rotation.z, cubeObj.transform.rotation.w),
+            mass: 10
+        });
+        let boxShape = new CANNON.Box(new CANNON.Vec3(size.x / 2, size.y / 2, size.z / 2));
+        rig.addShape(boxShape);
+        this._world.addBody(rig);
+        this._cubeObjs.push(cubeObj);
+        this._cubeRigs.push(rig);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_text_notice.text = "物体数量:" + this._cubeObjs.length;
+    }
+    _OnMouseDown(event) {
+        if (this._isPressed)
+            return;
+        this._isPressed = true;
+        this._touchId = event.touchId;
+        this._remainTime = 0;
+    }
+    _OnMouseUp(event) {
+        if (!this._isPressed)
+            return;
+        if (this._touchId != event.touchId)
+            return;
+        this._isPressed = false;
+    }
+    Clear() {
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
     }
 }
 
@@ -26261,6 +26473,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../test/PhysicTest */ "./src/script/test/PhysicTest.ts");
 /* harmony import */ var _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../test/OimoPhysicTest */ "./src/script/test/OimoPhysicTest.ts");
 /* harmony import */ var _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../test/HybridPhysicTest */ "./src/script/test/HybridPhysicTest.ts");
+/* harmony import */ var _test_CannonPhysicTest__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../test/CannonPhysicTest */ "./src/script/test/CannonPhysicTest.ts");
+
 
 
 
@@ -26282,6 +26496,7 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
             new _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__["PhysicTest"](),
             new _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["OimoPhysicTest"](),
             new _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__["HybridPhysicTest"](),
+            new _test_CannonPhysicTest__WEBPACK_IMPORTED_MODULE_10__["CannonPhysicTest"](),
         ];
     }
     static get instance() {
@@ -27005,6 +27220,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_BoneAnimTest; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_BoneAnimTest extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "BoneAnimTest"));
     }
@@ -27032,6 +27250,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonUI; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_CommonUI extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "CommonUI"));
     }
@@ -27070,6 +27291,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_FunctionTest; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_FunctionTest extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "FunctionTest"));
     }
@@ -27095,6 +27319,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Main; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_Main extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "Main"));
     }
@@ -27187,6 +27414,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Others; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_Others extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "Others"));
     }
@@ -27221,6 +27451,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_PerfomanceDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_PerfomanceDemo extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "PerfomanceDemo"));
     }
@@ -27247,6 +27480,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_RecordDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_RecordDemo extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "RecordDemo"));
     }
@@ -27282,6 +27518,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Test; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_Test extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "Test"));
     }
@@ -27308,6 +27547,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TestRT; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_TestRT extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "TestRT"));
     }
@@ -27333,6 +27575,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_UIDemo; });
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 class UI_UIDemo extends fgui.GComponent {
+    constructor() {
+        super();
+    }
     static createInstance() {
         return (fgui.UIPackage.createObject("Main", "UIDemo"));
     }
