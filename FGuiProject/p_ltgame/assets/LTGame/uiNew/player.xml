@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="208,58">
-  <displayList>
-    <image id="n41_nl5t" name="sp_player_bg" src="kj719c" fileName="img/main/sp_jinbilan.png" xy="0,0" size="208,58"/>
-    <image id="n42_nl5t" name="sp_zuanshi" src="kj719d" fileName="img/main/sp_zuanshi.png" xy="8,8"/>
-    <text id="n43_nl5t" name="lbl_playerMoney" xy="66,6" size="137,45" fontSize="35" color="#ffffff" align="center" vAlign="middle" autoSize="shrink" singleLine="true" text="11400"/>
-  </displayList>
-</component>

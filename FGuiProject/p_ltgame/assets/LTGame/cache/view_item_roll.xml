@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="87,203">
-  <displayList>
-    <loader id="n6_bg00" name="icon" xy="16,44" size="57,70" url="ui://75kiu87kbg002p" align="center" vAlign="middle" fill="scale"/>
-    <text id="n7_bg00" name="text_title" xy="0,0" pivot="0.5,0.5" size="85,27" fontSize="20" text="下次奖励"/>
-  </displayList>
-</component>

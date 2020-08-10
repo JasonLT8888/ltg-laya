@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="680,465">
-  <displayList>
-    <image id="n3_bg00" name="n3" src="bg001d" fileName="img/sp_baiwanren.png" xy="150,0"/>
-    <component id="n4_bg00" name="sharegames" src="wjpo4i" fileName="cache/view_sharegames_big.xml" xy="0,54"/>
-  </displayList>
-</component>

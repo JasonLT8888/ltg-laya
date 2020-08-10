@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="250,100" extention="Button">
-  <displayList>
-    <image id="n11_it2i" name="n11" src="ovsy3" fileName="img/btn_anniulan.png" xy="0,0" size="250,100"/>
-    <image id="n12_it2i" name="n12" src="it2it" fileName="img/sp_lingqujiangli.png" xy="50,31"/>
-  </displayList>
-  <Button downEffect="dark" downEffectValue="0.80"/>
-</component>
