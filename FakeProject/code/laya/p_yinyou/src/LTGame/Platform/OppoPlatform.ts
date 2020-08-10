@@ -1,12 +1,12 @@
+import { ECheckState } from "../../SDK/common/ECheckState";
+import LTSDK from "../../SDK/LTSDK";
 import Awaiters from "../Async/Awaiters";
 import { CommonEventId } from "../Commom/CommonEventId";
-import CommonSaveData from "../Commom/CommonSaveData";
 import StringEx from "../LTUtils/StringEx";
 import UI_ImageBannerMediator, { FakeBannerData } from "../UIExt/DefaultUI/UI_ImageBannerMediator";
-import UI_NativeInterstitialMediator, { FakeInterstitalData } from "../UIExt/DefaultUI/UI_NativeInterstitialMediator";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
-import DefaultDevice, { OppoDevice } from "./DefaultDevice";
+import { OppoDevice } from "./DefaultDevice";
 import DefaultRecordManager from "./DefaultRecordManager";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
@@ -14,8 +14,6 @@ import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
-import LTSDK from "../../SDK/LTSDK";
-import { ECheckState } from "../../SDK/common/ECheckState";
 
 export default class OppoPlatform extends WXPlatform {
 

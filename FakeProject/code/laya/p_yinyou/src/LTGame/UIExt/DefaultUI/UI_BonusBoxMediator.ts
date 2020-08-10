@@ -1,16 +1,12 @@
 import GameData from "../../../script/common/GameData";
-import { ECheckState } from "../../../SDK/common/ECheckState";
-import LTSDK from "../../../SDK/LTSDK";
 import MathEx from "../../LTUtils/MathEx";
-import { EPlatformType } from "../../Platform/EPlatformType";
 import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
 import { CommonRewardData, RewardItem } from "./Data/CommonRewardData";
-import UI_BonusBox from "./UI/LTGame/UI_BonusBox";
-import UI_BonusItem from "./UI/LTGame/UI_BonusItem";
-import UI_tog_key from "./UI/LTGame/UI_tog_key";
-import GlobalUnit from "../../../script/common/GlobalUnit";
+import UI_BonusBox from "./UI/LTUI/UI_BonusBox";
+import UI_BonusItem from "./UI/LTUI/UI_BonusItem";
+import UI_tog_key from "./UI/LTUI/UI_tog_key";
 
 
 
@@ -35,8 +31,7 @@ export class UI_BonusBoxMediator extends BaseUIMediator<UI_BonusBox> {
     datas: RewardItem[] = [];
     private _openData: CommonRewardData;
     _OnShow() {
-        super._OnShow();
-        this._ui.sortingOrder = this._sortOrder + 1;
+        super._OnShow(); 
         this._openData = new CommonRewardData();
         if (this._openParam == null) {
             console.error("请传入CommonRewardData用于初始化宝箱界面");
