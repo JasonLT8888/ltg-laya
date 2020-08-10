@@ -479,7 +479,7 @@ export default class WXPlatform implements IPlatform {
         console.log(LTPlatform.platformStr, "OnShow", res);
         LTPlatform.instance.lauchOption = res;
         LTPlatform.instance._CheckUpdate();
-        this.NavigateToAppSuccess = null;
+        // this.NavigateToAppSuccess = null;//wx
         Awaiters.NextFrame().then(() => {
             if (LTPlatform.instance.onResume) {
                 LTPlatform.instance.onResume.runWith(res);
@@ -500,9 +500,10 @@ export default class WXPlatform implements IPlatform {
         if (LTPlatform.instance.onPause) {
             LTPlatform.instance.onPause.runWith(res);
         }
-        if (this.NavigateToAppSuccess) {
-            this.NavigateToAppSuccess();
-        }
+        //wx
+        // if (this.NavigateToAppSuccess) {
+        //     this.NavigateToAppSuccess();
+        // }
     }
 
     ShareAppMessage(shareInfo: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {

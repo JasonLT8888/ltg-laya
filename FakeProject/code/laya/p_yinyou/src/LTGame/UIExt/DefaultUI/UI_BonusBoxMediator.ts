@@ -68,8 +68,7 @@ export class UI_BonusBoxMediator extends BaseUIMediator<UI_BonusBox> {
         //     this.ui.m_tog.m_selected.selectedIndex = (this.ui.m_tog.m_selected.selectedIndex + 1) % 2;
         //     this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
         // });
-        this.ui.m_btn_ad.m_ad.selectedIndex = 1;//this.ui.m_tog.m_selected.selectedIndex;
-        console.error(this._sortOrder, this._ui.sortingOrder);
+        this.ui.m_btn_ad.m_ad.selectedIndex = 1;//this.ui.m_tog.m_selected.selectedIndex; 
 
     }
     async addKey() {

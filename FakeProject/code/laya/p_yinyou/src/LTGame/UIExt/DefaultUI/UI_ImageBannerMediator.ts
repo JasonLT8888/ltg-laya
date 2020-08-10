@@ -16,10 +16,10 @@ export default class UI_ImageBannerMediator extends BaseUIMediator<UI_ImageBanne
     private _fakeBannerData: FakeBannerData;
 
     _OnShow() {
+        this._sortOrder = 500;
         super._OnShow();
         // your code
 
-        this._sortOrder = 500;
         this._fakeBannerData = this._openParam as FakeBannerData;
         this.ui.m_img_banner.url = this._fakeBannerData.imgPath;
         this.ui.m_img_adnotice.url = this._fakeBannerData.noticePath;
