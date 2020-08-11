@@ -1,6 +1,6 @@
-import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_BonusGame from "./UI/LTGame/UI_BonusGame";
+import BaseUIMediator from "../FGui/BaseUIMediator"; 
 import LTUI from "../LTUI";
+import UI_BonusGame from "./UI/LTUI/UI_BonusGame";
 
 
 
