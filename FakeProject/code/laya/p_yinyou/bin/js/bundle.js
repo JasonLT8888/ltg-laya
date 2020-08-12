@@ -12069,6 +12069,12 @@ class DefaultPlatform {
         console.log('写本地存储');
         Laya.LocalStorage.setItem(key, data);
     }
+    followOfficialAccount() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "暂不支持关注");
+    }
+    checkFollowState() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "暂不支持关注");
+    }
 }
 
 
@@ -12626,18 +12632,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return OppoPlatform; });
 /* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
 /* harmony import */ var _Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Commom/CommonEventId */ "./src/LTGame/Commom/CommonEventId.ts");
-/* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
-/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
-/* harmony import */ var _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_ImageBannerMediator */ "./src/LTGame/UIExt/DefaultUI/UI_ImageBannerMediator.ts");
-/* harmony import */ var _UIExt_DefaultUI_UI_NativeInterstitialMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_NativeInterstitialMediator */ "./src/LTGame/UIExt/DefaultUI/UI_NativeInterstitialMediator.ts");
-/* harmony import */ var _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-/* harmony import */ var _DefaultDevice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./DefaultDevice */ "./src/LTGame/Platform/DefaultDevice.ts");
-/* harmony import */ var _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./DefaultRecordManager */ "./src/LTGame/Platform/DefaultRecordManager.ts");
-/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_ImageBannerMediator */ "./src/LTGame/UIExt/DefaultUI/UI_ImageBannerMediator.ts");
+/* harmony import */ var _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _DefaultDevice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DefaultDevice */ "./src/LTGame/Platform/DefaultDevice.ts");
+/* harmony import */ var _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DefaultRecordManager */ "./src/LTGame/Platform/DefaultRecordManager.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
 
 
 
@@ -12650,15 +12654,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] {
+class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_9__["default"] {
     constructor() {
         super(...arguments);
-        this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_9__["EPlatformType"].Oppo;
+        this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_7__["EPlatformType"].Oppo;
         this.safeArea = null;
-        this.recordManager = new _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_8__["default"]();
-        this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_7__["OppoDevice"]();
+        this.recordManager = new _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_6__["default"]();
+        this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_5__["OppoDevice"]();
         /**
          * 是否支持直接跳转到其他小程序
          */
@@ -12673,7 +12675,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
     Init(platformData) {
         this._base = window["qg"];
         if (this._base == null) {
-            console.error("平台初始化错误", _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr);
+            console.error("平台初始化错误", _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].platformStr);
             return;
         }
         this.platformData = platformData;
@@ -12744,7 +12746,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
             this._OnLoginSuccess(res);
         };
         loginData.fail = (res) => {
-            console.error(_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "登录失败", res);
+            console.error(_LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].platformStr, "登录失败", res);
             this.loginState.isLogin = false;
             this.loginState.code = "";
         };
@@ -12756,7 +12758,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         this._base.login(loginData);
     }
     _OnLoginSuccess(res) {
-        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "登录成功", res);
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].platformStr, "登录成功", res);
         this.loginState.isLogin = true;
         this.loginState.code = res.token;
     }
@@ -12854,7 +12856,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
             console.error("无createRewardedVideoAd方法,跳过初始化");
             return;
         }
-        if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__["default"].IsNullOrEmpty(this.platformData.rewardVideoId)) {
+        if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
             return;
         }
@@ -12907,11 +12909,11 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
     ShowBannerAd() {
         return __awaiter(this, void 0, void 0, function* () {
             // 先尝试展示普通banner
-            if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_12__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_13__["ECheckState"].InCheck) {
+            if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_10__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_11__["ECheckState"].InCheck) {
                 console.log('审核中');
                 return;
             }
-            if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__["default"].IsNullOrEmpty(this.platformData.bannerId)) {
+            if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(this.platformData.bannerId)) {
                 console.log("无有效的banner广告ID,取消加载");
                 return;
             }
@@ -12977,13 +12979,13 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
                     console.error("native banner加载失败", loadRet);
                     return false;
                 }
-                let fakeData = new _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_4__["FakeBannerData"]();
+                let fakeData = new _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_3__["FakeBannerData"]();
                 fakeData.imgPath = adData.imgUrlList[0];
                 fakeData.noticePath = adData.logoUrl;
                 fakeData.adId = adData.adId;
                 fakeData.owner = this._bannerAd;
                 fakeData.iconPath = adData.icon;
-                _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show(fakeData);
+                _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show(fakeData);
                 return true;
             }
             else {
@@ -12997,7 +12999,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
             this._bannerAd.destroy();
             this._bannerAd = null;
         }
-        _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Hide();
+        _UIExt_DefaultUI_UI_ImageBannerMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Hide();
     }
     ShowNativeAd() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -13031,7 +13033,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         var _a, _b;
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
-        if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__["default"].IsNullOrEmpty(this.platformData.rewardVideoId)) {
+        if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
             (_a = this._rewardSkipped) === null || _a === void 0 ? void 0 : _a.run();
             return;
@@ -13045,7 +13047,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         if (this._rewardVideo) {
             this._rewardVideo.destroy();
         }
-        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].ShowLoading("广告拉取中...");
+        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].ShowLoading("广告拉取中...");
         let videoObj = {};
         videoObj["adUnitId"] = this.platformData.rewardVideoId; // "adunit-5631637236cf16b6";
         this._rewardVideo = createRewardedVideoAd(videoObj);
@@ -13067,13 +13069,13 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         });
         this._rewardVideo.onError((err) => {
             console.log("广告组件出现问题", err);
-            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].HideLoading();
+            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].HideLoading();
             if (this._rewardSkipped)
                 this._rewardSkipped.run();
         });
         this._rewardVideo.onLoad((res) => {
             console.log("广告加载成功", res);
-            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].HideLoading();
+            _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].HideLoading();
         });
         this._rewardVideo.load().then(() => {
             this._rewardVideo.show();
@@ -13089,7 +13091,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
     }
     ShowRewardVideoAdAsync() {
         return new Promise(function (resolve) {
-            _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
                 resolve(true);
             }), Laya.Handler.create(this, () => {
                 resolve(false);
@@ -13099,128 +13101,136 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
     _ShowNativeInterstital(index) {
         return __awaiter(this, void 0, void 0, function* () {
             return;
-            let nativeAd = this._base.createNativeAd({
-                adUnitId: this.platformData.nativeinterstitialIds[index]
-            });
-            // 转接对象
-            this._intersitialAd = nativeAd;
-            let loadRet = yield nativeAd.load();
-            if (loadRet["code"] == 0) {
-                // 加载成功
-                let adList = loadRet['adList'];
-                if (adList == null || adList.length == 0) {
-                    console.error("native 插页 加载失败", loadRet);
-                    return false;
-                }
-                let adData = adList[0];
-                console.log('广告数据加载完成', loadRet);
-                if (adData == null) {
-                    console.error("native 插页 加载失败", loadRet);
-                    return false;
-                }
-                let fakeData = new _UIExt_DefaultUI_UI_NativeInterstitialMediator__WEBPACK_IMPORTED_MODULE_5__["FakeInterstitalData"]();
-                fakeData.imgPath = adData.imgUrlList[0];
-                fakeData.noticePath = adData.logoUrl;
-                fakeData.adId = adData.adId;
-                fakeData.desc = adData.desc;
-                fakeData.iconPath = adData.icon;
-                fakeData.title = adData.title;
-                fakeData.owner = nativeAd;
-                _UIExt_DefaultUI_UI_NativeInterstitialMediator__WEBPACK_IMPORTED_MODULE_5__["default"].instance.Show(fakeData);
-                return true;
-            }
-            else {
-                console.error("native 插页 加载失败", loadRet);
-                return false;
-            }
+            // let nativeAd = this._base.createNativeAd({
+            //     adUnitId: this.platformData.nativeinterstitialIds[index]
+            // });
+            // // 转接对象
+            // this._intersitialAd = nativeAd;
+            // let loadRet = await nativeAd.load();
+            // if (loadRet["code"] == 0) {
+            //     // 加载成功
+            //     let adList = loadRet['adList'] as any[];
+            //     if (adList == null || adList.length == 0) {
+            //         console.error("native 插页 加载失败", loadRet);
+            //         return false;
+            //     }
+            //     let adData = adList[0] as {
+            //         adId: string,
+            //         imgUrlList: string[],
+            //         logoUrl: string,
+            //         icon: string,
+            //         title: string,
+            //         desc: string
+            //     };
+            //     console.log('广告数据加载完成', loadRet);
+            //     if (adData == null) {
+            //         console.error("native 插页 加载失败", loadRet);
+            //         return false;
+            //     }
+            //     let fakeData = new FakeInterstitalData();
+            //     fakeData.imgPath = adData.imgUrlList[0];
+            //     fakeData.noticePath = adData.logoUrl;
+            //     fakeData.adId = adData.adId;
+            //     fakeData.desc = adData.desc;
+            //     fakeData.iconPath = adData.icon;
+            //     fakeData.title = adData.title;
+            //     fakeData.owner = nativeAd;
+            //     UI_NativeInterstitialMediator.instance.Show(fakeData);
+            //     return true;
+            // } else {
+            //     console.error("native 插页 加载失败", loadRet);
+            //     return false;
+            // }
         });
     }
     _ShowNormalInterstitalAd() {
         return __awaiter(this, void 0, void 0, function* () {
             return;
-            if (this._intersitialAd) {
-                this._intersitialAd.destroy();
-            }
-            if (this.systemInfo.platformVersion < 1061) {
-                console.log("平台版本号不足1061,无法创建普通插页", this.systemInfo.platformVersion);
-                return false;
-            }
-            console.log("创建普通插页", this.platformData.interstitialId);
-            this._intersitialAd = this._base.createInterstitialAd({
-                adUnitId: this.platformData.interstitialId
-            });
-            let isloading = true;
-            let isSuccess = false;
-            this._intersitialAd.load()
-                .then((res) => {
-                console.log("普通插页加载成功", res);
-                isloading = false;
-                isSuccess = res['code'] == 0;
-            })
-                .catch((res) => {
-                console.error("普通插页加载失败", res);
-                isloading = false;
-                isSuccess = false;
-            });
-            while (isloading) {
-                yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_0__["default"].Frames(1);
-            }
-            if (!isSuccess) {
-                return false;
-            }
-            isloading = true;
-            this._intersitialAd.show()
-                .then((res) => {
-                console.log("普通插页展示成功", res);
-                isloading = false;
-                isSuccess = res['code'] == 0;
-            })
-                .catch((res) => {
-                console.error("普通插页展示失败", res);
-                isloading = false;
-                isSuccess = false;
-            });
-            while (isloading) {
-                yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_0__["default"].Frames(1);
-            }
-            return isSuccess;
+            // if (this._intersitialAd) {
+            //     this._intersitialAd.destroy();
+            // }
+            // if (this.systemInfo.platformVersion < 1061) {
+            //     console.log("平台版本号不足1061,无法创建普通插页", this.systemInfo.platformVersion);
+            //     return false;
+            // }
+            // console.log("创建普通插页", this.platformData.interstitialId);
+            // this._intersitialAd = this._base.createInterstitialAd(
+            //     {
+            //         adUnitId: this.platformData.interstitialId
+            //     }
+            // );
+            // let isloading = true;
+            // let isSuccess = false;
+            // this._intersitialAd.load()
+            //     .then((res) => {
+            //         console.log("普通插页加载成功", res);
+            //         isloading = false;
+            //         isSuccess = res['code'] == 0;
+            //     })
+            //     .catch((res) => {
+            //         console.error("普通插页加载失败", res);
+            //         isloading = false;
+            //         isSuccess = false;
+            //     });
+            // while (isloading) {
+            //     await Awaiters.Frames(1);
+            // }
+            // if (!isSuccess) {
+            //     return false;
+            // }
+            // isloading = true;
+            // this._intersitialAd.show()
+            //     .then((res) => {
+            //         console.log("普通插页展示成功", res);
+            //         isloading = false;
+            //         isSuccess = res['code'] == 0;
+            //     })
+            //     .catch((res) => {
+            //         console.error("普通插页展示失败", res);
+            //         isloading = false;
+            //         isSuccess = false;
+            //     });
+            // while (isloading) {
+            //     await Awaiters.Frames(1);
+            // }
+            // return isSuccess;
         });
     }
     ShowInterstitalAd() {
         return __awaiter(this, void 0, void 0, function* () {
             return;
-            if (!this.IsInterstitalAvaliable()) {
-                console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.interstitialCount}`);
-                return;
-            }
-            if (this._intersitialAd) {
-                this._intersitialAd.destroy();
-                _UIExt_DefaultUI_UI_NativeInterstitialMediator__WEBPACK_IMPORTED_MODULE_5__["default"].instance.Hide();
-            }
-            // 先拉去原生插屏(一个)
-            if (this.platformData.nativeinterstitialIds.length > 0) {
-                let ret = yield this._ShowNativeInterstital(0);
-                if (ret) {
-                    this._DisableInterstitalAd();
-                    return;
-                }
-            }
-            // 失败则拉取正常插屏
-            let ret = yield this._ShowNormalInterstitalAd();
-            if (ret) {
-                _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.interstitialCount++;
-                _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].SaveToDisk();
-                this._DisableInterstitalAd();
-                return;
-            }
-            // 失败再继续拉取剩余原生插屏
-            for (let i = 1; i < this.platformData.nativeinterstitialIds.length; ++i) {
-                let ret = yield this._ShowNativeInterstital(i);
-                if (ret) {
-                    this._DisableInterstitalAd();
-                    return;
-                }
-            }
+            // if (!this.IsInterstitalAvaliable()) {
+            //     console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${CommonSaveData.instance.interstitialCount}`);
+            //     return;
+            // }
+            // if (this._intersitialAd) {
+            //     this._intersitialAd.destroy();
+            //     UI_NativeInterstitialMediator.instance.Hide();
+            // }
+            // // 先拉去原生插屏(一个)
+            // if (this.platformData.nativeinterstitialIds.length > 0) {
+            //     let ret = await this._ShowNativeInterstital(0);
+            //     if (ret) {
+            //         this._DisableInterstitalAd();
+            //         return;
+            //     }
+            // }
+            // // 失败则拉取正常插屏
+            // let ret = await this._ShowNormalInterstitalAd();
+            // if (ret) {
+            //     CommonSaveData.instance.interstitialCount++;
+            //     CommonSaveData.SaveToDisk();
+            //     this._DisableInterstitalAd();
+            //     return;
+            // }
+            // // 失败再继续拉取剩余原生插屏
+            // for (let i = 1; i < this.platformData.nativeinterstitialIds.length; ++i) {
+            //     let ret = await this._ShowNativeInterstital(i);
+            //     if (ret) {
+            //         this._DisableInterstitalAd();
+            //         return;
+            //     }
+            // }
         });
     }
     _DisableInterstitalAd() {
@@ -13234,7 +13244,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         if (this.lauchOption.referrerInfo == null) {
             return null;
         }
-        if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_3__["default"].IsNullOrEmpty(this.lauchOption.referrerInfo.appId)) {
+        if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(this.lauchOption.referrerInfo.appId)) {
             return null;
         }
         return this.lauchOption.referrerInfo.appId;
@@ -13271,17 +13281,17 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
      * 小游戏回到前台的事件
      */
     _OnShow(res) {
-        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "OnShow", res);
-        _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance.lauchOption = res;
-        _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance._CheckUpdate();
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].platformStr, "OnShow", res);
+        _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance.lauchOption = res;
+        _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance._CheckUpdate();
         _Async_Awaiters__WEBPACK_IMPORTED_MODULE_0__["default"].NextFrame().then(() => {
-            if (_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance.onResume) {
-                _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance.onResume.runWith(res);
+            if (_LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance.onResume) {
+                _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance.onResume.runWith(res);
             }
-            let cacheOnShow = _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance["_cacheOnShowHandle"];
+            let cacheOnShow = _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance["_cacheOnShowHandle"];
             if (cacheOnShow) {
                 cacheOnShow.run();
-                _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance["_cacheOnShowHandle"] = null;
+                _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance["_cacheOnShowHandle"] = null;
             }
         });
     }
@@ -13289,9 +13299,9 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
      * 小游戏退出前台的事件
      */
     _OnHide(res) {
-        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "OnHide", res);
-        if (_LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance.onPause) {
-            _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].instance.onPause.runWith(res);
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].platformStr, "OnHide", res);
+        if (_LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance.onPause) {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].instance.onPause.runWith(res);
         }
     }
     LoadSubpackage(name, onSuccess, onFailed, onProgress) {
@@ -13344,7 +13354,7 @@ class OppoPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_11__["default"] 
         });
     }
     OpenGameBox(appIds) {
-        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "暂不支持互推游戏盒子");
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_8__["default"].platformStr, "暂不支持互推游戏盒子");
     }
     /**
      * @param appId oppo vivo传包名
@@ -13991,6 +14001,36 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_0__["default"] {
             }
         });
     }
+    followOfficialAccount() {
+        return new Promise((resolve, reject) => {
+            this.base.followOfficialAccount({
+                success(res) {
+                    if (res.errCode === 0) {
+                        resolve(true);
+                    }
+                    else {
+                        console.log(res.errMsg);
+                        resolve(false);
+                    }
+                },
+            });
+        });
+    }
+    checkFollowState() {
+        return new Promise((resolve, reject) => {
+            this.base.checkFollowState({
+                success(res) {
+                    if (res.result) {
+                        resolve(true);
+                    }
+                    else {
+                        resolve(false);
+                    }
+                    console.log(res.result); // true:已关注 /  false:未关注
+                },
+            });
+        });
+    }
 }
 
 
@@ -14013,6 +14053,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
 /* harmony import */ var _Impl_Web_WebRecordManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Impl/Web/WebRecordManager */ "./src/LTGame/Platform/Impl/Web/WebRecordManager.ts");
 /* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _script_manager_AudioManager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../script/manager/AudioManager */ "./src/script/manager/AudioManager.ts");
+
 
 
 
@@ -14132,6 +14174,7 @@ class VivoPlatform {
         }
         _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].ShowLoading("广告拉取中...");
         this.createVideo();
+        _script_manager_AudioManager__WEBPACK_IMPORTED_MODULE_7__["default"].instance.Pause();
         this._rewardVideo.show().then(() => {
             _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].HideLoading();
         }).catch(err => {
@@ -14230,6 +14273,12 @@ class VivoPlatform {
     SetStorage(key, data) {
         console.log('写本地存储');
         Laya.LocalStorage.setItem(key, data);
+    }
+    followOfficialAccount() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr, "暂不支持关注");
+    }
+    checkFollowState() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr, "暂不支持关注");
     }
 }
 
@@ -14866,6 +14915,12 @@ class WXPlatform {
             }
         }
     }
+    followOfficialAccount() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].platformStr, "暂不支持关注");
+    }
+    checkFollowState() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].platformStr, "暂不支持关注");
+    }
 }
 
 
@@ -14989,6 +15044,9 @@ class LTRespackManager {
                 break;
             case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo:
                 adapter = Laya.QGMiniAdapter;
+                break;
+            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Vivo:
+                adapter = Laya.VVMiniAdapter;
                 break;
         }
         if (adapter == null)
@@ -22371,108 +22429,6 @@ class FakeBannerData {
 
 /***/ }),
 
-/***/ "./src/LTGame/UIExt/DefaultUI/UI_NativeInterstitialMediator.ts":
-/*!*********************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/UI_NativeInterstitialMediator.ts ***!
-  \*********************************************************************/
-/*! exports provided: default, FakeInterstitalData */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_NativeInterstitialMediator; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FakeInterstitalData", function() { return FakeInterstitalData; });
-/* harmony import */ var _UI_LTGame_UI_NativeInterstitial__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UI/LTGame/UI_NativeInterstitial */ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/UI_NativeInterstitial.ts");
-/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
-/* harmony import */ var _LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
-
-
-
-
-
-
-
-
-class UI_NativeInterstitialMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_1__["default"] {
-    static get instance() {
-        if (this._instance == null) {
-            this._instance = new UI_NativeInterstitialMediator();
-            this._instance._classDefine = _UI_LTGame_UI_NativeInterstitial__WEBPACK_IMPORTED_MODULE_0__["default"];
-        }
-        return this._instance;
-    }
-    _OnShow() {
-        super._OnShow();
-        // your code
-        this._sortOrder = 1000;
-        this._Init();
-        console.log("展示广告", this._fakeAdData);
-        // 同一个界面只能显示一个广告
-        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.HideBannerAd();
-    }
-    _Init() {
-        this._fakeAdData = this._openParam;
-        this.ui.m_btn_pay.onClick(this, this._OnClickAd);
-        this.ui.m_ad.onClick(this, this._OnClickAd);
-        this.ui.m_btn_return.onClick(this, this._OnClickClose);
-        this.ui.m_ad.m_btn_close.onClick(this, this._OnClickClose);
-        if (!_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_6__["default"].IsNullOrEmpty(this._fakeAdData.iconPath)) {
-            this.ui.m_ad.m_icon.url = this._fakeAdData.iconPath;
-        }
-        if (!_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_6__["default"].IsNullOrEmpty(this._fakeAdData.imgPath)) {
-            this.ui.m_ad.m_img.url = this._fakeAdData.imgPath;
-        }
-        if (!_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_6__["default"].IsNullOrEmpty(this._fakeAdData.noticePath)) {
-            this.ui.m_ad.m_tag.url = this._fakeAdData.noticePath;
-        }
-        if (!_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_6__["default"].IsNullOrEmpty(this._fakeAdData.title)) {
-            this.ui.m_ad.m_title.text = this._fakeAdData.title;
-        }
-        if (!_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_6__["default"].IsNullOrEmpty(this._fakeAdData.desc)) {
-            this.ui.m_ad.m_desc.text = this._fakeAdData.desc;
-        }
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_4__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"].InCheck:
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"].Normal:
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_5__["ECheckState"].NoGame:
-                if (!_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_4__["default"].instance.isShielding && _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_4__["default"].instance.isDelayClose) {
-                    this.ui.m_t0.play();
-                }
-                break;
-        }
-        this._fakeAdData.owner.reportAdShow({ adId: this._fakeAdData.adId });
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].instance.interstitialCount++;
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_3__["default"].SaveToDisk();
-    }
-    _OnClickAd() {
-        console.log("点击插页广告", this._fakeAdData);
-        this._fakeAdData.owner.reportAdClick({ adId: this._fakeAdData.adId });
-        this.Hide();
-    }
-    _OnClickClose() {
-        console.log("点击关闭插页广告", this._fakeAdData);
-        let rate = Object(_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_7__["randomRangeInt"])(0, 100);
-        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_4__["default"].instance.payRate > rate) {
-            this._OnClickAd();
-        }
-        this.Hide();
-    }
-    _OnHide() {
-        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ShowBannerAd();
-    }
-}
-class FakeInterstitalData {
-}
-
-
-/***/ }),
-
 /***/ "./src/LTGame/UIExt/DefaultUI/UI_SelfBannerMediator.ts":
 /*!*************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/UI_SelfBannerMediator.ts ***!
@@ -22582,7 +22538,7 @@ class BaseUIMediator {
         /**
          * 是否适配顶部刘海屏
          */
-        this._needFilScreen = false;
+        this._needFilScreen = true;
         this._isShow = false;
         this._sortOrder = 10;
     }
@@ -25328,6 +25284,161 @@ class CannonPhysicTest {
 
 /***/ }),
 
+/***/ "./src/script/test/HXOimoPhysicTest.ts":
+/*!*********************************************!*\
+  !*** ./src/script/test/HXOimoPhysicTest.ts ***!
+  \*********************************************/
+/*! exports provided: HXOimoPhysicTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HXOimoPhysicTest", function() { return HXOimoPhysicTest; });
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+/* harmony import */ var _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/QuaternionEx */ "./src/LTGame/LTUtils/QuaternionEx.ts");
+
+
+
+
+
+
+class HXOimoPhysicTest {
+    constructor() {
+        this.name = "HXOimo物理";
+        this._isPressed = false;
+        this._panelSize = 50;
+    }
+    Create() {
+        this._s3d = new Laya.Scene3D();
+        Laya.stage.addChildAt(this._s3d, 1);
+        this._world = new OIMO.World(OIMO.BroadPhaseType.BRUTE_FORCE, new OIMO.Vec3(0, -9.8, 0));
+        console.log(this._world);
+        let panelMesh = Laya.PrimitiveMesh.createPlane(this._panelSize, this._panelSize, 1, 1);
+        let panelMat = new Laya.BlinnPhongMaterial();
+        panelMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
+        let panelObj = new Laya.MeshSprite3D(panelMesh, "floor");
+        panelObj.meshRenderer.material = panelMat;
+        panelObj.meshRenderer.receiveShadow = true;
+        this._s3d.addChild(panelObj);
+        panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
+        let rigConfig = new OIMO.RigidBodyConfig();
+        rigConfig.position = new OIMO.Vec3(0, -0.5, 0);
+        let q = panelObj.transform.rotation;
+        rigConfig.rotation.fromQuat(q);
+        rigConfig.type = OIMO.RigidBodyType.STATIC;
+        let rig = new OIMO.RigidBody(rigConfig);
+        let boxGeometry = new OIMO.BoxGeometry(new OIMO.Vec3(this._panelSize / 2, 1, this._panelSize / 2));
+        let shapeConfig = new OIMO.ShapeConfig();
+        shapeConfig.geometry = boxGeometry;
+        let shape = new OIMO.Shape(shapeConfig);
+        rig.addShape(shape);
+        this._world.addRigidBody(rig);
+        let camera = new Laya.Camera();
+        camera.name = "camera";
+        this._s3d.addChild(camera);
+        camera.transform.localPosition = new Laya.Vector3(0, this._panelSize * 1.2, this._panelSize * 1.2);
+        camera.transform.localRotationEuler = new Laya.Vector3(-45, 0, 0);
+        let light = new Laya.DirectionLight();
+        this._s3d.addChild(light);
+        light.transform.localRotationEuler = new Laya.Vector3(-75, 0, 0);
+        light.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
+        light.shadowMode = Laya.ShadowMode.SoftHigh;
+        light.shadowDistance = 200;
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
+        this._cacheMaterial = new Laya.BlinnPhongMaterial();
+        this._cacheMaterial.albedoColor = new Laya.Vector4(0.1, 0.1, 0.6, 1);
+        this._sleepMaterial = new Laya.BlinnPhongMaterial();
+        this._sleepMaterial.albedoColor = new Laya.Vector4(0.5, 0.5, 0, 1);
+        this._cacheMesh = Laya.PrimitiveMesh.createBox(1, 1, 1);
+        this._cubeRigs = [];
+        this._cubeObjs = [];
+        this._s3d.physicsSimulation.maxSubSteps = 2;
+        this._s3d.physicsSimulation.fixedTimeStep = 1 / 30;
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        if (this._isPressed) {
+            this._remainTime -= dt;
+            if (this._remainTime < 0) {
+                this._GenCube();
+                this._remainTime = 0.1;
+            }
+        }
+        this._world.step(dt);
+        for (let i = 0; i < this._cubeObjs.length; ++i) {
+            let cubeObj = this._cubeObjs[i];
+            let rig = this._cubeRigs[i];
+            let pos = rig.getPosition();
+            _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0.setValue(pos.x, pos.y, pos.z);
+            cubeObj.transform.position = _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0;
+            let rot = rig.getOrientation();
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.x = rot.x;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.y = rot.y;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.z = rot.z;
+            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.w = rot.w;
+            cubeObj.transform.rotation = _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0;
+            cubeObj.meshRenderer.sharedMaterial = rig._sleeping ? this._sleepMaterial : this._cacheMaterial;
+        }
+    }
+    _GenCube() {
+        let cubeObj = new Laya.MeshSprite3D(this._cacheMesh, "cube");
+        cubeObj.meshRenderer.sharedMaterial = this._cacheMaterial;
+        this._s3d.addChild(cubeObj);
+        let size = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2));
+        let pos = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5), this._panelSize, _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5));
+        cubeObj.transform.localPosition = pos;
+        cubeObj.transform.localRotationEuler = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360));
+        cubeObj.transform.localScale = size;
+        cubeObj.meshRenderer.castShadow = true;
+        cubeObj.meshRenderer.receiveShadow = true;
+        let rigConfig = new OIMO.RigidBodyConfig();
+        rigConfig.position = new OIMO.Vec3(pos.x, pos.y, pos.z);
+        let q = cubeObj.transform.rotation;
+        rigConfig.rotation.fromQuat(q);
+        rigConfig.type = OIMO.RigidBodyType.DYNAMIC;
+        let rig = new OIMO.RigidBody(rigConfig);
+        let boxGeometry = new OIMO.BoxGeometry(new OIMO.Vec3(size.x / 2, size.y / 2, size.z / 2));
+        let shapeConfig = new OIMO.ShapeConfig();
+        shapeConfig.geometry = boxGeometry;
+        let shape = new OIMO.Shape(shapeConfig);
+        rig.addShape(shape);
+        this._world.addRigidBody(rig);
+        this._cubeObjs.push(cubeObj);
+        this._cubeRigs.push(rig);
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_text_notice.text = "物体数量:" + this._cubeObjs.length;
+    }
+    _OnMouseDown(event) {
+        if (this._isPressed)
+            return;
+        this._isPressed = true;
+        this._touchId = event.touchId;
+        this._remainTime = 0;
+    }
+    _OnMouseUp(event) {
+        if (!this._isPressed)
+            return;
+        if (this._touchId != event.touchId)
+            return;
+        this._isPressed = false;
+    }
+    Clear() {
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/test/HeightFogTest.ts":
 /*!******************************************!*\
   !*** ./src/script/test/HeightFogTest.ts ***!
@@ -26474,6 +26585,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../test/OimoPhysicTest */ "./src/script/test/OimoPhysicTest.ts");
 /* harmony import */ var _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../test/HybridPhysicTest */ "./src/script/test/HybridPhysicTest.ts");
 /* harmony import */ var _test_CannonPhysicTest__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../test/CannonPhysicTest */ "./src/script/test/CannonPhysicTest.ts");
+/* harmony import */ var _test_HXOimoPhysicTest__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../test/HXOimoPhysicTest */ "./src/script/test/HXOimoPhysicTest.ts");
+
 
 
 
@@ -26497,6 +26610,7 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
             new _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["OimoPhysicTest"](),
             new _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__["HybridPhysicTest"](),
             new _test_CannonPhysicTest__WEBPACK_IMPORTED_MODULE_10__["CannonPhysicTest"](),
+            new _test_HXOimoPhysicTest__WEBPACK_IMPORTED_MODULE_11__["HXOimoPhysicTest"](),
         ];
     }
     static get instance() {
