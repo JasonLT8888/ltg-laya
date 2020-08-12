@@ -74,6 +74,10 @@ export default interface IPlatform {
      * 系统信息
      */
     systemInfo: any;
+    /**
+     * 系统信息
+     */
+    userInfo: LTGame.UserInfo;
 
     /**
      * 初始化
@@ -187,5 +191,9 @@ export default interface IPlatform {
     /**
      * 创建桌面图标
      */
-    createShortcut();
+    createShortcut(): Promise<boolean>;
+    /**关注官方账号 */
+    followOfficialAccount(): Promise<boolean>;
+    /**检查关注账号 状态*/
+    checkFollowState(): Promise<boolean>;
 }

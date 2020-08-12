@@ -18,9 +18,13 @@
   <IgnoreNotActiveGameObjects> 忽 略 未 激 活 节 点 </IgnoreNotActiveGameObjects>
   <BatchMakeTheFirstLevelGameObjects> 批 量 导 出 一 级 节 点 </BatchMakeTheFirstLevelGameObjects>
   <Assetsplatform> 发 布 平 台 </Assetsplatform>
+  <IOSQuality>iOS 质量</IOSQuality>
   <AnimationSetting> 动 画 设 置 </AnimationSetting>
+  <TexAnimatorSetting> 预 烘 焙 骨 骼 动 画 </TexAnimatorSetting>
+  <TexAnimatorbakeFPS> 烘 焙 帧 数 </TexAnimatorbakeFPS>
+  <TexAnimationSocket> 保 留 骨 骼 挂 点 </TexAnimationSocket>
   <OtherSetting> 其 他 设 置 </OtherSetting>
-  <CustomizeExportRootDirectoryName> 自 定 义 导 出 根 目 录</CustomizeExportRootDirectoryName>
+  <CustomizeExportRootDirectoryName> 自 定 义 导 出 根 目 录 名</CustomizeExportRootDirectoryName>
   <SavePathcannotbeempty>                   保 存 路 径 不 能 为 空 </SavePathcannotbeempty>
   <SavePath> 导 出 路 径 </SavePath>
   <Browse> 浏 览 </Browse>
@@ -31,6 +35,7 @@
   <Exportaddresscannotbeempty> 导 出 地 址 不 能 为 空</Exportaddresscannotbeempty>
   <JPGquality>JPG 质 量 </JPGquality>
   <Copy>复 制</Copy>
+  <multiScene> 批量导出场景 </multiScene>
 
 
   //LoginWindow
@@ -60,7 +65,7 @@
   <putongVIP>普通用户</putongVIP>
 
   //Version
-  <LayaBoxVersion>LayaBox 版 本 2.5.0</LayaBoxVersion>
+  <LayaBoxVersion>LayaBox 版 本 2.8.0beta</LayaBoxVersion>
   <AboutLayaAir> 关 于 LayaAir</AboutLayaAir>
   <downloadNodejs> 请 下 载 和 安 装 NodeJs,</downloadNodejs>
   <unity> 然 后 重 新 启 动 Unity</unity>

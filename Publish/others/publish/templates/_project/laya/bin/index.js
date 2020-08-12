@@ -15,4 +15,6 @@ loadLib("libs/ltgame/generator.js");
 loadLib("libs/ltgame/promise.js");
 loadLib("libs/fairygui/fairygui.js");
 loadLib("libs/laya.physics3D.js");
+loadLib("libs/cannon.old.js");
+loadLib("libs/OimoPhysics.min.js");
 loadLib("js/bundle.js");

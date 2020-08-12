@@ -7,16 +7,16 @@ import QQPlatform from "./QQPlatform";
 import DefaultPlatform from "./DefaultPlatform";
 import OppoPlatform from "./OppoPlatform";
 import { NativeIOSPlatform } from "./Impl/Native_IOS/NativeIOSPlatform";
+import VivoPlatform from "./VivoPlatform";
 
 export default class LTPlatformFactory {
 
     public static CreateInstance(): IPlatform {
 
         let isQTT = window["qttGame"] != null;
-        let isTT = window["tt"] != null;
 
         let result: IPlatform;
-        if (isTT) {
+        if (Laya.Browser.onTTMiniGame) {
             result = new TTPlatform();
         } else if (Laya.Browser.onMiniGame) {
             result = new WXPlatform();
@@ -28,6 +28,8 @@ export default class LTPlatformFactory {
             result = new QQPlatform();
         } else if (Laya.Browser.onQGMiniGame) {
             result = new OppoPlatform();
+        } else if (Laya.Browser.onVVMiniGame) {
+            result = new VivoPlatform(); 
         } else if (window['conch']) {
             let conchConfig = window['conchConfig'];
             let os = conchConfig.getOS();

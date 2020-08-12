@@ -193,7 +193,7 @@ half4 fragForwardAddInternal(VertexOutputForwardAdd i) : SV_Target
 
 	half4 c = BRDF1_Laya_PBS(s.diffColor, s.specColor, s.oneMinusReflectivity, s.smoothness, s.normalWorld, -s.eyeVec, light, noIndirect);
 
-	// UNITY_APPLY_FOG_COLOR(_unity_fogCoord, c.rgb, half4(0, 0, 0, 0));
+	UNITY_APPLY_FOG_COLOR(_unity_fogCoord, c.rgb, half4(0, 0, 0, 0));
 
 	return LayaOutputForward(c, s.alpha);
 }

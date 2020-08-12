@@ -59,6 +59,9 @@ module LTGame {
         isLogin: boolean; // 是否登录成功
         code: string; // 登录成功之后的用户凭证(失败无值)
     }
-
+    export class UserInfo {
+        nickName: string;
+        avatarUrl: string;
+    }
 
 }

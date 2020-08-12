@@ -17,7 +17,11 @@
   <IgnoreNotActiveGameObjects> Ignore Not Active Game Objects</IgnoreNotActiveGameObjects>
   <BatchMakeTheFirstLevelGameObjects> Batch Make The First Level Game Objects</BatchMakeTheFirstLevelGameObjects>
   <Assetsplatform> Assets platform</Assetsplatform>
+  <IOSQuality>iOS Quality</IOSQuality>
   <AnimationSetting> Animation Setting</AnimationSetting>
+  <TexAnimatorSetting> Previously Skeletal Animation</TexAnimatorSetting>
+  <TexAnimatorbakeFPS> Bake FPS </TexAnimatorbakeFPS>
+  <TexAnimationSocket> Keep Skeletal Add Point </TexAnimationSocket>
   <OtherSetting> Other Setting</OtherSetting>
   <CustomizeExportRootDirectoryName> Customize Export Root Directory Name</CustomizeExportRootDirectoryName>
   <SavePathcannotbeempty>                   Save Path cannot be empty</SavePathcannotbeempty>
@@ -30,6 +34,7 @@
   <Exportaddresscannotbeempty>Export address cannot be empty</Exportaddresscannotbeempty>
   <JPGquality>JPG quality </JPGquality>
   <Copy>Copy</Copy>
+  <multiScene> export multiScenes </multiScene>
 
     //LoginWindow
     <Accountorpassworderror>Account or password error</Accountorpassworderror>
@@ -56,8 +61,9 @@
   <qiyeVIP>enterpriseVIP</qiyeVIP>
   <gerenVIP>persionalVIP</gerenVIP>
   <putongVIP>normalUser</putongVIP>
+  
   //Version
-  <LayaBoxVersion>LayaBox Version 2.5.0</LayaBoxVersion>
+  <LayaBoxVersion>LayaBox Version 2.8.0beta</LayaBoxVersion>
   <AboutLayaAir>About LayaAir</AboutLayaAir>
   <downloadNodejs>Please download and install nodejs,</downloadNodejs>
   <unity> then restart Unity</unity>

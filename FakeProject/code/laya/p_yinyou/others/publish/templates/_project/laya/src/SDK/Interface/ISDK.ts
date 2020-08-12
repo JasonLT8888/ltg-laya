@@ -6,7 +6,7 @@ export interface ISDK {
      * 误触概率 试用皮肤
      */
     payRate: number;
-    
+
     /**
      * 地区屏蔽
      */
@@ -77,7 +77,7 @@ export interface ISDK {
      * 游戏状态
      */
     checkState: ECheckState;
-    
+
 
     /**
      * 请求远程开关信息
@@ -110,4 +110,24 @@ export interface ISDK {
      * 记录看视频和分享
      */
     ReportStat(isShare: boolean, sid: string);
+
+    /**查询周排名 
+  * @param levelID 关卡
+  * @param score 分数/时长
+ * @param onGetList 回调处理
+  */
+    GetWeekRankList(levelID: number, score: number, onGetList: Function);
+    /**查询日排名 
+  * @param levelID 关卡
+  * @param score 分数/时长
+    *@param onGetList 回调处理
+  */
+    GetDayRankList(levelID: number, score: number, onGetList: Function);
+
+    /**
+     * 按关卡上报排名 
+     * @param levelID 关卡
+     * @param score 分数/时长
+     */
+    RecordRankInfo(levelID: number, score: number);
 }

@@ -8,18 +8,7 @@ export class SaveData {
      */
     public coinCount: number = 0;
 
-    /**
- * 彩蛋获得数据
- */
-    public EggPassIds: number[] = [];
-    /**
-    * 彩蛋密语数据
-    */
-    public EggSecretIds: number[] = [];
-    /**
-    * 彩蛋暗号数据
-    */
-    public EggPasswordIds: number[] = [];
+   
 
 }
 
