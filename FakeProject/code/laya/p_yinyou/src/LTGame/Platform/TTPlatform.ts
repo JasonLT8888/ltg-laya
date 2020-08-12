@@ -55,20 +55,20 @@ export default class TTPlatform extends WXPlatform {
 
         window["iplatform"] = this;
     }
+
     protected _Login() {
         this.loginState = {
             isLogin: false,
             code: ""
         };
         let loginData = {
-            force: true,
-            success: (res) => {
+            force: false,
+            success: (res: { code: string, anonymousCode: string, isLogin: boolean }) => {
                 this.loginCode = res.code;
                 this._OnLoginSuccess(res);
-                console.error(this.loginState);
-
+                console.log(this.loginState);
             },
-            fail: (res) => {
+            fail: (res: { errMsg: string }) => {
                 console.error(LTPlatform.platformStr, "登录失败", res);
                 this.loginState.isLogin = false;
                 this.loginState.code = "";
@@ -80,8 +80,9 @@ export default class TTPlatform extends WXPlatform {
             }
         };
 
-        window["tt"].login(loginData);
+        this._base.login(loginData);
     }
+
     getUserInfo() {
         console.log('开始授权')
         window["tt"].authorize({
