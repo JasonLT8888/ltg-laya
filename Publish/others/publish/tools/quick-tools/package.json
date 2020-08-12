@@ -23,7 +23,7 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "fs-extra": "^6.0.1",
-    "jsrsasign": "^7.1.2",
+    "jsrsasign": "^8.0.19",
     "jszip": "^3.1.5"
   },
   "devDependencies": {
