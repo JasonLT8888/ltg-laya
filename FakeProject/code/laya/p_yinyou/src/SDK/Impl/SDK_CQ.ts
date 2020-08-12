@@ -26,7 +26,7 @@ export default class SDK_CQ extends SDK_Default {
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
-        this._RecordRankInfo(1, 0);
+        this.RecordRankInfo(1, 0);
     }
 
     private _RequestShareInfo() {
@@ -46,7 +46,7 @@ export default class SDK_CQ extends SDK_Default {
      * @param levelID 关卡
      * @param score 分数/时长
      */
-    private _RecordRankInfo(levelID: number, score: number) {
+    public RecordRankInfo(levelID: number, score: number) {
         let uid = this.appId;
         if (LTPlatform.instance.platform == EPlatformType.Oppo) {
             uid = LTPlatform.instance.platformData.appKey

@@ -167,7 +167,7 @@ export default class SDK_Default implements ISDK {
 * @param score 分数/时长
 * @param onGetList 回调处理
 */
-    getWeekRankList(levelID: number, score: number, onGetList: Function) {
+    GetWeekRankList(levelID: number, score: number, onGetList: Function) {
 
     }
     /**查询日排名 
@@ -175,7 +175,15 @@ export default class SDK_Default implements ISDK {
    * @param score 分数/时长
     *@param onGetList 回调处理
    */
-    getDayRankList(levelID: number, score: number, onGetList: Function) {
+    GetDayRankList(levelID: number, score: number, onGetList: Function) {
+
+    }
+    /**
+     * 按关卡上报排名 
+     * @param levelID 关卡
+     * @param score 分数/时长
+     */
+    RecordRankInfo(levelID: number, score: number) {
 
     }
 }
