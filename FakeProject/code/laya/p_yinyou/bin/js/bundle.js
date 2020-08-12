@@ -25190,8 +25190,8 @@ __webpack_require__.r(__webpack_exports__);
 class UI_BoneAnimTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
         super(...arguments);
-        this._xBorder = [-10, 10];
-        this._zBorder = [-10, 30];
+        this._xBorder = [-3, 3];
+        this._zBorder = [0, 4];
     }
     static get instance() {
         if (this._instance == null) {
@@ -25247,10 +25247,11 @@ class UI_BoneAnimTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
         this.ui.m_text_total.text = "当前总数量:" + (this._cacheAnims.length + 1);
     }
     _GetGenPos() {
-        let xCount = this._xBorder[1] - this._xBorder[0];
+        const unit = 0.4;
+        let xCount = Math.floor((this._xBorder[1] - this._xBorder[0]) / unit);
         let zIndex = Math.floor(this._cacheAnims.length / xCount);
         let xIndex = this._cacheAnims.length % xCount;
-        return new Laya.Vector3(xIndex + this._xBorder[0], 0, this._zBorder[0] + zIndex);
+        return new Laya.Vector3(xIndex * unit + this._xBorder[0], 0, this._zBorder[0] + zIndex * unit);
     }
     _OnClickBack() {
         this.Hide();

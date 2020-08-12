@@ -12,5 +12,5 @@
     "maxSinglePackSize": 8,
     "maxTotalPackSize": 8,
     "packType": 0,
-    "compress": false
+    "compress": true
 }
