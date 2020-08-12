@@ -1,13 +1,13 @@
-import UI_CommonUnlockProgress from "./UI/LTGame/UI_CommonUnlockProgress";
-import BaseUIMediator from "../FGui/BaseUIMediator";
-import { UnlockProgressOpenData } from "./Data/UnlockProgressOpenData";
+ 
+import { ECheckState } from "../../../SDK/common/ECheckState";
+import LTSDK from "../../../SDK/LTSDK";
 import Awaiters from "../../Async/Awaiters";
 import MathEx from "../../LTUtils/MathEx";
 import LTPlatform from "../../Platform/LTPlatform";
+import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
-import LTSDK from "../../../SDK/LTSDK";
-import { ECheckState } from "../../../SDK/common/ECheckState";
-import { EPlatformType } from "../../Platform/EPlatformType";
+import { UnlockProgressOpenData } from "./Data/UnlockProgressOpenData"; 
+import UI_CommonUnlockProgress from "./UI/LTUI/UI_CommonUnlockProgress";
 
 export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_CommonUnlockProgress> {
 
@@ -91,8 +91,8 @@ export default class UI_CommonUnlockProgressMediator extends BaseUIMediator<UI_C
         if (this._openData.endProgress < 100) {
             this._OnClickClose();
         } else {
-            this.ui.m_btn_get.m_bg_type.selectedIndex = 1;
-            this.ui.m_btn_get.m_btn_type.selectedIndex = LTSDK.instance.checkState == ECheckState.NoGame ? 0 : 3;
+            // this.ui.m_btn_get.m_bg_type.selectedIndex = 1;
+            // this.ui.m_btn_get.m_btn_type.selectedIndex = LTSDK.instance.checkState == ECheckState.NoGame ? 0 : 3;
             this.ui.m_btn_get.visible = true;
             this.ui.m_show_close.play();
         }

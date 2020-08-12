@@ -12,7 +12,7 @@
 		"getMemberByName":false,
 		"ignoreNoname":true,
 		"memberNamePrefix":"m_",
-		"packageName":null
+		"packageName":""
 	},
 	"compressDesc":false,
 	"fileExtension":"bin",

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="358,56" extention="ProgressBar">
-  <displayList>
-    <image id="n7_gln0" name="bg" src="kj719f" fileName="img/roll/sp_juxing.png" xy="0,0"/>
-    <image id="n8_gln0" name="bar" src="kj719g" fileName="img/roll/sp_juxing1.png" xy="7,7"/>
-  </displayList>
-  <ProgressBar/>
-</component>

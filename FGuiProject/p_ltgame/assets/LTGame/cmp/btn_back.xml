@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="80,60" extention="Button">
-  <displayList>
-    <image id="n3_re3i" name="n3" src="re3i3e" fileName="img/btn_fanhui.png" xy="12,9">
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </image>
-  </displayList>
-  <Button/>
-</component>

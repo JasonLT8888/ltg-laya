@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="84,84">
-  <displayList>
-    <image id="n11_bg00" name="n11" src="bg001s" fileName="img/sp_beishubg.png" xy="0,0"/>
-    <text id="n12_bg00" name="n12" xy="41,42" pivot="0.5,0.5" anchor="true" size="59,25" rotation="24.6" fontSize="18" color="#ffffff" align="center" vAlign="middle" text="+3.5倍"/>
-  </displayList>
-</component>

@@ -5,8 +5,8 @@ import { EPlatformType } from "../../Platform/EPlatformType";
 import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
-import TrySkinOpenData from "./Data/TrySkinOpenData";
-import UI_TrySkin from "./UI/LTGame/UI_TrySkin";
+import TrySkinOpenData from "./Data/TrySkinOpenData"; 
+import UI_TrySkin from "./UI/LTUI/UI_TrySkin";
 
 
 

@@ -10,15 +10,15 @@ import SignOpenData from "./DefaultUI/Data/SignOpenData";
 import TrySkinOpenData from "./DefaultUI/Data/TrySkinOpenData";
 import { UnlockProgressOpenData } from "./DefaultUI/Data/UnlockProgressOpenData";
 import UI_CommomToastMediator from "./DefaultUI/UI_CommomToastMediator";
-import UI_CommonEndLoseMediator from "./DefaultUI/UI_CommonEndLoseMediator";
-import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
-import UI_CommonEndShareMediator from "./DefaultUI/UI_CommonEndShareMediator";
+// import UI_CommonEndLoseMediator from "./DefaultUI/UI_CommonEndLoseMediator";
+// import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
+// import UI_CommonEndShareMediator from "./DefaultUI/UI_CommonEndShareMediator";
 import UI_CommondLoadMediator from "./DefaultUI/UI_CommonLoadMediator";
 import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator";
-import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
-import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
-import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
-import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
+// import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
+// import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
+// import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
+// import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
 import { UI_CommonSignMediator } from "./DefaultUI/UI_CommonSignMediator";
 import UI_CommonTrySkinMediator from "./DefaultUI/UI_CommonTrySkinMediator";
 import UI_CommonUnlockProgressMediator from "./DefaultUI/UI_CommonUnlockProgressMediator";
@@ -78,20 +78,20 @@ export default class LTUI {
      * @param openData 
      */
     public static ShowOneMore(openData: OneMoreOpenData) {
-        UI_CommonOneMoreMediator.instance.Show(openData);
+        //   UI_CommonOneMoreMediator.instance.Show(openData);
     }
 
     public static ShowEndShare(openData: EndShareOpenData) {
         // 不在内部进行平台判断,防止开发过程中功能遗漏
-        UI_CommonEndShareMediator.instance.Show(openData);
+        //   UI_CommonEndShareMediator.instance.Show(openData);
     }
 
     public static ShowEndReward(openData: EndRewardOpenData) {
-        UI_CommonEndRewardMediator.instance.Show(openData);
+        // UI_CommonEndRewardMediator.instance.Show(openData);
     }
 
     public static ShowEndLose(openData: EndLoseOpenData) {
-        UI_CommonEndLoseMediator.instance.Show(openData);
+        // UI_CommonEndLoseMediator.instance.Show(openData);
     }
 
     public static ShowUnlockProgress(openData: UnlockProgressOpenData) {
@@ -99,7 +99,7 @@ export default class LTUI {
     }
 
     public static ShowOffline(openData: OfflineOpenData) {
-        UI_CommonOfflineMediator.instance.Show(openData);
+        // UI_CommonOfflineMediator.instance.Show(openData);
     }
 
     public static ShowTrySkin(openData: TrySkinOpenData) {
@@ -107,11 +107,11 @@ export default class LTUI {
     }
 
     public static ShowSet(openData: SetOpenData) {
-        UI_CommonSetMediator.instance.Show(openData);
+        // UI_CommonSetMediator.instance.Show(openData);
     }
 
     public static ShowRoll(openData: RollOpenData) {
-        UI_CommonRollMediator.instance.Show(openData);
+        // UI_CommonRollMediator.instance.Show(openData);
     }
 
     public static LockScreen() {

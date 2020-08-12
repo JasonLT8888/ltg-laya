@@ -145,7 +145,7 @@ export default class WXPlatform implements IPlatform {
         };
         this._base.login(loginData);
     }
-   
+
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
         console.log(LTPlatform.platformStr, "登录成功", res);
         LTUI.Toast('登录成功');
@@ -479,7 +479,7 @@ export default class WXPlatform implements IPlatform {
         console.log(LTPlatform.platformStr, "OnShow", res);
         LTPlatform.instance.lauchOption = res;
         LTPlatform.instance._CheckUpdate();
-        this.NavigateToAppSuccess = null;
+        // this.NavigateToAppSuccess = null;//wx
         Awaiters.NextFrame().then(() => {
             if (LTPlatform.instance.onResume) {
                 LTPlatform.instance.onResume.runWith(res);
@@ -500,9 +500,10 @@ export default class WXPlatform implements IPlatform {
         if (LTPlatform.instance.onPause) {
             LTPlatform.instance.onPause.runWith(res);
         }
-        if (this.NavigateToAppSuccess) {
-            this.NavigateToAppSuccess();
-        }
+        //wx
+        // if (this.NavigateToAppSuccess) {
+        //     this.NavigateToAppSuccess();
+        // }
     }
 
     ShareAppMessage(shareInfo: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
@@ -654,7 +655,7 @@ export default class WXPlatform implements IPlatform {
             });
         })
     }
-    createShortcut() {
+    createShortcut(): any {
         console.log('暂未实现');
     }
     public GetStorage(key: string): any {
@@ -676,5 +677,10 @@ export default class WXPlatform implements IPlatform {
             }
         }
     }
-
+    followOfficialAccount(): any {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
+    }
+    checkFollowState(): any {
+        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
+    }
 }

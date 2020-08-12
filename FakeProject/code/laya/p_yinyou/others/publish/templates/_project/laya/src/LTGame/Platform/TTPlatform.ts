@@ -7,6 +7,7 @@ import IRecordManager from "./IRecordManager";
 import TTRecordManager from "./Impl/TT/TTRecordManager";
 import { IDevice } from "./IDevice";
 import TTDevice from "./Impl/TT/TTDevice";
+import LTUI from "../UIExt/LTUI";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -146,7 +147,7 @@ export default class TTPlatform extends WXPlatform {
             appLaunchOptions: openData
         });
     }
-    
+
     NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
             if (!this.isSupportJumpOther) {
@@ -173,5 +174,33 @@ export default class TTPlatform extends WXPlatform {
             }
         });
     }
+    followOfficialAccount(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.followOfficialAccount({
+                success(res) {
+                    if (res.errCode === 0) {
+                        resolve(true);
+                    } else {
+                        console.log(res.errMsg);
+                        resolve(false);
+                    }
+                },
+            });
 
+        })
+    }
+    checkFollowState(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.checkFollowState({
+                success(res) {
+                    if (res.result) {
+                        resolve(true);
+                    } else {
+                        resolve(false)
+                    }
+                    console.log(res.result); // true:已关注 /  false:未关注
+                },
+            });
+        });
+    }
 }

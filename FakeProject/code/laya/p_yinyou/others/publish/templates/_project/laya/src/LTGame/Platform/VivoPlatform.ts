@@ -2,7 +2,7 @@ import Awaiters from "../Async/Awaiters";
 import StringEx from "../LTUtils/StringEx";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
-import DefaultDevice from "./DefaultDevice";
+import DefaultDevice, { VivoDevice } from "./DefaultDevice";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
@@ -10,9 +10,9 @@ import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
+import AudioManager from "../../script/manager/AudioManager";
 
 export default class VivoPlatform implements IPlatform {
-
 
     base: any;
     platformData: LTPlatformData;
@@ -25,7 +25,7 @@ export default class VivoPlatform implements IPlatform {
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
     recordManager: IRecordManager = new WebRecordManager();
-    device: IDevice = new DefaultDevice();
+    device: IDevice = new VivoDevice();
     systemInfo: any = null;
     private _banner: any;
     private _rewardVideo: any;
@@ -50,10 +50,49 @@ export default class VivoPlatform implements IPlatform {
             return;
         }
         this.platformData = platformData;
-        // this._InitLauchOption(); 
+        this._InitLauchOption();
         this.getSystemInfo();
         this.createVideo();
 
+
+    }
+    protected _InitLauchOption() {
+        // 绑定onShow事件
+        this.base.onShow(this._OnShow);
+        this.base.onHide(this._OnHide);
+        // 自动获取一次启动参数
+        let res = this.base.getLaunchOptionsSync() as LTGame.LaunchOption;
+        this._OnShow(res);
+    }
+    /**
+     * 小游戏回到前台的事件
+     */
+    protected _OnShow(res: LTGame.LaunchOption) {
+        console.log(LTPlatform.platformStr, "OnShow", res);
+        LTPlatform.instance.lauchOption = res;
+        LTPlatform.instance._CheckUpdate();
+        AudioManager.instance.Resume();
+        Awaiters.NextFrame().then(() => {
+            if (LTPlatform.instance.onResume) {
+                LTPlatform.instance.onResume.runWith(res);
+            }
+            let cacheOnShow = LTPlatform.instance["_cacheOnShowHandle"];
+            console.log(cacheOnShow);
+            if (cacheOnShow) {
+                cacheOnShow.run();
+                LTPlatform.instance["_cacheOnShowHandle"] = null;
+            }
+        });
+    }
+    /**
+    * 小游戏退出前台的事件
+    */
+    protected _OnHide(res: LTGame.LaunchOption) {
+        console.log(LTPlatform.platformStr, "OnHide", res);
+        AudioManager.instance.Pause();
+        if (LTPlatform.instance.onPause) {
+            LTPlatform.instance.onPause.runWith(res);
+        }
 
     }
     getSystemInfo() {
@@ -96,6 +135,12 @@ export default class VivoPlatform implements IPlatform {
     }
     ShowInterstitalAd() {
         console.log('todo');
+        let interad = this.base.createInterstitialAd({
+            posId: this.platformData.interstitialId
+        });
+        if (interad) {
+            interad.show();
+        }
     }
 
     ShowBannerAd() {
@@ -134,41 +179,49 @@ export default class VivoPlatform implements IPlatform {
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
-        if (StringEx.IsNullOrEmpty(this.platformData.rewardVideoId)) {
-            console.log("无有效的视频广告ID,取消加载");
-            onSkipped.run();
-            return;
-        }
-        let createRewardedVideoAd = this.base["createRewardedVideoAd"];
-        if (createRewardedVideoAd == null) {
-            console.error("无createRewardedVideoAd方法,跳过初始化");
-            onSkipped.run();
-            return;
-        }
-        LTUI.ShowLoading("广告拉取中...");
-        this.createVideo();
-        this._rewardVideo.show().then(() => {
-            LTUI.HideLoading();
-        }).catch(err => {
-            console.log("广告组件出现问题", err);
-            // 可以手动加载一次
-            this._rewardVideo.load().then(() => {
-                console.log("手动加载成功");
-                // 加载成功后需要再显示广告
+        return new Promise<void>(async (resolve, reject) => {
+            if (this._rewardVideo) {
+                await this._rewardVideo.load();
                 this._rewardVideo.show().then(() => {
-                    LTUI.HideLoading();
-                }).catch((err) => {
-                    console.error(err);
-                    LTUI.HideLoading();
-                });;
-            });
-        });;
+                    resolve();
+                }).catch(() => {
+                    reject();
+                });
+            } else {
+                this._rewardVideo = window['qg'].createRewardedVideoAd({
+                    posId: this.platformData.rewardVideoId
+                });
+                this._rewardVideo.onLoad(() => {
+                    console.log("视频广告加载成功");
+                });
+                this._rewardVideo.onError((res) => {
+                    console.error("视频广告加载失败", res);
+                });
+                this._rewardVideo.onClose((res) => {
+                    let isEnd = res["isEnded"] as boolean;
+                    Awaiters.NextFrame().then(() => {
+                        if (isEnd) {
+                            if (this._rewardSuccessed) this._rewardSuccessed.run();
+                        } else {
+                            if (this._rewardSkipped) this._rewardSkipped.run();
+                        }
+                    });
+                });
+                await this._rewardVideo.load();
+                this._rewardVideo.show().then(() => {
+                    resolve();
+                }).catch(() => {
+                    reject();
+                });
+            }
+        });
     }
     private createVideo() {
         this._rewardVideo = this.base.createRewardedVideoAd({
             posId: this.platformData.rewardVideoId
         });
         this._rewardVideo.onLoad(() => {
+
             console.log("视频广告加载成功");
         });
         this._rewardVideo.onError((res) => {
@@ -178,6 +231,7 @@ export default class VivoPlatform implements IPlatform {
             console.log("视频回调", res);
             let isEnd = res["isEnded"] as boolean;
             Awaiters.NextFrame().then(() => {
+
                 if (isEnd) {
                     if (this._rewardSuccessed) this._rewardSuccessed.run();
                 } else {
@@ -190,6 +244,7 @@ export default class VivoPlatform implements IPlatform {
 
     ShowRewardVideoAdAsync(): Promise<boolean> {
         return new Promise(function (resolve) {
+
             LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
                 resolve(true);
             }), Laya.Handler.create(this, () => {
@@ -238,8 +293,9 @@ export default class VivoPlatform implements IPlatform {
             resolve(false);
         });
     }
-    createShortcut() {
+    createShortcut(): Promise<boolean> {
         console.log('创建桌面图标');
+        return;
     }
     GetStorage(key: string) {
         console.log('读本地存储');
@@ -250,4 +306,13 @@ export default class VivoPlatform implements IPlatform {
         Laya.LocalStorage.setItem(key, data);
 
     }
+    followOfficialAccount(): Promise<boolean> {
+        console.log('暂不支持');
+        return;
+    }
+    checkFollowState(): Promise<boolean> {
+        console.log('暂不支持');
+        return;
+    }
+
 }

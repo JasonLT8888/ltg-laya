@@ -3,8 +3,8 @@ import CommonSaveData from "../../Commom/CommonSaveData";
 import MathEx from "../../LTUtils/MathEx";
 import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_CommonGameEgg from "./UI/LTGame/UI_CommonGameEgg";
-import UI_eggItem from "./UI/LTGame/UI_eggItem";
+import UI_CommonGameEgg from "./UI/LTUI/UI_CommonGameEgg";
+import UI_eggItem from "./UI/LTUI/UI_eggItem";
 
 
 
@@ -22,7 +22,6 @@ export class UI_CommonGameEggMediator extends BaseUIMediator<UI_CommonGameEgg> {
         return this._instance;
     }
     private selectId: number = 1;
-    private isInit: boolean = false;
     _OnShow() {
         super._OnShow();
         this.ui.m_btn_close.onClick(this, this.Hide);
@@ -32,7 +31,6 @@ export class UI_CommonGameEggMediator extends BaseUIMediator<UI_CommonGameEgg> {
         this.ui.m_eggLsit.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
         this.ui.m_eggLsit.on(fgui.Events.CLICK_ITEM, this, this.onItemClick);
         this.ui.m_eggLsit.numItems = EggConfig.dataList.length;
-        this.isInit = true;
         this.refreshShowInfo();
     }
     onItemClick(item: UI_eggItem) {
@@ -43,10 +41,9 @@ export class UI_CommonGameEggMediator extends BaseUIMediator<UI_CommonGameEgg> {
     }
     renderItem(index: number, item: UI_eggItem) {
         item.data = { index: index };
-        if (!this.isInit) {
-            let type = MathEx.RandomInt(0, 3);
-            item.m_type.selectedIndex = type;
-        }
+        let type = MathEx.RandomInt(0, 3);
+        item.m_type.selectedIndex = type;
+
         let data = EggConfig.dataList[index];
         let passState = CommonSaveData.instance.EggPassIds.indexOf(data.id) >= 0;
         item.m_icon.m_selected.selectedIndex = (index == this.selectId - 1) ? 1 : 0;

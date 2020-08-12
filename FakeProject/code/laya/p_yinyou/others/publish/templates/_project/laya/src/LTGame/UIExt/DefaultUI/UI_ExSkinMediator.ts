@@ -6,8 +6,8 @@ import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
 import { CommonRewardData } from "./Data/CommonRewardData";
-import UI_ExSkin from "./UI/LTGame/UI_ExSkin";
-import UI_tog_progress from "./UI/LTGame/UI_tog_progress";
+import UI_ExSkin from "./UI/LTUI/UI_ExSkin";
+import UI_tog_progress from "./UI/LTUI/UI_tog_progress";
 
 
 
@@ -29,6 +29,7 @@ export class UI_ExSkinMediator extends BaseUIMediator<UI_ExSkin> {
     _OnShow() {
         super._OnShow();
         this._openData = new CommonRewardData();
+        console.log(this.ui);
         if (this._openParam == null) {
             console.error("请传入CommonRewardData用于初始化限定皮肤界面");
         } else {
@@ -37,6 +38,7 @@ export class UI_ExSkinMediator extends BaseUIMediator<UI_ExSkin> {
             }
         }
         if (this._openData && this._openData.datas) {
+            console.log(this.ui.m_icon);
             this.ui.m_icon.url = this._openData.datas[0].icon;
         }
         if (CommonSaveData.instance.ExSkinAdCount >= 3) {
