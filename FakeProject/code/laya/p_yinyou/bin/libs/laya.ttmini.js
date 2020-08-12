@@ -1,10 +1,10 @@
-window.bdMiniGame = function (exports, Laya) {
+window.ttMiniGame = function (exports, Laya) {
 	'use strict';
 
 	class MiniFileMgr {
 	    static isLocalNativeFile(url) {
-	        for (var i = 0, sz = BMiniAdapter.nativefiles.length; i < sz; i++) {
-	            if (url.indexOf(BMiniAdapter.nativefiles[i]) != -1)
+	        for (var i = 0, sz = TTMiniAdapter.nativefiles.length; i < sz; i++) {
+	            if (url.indexOf(TTMiniAdapter.nativefiles[i]) != -1)
 	                return true;
 	        }
 	        return false;
@@ -31,7 +31,7 @@ window.bdMiniGame = function (exports, Laya) {
 	                callBack != null && callBack.runWith([0, data]);
 	            }, fail: function (data) {
 	                if (data && readyUrl != "")
-	                    MiniFileMgr.downFiles(readyUrl, encoding, callBack, readyUrl, isSaveFile, fileType);
+	                    MiniFileMgr.downFiles(encodeURI(readyUrl), encoding, callBack, readyUrl, isSaveFile, fileType);
 	                else
 	                    callBack != null && callBack.runWith([1]);
 	            } });
@@ -56,8 +56,8 @@ window.bdMiniGame = function (exports, Laya) {
 	    static readFile(filePath, encoding = "utf8", callBack = null, readyUrl = "", isSaveFile = false, fileType = "", isAutoClear = true) {
 	        filePath = Laya.URL.getAdptedFilePath(filePath);
 	        MiniFileMgr.fs.readFile({ filePath: filePath, encoding: encoding, success: function (data) {
-	                if (filePath.indexOf(BMiniAdapter.window.swan.env.USER_DATA_PATH) == -1 && (filePath.indexOf("http://") != -1 || filePath.indexOf("https://") != -1)) {
-	                    if (BMiniAdapter.autoCacheFile || isSaveFile) {
+	                if (filePath.indexOf("http://") != -1 || filePath.indexOf("https://") != -1) {
+	                    if (TTMiniAdapter.autoCacheFile || isSaveFile) {
 	                        callBack != null && callBack.runWith([0, data]);
 	                        MiniFileMgr.copyFile(filePath, readyUrl, null, encoding, isAutoClear);
 	                    }
@@ -67,14 +67,15 @@ window.bdMiniGame = function (exports, Laya) {
 	                else
 	                    callBack != null && callBack.runWith([0, data]);
 	            }, fail: function (data) {
-	                if (data)
+	                if (data) {
 	                    callBack != null && callBack.runWith([1, data]);
+	                }
 	            } });
 	    }
 	    static downOtherFiles(fileUrl, callBack = null, readyUrl = "", isSaveFile = false, isAutoClear = true) {
 	        MiniFileMgr.wxdown({ url: fileUrl, success: function (data) {
 	                if (data.statusCode === 200) {
-	                    if ((BMiniAdapter.autoCacheFile || isSaveFile) && readyUrl.indexOf("qlogo.cn") == -1 && readyUrl.indexOf(".php") == -1) {
+	                    if ((TTMiniAdapter.autoCacheFile || isSaveFile) && readyUrl.indexOf("qlogo.cn") == -1 && readyUrl.indexOf(".php") == -1) {
 	                        callBack != null && callBack.runWith([0, data.tempFilePath]);
 	                        MiniFileMgr.copyFile(data.tempFilePath, readyUrl, null, "", isAutoClear);
 	                    }
@@ -89,7 +90,7 @@ window.bdMiniGame = function (exports, Laya) {
 	            } });
 	    }
 	    static downLoadFile(fileUrl, fileType = "", callBack = null, encoding = "utf8") {
-	        if (window.navigator.userAgent.indexOf('SwanGame') < 0) {
+	        if (window.navigator.userAgent.indexOf('MiniGame') < 0) {
 	            Laya.Laya.loader.load(fileUrl, callBack);
 	        }
 	        else {
@@ -115,8 +116,8 @@ window.bdMiniGame = function (exports, Laya) {
 	                    filePath: tempFilePath,
 	                    success: function (data) {
 	                        if ((isAutoClear && (fileUseSize + chaSize + data.size) >= totalSize)) {
-	                            if (data.size > BMiniAdapter.minClearSize)
-	                                BMiniAdapter.minClearSize = data.size;
+	                            if (data.size > TTMiniAdapter.minClearSize)
+	                                TTMiniAdapter.minClearSize = data.size;
 	                            MiniFileMgr.onClearCacheRes();
 	                        }
 	                        MiniFileMgr.deleteFile(tempFilePath, readyUrl, callBack, encoding, data.size);
@@ -134,8 +135,8 @@ window.bdMiniGame = function (exports, Laya) {
 	                filePath: tempFilePath,
 	                success: function (data) {
 	                    if ((isAutoClear && (fileUseSize + chaSize + data.size) >= totalSize)) {
-	                        if (data.size > BMiniAdapter.minClearSize)
-	                            BMiniAdapter.minClearSize = data.size;
+	                        if (data.size > TTMiniAdapter.minClearSize)
+	                            TTMiniAdapter.minClearSize = data.size;
 	                        MiniFileMgr.onClearCacheRes();
 	                    }
 	                    MiniFileMgr.fs.copyFile({ srcPath: tempFilePath, destPath: saveFilePath, success: function (data2) {
@@ -151,7 +152,7 @@ window.bdMiniGame = function (exports, Laya) {
 	        }
 	    }
 	    static onClearCacheRes() {
-	        var memSize = BMiniAdapter.minClearSize;
+	        var memSize = TTMiniAdapter.minClearSize;
 	        var tempFileListArr = [];
 	        for (var key in MiniFileMgr.filesListObj) {
 	            if (key != "fileUsedSize")
@@ -223,6 +224,9 @@ window.bdMiniGame = function (exports, Laya) {
 	            if (MiniFileMgr.filesListObj[fileurlkey]) {
 	                var deletefileSize = parseInt(MiniFileMgr.filesListObj[fileurlkey].size);
 	                MiniFileMgr.filesListObj['fileUsedSize'] = parseInt(MiniFileMgr.filesListObj['fileUsedSize']) - deletefileSize;
+	                if (MiniFileMgr.filesListObj[fileurlkey].md5 == MiniFileMgr.fakeObj[fileurlkey].md5) {
+	                    delete MiniFileMgr.fakeObj[fileurlkey];
+	                }
 	                delete MiniFileMgr.filesListObj[fileurlkey];
 	                MiniFileMgr.writeFilesList(fileurlkey, JSON.stringify(MiniFileMgr.filesListObj), false);
 	                callBack != null && callBack.runWith([0]);
@@ -234,8 +238,8 @@ window.bdMiniGame = function (exports, Laya) {
 	        MiniFileMgr.fs.writeFile({ filePath: listFilesPath, encoding: 'utf8', data: filesListStr, success: function (data) {
 	            }, fail: function (data) {
 	            } });
-	        if (!BMiniAdapter.isZiYu && BMiniAdapter.isPosMsgYu) {
-	            BMiniAdapter.window.swan.postMessage({ url: fileurlkey, data: MiniFileMgr.filesListObj[fileurlkey], isLoad: "filenative", isAdd: isAdd });
+	        if (!TTMiniAdapter.isZiYu && TTMiniAdapter.isPosMsgYu) {
+	            TTMiniAdapter.window.tt.postMessage({ url: fileurlkey, data: MiniFileMgr.filesListObj[fileurlkey], isLoad: "filenative", isAdd: isAdd });
 	        }
 	    }
 	    static getCacheUseSize() {
@@ -265,11 +269,11 @@ window.bdMiniGame = function (exports, Laya) {
 	        }
 	    }
 	    static setNativeFileDir(value) {
-	        MiniFileMgr.fileNativeDir = BMiniAdapter.window.swan.env.USER_DATA_PATH + value;
+	        MiniFileMgr.fileNativeDir = TTMiniAdapter.window.tt.env.USER_DATA_PATH + value;
 	    }
 	}
-	MiniFileMgr.fs = window.swan.getFileSystemManager();
-	MiniFileMgr.wxdown = window.swan.downloadFile;
+	MiniFileMgr.fs = window.tt.getFileSystemManager();
+	MiniFileMgr.wxdown = window.tt.downloadFile;
 	MiniFileMgr.filesListObj = {};
 	MiniFileMgr.fakeObj = {};
 	MiniFileMgr.fileListName = "layaairfiles.txt";
@@ -385,7 +389,7 @@ window.bdMiniGame = function (exports, Laya) {
 	    }
 	    static _createSound() {
 	        MiniSound._id++;
-	        return BMiniAdapter.window.swan.createInnerAudioContext();
+	        return TTMiniAdapter.window.tt.createInnerAudioContext();
 	    }
 	    load(url) {
 	        if (!MiniSound._musicAudio)
@@ -411,11 +415,11 @@ window.bdMiniGame = function (exports, Laya) {
 	            this.event(Laya.Event.COMPLETE);
 	            return;
 	        }
-	        if (BMiniAdapter.autoCacheFile && MiniFileMgr.getFileInfo(url)) {
+	        if (TTMiniAdapter.autoCacheFile && MiniFileMgr.getFileInfo(url)) {
 	            this.onDownLoadCallBack(url, 0);
 	        }
 	        else {
-	            if (!BMiniAdapter.autoCacheFile) {
+	            if (!TTMiniAdapter.autoCacheFile) {
 	                this.onDownLoadCallBack(url, 0);
 	            }
 	            else {
@@ -427,26 +431,26 @@ window.bdMiniGame = function (exports, Laya) {
 	                    if (!url) {
 	                        url = tempUrl;
 	                    }
-	                    if (BMiniAdapter.subNativeFiles && BMiniAdapter.subNativeheads.length == 0) {
-	                        for (var key in BMiniAdapter.subNativeFiles) {
-	                            var tempArr = BMiniAdapter.subNativeFiles[key];
-	                            BMiniAdapter.subNativeheads = BMiniAdapter.subNativeheads.concat(tempArr);
+	                    if (TTMiniAdapter.subNativeFiles && TTMiniAdapter.subNativeheads.length == 0) {
+	                        for (var key in TTMiniAdapter.subNativeFiles) {
+	                            var tempArr = TTMiniAdapter.subNativeFiles[key];
+	                            TTMiniAdapter.subNativeheads = TTMiniAdapter.subNativeheads.concat(tempArr);
 	                            for (var aa = 0; aa < tempArr.length; aa++) {
-	                                BMiniAdapter.subMaps[tempArr[aa]] = key + "/" + tempArr[aa];
+	                                TTMiniAdapter.subMaps[tempArr[aa]] = key + "/" + tempArr[aa];
 	                            }
 	                        }
 	                    }
-	                    if (BMiniAdapter.subNativeFiles && url.indexOf("/") != -1) {
+	                    if (TTMiniAdapter.subNativeFiles && url.indexOf("/") != -1) {
 	                        var curfileHead = url.split("/")[0] + "/";
-	                        if (curfileHead && BMiniAdapter.subNativeheads.indexOf(curfileHead) != -1) {
-	                            var newfileHead = BMiniAdapter.subMaps[curfileHead];
+	                        if (curfileHead && TTMiniAdapter.subNativeheads.indexOf(curfileHead) != -1) {
+	                            var newfileHead = TTMiniAdapter.subMaps[curfileHead];
 	                            url = url.replace(curfileHead, newfileHead);
 	                        }
 	                    }
 	                    this.onDownLoadCallBack(url, 0);
 	                }
 	                else {
-	                    if (!MiniFileMgr.isLocalNativeFile(url) && (url.indexOf("http://") == -1 && url.indexOf("https://") == -1) || (url.indexOf(BMiniAdapter.window.swan.env.USER_DATA_PATH) != -1)) {
+	                    if (!MiniFileMgr.isLocalNativeFile(url) && (url.indexOf("http://") == -1 && url.indexOf("https://") == -1) || (url.indexOf("http://usr/") != -1)) {
 	                        this.onDownLoadCallBack(url, 0);
 	                    }
 	                    else {
@@ -456,28 +460,33 @@ window.bdMiniGame = function (exports, Laya) {
 	            }
 	        }
 	    }
-	    onDownLoadCallBack(sourceUrl, errorCode) {
+	    onDownLoadCallBack(sourceUrl, errorCode, tempFilePath = null) {
 	        if (!errorCode) {
 	            var fileNativeUrl;
-	            if (BMiniAdapter.autoCacheFile) {
-	                if (MiniFileMgr.isLocalNativeFile(sourceUrl)) {
-	                    var tempStr = Laya.URL.rootPath != "" ? Laya.URL.rootPath : Laya.URL._basePath;
-	                    var tempUrl = sourceUrl;
-	                    if (tempStr != "" && (sourceUrl.indexOf("http://") != -1 || sourceUrl.indexOf("https://") != -1))
-	                        fileNativeUrl = sourceUrl.split(tempStr)[1];
-	                    if (!fileNativeUrl) {
-	                        fileNativeUrl = tempUrl;
+	            if (TTMiniAdapter.autoCacheFile) {
+	                if (!tempFilePath) {
+	                    if (MiniFileMgr.isLocalNativeFile(sourceUrl)) {
+	                        var tempStr = Laya.URL.rootPath != "" ? Laya.URL.rootPath : Laya.URL._basePath;
+	                        var tempUrl = sourceUrl;
+	                        if (tempStr != "" && (sourceUrl.indexOf("http://") != -1 || sourceUrl.indexOf("https://") != -1))
+	                            fileNativeUrl = sourceUrl.split(tempStr)[1];
+	                        if (!fileNativeUrl) {
+	                            fileNativeUrl = tempUrl;
+	                        }
+	                    }
+	                    else {
+	                        var fileObj = MiniFileMgr.getFileInfo(sourceUrl);
+	                        if (fileObj && fileObj.md5) {
+	                            var fileMd5Name = fileObj.md5;
+	                            fileNativeUrl = MiniFileMgr.getFileNativePath(fileMd5Name);
+	                        }
+	                        else {
+	                            fileNativeUrl = sourceUrl;
+	                        }
 	                    }
 	                }
 	                else {
-	                    var fileObj = MiniFileMgr.getFileInfo(sourceUrl);
-	                    if (fileObj && fileObj.md5) {
-	                        var fileMd5Name = fileObj.md5;
-	                        fileNativeUrl = MiniFileMgr.getFileNativePath(fileMd5Name);
-	                    }
-	                    else {
-	                        fileNativeUrl = sourceUrl;
-	                    }
+	                    fileNativeUrl = tempFilePath;
 	                }
 	                if (this.url != Laya.SoundManager._bgMusic) {
 	                    this._sound = MiniSound._createSound();
@@ -544,13 +553,13 @@ window.bdMiniGame = function (exports, Laya) {
 	        }
 	        if (!tSound)
 	            return null;
-	        if (BMiniAdapter.autoCacheFile && MiniFileMgr.getFileInfo(this.url)) {
+	        if (TTMiniAdapter.autoCacheFile && MiniFileMgr.getFileInfo(this.url)) {
 	            var fileObj = MiniFileMgr.getFileInfo(this.url);
 	            var fileMd5Name = fileObj.md5;
 	            tSound.src = this.url = MiniFileMgr.getFileNativePath(fileMd5Name);
 	        }
 	        else {
-	            tSound.src = encodeURI(this.url);
+	            tSound.src = this.url;
 	        }
 	        var channel = new MiniSoundChannel(tSound, this);
 	        channel.url = this.url;
@@ -596,12 +605,12 @@ window.bdMiniGame = function (exports, Laya) {
 	        Laya.Input['inputContainer'].style.zIndex = 1E5;
 	        Laya.Browser.container.appendChild(Laya.Input['inputContainer']);
 	        Laya.Laya.stage.on("resize", null, MiniInput._onStageResize);
-	        BMiniAdapter.window.swan.onWindowResize && BMiniAdapter.window.swan.onWindowResize(function (res) {
+	        TTMiniAdapter.window.tt.onWindowResize && TTMiniAdapter.window.tt.onWindowResize(function (res) {
 	        });
 	        Laya.SoundManager._soundClass = MiniSound;
 	        Laya.SoundManager._musicClass = MiniSound;
-	        var model = BMiniAdapter.systemInfo.model;
-	        var system = BMiniAdapter.systemInfo.system;
+	        var model = TTMiniAdapter.systemInfo.model;
+	        var system = TTMiniAdapter.systemInfo.system;
 	        if (model.indexOf("iPhone") != -1) {
 	            Laya.Browser.onIPhone = true;
 	            Laya.Browser.onIOS = true;
@@ -619,17 +628,17 @@ window.bdMiniGame = function (exports, Laya) {
 	        var ts = Laya.Laya.stage._canvasTransform.identity();
 	        ts.scale((Laya.Browser.width / Laya.Render.canvas.width / Laya.Browser.pixelRatio), Laya.Browser.height / Laya.Render.canvas.height / Laya.Browser.pixelRatio);
 	    }
-	    static wxinputFocus(e) {
+	    static inputFocus(e) {
 	        var _inputTarget = Laya.Input['inputElement'].target;
 	        if (_inputTarget && !_inputTarget.editable) {
 	            return;
 	        }
-	        BMiniAdapter.window.swan.offKeyboardConfirm();
-	        BMiniAdapter.window.swan.offKeyboardInput();
-	        BMiniAdapter.window.swan.showKeyboard({ defaultValue: _inputTarget.text, maxLength: _inputTarget.maxChars, multiple: _inputTarget.multiline, confirmHold: true, confirmType: _inputTarget["confirmType"] || 'done', success: function (res) {
+	        TTMiniAdapter.window.tt.offKeyboardConfirm();
+	        TTMiniAdapter.window.tt.offKeyboardInput();
+	        TTMiniAdapter.window.tt.showKeyboard({ defaultValue: _inputTarget.text, maxLength: _inputTarget.maxChars, multiple: _inputTarget.multiline, confirmHold: true, confirmType: _inputTarget["confirmType"] || 'done', success: function (res) {
 	            }, fail: function (res) {
 	            } });
-	        BMiniAdapter.window.swan.onKeyboardConfirm(function (res) {
+	        TTMiniAdapter.window.tt.onKeyboardConfirm(function (res) {
 	            var str = res ? res.value : "";
 	            if (_inputTarget._restrictPattern) {
 	                str = str.replace(/\u2006|\x27/g, "");
@@ -642,7 +651,7 @@ window.bdMiniGame = function (exports, Laya) {
 	            MiniInput.inputEnter();
 	            _inputTarget.event("confirm");
 	        });
-	        BMiniAdapter.window.swan.onKeyboardInput(function (res) {
+	        TTMiniAdapter.window.tt.onKeyboardInput(function (res) {
 	            var str = res ? res.value : "";
 	            if (!_inputTarget.multiline) {
 	                if (str.indexOf("\n") != -1) {
@@ -663,13 +672,13 @@ window.bdMiniGame = function (exports, Laya) {
 	    static inputEnter() {
 	        Laya.Input['inputElement'].target.focus = false;
 	    }
-	    static wxinputblur() {
+	    static inputblur() {
 	        MiniInput.hideKeyboard();
 	    }
 	    static hideKeyboard() {
-	        BMiniAdapter.window.swan.offKeyboardConfirm();
-	        BMiniAdapter.window.swan.offKeyboardInput();
-	        BMiniAdapter.window.swan.hideKeyboard({ success: function (res) {
+	        TTMiniAdapter.window.tt.offKeyboardConfirm();
+	        TTMiniAdapter.window.tt.offKeyboardInput();
+	        TTMiniAdapter.window.tt.hideKeyboard({ success: function (res) {
 	                console.log('隐藏键盘');
 	            }, fail: function (res) {
 	                console.log("隐藏键盘出错:" + (res ? res.errMsg : ""));
@@ -684,7 +693,7 @@ window.bdMiniGame = function (exports, Laya) {
 	    _loadResourceFilter(type, url) {
 	        var thisLoader = this;
 	        this.sourceUrl = Laya.URL.formatURL(url);
-	        if (url.indexOf(BMiniAdapter.window.swan.env.USER_DATA_PATH) == -1 && (url.indexOf("http://") != -1 || url.indexOf("https://") != -1)) {
+	        if (url.indexOf(TTMiniAdapter.window.tt.env.USER_DATA_PATH) == -1 && (url.indexOf("http://") != -1 || url.indexOf("https://") != -1)) {
 	            if (MiniFileMgr.loadPath != "") {
 	                url = url.split(MiniFileMgr.loadPath)[1];
 	            }
@@ -698,19 +707,19 @@ window.bdMiniGame = function (exports, Laya) {
 	                }
 	            }
 	        }
-	        if (BMiniAdapter.subNativeFiles && BMiniAdapter.subNativeheads.length == 0) {
-	            for (var key in BMiniAdapter.subNativeFiles) {
-	                var tempArr = BMiniAdapter.subNativeFiles[key];
-	                BMiniAdapter.subNativeheads = BMiniAdapter.subNativeheads.concat(tempArr);
+	        if (TTMiniAdapter.subNativeFiles && TTMiniAdapter.subNativeheads.length == 0) {
+	            for (var key in TTMiniAdapter.subNativeFiles) {
+	                var tempArr = TTMiniAdapter.subNativeFiles[key];
+	                TTMiniAdapter.subNativeheads = TTMiniAdapter.subNativeheads.concat(tempArr);
 	                for (var aa = 0; aa < tempArr.length; aa++) {
-	                    BMiniAdapter.subMaps[tempArr[aa]] = key + "/" + tempArr[aa];
+	                    TTMiniAdapter.subMaps[tempArr[aa]] = key + "/" + tempArr[aa];
 	                }
 	            }
 	        }
-	        if (BMiniAdapter.subNativeFiles && url.indexOf("/") != -1) {
+	        if (TTMiniAdapter.subNativeFiles && url.indexOf("/") != -1) {
 	            var curfileHead = url.split("/")[0] + "/";
-	            if (curfileHead && BMiniAdapter.subNativeheads.indexOf(curfileHead) != -1) {
-	                var newfileHead = BMiniAdapter.subMaps[curfileHead];
+	            if (curfileHead && TTMiniAdapter.subNativeheads.indexOf(curfileHead) != -1) {
+	                var newfileHead = TTMiniAdapter.subMaps[curfileHead];
 	                url = url.replace(curfileHead, newfileHead);
 	            }
 	        }
@@ -742,7 +751,7 @@ window.bdMiniGame = function (exports, Laya) {
 	        }
 	        else {
 	            var tempurl = Laya.URL.formatURL(url);
-	            if (!MiniFileMgr.isLocalNativeFile(url) && (tempurl.indexOf("http://") == -1 && tempurl.indexOf("https://") == -1) || (tempurl.indexOf("http://usr/") != -1)) {
+	            if (!MiniFileMgr.isLocalNativeFile(url) && (tempurl.indexOf("http://") == -1 && tempurl.indexOf("https://") == -1) || (tempurl.indexOf(TTMiniAdapter.window.tt.env.USER_DATA_PATH) != -1)) {
 	                MiniLoader.onDownLoadCallBack(url, thisLoader, 0);
 	            }
 	            else {
@@ -753,7 +762,7 @@ window.bdMiniGame = function (exports, Laya) {
 	    static onDownLoadCallBack(sourceUrl, thisLoader, errorCode, tempFilePath = null) {
 	        if (!errorCode) {
 	            var fileNativeUrl;
-	            if (BMiniAdapter.autoCacheFile) {
+	            if (TTMiniAdapter.autoCacheFile) {
 	                if (!tempFilePath) {
 	                    if (MiniFileMgr.isLocalNativeFile(sourceUrl)) {
 	                        var tempStr = Laya.URL.rootPath != "" ? Laya.URL.rootPath : Laya.URL._basePath;
@@ -804,12 +813,12 @@ window.bdMiniGame = function (exports, Laya) {
 	    }
 	    _loadHttpRequestWhat(url, contentType) {
 	        var thisLoader = this;
-	        var encoding = BMiniAdapter.getUrlEncode(url, contentType);
+	        var encoding = TTMiniAdapter.getUrlEncode(url, contentType);
 	        if (Laya.Loader.preLoadedMap[url])
 	            thisLoader.onLoaded(Laya.Loader.preLoadedMap[url]);
 	        else {
 	            var tempurl = Laya.URL.formatURL(url);
-	            if (!MiniFileMgr.isLocalNativeFile(url) && !MiniFileMgr.getFileInfo(tempurl) && url.indexOf(BMiniAdapter.window.swan.env.USER_DATA_PATH) == -1 && (tempurl.indexOf("http://") != -1 || tempurl.indexOf("https://") != -1) && !BMiniAdapter.AutoCacheDownFile) {
+	            if (!MiniFileMgr.isLocalNativeFile(url) && !MiniFileMgr.getFileInfo(tempurl) && url.indexOf(TTMiniAdapter.window.tt.env.USER_DATA_PATH) == -1 && (tempurl.indexOf("http://") != -1 || tempurl.indexOf("https://") != -1) && !TTMiniAdapter.AutoCacheDownFile) {
 	                thisLoader._loadHttpRequest(tempurl, contentType, thisLoader, thisLoader.onLoaded, thisLoader, thisLoader.onProgress, thisLoader, thisLoader.onError);
 	            }
 	            else {
@@ -826,7 +835,7 @@ window.bdMiniGame = function (exports, Laya) {
 	                        MiniFileMgr.readFile(url, encoding, new Laya.Handler(MiniLoader, MiniLoader.onReadNativeCallBack, [url, contentType, thisLoader]), url);
 	                    }
 	                    else {
-	                        MiniFileMgr.downFiles(tempurl, encoding, new Laya.Handler(MiniLoader, MiniLoader.onReadNativeCallBack, [url, contentType, thisLoader]), tempurl, true);
+	                        MiniFileMgr.downFiles(encodeURI(tempurl), encoding, new Laya.Handler(MiniLoader, MiniLoader.onReadNativeCallBack, [url, contentType, thisLoader]), tempurl, true);
 	                    }
 	                }
 	            }
@@ -836,7 +845,7 @@ window.bdMiniGame = function (exports, Laya) {
 	        if (!errorCode) {
 	            var tempData;
 	            if (type == Laya.Loader.JSON || type == Laya.Loader.ATLAS || type == Laya.Loader.PREFAB || type == Laya.Loader.PLF) {
-	                tempData = BMiniAdapter.getJson(data.data);
+	                tempData = TTMiniAdapter.getJson(data.data);
 	            }
 	            else if (type == Laya.Loader.XML) {
 	                tempData = Laya.Utils.parseXMLFromString(data.data);
@@ -844,8 +853,8 @@ window.bdMiniGame = function (exports, Laya) {
 	            else {
 	                tempData = data.data;
 	            }
-	            if (!BMiniAdapter.isZiYu && BMiniAdapter.isPosMsgYu && type != Laya.Loader.BUFFER && BMiniAdapter.window.swan) {
-	                BMiniAdapter.window.swan.postMessage({ url: url, data: tempData, isLoad: "filedata" });
+	            if (!TTMiniAdapter.isZiYu && TTMiniAdapter.isPosMsgYu && type != Laya.Loader.BUFFER) {
+	                TTMiniAdapter.window.tt.postMessage({ url: url, data: tempData, isLoad: "filedata" });
 	            }
 	            thisLoader.onLoaded(tempData);
 	        }
@@ -854,22 +863,22 @@ window.bdMiniGame = function (exports, Laya) {
 	        }
 	    }
 	    static _transformImgUrl(url, type, thisLoader) {
-	        if (BMiniAdapter.isZiYu || MiniFileMgr.isLocalNativeFile(url)) {
+	        if (TTMiniAdapter.isZiYu || MiniFileMgr.isLocalNativeFile(url)) {
 	            thisLoader._loadImage(url, false);
 	            return;
 	        }
-	        if (!BMiniAdapter.autoCacheFile) {
+	        if (!TTMiniAdapter.autoCacheFile) {
 	            thisLoader._loadImage(encodeURI(url));
 	            return;
 	        }
 	        if (!MiniFileMgr.isLocalNativeFile(url) && !MiniFileMgr.getFileInfo(Laya.URL.formatURL(url))) {
 	            var tempUrl = Laya.URL.formatURL(url);
-	            if (url.indexOf(BMiniAdapter.window.swan.env.USER_DATA_PATH) == -1 && (tempUrl.indexOf("http://") != -1 || tempUrl.indexOf("https://") != -1)) {
-	                if (BMiniAdapter.isZiYu) {
+	            if (url.indexOf(TTMiniAdapter.window.tt.env.USER_DATA_PATH) == -1 && (tempUrl.indexOf("http://") != -1 || tempUrl.indexOf("https://") != -1)) {
+	                if (TTMiniAdapter.isZiYu) {
 	                    thisLoader._loadImage(url);
 	                }
 	                else {
-	                    MiniFileMgr.downOtherFiles(tempUrl, new Laya.Handler(MiniLoader, MiniLoader.onDownImgCallBack, [url, thisLoader]), tempUrl);
+	                    MiniFileMgr.downOtherFiles(encodeURI(tempUrl), new Laya.Handler(MiniLoader, MiniLoader.onDownImgCallBack, [url, thisLoader]), tempUrl);
 	                }
 	            }
 	            else
@@ -888,7 +897,7 @@ window.bdMiniGame = function (exports, Laya) {
 	    }
 	    static onCreateImage(sourceUrl, thisLoader, isLocal = false, tempFilePath = "") {
 	        var fileNativeUrl;
-	        if (BMiniAdapter.autoCacheFile) {
+	        if (TTMiniAdapter.autoCacheFile) {
 	            if (!isLocal) {
 	                if (tempFilePath != "") {
 	                    fileNativeUrl = tempFilePath;
@@ -899,7 +908,7 @@ window.bdMiniGame = function (exports, Laya) {
 	                    fileNativeUrl = MiniFileMgr.getFileNativePath(fileMd5Name);
 	                }
 	            }
-	            else if (BMiniAdapter.isZiYu) {
+	            else if (TTMiniAdapter.isZiYu) {
 	                var tempUrl = Laya.URL.formatURL(sourceUrl);
 	                if (MiniFileMgr.ziyuFileTextureData[tempUrl]) {
 	                    fileNativeUrl = MiniFileMgr.ziyuFileTextureData[tempUrl];
@@ -928,17 +937,17 @@ window.bdMiniGame = function (exports, Laya) {
 	    }
 	    static setItem(key, value) {
 	        try {
-	            BMiniAdapter.window.swan.setStorageSync(key, value);
+	            TTMiniAdapter.window.tt.setStorageSync(key, value);
 	        }
 	        catch (error) {
-	            BMiniAdapter.window.swan.setStorage({
+	            TTMiniAdapter.window.tt.setStorage({
 	                key: key,
 	                data: value
 	            });
 	        }
 	    }
 	    static getItem(key) {
-	        return BMiniAdapter.window.swan.getStorageSync(key);
+	        return TTMiniAdapter.window.tt.getStorageSync(key);
 	    }
 	    static setJSON(key, value) {
 	        MiniLocalStorage.setItem(key, value);
@@ -947,14 +956,14 @@ window.bdMiniGame = function (exports, Laya) {
 	        return MiniLocalStorage.getItem(key);
 	    }
 	    static removeItem(key) {
-	        BMiniAdapter.window.swan.removeStorageSync(key);
+	        TTMiniAdapter.window.tt.removeStorageSync(key);
 	    }
 	    static clear() {
-	        BMiniAdapter.window.swan.clearStorageSync();
+	        TTMiniAdapter.window.tt.clearStorageSync();
 	    }
 	    static getStorageInfoSync() {
 	        try {
-	            var res = BMiniAdapter.window.swan.getStorageInfoSync();
+	            var res = TTMiniAdapter.window.tt.getStorageInfoSync();
 	            console.log(res.keys);
 	            console.log(res.currentSize);
 	            console.log(res.limitSize);
@@ -967,53 +976,54 @@ window.bdMiniGame = function (exports, Laya) {
 	}
 	MiniLocalStorage.support = true;
 
-	class BMiniAdapter {
+	class TTMiniAdapter {
 	    static getJson(data) {
 	        return JSON.parse(data);
 	    }
 	    static enable() {
-	        BMiniAdapter.init(Laya.Laya.isWXPosMsg, Laya.Laya.isWXOpenDataContext);
+	        TTMiniAdapter.init(Laya.Laya.isWXPosMsg, Laya.Laya.isWXOpenDataContext);
 	    }
 	    static init(isPosMsg = false, isSon = false) {
-	        if (BMiniAdapter._inited)
+	        if (TTMiniAdapter._inited)
 	            return;
-	        BMiniAdapter._inited = true;
-	        BMiniAdapter.window = window;
-	        if (!BMiniAdapter.window.hasOwnProperty("swan"))
+	        TTMiniAdapter._inited = true;
+	        TTMiniAdapter.window = window;
+	        if (!TTMiniAdapter.window.hasOwnProperty("tt"))
 	            return;
-	        if (BMiniAdapter.window.navigator.userAgent.indexOf('SwanGame') < 0)
+	        if (TTMiniAdapter.window.navigator.userAgent.indexOf('MiniGame') < 0)
 	            return;
-	        BMiniAdapter.isZiYu = isSon;
-	        BMiniAdapter.isPosMsgYu = isPosMsg;
-	        BMiniAdapter.EnvConfig = {};
-	        if (!BMiniAdapter.isZiYu) {
+	        TTMiniAdapter.isZiYu = isSon;
+	        TTMiniAdapter.isPosMsgYu = isPosMsg;
+	        TTMiniAdapter.EnvConfig = {};
+	        if (!TTMiniAdapter.isZiYu) {
 	            MiniFileMgr.setNativeFileDir("/layaairGame");
-	            MiniFileMgr.existDir(MiniFileMgr.fileNativeDir, Laya.Handler.create(BMiniAdapter, BMiniAdapter.onMkdirCallBack));
+	            MiniFileMgr.existDir(MiniFileMgr.fileNativeDir, Laya.Handler.create(TTMiniAdapter, TTMiniAdapter.onMkdirCallBack));
 	        }
-	        BMiniAdapter.systemInfo = BMiniAdapter.window.swan.getSystemInfoSync();
-	        BMiniAdapter.window.focus = function () {
+	        TTMiniAdapter.systemInfo = TTMiniAdapter.window.tt.getSystemInfoSync();
+	        TTMiniAdapter.window.focus = function () {
 	        };
 	        Laya.Laya['_getUrlPath'] = function () {
 	            return "";
 	        };
-	        BMiniAdapter.window.logtime = function (str) {
+	        TTMiniAdapter.window.logtime = function (str) {
 	        };
-	        BMiniAdapter.window.alertTimeLog = function (str) {
+	        TTMiniAdapter.window.alertTimeLog = function (str) {
 	        };
-	        BMiniAdapter.window.resetShareInfo = function () {
+	        TTMiniAdapter.window.resetShareInfo = function () {
 	        };
-	        BMiniAdapter.window.CanvasRenderingContext2D = function () {
+	        TTMiniAdapter.window.CanvasRenderingContext2D = function () {
 	        };
-	        BMiniAdapter.window.CanvasRenderingContext2D.prototype = BMiniAdapter.window.swan.createCanvas().getContext('2d').__proto__;
-	        BMiniAdapter.window.document.body.appendChild = function () {
+	        TTMiniAdapter.window.CanvasRenderingContext2D.prototype = TTMiniAdapter.window.tt.createCanvas().getContext('2d').__proto__;
+	        TTMiniAdapter.window.document.body.appendChild = function () {
 	        };
-	        BMiniAdapter.EnvConfig.pixelRatioInt = 0;
-	        Laya.Browser["_pixelRatio"] = BMiniAdapter.pixelRatio();
-	        BMiniAdapter._preCreateElement = Laya.Browser.createElement;
-	        Laya.Browser["createElement"] = BMiniAdapter.createElement;
-	        Laya.RunDriver.createShaderCondition = BMiniAdapter.createShaderCondition;
-	        Laya.Utils['parseXMLFromString'] = BMiniAdapter.parseXMLFromString;
+	        TTMiniAdapter.EnvConfig.pixelRatioInt = 0;
+	        Laya.Browser["_pixelRatio"] = TTMiniAdapter.pixelRatio();
+	        TTMiniAdapter._preCreateElement = Laya.Browser.createElement;
+	        Laya.Browser["createElement"] = TTMiniAdapter.createElement;
+	        Laya.RunDriver.createShaderCondition = TTMiniAdapter.createShaderCondition;
+	        Laya.Utils['parseXMLFromString'] = TTMiniAdapter.parseXMLFromString;
 	        Laya.Input['_createInputElement'] = MiniInput['_createInputElement'];
+	        TTMiniAdapter.openCtx = TTMiniAdapter.window.tt.getOpenDataContext();
 	        Laya.Loader.prototype._loadResourceFilter = MiniLoader.prototype._loadResourceFilter;
 	        Laya.Loader.prototype._loadSound = MiniLoader.prototype._loadSound;
 	        Laya.Loader.prototype.originComplete = Laya.Loader.prototype.complete;
@@ -1021,7 +1031,7 @@ window.bdMiniGame = function (exports, Laya) {
 	        Laya.Loader.prototype._loadHttpRequestWhat = MiniLoader.prototype._loadHttpRequestWhat;
 	        Laya.LocalStorage._baseClass = MiniLocalStorage;
 	        MiniLocalStorage.__init__();
-	        BMiniAdapter.window.swan.onMessage && BMiniAdapter.window.swan.onMessage(BMiniAdapter._onMessage);
+	        TTMiniAdapter.window.tt.onMessage && TTMiniAdapter.window.tt.onMessage(TTMiniAdapter._onMessage);
 	    }
 	    static _onMessage(data) {
 	        switch (data.type) {
@@ -1081,9 +1091,12 @@ window.bdMiniGame = function (exports, Laya) {
 	    static getFileList() {
 	        return MiniFileMgr.filesListObj;
 	    }
+	    static exitMiniProgram() {
+	        TTMiniAdapter.window["tt"].exitMiniProgram();
+	    }
 	    static onMkdirCallBack(errorCode, data) {
 	        if (!errorCode) {
-	            MiniFileMgr.filesListObj = JSON.parse(data.data);
+	            MiniFileMgr.filesListObj = JSON.parse(data.data) || {};
 	            MiniFileMgr.fakeObj = JSON.parse(data.data) || {};
 	        }
 	        else {
@@ -1123,39 +1136,39 @@ window.bdMiniGame = function (exports, Laya) {
 	        });
 	    }
 	    static pixelRatio() {
-	        if (!BMiniAdapter.EnvConfig.pixelRatioInt) {
+	        if (!TTMiniAdapter.EnvConfig.pixelRatioInt) {
 	            try {
-	                BMiniAdapter.EnvConfig.pixelRatioInt = BMiniAdapter.systemInfo.pixelRatio;
-	                return BMiniAdapter.systemInfo.pixelRatio;
+	                TTMiniAdapter.EnvConfig.pixelRatioInt = TTMiniAdapter.systemInfo.pixelRatio;
+	                return TTMiniAdapter.systemInfo.pixelRatio;
 	            }
 	            catch (error) {
 	            }
 	        }
-	        return BMiniAdapter.EnvConfig.pixelRatioInt;
+	        return TTMiniAdapter.EnvConfig.pixelRatioInt;
 	    }
 	    static createElement(type) {
 	        if (type == "canvas") {
 	            var _source;
-	            if (BMiniAdapter.idx == 1) {
-	                if (BMiniAdapter.isZiYu) {
-	                    _source = BMiniAdapter.window.sharedCanvas;
+	            if (TTMiniAdapter.idx == 1) {
+	                if (TTMiniAdapter.isZiYu) {
+	                    _source = TTMiniAdapter.window.sharedCanvas;
+	                    _source.style = {};
 	                }
 	                else {
-	                    _source = BMiniAdapter.window.canvas;
+	                    _source = TTMiniAdapter.window.canvas;
 	                }
 	            }
 	            else {
-	                _source = BMiniAdapter.window.swan.createCanvas();
+	                _source = TTMiniAdapter.window.tt.createCanvas();
 	            }
-	            _source.style = {};
-	            BMiniAdapter.idx++;
+	            TTMiniAdapter.idx++;
 	            return _source;
 	        }
 	        else if (type == "textarea" || type == "input") {
-	            return BMiniAdapter.onCreateInput(type);
+	            return TTMiniAdapter.onCreateInput(type);
 	        }
 	        else if (type == "div") {
-	            var node = BMiniAdapter._preCreateElement(type);
+	            var node = TTMiniAdapter._preCreateElement(type);
 	            node.contains = function (value) {
 	                return null;
 	            };
@@ -1164,17 +1177,16 @@ window.bdMiniGame = function (exports, Laya) {
 	            return node;
 	        }
 	        else {
-	            return BMiniAdapter._preCreateElement(type);
+	            return TTMiniAdapter._preCreateElement(type);
 	        }
 	    }
 	    static onCreateInput(type) {
-	        var node = BMiniAdapter._preCreateElement(type);
-	        node.focus = MiniInput.wxinputFocus;
-	        node.blur = MiniInput.wxinputblur;
+	        var node = TTMiniAdapter._preCreateElement(type);
+	        node.focus = MiniInput.inputFocus;
+	        node.blur = MiniInput.inputblur;
 	        node.style = {};
 	        node.value = 0;
-	        if (!node.parentElement)
-	            node.parentElement = {};
+	        node.parentElement = {};
 	        node.placeholder = {};
 	        node.type = {};
 	        node.setColor = function (value) {
@@ -1199,7 +1211,7 @@ window.bdMiniGame = function (exports, Laya) {
 	        return func;
 	    }
 	    static sendAtlasToOpenDataContext(url) {
-	        if (!BMiniAdapter.isZiYu) {
+	        if (!TTMiniAdapter.isZiYu) {
 	            var atlasJson = Laya.Loader.getRes(Laya.URL.formatURL(url));
 	            if (atlasJson) {
 	                var textureArr = atlasJson.meta.image.split(",");
@@ -1217,7 +1229,7 @@ window.bdMiniGame = function (exports, Laya) {
 	                }
 	                for (i = 0; i < toloadPics.length; i++) {
 	                    var tempAtlasPngUrl = toloadPics[i];
-	                    BMiniAdapter.postInfoToContext(url, tempAtlasPngUrl, atlasJson);
+	                    TTMiniAdapter.postInfoToContext(Laya.Laya.URL.formatURL(url), Laya.Laya.URL.formatURL(tempAtlasPngUrl), atlasJson);
 	                }
 	            }
 	            else {
@@ -1237,7 +1249,7 @@ window.bdMiniGame = function (exports, Laya) {
 	            fileNativeUrl = textureUrl;
 	        }
 	        if (fileNativeUrl) {
-	            BMiniAdapter.window.swan.postMessage({ url: url, atlasdata: postData, imgNativeUrl: fileNativeUrl, imgReadyUrl: textureUrl, isLoad: "opendatacontext" });
+	            TTMiniAdapter.openCtx.postMessage({ url: url, atlasdata: postData, imgNativeUrl: fileNativeUrl, imgReadyUrl: textureUrl, isLoad: "opendatacontext" });
 	        }
 	        else {
 	            throw "获取图集的磁盘url路径不存在！";
@@ -1255,17 +1267,19 @@ window.bdMiniGame = function (exports, Laya) {
 	            fileNativeUrl = url;
 	        }
 	        if (fileNativeUrl) {
-	            BMiniAdapter.window.swan.postMessage({ url: url, imgNativeUrl: fileNativeUrl, imgReadyUrl: url, isLoad: "openJsondatacontextPic" });
+	            url = Laya.Laya.URL.formatURL(url);
+	            TTMiniAdapter.openCtx.postMessage({ url: url, imgNativeUrl: fileNativeUrl, imgReadyUrl: url, isLoad: "openJsondatacontextPic" });
 	        }
 	        else {
 	            throw "获取图集的磁盘url路径不存在！";
 	        }
 	    }
 	    static sendJsonDataToDataContext(url) {
-	        if (!BMiniAdapter.isZiYu) {
+	        if (!TTMiniAdapter.isZiYu) {
+	            url = Laya.Laya.URL.formatURL(url);
 	            var atlasJson = Laya.Loader.getRes(url);
 	            if (atlasJson) {
-	                BMiniAdapter.window.swan.postMessage({ url: url, atlasdata: atlasJson, isLoad: "openJsondatacontext" });
+	                TTMiniAdapter.openCtx.postMessage({ url: url, atlasdata: atlasJson, isLoad: "openJsondatacontext" });
 	            }
 	            else {
 	                throw "传递的url没有获取到对应的图集数据信息，请确保图集已经过！";
@@ -1273,26 +1287,26 @@ window.bdMiniGame = function (exports, Laya) {
 	        }
 	    }
 	}
-	BMiniAdapter._inited = false;
-	BMiniAdapter.autoCacheFile = true;
-	BMiniAdapter.minClearSize = (5 * 1024 * 1024);
-	BMiniAdapter.nativefiles = ["layaNativeDir", "wxlocal"];
-	BMiniAdapter.subNativeFiles = [];
-	BMiniAdapter.subNativeheads = [];
-	BMiniAdapter.subMaps = [];
-	BMiniAdapter.AutoCacheDownFile = false;
-	BMiniAdapter.parseXMLFromString = function (value) {
+	TTMiniAdapter._inited = false;
+	TTMiniAdapter.autoCacheFile = true;
+	TTMiniAdapter.minClearSize = (5 * 1024 * 1024);
+	TTMiniAdapter.nativefiles = ["layaNativeDir", "wxlocal"];
+	TTMiniAdapter.subNativeFiles = [];
+	TTMiniAdapter.subNativeheads = [];
+	TTMiniAdapter.subMaps = [];
+	TTMiniAdapter.AutoCacheDownFile = false;
+	TTMiniAdapter.parseXMLFromString = function (value) {
 	    var rst;
 	    value = value.replace(/>\s+</g, '><');
 	    try {
-	        rst = (new BMiniAdapter.window.Parser.DOMParser()).parseFromString(value, 'text/xml');
+	        rst = (new TTMiniAdapter.window.Parser.DOMParser()).parseFromString(value, 'text/xml');
 	    }
 	    catch (error) {
 	        throw "需要引入xml解析库文件";
 	    }
 	    return rst;
 	};
-	BMiniAdapter.idx = 1;
+	TTMiniAdapter.idx = 1;
 
 	class MiniAccelerator extends Laya.EventDispatcher {
 	    constructor() {
@@ -1316,14 +1330,14 @@ window.bdMiniGame = function (exports, Laya) {
 	            return;
 	        MiniAccelerator._isListening = true;
 	        try {
-	            BMiniAdapter.window.swan.onAccelerometerChange(MiniAccelerator.onAccelerometerChange);
+	            TTMiniAdapter.window.tt.onAccelerometerChange(MiniAccelerator.onAccelerometerChange);
 	        }
 	        catch (e) { }
 	    }
 	    static stopListen() {
 	        MiniAccelerator._isListening = false;
 	        try {
-	            BMiniAdapter.window.swan.stopAccelerometer({});
+	            TTMiniAdapter.window.tt.stopAccelerometer({});
 	        }
 	        catch (e) { }
 	    }
@@ -1353,7 +1367,7 @@ window.bdMiniGame = function (exports, Laya) {
 	class MiniImage {
 	    _loadImage(url) {
 	        var thisLoader = this;
-	        if (BMiniAdapter.isZiYu) {
+	        if (TTMiniAdapter.isZiYu) {
 	            MiniImage.onCreateImage(url, thisLoader, true);
 	            return;
 	        }
@@ -1363,7 +1377,7 @@ window.bdMiniGame = function (exports, Laya) {
 	            url = Laya.URL.formatURL(url);
 	        }
 	        else {
-	            if (url.indexOf("http://usr/") == -1 && (url.indexOf("http://") != -1 || url.indexOf("https://") != -1)) {
+	            if (url.indexOf(TTMiniAdapter.window.tt.env.USER_DATA_PATH) == -1 && (url.indexOf("http://") != -1 || url.indexOf("https://") != -1)) {
 	                if (MiniFileMgr.loadPath != "") {
 	                    url = url.split(MiniFileMgr.loadPath)[1];
 	                }
@@ -1377,26 +1391,26 @@ window.bdMiniGame = function (exports, Laya) {
 	                    }
 	                }
 	            }
-	            if (BMiniAdapter.subNativeFiles && BMiniAdapter.subNativeheads.length == 0) {
-	                for (var key in BMiniAdapter.subNativeFiles) {
-	                    var tempArr = BMiniAdapter.subNativeFiles[key];
-	                    BMiniAdapter.subNativeheads = BMiniAdapter.subNativeheads.concat(tempArr);
+	            if (TTMiniAdapter.subNativeFiles && TTMiniAdapter.subNativeheads.length == 0) {
+	                for (var key in TTMiniAdapter.subNativeFiles) {
+	                    var tempArr = TTMiniAdapter.subNativeFiles[key];
+	                    TTMiniAdapter.subNativeheads = TTMiniAdapter.subNativeheads.concat(tempArr);
 	                    for (var aa = 0; aa < tempArr.length; aa++) {
-	                        BMiniAdapter.subMaps[tempArr[aa]] = key + "/" + tempArr[aa];
+	                        TTMiniAdapter.subMaps[tempArr[aa]] = key + "/" + tempArr[aa];
 	                    }
 	                }
 	            }
-	            if (BMiniAdapter.subNativeFiles && url.indexOf("/") != -1) {
+	            if (TTMiniAdapter.subNativeFiles && url.indexOf("/") != -1) {
 	                var curfileHead = url.split("/")[0] + "/";
-	                if (curfileHead && BMiniAdapter.subNativeheads.indexOf(curfileHead) != -1) {
-	                    var newfileHead = BMiniAdapter.subMaps[curfileHead];
+	                if (curfileHead && TTMiniAdapter.subNativeheads.indexOf(curfileHead) != -1) {
+	                    var newfileHead = TTMiniAdapter.subMaps[curfileHead];
 	                    url = url.replace(curfileHead, newfileHead);
 	                }
 	            }
 	        }
 	        if (!MiniFileMgr.getFileInfo(url)) {
-	            if (url.indexOf('http://usr/') == -1 && (url.indexOf("http://") != -1 || url.indexOf("https://") != -1)) {
-	                if (BMiniAdapter.isZiYu) {
+	            if (url.indexOf(TTMiniAdapter.window.tt.env.USER_DATA_PATH) == -1 && (url.indexOf("http://") != -1 || url.indexOf("https://") != -1)) {
+	                if (TTMiniAdapter.isZiYu) {
 	                    MiniImage.onCreateImage(url, thisLoader, true);
 	                }
 	                else {
@@ -1419,7 +1433,7 @@ window.bdMiniGame = function (exports, Laya) {
 	    }
 	    static onCreateImage(sourceUrl, thisLoader, isLocal = false, tempFilePath = "") {
 	        var fileNativeUrl;
-	        if (BMiniAdapter.autoCacheFile) {
+	        if (TTMiniAdapter.autoCacheFile) {
 	            if (!isLocal) {
 	                if (tempFilePath != "") {
 	                    fileNativeUrl = tempFilePath;
@@ -1430,7 +1444,7 @@ window.bdMiniGame = function (exports, Laya) {
 	                    fileNativeUrl = MiniFileMgr.getFileNativePath(fileMd5Name);
 	                }
 	            }
-	            else if (BMiniAdapter.isZiYu) {
+	            else if (TTMiniAdapter.isZiYu) {
 	                var tempUrl = Laya.URL.formatURL(sourceUrl);
 	                if (MiniFileMgr.ziyuFileTextureData[tempUrl]) {
 	                    fileNativeUrl = MiniFileMgr.ziyuFileTextureData[tempUrl];
@@ -1498,16 +1512,16 @@ window.bdMiniGame = function (exports, Laya) {
 	    constructor() {
 	    }
 	    static __init__() {
-	        BMiniAdapter.window.navigator.geolocation.getCurrentPosition = MiniLocation.getCurrentPosition;
-	        BMiniAdapter.window.navigator.geolocation.watchPosition = MiniLocation.watchPosition;
-	        BMiniAdapter.window.navigator.geolocation.clearWatch = MiniLocation.clearWatch;
+	        TTMiniAdapter.window.navigator.geolocation.getCurrentPosition = MiniLocation.getCurrentPosition;
+	        TTMiniAdapter.window.navigator.geolocation.watchPosition = MiniLocation.watchPosition;
+	        TTMiniAdapter.window.navigator.geolocation.clearWatch = MiniLocation.clearWatch;
 	    }
 	    static getCurrentPosition(success = null, error = null, options = null) {
 	        var paramO;
 	        paramO = {};
 	        paramO.success = getSuccess;
 	        paramO.fail = error;
-	        BMiniAdapter.window.swan.getLocation(paramO);
+	        TTMiniAdapter.window.tt.getLocation(paramO);
 	        function getSuccess(res) {
 	            if (success != null) {
 	                success(res);
@@ -1568,7 +1582,7 @@ window.bdMiniGame = function (exports, Laya) {
 	    constructor(width = 320, height = 240) {
 	        this.videoend = false;
 	        this.videourl = "";
-	        this.videoElement = BMiniAdapter.window.swan.createVideo({ width: width, height: height, autoplay: true });
+	        this.videoElement = TTMiniAdapter.window.tt.createVideo({ width: width, height: height, autoplay: true });
 	    }
 	    static __init__() {
 	    }
@@ -1733,7 +1747,6 @@ window.bdMiniGame = function (exports, Laya) {
 	    }
 	}
 
-	exports.BMiniAdapter = BMiniAdapter;
 	exports.MiniAccelerator = MiniAccelerator;
 	exports.MiniFileMgr = MiniFileMgr;
 	exports.MiniImage = MiniImage;
@@ -1744,5 +1757,6 @@ window.bdMiniGame = function (exports, Laya) {
 	exports.MiniSound = MiniSound;
 	exports.MiniSoundChannel = MiniSoundChannel;
 	exports.MiniVideo = MiniVideo;
+	exports.TTMiniAdapter = TTMiniAdapter;
 
 } 

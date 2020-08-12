@@ -26,7 +26,7 @@ export default class SDK_CQ extends SDK_Default {
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
-        this.RecordRankInfo(1, 0);
+        // this.RecordRankInfo(1, 0);
     }
 
     private _RequestShareInfo() {

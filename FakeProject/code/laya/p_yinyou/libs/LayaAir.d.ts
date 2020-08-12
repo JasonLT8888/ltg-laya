@@ -3382,7 +3382,6 @@ declare module laya.d3.core.light {
 		 */
 
 		constructor();
-		_parse(data:any,spriteMap:any):void;
 	}
 
 }
@@ -3674,16 +3673,19 @@ declare module laya.d3.core.material {
 		set _ColorG(value:number);
 		set _ColorB(value:number);
 		set _ColorA(value:number);
+		set _Color(value:laya.d3.math.Vector4);
 		set _SpecColorR(value:number);
 		set _SpecColorG(value:number);
 		set _SpecColorB(value:number);
 		set _SpecColorA(value:number);
+		set _SpecColor(value:laya.d3.math.Vector4);
 		set _AlbedoIntensity(value:number);
 		set _Shininess(value:number);
 		set _MainTex_STX(x:number);
 		set _MainTex_STY(y:number);
 		set _MainTex_STZ(z:number);
 		set _MainTex_STW(w:number);
+		set _MainTex_ST(value:laya.d3.math.Vector4);
 		set _Cutoff(value:number);
 
 		/**
@@ -3913,10 +3915,12 @@ declare module laya.d3.core.material {
 		set _TintColorG(value:number);
 		set _TintColorB(value:number);
 		set _TintColorA(value:number);
+		set _TintColor(value:laya.d3.math.Vector4);
 		set _MainTex_STX(x:number);
 		set _MainTex_STY(y:number);
 		set _MainTex_STZ(z:number);
 		set _MainTex_STW(w:number);
+		set _MainTex_ST(value:laya.d3.math.Vector4);
 
 		/**
 		 * 设置渲染模式。
@@ -5061,11 +5065,13 @@ declare module laya.d3.core.material {
 		set _ColorG(value:number);
 		set _ColorB(value:number);
 		set _ColorA(value:number);
+		set _Color(value:laya.d3.math.Vector4);
 		set _AlbedoIntensity(value:number);
 		set _MainTex_STX(x:number);
 		set _MainTex_STY(y:number);
 		set _MainTex_STZ(z:number);
 		set _MainTex_STW(w:number);
+		set _MainTex_ST(value:laya.d3.math.Vector4);
 		set _Cutoff(value:number);
 
 		/**
@@ -6369,7 +6375,7 @@ declare module laya.d3.core.particleShuriKen.module {
 		/**
 		 * 获取最大尺寸。
 		 */
-		getMaxSizeInGradient():number;
+		getMaxSizeInGradient(meshMode?:boolean):number;
 
 		/**
 		 * 克隆。
@@ -6568,7 +6574,13 @@ declare module laya.d3.core.particleShuriKen.module {
 }
 
 declare module laya.d3.core.particleShuriKen.module.shape {
-
+enum ParticleSystemShapeType {
+    Box = 0,
+    Circle = 1,
+    Cone = 2,
+    Hemisphere = 3,
+    Sphere = 4
+}
 	/**
 	 * <code>BaseShape</code> 类用于粒子形状。
 	 */
@@ -6583,6 +6595,11 @@ declare module laya.d3.core.particleShuriKen.module.shape {
 		 * 随机方向。
 		 */
 		randomDirection:number;
+
+		/**
+		 * 粒子类型
+		 */
+		shapeType:ParticleSystemShapeType;
 
 		/**
 		 * 创建一个 <code>BaseShape</code> 实例。
@@ -7745,6 +7762,12 @@ declare module laya.d3.core.particleShuriKen {
 		set textureSheetAnimation(value:laya.d3.core.particleShuriKen.module.TextureSheetAnimation);
 
 		constructor(owner:laya.d3.core.particleShuriKen.ShuriKenParticle3D);
+
+		/**
+		 * 设置 自定义 包围盒
+		 */
+		get customBounds():laya.d3.core.Bounds;
+		set customBounds(value:laya.d3.core.Bounds);
 
 		/**
 		 * 发射一个粒子。
@@ -9167,6 +9190,63 @@ declare module laya.d3.core.scene {
 }
 
 declare module laya.d3.core {
+	class SimpleSkinnedMeshRenderer extends laya.d3.core.SkinnedMeshRenderer  {
+
+		/**
+		 * 创建一个 <code>SkinnedMeshRender</code> 实例。
+		 */
+
+		constructor(owner:laya.d3.core.RenderableSprite3D);
+
+		/**
+		 * 删除节点
+		 */
+		_destroy():void;
+	}
+
+}
+
+declare module laya.d3.core {
+
+	/**
+	 * <code>SkinnedMeshSprite3D</code> 类用于创建网格。
+	 */
+	class SimpleSkinnedMeshSprite3D extends laya.d3.core.RenderableSprite3D  {
+
+		/**
+		 */
+		static SIMPLE_SIMPLEANIMATORTEXTURE:number;
+		static SIMPLE_SIMPLEANIMATORPARAMS:number;
+		static SIMPLE_SIMPLEANIMATORTEXTURESIZE:number;
+
+		/**
+		 * 网格过滤器。
+		 */
+		get meshFilter():laya.d3.core.MeshFilter;
+
+		/**
+		 * 网格渲染器。
+		 */
+		get simpleSkinnedMeshRenderer():laya.d3.core.SimpleSkinnedMeshRenderer;
+
+		/**
+		 * 创建一个 <code>MeshSprite3D</code> 实例。
+		 * @param mesh 网格,同时会加载网格所用默认材质。
+		 * @param name 名字。
+		 */
+
+		constructor(mesh?:laya.d3.resource.models.Mesh,name?:string);
+
+		/**
+		 * @inheritDoc 
+		 * @override 
+		 */
+		destroy(destroyChild?:boolean):void;
+	}
+
+}
+
+declare module laya.d3.core {
 
 	/**
 	 * <code>SkinMeshRenderer</code> 类用于蒙皮渲染器。
@@ -9207,7 +9287,7 @@ declare module laya.d3.core {
 declare module laya.d3.core {
 
 	/**
-	 * <code>SkinnedMeshSprite3D</code> 类用于创建网格。
+	 * <code>SkinnedMeshSprite3D</code> 类用于绑点骨骼节点精灵。
 	 */
 	class SkinnedMeshSprite3D extends laya.d3.core.RenderableSprite3D  {
 
@@ -9215,6 +9295,13 @@ declare module laya.d3.core {
 		 * 着色器变量名，蒙皮动画。
 		 */
 		static BONES:number;
+
+		/**
+		 * 简单动画变量名，贴图蒙皮动画
+		 */
+		static SIMPLE_SIMPLEANIMATORTEXTURE:number;
+		static SIMPLE_SIMPLEANIMATORPARAMS:number;
+		static SIMPLE_SIMPLEANIMATORTEXTURESIZE:number;
 
 		/**
 		 * 网格过滤器。
@@ -9250,6 +9337,7 @@ declare module laya.d3.core {
 		 * 精灵级着色器宏定义,蒙皮动画。
 		 */
 		static SHADERDEFINE_BONE:laya.d3.shader.ShaderDefine;
+		static SHADERDEFINE_SIMPLEBONE:laya.d3.shader.ShaderDefine;
 	}
 
 }
@@ -9283,12 +9371,6 @@ declare module laya.d3.core {
 		 * @param complete 完成回掉。
 		 */
 		static load(url:string,complete:laya.utils.Handler):void;
-
-		/**
-		 * 额外数据
-		 */
-		get extData():any;
-		set extData(value:any);
 
 		/**
 		 * 唯一标识ID。
@@ -10304,8 +10386,10 @@ declare module laya.d3.graphics.Vertex {
 		static MESH_MVPMATRIX_ROW1:number;
 		static MESH_MVPMATRIX_ROW2:number;
 		static MESH_MVPMATRIX_ROW3:number;
+		static MESH_SIMPLEANIMATOR:number;
 		static instanceWorldMatrixDeclaration:laya.d3.graphics.VertexDeclaration;
 		static instanceMVPMatrixDeclaration:laya.d3.graphics.VertexDeclaration;
+		static instanceSimpleAnimatorDeclaration:laya.d3.graphics.VertexDeclaration;
 
 		/**
 		 * 获取顶点声明。
@@ -13852,13 +13936,29 @@ declare module laya.d3.physics {
 }
 
 declare module laya.d3.physics.constraints {
+
+	/**
+	 * <code>ConfigurableConstraint</code>类用于可设置的约束组件
+	 */
 	class ConfigurableConstraint extends laya.d3.physics.constraints.ConstraintComponent  {
+
+		/**
+		 * 约束限制模式  完全限制
+		 */
 		static CONFIG_MOTION_TYPE_LOCKED:number;
+
+		/**
+		 * 约束限制模式  范围限制
+		 */
 		static CONFIG_MOTION_TYPE_LIMITED:number;
+
+		/**
+		 * 约束限制模式  不限制
+		 */
 		static CONFIG_MOTION_TYPE_FREE:number;
 
 		/**
-		 * 创建一个<code>Generic6DofSpring2Constraint</code>实例
+		 * 创建一个<code>ConfigurableConstraint</code>实例	可设置的约束组件
 		 */
 
 		constructor();
@@ -13872,11 +13972,27 @@ declare module laya.d3.physics.constraints {
 		 * 副轴
 		 */
 		get secondaryAxis():laya.d3.math.Vector3;
+
+		/**
+		 * 旋转角度最大值
+		 */
 		set maxAngularLimit(value:laya.d3.math.Vector3);
+
+		/**
+		 * 旋转角度最小值
+		 */
 		set minAngularLimit(value:laya.d3.math.Vector3);
 		get maxAngularLimit():laya.d3.math.Vector3;
 		get minAngularLimit():laya.d3.math.Vector3;
+
+		/**
+		 * 最大线性位置
+		 */
 		set maxLinearLimit(value:laya.d3.math.Vector3);
+
+		/**
+		 * 最小线性位置
+		 */
 		set minLinearLimit(value:laya.d3.math.Vector3);
 		get maxLinearLimit():laya.d3.math.Vector3;
 		get minLinearLimit():laya.d3.math.Vector3;
@@ -13940,12 +14056,28 @@ declare module laya.d3.physics.constraints {
 		 */
 		set angularBounce(value:laya.d3.math.Vector3);
 		get angularBounce():laya.d3.math.Vector3;
+
+		/**
+		 * 线性阻力
+		 */
 		set linearDamp(value:laya.d3.math.Vector3);
 		get linearDamp():laya.d3.math.Vector3;
+
+		/**
+		 * 角度阻力
+		 */
 		set angularDamp(value:laya.d3.math.Vector3);
 		get angularDamp():laya.d3.math.Vector3;
+
+		/**
+		 * 设置锚点
+		 */
 		set anchor(value:laya.d3.math.Vector3);
 		get anchor():laya.d3.math.Vector3;
+
+		/**
+		 * 设置链接锚点
+		 */
 		set connectAnchor(value:laya.d3.math.Vector3);
 		get connectAnchor():laya.d3.math.Vector3;
 
@@ -14020,8 +14152,16 @@ declare module laya.d3.physics.constraints {
 		 */
 		get breakTorque():number;
 		set breakTorque(value:number);
+
+		/**
+		 * 设置锚点
+		 */
 		set anchor(value:laya.d3.math.Vector3);
 		get anchor():laya.d3.math.Vector3;
+
+		/**
+		 * 设置链接锚点
+		 */
 		set connectAnchor(value:laya.d3.math.Vector3);
 		get connectAnchor():laya.d3.math.Vector3;
 
@@ -15764,6 +15904,8 @@ declare module laya.d3.resource.models {
 		 * Mesh资源。
 		 */
 		static MESH:string;
+		static MESH_INSTANCEBUFFER_TYPE_NORMAL:number;
+		static MESH_INSTANCEBUFFER_TYPE_SIMPLEANIMATOR:number;
 
 		/**
 		 * 加载网格模板。
@@ -15973,11 +16115,6 @@ declare module laya.d3.resource.models {
 	 */
 	class PrimitiveMesh  {
 		static __init__():void;
-
-		/**
-		 * 创建自定义网格
-		 */
-		static _createMesh(vertexDeclaration:laya.d3.graphics.VertexDeclaration,vertices:Float32Array,indices:Uint16Array):laya.d3.resource.models.Mesh;
 
 		/**
 		 * 创建Box网格。
@@ -16528,6 +16665,13 @@ declare module laya.d3.shader {
 		 * @return 唯一ID。
 		 */
 		static propertyNameToID(name:string):number;
+
+		/**
+		 * 通过宏属性动态修改AttributeMap
+		 * @param defineString 
+		 * @param attributeMap 
+		 */
+		static getAttributeMapByDefine(defineString:string[],attributeMap:any):any;
 
 		/**
 		 * 添加函数库引用。
@@ -17474,6 +17618,32 @@ declare module laya.device.geolocation {
 declare module laya.device.media {
 
 	/**
+	 * <HtmlVideo>html多媒体数据<HtmlVideo>
+	 */
+	class HtmlVideo extends laya.resource.Bitmap  {
+		video:HTMLVideoElement;
+		protected _source:any;
+		protected _w:number;
+		protected _h:number;
+
+		constructor();
+		static create:Function;
+		private createDomElement:any;
+		setSource(url:string,extension:number):void;
+		private appendSource:any;
+		getVideo():any;
+
+		/**
+		 * @override 
+		 */
+		destroy():void;
+	}
+
+}
+
+declare module laya.device.media {
+
+	/**
 	 * Media用于捕捉摄像头和麦克风。可以捕捉任意之一，或者同时捕捉两者。<code>getCamera</code>前可以使用<code>supported()</code>检查当前浏览器是否支持。
 	 * <b>NOTE:</b>
 	 * <p>目前Media在移动平台只支持Android，不支持IOS。只可在FireFox完整地使用，Chrome测试时无法捕捉视频。</p>
@@ -17536,8 +17706,9 @@ const enum VIDEOTYPE {
 		 */
 		static SUPPORT_NO:string;
 		private htmlVideo:any;
-		private videoElement:any;
+		videoElement:any;
 		private internalTexture:any;
+		private _clickhandle:any;
 
 		constructor(width?:number,height?:number);
 		private static onAbort:any;
@@ -20193,9 +20364,9 @@ declare module laya.display {
 		 * @param y 开始绘制文本的 y 坐标位置（相对于画布）。
 		 * @param font 定义字体和字号，比如"20px Arial"。
 		 * @param fillColor 定义文本颜色，比如"#ff0000"。
-		 * @param borderColor 定义镶边文本颜色。
-		 * @param lineWidth 镶边线条宽度。
 		 * @param textAlign 文本对齐方式，可选值："left"，"center"，"right"。
+		 * @param lineWidth 镶边线条宽度。
+		 * @param borderColor 定义镶边文本颜色。
 		 */
 		fillBorderText(text:string,x:number,y:number,font:string,fillColor:string,textAlign:string,lineWidth:number,borderColor:string):laya.display.cmd.FillTextCmd;
 
@@ -21949,7 +22120,7 @@ declare module laya.display {
 		 * @param globalNode global节点，默认为Laya.stage
 		 * @return 转换后的坐标的点。
 		 */
-		localToGlobal(point:laya.maths.Point,createNewPoint?:boolean,globalNode?:Sprite):laya.maths.Point;
+		localToGlobal(point:laya.maths.Point,createNewPoint?:boolean,globalNode?:Sprite|null):laya.maths.Point;
 
 		/**
 		 * 把stage的全局坐标转换为本地坐标。
@@ -21958,7 +22129,7 @@ declare module laya.display {
 		 * @param globalNode global节点，默认为Laya.stage
 		 * @return 转换后的坐标的点。
 		 */
-		globalToLocal(point:laya.maths.Point,createNewPoint?:boolean,globalNode?:Sprite):laya.maths.Point;
+		globalToLocal(point:laya.maths.Point,createNewPoint?:boolean,globalNode?:Sprite|null):laya.maths.Point;
 
 		/**
 		 * 将本地坐标系坐标转转换到父容器坐标系。
@@ -27980,7 +28151,7 @@ declare module laya.media {
 		 * 播放背景音乐。背景音乐同时只能播放一个，如果在播放背景音乐时再次调用本方法，会先停止之前的背景音乐，再播放当前的背景音乐。
 		 * @param url 声音文件地址。
 		 * @param loops 循环次数,0表示无限循环。
-		 * @param complete 声音播放完成回调。
+		 * @param complete 声音播放完成回调,complete 结果参数 true: 播放完成, false/undefined ：stop触发的complete。
 		 * @param startTime 声音播放起始时间。
 		 * @return SoundChannel对象，通过此对象可以对声音进行控制，以及获取声音信息。
 		 */
@@ -32066,6 +32237,12 @@ declare module laya.renders {
 declare module laya.renders {
 
 	/**
+	 * @private 
+	 */
+	interface _RenderFunction{
+(sp:laya.display.Sprite,ctx:laya.resource.Context,x:number,y:number):void	}
+
+	/**
 	 * @private 精灵渲染器
 	 */
 	class RenderSprite  {
@@ -32126,7 +32303,7 @@ declare module laya.renders {
 		/**
 		 * @private 
 		 */
-		static renders:any[];
+		static renders:RenderSprite[];
 
 		/**
 		 * @private 
@@ -32135,7 +32312,7 @@ declare module laya.renders {
 		private static _initRenderFun:any;
 		private static _getTypeRender:any;
 
-		constructor(type:number,next:RenderSprite);
+		constructor(type:number,next:RenderSprite|null);
 		protected onCreate(type:number):void;
 		static tempUV:any[];
 		static tmpTarget(ctx:laya.resource.Context,rt:laya.resource.RenderTexture2D,w:number,h:number):void;
@@ -32830,7 +33007,7 @@ declare module laya.resource {
 		 * @param type "image/png"
 		 * @param encoderOptions 质量参数，取值范围为0-1
 		 */
-		toBase64(type:string,encoderOptions:number):string;
+		toBase64(type:string,encoderOptions:number):string|null;
 		toBase64Async(type:string,encoderOptions:number,callBack:Function):void;
 	}
 
@@ -33573,8 +33750,55 @@ enum TextureFormat {
     /**纹理格式_PVRTCRGBA_4BPPV。*/
     PVRTCRGBA_4BPPV = 12,
     /**RGBA格式纹理,每个通道32位浮点数。*/
-    R32G32B32A32 = 15
+    R32G32B32A32 = 15,
+    /**RGBA格式纹理，每个通道16位浮点数。 */
+    R16G16B16A16 = 16
 }
+}
+
+declare module laya.resource {
+
+	/**
+	 * <code>VideoTexture</code> 多媒体纹理
+	 */
+	class VideoTexture extends laya.resource.BaseTexture  {
+
+		/**
+		 * videoTexture对象池
+		 */
+		static _videoTexturePool:Array<VideoTexture>;
+		private _video:any;
+		private _needUpdate:any;
+
+		/**
+		 * 创建VideoTexture对象，
+		 */
+
+		constructor();
+
+		/**
+		 * 获得绑定的资源Video
+		 * return HTMLVideoElement
+		 */
+		get video():any;
+
+		/**
+		 * @value 输入Video资源
+		 */
+		set video(value:any);
+
+		/**
+		 * 开始播放视频
+		 */
+		videoPlay():void;
+
+		/**
+		 * 暂停播放视频
+		 */
+		videoPause():void;
+		destroy():void;
+	}
+
 }
 
 declare module laya.resource {
@@ -42008,7 +42232,7 @@ declare module laya.utils {
 		 * 根据类名回收类的实例
 		 * @param instance 类的具体实例
 		 */
-		static createByClass(cls:new () => T):T;
+		static createByClass<T>(cls:new () => T):T;
 
 		/**
 		 * <p>根据传入的对象类型标识字符，获取对象池中此类型标识的一个对象实例。</p>
@@ -42017,7 +42241,7 @@ declare module laya.utils {
 		 * @param cls 用于创建该类型对象的类。
 		 * @return 此类型标识的一个对象。
 		 */
-		static getItemByClass(sign:string,cls:new () => T):T;
+		static getItemByClass<T>(sign:string,cls:new () => T):T;
 
 		/**
 		 * <p>根据传入的对象类型标识字符，获取对象池中此类型标识的一个对象实例。</p>
@@ -43590,7 +43814,7 @@ declare module laya.webgl.canvas {
 		context:laya.resource.Context;
 		touches:any[];
 		submits:any[];
-		sprite:laya.display.Sprite;
+		sprite:laya.display.Sprite|null;
 		private _pathMesh:any;
 		private _triangleMesh:any;
 		meshlist:any[];
@@ -45452,6 +45676,11 @@ declare module laya.webgl {
 		static TERRAINRES:string;
 
 		/**
+		 * SimpleAnimator资源。
+		 */
+		static SIMPLEANIMATORBIN:string;
+
+		/**
 		 * @private 
 		 */
 		static physicsSettings:laya.d3.physics.PhysicsSettings;
@@ -46090,6 +46319,14 @@ enum PBRMetallicSmoothnessSource {
 
 	class RotationOverLifetime extends laya.d3.core.particleShuriKen.module.RotationOverLifetime {}
 
+enum ParticleSystemShapeType {
+    Box = 0,
+    Circle = 1,
+    Cone = 2,
+    Hemisphere = 3,
+    Sphere = 4
+}
+
 	/**
 	 * <code>BaseShape</code> 类用于粒子形状。
 	 */
@@ -46344,6 +46581,14 @@ enum AmbientMode {
 
 	class SceneManager extends laya.d3.core.scene.SceneManager {}
 
+	class SimpleSkinnedMeshRenderer extends laya.d3.core.SimpleSkinnedMeshRenderer {}
+
+	/**
+	 * <code>SkinnedMeshSprite3D</code> 类用于创建网格。
+	 */
+
+	class SimpleSkinnedMeshSprite3D extends laya.d3.core.SimpleSkinnedMeshSprite3D {}
+
 	/**
 	 * <code>SkinMeshRenderer</code> 类用于蒙皮渲染器。
 	 */
@@ -46351,7 +46596,7 @@ enum AmbientMode {
 	class SkinnedMeshRenderer extends laya.d3.core.SkinnedMeshRenderer {}
 
 	/**
-	 * <code>SkinnedMeshSprite3D</code> 类用于创建网格。
+	 * <code>SkinnedMeshSprite3D</code> 类用于绑点骨骼节点精灵。
 	 */
 
 	class SkinnedMeshSprite3D extends laya.d3.core.SkinnedMeshSprite3D {}
@@ -46690,6 +46935,10 @@ enum FrustumCorner {
 	 */
 
 	class Constraint3D extends laya.d3.physics.Constraint3D {}
+
+	/**
+	 * <code>ConfigurableConstraint</code>类用于可设置的约束组件
+	 */
 
 	class ConfigurableConstraint extends laya.d3.physics.constraints.ConfigurableConstraint {}
 
@@ -47083,6 +47332,12 @@ enum ShadowLightType {
 	class Geolocation extends laya.device.geolocation.Geolocation {}
 
 	class GeolocationInfo extends laya.device.geolocation.GeolocationInfo {}
+
+	/**
+	 * <HtmlVideo>html多媒体数据<HtmlVideo>
+	 */
+
+	class HtmlVideo extends laya.device.media.HtmlVideo {}
 
 	/**
 	 * Media用于捕捉摄像头和麦克风。可以捕捉任意之一，或者同时捕捉两者。<code>getCamera</code>前可以使用<code>supported()</code>检查当前浏览器是否支持。
@@ -48479,8 +48734,16 @@ enum TextureFormat {
     /**纹理格式_PVRTCRGBA_4BPPV。*/
     PVRTCRGBA_4BPPV = 12,
     /**RGBA格式纹理,每个通道32位浮点数。*/
-    R32G32B32A32 = 15
+    R32G32B32A32 = 15,
+    /**RGBA格式纹理，每个通道16位浮点数。 */
+    R16G16B16A16 = 16
 }
+
+	/**
+	 * <code>VideoTexture</code> 多媒体纹理
+	 */
+
+	class VideoTexture extends laya.resource.VideoTexture {}
 
 	/**
 	 * WebGLRTMgr 管理WebGLRenderTarget的创建和回收

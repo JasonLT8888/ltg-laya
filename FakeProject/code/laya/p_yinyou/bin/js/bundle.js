@@ -12576,9 +12576,8 @@ __webpack_require__.r(__webpack_exports__);
 class LTPlatformFactory {
     static CreateInstance() {
         let isQTT = window["qttGame"] != null;
-        let isTT = window["tt"] != null;
         let result;
-        if (isTT) {
+        if (Laya.Browser.onTTMiniGame) {
             result = new _TTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"]();
         }
         else if (Laya.Browser.onMiniGame) {
@@ -21854,7 +21853,7 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
     Init(flg, channel, controlVersion, appId) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
-        this.RecordRankInfo(1, 0);
+        // this.RecordRankInfo(1, 0);
     }
     _RequestShareInfo() {
         let uid = this.appId;
