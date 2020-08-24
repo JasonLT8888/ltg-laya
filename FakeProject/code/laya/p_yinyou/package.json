@@ -27,7 +27,7 @@
     "publish-vivo": "mg-service build",
     "publish-bd": "node others/publish/bin/publish.js -p bd",
     "update-ltg": "node others/publish/bin/update.js",
-    "test": "python others/publish/templates/tools/upadteAppIds.py",
+    "test": "python others/publish/tools/MinifyJson.py",
     "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js oppogame/quickgame debug"
   },
   "author": "lt",

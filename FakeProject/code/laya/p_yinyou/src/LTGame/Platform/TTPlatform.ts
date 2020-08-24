@@ -9,6 +9,7 @@ import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
+import Awaiters from "../Async/Awaiters";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -18,6 +19,7 @@ export default class TTPlatform extends WXPlatform {
 
     recordManager: IRecordManager;
     device: IDevice;
+    loginCode: string = null;
 
     Init(platformData: LTPlatformData) {
         this._base = window["tt"];
@@ -64,8 +66,9 @@ export default class TTPlatform extends WXPlatform {
             force: true,
             success: (res) => {
                 this.loginCode = res.code;
+                this.loginState.isLogin = true;
+                this.loginState.code = res.code;
                 this._OnLoginSuccess(res);
-                console.error(this.loginState);
 
             },
             fail: (res) => {
@@ -115,6 +118,44 @@ export default class TTPlatform extends WXPlatform {
         // this.loginState.isLogin = true;
         // this.loginState.code = res.code;
     }
+
+    protected _InitLauchOption() {
+        // 绑定onShow事件
+        this._base.onShow(this._OnShow);
+        this._base.onHide(this._OnHide);
+        // 自动获取一次启动参数
+        let res = this._base.getLaunchOptionsSync() as LTGame.LaunchOption;
+        this._OnShow(res);
+    }
+    /**
+    * 小游戏回到前台的事件
+    */
+    protected _OnShow(res: LTGame.LaunchOption) {
+        console.log(LTPlatform.platformStr, "OnShow", res);
+        LTPlatform.instance.lauchOption = res;
+        LTPlatform.instance._CheckUpdate();
+        Awaiters.NextFrame().then(() => {
+            if (LTPlatform.instance.onResume) {
+                LTPlatform.instance.onResume.runWith(res);
+            }
+            let cacheOnShow = LTPlatform.instance["_cacheOnShowHandle"];
+            if (cacheOnShow) {
+                cacheOnShow.run();
+                LTPlatform.instance["_cacheOnShowHandle"] = null;
+            }
+        });
+    }
+
+    /**
+     * 小游戏退出前台的事件
+     */
+    protected _OnHide(res: LTGame.LaunchOption) {
+        console.log(LTPlatform.platformStr, "OnHide", res);
+        if (LTPlatform.instance.onPause) {
+            LTPlatform.instance.onPause.runWith(res);
+        }
+    }
+
 
     protected _CreateBannerAd() {
         if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
