@@ -2,7 +2,9 @@
 <component size="296,120" extention="Button">
   <displayList>
     <image id="n13_8gel" name="n13" src="8gel43" fileName="img/圆角矩形3.png" xy="0,0"/>
-    <text id="n14_8gel" name="title" xy="51,34" size="197,59" fontSize="48" color="#ffffff" align="center" vAlign="middle" text="不，谢谢"/>
+    <text id="n14_8gel" name="title" xy="51,28" size="197,59" fontSize="48" color="#ffffff" align="center" vAlign="middle" text="不，谢谢">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
   </displayList>
   <Button downEffect="dark" downEffectValue="0.80"/>
 </component>

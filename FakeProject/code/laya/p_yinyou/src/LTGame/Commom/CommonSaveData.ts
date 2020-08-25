@@ -59,8 +59,8 @@ export class SaveData {
     public ExSkinAdCount: number;
 
     /**
-* 彩蛋获得数据
-*/
+    * 彩蛋获得数据
+    */
     public EggPassIds: number[] = [];
     /**
     * 彩蛋密语数据
@@ -70,6 +70,12 @@ export class SaveData {
     * 彩蛋暗号数据
     */
     public EggPasswordIds: number[] = [];
+
+    /**
+     * 彩蛋ID
+     */
+    public eggWallIds: number[] = [];
+    public eggWallStates: number[] = [];
 
 }
 

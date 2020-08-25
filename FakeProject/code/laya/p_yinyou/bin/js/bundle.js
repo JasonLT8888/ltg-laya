@@ -144,6 +144,45 @@ class LTG_Com_FindGameData {
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_LimitSkinData.ts":
+/*!********************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_LimitSkinData.ts ***!
+  \********************************************************/
+/*! exports provided: LTG_Com_LimitSkinData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_LimitSkinData", function() { return LTG_Com_LimitSkinData; });
+/* harmony import */ var _Mediator_LTG_UI_LimitSkinMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_LimitSkinMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_LimitSkinMediator.ts");
+
+/**
+ * -限定皮肤-
+ */
+class LTG_Com_LimitSkinData {
+    constructor() {
+        this.iconUrl = null;
+        this.textUrl = null;
+        this.watchCount = 0;
+        this.onWatchedAd = null;
+    }
+    Send() {
+        _Mediator_LTG_UI_LimitSkinMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+    static UpdateCount(count) {
+        if (!_Mediator_LTG_UI_LimitSkinMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.isShow)
+            return;
+        _Mediator_LTG_UI_LimitSkinMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Refresh(count);
+    }
+    static Hide() {
+        _Mediator_LTG_UI_LimitSkinMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Hide();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Data/LTG_Com_MyGameData.ts":
 /*!*****************************************************!*\
   !*** ./src/LTG_CommonUI/Data/LTG_Com_MyGameData.ts ***!
@@ -370,6 +409,117 @@ class LTG_UI_HideMenuMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
     _OnClickFindGame() {
         let data = new _Data_LTG_Com_FindGameData__WEBPACK_IMPORTED_MODULE_4__["LTG_Com_FindGameData"]();
         data.Send();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_LimitSkinMediator.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_LimitSkinMediator.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_LimitSkinMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_LimitSkin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_LimitSkin */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_LimitSkin.ts");
+/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
+/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
+
+
+
+
+
+
+
+class LTG_UI_LimitSkinMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_LimitSkinMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_LimitSkin__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._cacheData = this._openParam;
+        if (this._cacheData == null) {
+            throw new Error("请调用LTG_Com_LimitSkinData进行界面打开操作");
+        }
+        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(this._cacheData.iconUrl)) {
+            this.ui.m_view.m_loader_icon.url = this._cacheData.iconUrl;
+        }
+        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(this._cacheData.textUrl)) {
+            this.ui.m_view.m_loader_text.url = this._cacheData.textUrl;
+        }
+        this.Refresh(this._cacheData.watchCount);
+        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_5__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_6__["ECheckState"].InCheck) {
+            this._isToggleOn = false;
+        }
+        else {
+            this._isToggleOn = true;
+        }
+        this._UpdateUI();
+        this.ui.m_btn_get.onClick(this, this._OnClickBtn);
+        this.ui.m_toggle_watchad.onClick(this, this._OnClickToggle);
+    }
+    _OnClickToggle() {
+        this._isToggleOn = !this._isToggleOn;
+        this._UpdateUI();
+    }
+    _UpdateUI() {
+        this.ui.m_toggle_watchad.m_state_toggle.selectedIndex = this._isToggleOn ? 1 : 0;
+        this.ui.m_btn_get.text = this._isToggleOn ? "获取+1" : "不，谢谢";
+    }
+    Refresh(count) {
+        switch (count) {
+            case 0:
+                this.ui.m_view_ad_progress.m_toggle_01.m_state_toggle.selectedIndex = 0;
+                this.ui.m_view_ad_progress.m_toggle_02.m_state_toggle.selectedIndex = 0;
+                this.ui.m_view_ad_progress.m_toggle_03.m_state_toggle.selectedIndex = 0;
+                break;
+            case 1:
+                this.ui.m_view_ad_progress.m_toggle_01.m_state_toggle.selectedIndex = 1;
+                this.ui.m_view_ad_progress.m_toggle_02.m_state_toggle.selectedIndex = 0;
+                this.ui.m_view_ad_progress.m_toggle_03.m_state_toggle.selectedIndex = 0;
+                break;
+            case 2:
+                this.ui.m_view_ad_progress.m_toggle_01.m_state_toggle.selectedIndex = 1;
+                this.ui.m_view_ad_progress.m_toggle_02.m_state_toggle.selectedIndex = 1;
+                this.ui.m_view_ad_progress.m_toggle_03.m_state_toggle.selectedIndex = 0;
+                break;
+            case 3:
+            default:
+                this.ui.m_view_ad_progress.m_toggle_01.m_state_toggle.selectedIndex = 1;
+                this.ui.m_view_ad_progress.m_toggle_02.m_state_toggle.selectedIndex = 1;
+                this.ui.m_view_ad_progress.m_toggle_03.m_state_toggle.selectedIndex = 1;
+                break;
+        }
+    }
+    _OnClickBtn() {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this._isToggleOn) {
+                let result = yield _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.ShowRewardVideoAdAsync();
+                if (result) {
+                    (_a = this._cacheData.onWatchedAd) === null || _a === void 0 ? void 0 : _a.run();
+                }
+                else {
+                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过广告无法获得奖励");
+                }
+            }
+            else {
+                this.Hide();
+            }
+        });
     }
 }
 
@@ -874,6 +1024,7 @@ class LTG_UI_LimitSkin extends fgui.GComponent {
         this.m_img_bg = (this.getChildAt(0));
         this.m_view = (this.getChildAt(1));
         this.m_view_ad_progress = (this.getChildAt(2));
+        this.m_toggle_watchad = (this.getChildAt(3));
         this.m_btn_get = (this.getChildAt(4));
     }
 }
@@ -1184,7 +1335,10 @@ class LTG_UI_item_view_eggwall extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTCom", "item_view_eggwall"));
     }
     onConstruct() {
+        this.m_loader_mask = (this.getChildAt(1));
+        this.m_loader_icon = (this.getChildAt(2));
         this.m_btn_get_tip = (this.getChildAt(3));
+        this.m_img_comming = (this.getChildAt(4));
         this.m_btn_show_tip = (this.getChildAt(5));
     }
 }
@@ -2147,8 +2301,8 @@ class SaveData {
          */
         this.freeRollCount = 1;
         /**
-    * 彩蛋获得数据
-    */
+        * 彩蛋获得数据
+        */
         this.EggPassIds = [];
         /**
         * 彩蛋密语数据
@@ -2158,6 +2312,11 @@ class SaveData {
         * 彩蛋暗号数据
         */
         this.EggPasswordIds = [];
+        /**
+         * 彩蛋ID
+         */
+        this.eggWallIds = [];
+        this.eggWallStates = [];
     }
 }
 class CommonSaveData {
@@ -17673,6 +17832,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTG_CommonUI_Mediator_LTG_UI_HideMenuMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_MyGameData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_MyGameData */ "./src/LTG_CommonUI/Data/LTG_Com_MyGameData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_ZhuaWawaData__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_ZhuaWawaData */ "./src/LTG_CommonUI/Data/LTG_Com_ZhuaWawaData.ts");
+/* harmony import */ var _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_LimitSkinData */ "./src/LTG_CommonUI/Data/LTG_Com_LimitSkinData.ts");
+
 
 
 
@@ -17699,6 +17860,21 @@ class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IM
                 let data = new _LTG_CommonUI_Data_LTG_Com_ZhuaWawaData__WEBPACK_IMPORTED_MODULE_5__["LTG_Com_ZhuaWawaData"]();
                 data.onPickup = Laya.Handler.create(null, () => { });
                 data.onTimeout = Laya.Handler.create(null, () => { });
+                data.Send();
+            }),
+            new UIDemoData("限定皮肤", () => {
+                let data = new _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__["LTG_Com_LimitSkinData"]();
+                data.watchCount = 0;
+                data.onWatchedAd = Laya.Handler.create(null, () => {
+                    data.watchCount++;
+                    if (data.watchCount >= 3) {
+                        _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__["LTG_Com_LimitSkinData"].Hide();
+                        console.log("获取皮肤");
+                    }
+                    else {
+                        _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__["LTG_Com_LimitSkinData"].UpdateCount(data.watchCount);
+                    }
+                }, null, false);
                 data.Send();
             }),
         ];
