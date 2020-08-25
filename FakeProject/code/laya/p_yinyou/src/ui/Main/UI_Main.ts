@@ -12,6 +12,7 @@ export default class UI_Main extends fgui.GComponent {
 	public m_btn_common:fgui.GButton;
 	public m_btn_performance:fgui.GButton;
 	public m_btn_feature:fgui.GButton;
+	public m_btn_common2:fgui.GButton;
 
 	public static URL:string = "ui://kk7g5mmmjhmq1";
 
@@ -32,5 +33,6 @@ export default class UI_Main extends fgui.GComponent {
 		this.m_btn_common = <fgui.GButton><any>(this.getChildAt(6));
 		this.m_btn_performance = <fgui.GButton><any>(this.getChildAt(7));
 		this.m_btn_feature = <fgui.GButton><any>(this.getChildAt(8));
+		this.m_btn_common2 = <fgui.GButton><any>(this.getChildAt(9));
 	}
 }

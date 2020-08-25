@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="205,391">
+  <displayList>
+    <image id="n11_8gel" name="n11" src="8gel2q" fileName="img/sp_renwubg.png" xy="0,0" size="205,326"/>
+    <image id="n5_8gel" name="n5" src="8gel2j" fileName="img/FemalePirate_Unlock.png" xy="24,2"/>
+    <image id="n6_8gel" name="n6" src="8gel2k" fileName="img/FemalePirate_Unlock0.png" xy="24,2"/>
+    <component id="n7_8gel" name="btn_get_tip" src="8gel2o" fileName="cmp/btn_getnotice.xml" xy="13,331"/>
+    <image id="n10_8gel" name="n10" src="8gel2p" fileName="img/sp_jingqingqidai.png" xy="39,249"/>
+    <component id="n12_8gel" name="btn_show_tip" src="8gel2t" fileName="cmp/btn_show_tips.xml" xy="12,331"/>
+  </displayList>
+</component>

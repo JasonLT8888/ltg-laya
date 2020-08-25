@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="626,712">
+  <displayList>
+    <image id="n1_8gel" name="n1" src="8gel3" fileName="img/sp_diban1.png" xy="0,29" size="626,683"/>
+    <component id="n2_8gel" name="n2" src="8gel6" fileName="cmp/view_title_set.xml" xy="144,0"/>
+    <image id="n4_8gel" name="n4" src="8gel7" fileName="img/sp_huiditiao.png" xy="34,98" size="555,55"/>
+    <image id="n5_8gel" name="n5" src="8gel8" fileName="img/游戏设置.png" xy="253,112"/>
+    <component id="n6_8gel" name="toggle_music" src="8gelc" fileName="cmp/toggle_01.xml" xy="340,169"/>
+    <component id="n9_8gel" name="toggle_shake" src="8gelc" fileName="cmp/toggle_01.xml" xy="340,239"/>
+    <image id="n10_8gel" name="n10" src="8geld" fileName="img/声音.png" xy="119,180"/>
+    <image id="n11_8gel" name="n11" src="8gele" fileName="img/震动.png" xy="120,256"/>
+    <image id="n13_8gel" name="n13" src="8gel7" fileName="img/sp_huiditiao.png" xy="34,334" size="555,55"/>
+    <image id="n14_8gel" name="n14" src="8gelf" fileName="img/服务.png" xy="280,348"/>
+    <component id="n15_8gel" name="btn_code" src="8gelk" fileName="cmp/btn_reward_code.xml" xy="178,418"/>
+    <component id="n19_8gel" name="btn_close" src="8geln" fileName="cmp/btn_close.xml" xy="207,577"/>
+  </displayList>
+</component>

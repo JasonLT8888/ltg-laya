@@ -7,6 +7,7 @@ import UI_OthersMediator from "./UI_OthersMediator";
 import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
 import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_UIDemoMediator from "./UI_UIDemoMediator";
+import UI_CommonUI2Mediator from "./UI_CommonUI2Mediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -27,7 +28,13 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
         this.ui.m_btn_common.onClick(this, this._OnClickCommon);
         this.ui.m_btn_others.onClick(this, this._OnClickOthers);
         this.ui.m_btn_performance.onClick(this, this._OnClickPerfomance);
-        this.ui.m_btn_feature.onClick(this, this._OnClickFunctionTest); 
+        this.ui.m_btn_feature.onClick(this, this._OnClickFunctionTest);
+        this.ui.m_btn_common2.onClick(this, this._OnClickCommon2);
+    }
+
+    private _OnClickCommon2() {
+        this.Hide();
+        UI_CommonUI2Mediator.instance.Show();
     }
 
     private _OnClickFunctionTest() {

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="147,669" pivot="0.5,1">
+  <controller name="state_pick" pages="0,no,1,picked" selected="1"/>
+  <displayList>
+    <image id="n9_8gel" name="n9" src="8gel24" fileName="img/sp_zhuzi.png" xy="53,0" size="39,603"/>
+    <image id="n12_8gel" name="n12" src="8gel2a" fileName="img/sp_qiu.png" xy="9,621">
+      <gearDisplay controller="state_pick" pages="1"/>
+    </image>
+    <image id="n10_8gel" name="n10" src="8gel25" fileName="img/sp_zhua1.png" xy="0,574">
+      <gearDisplay controller="state_pick" pages="1"/>
+    </image>
+    <image id="n11_8gel" name="n11" src="8gel26" fileName="img/sp_zhua2.png" xy="14,574">
+      <gearDisplay controller="state_pick" pages="0"/>
+    </image>
+  </displayList>
+</component>

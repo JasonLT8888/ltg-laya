@@ -35,5 +35,9 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="功能相关"/>
     </component>
+    <component id="n10_tsm1" name="btn_common2" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="408,796">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="共用ui2"/>
+    </component>
   </displayList>
 </component>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="780,998">
+  <displayList>
+    <component id="n2_8gel" name="n2" src="8gel41" fileName="cmp/view_roll_panel.xml" xy="372,414" pivot="0.5,0.48" anchor="true"/>
+    <image id="n3_8gel" name="n3" src="8gel3n" fileName="img/sp_zhizhen.png" xy="226,132"/>
+    <image id="n4_8gel" name="n4" src="8gel3o" fileName="img/sp_biaoti2.png" xy="176,0"/>
+    <component id="n7_8gel" name="progress_supper" src="8gel3s" fileName="cmp/progress_02.xml" xy="143,766">
+      <ProgressBar value="49" max="100"/>
+    </component>
+    <image id="n6_8gel" name="n6" src="8gel3p" fileName="img/sp_baoxiang.png" xy="452,715"/>
+    <component id="n9_8gel" name="btn_watchad" src="8gel3w" fileName="cmp/btn_watchad_roll.xml" xy="219,896"/>
+    <component id="n12_8gel" name="btn_free" src="8gel3y" fileName="cmp/btn_free_roll.xml" xy="219,896"/>
+    <text id="n14_8gel" name="text_notice" xy="158,813" size="313,45" fontSize="36" color="#ffffff" text="4次后必得特殊奖励"/>
+  </displayList>
+</component>

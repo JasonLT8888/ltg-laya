@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="252,180">
+  <controller name="state_get" pages="0,未到时间,1,可领取,2,已领取" selected="0"/>
+  <displayList>
+    <image id="n10_uo3l" name="n10" src="8gel56" fileName="img/sp_kuang4.png" xy="-5,-1" size="262,135">
+      <relation target="" sidePair="width-width"/>
+    </image>
+    <image id="n11_uo3l" name="n11" src="8gel57" fileName="img/sp_kuang3.png" xy="-5,125" size="262,58">
+      <relation target="" sidePair="width-width"/>
+    </image>
+    <image id="n5_uo3l" name="img_can_get" src="8gel51" fileName="img/sp_kelingqu.png" xy="-17,-38">
+      <gearDisplay controller="state_get" pages="1"/>
+    </image>
+    <image id="n6_uo3l" name="img_got" src="8gel52" fileName="img/sp_yihuode.png" xy="68,8">
+      <gearDisplay controller="state_get" pages="2"/>
+    </image>
+    <loader id="n9_uo3l" name="loader_icon" xy="6,2" size="239,126" url="ui://hbq27te38gel58" align="center" vAlign="middle" fill="scale" clearOnPublish="true">
+      <gearDisplay controller="state_get" pages="0,1"/>
+      <relation target="" sidePair="width-width,center-center"/>
+    </loader>
+    <text id="n7_uo3l" name="text_day" xy="95,134" size="66,34" fontSize="24" color="#9092ad" align="center" vAlign="middle" text="第3天">
+      <relation target="" sidePair="center-center"/>
+    </text>
+    <text id="n8_uo3l" name="text_name" xy="87,95" size="82,36" fontSize="26" color="#ffffff" align="center" vAlign="middle" strokeColor="#000000" text="闪电人">
+      <gearDisplay controller="state_get" pages="0,1"/>
+      <relation target="" sidePair="center-center"/>
+    </text>
+  </displayList>
+</component>

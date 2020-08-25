@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="646,641">
+  <displayList>
+    <image id="n1_8gel" name="n1" src="8gel2y" fileName="img/sp_tanchuang.png" xy="0,0" size="646,641"/>
+    <image id="n2_8gel" name="n2" src="8gel2z" fileName="img/sp_caidantishi.png" xy="207,23"/>
+    <component id="n3_8gel" name="btn_close" src="8gel1d" fileName="cmp/btn_close_01.xml" xy="572,30"/>
+    <image id="n5_8gel" name="n5" src="8gel30" fileName="img/sp_erjibgjineirongkuang.png" xy="19,133" size="607,321"/>
+    <image id="n6_8gel" name="n6" src="8gel31" fileName="img/sp_luodichenghe.png" xy="134,266"/>
+    <component id="n7_8gel" name="btn_get_imd" src="8gel33" fileName="cmp/btn_get_imd.xml" xy="56,479"/>
+  </displayList>
+</component>

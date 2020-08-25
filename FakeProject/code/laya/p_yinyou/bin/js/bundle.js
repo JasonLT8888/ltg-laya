@@ -86,6 +86,1754 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_AddShortcutData.ts":
+/*!**********************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_AddShortcutData.ts ***!
+  \**********************************************************/
+/*! exports provided: LTG_Com_AddShortcutData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_AddShortcutData", function() { return LTG_Com_AddShortcutData; });
+/* harmony import */ var _Mediator_LTG_UI_AddShortcutMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_AddShortcutMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_AddShortcutMediator.ts");
+
+/**
+ * -添加桌面-
+ * @param icon_url 可以修改图片(不建议使用),最好通过UI工程修改图片
+ */
+class LTG_Com_AddShortcutData {
+    constructor() {
+        this.icon_url = null;
+    }
+    Send() {
+        _Mediator_LTG_UI_AddShortcutMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_FindGameData.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_FindGameData.ts ***!
+  \*******************************************************/
+/*! exports provided: LTG_Com_FindGameData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_FindGameData", function() { return LTG_Com_FindGameData; });
+/* harmony import */ var _Mediator_LTG_UI_FindGameMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_FindGameMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_FindGameMediator.ts");
+
+/**
+ * -找回游戏-
+ * @param icon_url 可以修改图片(不建议使用),最好通过UI工程修改图片
+ */
+class LTG_Com_FindGameData {
+    constructor() {
+        this.icon_url = null;
+    }
+    Send() {
+        _Mediator_LTG_UI_FindGameMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_NoticeData.ts":
+/*!*****************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_NoticeData.ts ***!
+  \*****************************************************/
+/*! exports provided: LTG_Com_NoticeData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_NoticeData", function() { return LTG_Com_NoticeData; });
+/* harmony import */ var _Mediator_LTG_UI_NoticeMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_NoticeMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_NoticeMediator.ts");
+
+/**
+ * -公告界面-
+ * @param content 公告内容,支付富文本
+ */
+class LTG_Com_NoticeData {
+    constructor() {
+        this.content = "<font color='#ff0000'>游戏公告</font>七个字";
+    }
+    Send() {
+        _Mediator_LTG_UI_NoticeMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_AddShortcutMediator.ts":
+/*!*****************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_AddShortcutMediator.ts ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_AddShortcutMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_AddShortcut__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_AddShortcut */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_AddShortcut.ts");
+/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+
+
+
+class LTG_UI_AddShortcutMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_AddShortcutMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_AddShortcut__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        let openData = this._openParam;
+        if (openData == null) {
+            throw new Error("请调用LTG_Com_AddShortcutData进行界面打开操作");
+        }
+        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(openData.icon_url)) {
+            this.ui.m_view.m_loader_icon.url = openData.icon_url;
+        }
+        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+        this.ui.m_view.m_btn_ok.onClick(this, this._OnClickClose);
+    }
+    _OnClickClose() {
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_FindGameMediator.ts":
+/*!**************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_FindGameMediator.ts ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_FindGameMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_FindGame__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_FindGame */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_FindGame.ts");
+/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+
+
+
+class LTG_UI_FindGameMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_FindGameMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_FindGame__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        let openData = this._openParam;
+        if (openData == null) {
+            throw new Error("请调用LTG_Com_FindGameData进行界面打开操作");
+        }
+        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(openData.icon_url)) {
+            this.ui.m_view.m_loader_icon.url = openData.icon_url;
+        }
+        this.ui.m_view.m_btn_ok.onClick(this, this._OnClickClose);
+        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+    }
+    _OnClickClose() {
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator.ts":
+/*!**************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator.ts ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_HideMenuMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_HideMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_HideMenu */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_HideMenu.ts");
+/* harmony import */ var _Data_LTG_Com_NoticeData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Data/LTG_Com_NoticeData */ "./src/LTG_CommonUI/Data/LTG_Com_NoticeData.ts");
+/* harmony import */ var _Data_LTG_Com_AddShortcutData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Data/LTG_Com_AddShortcutData */ "./src/LTG_CommonUI/Data/LTG_Com_AddShortcutData.ts");
+/* harmony import */ var _Data_LTG_Com_FindGameData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Data/LTG_Com_FindGameData */ "./src/LTG_CommonUI/Data/LTG_Com_FindGameData.ts");
+
+
+
+
+
+class LTG_UI_HideMenuMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_HideMenuMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_HideMenu__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this.ui.m_view_menu.visible = false;
+        this.ui.m_btn_show.onClick(this, this._OnClickShow);
+        this.ui.m_view_menu.m_btn_hide.onClick(this, this._OnClickHide);
+        this.ui.m_view_menu.m_btn_notice.onClick(this, this._OnClickNotice);
+        this.ui.m_view_menu.m_btn_addshortcut.onClick(this, this._OnClickAddShortcut);
+        this.ui.m_view_menu.m_btn_findgame.onClick(this, this._OnClickFindGame);
+    }
+    _OnClickShow() {
+        this.ui.m_anim_show_menu.play();
+    }
+    _OnClickHide() {
+        this.ui.m_anim_hide_menu.play();
+    }
+    _OnClickNotice() {
+        let data = new _Data_LTG_Com_NoticeData__WEBPACK_IMPORTED_MODULE_2__["LTG_Com_NoticeData"]();
+        data.Send();
+    }
+    _OnClickAddShortcut() {
+        let data = new _Data_LTG_Com_AddShortcutData__WEBPACK_IMPORTED_MODULE_3__["LTG_Com_AddShortcutData"]();
+        data.Send();
+    }
+    _OnClickFindGame() {
+        let data = new _Data_LTG_Com_FindGameData__WEBPACK_IMPORTED_MODULE_4__["LTG_Com_FindGameData"]();
+        data.Send();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_NoticeMediator.ts":
+/*!************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_NoticeMediator.ts ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_NoticeMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_Notice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_Notice */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Notice.ts");
+
+
+class LTG_UI_NoticeMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_NoticeMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_Notice__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        let openData = this._openParam;
+        if (openData == null) {
+            throw new Error("请调用LTG_Com_NoticeData进行界面打开操作");
+        }
+        this.ui.m_view.m_text_notice.text = openData.content;
+        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+    }
+    _OnClickClose() {
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTComBinder.ts":
+/*!**************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTComBinder.ts ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTComBinder; });
+/* harmony import */ var _LTG_UI_Set__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LTG_UI_Set */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Set.ts");
+/* harmony import */ var _LTG_UI_Notice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LTG_UI_Notice */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Notice.ts");
+/* harmony import */ var _LTG_UI_view_notice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LTG_UI_view_notice */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_notice.ts");
+/* harmony import */ var _LTG_UI_AddShortcut__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LTG_UI_AddShortcut */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_AddShortcut.ts");
+/* harmony import */ var _LTG_UI_view_addshortcut__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./LTG_UI_view_addshortcut */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_addshortcut.ts");
+/* harmony import */ var _LTG_UI_FindGame__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./LTG_UI_FindGame */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_FindGame.ts");
+/* harmony import */ var _LTG_UI_view_findgame__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./LTG_UI_view_findgame */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_findgame.ts");
+/* harmony import */ var _LTG_UI_MyGame__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./LTG_UI_MyGame */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_MyGame.ts");
+/* harmony import */ var _LTG_UI_view_mygame__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./LTG_UI_view_mygame */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_mygame.ts");
+/* harmony import */ var _LTG_UI_Zhuawawa__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./LTG_UI_Zhuawawa */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Zhuawawa.ts");
+/* harmony import */ var _LTG_UI_view_zhuazi__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./LTG_UI_view_zhuazi */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_zhuazi.ts");
+/* harmony import */ var _LTG_UI_view_zww__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./LTG_UI_view_zww */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_zww.ts");
+/* harmony import */ var _LTG_UI_EggWall__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./LTG_UI_EggWall */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_EggWall.ts");
+/* harmony import */ var _LTG_UI_item_view_eggwall__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./LTG_UI_item_view_eggwall */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_item_view_eggwall.ts");
+/* harmony import */ var _LTG_UI_view_grow_01__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./LTG_UI_view_grow_01 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_grow_01.ts");
+/* harmony import */ var _LTG_UI_EggNotice__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./LTG_UI_EggNotice */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_EggNotice.ts");
+/* harmony import */ var _LTG_UI_view_egg_notice__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./LTG_UI_view_egg_notice */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_egg_notice.ts");
+/* harmony import */ var _LTG_UI_LimitSkin__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./LTG_UI_LimitSkin */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_LimitSkin.ts");
+/* harmony import */ var _LTG_UI_toggle_02__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./LTG_UI_toggle_02 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_02.ts");
+/* harmony import */ var _LTG_UI_view_watchad_progress__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./LTG_UI_view_watchad_progress */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchad_progress.ts");
+/* harmony import */ var _LTG_UI_toggle_03__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./LTG_UI_toggle_03 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_03.ts");
+/* harmony import */ var _LTG_UI_Roll__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./LTG_UI_Roll */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Roll.ts");
+/* harmony import */ var _LTG_UI_item_view_roll__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./LTG_UI_item_view_roll */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_item_view_roll.ts");
+/* harmony import */ var _LTG_UI_view_roll_panel__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./LTG_UI_view_roll_panel */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_roll_panel.ts");
+/* harmony import */ var _LTG_UI_view_roll__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./LTG_UI_view_roll */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_roll.ts");
+/* harmony import */ var _LTG_UI_view_limit_skin__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./LTG_UI_view_limit_skin */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_limit_skin.ts");
+/* harmony import */ var _LTG_UI_WatchDY__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./LTG_UI_WatchDY */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchDY.ts");
+/* harmony import */ var _LTG_UI_view_watchdy__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./LTG_UI_view_watchdy */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchdy.ts");
+/* harmony import */ var _LTG_UI_ShareVideo__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./LTG_UI_ShareVideo */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_ShareVideo.ts");
+/* harmony import */ var _LTG_UI_view_sharevideo__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./LTG_UI_view_sharevideo */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_sharevideo.ts");
+/* harmony import */ var _LTG_UI_Sign__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./LTG_UI_Sign */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Sign.ts");
+/* harmony import */ var _LTG_UI_view_sign__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./LTG_UI_view_sign */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_sign.ts");
+/* harmony import */ var _LTG_UI_view_item_sign_01__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./LTG_UI_view_item_sign_01 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_01.ts");
+/* harmony import */ var _LTG_UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./LTG_UI_view_item_sign_02 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_02.ts");
+/* harmony import */ var _LTG_UI_view_item_sign_03__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./LTG_UI_view_item_sign_03 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_03.ts");
+/* harmony import */ var _LTG_UI_view_item_sign_05__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./LTG_UI_view_item_sign_05 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_05.ts");
+/* harmony import */ var _LTG_UI_view_item_sign_06__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./LTG_UI_view_item_sign_06 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_06.ts");
+/* harmony import */ var _LTG_UI_view_item_sign_07__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./LTG_UI_view_item_sign_07 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_07.ts");
+/* harmony import */ var _LTG_UI_btn_tog__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./LTG_UI_btn_tog */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_btn_tog.ts");
+/* harmony import */ var _LTG_UI_HideMenu__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./LTG_UI_HideMenu */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_HideMenu.ts");
+/* harmony import */ var _LTG_UI_view_hidemenu__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./LTG_UI_view_hidemenu */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_hidemenu.ts");
+/* harmony import */ var _LTG_UI_toggle_01__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./LTG_UI_toggle_01 */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_01.ts");
+/* harmony import */ var _LTG_UI_view_set__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./LTG_UI_view_set */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_set.ts");
+/* harmony import */ var _LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./LTG_UI_RewardCode */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_RewardCode.ts");
+/* harmony import */ var _LTG_UI_view_rewardcode__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./LTG_UI_view_rewardcode */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_rewardcode.ts");
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class LTComBinder {
+    static bindAll() {
+        fgui.UIObjectFactory.setExtension(_LTG_UI_Set__WEBPACK_IMPORTED_MODULE_0__["default"].URL, _LTG_UI_Set__WEBPACK_IMPORTED_MODULE_0__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_Notice__WEBPACK_IMPORTED_MODULE_1__["default"].URL, _LTG_UI_Notice__WEBPACK_IMPORTED_MODULE_1__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_notice__WEBPACK_IMPORTED_MODULE_2__["default"].URL, _LTG_UI_view_notice__WEBPACK_IMPORTED_MODULE_2__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_AddShortcut__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _LTG_UI_AddShortcut__WEBPACK_IMPORTED_MODULE_3__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_addshortcut__WEBPACK_IMPORTED_MODULE_4__["default"].URL, _LTG_UI_view_addshortcut__WEBPACK_IMPORTED_MODULE_4__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_FindGame__WEBPACK_IMPORTED_MODULE_5__["default"].URL, _LTG_UI_FindGame__WEBPACK_IMPORTED_MODULE_5__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_findgame__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _LTG_UI_view_findgame__WEBPACK_IMPORTED_MODULE_6__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_MyGame__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _LTG_UI_MyGame__WEBPACK_IMPORTED_MODULE_7__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_mygame__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _LTG_UI_view_mygame__WEBPACK_IMPORTED_MODULE_8__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_Zhuawawa__WEBPACK_IMPORTED_MODULE_9__["default"].URL, _LTG_UI_Zhuawawa__WEBPACK_IMPORTED_MODULE_9__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_zhuazi__WEBPACK_IMPORTED_MODULE_10__["default"].URL, _LTG_UI_view_zhuazi__WEBPACK_IMPORTED_MODULE_10__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_zww__WEBPACK_IMPORTED_MODULE_11__["default"].URL, _LTG_UI_view_zww__WEBPACK_IMPORTED_MODULE_11__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_EggWall__WEBPACK_IMPORTED_MODULE_12__["default"].URL, _LTG_UI_EggWall__WEBPACK_IMPORTED_MODULE_12__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_item_view_eggwall__WEBPACK_IMPORTED_MODULE_13__["default"].URL, _LTG_UI_item_view_eggwall__WEBPACK_IMPORTED_MODULE_13__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_grow_01__WEBPACK_IMPORTED_MODULE_14__["default"].URL, _LTG_UI_view_grow_01__WEBPACK_IMPORTED_MODULE_14__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_EggNotice__WEBPACK_IMPORTED_MODULE_15__["default"].URL, _LTG_UI_EggNotice__WEBPACK_IMPORTED_MODULE_15__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_egg_notice__WEBPACK_IMPORTED_MODULE_16__["default"].URL, _LTG_UI_view_egg_notice__WEBPACK_IMPORTED_MODULE_16__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_LimitSkin__WEBPACK_IMPORTED_MODULE_17__["default"].URL, _LTG_UI_LimitSkin__WEBPACK_IMPORTED_MODULE_17__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_toggle_02__WEBPACK_IMPORTED_MODULE_18__["default"].URL, _LTG_UI_toggle_02__WEBPACK_IMPORTED_MODULE_18__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_watchad_progress__WEBPACK_IMPORTED_MODULE_19__["default"].URL, _LTG_UI_view_watchad_progress__WEBPACK_IMPORTED_MODULE_19__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_toggle_03__WEBPACK_IMPORTED_MODULE_20__["default"].URL, _LTG_UI_toggle_03__WEBPACK_IMPORTED_MODULE_20__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_Roll__WEBPACK_IMPORTED_MODULE_21__["default"].URL, _LTG_UI_Roll__WEBPACK_IMPORTED_MODULE_21__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_item_view_roll__WEBPACK_IMPORTED_MODULE_22__["default"].URL, _LTG_UI_item_view_roll__WEBPACK_IMPORTED_MODULE_22__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_roll_panel__WEBPACK_IMPORTED_MODULE_23__["default"].URL, _LTG_UI_view_roll_panel__WEBPACK_IMPORTED_MODULE_23__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_roll__WEBPACK_IMPORTED_MODULE_24__["default"].URL, _LTG_UI_view_roll__WEBPACK_IMPORTED_MODULE_24__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_limit_skin__WEBPACK_IMPORTED_MODULE_25__["default"].URL, _LTG_UI_view_limit_skin__WEBPACK_IMPORTED_MODULE_25__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_WatchDY__WEBPACK_IMPORTED_MODULE_26__["default"].URL, _LTG_UI_WatchDY__WEBPACK_IMPORTED_MODULE_26__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_watchdy__WEBPACK_IMPORTED_MODULE_27__["default"].URL, _LTG_UI_view_watchdy__WEBPACK_IMPORTED_MODULE_27__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_ShareVideo__WEBPACK_IMPORTED_MODULE_28__["default"].URL, _LTG_UI_ShareVideo__WEBPACK_IMPORTED_MODULE_28__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_sharevideo__WEBPACK_IMPORTED_MODULE_29__["default"].URL, _LTG_UI_view_sharevideo__WEBPACK_IMPORTED_MODULE_29__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_Sign__WEBPACK_IMPORTED_MODULE_30__["default"].URL, _LTG_UI_Sign__WEBPACK_IMPORTED_MODULE_30__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_sign__WEBPACK_IMPORTED_MODULE_31__["default"].URL, _LTG_UI_view_sign__WEBPACK_IMPORTED_MODULE_31__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_item_sign_01__WEBPACK_IMPORTED_MODULE_32__["default"].URL, _LTG_UI_view_item_sign_01__WEBPACK_IMPORTED_MODULE_32__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_33__["default"].URL, _LTG_UI_view_item_sign_02__WEBPACK_IMPORTED_MODULE_33__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_item_sign_03__WEBPACK_IMPORTED_MODULE_34__["default"].URL, _LTG_UI_view_item_sign_03__WEBPACK_IMPORTED_MODULE_34__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_item_sign_05__WEBPACK_IMPORTED_MODULE_35__["default"].URL, _LTG_UI_view_item_sign_05__WEBPACK_IMPORTED_MODULE_35__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_item_sign_06__WEBPACK_IMPORTED_MODULE_36__["default"].URL, _LTG_UI_view_item_sign_06__WEBPACK_IMPORTED_MODULE_36__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_item_sign_07__WEBPACK_IMPORTED_MODULE_37__["default"].URL, _LTG_UI_view_item_sign_07__WEBPACK_IMPORTED_MODULE_37__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_btn_tog__WEBPACK_IMPORTED_MODULE_38__["default"].URL, _LTG_UI_btn_tog__WEBPACK_IMPORTED_MODULE_38__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_HideMenu__WEBPACK_IMPORTED_MODULE_39__["default"].URL, _LTG_UI_HideMenu__WEBPACK_IMPORTED_MODULE_39__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_hidemenu__WEBPACK_IMPORTED_MODULE_40__["default"].URL, _LTG_UI_view_hidemenu__WEBPACK_IMPORTED_MODULE_40__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_toggle_01__WEBPACK_IMPORTED_MODULE_41__["default"].URL, _LTG_UI_toggle_01__WEBPACK_IMPORTED_MODULE_41__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_set__WEBPACK_IMPORTED_MODULE_42__["default"].URL, _LTG_UI_view_set__WEBPACK_IMPORTED_MODULE_42__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_43__["default"].URL, _LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_43__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_rewardcode__WEBPACK_IMPORTED_MODULE_44__["default"].URL, _LTG_UI_view_rewardcode__WEBPACK_IMPORTED_MODULE_44__["default"]);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_AddShortcut.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_AddShortcut.ts ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_AddShortcut; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_AddShortcut extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "AddShortcut"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_AddShortcut.URL = "ui://hbq27te38gel17";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_EggNotice.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_EggNotice.ts ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_EggNotice; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_EggNotice extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "EggNotice"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_EggNotice.URL = "ui://hbq27te38gel2w";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_EggWall.ts":
+/*!*****************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_EggWall.ts ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_EggWall; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_EggWall extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "EggWall"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_btn_back = (this.getChildAt(2));
+        this.m_list_view = (this.getChildAt(5));
+    }
+}
+LTG_UI_EggWall.URL = "ui://hbq27te38gel2c";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_FindGame.ts":
+/*!******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_FindGame.ts ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_FindGame; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_FindGame extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "FindGame"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_FindGame.URL = "ui://hbq27te38gel1f";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_HideMenu.ts":
+/*!******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_HideMenu.ts ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_HideMenu; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_HideMenu extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "HideMenu"));
+    }
+    onConstruct() {
+        this.m_btn_show = (this.getChildAt(0));
+        this.m_view_menu = (this.getChildAt(1));
+        this.m_anim_show_menu = this.getTransitionAt(0);
+        this.m_anim_hide_menu = this.getTransitionAt(1);
+    }
+}
+LTG_UI_HideMenu.URL = "ui://hbq27te38gel60";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_LimitSkin.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_LimitSkin.ts ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_LimitSkin; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_LimitSkin extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "LimitSkin"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+        this.m_view_ad_progress = (this.getChildAt(2));
+        this.m_btn_get = (this.getChildAt(4));
+    }
+}
+LTG_UI_LimitSkin.URL = "ui://hbq27te38gel35";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_MyGame.ts":
+/*!****************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_MyGame.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_MyGame; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_MyGame extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "MyGame"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_MyGame.URL = "ui://hbq27te38gel1k";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Notice.ts":
+/*!****************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_Notice.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_Notice; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_Notice extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "Notice"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_Notice.URL = "ui://hbq27te38gel10";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_RewardCode.ts":
+/*!********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_RewardCode.ts ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_RewardCode; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_RewardCode extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "RewardCode"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_RewardCode.URL = "ui://hbq27te38gelp";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Roll.ts":
+/*!**************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_Roll.ts ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_Roll; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_Roll extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "Roll"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_btn_close = (this.getChildAt(1));
+        this.m_view = (this.getChildAt(2));
+    }
+}
+LTG_UI_Roll.URL = "ui://hbq27te38gel3k";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Set.ts":
+/*!*************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_Set.ts ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_Set; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_Set extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "Set"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_Set.URL = "ui://hbq27te38gel1";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_ShareVideo.ts":
+/*!********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_ShareVideo.ts ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_ShareVideo; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_ShareVideo extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "ShareVideo"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_ShareVideo.URL = "ui://hbq27te38gel4h";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Sign.ts":
+/*!**************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_Sign.ts ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_Sign; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_Sign extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "Sign"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+        this.m_btn_back = (this.getChildAt(2));
+        this.m_anim_enter = this.getTransitionAt(0);
+        this.m_anim_exit = this.getTransitionAt(1);
+    }
+}
+LTG_UI_Sign.URL = "ui://hbq27te38gel4v";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchDY.ts":
+/*!*****************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchDY.ts ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_WatchDY; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_WatchDY extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "WatchDY"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_WatchDY.URL = "ui://hbq27te38gel46";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Zhuawawa.ts":
+/*!******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_Zhuawawa.ts ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_Zhuawawa; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_Zhuawawa extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "Zhuawawa"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_btn_push = (this.getChildAt(1));
+    }
+}
+LTG_UI_Zhuawawa.URL = "ui://hbq27te38gel1u";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_btn_tog.ts":
+/*!*****************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_btn_tog.ts ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_btn_tog; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_btn_tog extends fgui.GButton {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "btn_tog"));
+    }
+    onConstruct() {
+        this.m_selected = this.getControllerAt(0);
+    }
+}
+LTG_UI_btn_tog.URL = "ui://hbq27te38gel5p";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_item_view_eggwall.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_item_view_eggwall.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_item_view_eggwall; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_item_view_eggwall extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "item_view_eggwall"));
+    }
+    onConstruct() {
+        this.m_btn_get_tip = (this.getChildAt(3));
+        this.m_btn_show_tip = (this.getChildAt(5));
+    }
+}
+LTG_UI_item_view_eggwall.URL = "ui://hbq27te38gel2u";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_item_view_roll.ts":
+/*!************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_item_view_roll.ts ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_item_view_roll; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_item_view_roll extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "item_view_roll"));
+    }
+    onConstruct() {
+        this.m_text_name = (this.getChildAt(0));
+        this.m_loader_icon = (this.getChildAt(1));
+    }
+}
+LTG_UI_item_view_roll.URL = "ui://hbq27te38gel40";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_01.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_01.ts ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_toggle_01; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_toggle_01 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "toggle_01"));
+    }
+    onConstruct() {
+        this.m_toggle_state = this.getControllerAt(0);
+    }
+}
+LTG_UI_toggle_01.URL = "ui://hbq27te38gelc";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_02.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_02.ts ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_toggle_02; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_toggle_02 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "toggle_02"));
+    }
+    onConstruct() {
+        this.m_state_toggle = this.getControllerAt(0);
+    }
+}
+LTG_UI_toggle_02.URL = "ui://hbq27te38gel3c";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_03.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_toggle_03.ts ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_toggle_03; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_toggle_03 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "toggle_03"));
+    }
+    onConstruct() {
+        this.m_state_toggle = this.getControllerAt(0);
+    }
+}
+LTG_UI_toggle_03.URL = "ui://hbq27te38gel3j";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_addshortcut.ts":
+/*!**************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_addshortcut.ts ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_addshortcut; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_addshortcut extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_addshortcut"));
+    }
+    onConstruct() {
+        this.m_loader_icon = (this.getChildAt(4));
+        this.m_btn_close = (this.getChildAt(5));
+        this.m_btn_ok = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_addshortcut.URL = "ui://hbq27te38gel1e";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_egg_notice.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_egg_notice.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_egg_notice; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_egg_notice extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_egg_notice"));
+    }
+    onConstruct() {
+        this.m_btn_close = (this.getChildAt(2));
+        this.m_btn_get_imd = (this.getChildAt(5));
+    }
+}
+LTG_UI_view_egg_notice.URL = "ui://hbq27te38gel34";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_findgame.ts":
+/*!***********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_findgame.ts ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_findgame; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_findgame extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_findgame"));
+    }
+    onConstruct() {
+        this.m_loader_icon = (this.getChildAt(4));
+        this.m_btn_close = (this.getChildAt(5));
+        this.m_btn_ok = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_findgame.URL = "ui://hbq27te38gel1j";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_grow_01.ts":
+/*!**********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_grow_01.ts ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_grow_01; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_grow_01 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_grow_01"));
+    }
+    onConstruct() {
+        this.m_t0 = this.getTransitionAt(0);
+    }
+}
+LTG_UI_view_grow_01.URL = "ui://hbq27te38gel2v";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_hidemenu.ts":
+/*!***********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_hidemenu.ts ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_hidemenu; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_hidemenu extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_hidemenu"));
+    }
+    onConstruct() {
+        this.m_btn_notice = (this.getChildAt(1));
+        this.m_btn_addshortcut = (this.getChildAt(2));
+        this.m_btn_findgame = (this.getChildAt(3));
+        this.m_btn_hide = (this.getChildAt(4));
+    }
+}
+LTG_UI_view_hidemenu.URL = "ui://hbq27te38gel67";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_01.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_01.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_item_sign_01; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_item_sign_01 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_item_sign_01"));
+    }
+    onConstruct() {
+        this.m_state_get = this.getControllerAt(0);
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_img_can_get = (this.getChildAt(1));
+        this.m_img_got = (this.getChildAt(2));
+        this.m_loader_icon = (this.getChildAt(3));
+        this.m_text_day = (this.getChildAt(4));
+        this.m_text_name = (this.getChildAt(5));
+    }
+}
+LTG_UI_view_item_sign_01.URL = "ui://hbq27te38gel4z";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_02.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_02.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_item_sign_02; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_item_sign_02 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_item_sign_02"));
+    }
+    onConstruct() {
+        this.m_state_get = this.getControllerAt(0);
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_img_can_get = (this.getChildAt(2));
+        this.m_img_got = (this.getChildAt(3));
+        this.m_loader_icon = (this.getChildAt(4));
+        this.m_text_day = (this.getChildAt(5));
+        this.m_text_name = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_item_sign_02.URL = "ui://hbq27te38gel53";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_03.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_03.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_item_sign_03; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_item_sign_03 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_item_sign_03"));
+    }
+    onConstruct() {
+        this.m_state_get = this.getControllerAt(0);
+        this.m_img_can_get = (this.getChildAt(2));
+        this.m_img_got = (this.getChildAt(3));
+        this.m_loader_icon = (this.getChildAt(4));
+        this.m_text_day = (this.getChildAt(5));
+        this.m_text_name = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_item_sign_03.URL = "ui://hbq27te38gel55";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_05.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_05.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_item_sign_05; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_item_sign_05 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_item_sign_05"));
+    }
+    onConstruct() {
+        this.m_state_get = this.getControllerAt(0);
+        this.m_img_can_get = (this.getChildAt(2));
+        this.m_img_got = (this.getChildAt(3));
+        this.m_loader_icon = (this.getChildAt(4));
+        this.m_text_day = (this.getChildAt(5));
+        this.m_text_name = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_item_sign_05.URL = "ui://hbq27te38gel59";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_06.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_06.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_item_sign_06; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_item_sign_06 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_item_sign_06"));
+    }
+    onConstruct() {
+        this.m_state_get = this.getControllerAt(0);
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_img_can_get = (this.getChildAt(2));
+        this.m_img_got = (this.getChildAt(3));
+        this.m_loader_icon = (this.getChildAt(4));
+        this.m_text_day = (this.getChildAt(5));
+        this.m_text_name = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_item_sign_06.URL = "ui://hbq27te38gel5a";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_07.ts":
+/*!***************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_item_sign_07.ts ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_item_sign_07; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_item_sign_07 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_item_sign_07"));
+    }
+    onConstruct() {
+        this.m_state_get = this.getControllerAt(0);
+        this.m_img_can_get = (this.getChildAt(2));
+        this.m_loader_icon = (this.getChildAt(3));
+        this.m_loader_title = (this.getChildAt(5));
+        this.m_img_got = (this.getChildAt(8));
+    }
+}
+LTG_UI_view_item_sign_07.URL = "ui://hbq27te38gel5b";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_limit_skin.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_limit_skin.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_limit_skin; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_limit_skin extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_limit_skin"));
+    }
+    onConstruct() {
+        this.m_loader_icon = (this.getChildAt(1));
+        this.m_loader_text = (this.getChildAt(2));
+    }
+}
+LTG_UI_view_limit_skin.URL = "ui://hbq27te38gel45";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_mygame.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_mygame.ts ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_mygame; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_mygame extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_mygame"));
+    }
+    onConstruct() {
+        this.m_btn_back = (this.getChildAt(0));
+        this.m_t0 = this.getTransitionAt(0);
+    }
+}
+LTG_UI_view_mygame.URL = "ui://hbq27te38gel1t";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_notice.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_notice.ts ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_notice; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_notice extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_notice"));
+    }
+    onConstruct() {
+        this.m_text_notice = (this.getChildAt(4));
+        this.m_btn_close = (this.getChildAt(5));
+    }
+}
+LTG_UI_view_notice.URL = "ui://hbq27te38gel16";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_rewardcode.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_rewardcode.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_rewardcode; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_rewardcode extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_rewardcode"));
+    }
+    onConstruct() {
+        this.m_btn_confirm = (this.getChildAt(4));
+        this.m_btn_cancel = (this.getChildAt(5));
+        this.m_text_input = (this.getChildAt(7));
+    }
+}
+LTG_UI_view_rewardcode.URL = "ui://hbq27te38gely";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_roll.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_roll.ts ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_roll; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_roll extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_roll"));
+    }
+    onConstruct() {
+        this.m_progress_supper = (this.getChildAt(3));
+        this.m_btn_watchad = (this.getChildAt(5));
+        this.m_btn_free = (this.getChildAt(6));
+        this.m_text_notice = (this.getChildAt(7));
+    }
+}
+LTG_UI_view_roll.URL = "ui://hbq27te38gel42";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_roll_panel.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_roll_panel.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_roll_panel; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_roll_panel extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_roll_panel"));
+    }
+    onConstruct() {
+        this.m_item_01 = (this.getChildAt(1));
+        this.m_item_02 = (this.getChildAt(2));
+        this.m_item_03 = (this.getChildAt(3));
+        this.m_item_04 = (this.getChildAt(4));
+        this.m_item_05 = (this.getChildAt(5));
+        this.m_item_06 = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_roll_panel.URL = "ui://hbq27te38gel41";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_set.ts":
+/*!******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_set.ts ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_set; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_set extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_set"));
+    }
+    onConstruct() {
+        this.m_toggle_music = (this.getChildAt(4));
+        this.m_toggle_shake = (this.getChildAt(5));
+        this.m_btn_code = (this.getChildAt(10));
+        this.m_btn_close = (this.getChildAt(11));
+    }
+}
+LTG_UI_view_set.URL = "ui://hbq27te38gelo";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_sharevideo.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_sharevideo.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_sharevideo; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_sharevideo extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_sharevideo"));
+    }
+    onConstruct() {
+        this.m_loader_text = (this.getChildAt(2));
+        this.m_loader_icon = (this.getChildAt(3));
+        this.m_btn_share = (this.getChildAt(5));
+        this.m_btn_close = (this.getChildAt(6));
+    }
+}
+LTG_UI_view_sharevideo.URL = "ui://hbq27te38gel4t";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_sign.ts":
+/*!*******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_sign.ts ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_sign; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_sign extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_sign"));
+    }
+    onConstruct() {
+        this.m_state = this.getControllerAt(0);
+        this.m_day_1 = (this.getChildAt(2));
+        this.m_day_2 = (this.getChildAt(3));
+        this.m_day_3 = (this.getChildAt(4));
+        this.m_day_4 = (this.getChildAt(5));
+        this.m_day_5 = (this.getChildAt(6));
+        this.m_day_6 = (this.getChildAt(7));
+        this.m_day_7 = (this.getChildAt(8));
+        this.m_text_signed = (this.getChildAt(9));
+        this.m_btn_watchad = (this.getChildAt(10));
+        this.m_tog = (this.getChildAt(11));
+    }
+}
+LTG_UI_view_sign.URL = "ui://hbq27te38gel4w";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchad_progress.ts":
+/*!*******************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchad_progress.ts ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_watchad_progress; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_watchad_progress extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_watchad_progress"));
+    }
+    onConstruct() {
+        this.m_toggle_01 = (this.getChildAt(1));
+        this.m_toggle_02 = (this.getChildAt(3));
+        this.m_toggle_03 = (this.getChildAt(4));
+    }
+}
+LTG_UI_view_watchad_progress.URL = "ui://hbq27te38gel3d";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchdy.ts":
+/*!**********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchdy.ts ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_watchdy; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_watchdy extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_watchdy"));
+    }
+    onConstruct() {
+        this.m_btn_copy = (this.getChildAt(1));
+        this.m_btn_close = (this.getChildAt(3));
+    }
+}
+LTG_UI_view_watchdy.URL = "ui://hbq27te38gel4g";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_zhuazi.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_zhuazi.ts ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_zhuazi; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_zhuazi extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_zhuazi"));
+    }
+    onConstruct() {
+        this.m_state_pick = this.getControllerAt(0);
+    }
+}
+LTG_UI_view_zhuazi.URL = "ui://hbq27te38gel27";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_zww.ts":
+/*!******************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_zww.ts ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_zww; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_zww extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_zww"));
+    }
+    onConstruct() {
+        this.m_btn_push = (this.getChildAt(0));
+        this.m_progress_push = (this.getChildAt(2));
+        this.m_view_pick = (this.getChildAt(5));
+        this.m_text_time = (this.getChildAt(8));
+    }
+}
+LTG_UI_view_zww.URL = "ui://hbq27te38gel29";
+
+
+/***/ }),
+
 /***/ "./src/LTGame/3rd/oimo/collision/broadphase/BroadPhase.ts":
 /*!****************************************************************!*\
   !*** ./src/LTGame/3rd/oimo/collision/broadphase/BroadPhase.ts ***!
@@ -15335,6 +17083,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Config_ConfigManager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Config/ConfigManager */ "./src/LTGame/Config/ConfigManager.ts");
 /* harmony import */ var _UIExt_DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
 /* harmony import */ var _UIExt_DefaultUI_UI_LTUI_LTUIBinder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../UIExt/DefaultUI/UI/LTUI/LTUIBinder */ "./src/LTGame/UIExt/DefaultUI/UI/LTUI/LTUIBinder.ts");
+/* harmony import */ var _LTG_CommonUI_UI_LTCom_LTComBinder__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../LTG_CommonUI/UI/LTCom/LTComBinder */ "./src/LTG_CommonUI/UI/LTCom/LTComBinder.ts");
+
 
 
 
@@ -15374,6 +17124,7 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         this._subPackProgress = 0;
         this._isUIShowed = false;
         this._jsonPath = "subpack.json";
+        this._useCommonUI = false;
         switch (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform) {
             case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].WX:
             case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].QQ:
@@ -15395,6 +17146,9 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
     _DoEnter() {
         this._needLoadOtherUIPack.push(new _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_1__["LoadUIPack"]("res/ltgame/ui/LTUI"));
         this._needLoadOtherUIPack.push(new _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_1__["LoadUIPack"]("res/ltgame/ui/LTGame"));
+        if (this._useCommonUI) {
+            this._needLoadOtherUIPack.push(new _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_1__["LoadUIPack"]("res/ltgame/ui/LTCom", 2));
+        }
         Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
     }
     _OnJsonLoaded() {
@@ -15414,6 +17168,9 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.RecordEvent("开始初始化启动界面", null);
         _UIExt_DefaultUI_UI_LTGame_LTGameBinder__WEBPACK_IMPORTED_MODULE_6__["default"].bindAll();
         _UIExt_DefaultUI_UI_LTUI_LTUIBinder__WEBPACK_IMPORTED_MODULE_11__["default"].bindAll();
+        if (this._useCommonUI) {
+            _LTG_CommonUI_UI_LTCom_LTComBinder__WEBPACK_IMPORTED_MODULE_12__["default"].bindAll();
+        }
         this._OnBindUI();
         let loadUrl = [];
         this._initUiPack.PushUrl(loadUrl);
@@ -23375,7 +25132,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_3__["LTSt
         this._resVersion = "0515";
         /**项目名 */
         this._gameName = "p_ltg";
-        this.enableStat = true;
+        // this.enableStat = true;
     }
     _HandleInitPlatform(ePlatform, platformData) {
         switch (ePlatform) {
@@ -24052,6 +25809,7 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_2
     constructor() {
         super();
         this._splashUIClass = _ui_Load_UI_splash__WEBPACK_IMPORTED_MODULE_4__["default"];
+        this._useCommonUI = true;
     }
     _OnBindUI() {
         _ui_Load_LoadBinder__WEBPACK_IMPORTED_MODULE_3__["default"].bindAll();
@@ -25264,6 +27022,68 @@ class UI_BoneAnimTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
 
 /***/ }),
 
+/***/ "./src/script/ui/UI_CommonUI2Mediator.ts":
+/*!***********************************************!*\
+  !*** ./src/script/ui/UI_CommonUI2Mediator.ts ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonUI2Mediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_CommonUI2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_CommonUI2 */ "./src/ui/Main/UI_CommonUI2.ts");
+/* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _LTG_CommonUI_Mediator_LTG_UI_HideMenuMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator.ts");
+
+
+
+
+class UIDemoData {
+    constructor(name, func) {
+        this.name = name;
+        this.func = func;
+    }
+}
+class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor() {
+        super(...arguments);
+        this._demos = [
+            new UIDemoData("隐藏菜单", () => {
+                _LTG_CommonUI_Mediator_LTG_UI_HideMenuMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
+            }),
+        ];
+    }
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_CommonUI2Mediator();
+            this._instance._classDefine = _ui_Main_UI_CommonUI2__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this.ui.m_btn_back.onClick(this, this._OnClickBack);
+        this.ui.m_list_btns.setVirtual();
+        this.ui.m_list_btns.itemRenderer = Laya.Handler.create(this, this._OnItemRender, null, false);
+        this.ui.m_list_btns.numItems = this._demos.length;
+    }
+    _OnItemRender(index, itemUI) {
+        let data = this._demos[index];
+        itemUI.text = data.name;
+        itemUI.onClick(this, data.func);
+    }
+    _OnClickBack() {
+        this.Hide();
+        _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__["UI_MainMediator"].instance.Show();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_CommonUIMediator.ts":
 /*!**********************************************!*\
   !*** ./src/script/ui/UI_CommonUIMediator.ts ***!
@@ -25609,6 +27429,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_PerfomanceMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_PerfomanceMediator */ "./src/script/ui/UI_PerfomanceMediator.ts");
 /* harmony import */ var _UI_RecordDemoMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_RecordDemoMediator */ "./src/script/ui/UI_RecordDemoMediator.ts");
 /* harmony import */ var _UI_UIDemoMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_UIDemoMediator */ "./src/script/ui/UI_UIDemoMediator.ts");
+/* harmony import */ var _UI_CommonUI2Mediator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI_CommonUI2Mediator */ "./src/script/ui/UI_CommonUI2Mediator.ts");
+
 
 
 
@@ -25635,6 +27457,11 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
         this.ui.m_btn_others.onClick(this, this._OnClickOthers);
         this.ui.m_btn_performance.onClick(this, this._OnClickPerfomance);
         this.ui.m_btn_feature.onClick(this, this._OnClickFunctionTest);
+        this.ui.m_btn_common2.onClick(this, this._OnClickCommon2);
+    }
+    _OnClickCommon2() {
+        this.Hide();
+        _UI_CommonUI2Mediator__WEBPACK_IMPORTED_MODULE_9__["default"].instance.Show();
     }
     _OnClickFunctionTest() {
         this.Hide();
@@ -26191,11 +28018,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI_BoneAnimTest */ "./src/ui/Main/UI_BoneAnimTest.ts");
 /* harmony import */ var _UI_NativeDemo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UI_NativeDemo */ "./src/ui/Main/UI_NativeDemo.ts");
 /* harmony import */ var _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI_MoudleDemo */ "./src/ui/Main/UI_MoudleDemo.ts");
-/* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
-/* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
-/* harmony import */ var _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
-/* harmony import */ var _UI_Test__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./UI_Test */ "./src/ui/Main/UI_Test.ts");
+/* harmony import */ var _UI_CommonUI2__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./UI_CommonUI2 */ "./src/ui/Main/UI_CommonUI2.ts");
+/* harmony import */ var _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./UI_RecordDemo */ "./src/ui/Main/UI_RecordDemo.ts");
+/* harmony import */ var _UI_Others__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./UI_Others */ "./src/ui/Main/UI_Others.ts");
+/* harmony import */ var _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./UI_FunctionTest */ "./src/ui/Main/UI_FunctionTest.ts");
+/* harmony import */ var _UI_Test__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./UI_Test */ "./src/ui/Main/UI_Test.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
 
 
 
@@ -26220,10 +28049,11 @@ class MainBinder {
         fgui.UIObjectFactory.setExtension(_UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__["default"].URL, _UI_BoneAnimTest__WEBPACK_IMPORTED_MODULE_6__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_NativeDemo__WEBPACK_IMPORTED_MODULE_7__["default"].URL, _UI_NativeDemo__WEBPACK_IMPORTED_MODULE_7__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_8__["default"].URL, _UI_MoudleDemo__WEBPACK_IMPORTED_MODULE_8__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_9__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_9__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_10__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_10__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_11__["default"].URL, _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_11__["default"]);
-        fgui.UIObjectFactory.setExtension(_UI_Test__WEBPACK_IMPORTED_MODULE_12__["default"].URL, _UI_Test__WEBPACK_IMPORTED_MODULE_12__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_CommonUI2__WEBPACK_IMPORTED_MODULE_9__["default"].URL, _UI_CommonUI2__WEBPACK_IMPORTED_MODULE_9__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_RecordDemo__WEBPACK_IMPORTED_MODULE_10__["default"].URL, _UI_RecordDemo__WEBPACK_IMPORTED_MODULE_10__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Others__WEBPACK_IMPORTED_MODULE_11__["default"].URL, _UI_Others__WEBPACK_IMPORTED_MODULE_11__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_FunctionTest__WEBPACK_IMPORTED_MODULE_12__["default"].URL, _UI_FunctionTest__WEBPACK_IMPORTED_MODULE_12__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Test__WEBPACK_IMPORTED_MODULE_13__["default"].URL, _UI_Test__WEBPACK_IMPORTED_MODULE_13__["default"]);
     }
 }
 
@@ -26336,6 +28166,35 @@ UI_CommonUI.URL = "ui://kk7g5mmmfkl1g";
 
 /***/ }),
 
+/***/ "./src/ui/Main/UI_CommonUI2.ts":
+/*!*************************************!*\
+  !*** ./src/ui/Main/UI_CommonUI2.ts ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonUI2; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_CommonUI2 extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "CommonUI2"));
+    }
+    onConstruct() {
+        this.m_title = (this.getChildAt(1));
+        this.m_btn_back = (this.getChildAt(2));
+        this.m_list_btns = (this.getChildAt(3));
+    }
+}
+UI_CommonUI2.URL = "ui://kk7g5mmmtsm1o";
+
+
+/***/ }),
+
 /***/ "./src/ui/Main/UI_FunctionTest.ts":
 /*!****************************************!*\
   !*** ./src/ui/Main/UI_FunctionTest.ts ***!
@@ -26391,6 +28250,7 @@ class UI_Main extends fgui.GComponent {
         this.m_btn_common = (this.getChildAt(6));
         this.m_btn_performance = (this.getChildAt(7));
         this.m_btn_feature = (this.getChildAt(8));
+        this.m_btn_common2 = (this.getChildAt(9));
     }
 }
 UI_Main.URL = "ui://kk7g5mmmjhmq1";

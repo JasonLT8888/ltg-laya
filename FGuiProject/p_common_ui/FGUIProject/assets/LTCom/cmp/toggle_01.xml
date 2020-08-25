@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="167,53">
+  <controller name="toggle_state" pages="0,off,1,on" selected="1"/>
+  <displayList>
+    <image id="n6_8gel" name="n6" src="8gel9" fileName="img/sp_hui.png" xy="0,1">
+      <gearDisplay controller="toggle_state" pages="0"/>
+    </image>
+    <image id="n7_8gel" name="n7" src="8gela" fileName="img/sp_lv.png" xy="0,0">
+      <gearDisplay controller="toggle_state" pages="1"/>
+    </image>
+    <image id="n8_8gel" name="n8" src="8gelb" fileName="img/btn_yuan.png" xy="2,3">
+      <gearXY controller="toggle_state" pages="0" values="118,3" default="2,3" tween="true"/>
+    </image>
+  </displayList>
+</component>

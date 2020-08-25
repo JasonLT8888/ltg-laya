@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://hbq27te38gel5v" designImageLayer="1">
+  <displayList>
+    <graph id="n0_uo3l" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n1_uo3l" name="view" src="8gel4w" fileName="cmp/view_sign.xml" xy="374,617" pivot="0.5,0.5" anchor="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n3_8gel" name="btn_back" src="8gel5z" fileName="cmp/btn_back_03.xml" xy="30,68"/>
+  </displayList>
+  <transition name="anim_enter">
+    <item time="0" type="Alpha" target="n0_uo3l" tween="true" startValue="0" endValue="0.8" duration="6"/>
+    <item time="0" type="Scale" target="n1_uo3l" tween="true" startValue="0,0" endValue="1,1" duration="6" ease="Linear"/>
+  </transition>
+  <transition name="anim_exit">
+    <item time="0" type="Alpha" target="n0_uo3l" tween="true" startValue="0.8" endValue="0" duration="6"/>
+    <item time="0" type="Scale" target="n1_uo3l" tween="true" startValue="1,1" endValue="0,0" duration="6"/>
+  </transition>
+</component>
