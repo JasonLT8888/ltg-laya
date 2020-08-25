@@ -56,9 +56,6 @@ export default class LTRespackManager {
             case EPlatformType.Oppo:
                 adapter = Laya.QGMiniAdapter;
                 break;
-            case EPlatformType.Vivo:
-                adapter = Laya.VVMiniAdapter;
-                break;
         }
         if (adapter == null) return;
         Laya.URL.basePath = this._baseUrl;

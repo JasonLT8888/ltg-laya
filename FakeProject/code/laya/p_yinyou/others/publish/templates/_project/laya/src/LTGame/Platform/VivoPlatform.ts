@@ -1,8 +1,8 @@
-import AudioManager from "../../script/manager/AudioManager";
 import Awaiters from "../Async/Awaiters";
+import StringEx from "../LTUtils/StringEx";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
-import { VivoDevice } from "./DefaultDevice";
+import DefaultDevice, { VivoDevice } from "./DefaultDevice";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
@@ -10,9 +10,10 @@ import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
+import AudioManager from "../../script/manager/AudioManager";
 
 export default class VivoPlatform implements IPlatform {
-    userInfo: LTGame.UserInfo;
+
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;

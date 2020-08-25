@@ -1,10 +1,8 @@
 
-import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 import LTSDK from "../../../../SDK/LTSDK";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
-import UI_bottomGames from "../UI/LTGame/UI_bottomGames";
 import UI_CommonEndSliderADs from "../UI/LTGame/UI_CommonEndSliderADs";
 import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 
@@ -20,26 +18,18 @@ export default class View_BottomGames {
             return null;
         }
 
-        if (tagUI instanceof UI_bottomGames) {
-            return new View_BottomGames(tagUI);
-        }
         if (tagUI instanceof UI_CommonEndSliderADs) {
             return new View_BottomGames(tagUI);
         }
-        let uiInstance = null;
-        if (tagUI.height < 140) {
-            uiInstance = UI_bottomGames.createInstance()
-        } else {
-            uiInstance = UI_CommonEndSliderADs.createInstance();
-        }
+        let uiInstance = UI_CommonEndSliderADs.createInstance();
         tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
         tagUI.dispose();
         return new View_BottomGames(uiInstance);
     }
 
-    private _ui: UI_bottomGames;
-    public get ui(): UI_bottomGames {
+    private _ui: UI_CommonEndSliderADs;
+    public get ui(): UI_CommonEndSliderADs {
         return this._ui;
     }
 
@@ -50,13 +40,13 @@ export default class View_BottomGames {
 
     private _posId: number = 0;
 
-    private constructor(ui: any) {
+    private constructor(ui: UI_CommonEndSliderADs) {
         this._ui = ui;
         this._Init();
     }
 
     private _Init() {
-        if (LTSDK.instance instanceof SDK_YQ) {
+        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
@@ -70,11 +60,7 @@ export default class View_BottomGames {
             this.ui.m_list.numItems = this._cacheAds.length;
             this.ui.m_list.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
             Laya.timer.loop(5000, this, () => {
-                if (this.ui.height < 140) {
-                    this.ui.m_list.scrollPane.scrollRight(133 / 128, true);
-                } else {
-                    this.ui.m_list.scrollPane.scrollRight(169 / 150, true);
-                }
+                this.ui.m_list.scrollPane.scrollRight(169 / 150, true);
             });
             let ads = [];
             for (let i = 0; i < this._cacheAds.length; i++) {

@@ -15,11 +15,11 @@ export default class UI_FakeInterstitalMediator extends BaseUIMediator<UI_FakeIn
     private _closeHandle: Laya.Handler;
 
     _OnShow() {
-        this._sortOrder = Number.MAX_SAFE_INTEGER;
         super._OnShow();
         // your code
 
         this._closeHandle = this._openParam;
+        this._sortOrder = Number.MAX_SAFE_INTEGER;
         this.ui.m_btn_close.onClick(this, this._OnClickClose);
     }
 

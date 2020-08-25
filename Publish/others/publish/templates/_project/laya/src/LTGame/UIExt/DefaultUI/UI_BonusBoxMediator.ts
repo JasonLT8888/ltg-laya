@@ -1,12 +1,15 @@
 import GameData from "../../../script/common/GameData";
+import { ECheckState } from "../../../SDK/common/ECheckState";
+import LTSDK from "../../../SDK/LTSDK";
 import MathEx from "../../LTUtils/MathEx";
+import { EPlatformType } from "../../Platform/EPlatformType";
 import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
 import { CommonRewardData, RewardItem } from "./Data/CommonRewardData";
-import UI_BonusBox from "./UI/LTUI/UI_BonusBox";
-import UI_BonusItem from "./UI/LTUI/UI_BonusItem";
-import UI_tog_key from "./UI/LTUI/UI_tog_key";
+import UI_BonusBox from "./UI/LTGame/UI_BonusBox";
+import UI_BonusItem from "./UI/LTGame/UI_BonusItem";
+import UI_tog_key from "./UI/LTGame/UI_tog_key";
 
 
 
@@ -26,13 +29,13 @@ export class UI_BonusBoxMediator extends BaseUIMediator<UI_BonusBox> {
         return this._instance;
     }
     keyCount: number = 3;
-    weight: number[] = [20, 20, 20, 5, 5, 5, 5, 1, 1];
+    weight: number[] = [2, 2, 2, 5, 5, 5, 5, 5, 5];
     adItems: number[] = [];
     datas: RewardItem[] = [];
     private _openData: CommonRewardData;
     _OnShow() {
-        super._OnShow(); 
-        this._openData = new CommonRewardData();
+        super._OnShow();
+        this._openData=new CommonRewardData();
         if (this._openParam == null) {
             console.error("请传入CommonRewardData用于初始化宝箱界面");
         } else {
@@ -44,10 +47,8 @@ export class UI_BonusBoxMediator extends BaseUIMediator<UI_BonusBox> {
         if (this._openData) {
             this.datas = this._openData.datas;
         }
-
         this.adItems = MathEx.RandomArrayFromArray([0, 1, 2, 3, 4, 5, 6, 7, 8], 3);
-        this.ui.m_btn_close.visible = false;// LTPlatform.instance.platform == EPlatformType.Oppo;
-
+        this.ui.m_btn_close.visible = LTPlatform.instance.platform == EPlatformType.Oppo;
         this.ui.m_keyList.setVirtual();
         this.ui.m_keyList.itemRenderer = Laya.Handler.create(this, this.renderKeyItem, null, false);
         this.ui.m_keyList.numItems = 3;
@@ -61,15 +62,12 @@ export class UI_BonusBoxMediator extends BaseUIMediator<UI_BonusBox> {
         this.ui.m_btn_close.onClick(this, this.Hide);
         this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
         this.ui.m_btn_ad.onClick(this, this.addKey);
-        this.ui.m_tog.visible = false;
-        this.ui.m_tog.m_selected.selectedIndex = 1;
-        // this.ui.m_tog.m_selected.selectedIndex = LTSDK.instance.checkState == ECheckState.InCheck ? 0 : 1;
-        // this.ui.m_tog.onClick(this, () => {
-        //     this.ui.m_tog.m_selected.selectedIndex = (this.ui.m_tog.m_selected.selectedIndex + 1) % 2;
-        //     this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
-        // });
-        this.ui.m_btn_ad.m_ad.selectedIndex = 1;//this.ui.m_tog.m_selected.selectedIndex; 
-
+        this.ui.m_tog.m_selected.selectedIndex = LTSDK.instance.checkState == ECheckState.InCheck ? 0 : 1;
+        this.ui.m_tog.onClick(this, () => {
+            this.ui.m_tog.m_selected.selectedIndex = (this.ui.m_tog.m_selected.selectedIndex + 1) % 2;
+            this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
+        });
+        this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
     }
     async addKey() {
         if (this.ui.m_tog.m_selected.selectedIndex == 1) {
@@ -88,9 +86,6 @@ export class UI_BonusBoxMediator extends BaseUIMediator<UI_BonusBox> {
 
     }
     clickBox(item: UI_BonusItem) {
-        if (item.m_isclicked.selectedIndex == 1) {
-            return;
-        }
         if (parseInt(item.data.toString()) == 1 || this.keyCount == 0) {
             this.getAdBonus(item);
         } else {
@@ -121,17 +116,9 @@ export class UI_BonusBoxMediator extends BaseUIMediator<UI_BonusBox> {
         if (this.keyCount > 0) {
             this.keyCount -= 1;
             this.ui.m_keyList.refreshVirtualList();
-            if (this.ui.m_canclose.selectedIndex == 0) {
-                this.ui.m_canclose.selectedIndex = this.keyCount < 1 ? 1 : 0;
-            }
-            if (!this.ui.m_btn_close.visible && this.ui.m_canclose.selectedIndex == 1) {
-                this.ui.m_btn_close.visible = true;
-                this.ui.m_delay.play();
-            }
+            this.ui.m_canclose.selectedIndex = this.keyCount < 1 ? 1 : 0;
         }
         this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
-
-
     }
     renderKeyItem(indx: number, item: UI_tog_key) {
         if (indx < this.keyCount) {

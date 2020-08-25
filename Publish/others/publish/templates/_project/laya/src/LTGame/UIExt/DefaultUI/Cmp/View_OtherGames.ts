@@ -1,10 +1,9 @@
-import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
-import LTSDK from "../../../../SDK/LTSDK";
-import { CommonEventId } from "../../../Commom/CommonEventId";
-import { EPlatformType } from "../../../Platform/EPlatformType";
-import LTPlatform from "../../../Platform/LTPlatform";
-import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 import UI_view_sharegames_big from "../UI/LTGame/UI_view_sharegames_big";
+import LTSDK from "../../../../SDK/LTSDK";
+import LTPlatform from "../../../Platform/LTPlatform";
+import { EPlatformType } from "../../../Platform/EPlatformType";
+import { CommonEventId } from "../../../Commom/CommonEventId";
+import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 
 export default class View_OtherGames {
 
@@ -45,7 +44,7 @@ export default class View_OtherGames {
     }
 
     private _Init() {
-        if (LTSDK.instance instanceof SDK_YQ) {
+        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);

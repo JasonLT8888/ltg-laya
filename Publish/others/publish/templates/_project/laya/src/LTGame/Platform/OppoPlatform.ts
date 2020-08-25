@@ -1,12 +1,12 @@
-import { ECheckState } from "../../SDK/common/ECheckState";
-import LTSDK from "../../SDK/LTSDK";
 import Awaiters from "../Async/Awaiters";
 import { CommonEventId } from "../Commom/CommonEventId";
+import CommonSaveData from "../Commom/CommonSaveData";
 import StringEx from "../LTUtils/StringEx";
 import UI_ImageBannerMediator, { FakeBannerData } from "../UIExt/DefaultUI/UI_ImageBannerMediator";
+import UI_NativeInterstitialMediator, { FakeInterstitalData } from "../UIExt/DefaultUI/UI_NativeInterstitialMediator";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
-import { OppoDevice } from "./DefaultDevice";
+import DefaultDevice from "./DefaultDevice";
 import DefaultRecordManager from "./DefaultRecordManager";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
@@ -14,9 +14,11 @@ import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
+import LTSDK from "../../SDK/LTSDK";
+import { ECheckState } from "../../SDK/common/ECheckState";
 
 export default class OppoPlatform extends WXPlatform {
-    userInfo: LTGame.UserInfo;
+
     onPause: Laya.Handler;
     appId: string;
     platform: EPlatformType = EPlatformType.Oppo;
@@ -26,7 +28,7 @@ export default class OppoPlatform extends WXPlatform {
     onLoginEnd: Laya.Handler;
     onResume: Laya.Handler;
     recordManager: IRecordManager = new DefaultRecordManager();
-    device: IDevice = new OppoDevice();
+    device: IDevice = new DefaultDevice();
     systemInfo: any;
 
     /**
@@ -96,17 +98,11 @@ export default class OppoPlatform extends WXPlatform {
         window["iplatform"] = this;
     }
 
-    private async getSystemInfo() {
-        this.base = this._base;
+    private getSystemInfo() {
         this._base.getSystemInfo({
             success: (res) => {
                 this.systemInfo = res;
-                console.log('systeminfo', this.systemInfo);
-                if (!this.safeArea) {
-                    this.safeArea = { top: res['notchHeight'], bottom: res['screenHeight'] - res['notchHeight'], left: 0, right: res['screenWidth'], height: res['screenHeight'], width: res['screenWidth'] }
-                }
-                this._cacheScreenScale = this.systemInfo.screenWidth / Laya.stage.width;
-                console.log(this.safeArea);
+                console.log(this.systemInfo);
             },
             fail: () => { },
             complete: () => { }
@@ -184,7 +180,7 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     /** 发起创建桌面图标请求 */
-    createShortcut(): Promise<boolean> {
+    createShortcut() {
         return new Promise((resolve, reject) => {
             qg['hasShortcutInstalled']({
                 success: function (res) {
@@ -500,140 +496,140 @@ export default class OppoPlatform extends WXPlatform {
 
     private async _ShowNativeInterstital(index: number): Promise<boolean> {
         return;
-        // let nativeAd = this._base.createNativeAd({
-        //     adUnitId: this.platformData.nativeinterstitialIds[index]
-        // });
-        // // 转接对象
-        // this._intersitialAd = nativeAd;
+        let nativeAd = this._base.createNativeAd({
+            adUnitId: this.platformData.nativeinterstitialIds[index]
+        });
+        // 转接对象
+        this._intersitialAd = nativeAd;
 
-        // let loadRet = await nativeAd.load();
-        // if (loadRet["code"] == 0) {
-        //     // 加载成功
-        //     let adList = loadRet['adList'] as any[];
-        //     if (adList == null || adList.length == 0) {
-        //         console.error("native 插页 加载失败", loadRet);
-        //         return false;
-        //     }
-        //     let adData = adList[0] as {
-        //         adId: string,
-        //         imgUrlList: string[],
-        //         logoUrl: string,
-        //         icon: string,
-        //         title: string,
-        //         desc: string
-        //     };
-        //     console.log('广告数据加载完成', loadRet);
+        let loadRet = await nativeAd.load();
+        if (loadRet["code"] == 0) {
+            // 加载成功
+            let adList = loadRet['adList'] as any[];
+            if (adList == null || adList.length == 0) {
+                console.error("native 插页 加载失败", loadRet);
+                return false;
+            }
+            let adData = adList[0] as {
+                adId: string,
+                imgUrlList: string[],
+                logoUrl: string,
+                icon: string,
+                title: string,
+                desc: string
+            };
+            console.log('广告数据加载完成', loadRet);
 
-        //     if (adData == null) {
-        //         console.error("native 插页 加载失败", loadRet);
-        //         return false;
-        //     }
-        //     let fakeData = new FakeInterstitalData();
-        //     fakeData.imgPath = adData.imgUrlList[0];
-        //     fakeData.noticePath = adData.logoUrl;
-        //     fakeData.adId = adData.adId;
-        //     fakeData.desc = adData.desc;
-        //     fakeData.iconPath = adData.icon;
-        //     fakeData.title = adData.title;
-        //     fakeData.owner = nativeAd;
-        //     UI_NativeInterstitialMediator.instance.Show(fakeData);
-        //     return true;
-        // } else {
-        //     console.error("native 插页 加载失败", loadRet);
-        //     return false;
-        // }
+            if (adData == null) {
+                console.error("native 插页 加载失败", loadRet);
+                return false;
+            }
+            let fakeData = new FakeInterstitalData();
+            fakeData.imgPath = adData.imgUrlList[0];
+            fakeData.noticePath = adData.logoUrl;
+            fakeData.adId = adData.adId;
+            fakeData.desc = adData.desc;
+            fakeData.iconPath = adData.icon;
+            fakeData.title = adData.title;
+            fakeData.owner = nativeAd;
+            UI_NativeInterstitialMediator.instance.Show(fakeData);
+            return true;
+        } else {
+            console.error("native 插页 加载失败", loadRet);
+            return false;
+        }
     }
 
     public async _ShowNormalInterstitalAd(): Promise<boolean> {
         return;
-        // if (this._intersitialAd) {
-        //     this._intersitialAd.destroy();
-        // }
-        // if (this.systemInfo.platformVersion < 1061) {
-        //     console.log("平台版本号不足1061,无法创建普通插页", this.systemInfo.platformVersion);
-        //     return false;
-        // }
-        // console.log("创建普通插页", this.platformData.interstitialId);
-        // this._intersitialAd = this._base.createInterstitialAd(
-        //     {
-        //         adUnitId: this.platformData.interstitialId
-        //     }
-        // );
-        // let isloading = true;
-        // let isSuccess = false;
-        // this._intersitialAd.load()
-        //     .then((res) => {
-        //         console.log("普通插页加载成功", res);
-        //         isloading = false;
-        //         isSuccess = res['code'] == 0;
-        //     })
-        //     .catch((res) => {
-        //         console.error("普通插页加载失败", res);
-        //         isloading = false;
-        //         isSuccess = false;
-        //     });
-        // while (isloading) {
-        //     await Awaiters.Frames(1);
-        // }
-        // if (!isSuccess) {
-        //     return false;
-        // }
+        if (this._intersitialAd) {
+            this._intersitialAd.destroy();
+        }
+        if (this.systemInfo.platformVersion < 1061) {
+            console.log("平台版本号不足1061,无法创建普通插页", this.systemInfo.platformVersion);
+            return false;
+        }
+        console.log("创建普通插页", this.platformData.interstitialId);
+        this._intersitialAd = this._base.createInterstitialAd(
+            {
+                adUnitId: this.platformData.interstitialId
+            }
+        );
+        let isloading = true;
+        let isSuccess = false;
+        this._intersitialAd.load()
+            .then((res) => {
+                console.log("普通插页加载成功", res);
+                isloading = false;
+                isSuccess = res['code'] == 0;
+            })
+            .catch((res) => {
+                console.error("普通插页加载失败", res);
+                isloading = false;
+                isSuccess = false;
+            });
+        while (isloading) {
+            await Awaiters.Frames(1);
+        }
+        if (!isSuccess) {
+            return false;
+        }
 
-        // isloading = true;
-        // this._intersitialAd.show()
-        //     .then((res) => {
-        //         console.log("普通插页展示成功", res);
-        //         isloading = false;
-        //         isSuccess = res['code'] == 0;
-        //     })
-        //     .catch((res) => {
-        //         console.error("普通插页展示失败", res);
-        //         isloading = false;
-        //         isSuccess = false;
-        //     });
-        // while (isloading) {
-        //     await Awaiters.Frames(1);
-        // }
-        // return isSuccess;
+        isloading = true;
+        this._intersitialAd.show()
+            .then((res) => {
+                console.log("普通插页展示成功", res);
+                isloading = false;
+                isSuccess = res['code'] == 0;
+            })
+            .catch((res) => {
+                console.error("普通插页展示失败", res);
+                isloading = false;
+                isSuccess = false;
+            });
+        while (isloading) {
+            await Awaiters.Frames(1);
+        }
+        return isSuccess;
     }
 
     async ShowInterstitalAd() {
         return;
-        // if (!this.IsInterstitalAvaliable()) {
-        //     console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${CommonSaveData.instance.interstitialCount}`);
-        //     return;
-        // }
-        // if (this._intersitialAd) {
-        //     this._intersitialAd.destroy();
-        //     UI_NativeInterstitialMediator.instance.Hide();
-        // }
+        if (!this.IsInterstitalAvaliable()) {
+            console.error(`插页广告不能展示 冷却中：${this._isInterstitialCanShow} 展示次数${CommonSaveData.instance.interstitialCount}`);
+            return;
+        }
+        if (this._intersitialAd) {
+            this._intersitialAd.destroy();
+            UI_NativeInterstitialMediator.instance.Hide();
+        }
 
-        // // 先拉去原生插屏(一个)
-        // if (this.platformData.nativeinterstitialIds.length > 0) {
-        //     let ret = await this._ShowNativeInterstital(0);
-        //     if (ret) {
-        //         this._DisableInterstitalAd();
-        //         return;
-        //     }
-        // }
+        // 先拉去原生插屏(一个)
+        if (this.platformData.nativeinterstitialIds.length > 0) {
+            let ret = await this._ShowNativeInterstital(0);
+            if (ret) {
+                this._DisableInterstitalAd();
+                return;
+            }
+        }
 
-        // // 失败则拉取正常插屏
-        // let ret = await this._ShowNormalInterstitalAd();
-        // if (ret) {
-        //     CommonSaveData.instance.interstitialCount++;
-        //     CommonSaveData.SaveToDisk();
-        //     this._DisableInterstitalAd();
-        //     return;
-        // }
+        // 失败则拉取正常插屏
+        let ret = await this._ShowNormalInterstitalAd();
+        if (ret) {
+            CommonSaveData.instance.interstitialCount++;
+            CommonSaveData.SaveToDisk();
+            this._DisableInterstitalAd();
+            return;
+        }
 
-        // // 失败再继续拉取剩余原生插屏
-        // for (let i = 1; i < this.platformData.nativeinterstitialIds.length; ++i) {
-        //     let ret = await this._ShowNativeInterstital(i);
-        //     if (ret) {
-        //         this._DisableInterstitalAd();
-        //         return;
-        //     }
-        // }
+        // 失败再继续拉取剩余原生插屏
+        for (let i = 1; i < this.platformData.nativeinterstitialIds.length; ++i) {
+            let ret = await this._ShowNativeInterstital(i);
+            if (ret) {
+                this._DisableInterstitalAd();
+                return;
+            }
+        }
     }
 
     private async _DisableInterstitalAd() {

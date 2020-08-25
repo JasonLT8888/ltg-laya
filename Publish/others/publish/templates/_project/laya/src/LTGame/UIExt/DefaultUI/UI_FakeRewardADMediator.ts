@@ -16,9 +16,9 @@ export default class UI_FakeRewardADMediator extends BaseUIMediator<UI_FakeRewar
     private _skipHandle: Laya.Handler;
 
     _OnShow() {
-        this._sortOrder = Number.MAX_SAFE_INTEGER;
         super._OnShow();
         // your code
+        this._sortOrder = Number.MAX_SAFE_INTEGER;
 
         this._rewardHandle = this._openParam[0];
         this._skipHandle = this._openParam[1];

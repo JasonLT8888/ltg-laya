@@ -1,19 +1,18 @@
-import UI_FakeBannerVMediator from "../UIExt/DefaultUI/UI_FakeBannerVMediator";
-import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
-import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator";
-import LTUI from "../UIExt/LTUI";
-import LTPlatformData from "./Data/LTPlatformData";
-import DefaultDevice from "./DefaultDevice";
-import { EPlatformType } from "./EPlatformType";
-import { IDevice } from "./IDevice";
-import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 import IPlatform from "./IPlatform";
-import IRecordManager from "./IRecordManager";
-import LTPlatform from "./LTPlatform";
+import { EPlatformType } from "./EPlatformType";
+import LTPlatformData from "./Data/LTPlatformData";
 import { ShareInfo } from "./ShareInfo";
+import LTPlatform from "./LTPlatform";
+import UI_FakeBannerVMediator from "../UIExt/DefaultUI/UI_FakeBannerVMediator";
+import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator";
+import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
+import IRecordManager from "./IRecordManager";
+import LTUI from "../UIExt/LTUI";
+import { IDevice } from "./IDevice";
+import DefaultDevice from "./DefaultDevice";
+import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 
 export default class DefaultPlatform implements IPlatform {
-    userInfo: LTGame.UserInfo;
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -36,10 +35,9 @@ export default class DefaultPlatform implements IPlatform {
 
     Init(platformData: LTPlatformData) {
         this.loginState = {
-            isLogin: true,
-            code: "111111111111"
+            isLogin: false,
+            code: null
         };
-        this.userInfo = { nickName: '未登录用户666', avatarUrl: '66.png' }
         Laya.timer.once(500, this, this._FakeLoginEnd);
     }
     private _FakeLoginEnd() {
@@ -121,7 +119,7 @@ export default class DefaultPlatform implements IPlatform {
             resolve(false);
         });
     }
-    createShortcut(): any {
+    createShortcut() {
         console.log('创建桌面图标');
     }
     GetStorage(key: string) {
@@ -132,11 +130,5 @@ export default class DefaultPlatform implements IPlatform {
         console.log('写本地存储');
         Laya.LocalStorage.setItem(key, data);
 
-    }
-    followOfficialAccount(): any {
-        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
-    }
-    checkFollowState(): any {
-        console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
     }
 }

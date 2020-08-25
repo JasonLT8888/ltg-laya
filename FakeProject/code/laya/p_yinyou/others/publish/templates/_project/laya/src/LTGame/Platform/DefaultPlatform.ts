@@ -1,19 +1,19 @@
-import UI_FakeBannerVMediator from "../UIExt/DefaultUI/UI_FakeBannerVMediator";
-import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
-import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator";
-import LTUI from "../UIExt/LTUI";
-import LTPlatformData from "./Data/LTPlatformData";
-import DefaultDevice from "./DefaultDevice";
-import { EPlatformType } from "./EPlatformType";
-import { IDevice } from "./IDevice";
-import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 import IPlatform from "./IPlatform";
-import IRecordManager from "./IRecordManager";
-import LTPlatform from "./LTPlatform";
+import { EPlatformType } from "./EPlatformType";
+import LTPlatformData from "./Data/LTPlatformData";
 import { ShareInfo } from "./ShareInfo";
+import LTPlatform from "./LTPlatform";
+import UI_FakeBannerVMediator from "../UIExt/DefaultUI/UI_FakeBannerVMediator";
+import UI_FakeRewardADMediator from "../UIExt/DefaultUI/UI_FakeRewardADMediator";
+import UI_FakeInterstitalMediator from "../UIExt/DefaultUI/UI_FakeInterstitalMediator";
+import IRecordManager from "./IRecordManager";
+import LTUI from "../UIExt/LTUI";
+import { IDevice } from "./IDevice";
+import DefaultDevice from "./DefaultDevice";
+import { WebRecordManager } from "./Impl/Web/WebRecordManager";
 
 export default class DefaultPlatform implements IPlatform {
-    userInfo: LTGame.UserInfo;
+
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -37,9 +37,8 @@ export default class DefaultPlatform implements IPlatform {
     Init(platformData: LTPlatformData) {
         this.loginState = {
             isLogin: true,
-            code: "111111111111"
+            code: "716bfd1a322be5795636d8e7df50f9780372c3713a941e2bc5ba8823887c526c"
         };
-        this.userInfo = { nickName: '未登录用户666', avatarUrl: '66.png' }
         Laya.timer.once(500, this, this._FakeLoginEnd);
     }
     private _FakeLoginEnd() {

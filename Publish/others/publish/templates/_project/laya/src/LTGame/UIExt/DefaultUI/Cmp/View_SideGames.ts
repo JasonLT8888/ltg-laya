@@ -7,7 +7,6 @@ import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_SideGames from "../UI/LTGame/UI_SideGames";
 import { ECheckState } from "../../../../SDK/common/ECheckState";
 import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
-import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 /** __sidegames 100*100 */
 export default class View_SideGames {
 
@@ -61,7 +60,7 @@ export default class View_SideGames {
             });
             return;
         }
-        if (LTSDK.instance instanceof SDK_YQ) {
+        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);

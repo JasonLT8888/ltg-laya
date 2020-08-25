@@ -7,7 +7,6 @@ import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_WxSideGames from "../UI/LTGame/UI_WxSideGames";
 import UI_item_gameSmall from "../UI/LTGame/UI_item_gameSmall";
 import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
-import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 /**__wxSG 750*280  */
 export default class View_WxSideGames {
 
@@ -54,7 +53,7 @@ export default class View_WxSideGames {
     }
 
     private _Init() {
-        if (LTSDK.instance instanceof SDK_YQ) {
+        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
@@ -62,7 +61,7 @@ export default class View_WxSideGames {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
             this.ui.visible = false;
         } else {
-            Laya.timer.loop(5000, this, () => {
+            Laya.timer.loop(5000, this.ui, () => {
                 this.refresh();
             });
             this.refresh();
@@ -92,8 +91,6 @@ export default class View_WxSideGames {
                 this.showingIndexs.push(ind);
                 this.renderItem(i, this.ui[`m_ad${i}`]);
             }
-        } else {
-            Laya.timer.clearAll(this);
         }
     }
     private _OnAdInited(posId: number) {

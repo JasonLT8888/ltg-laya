@@ -13,9 +13,9 @@ export default class UI_CommondLoadMediator extends BaseUIMediator<UI_CommonLoad
     }
 
     _OnShow() {
-        this._sortOrder = Number.MAX_SAFE_INTEGER;
         super._OnShow();
         // your code
+        this._sortOrder = Number.MAX_SAFE_INTEGER;
 
         let openStr = this._openParam[0] as string;
         let isBig = this._openParam[1] as boolean;

@@ -16,7 +16,7 @@ import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
 
 export default class OppoPlatform extends WXPlatform {
-    userInfo: LTGame.UserInfo;
+
     onPause: Laya.Handler;
     appId: string;
     platform: EPlatformType = EPlatformType.Oppo;

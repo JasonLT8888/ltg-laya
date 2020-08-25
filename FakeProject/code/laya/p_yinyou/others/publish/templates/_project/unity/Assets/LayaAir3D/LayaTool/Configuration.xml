@@ -2,10 +2,7 @@
 <LayaExportSetting>
   <config>1</config>
   <config1>
-    <FirstlevelMenu>1</FirstlevelMenu>
-    <Scenes>False</Scenes>
-    <ScenesDir>
-    </ScenesDir>
+    <FirstlevelMenu>0</FirstlevelMenu>
     <MeshSetting>True</MeshSetting>
     <IgnoreVerticesUV>False</IgnoreVerticesUV>
     <IgnoreVerticesNormal>False</IgnoreVerticesNormal>
@@ -13,16 +10,12 @@
     <IgnoreVerticesColor>True</IgnoreVerticesColor>
     <CompressMesh>True</CompressMesh>
     <AnimatorCompress>True</AnimatorCompress>
-    <TexAnimatorSetting>True</TexAnimatorSetting>
-    <TexAnimatorbakeFPS>30</TexAnimatorbakeFPS>
-    <TexAnimationSocket>False</TexAnimationSocket>
-    <TerrainSetting>True</TerrainSetting>
+    <TerrainSetting>False</TerrainSetting>
     <TextureSetting>False</TextureSetting>
     <JPGQuality>75</JPGQuality>
-    <PVRQuality>2</PVRQuality>
     <ConvertTerrain>True</ConvertTerrain>
     <TerrainToMeshResolution>8</TerrainToMeshResolution>
-    <GameObjectSetting>False</GameObjectSetting>
+    <GameObjectSetting>True</GameObjectSetting>
     <IgnoreNullGameObject>True</IgnoreNullGameObject>
     <IgnoreNotActiveGameObject>True</IgnoreNotActiveGameObject>
     <OptimizeGameObject>False</OptimizeGameObject>
@@ -39,9 +32,6 @@
   </config1>
   <config2>
     <FirstlevelMenu>0</FirstlevelMenu>
-    <Scenes>False</Scenes>
-    <ScenesDir>
-    </ScenesDir>
     <MeshSetting>False</MeshSetting>
     <IgnoreVerticesUV>False</IgnoreVerticesUV>
     <IgnoreVerticesNormal>False</IgnoreVerticesNormal>
@@ -49,12 +39,8 @@
     <IgnoreVerticesColor>False</IgnoreVerticesColor>
     <CompressMesh>False</CompressMesh>
     <AnimatorCompress>False</AnimatorCompress>
-    <TexAnimatorSetting>False</TexAnimatorSetting>
-    <TexAnimatorbakeFPS>30</TexAnimatorbakeFPS>
-    <TexAnimationSocket>False</TexAnimationSocket>
     <TextureSetting>False</TextureSetting>
     <JPGQuality>75</JPGQuality>
-    <PVRQuality>2</PVRQuality>
     <TerrainSetting>False</TerrainSetting>
     <ConvertTerrain>False</ConvertTerrain>
     <TerrainToMeshResolution>8</TerrainToMeshResolution>
@@ -77,9 +63,6 @@
   </config2>
   <config3>
     <FirstlevelMenu>0</FirstlevelMenu>
-    <Scenes>False</Scenes>
-    <ScenesDir>
-    </ScenesDir>
     <MeshSetting>False</MeshSetting>
     <IgnoreVerticesUV>False</IgnoreVerticesUV>
     <IgnoreVerticesNormal>False</IgnoreVerticesNormal>
@@ -87,12 +70,8 @@
     <IgnoreVerticesColor>False</IgnoreVerticesColor>
     <CompressMesh>False</CompressMesh>
     <AnimatorCompress>False</AnimatorCompress>
-    <TexAnimatorSetting>False</TexAnimatorSetting>
-    <TexAnimatorbakeFPS>30</TexAnimatorbakeFPS>
-    <TexAnimationSocket>False</TexAnimationSocket>
     <TextureSetting>False</TextureSetting>
     <JPGQuality>75</JPGQuality>
-    <PVRQuality>2</PVRQuality>
     <TerrainSetting>False</TerrainSetting>
     <ConvertTerrain>False</ConvertTerrain>
     <TerrainToMeshResolution>8</TerrainToMeshResolution>
@@ -115,9 +94,6 @@
   </config3>
   <config4>
     <FirstlevelMenu>0</FirstlevelMenu>
-    <Scenes>False</Scenes>
-    <ScenesDir>
-    </ScenesDir>
     <MeshSetting>False</MeshSetting>
     <IgnoreVerticesUV>False</IgnoreVerticesUV>
     <IgnoreVerticesNormal>False</IgnoreVerticesNormal>
@@ -125,12 +101,8 @@
     <IgnoreVerticesColor>False</IgnoreVerticesColor>
     <CompressMesh>False</CompressMesh>
     <AnimatorCompress>False</AnimatorCompress>
-    <TexAnimatorSetting>False</TexAnimatorSetting>
-    <TexAnimatorbakeFPS>30</TexAnimatorbakeFPS>
-    <TexAnimationSocket>False</TexAnimationSocket>
     <TextureSetting>False</TextureSetting>
     <JPGQuality>75</JPGQuality>
-    <PVRQuality>2</PVRQuality>
     <TerrainSetting>False</TerrainSetting>
     <ConvertTerrain>False</ConvertTerrain>
     <TerrainToMeshResolution>8</TerrainToMeshResolution>
@@ -153,9 +125,6 @@
   </config4>
   <config5>
     <FirstlevelMenu>0</FirstlevelMenu>
-    <Scenes>False</Scenes>
-    <ScenesDir>
-    </ScenesDir>
     <MeshSetting>False</MeshSetting>
     <IgnoreVerticesUV>False</IgnoreVerticesUV>
     <IgnoreVerticesNormal>False</IgnoreVerticesNormal>
@@ -163,12 +132,8 @@
     <IgnoreVerticesColor>False</IgnoreVerticesColor>
     <CompressMesh>False</CompressMesh>
     <AnimatorCompress>False</AnimatorCompress>
-    <TexAnimatorSetting>False</TexAnimatorSetting>
-    <TexAnimatorbakeFPS>30</TexAnimatorbakeFPS>
-    <TexAnimationSocket>False</TexAnimationSocket>
     <TextureSetting>False</TextureSetting>
     <JPGQuality>75</JPGQuality>
-    <PVRQuality>2</PVRQuality>
     <TerrainSetting>False</TerrainSetting>
     <ConvertTerrain>False</ConvertTerrain>
     <TerrainToMeshResolution>8</TerrainToMeshResolution>
@@ -190,7 +155,7 @@
     <ScrollPositionY>0</ScrollPositionY>
   </config5>
   <language>1</language>
-  <time>1597210777</time>
+  <time>1587887942</time>
   <saveAcount>
   </saveAcount>
   <savePassWorld>

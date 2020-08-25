@@ -466,6 +466,184 @@
 	    PBRRenderQuality[PBRRenderQuality["Low"] = 1] = "Low";
 	})(exports.PBRRenderQuality || (exports.PBRRenderQuality = {}));
 
+	class Config3D {
+	    constructor() {
+	        this._defaultPhysicsMemory = 16;
+	        this._maxLightCount = 32;
+	        this._lightClusterCount = new Vector3(12, 12, 12);
+	        this._editerEnvironment = false;
+	        this.isAntialias = true;
+	        this.isAlpha = false;
+	        this.premultipliedAlpha = true;
+	        this.isStencil = true;
+	        this.enableMultiLight = true;
+	        this.octreeCulling = false;
+	        this.octreeInitialSize = 64.0;
+	        this.octreeInitialCenter = new Vector3(0, 0, 0);
+	        this.octreeMinNodeSize = 2.0;
+	        this.octreeLooseness = 1.25;
+	        this.debugFrustumCulling = false;
+	        this.pbrRenderQuality = exports.PBRRenderQuality.High;
+	        this._maxAreaLightCountPerClusterAverage = Math.min(Math.floor(2048 / this._lightClusterCount.z - 1) * 4, this._maxLightCount);
+	    }
+	    get defaultPhysicsMemory() {
+	        return this._defaultPhysicsMemory;
+	    }
+	    set defaultPhysicsMemory(value) {
+	        if (value < 16)
+	            throw "defaultPhysicsMemory must large than 16M";
+	        this._defaultPhysicsMemory = value;
+	    }
+	    get maxLightCount() {
+	        return this._maxLightCount;
+	    }
+	    set maxLightCount(value) {
+	        if (value > 2048) {
+	            this._maxLightCount = 2048;
+	            console.warn("Config3D: maxLightCount must less equal 2048.");
+	        }
+	        else {
+	            this._maxLightCount = value;
+	        }
+	    }
+	    get lightClusterCount() {
+	        return this._lightClusterCount;
+	    }
+	    set lightClusterCount(value) {
+	        if (value.x > 128 || value.y > 128 || value.z > 128) {
+	            this._lightClusterCount.setValue(Math.min(value.x, 128), Math.min(value.y, 128), Math.min(value.z, 128));
+	            console.warn("Config3D: lightClusterCount X and Y、Z must less equal 128.");
+	        }
+	        else {
+	            value.cloneTo(this._lightClusterCount);
+	        }
+	        var maxAreaLightCountWithZ = Math.floor(2048 / this._lightClusterCount.z - 1) * 4;
+	        if (maxAreaLightCountWithZ < this._maxLightCount)
+	            console.warn("Config3D: if the area light(PointLight、SpotLight) count is large than " + maxAreaLightCountWithZ + ",maybe the far away culster will ingonre some light.");
+	        this._maxAreaLightCountPerClusterAverage = Math.min(maxAreaLightCountWithZ, this._maxLightCount);
+	    }
+	    cloneTo(dest) {
+	        var destConfig3D = dest;
+	        destConfig3D._defaultPhysicsMemory = this._defaultPhysicsMemory;
+	        destConfig3D._editerEnvironment = this._editerEnvironment;
+	        destConfig3D.isAntialias = this.isAntialias;
+	        destConfig3D.isAlpha = this.isAlpha;
+	        destConfig3D.premultipliedAlpha = this.premultipliedAlpha;
+	        destConfig3D.isStencil = this.isStencil;
+	        destConfig3D.octreeCulling = this.octreeCulling;
+	        this.octreeInitialCenter.cloneTo(destConfig3D.octreeInitialCenter);
+	        destConfig3D.octreeInitialSize = this.octreeInitialSize;
+	        destConfig3D.octreeMinNodeSize = this.octreeMinNodeSize;
+	        destConfig3D.octreeLooseness = this.octreeLooseness;
+	        destConfig3D.debugFrustumCulling = this.debugFrustumCulling;
+	        destConfig3D.maxLightCount = this.maxLightCount;
+	        destConfig3D.enableMultiLight = this.enableMultiLight;
+	        var lightClusterCount = destConfig3D.lightClusterCount;
+	        this.lightClusterCount.cloneTo(lightClusterCount);
+	        destConfig3D.lightClusterCount = lightClusterCount;
+	        destConfig3D.pbrRenderQuality = this.pbrRenderQuality;
+	    }
+	    clone() {
+	        var dest = new Config3D();
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+	Config3D._config = new Config3D();
+	window.Config3D = Config3D;
+
+	class ILaya3D {
+	}
+	ILaya3D.Shader3D = null;
+	ILaya3D.Scene3D = null;
+	ILaya3D.MeshRenderStaticBatchManager = null;
+	ILaya3D.MeshRenderDynamicBatchManager = null;
+	ILaya3D.SubMeshDynamicBatch = null;
+	ILaya3D.Laya3D = null;
+	ILaya3D.Matrix4x4 = null;
+
+	class KeyframeNode {
+	    constructor() {
+	        this._ownerPath = [];
+	        this._propertys = [];
+	        this._keyFrames = [];
+	    }
+	    get ownerPathCount() {
+	        return this._ownerPath.length;
+	    }
+	    get propertyCount() {
+	        return this._propertys.length;
+	    }
+	    get keyFramesCount() {
+	        return this._keyFrames.length;
+	    }
+	    _setOwnerPathCount(value) {
+	        this._ownerPath.length = value;
+	    }
+	    _setOwnerPathByIndex(index, value) {
+	        this._ownerPath[index] = value;
+	    }
+	    _joinOwnerPath(sep) {
+	        return this._ownerPath.join(sep);
+	    }
+	    _setPropertyCount(value) {
+	        this._propertys.length = value;
+	    }
+	    _setPropertyByIndex(index, value) {
+	        this._propertys[index] = value;
+	    }
+	    _joinProperty(sep) {
+	        return this._propertys.join(sep);
+	    }
+	    _setKeyframeCount(value) {
+	        this._keyFrames.length = value;
+	    }
+	    _setKeyframeByIndex(index, value) {
+	        this._keyFrames[index] = value;
+	    }
+	    getOwnerPathByIndex(index) {
+	        return this._ownerPath[index];
+	    }
+	    getPropertyByIndex(index) {
+	        return this._propertys[index];
+	    }
+	    getKeyframeByIndex(index) {
+	        return this._keyFrames[index];
+	    }
+	}
+
+	class AnimationEvent {
+	    constructor() {
+	    }
+	}
+
+	class Keyframe {
+	    constructor() {
+	    }
+	    cloneTo(destObject) {
+	        var destKeyFrame = destObject;
+	        destKeyFrame.time = this.time;
+	    }
+	    clone() {
+	        var dest = new Keyframe();
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+
+	class FloatKeyframe extends Keyframe {
+	    constructor() {
+	        super();
+	    }
+	    cloneTo(destObject) {
+	        super.cloneTo(destObject);
+	        var destKeyFrame = destObject;
+	        destKeyFrame.inTangent = this.inTangent;
+	        destKeyFrame.outTangent = this.outTangent;
+	        destKeyFrame.value = this.value;
+	    }
+	}
+
 	class Matrix3x3 {
 	    constructor() {
 	        var e = this.elements = new Float32Array(9);
@@ -731,18 +909,6 @@
 	Matrix3x3._tempV30 = new Vector3();
 	Matrix3x3._tempV31 = new Vector3();
 	Matrix3x3._tempV32 = new Vector3();
-
-	class ILaya3D {
-	}
-	ILaya3D.Shader3D = null;
-	ILaya3D.Scene3D = null;
-	ILaya3D.MeshRenderStaticBatchManager = null;
-	ILaya3D.MeshRenderDynamicBatchManager = null;
-	ILaya3D.SubMeshDynamicBatch = null;
-	ILaya3D.Laya3D = null;
-	ILaya3D.Matrix4x4 = null;
-	ILaya3D.Physics3D = null;
-	ILaya3D.ShadowLightType = null;
 
 	class Quaternion {
 	    constructor(x = 0, y = 0, z = 0, w = 1, nativeElements = null) {
@@ -1109,4079 +1275,6 @@
 	Quaternion._tempMatrix3x3 = new Matrix3x3();
 	Quaternion.DEFAULT = new Quaternion();
 	Quaternion.NAN = new Quaternion(NaN, NaN, NaN, NaN);
-
-	class Matrix4x4 {
-	    constructor(m11 = 1, m12 = 0, m13 = 0, m14 = 0, m21 = 0, m22 = 1, m23 = 0, m24 = 0, m31 = 0, m32 = 0, m33 = 1, m34 = 0, m41 = 0, m42 = 0, m43 = 0, m44 = 1, elements = null) {
-	        var e = elements ? this.elements = elements : this.elements = new Float32Array(16);
-	        e[0] = m11;
-	        e[1] = m12;
-	        e[2] = m13;
-	        e[3] = m14;
-	        e[4] = m21;
-	        e[5] = m22;
-	        e[6] = m23;
-	        e[7] = m24;
-	        e[8] = m31;
-	        e[9] = m32;
-	        e[10] = m33;
-	        e[11] = m34;
-	        e[12] = m41;
-	        e[13] = m42;
-	        e[14] = m43;
-	        e[15] = m44;
-	    }
-	    static createRotationX(rad, out) {
-	        var oe = out.elements;
-	        var s = Math.sin(rad), c = Math.cos(rad);
-	        oe[1] = oe[2] = oe[3] = oe[4] = oe[7] = oe[8] = oe[11] = oe[12] = oe[13] = oe[14] = 0;
-	        oe[0] = oe[15] = 1;
-	        oe[5] = oe[10] = c;
-	        oe[6] = s;
-	        oe[9] = -s;
-	    }
-	    static createRotationY(rad, out) {
-	        var oe = out.elements;
-	        var s = Math.sin(rad), c = Math.cos(rad);
-	        oe[1] = oe[3] = oe[4] = oe[6] = oe[7] = oe[9] = oe[11] = oe[12] = oe[13] = oe[14] = 0;
-	        oe[5] = oe[15] = 1;
-	        oe[0] = oe[10] = c;
-	        oe[2] = -s;
-	        oe[8] = s;
-	    }
-	    static createRotationZ(rad, out) {
-	        var oe = out.elements;
-	        var s = Math.sin(rad), c = Math.cos(rad);
-	        oe[2] = oe[3] = oe[6] = oe[7] = oe[8] = oe[9] = oe[11] = oe[12] = oe[13] = oe[14] = 0;
-	        oe[10] = oe[15] = 1;
-	        oe[0] = oe[5] = c;
-	        oe[1] = s;
-	        oe[4] = -s;
-	    }
-	    static createRotationYawPitchRoll(yaw, pitch, roll, result) {
-	        Quaternion.createFromYawPitchRoll(yaw, pitch, roll, Matrix4x4._tempQuaternion);
-	        Matrix4x4.createRotationQuaternion(Matrix4x4._tempQuaternion, result);
-	    }
-	    static createRotationAxis(axis, angle, result) {
-	        var x = axis.x;
-	        var y = axis.y;
-	        var z = axis.z;
-	        var cos = Math.cos(angle);
-	        var sin = Math.sin(angle);
-	        var xx = x * x;
-	        var yy = y * y;
-	        var zz = z * z;
-	        var xy = x * y;
-	        var xz = x * z;
-	        var yz = y * z;
-	        var resultE = result.elements;
-	        resultE[3] = resultE[7] = resultE[11] = resultE[12] = resultE[13] = resultE[14] = 0;
-	        resultE[15] = 1.0;
-	        resultE[0] = xx + (cos * (1.0 - xx));
-	        resultE[1] = (xy - (cos * xy)) + (sin * z);
-	        resultE[2] = (xz - (cos * xz)) - (sin * y);
-	        resultE[4] = (xy - (cos * xy)) - (sin * z);
-	        resultE[5] = yy + (cos * (1.0 - yy));
-	        resultE[6] = (yz - (cos * yz)) + (sin * x);
-	        resultE[8] = (xz - (cos * xz)) + (sin * y);
-	        resultE[9] = (yz - (cos * yz)) - (sin * x);
-	        resultE[10] = zz + (cos * (1.0 - zz));
-	    }
-	    setRotation(rotation) {
-	        var rotationX = rotation.x;
-	        var rotationY = rotation.y;
-	        var rotationZ = rotation.z;
-	        var rotationW = rotation.w;
-	        var xx = rotationX * rotationX;
-	        var yy = rotationY * rotationY;
-	        var zz = rotationZ * rotationZ;
-	        var xy = rotationX * rotationY;
-	        var zw = rotationZ * rotationW;
-	        var zx = rotationZ * rotationX;
-	        var yw = rotationY * rotationW;
-	        var yz = rotationY * rotationZ;
-	        var xw = rotationX * rotationW;
-	        var e = this.elements;
-	        e[0] = 1.0 - (2.0 * (yy + zz));
-	        e[1] = 2.0 * (xy + zw);
-	        e[2] = 2.0 * (zx - yw);
-	        e[4] = 2.0 * (xy - zw);
-	        e[5] = 1.0 - (2.0 * (zz + xx));
-	        e[6] = 2.0 * (yz + xw);
-	        e[8] = 2.0 * (zx + yw);
-	        e[9] = 2.0 * (yz - xw);
-	        e[10] = 1.0 - (2.0 * (yy + xx));
-	    }
-	    setPosition(position) {
-	        var e = this.elements;
-	        e[12] = position.x;
-	        e[13] = position.y;
-	        e[14] = position.z;
-	    }
-	    static createRotationQuaternion(rotation, result) {
-	        var resultE = result.elements;
-	        var rotationX = rotation.x;
-	        var rotationY = rotation.y;
-	        var rotationZ = rotation.z;
-	        var rotationW = rotation.w;
-	        var xx = rotationX * rotationX;
-	        var yy = rotationY * rotationY;
-	        var zz = rotationZ * rotationZ;
-	        var xy = rotationX * rotationY;
-	        var zw = rotationZ * rotationW;
-	        var zx = rotationZ * rotationX;
-	        var yw = rotationY * rotationW;
-	        var yz = rotationY * rotationZ;
-	        var xw = rotationX * rotationW;
-	        resultE[3] = resultE[7] = resultE[11] = resultE[12] = resultE[13] = resultE[14] = 0;
-	        resultE[15] = 1.0;
-	        resultE[0] = 1.0 - (2.0 * (yy + zz));
-	        resultE[1] = 2.0 * (xy + zw);
-	        resultE[2] = 2.0 * (zx - yw);
-	        resultE[4] = 2.0 * (xy - zw);
-	        resultE[5] = 1.0 - (2.0 * (zz + xx));
-	        resultE[6] = 2.0 * (yz + xw);
-	        resultE[8] = 2.0 * (zx + yw);
-	        resultE[9] = 2.0 * (yz - xw);
-	        resultE[10] = 1.0 - (2.0 * (yy + xx));
-	    }
-	    static createTranslate(trans, out) {
-	        var oe = out.elements;
-	        oe[4] = oe[8] = oe[1] = oe[9] = oe[2] = oe[6] = oe[3] = oe[7] = oe[11] = 0;
-	        oe[0] = oe[5] = oe[10] = oe[15] = 1;
-	        oe[12] = trans.x;
-	        oe[13] = trans.y;
-	        oe[14] = trans.z;
-	    }
-	    static createScaling(scale, out) {
-	        var oe = out.elements;
-	        oe[0] = scale.x;
-	        oe[5] = scale.y;
-	        oe[10] = scale.z;
-	        oe[1] = oe[4] = oe[8] = oe[12] = oe[9] = oe[13] = oe[2] = oe[6] = oe[14] = oe[3] = oe[7] = oe[11] = 0;
-	        oe[15] = 1;
-	    }
-	    static multiply(left, right, out) {
-	        var l = right.elements;
-	        var r = left.elements;
-	        var e = out.elements;
-	        var l11 = l[0], l12 = l[1], l13 = l[2], l14 = l[3];
-	        var l21 = l[4], l22 = l[5], l23 = l[6], l24 = l[7];
-	        var l31 = l[8], l32 = l[9], l33 = l[10], l34 = l[11];
-	        var l41 = l[12], l42 = l[13], l43 = l[14], l44 = l[15];
-	        var r11 = r[0], r12 = r[1], r13 = r[2], r14 = r[3];
-	        var r21 = r[4], r22 = r[5], r23 = r[6], r24 = r[7];
-	        var r31 = r[8], r32 = r[9], r33 = r[10], r34 = r[11];
-	        var r41 = r[12], r42 = r[13], r43 = r[14], r44 = r[15];
-	        e[0] = (l11 * r11) + (l12 * r21) + (l13 * r31) + (l14 * r41);
-	        e[1] = (l11 * r12) + (l12 * r22) + (l13 * r32) + (l14 * r42);
-	        e[2] = (l11 * r13) + (l12 * r23) + (l13 * r33) + (l14 * r43);
-	        e[3] = (l11 * r14) + (l12 * r24) + (l13 * r34) + (l14 * r44);
-	        e[4] = (l21 * r11) + (l22 * r21) + (l23 * r31) + (l24 * r41);
-	        e[5] = (l21 * r12) + (l22 * r22) + (l23 * r32) + (l24 * r42);
-	        e[6] = (l21 * r13) + (l22 * r23) + (l23 * r33) + (l24 * r43);
-	        e[7] = (l21 * r14) + (l22 * r24) + (l23 * r34) + (l24 * r44);
-	        e[8] = (l31 * r11) + (l32 * r21) + (l33 * r31) + (l34 * r41);
-	        e[9] = (l31 * r12) + (l32 * r22) + (l33 * r32) + (l34 * r42);
-	        e[10] = (l31 * r13) + (l32 * r23) + (l33 * r33) + (l34 * r43);
-	        e[11] = (l31 * r14) + (l32 * r24) + (l33 * r34) + (l34 * r44);
-	        e[12] = (l41 * r11) + (l42 * r21) + (l43 * r31) + (l44 * r41);
-	        e[13] = (l41 * r12) + (l42 * r22) + (l43 * r32) + (l44 * r42);
-	        e[14] = (l41 * r13) + (l42 * r23) + (l43 * r33) + (l44 * r43);
-	        e[15] = (l41 * r14) + (l42 * r24) + (l43 * r34) + (l44 * r44);
-	    }
-	    static multiplyForNative(left, right, out) {
-	        Laya.LayaGL.instance.matrix4x4Multiply(left.elements, right.elements, out.elements);
-	    }
-	    static createFromQuaternion(rotation, out) {
-	        var e = out.elements;
-	        var x = rotation.x, y = rotation.y, z = rotation.z, w = rotation.w;
-	        var x2 = x + x;
-	        var y2 = y + y;
-	        var z2 = z + z;
-	        var xx = x * x2;
-	        var yx = y * x2;
-	        var yy = y * y2;
-	        var zx = z * x2;
-	        var zy = z * y2;
-	        var zz = z * z2;
-	        var wx = w * x2;
-	        var wy = w * y2;
-	        var wz = w * z2;
-	        e[0] = 1 - yy - zz;
-	        e[1] = yx + wz;
-	        e[2] = zx - wy;
-	        e[3] = 0;
-	        e[4] = yx - wz;
-	        e[5] = 1 - xx - zz;
-	        e[6] = zy + wx;
-	        e[7] = 0;
-	        e[8] = zx + wy;
-	        e[9] = zy - wx;
-	        e[10] = 1 - xx - yy;
-	        e[11] = 0;
-	        e[12] = 0;
-	        e[13] = 0;
-	        e[14] = 0;
-	        e[15] = 1;
-	    }
-	    static createAffineTransformation(trans, rot, scale, out) {
-	        var oe = out.elements;
-	        var x = rot.x, y = rot.y, z = rot.z, w = rot.w, x2 = x + x, y2 = y + y, z2 = z + z;
-	        var xx = x * x2, xy = x * y2, xz = x * z2, yy = y * y2, yz = y * z2, zz = z * z2;
-	        var wx = w * x2, wy = w * y2, wz = w * z2, sx = scale.x, sy = scale.y, sz = scale.z;
-	        oe[0] = (1 - (yy + zz)) * sx;
-	        oe[1] = (xy + wz) * sx;
-	        oe[2] = (xz - wy) * sx;
-	        oe[3] = 0;
-	        oe[4] = (xy - wz) * sy;
-	        oe[5] = (1 - (xx + zz)) * sy;
-	        oe[6] = (yz + wx) * sy;
-	        oe[7] = 0;
-	        oe[8] = (xz + wy) * sz;
-	        oe[9] = (yz - wx) * sz;
-	        oe[10] = (1 - (xx + yy)) * sz;
-	        oe[11] = 0;
-	        oe[12] = trans.x;
-	        oe[13] = trans.y;
-	        oe[14] = trans.z;
-	        oe[15] = 1;
-	    }
-	    static createLookAt(eye, target, up, out) {
-	        var oE = out.elements;
-	        var xaxis = Matrix4x4._tempVector0;
-	        var yaxis = Matrix4x4._tempVector1;
-	        var zaxis = Matrix4x4._tempVector2;
-	        Vector3.subtract(eye, target, zaxis);
-	        Vector3.normalize(zaxis, zaxis);
-	        Vector3.cross(up, zaxis, xaxis);
-	        Vector3.normalize(xaxis, xaxis);
-	        Vector3.cross(zaxis, xaxis, yaxis);
-	        oE[3] = oE[7] = oE[11] = 0;
-	        oE[15] = 1;
-	        oE[0] = xaxis.x;
-	        oE[4] = xaxis.y;
-	        oE[8] = xaxis.z;
-	        oE[1] = yaxis.x;
-	        oE[5] = yaxis.y;
-	        oE[9] = yaxis.z;
-	        oE[2] = zaxis.x;
-	        oE[6] = zaxis.y;
-	        oE[10] = zaxis.z;
-	        oE[12] = -Vector3.dot(xaxis, eye);
-	        oE[13] = -Vector3.dot(yaxis, eye);
-	        oE[14] = -Vector3.dot(zaxis, eye);
-	    }
-	    static createPerspective(fov, aspect, znear, zfar, out) {
-	        var yScale = 1.0 / Math.tan(fov * 0.5);
-	        var xScale = yScale / aspect;
-	        var halfWidth = znear / xScale;
-	        var halfHeight = znear / yScale;
-	        Matrix4x4.createPerspectiveOffCenter(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out);
-	    }
-	    static createPerspectiveOffCenter(left, right, bottom, top, znear, zfar, out) {
-	        var oe = out.elements;
-	        var zRange = zfar / (zfar - znear);
-	        oe[1] = oe[2] = oe[3] = oe[4] = oe[6] = oe[7] = oe[12] = oe[13] = oe[15] = 0;
-	        oe[0] = 2.0 * znear / (right - left);
-	        oe[5] = 2.0 * znear / (top - bottom);
-	        oe[8] = (left + right) / (right - left);
-	        oe[9] = (top + bottom) / (top - bottom);
-	        oe[10] = -zRange;
-	        oe[11] = -1.0;
-	        oe[14] = -znear * zRange;
-	    }
-	    static createOrthoOffCenter(left, right, bottom, top, znear, zfar, out) {
-	        var oe = out.elements;
-	        var zRange = 1.0 / (zfar - znear);
-	        oe[1] = oe[2] = oe[3] = oe[4] = oe[6] = oe[8] = oe[7] = oe[9] = oe[11] = 0;
-	        oe[15] = 1;
-	        oe[0] = 2.0 / (right - left);
-	        oe[5] = 2.0 / (top - bottom);
-	        oe[10] = -zRange;
-	        oe[12] = (left + right) / (left - right);
-	        oe[13] = (top + bottom) / (bottom - top);
-	        oe[14] = -znear * zRange;
-	    }
-	    getElementByRowColumn(row, column) {
-	        if (row < 0 || row > 3)
-	            throw new Error("row Rows and columns for matrices run from 0 to 3, inclusive.");
-	        if (column < 0 || column > 3)
-	            throw new Error("column Rows and columns for matrices run from 0 to 3, inclusive.");
-	        return this.elements[(row * 4) + column];
-	    }
-	    setElementByRowColumn(row, column, value) {
-	        if (row < 0 || row > 3)
-	            throw new Error("row Rows and columns for matrices run from 0 to 3, inclusive.");
-	        if (column < 0 || column > 3)
-	            throw new Error("column Rows and columns for matrices run from 0 to 3, inclusive.");
-	        this.elements[(row * 4) + column] = value;
-	    }
-	    equalsOtherMatrix(other) {
-	        var e = this.elements;
-	        var oe = other.elements;
-	        return (MathUtils3D.nearEqual(e[0], oe[0]) && MathUtils3D.nearEqual(e[1], oe[1]) && MathUtils3D.nearEqual(e[2], oe[2]) && MathUtils3D.nearEqual(e[3], oe[3]) && MathUtils3D.nearEqual(e[4], oe[4]) && MathUtils3D.nearEqual(e[5], oe[5]) && MathUtils3D.nearEqual(e[6], oe[6]) && MathUtils3D.nearEqual(e[7], oe[7]) && MathUtils3D.nearEqual(e[8], oe[8]) && MathUtils3D.nearEqual(e[9], oe[9]) && MathUtils3D.nearEqual(e[10], oe[10]) && MathUtils3D.nearEqual(e[11], oe[11]) && MathUtils3D.nearEqual(e[12], oe[12]) && MathUtils3D.nearEqual(e[13], oe[13]) && MathUtils3D.nearEqual(e[14], oe[14]) && MathUtils3D.nearEqual(e[15], oe[15]));
-	    }
-	    decomposeTransRotScale(translation, rotation, scale) {
-	        var rotationMatrix = Matrix4x4._tempMatrix4x4;
-	        if (this.decomposeTransRotMatScale(translation, rotationMatrix, scale)) {
-	            Quaternion.createFromMatrix4x4(rotationMatrix, rotation);
-	            return true;
-	        }
-	        else {
-	            rotation.identity();
-	            return false;
-	        }
-	    }
-	    decomposeTransRotMatScale(translation, rotationMatrix, scale) {
-	        var e = this.elements;
-	        var te = translation;
-	        var re = rotationMatrix.elements;
-	        var se = scale;
-	        te.x = e[12];
-	        te.y = e[13];
-	        te.z = e[14];
-	        var m11 = e[0], m12 = e[1], m13 = e[2];
-	        var m21 = e[4], m22 = e[5], m23 = e[6];
-	        var m31 = e[8], m32 = e[9], m33 = e[10];
-	        var sX = se.x = Math.sqrt((m11 * m11) + (m12 * m12) + (m13 * m13));
-	        var sY = se.y = Math.sqrt((m21 * m21) + (m22 * m22) + (m23 * m23));
-	        var sZ = se.z = Math.sqrt((m31 * m31) + (m32 * m32) + (m33 * m33));
-	        if (MathUtils3D.isZero(sX) || MathUtils3D.isZero(sY) || MathUtils3D.isZero(sZ)) {
-	            re[1] = re[2] = re[3] = re[4] = re[6] = re[7] = re[8] = re[9] = re[11] = re[12] = re[13] = re[14] = 0;
-	            re[0] = re[5] = re[10] = re[15] = 1;
-	            return false;
-	        }
-	        var at = Matrix4x4._tempVector0;
-	        at.x = m31 / sZ;
-	        at.y = m32 / sZ;
-	        at.z = m33 / sZ;
-	        var tempRight = Matrix4x4._tempVector1;
-	        tempRight.x = m11 / sX;
-	        tempRight.y = m12 / sX;
-	        tempRight.z = m13 / sX;
-	        var up = Matrix4x4._tempVector2;
-	        Vector3.cross(at, tempRight, up);
-	        var right = Matrix4x4._tempVector1;
-	        Vector3.cross(up, at, right);
-	        re[3] = re[7] = re[11] = re[12] = re[13] = re[14] = 0;
-	        re[15] = 1;
-	        re[0] = right.x;
-	        re[1] = right.y;
-	        re[2] = right.z;
-	        re[4] = up.x;
-	        re[5] = up.y;
-	        re[6] = up.z;
-	        re[8] = at.x;
-	        re[9] = at.y;
-	        re[10] = at.z;
-	        ((re[0] * m11 + re[1] * m12 + re[2] * m13) < 0.0) && (se.x = -sX);
-	        ((re[4] * m21 + re[5] * m22 + re[6] * m23) < 0.0) && (se.y = -sY);
-	        ((re[8] * m31 + re[9] * m32 + re[10] * m33) < 0.0) && (se.z = -sZ);
-	        return true;
-	    }
-	    decomposeYawPitchRoll(yawPitchRoll) {
-	        var pitch = Math.asin(-this.elements[9]);
-	        yawPitchRoll.y = pitch;
-	        var test = Math.cos(pitch);
-	        if (test > MathUtils3D.zeroTolerance) {
-	            yawPitchRoll.z = Math.atan2(this.elements[1], this.elements[5]);
-	            yawPitchRoll.x = Math.atan2(this.elements[8], this.elements[10]);
-	        }
-	        else {
-	            yawPitchRoll.z = Math.atan2(-this.elements[4], this.elements[0]);
-	            yawPitchRoll.x = 0.0;
-	        }
-	    }
-	    normalize() {
-	        var v = this.elements;
-	        var c = v[0], d = v[1], e = v[2], g = Math.sqrt(c * c + d * d + e * e);
-	        if (g) {
-	            if (g == 1)
-	                return;
-	        }
-	        else {
-	            v[0] = 0;
-	            v[1] = 0;
-	            v[2] = 0;
-	            return;
-	        }
-	        g = 1 / g;
-	        v[0] = c * g;
-	        v[1] = d * g;
-	        v[2] = e * g;
-	    }
-	    transpose() {
-	        var e, t;
-	        e = this.elements;
-	        t = e[1];
-	        e[1] = e[4];
-	        e[4] = t;
-	        t = e[2];
-	        e[2] = e[8];
-	        e[8] = t;
-	        t = e[3];
-	        e[3] = e[12];
-	        e[12] = t;
-	        t = e[6];
-	        e[6] = e[9];
-	        e[9] = t;
-	        t = e[7];
-	        e[7] = e[13];
-	        e[13] = t;
-	        t = e[11];
-	        e[11] = e[14];
-	        e[14] = t;
-	        return this;
-	    }
-	    invert(out) {
-	        var ae = this.elements;
-	        var oe = out.elements;
-	        var a00 = ae[0], a01 = ae[1], a02 = ae[2], a03 = ae[3], a10 = ae[4], a11 = ae[5], a12 = ae[6], a13 = ae[7], a20 = ae[8], a21 = ae[9], a22 = ae[10], a23 = ae[11], a30 = ae[12], a31 = ae[13], a32 = ae[14], a33 = ae[15], b00 = a00 * a11 - a01 * a10, b01 = a00 * a12 - a02 * a10, b02 = a00 * a13 - a03 * a10, b03 = a01 * a12 - a02 * a11, b04 = a01 * a13 - a03 * a11, b05 = a02 * a13 - a03 * a12, b06 = a20 * a31 - a21 * a30, b07 = a20 * a32 - a22 * a30, b08 = a20 * a33 - a23 * a30, b09 = a21 * a32 - a22 * a31, b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32, det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
-	        if (Math.abs(det) === 0.0) {
-	            return;
-	        }
-	        det = 1.0 / det;
-	        oe[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
-	        oe[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
-	        oe[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
-	        oe[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
-	        oe[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
-	        oe[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
-	        oe[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
-	        oe[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
-	        oe[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
-	        oe[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
-	        oe[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
-	        oe[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
-	        oe[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
-	        oe[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
-	        oe[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
-	        oe[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
-	    }
-	    static billboard(objectPosition, cameraPosition, cameraRight, cameraUp, cameraForward, mat) {
-	        Vector3.subtract(objectPosition, cameraPosition, Matrix4x4._tempVector0);
-	        var lengthSq = Vector3.scalarLengthSquared(Matrix4x4._tempVector0);
-	        if (MathUtils3D.isZero(lengthSq)) {
-	            Vector3.scale(cameraForward, -1, Matrix4x4._tempVector1);
-	            Matrix4x4._tempVector1.cloneTo(Matrix4x4._tempVector0);
-	        }
-	        else {
-	            Vector3.scale(Matrix4x4._tempVector0, 1 / Math.sqrt(lengthSq), Matrix4x4._tempVector0);
-	        }
-	        Vector3.cross(cameraUp, Matrix4x4._tempVector0, Matrix4x4._tempVector2);
-	        Vector3.normalize(Matrix4x4._tempVector2, Matrix4x4._tempVector2);
-	        Vector3.cross(Matrix4x4._tempVector0, Matrix4x4._tempVector2, Matrix4x4._tempVector3);
-	        var crosse = Matrix4x4._tempVector2;
-	        var finale = Matrix4x4._tempVector3;
-	        var diffee = Matrix4x4._tempVector0;
-	        var obpose = objectPosition;
-	        var mate = mat.elements;
-	        mate[0] = crosse.x;
-	        mate[1] = crosse.y;
-	        mate[2] = crosse.z;
-	        mate[3] = 0.0;
-	        mate[4] = finale.x;
-	        mate[5] = finale.y;
-	        mate[6] = finale.z;
-	        mate[7] = 0.0;
-	        mate[8] = diffee.x;
-	        mate[9] = diffee.y;
-	        mate[10] = diffee.z;
-	        mate[11] = 0.0;
-	        mate[12] = obpose.x;
-	        mate[13] = obpose.y;
-	        mate[14] = obpose.z;
-	        mate[15] = 1.0;
-	    }
-	    identity() {
-	        var e = this.elements;
-	        e[1] = e[2] = e[3] = e[4] = e[6] = e[7] = e[8] = e[9] = e[11] = e[12] = e[13] = e[14] = 0;
-	        e[0] = e[5] = e[10] = e[15] = 1;
-	    }
-	    cloneTo(destObject) {
-	        var i, s, d;
-	        s = this.elements;
-	        d = destObject.elements;
-	        if (s === d) {
-	            return;
-	        }
-	        for (i = 0; i < 16; ++i) {
-	            d[i] = s[i];
-	        }
-	    }
-	    clone() {
-	        var dest = new Matrix4x4();
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	    static translation(v3, out) {
-	        var oe = out.elements;
-	        oe[0] = oe[5] = oe[10] = oe[15] = 1;
-	        oe[12] = v3.x;
-	        oe[13] = v3.y;
-	        oe[14] = v3.z;
-	    }
-	    getTranslationVector(out) {
-	        var me = this.elements;
-	        out.x = me[12];
-	        out.y = me[13];
-	        out.z = me[14];
-	    }
-	    setTranslationVector(translate) {
-	        var me = this.elements;
-	        var ve = translate;
-	        me[12] = ve.x;
-	        me[13] = ve.y;
-	        me[14] = ve.z;
-	    }
-	    getForward(out) {
-	        var me = this.elements;
-	        out.x = -me[8];
-	        out.y = -me[9];
-	        out.z = -me[10];
-	    }
-	    setForward(forward) {
-	        var me = this.elements;
-	        me[8] = -forward.x;
-	        me[9] = -forward.y;
-	        me[10] = -forward.z;
-	    }
-	}
-	Matrix4x4._tempMatrix4x4 = new Matrix4x4();
-	Matrix4x4.TEMPMatrix0 = new Matrix4x4();
-	Matrix4x4.TEMPMatrix1 = new Matrix4x4();
-	Matrix4x4._tempVector0 = new Vector3();
-	Matrix4x4._tempVector1 = new Vector3();
-	Matrix4x4._tempVector2 = new Vector3();
-	Matrix4x4._tempVector3 = new Vector3();
-	Matrix4x4._tempQuaternion = new Quaternion();
-	Matrix4x4.DEFAULT = new Matrix4x4();
-	Matrix4x4.ZERO = new Matrix4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-	class ColliderShape {
-	    constructor() {
-	        this._scale = new Vector3(1, 1, 1);
-	        this._centerMatrix = new Matrix4x4();
-	        this._attatched = false;
-	        this._indexInCompound = -1;
-	        this._compoundParent = null;
-	        this._attatchedCollisionObject = null;
-	        this._referenceCount = 0;
-	        this._localOffset = new Vector3(0, 0, 0);
-	        this._localRotation = new Quaternion(0, 0, 0, 1);
-	        this.needsCustomCollisionCallback = false;
-	    }
-	    static __init__() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        ColliderShape._btScale = bt.btVector3_create(1, 1, 1);
-	        ColliderShape._btVector30 = bt.btVector3_create(0, 0, 0);
-	        ColliderShape._btQuaternion0 = bt.btQuaternion_create(0, 0, 0, 1);
-	        ColliderShape._btTransform0 = bt.btTransform_create();
-	    }
-	    static _createAffineTransformation(trans, rot, outE) {
-	        var x = rot.x, y = rot.y, z = rot.z, w = rot.w, x2 = x + x, y2 = y + y, z2 = z + z;
-	        var xx = x * x2, xy = x * y2, xz = x * z2, yy = y * y2, yz = y * z2, zz = z * z2;
-	        var wx = w * x2, wy = w * y2, wz = w * z2;
-	        outE[0] = (1 - (yy + zz));
-	        outE[1] = (xy + wz);
-	        outE[2] = (xz - wy);
-	        outE[3] = 0;
-	        outE[4] = (xy - wz);
-	        outE[5] = (1 - (xx + zz));
-	        outE[6] = (yz + wx);
-	        outE[7] = 0;
-	        outE[8] = (xz + wy);
-	        outE[9] = (yz - wx);
-	        outE[10] = (1 - (xx + yy));
-	        outE[11] = 0;
-	        outE[12] = trans.x;
-	        outE[13] = trans.y;
-	        outE[14] = trans.z;
-	        outE[15] = 1;
-	    }
-	    get type() {
-	        return this._type;
-	    }
-	    get localOffset() {
-	        return this._localOffset;
-	    }
-	    set localOffset(value) {
-	        this._localOffset = value;
-	        if (this._compoundParent)
-	            this._compoundParent._updateChildTransform(this);
-	    }
-	    get localRotation() {
-	        return this._localRotation;
-	    }
-	    set localRotation(value) {
-	        this._localRotation = value;
-	        if (this._compoundParent)
-	            this._compoundParent._updateChildTransform(this);
-	    }
-	    _setScale(value) {
-	        if (this._compoundParent) {
-	            this.updateLocalTransformations();
-	        }
-	        else {
-	            var bt = ILaya3D.Physics3D._bullet;
-	            bt.btVector3_setValue(ColliderShape._btScale, value.x, value.y, value.z);
-	            bt.btCollisionShape_setLocalScaling(this._btShape, ColliderShape._btScale);
-	        }
-	    }
-	    _addReference() {
-	        this._referenceCount++;
-	    }
-	    _removeReference() {
-	        this._referenceCount--;
-	    }
-	    updateLocalTransformations() {
-	        if (this._compoundParent) {
-	            var offset = ColliderShape._tempVector30;
-	            Vector3.multiply(this.localOffset, this._scale, offset);
-	            ColliderShape._createAffineTransformation(offset, this.localRotation, this._centerMatrix.elements);
-	        }
-	        else {
-	            ColliderShape._createAffineTransformation(this.localOffset, this.localRotation, this._centerMatrix.elements);
-	        }
-	    }
-	    cloneTo(destObject) {
-	        var destColliderShape = destObject;
-	        this._localOffset.cloneTo(destColliderShape.localOffset);
-	        this._localRotation.cloneTo(destColliderShape.localRotation);
-	        destColliderShape.localOffset = destColliderShape.localOffset;
-	        destColliderShape.localRotation = destColliderShape.localRotation;
-	    }
-	    clone() {
-	        return null;
-	    }
-	    destroy() {
-	        if (this._btShape) {
-	            ILaya3D.Physics3D._bullet.btCollisionShape_destroy(this._btShape);
-	            this._btShape = null;
-	        }
-	    }
-	}
-	ColliderShape.SHAPEORIENTATION_UPX = 0;
-	ColliderShape.SHAPEORIENTATION_UPY = 1;
-	ColliderShape.SHAPEORIENTATION_UPZ = 2;
-	ColliderShape.SHAPETYPES_BOX = 0;
-	ColliderShape.SHAPETYPES_SPHERE = 1;
-	ColliderShape.SHAPETYPES_CYLINDER = 2;
-	ColliderShape.SHAPETYPES_CAPSULE = 3;
-	ColliderShape.SHAPETYPES_CONVEXHULL = 4;
-	ColliderShape.SHAPETYPES_COMPOUND = 5;
-	ColliderShape.SHAPETYPES_STATICPLANE = 6;
-	ColliderShape.SHAPETYPES_CONE = 7;
-	ColliderShape._tempVector30 = new Vector3();
-
-	class StaticPlaneColliderShape extends ColliderShape {
-	    constructor(normal, offset) {
-	        super();
-	        this._normal = normal;
-	        this._offset = offset;
-	        this._type = ColliderShape.SHAPETYPES_STATICPLANE;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btVector3_setValue(StaticPlaneColliderShape._btNormal, -normal.x, normal.y, normal.z);
-	        this._btShape = bt.btStaticPlaneShape_create(StaticPlaneColliderShape._btNormal, offset);
-	    }
-	    static __init__() {
-	        StaticPlaneColliderShape._btNormal = ILaya3D.Physics3D._bullet.btVector3_create(0, 0, 0);
-	    }
-	    clone() {
-	        var dest = new StaticPlaneColliderShape(this._normal, this._offset);
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-
-	class CompoundColliderShape extends ColliderShape {
-	    constructor() {
-	        super();
-	        this._childColliderShapes = [];
-	        this._type = ColliderShape.SHAPETYPES_COMPOUND;
-	        this._btShape = ILaya3D.Physics3D._bullet.btCompoundShape_create();
-	    }
-	    static __init__() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        CompoundColliderShape._btVector3One = bt.btVector3_create(1, 1, 1);
-	        CompoundColliderShape._btTransform = bt.btTransform_create();
-	        CompoundColliderShape._btOffset = bt.btVector3_create(0, 0, 0);
-	        CompoundColliderShape._btRotation = bt.btQuaternion_create(0, 0, 0, 1);
-	    }
-	    _clearChildShape(shape) {
-	        shape._attatched = false;
-	        shape._compoundParent = null;
-	        shape._indexInCompound = -1;
-	    }
-	    _addReference() {
-	    }
-	    _removeReference() {
-	    }
-	    _updateChildTransform(shape) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var offset = shape.localOffset;
-	        var rotation = shape.localRotation;
-	        var btOffset = ColliderShape._btVector30;
-	        var btQuaternion = ColliderShape._btQuaternion0;
-	        var btTransform = ColliderShape._btTransform0;
-	        bt.btVector3_setValue(btOffset, -offset.x, offset.y, offset.z);
-	        bt.btQuaternion_setValue(btQuaternion, -rotation.x, rotation.y, rotation.z, -rotation.w);
-	        bt.btTransform_setOrigin(btTransform, btOffset);
-	        bt.btTransform_setRotation(btTransform, btQuaternion);
-	        bt.btCompoundShape_updateChildTransform(this._btShape, shape._indexInCompound, btTransform, true);
-	    }
-	    addChildShape(shape) {
-	        if (shape._attatched)
-	            throw "CompoundColliderShape: this shape has attatched to other entity.";
-	        shape._attatched = true;
-	        shape._compoundParent = this;
-	        shape._indexInCompound = this._childColliderShapes.length;
-	        this._childColliderShapes.push(shape);
-	        var offset = shape.localOffset;
-	        var rotation = shape.localRotation;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btVector3_setValue(CompoundColliderShape._btOffset, -offset.x, offset.y, offset.z);
-	        bt.btQuaternion_setValue(CompoundColliderShape._btRotation, -rotation.x, rotation.y, rotation.z, -rotation.w);
-	        bt.btTransform_setOrigin(CompoundColliderShape._btTransform, CompoundColliderShape._btOffset);
-	        bt.btTransform_setRotation(CompoundColliderShape._btTransform, CompoundColliderShape._btRotation);
-	        var btScale = bt.btCollisionShape_getLocalScaling(this._btShape);
-	        bt.btCollisionShape_setLocalScaling(this._btShape, CompoundColliderShape._btVector3One);
-	        bt.btCompoundShape_addChildShape(this._btShape, CompoundColliderShape._btTransform, shape._btShape);
-	        bt.btCollisionShape_setLocalScaling(this._btShape, btScale);
-	        (this._attatchedCollisionObject) && (this._attatchedCollisionObject.colliderShape = this);
-	    }
-	    removeChildShape(shape) {
-	        if (shape._compoundParent === this) {
-	            var index = shape._indexInCompound;
-	            this._clearChildShape(shape);
-	            var endShape = this._childColliderShapes[this._childColliderShapes.length - 1];
-	            endShape._indexInCompound = index;
-	            this._childColliderShapes[index] = endShape;
-	            this._childColliderShapes.pop();
-	            ILaya3D.Physics3D._bullet.btCompoundShape_removeChildShapeByIndex(this._btShape, index);
-	        }
-	    }
-	    clearChildShape() {
-	        for (var i = 0, n = this._childColliderShapes.length; i < n; i++) {
-	            this._clearChildShape(this._childColliderShapes[i]);
-	            ILaya3D.Physics3D._bullet.btCompoundShape_removeChildShapeByIndex(this._btShape, 0);
-	        }
-	        this._childColliderShapes.length = 0;
-	    }
-	    getChildShapeCount() {
-	        return this._childColliderShapes.length;
-	    }
-	    cloneTo(destObject) {
-	        var destCompoundColliderShape = destObject;
-	        destCompoundColliderShape.clearChildShape();
-	        for (var i = 0, n = this._childColliderShapes.length; i < n; i++)
-	            destCompoundColliderShape.addChildShape(this._childColliderShapes[i].clone());
-	    }
-	    clone() {
-	        var dest = new CompoundColliderShape();
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	    destroy() {
-	        super.destroy();
-	        for (var i = 0, n = this._childColliderShapes.length; i < n; i++) {
-	            var childShape = this._childColliderShapes[i];
-	            if (childShape._referenceCount === 0)
-	                childShape.destroy();
-	        }
-	    }
-	}
-
-	class Transform3D extends Laya.EventDispatcher {
-	    constructor(owner) {
-	        super();
-	        this._localPosition = new Vector3(0, 0, 0);
-	        this._localRotation = new Quaternion(0, 0, 0, 1);
-	        this._localScale = new Vector3(1, 1, 1);
-	        this._localRotationEuler = new Vector3(0, 0, 0);
-	        this._localMatrix = new Matrix4x4();
-	        this._position = new Vector3(0, 0, 0);
-	        this._rotation = new Quaternion(0, 0, 0, 1);
-	        this._scale = new Vector3(1, 1, 1);
-	        this._rotationEuler = new Vector3(0, 0, 0);
-	        this._worldMatrix = new Matrix4x4();
-	        this._children = null;
-	        this._parent = null;
-	        this._dummy = null;
-	        this._transformFlag = 0;
-	        this._owner = owner;
-	        this._children = [];
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION | Transform3D.TRANSFORM_LOCALEULER | Transform3D.TRANSFORM_LOCALMATRIX, false);
-	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER | Transform3D.TRANSFORM_WORLDSCALE | Transform3D.TRANSFORM_WORLDMATRIX, true);
-	    }
-	    get _isFrontFaceInvert() {
-	        var scale = this.getWorldLossyScale();
-	        var isInvert = scale.x < 0;
-	        (scale.y < 0) && (isInvert = !isInvert);
-	        (scale.z < 0) && (isInvert = !isInvert);
-	        return isInvert;
-	    }
-	    get owner() {
-	        return this._owner;
-	    }
-	    get worldNeedUpdate() {
-	        return this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX);
-	    }
-	    get localPositionX() {
-	        return this._localPosition.x;
-	    }
-	    set localPositionX(x) {
-	        this._localPosition.x = x;
-	        this.localPosition = this._localPosition;
-	    }
-	    get localPositionY() {
-	        return this._localPosition.y;
-	    }
-	    set localPositionY(y) {
-	        this._localPosition.y = y;
-	        this.localPosition = this._localPosition;
-	    }
-	    get localPositionZ() {
-	        return this._localPosition.z;
-	    }
-	    set localPositionZ(z) {
-	        this._localPosition.z = z;
-	        this.localPosition = this._localPosition;
-	    }
-	    get localPosition() {
-	        return this._localPosition;
-	    }
-	    set localPosition(value) {
-	        if (this._localPosition !== value)
-	            value.cloneTo(this._localPosition);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, true);
-	        this._onWorldPositionTransform();
-	    }
-	    get localRotationX() {
-	        return this.localRotation.x;
-	    }
-	    set localRotationX(x) {
-	        this._localRotation.x = x;
-	        this.localRotation = this._localRotation;
-	    }
-	    get localRotationY() {
-	        return this.localRotation.y;
-	    }
-	    set localRotationY(y) {
-	        this._localRotation.y = y;
-	        this.localRotation = this._localRotation;
-	    }
-	    get localRotationZ() {
-	        return this.localRotation.z;
-	    }
-	    set localRotationZ(z) {
-	        this._localRotation.z = z;
-	        this.localRotation = this._localRotation;
-	    }
-	    get localRotationW() {
-	        return this.localRotation.w;
-	    }
-	    set localRotationW(w) {
-	        this._localRotation.w = w;
-	        this.localRotation = this._localRotation;
-	    }
-	    get localRotation() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION)) {
-	            var eulerE = this._localRotationEuler;
-	            Quaternion.createFromYawPitchRoll(eulerE.y / Transform3D._angleToRandin, eulerE.x / Transform3D._angleToRandin, eulerE.z / Transform3D._angleToRandin, this._localRotation);
-	            this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION, false);
-	        }
-	        return this._localRotation;
-	    }
-	    set localRotation(value) {
-	        if (this._localRotation !== value)
-	            value.cloneTo(this._localRotation);
-	        this._localRotation.normalize(this._localRotation);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER | Transform3D.TRANSFORM_LOCALMATRIX, true);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION, false);
-	        this._onWorldRotationTransform();
-	    }
-	    get localScaleX() {
-	        return this._localScale.x;
-	    }
-	    set localScaleX(value) {
-	        this._localScale.x = value;
-	        this.localScale = this._localScale;
-	    }
-	    get localScaleY() {
-	        return this._localScale.y;
-	    }
-	    set localScaleY(value) {
-	        this._localScale.y = value;
-	        this.localScale = this._localScale;
-	    }
-	    get localScaleZ() {
-	        return this._localScale.z;
-	    }
-	    set localScaleZ(value) {
-	        this._localScale.z = value;
-	        this.localScale = this._localScale;
-	    }
-	    get localScale() {
-	        return this._localScale;
-	    }
-	    set localScale(value) {
-	        if (this._localScale !== value)
-	            value.cloneTo(this._localScale);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, true);
-	        this._onWorldScaleTransform();
-	    }
-	    get localRotationEulerX() {
-	        return this.localRotationEuler.x;
-	    }
-	    set localRotationEulerX(value) {
-	        this._localRotationEuler.x = value;
-	        this.localRotationEuler = this._localRotationEuler;
-	    }
-	    get localRotationEulerY() {
-	        return this.localRotationEuler.y;
-	    }
-	    set localRotationEulerY(value) {
-	        this._localRotationEuler.y = value;
-	        this.localRotationEuler = this._localRotationEuler;
-	    }
-	    get localRotationEulerZ() {
-	        return this.localRotationEuler.z;
-	    }
-	    set localRotationEulerZ(value) {
-	        this._localRotationEuler.z = value;
-	        this.localRotationEuler = this._localRotationEuler;
-	    }
-	    get localRotationEuler() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_LOCALEULER)) {
-	            this._localRotation.getYawPitchRoll(Transform3D._tempVector30);
-	            var euler = Transform3D._tempVector30;
-	            var localRotationEuler = this._localRotationEuler;
-	            localRotationEuler.x = euler.y * Transform3D._angleToRandin;
-	            localRotationEuler.y = euler.x * Transform3D._angleToRandin;
-	            localRotationEuler.z = euler.z * Transform3D._angleToRandin;
-	            this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER, false);
-	        }
-	        return this._localRotationEuler;
-	    }
-	    set localRotationEuler(value) {
-	        if (this._localRotationEuler !== value)
-	            value.cloneTo(this._localRotationEuler);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER, false);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION | Transform3D.TRANSFORM_LOCALMATRIX, true);
-	        this._onWorldRotationTransform();
-	    }
-	    get localMatrix() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX)) {
-	            Matrix4x4.createAffineTransformation(this._localPosition, this.localRotation, this._localScale, this._localMatrix);
-	            this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, false);
-	        }
-	        return this._localMatrix;
-	    }
-	    set localMatrix(value) {
-	        if (this._localMatrix !== value)
-	            value.cloneTo(this._localMatrix);
-	        this._localMatrix.decomposeTransRotScale(this._localPosition, this._localRotation, this._localScale);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER, true);
-	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, false);
-	        this._onWorldTransform();
-	    }
-	    get position() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION)) {
-	            if (this._parent != null) {
-	                var worldMatE = this.worldMatrix.elements;
-	                this._position.x = worldMatE[12];
-	                this._position.y = worldMatE[13];
-	                this._position.z = worldMatE[14];
-	            }
-	            else {
-	                this._localPosition.cloneTo(this._position);
-	            }
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION, false);
-	        }
-	        return this._position;
-	    }
-	    set position(value) {
-	        if (this._parent != null) {
-	            var parentInvMat = Transform3D._tempMatrix0;
-	            this._parent.worldMatrix.invert(parentInvMat);
-	            Vector3.transformCoordinate(value, parentInvMat, this._localPosition);
-	        }
-	        else {
-	            value.cloneTo(this._localPosition);
-	        }
-	        this.localPosition = this._localPosition;
-	        if (this._position !== value)
-	            value.cloneTo(this._position);
-	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION, false);
-	    }
-	    get rotation() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION)) {
-	            if (this._parent != null)
-	                Quaternion.multiply(this._parent.rotation, this.localRotation, this._rotation);
-	            else
-	                this.localRotation.cloneTo(this._rotation);
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION, false);
-	        }
-	        return this._rotation;
-	    }
-	    set rotation(value) {
-	        if (this._parent != null) {
-	            this._parent.rotation.invert(Transform3D._tempQuaternion0);
-	            Quaternion.multiply(Transform3D._tempQuaternion0, value, this._localRotation);
-	        }
-	        else {
-	            value.cloneTo(this._localRotation);
-	        }
-	        this.localRotation = this._localRotation;
-	        if (value !== this._rotation)
-	            value.cloneTo(this._rotation);
-	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION, false);
-	    }
-	    get rotationEuler() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER)) {
-	            this.rotation.getYawPitchRoll(Transform3D._tempVector30);
-	            var eulerE = Transform3D._tempVector30;
-	            var rotationEulerE = this._rotationEuler;
-	            rotationEulerE.x = eulerE.y * Transform3D._angleToRandin;
-	            rotationEulerE.y = eulerE.x * Transform3D._angleToRandin;
-	            rotationEulerE.z = eulerE.z * Transform3D._angleToRandin;
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDEULER, false);
-	        }
-	        return this._rotationEuler;
-	    }
-	    set rotationEuler(value) {
-	        Quaternion.createFromYawPitchRoll(value.y / Transform3D._angleToRandin, value.x / Transform3D._angleToRandin, value.z / Transform3D._angleToRandin, this._rotation);
-	        this.rotation = this._rotation;
-	        if (this._rotationEuler !== value)
-	            value.cloneTo(this._rotationEuler);
-	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDEULER, false);
-	    }
-	    get worldMatrix() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX)) {
-	            if (this._parent != null)
-	                Matrix4x4.multiply(this._parent.worldMatrix, this.localMatrix, this._worldMatrix);
-	            else
-	                this.localMatrix.cloneTo(this._worldMatrix);
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX, false);
-	        }
-	        return this._worldMatrix;
-	    }
-	    set worldMatrix(value) {
-	        if (this._parent === null) {
-	            value.cloneTo(this._localMatrix);
-	        }
-	        else {
-	            this._parent.worldMatrix.invert(this._localMatrix);
-	            Matrix4x4.multiply(this._localMatrix, value, this._localMatrix);
-	        }
-	        this.localMatrix = this._localMatrix;
-	        if (this._worldMatrix !== value)
-	            value.cloneTo(this._worldMatrix);
-	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX, false);
-	    }
-	    _getScaleMatrix() {
-	        var invRotation = Transform3D._tempQuaternion0;
-	        var invRotationMat = Transform3D._tempMatrix3x30;
-	        var worldRotScaMat = Transform3D._tempMatrix3x31;
-	        var scaMat = Transform3D._tempMatrix3x32;
-	        Matrix3x3.createFromMatrix4x4(this.worldMatrix, worldRotScaMat);
-	        this.rotation.invert(invRotation);
-	        Matrix3x3.createRotationQuaternion(invRotation, invRotationMat);
-	        Matrix3x3.multiply(invRotationMat, worldRotScaMat, scaMat);
-	        return scaMat;
-	    }
-	    _setTransformFlag(type, value) {
-	        if (value)
-	            this._transformFlag |= type;
-	        else
-	            this._transformFlag &= ~type;
-	    }
-	    _getTransformFlag(type) {
-	        return (this._transformFlag & type) != 0;
-	    }
-	    _setParent(value) {
-	        if (this._parent !== value) {
-	            if (this._parent) {
-	                var parentChilds = this._parent._children;
-	                var index = parentChilds.indexOf(this);
-	                parentChilds.splice(index, 1);
-	            }
-	            if (value) {
-	                value._children.push(this);
-	                (value) && (this._onWorldTransform());
-	            }
-	            this._parent = value;
-	        }
-	    }
-	    _onWorldPositionRotationTransform() {
-	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER)) {
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER, true);
-	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
-	            for (var i = 0, n = this._children.length; i < n; i++)
-	                this._children[i]._onWorldPositionRotationTransform();
-	        }
-	    }
-	    _onWorldPositionScaleTransform() {
-	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDSCALE, true);
-	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
-	            for (var i = 0, n = this._children.length; i < n; i++)
-	                this._children[i]._onWorldPositionScaleTransform();
-	        }
-	    }
-	    _onWorldPositionTransform() {
-	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION)) {
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION, true);
-	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
-	            for (var i = 0, n = this._children.length; i < n; i++)
-	                this._children[i]._onWorldPositionTransform();
-	        }
-	    }
-	    _onWorldRotationTransform() {
-	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER)) {
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER, true);
-	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
-	            for (var i = 0, n = this._children.length; i < n; i++)
-	                this._children[i]._onWorldPositionRotationTransform();
-	        }
-	    }
-	    _onWorldScaleTransform() {
-	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDSCALE, true);
-	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
-	            for (var i = 0, n = this._children.length; i < n; i++)
-	                this._children[i]._onWorldPositionScaleTransform();
-	        }
-	    }
-	    _onWorldTransform() {
-	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER | Transform3D.TRANSFORM_WORLDSCALE, true);
-	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
-	            for (var i = 0, n = this._children.length; i < n; i++)
-	                this._children[i]._onWorldTransform();
-	        }
-	    }
-	    translate(translation, isLocal = true) {
-	        if (isLocal) {
-	            Matrix4x4.createFromQuaternion(this.localRotation, Transform3D._tempMatrix0);
-	            Vector3.transformCoordinate(translation, Transform3D._tempMatrix0, Transform3D._tempVector30);
-	            Vector3.add(this.localPosition, Transform3D._tempVector30, this._localPosition);
-	            this.localPosition = this._localPosition;
-	        }
-	        else {
-	            Vector3.add(this.position, translation, this._position);
-	            this.position = this._position;
-	        }
-	    }
-	    rotate(rotation, isLocal = true, isRadian = true) {
-	        var rot;
-	        if (isRadian) {
-	            rot = rotation;
-	        }
-	        else {
-	            Vector3.scale(rotation, Math.PI / 180.0, Transform3D._tempVector30);
-	            rot = Transform3D._tempVector30;
-	        }
-	        Quaternion.createFromYawPitchRoll(rot.y, rot.x, rot.z, Transform3D._tempQuaternion0);
-	        if (isLocal) {
-	            Quaternion.multiply(this._localRotation, Transform3D._tempQuaternion0, this._localRotation);
-	            this.localRotation = this._localRotation;
-	        }
-	        else {
-	            Quaternion.multiply(Transform3D._tempQuaternion0, this.rotation, this._rotation);
-	            this.rotation = this._rotation;
-	        }
-	    }
-	    getForward(forward) {
-	        var worldMatElem = this.worldMatrix.elements;
-	        forward.x = -worldMatElem[8];
-	        forward.y = -worldMatElem[9];
-	        forward.z = -worldMatElem[10];
-	    }
-	    getUp(up) {
-	        var worldMatElem = this.worldMatrix.elements;
-	        up.x = worldMatElem[4];
-	        up.y = worldMatElem[5];
-	        up.z = worldMatElem[6];
-	    }
-	    getRight(right) {
-	        var worldMatElem = this.worldMatrix.elements;
-	        right.x = worldMatElem[0];
-	        right.y = worldMatElem[1];
-	        right.z = worldMatElem[2];
-	    }
-	    lookAt(target, up, isLocal = false) {
-	        var eye;
-	        if (isLocal) {
-	            eye = this._localPosition;
-	            if (Math.abs(eye.x - target.x) < MathUtils3D.zeroTolerance && Math.abs(eye.y - target.y) < MathUtils3D.zeroTolerance && Math.abs(eye.z - target.z) < MathUtils3D.zeroTolerance)
-	                return;
-	            Quaternion.lookAt(this._localPosition, target, up, this._localRotation);
-	            this._localRotation.invert(this._localRotation);
-	            this.localRotation = this._localRotation;
-	        }
-	        else {
-	            var worldPosition = this.position;
-	            eye = worldPosition;
-	            if (Math.abs(eye.x - target.x) < MathUtils3D.zeroTolerance && Math.abs(eye.y - target.y) < MathUtils3D.zeroTolerance && Math.abs(eye.z - target.z) < MathUtils3D.zeroTolerance)
-	                return;
-	            Quaternion.lookAt(worldPosition, target, up, this._rotation);
-	            this._rotation.invert(this._rotation);
-	            this.rotation = this._rotation;
-	        }
-	    }
-	    getWorldLossyScale() {
-	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
-	            if (this._parent !== null) {
-	                var scaMatE = this._getScaleMatrix().elements;
-	                this._scale.x = scaMatE[0];
-	                this._scale.y = scaMatE[4];
-	                this._scale.z = scaMatE[8];
-	            }
-	            else {
-	                this._localScale.cloneTo(this._scale);
-	            }
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDSCALE, false);
-	        }
-	        return this._scale;
-	    }
-	    setWorldLossyScale(value) {
-	        if (this._parent !== null) {
-	            var scaleMat = Transform3D._tempMatrix3x33;
-	            var localScaleMat = Transform3D._tempMatrix3x33;
-	            var localScaleMatE = localScaleMat.elements;
-	            var parInvScaleMat = this._parent._getScaleMatrix();
-	            parInvScaleMat.invert(parInvScaleMat);
-	            Matrix3x3.createFromScaling(value, scaleMat);
-	            Matrix3x3.multiply(parInvScaleMat, scaleMat, localScaleMat);
-	            this._localScale.x = localScaleMatE[0];
-	            this._localScale.y = localScaleMatE[4];
-	            this._localScale.z = localScaleMatE[8];
-	        }
-	        else {
-	            value.cloneTo(this._localScale);
-	        }
-	        this.localScale = this._localScale;
-	        if (this._scale !== value)
-	            value.cloneTo(this._scale);
-	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDSCALE, false);
-	    }
-	    get scale() {
-	        console.warn("Transfrm3D: discard function,please use getWorldLossyScale instead.");
-	        return this.getWorldLossyScale();
-	    }
-	    set scale(value) {
-	        console.warn("Transfrm3D: discard function,please use setWorldLossyScale instead.");
-	        this.setWorldLossyScale(value);
-	    }
-	}
-	Transform3D._tempVector30 = new Vector3();
-	Transform3D._tempQuaternion0 = new Quaternion();
-	Transform3D._tempMatrix0 = new Matrix4x4();
-	Transform3D._tempMatrix3x30 = new Matrix3x3();
-	Transform3D._tempMatrix3x31 = new Matrix3x3();
-	Transform3D._tempMatrix3x32 = new Matrix3x3();
-	Transform3D._tempMatrix3x33 = new Matrix3x3();
-	Transform3D.TRANSFORM_LOCALQUATERNION = 0x01;
-	Transform3D.TRANSFORM_LOCALEULER = 0x02;
-	Transform3D.TRANSFORM_LOCALMATRIX = 0x04;
-	Transform3D.TRANSFORM_WORLDPOSITION = 0x08;
-	Transform3D.TRANSFORM_WORLDQUATERNION = 0x10;
-	Transform3D.TRANSFORM_WORLDSCALE = 0x20;
-	Transform3D.TRANSFORM_WORLDMATRIX = 0x40;
-	Transform3D.TRANSFORM_WORLDEULER = 0x80;
-	Transform3D._angleToRandin = 180 / Math.PI;
-
-	class Physics3DUtils {
-	    constructor() {
-	    }
-	    static setColliderCollision(collider1, collider2, collsion) {
-	    }
-	    static getIColliderCollision(collider1, collider2) {
-	        return false;
-	    }
-	}
-	Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER = 0x1;
-	Physics3DUtils.COLLISIONFILTERGROUP_STATICFILTER = 0x2;
-	Physics3DUtils.COLLISIONFILTERGROUP_KINEMATICFILTER = 0x4;
-	Physics3DUtils.COLLISIONFILTERGROUP_DEBRISFILTER = 0x8;
-	Physics3DUtils.COLLISIONFILTERGROUP_SENSORTRIGGER = 0x10;
-	Physics3DUtils.COLLISIONFILTERGROUP_CHARACTERFILTER = 0x20;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER1 = 0x40;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER2 = 0x80;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER3 = 0x100;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER4 = 0x200;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER5 = 0x400;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER6 = 0x800;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER7 = 0x1000;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER8 = 0x2000;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER9 = 0x4000;
-	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER10 = 0x8000;
-	Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER = -1;
-	Physics3DUtils.gravity = new Vector3(0, -9.81, 0);
-
-	class BoxColliderShape extends ColliderShape {
-	    constructor(sizeX = 1.0, sizeY = 1.0, sizeZ = 1.0) {
-	        super();
-	        this._sizeX = sizeX;
-	        this._sizeY = sizeY;
-	        this._sizeZ = sizeZ;
-	        this._type = ColliderShape.SHAPETYPES_BOX;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btVector3_setValue(BoxColliderShape._btSize, sizeX / 2, sizeY / 2, sizeZ / 2);
-	        this._btShape = bt.btBoxShape_create(BoxColliderShape._btSize);
-	    }
-	    static __init__() {
-	        BoxColliderShape._btSize = ILaya3D.Physics3D._bullet.btVector3_create(0, 0, 0);
-	    }
-	    get sizeX() {
-	        return this._sizeX;
-	    }
-	    get sizeY() {
-	        return this._sizeY;
-	    }
-	    get sizeZ() {
-	        return this._sizeZ;
-	    }
-	    clone() {
-	        var dest = new BoxColliderShape(this._sizeX, this._sizeY, this._sizeZ);
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-
-	class CapsuleColliderShape extends ColliderShape {
-	    constructor(radius = 0.5, length = 1.25, orientation = ColliderShape.SHAPEORIENTATION_UPY) {
-	        super();
-	        this._radius = radius;
-	        this._length = length;
-	        this._orientation = orientation;
-	        this._type = ColliderShape.SHAPETYPES_CAPSULE;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        switch (orientation) {
-	            case ColliderShape.SHAPEORIENTATION_UPX:
-	                this._btShape = bt.btCapsuleShapeX_create(radius, length - radius * 2);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPY:
-	                this._btShape = bt.btCapsuleShape_create(radius, length - radius * 2);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPZ:
-	                this._btShape = bt.btCapsuleShapeZ_create(radius, length - radius * 2);
-	                break;
-	            default:
-	                throw "CapsuleColliderShape:unknown orientation.";
-	        }
-	    }
-	    get radius() {
-	        return this._radius;
-	    }
-	    get length() {
-	        return this._length;
-	    }
-	    get orientation() {
-	        return this._orientation;
-	    }
-	    _setScale(value) {
-	        var fixScale = CapsuleColliderShape._tempVector30;
-	        switch (this.orientation) {
-	            case ColliderShape.SHAPEORIENTATION_UPX:
-	                fixScale.x = value.x;
-	                fixScale.y = fixScale.z = Math.max(value.y, value.z);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPY:
-	                fixScale.y = value.y;
-	                fixScale.x = fixScale.z = Math.max(value.x, value.z);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPZ:
-	                fixScale.z = value.z;
-	                fixScale.x = fixScale.y = Math.max(value.x, value.y);
-	                break;
-	            default:
-	                throw "CapsuleColliderShape:unknown orientation.";
-	        }
-	        super._setScale(fixScale);
-	    }
-	    clone() {
-	        var dest = new CapsuleColliderShape(this._radius, this._length, this._orientation);
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-	CapsuleColliderShape._tempVector30 = new Vector3();
-
-	class ConeColliderShape extends ColliderShape {
-	    constructor(radius = 0.5, height = 1.0, orientation = ColliderShape.SHAPEORIENTATION_UPY) {
-	        super();
-	        this._radius = 1;
-	        this._height = 0.5;
-	        this._radius = radius;
-	        this._height = height;
-	        this._orientation = orientation;
-	        this._type = ColliderShape.SHAPETYPES_CYLINDER;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        switch (orientation) {
-	            case ColliderShape.SHAPEORIENTATION_UPX:
-	                this._btShape = bt.btConeShapeX_create(radius, height);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPY:
-	                this._btShape = bt.btConeShape_create(radius, height);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPZ:
-	                this._btShape = bt.btConeShapeZ_create(radius, height);
-	                break;
-	            default:
-	                throw "ConeColliderShape:unknown orientation.";
-	        }
-	    }
-	    get radius() {
-	        return this._radius;
-	    }
-	    get height() {
-	        return this._height;
-	    }
-	    get orientation() {
-	        return this._orientation;
-	    }
-	    clone() {
-	        var dest = new ConeColliderShape(this._radius, this._height, this._orientation);
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-
-	class CylinderColliderShape extends ColliderShape {
-	    constructor(radius = 0.5, height = 1.0, orientation = ColliderShape.SHAPEORIENTATION_UPY) {
-	        super();
-	        this._radius = 1;
-	        this._height = 0.5;
-	        this._radius = radius;
-	        this._height = height;
-	        this._orientation = orientation;
-	        this._type = ColliderShape.SHAPETYPES_CYLINDER;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        switch (orientation) {
-	            case ColliderShape.SHAPEORIENTATION_UPX:
-	                bt.btVector3_setValue(CylinderColliderShape._btSize, height / 2, radius, radius);
-	                this._btShape = bt.btCylinderShapeX_create(CylinderColliderShape._btSize);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPY:
-	                bt.btVector3_setValue(CylinderColliderShape._btSize, radius, height / 2, radius);
-	                this._btShape = bt.btCylinderShape_create(CylinderColliderShape._btSize);
-	                break;
-	            case ColliderShape.SHAPEORIENTATION_UPZ:
-	                bt.btVector3_setValue(CylinderColliderShape._btSize, radius, radius, height / 2);
-	                this._btShape = bt.btCylinderShapeZ_create(CylinderColliderShape._btSize);
-	                break;
-	            default:
-	                throw "CapsuleColliderShape:unknown orientation.";
-	        }
-	    }
-	    static __init__() {
-	        CylinderColliderShape._btSize = ILaya3D.Physics3D._bullet.btVector3_create(0, 0, 0);
-	    }
-	    get radius() {
-	        return this._radius;
-	    }
-	    get height() {
-	        return this._height;
-	    }
-	    get orientation() {
-	        return this._orientation;
-	    }
-	    clone() {
-	        var dest = new CylinderColliderShape(this._radius, this._height, this._orientation);
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-
-	class MeshColliderShape extends ColliderShape {
-	    constructor() {
-	        super();
-	        this._mesh = null;
-	        this._convex = false;
-	    }
-	    get mesh() {
-	        return this._mesh;
-	    }
-	    set mesh(value) {
-	        if (this._mesh !== value) {
-	            var bt = ILaya3D.Physics3D._bullet;
-	            if (this._mesh) {
-	                bt.btCollisionShape_destroy(this._btShape);
-	            }
-	            if (value) {
-	                this._btShape = bt.btGImpactMeshShape_create(value._getPhysicMesh());
-	                bt.btGImpactShapeInterface_updateBound(this._btShape);
-	            }
-	            this._mesh = value;
-	        }
-	    }
-	    get convex() {
-	        return this._convex;
-	    }
-	    set convex(value) {
-	        this._convex = value;
-	    }
-	    _setScale(value) {
-	        if (this._compoundParent) {
-	            this.updateLocalTransformations();
-	        }
-	        else {
-	            var bt = ILaya3D.Physics3D._bullet;
-	            bt.btVector3_setValue(ColliderShape._btScale, value.x, value.y, value.z);
-	            bt.btCollisionShape_setLocalScaling(this._btShape, ColliderShape._btScale);
-	            bt.btGImpactShapeInterface_updateBound(this._btShape);
-	        }
-	    }
-	    cloneTo(destObject) {
-	        var destMeshCollider = destObject;
-	        destMeshCollider.convex = this._convex;
-	        destMeshCollider.mesh = this._mesh;
-	        super.cloneTo(destObject);
-	    }
-	    clone() {
-	        var dest = new MeshColliderShape();
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	    destroy() {
-	        if (this._btShape) {
-	            ILaya3D.Physics3D._bullet.btCollisionShape_destroy(this._btShape);
-	            this._btShape = null;
-	        }
-	    }
-	}
-
-	class SphereColliderShape extends ColliderShape {
-	    constructor(radius = 0.5) {
-	        super();
-	        this._radius = radius;
-	        this._type = ColliderShape.SHAPETYPES_SPHERE;
-	        this._btShape = ILaya3D.Physics3D._bullet.btSphereShape_create(radius);
-	    }
-	    get radius() {
-	        return this._radius;
-	    }
-	    clone() {
-	        var dest = new SphereColliderShape(this._radius);
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-
-	class PhysicsComponent extends Laya.Component {
-	    constructor(collisionGroup, canCollideWith) {
-	        super();
-	        this._restitution = 0.0;
-	        this._friction = 0.5;
-	        this._rollingFriction = 0.0;
-	        this._ccdMotionThreshold = 0.0;
-	        this._ccdSweptSphereRadius = 0.0;
-	        this._collisionGroup = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER;
-	        this._canCollideWith = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER;
-	        this._colliderShape = null;
-	        this._transformFlag = 2147483647;
-	        this._controlBySimulation = false;
-	        this._enableProcessCollisions = true;
-	        this._inPhysicUpdateListIndex = -1;
-	        this.canScaleShape = true;
-	        this._collisionGroup = collisionGroup;
-	        this._canCollideWith = canCollideWith;
-	        PhysicsComponent._physicObjectsMap[this.id] = this;
-	    }
-	    static __init__() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        PhysicsComponent._btVector30 = bt.btVector3_create(0, 0, 0);
-	        PhysicsComponent._btQuaternion0 = bt.btQuaternion_create(0, 0, 0, 1);
-	    }
-	    static _createAffineTransformationArray(tranX, tranY, tranZ, rotX, rotY, rotZ, rotW, scale, outE) {
-	        var x2 = rotX + rotX, y2 = rotY + rotY, z2 = rotZ + rotZ;
-	        var xx = rotX * x2, xy = rotX * y2, xz = rotX * z2, yy = rotY * y2, yz = rotY * z2, zz = rotZ * z2;
-	        var wx = rotW * x2, wy = rotW * y2, wz = rotW * z2, sx = scale[0], sy = scale[1], sz = scale[2];
-	        outE[0] = (1 - (yy + zz)) * sx;
-	        outE[1] = (xy + wz) * sx;
-	        outE[2] = (xz - wy) * sx;
-	        outE[3] = 0;
-	        outE[4] = (xy - wz) * sy;
-	        outE[5] = (1 - (xx + zz)) * sy;
-	        outE[6] = (yz + wx) * sy;
-	        outE[7] = 0;
-	        outE[8] = (xz + wy) * sz;
-	        outE[9] = (yz - wx) * sz;
-	        outE[10] = (1 - (xx + yy)) * sz;
-	        outE[11] = 0;
-	        outE[12] = tranX;
-	        outE[13] = tranY;
-	        outE[14] = tranZ;
-	        outE[15] = 1;
-	    }
-	    static _creatShape(shapeData) {
-	        var colliderShape;
-	        switch (shapeData.type) {
-	            case "BoxColliderShape":
-	                var sizeData = shapeData.size;
-	                colliderShape = sizeData ? new BoxColliderShape(sizeData[0], sizeData[1], sizeData[2]) : new BoxColliderShape();
-	                break;
-	            case "SphereColliderShape":
-	                colliderShape = new SphereColliderShape(shapeData.radius);
-	                break;
-	            case "CapsuleColliderShape":
-	                colliderShape = new CapsuleColliderShape(shapeData.radius, shapeData.height, shapeData.orientation);
-	                break;
-	            case "MeshColliderShape":
-	                var meshCollider = new MeshColliderShape();
-	                shapeData.mesh && (meshCollider.mesh = Laya.Loader.getRes(shapeData.mesh));
-	                colliderShape = meshCollider;
-	                break;
-	            case "ConeColliderShape":
-	                colliderShape = new ConeColliderShape(shapeData.radius, shapeData.height, shapeData.orientation);
-	                break;
-	            case "CylinderColliderShape":
-	                colliderShape = new CylinderColliderShape(shapeData.radius, shapeData.height, shapeData.orientation);
-	                break;
-	            default:
-	                throw "unknown shape type.";
-	        }
-	        if (shapeData.center) {
-	            var localOffset = colliderShape.localOffset;
-	            localOffset.fromArray(shapeData.center);
-	            colliderShape.localOffset = localOffset;
-	        }
-	        return colliderShape;
-	    }
-	    static physicVector3TransformQuat(source, qx, qy, qz, qw, out) {
-	        var x = source.x, y = source.y, z = source.z, ix = qw * x + qy * z - qz * y, iy = qw * y + qz * x - qx * z, iz = qw * z + qx * y - qy * x, iw = -qx * x - qy * y - qz * z;
-	        out.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-	        out.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-	        out.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
-	    }
-	    static physicQuaternionMultiply(lx, ly, lz, lw, right, out) {
-	        var rx = right.x;
-	        var ry = right.y;
-	        var rz = right.z;
-	        var rw = right.w;
-	        var a = (ly * rz - lz * ry);
-	        var b = (lz * rx - lx * rz);
-	        var c = (lx * ry - ly * rx);
-	        var d = (lx * rx + ly * ry + lz * rz);
-	        out.x = (lx * rw + rx * lw) + a;
-	        out.y = (ly * rw + ry * lw) + b;
-	        out.z = (lz * rw + rz * lw) + c;
-	        out.w = lw * rw - d;
-	    }
-	    get restitution() {
-	        return this._restitution;
-	    }
-	    set restitution(value) {
-	        this._restitution = value;
-	        this._btColliderObject && ILaya3D.Physics3D._bullet.btCollisionObject_setRestitution(this._btColliderObject, value);
-	    }
-	    get friction() {
-	        return this._friction;
-	    }
-	    set friction(value) {
-	        this._friction = value;
-	        this._btColliderObject && ILaya3D.Physics3D._bullet.btCollisionObject_setFriction(this._btColliderObject, value);
-	    }
-	    get rollingFriction() {
-	        return this._rollingFriction;
-	    }
-	    set rollingFriction(value) {
-	        this._rollingFriction = value;
-	        this._btColliderObject && ILaya3D.Physics3D._bullet.btCollisionObject_setRollingFriction(this._btColliderObject, value);
-	    }
-	    get ccdMotionThreshold() {
-	        return this._ccdMotionThreshold;
-	    }
-	    set ccdMotionThreshold(value) {
-	        this._ccdMotionThreshold = value;
-	        this._btColliderObject && ILaya3D.Physics3D._bullet.btCollisionObject_setCcdMotionThreshold(this._btColliderObject, value);
-	    }
-	    get ccdSweptSphereRadius() {
-	        return this._ccdSweptSphereRadius;
-	    }
-	    set ccdSweptSphereRadius(value) {
-	        this._ccdSweptSphereRadius = value;
-	        this._btColliderObject && ILaya3D.Physics3D._bullet.btCollisionObject_setCcdSweptSphereRadius(this._btColliderObject, value);
-	    }
-	    get isActive() {
-	        return this._btColliderObject ? ILaya3D.Physics3D._bullet.btCollisionObject_isActive(this._btColliderObject) : false;
-	    }
-	    get colliderShape() {
-	        return this._colliderShape;
-	    }
-	    set colliderShape(value) {
-	        var lastColliderShape = this._colliderShape;
-	        if (lastColliderShape) {
-	            lastColliderShape._attatched = false;
-	            lastColliderShape._attatchedCollisionObject = null;
-	        }
-	        this._colliderShape = value;
-	        if (value) {
-	            if (value._attatched) {
-	                throw "PhysicsComponent: this shape has attatched to other entity.";
-	            }
-	            else {
-	                value._attatched = true;
-	                value._attatchedCollisionObject = this;
-	            }
-	            if (this._btColliderObject) {
-	                ILaya3D.Physics3D._bullet.btCollisionObject_setCollisionShape(this._btColliderObject, value._btShape);
-	                var canInSimulation = this._simulation && this._enabled;
-	                (canInSimulation && lastColliderShape) && (this._removeFromSimulation());
-	                this._onShapeChange(value);
-	                if (canInSimulation) {
-	                    this._derivePhysicsTransformation(true);
-	                    this._addToSimulation();
-	                }
-	            }
-	        }
-	        else {
-	            if (this._simulation && this._enabled)
-	                lastColliderShape && this._removeFromSimulation();
-	        }
-	    }
-	    get simulation() {
-	        return this._simulation;
-	    }
-	    get collisionGroup() {
-	        return this._collisionGroup;
-	    }
-	    set collisionGroup(value) {
-	        if (this._collisionGroup !== value) {
-	            this._collisionGroup = value;
-	            if (this._simulation && this._colliderShape && this._enabled) {
-	                this._removeFromSimulation();
-	                this._addToSimulation();
-	            }
-	        }
-	    }
-	    get canCollideWith() {
-	        return this._canCollideWith;
-	    }
-	    set canCollideWith(value) {
-	        if (this._canCollideWith !== value) {
-	            this._canCollideWith = value;
-	            if (this._simulation && this._colliderShape && this._enabled) {
-	                this._removeFromSimulation();
-	                this._addToSimulation();
-	            }
-	        }
-	    }
-	    _parseShape(shapesData) {
-	        var shapeCount = shapesData.length;
-	        if (shapeCount === 1) {
-	            var shape = PhysicsComponent._creatShape(shapesData[0]);
-	            this.colliderShape = shape;
-	        }
-	        else {
-	            var compoundShape = new CompoundColliderShape();
-	            for (var i = 0; i < shapeCount; i++) {
-	                shape = PhysicsComponent._creatShape(shapesData[i]);
-	                compoundShape.addChildShape(shape);
-	            }
-	            this.colliderShape = compoundShape;
-	        }
-	    }
-	    _onScaleChange(scale) {
-	        this._colliderShape._setScale(scale);
-	    }
-	    _onEnable() {
-	        this._simulation = this.owner._scene.physicsSimulation;
-	        ILaya3D.Physics3D._bullet.btCollisionObject_setContactProcessingThreshold(this._btColliderObject, 1e30);
-	        if (this._colliderShape) {
-	            this._derivePhysicsTransformation(true);
-	            this._addToSimulation();
-	        }
-	    }
-	    _onDisable() {
-	        if (this._colliderShape) {
-	            this._removeFromSimulation();
-	            (this._inPhysicUpdateListIndex !== -1) && (this._simulation._physicsUpdateList.remove(this));
-	        }
-	        this._simulation = null;
-	    }
-	    _onDestroy() {
-	        delete PhysicsComponent._physicObjectsMap[this.id];
-	        ILaya3D.Physics3D._bullet.btCollisionObject_destroy(this._btColliderObject);
-	        this._colliderShape.destroy();
-	        super._onDestroy();
-	        this._btColliderObject = null;
-	        this._colliderShape = null;
-	        this._simulation = null;
-	        this.owner.transform.off(Laya.Event.TRANSFORM_CHANGED, this, this._onTransformChanged);
-	    }
-	    _isValid() {
-	        return this._simulation && this._colliderShape && this._enabled;
-	    }
-	    _parse(data) {
-	        (data.collisionGroup != null) && (this.collisionGroup = data.collisionGroup);
-	        (data.canCollideWith != null) && (this.canCollideWith = data.canCollideWith);
-	        (data.ccdMotionThreshold != null) && (this.ccdMotionThreshold = data.ccdMotionThreshold);
-	        (data.ccdSweptSphereRadius != null) && (this.ccdSweptSphereRadius = data.ccdSweptSphereRadius);
-	    }
-	    _setTransformFlag(type, value) {
-	        if (value)
-	            this._transformFlag |= type;
-	        else
-	            this._transformFlag &= ~type;
-	    }
-	    _getTransformFlag(type) {
-	        return (this._transformFlag & type) != 0;
-	    }
-	    _addToSimulation() {
-	    }
-	    _removeFromSimulation() {
-	    }
-	    _derivePhysicsTransformation(force) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var btColliderObject = this._btColliderObject;
-	        var btTransform = bt.btCollisionObject_getWorldTransform(btColliderObject);
-	        this._innerDerivePhysicsTransformation(btTransform, force);
-	        bt.btCollisionObject_setWorldTransform(btColliderObject, btTransform);
-	    }
-	    _innerDerivePhysicsTransformation(physicTransformOut, force) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var transform = this.owner._transform;
-	        if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION)) {
-	            var shapeOffset = this._colliderShape.localOffset;
-	            var position = transform.position;
-	            var btPosition = PhysicsComponent._btVector30;
-	            if (shapeOffset.x !== 0 || shapeOffset.y !== 0 || shapeOffset.z !== 0) {
-	                var physicPosition = PhysicsComponent._tempVector30;
-	                var worldMat = transform.worldMatrix;
-	                Vector3.transformCoordinate(shapeOffset, worldMat, physicPosition);
-	                bt.btVector3_setValue(btPosition, -physicPosition.x, physicPosition.y, physicPosition.z);
-	            }
-	            else {
-	                bt.btVector3_setValue(btPosition, -position.x, position.y, position.z);
-	            }
-	            bt.btTransform_setOrigin(physicTransformOut, btPosition);
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION, false);
-	        }
-	        if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION)) {
-	            var shapeRotation = this._colliderShape.localRotation;
-	            var btRotation = PhysicsComponent._btQuaternion0;
-	            var rotation = transform.rotation;
-	            if (shapeRotation.x !== 0 || shapeRotation.y !== 0 || shapeRotation.z !== 0 || shapeRotation.w !== 1) {
-	                var physicRotation = PhysicsComponent._tempQuaternion0;
-	                PhysicsComponent.physicQuaternionMultiply(rotation.x, rotation.y, rotation.z, rotation.w, shapeRotation, physicRotation);
-	                bt.btQuaternion_setValue(btRotation, -physicRotation.x, physicRotation.y, physicRotation.z, -physicRotation.w);
-	            }
-	            else {
-	                bt.btQuaternion_setValue(btRotation, -rotation.x, rotation.y, rotation.z, -rotation.w);
-	            }
-	            bt.btTransform_setRotation(physicTransformOut, btRotation);
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION, false);
-	        }
-	        if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
-	            this._onScaleChange(transform.getWorldLossyScale());
-	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDSCALE, false);
-	        }
-	    }
-	    _updateTransformComponent(physicsTransform) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var colliderShape = this._colliderShape;
-	        var localOffset = colliderShape.localOffset;
-	        var localRotation = colliderShape.localRotation;
-	        var transform = this.owner._transform;
-	        var position = transform.position;
-	        var rotation = transform.rotation;
-	        var btPosition = bt.btTransform_getOrigin(physicsTransform);
-	        var btRotation = bt.btTransform_getRotation(physicsTransform);
-	        var btRotX = -bt.btQuaternion_x(btRotation);
-	        var btRotY = bt.btQuaternion_y(btRotation);
-	        var btRotZ = bt.btQuaternion_z(btRotation);
-	        var btRotW = -bt.btQuaternion_w(btRotation);
-	        if (localRotation.x !== 0 || localRotation.y !== 0 || localRotation.z !== 0 || localRotation.w !== 1) {
-	            var invertShapeRotaion = PhysicsComponent._tempQuaternion0;
-	            localRotation.invert(invertShapeRotaion);
-	            PhysicsComponent.physicQuaternionMultiply(btRotX, btRotY, btRotZ, btRotW, invertShapeRotaion, rotation);
-	        }
-	        else {
-	            rotation.x = btRotX;
-	            rotation.y = btRotY;
-	            rotation.z = btRotZ;
-	            rotation.w = btRotW;
-	        }
-	        transform.rotation = rotation;
-	        if (localOffset.x !== 0 || localOffset.y !== 0 || localOffset.z !== 0) {
-	            var btScale = bt.btCollisionShape_getLocalScaling(colliderShape._btShape);
-	            var rotShapePosition = PhysicsComponent._tempVector30;
-	            rotShapePosition.x = localOffset.x * bt.btVector3_x(btScale);
-	            rotShapePosition.y = localOffset.y * bt.btVector3_y(btScale);
-	            rotShapePosition.z = localOffset.z * bt.btVector3_z(btScale);
-	            Vector3.transformQuat(rotShapePosition, rotation, rotShapePosition);
-	            position.x = -bt.btVector3_x(btPosition) - rotShapePosition.x;
-	            position.y = bt.btVector3_y(btPosition) - rotShapePosition.y;
-	            position.z = bt.btVector3_z(btPosition) - rotShapePosition.z;
-	        }
-	        else {
-	            position.x = -bt.btVector3_x(btPosition);
-	            position.y = bt.btVector3_y(btPosition);
-	            position.z = bt.btVector3_z(btPosition);
-	        }
-	        transform.position = position;
-	    }
-	    _onShapeChange(colShape) {
-	        var btColObj = this._btColliderObject;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var flags = bt.btCollisionObject_getCollisionFlags(btColObj);
-	        if (colShape.needsCustomCollisionCallback) {
-	            if ((flags & PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK) === 0)
-	                bt.btCollisionObject_setCollisionFlags(btColObj, flags | PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK);
-	        }
-	        else {
-	            if ((flags & PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK) > 0)
-	                bt.btCollisionObject_setCollisionFlags(btColObj, flags ^ PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK);
-	        }
-	    }
-	    _onAdded() {
-	        this.enabled = this._enabled;
-	        this.restitution = this._restitution;
-	        this.friction = this._friction;
-	        this.rollingFriction = this._rollingFriction;
-	        this.ccdMotionThreshold = this._ccdMotionThreshold;
-	        this.ccdSweptSphereRadius = this._ccdSweptSphereRadius;
-	        this.owner.transform.on(Laya.Event.TRANSFORM_CHANGED, this, this._onTransformChanged);
-	    }
-	    _onTransformChanged(flag) {
-	        if (PhysicsComponent._addUpdateList || !this._controlBySimulation) {
-	            flag &= Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDSCALE;
-	            if (flag) {
-	                this._transformFlag |= flag;
-	                if (this._isValid() && this._inPhysicUpdateListIndex === -1)
-	                    this._simulation._physicsUpdateList.add(this);
-	            }
-	        }
-	    }
-	    _cloneTo(dest) {
-	        var destPhysicsComponent = dest;
-	        destPhysicsComponent.restitution = this._restitution;
-	        destPhysicsComponent.friction = this._friction;
-	        destPhysicsComponent.rollingFriction = this._rollingFriction;
-	        destPhysicsComponent.ccdMotionThreshold = this._ccdMotionThreshold;
-	        destPhysicsComponent.ccdSweptSphereRadius = this._ccdSweptSphereRadius;
-	        destPhysicsComponent.collisionGroup = this._collisionGroup;
-	        destPhysicsComponent.canCollideWith = this._canCollideWith;
-	        destPhysicsComponent.canScaleShape = this.canScaleShape;
-	        (this._colliderShape) && (destPhysicsComponent.colliderShape = this._colliderShape.clone());
-	    }
-	}
-	PhysicsComponent.ACTIVATIONSTATE_ACTIVE_TAG = 1;
-	PhysicsComponent.ACTIVATIONSTATE_ISLAND_SLEEPING = 2;
-	PhysicsComponent.ACTIVATIONSTATE_WANTS_DEACTIVATION = 3;
-	PhysicsComponent.ACTIVATIONSTATE_DISABLE_DEACTIVATION = 4;
-	PhysicsComponent.ACTIVATIONSTATE_DISABLE_SIMULATION = 5;
-	PhysicsComponent.COLLISIONFLAGS_STATIC_OBJECT = 1;
-	PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT = 2;
-	PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE = 4;
-	PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK = 8;
-	PhysicsComponent.COLLISIONFLAGS_CHARACTER_OBJECT = 16;
-	PhysicsComponent.COLLISIONFLAGS_DISABLE_VISUALIZE_OBJECT = 32;
-	PhysicsComponent.COLLISIONFLAGS_DISABLE_SPU_COLLISION_PROCESSING = 64;
-	PhysicsComponent._tempVector30 = new Vector3();
-	PhysicsComponent._tempQuaternion0 = new Quaternion();
-	PhysicsComponent._tempQuaternion1 = new Quaternion();
-	PhysicsComponent._tempMatrix4x40 = new Matrix4x4();
-	PhysicsComponent._physicObjectsMap = {};
-	PhysicsComponent._addUpdateList = true;
-
-	class SingletonList {
-	    constructor() {
-	        this.elements = [];
-	        this.length = 0;
-	    }
-	    _add(element) {
-	        if (this.length === this.elements.length)
-	            this.elements.push(element);
-	        else
-	            this.elements[this.length] = element;
-	    }
-	    add(element) {
-	        if (this.length === this.elements.length)
-	            this.elements.push(element);
-	        else
-	            this.elements[this.length] = element;
-	        this.length++;
-	    }
-	}
-
-	class PhysicsUpdateList extends SingletonList {
-	    constructor() {
-	        super();
-	    }
-	    add(element) {
-	        var index = element._inPhysicUpdateListIndex;
-	        if (index !== -1)
-	            throw "PhysicsUpdateList:element has  in  PhysicsUpdateList.";
-	        this._add(element);
-	        element._inPhysicUpdateListIndex = this.length++;
-	    }
-	    remove(element) {
-	        var index = element._inPhysicUpdateListIndex;
-	        this.length--;
-	        if (index !== this.length) {
-	            var end = this.elements[this.length];
-	            this.elements[index] = end;
-	            end._inPhysicUpdateListIndex = index;
-	        }
-	        element._inPhysicUpdateListIndex = -1;
-	    }
-	}
-
-	class ContactPoint {
-	    constructor() {
-	        this._idCounter = 0;
-	        this.colliderA = null;
-	        this.colliderB = null;
-	        this.distance = 0;
-	        this.normal = new Vector3();
-	        this.positionOnA = new Vector3();
-	        this.positionOnB = new Vector3();
-	        this._id = ++this._idCounter;
-	    }
-	}
-
-	class HitResult {
-	    constructor() {
-	        this.succeeded = false;
-	        this.collider = null;
-	        this.point = new Vector3();
-	        this.normal = new Vector3();
-	        this.hitFraction = 0;
-	    }
-	}
-
-	class Collision {
-	    constructor() {
-	        this._lastUpdateFrame = -2147483648;
-	        this._updateFrame = -2147483648;
-	        this._isTrigger = false;
-	        this.contacts = [];
-	    }
-	    _setUpdateFrame(farme) {
-	        this._lastUpdateFrame = this._updateFrame;
-	        this._updateFrame = farme;
-	    }
-	}
-
-	class CollisionTool {
-	    constructor() {
-	        this._hitResultsPoolIndex = 0;
-	        this._hitResultsPool = [];
-	        this._contactPonintsPoolIndex = 0;
-	        this._contactPointsPool = [];
-	        this._collisionsPool = [];
-	        this._collisions = {};
-	    }
-	    getHitResult() {
-	        var hitResult = this._hitResultsPool[this._hitResultsPoolIndex++];
-	        if (!hitResult) {
-	            hitResult = new HitResult();
-	            this._hitResultsPool.push(hitResult);
-	        }
-	        return hitResult;
-	    }
-	    recoverAllHitResultsPool() {
-	        this._hitResultsPoolIndex = 0;
-	    }
-	    getContactPoints() {
-	        var contactPoint = this._contactPointsPool[this._contactPonintsPoolIndex++];
-	        if (!contactPoint) {
-	            contactPoint = new ContactPoint();
-	            this._contactPointsPool.push(contactPoint);
-	        }
-	        return contactPoint;
-	    }
-	    recoverAllContactPointsPool() {
-	        this._contactPonintsPoolIndex = 0;
-	    }
-	    getCollision(physicComponentA, physicComponentB) {
-	        var collision;
-	        var idA = physicComponentA.id;
-	        var idB = physicComponentB.id;
-	        var subCollisionFirst = this._collisions[idA];
-	        if (subCollisionFirst)
-	            collision = subCollisionFirst[idB];
-	        if (!collision) {
-	            if (!subCollisionFirst) {
-	                subCollisionFirst = {};
-	                this._collisions[idA] = subCollisionFirst;
-	            }
-	            collision = this._collisionsPool.length === 0 ? new Collision() : this._collisionsPool.pop();
-	            collision._colliderA = physicComponentA;
-	            collision._colliderB = physicComponentB;
-	            subCollisionFirst[idB] = collision;
-	        }
-	        return collision;
-	    }
-	    recoverCollision(collision) {
-	        var idA = collision._colliderA.id;
-	        var idB = collision._colliderB.id;
-	        this._collisions[idA][idB] = null;
-	        this._collisionsPool.push(collision);
-	    }
-	    garbageCollection() {
-	        this._hitResultsPoolIndex = 0;
-	        this._hitResultsPool.length = 0;
-	        this._contactPonintsPoolIndex = 0;
-	        this._contactPointsPool.length = 0;
-	        this._collisionsPool.length = 0;
-	        for (var subCollisionsKey in this._collisionsPool) {
-	            var subCollisions = this._collisionsPool[subCollisionsKey];
-	            var wholeDelete = true;
-	            for (var collisionKey in subCollisions) {
-	                if (subCollisions[collisionKey])
-	                    wholeDelete = false;
-	                else
-	                    delete subCollisions[collisionKey];
-	            }
-	            if (wholeDelete)
-	                delete this._collisionsPool[subCollisionsKey];
-	        }
-	    }
-	}
-
-	class PhysicsSimulation {
-	    constructor(configuration, flags = 0) {
-	        this._gravity = new Vector3(0, -10, 0);
-	        this._btVector3Zero = ILaya3D.Physics3D._bullet.btVector3_create(0, 0, 0);
-	        this._btDefaultQuaternion = ILaya3D.Physics3D._bullet.btQuaternion_create(0, 0, 0, -1);
-	        this._collisionsUtils = new CollisionTool();
-	        this._previousFrameCollisions = [];
-	        this._currentFrameCollisions = [];
-	        this._currentConstraint = {};
-	        this._physicsUpdateList = new PhysicsUpdateList();
-	        this._characters = [];
-	        this._updatedRigidbodies = 0;
-	        this.maxSubSteps = 1;
-	        this.fixedTimeStep = 1.0 / 60.0;
-	        this.maxSubSteps = configuration.maxSubSteps;
-	        this.fixedTimeStep = configuration.fixedTimeStep;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        this._btCollisionConfiguration = bt.btDefaultCollisionConfiguration_create();
-	        this._btDispatcher = bt.btCollisionDispatcher_create(this._btCollisionConfiguration);
-	        this._btBroadphase = bt.btDbvtBroadphase_create();
-	        bt.btOverlappingPairCache_setInternalGhostPairCallback(bt.btDbvtBroadphase_getOverlappingPairCache(this._btBroadphase), bt.btGhostPairCallback_create());
-	        var conFlags = configuration.flags;
-	        if (conFlags & PhysicsSimulation.PHYSICSENGINEFLAGS_COLLISIONSONLY) {
-	            this._btCollisionWorld = new bt.btCollisionWorld(this._btDispatcher, this._btBroadphase, this._btCollisionConfiguration);
-	        }
-	        else if (conFlags & PhysicsSimulation.PHYSICSENGINEFLAGS_SOFTBODYSUPPORT) {
-	            throw "PhysicsSimulation:SoftBody processing is not yet available";
-	        }
-	        else {
-	            var solver = bt.btSequentialImpulseConstraintSolver_create();
-	            this._btDiscreteDynamicsWorld = bt.btDiscreteDynamicsWorld_create(this._btDispatcher, this._btBroadphase, solver, this._btCollisionConfiguration);
-	            this._btCollisionWorld = this._btDiscreteDynamicsWorld;
-	        }
-	        if (this._btDiscreteDynamicsWorld) {
-	            this._btSolverInfo = bt.btDynamicsWorld_getSolverInfo(this._btDiscreteDynamicsWorld);
-	            this._btDispatchInfo = bt.btCollisionWorld_getDispatchInfo(this._btDiscreteDynamicsWorld);
-	        }
-	        this._btClosestRayResultCallback = bt.ClosestRayResultCallback_create(this._btVector3Zero, this._btVector3Zero);
-	        this._btAllHitsRayResultCallback = bt.AllHitsRayResultCallback_create(this._btVector3Zero, this._btVector3Zero);
-	        this._btClosestConvexResultCallback = bt.ClosestConvexResultCallback_create(this._btVector3Zero, this._btVector3Zero);
-	        this._btAllConvexResultCallback = bt.AllConvexResultCallback_create(this._btVector3Zero, this._btVector3Zero);
-	        bt.btGImpactCollisionAlgorithm_RegisterAlgorithm(this._btDispatcher);
-	    }
-	    static __init__() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        PhysicsSimulation._btTempVector30 = bt.btVector3_create(0, 0, 0);
-	        PhysicsSimulation._btTempVector31 = bt.btVector3_create(0, 0, 0);
-	        PhysicsSimulation._btTempQuaternion0 = bt.btQuaternion_create(0, 0, 0, 1);
-	        PhysicsSimulation._btTempQuaternion1 = bt.btQuaternion_create(0, 0, 0, 1);
-	        PhysicsSimulation._btTempTransform0 = bt.btTransform_create();
-	        PhysicsSimulation._btTempTransform1 = bt.btTransform_create();
-	    }
-	    static createConstraint() {
-	    }
-	    get continuousCollisionDetection() {
-	        return ILaya3D.Physics3D._bullet.btCollisionWorld_get_m_useContinuous(this._btDispatchInfo);
-	    }
-	    set continuousCollisionDetection(value) {
-	        ILaya3D.Physics3D._bullet.btCollisionWorld_set_m_useContinuous(this._btDispatchInfo, value);
-	    }
-	    get gravity() {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        return this._gravity;
-	    }
-	    set gravity(value) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        this._gravity = value;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var btGravity = PhysicsSimulation._btTempVector30;
-	        bt.btVector3_setValue(btGravity, -value.x, value.y, value.z);
-	        bt.btDiscreteDynamicsWorld_setGravity(this._btDiscreteDynamicsWorld, btGravity);
-	    }
-	    get speculativeContactRestitution() {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        return ILaya3D.Physics3D._bullet.btDiscreteDynamicsWorld_getApplySpeculativeContactRestitution(this._btDiscreteDynamicsWorld);
-	    }
-	    set speculativeContactRestitution(value) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        ILaya3D.Physics3D._bullet.btDiscreteDynamicsWorld_setApplySpeculativeContactRestitution(this._btDiscreteDynamicsWorld, value);
-	    }
-	    _simulate(deltaTime) {
-	        this._updatedRigidbodies = 0;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        if (this._btDiscreteDynamicsWorld)
-	            bt.btDiscreteDynamicsWorld_stepSimulation(this._btDiscreteDynamicsWorld, deltaTime, this.maxSubSteps, this.fixedTimeStep);
-	        else
-	            bt.PerformDiscreteCollisionDetection(this._btCollisionWorld);
-	    }
-	    _destroy() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        if (this._btDiscreteDynamicsWorld) {
-	            bt.btCollisionWorld_destroy(this._btDiscreteDynamicsWorld);
-	            this._btDiscreteDynamicsWorld = null;
-	        }
-	        else {
-	            bt.btCollisionWorld_destroy(this._btCollisionWorld);
-	            this._btCollisionWorld = null;
-	        }
-	        bt.btDbvtBroadphase_destroy(this._btBroadphase);
-	        this._btBroadphase = null;
-	        bt.btCollisionDispatcher_destroy(this._btDispatcher);
-	        this._btDispatcher = null;
-	        bt.btDefaultCollisionConfiguration_destroy(this._btCollisionConfiguration);
-	        this._btCollisionConfiguration = null;
-	    }
-	    _addPhysicsCollider(component, group, mask) {
-	        ILaya3D.Physics3D._bullet.btCollisionWorld_addCollisionObject(this._btCollisionWorld, component._btColliderObject, group, mask);
-	    }
-	    _removePhysicsCollider(component) {
-	        ILaya3D.Physics3D._bullet.btCollisionWorld_removeCollisionObject(this._btCollisionWorld, component._btColliderObject);
-	    }
-	    _addRigidBody(rigidBody, group, mask) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        ILaya3D.Physics3D._bullet.btDiscreteDynamicsWorld_addRigidBody(this._btCollisionWorld, rigidBody._btColliderObject, group, mask);
-	    }
-	    _removeRigidBody(rigidBody) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        ILaya3D.Physics3D._bullet.btDiscreteDynamicsWorld_removeRigidBody(this._btCollisionWorld, rigidBody._btColliderObject);
-	    }
-	    _addCharacter(character, group, mask) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btCollisionWorld_addCollisionObject(this._btCollisionWorld, character._btColliderObject, group, mask);
-	        bt.btDynamicsWorld_addAction(this._btCollisionWorld, character._btKinematicCharacter);
-	    }
-	    _removeCharacter(character) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btCollisionWorld_removeCollisionObject(this._btCollisionWorld, character._btColliderObject);
-	        bt.btDynamicsWorld_removeAction(this._btCollisionWorld, character._btKinematicCharacter);
-	    }
-	    raycastFromTo(from, to, out = null, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var rayResultCall = this._btClosestRayResultCallback;
-	        var rayFrom = PhysicsSimulation._btTempVector30;
-	        var rayTo = PhysicsSimulation._btTempVector31;
-	        bt.btVector3_setValue(rayFrom, -from.x, from.y, from.z);
-	        bt.btVector3_setValue(rayTo, -to.x, to.y, to.z);
-	        bt.ClosestRayResultCallback_set_m_rayFromWorld(rayResultCall, rayFrom);
-	        bt.ClosestRayResultCallback_set_m_rayToWorld(rayResultCall, rayTo);
-	        bt.RayResultCallback_set_m_collisionFilterGroup(rayResultCall, collisonGroup);
-	        bt.RayResultCallback_set_m_collisionFilterMask(rayResultCall, collisionMask);
-	        bt.RayResultCallback_set_m_collisionObject(rayResultCall, null);
-	        bt.RayResultCallback_set_m_closestHitFraction(rayResultCall, 1);
-	        bt.btCollisionWorld_rayTest(this._btCollisionWorld, rayFrom, rayTo, rayResultCall);
-	        if (bt.RayResultCallback_hasHit(rayResultCall)) {
-	            if (out) {
-	                out.succeeded = true;
-	                out.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.RayResultCallback_get_m_collisionObject(rayResultCall))];
-	                out.hitFraction = bt.RayResultCallback_get_m_closestHitFraction(rayResultCall);
-	                var btPoint = bt.ClosestRayResultCallback_get_m_hitPointWorld(rayResultCall);
-	                var point = out.point;
-	                point.x = -bt.btVector3_x(btPoint);
-	                point.y = bt.btVector3_y(btPoint);
-	                point.z = bt.btVector3_z(btPoint);
-	                var btNormal = bt.ClosestRayResultCallback_get_m_hitNormalWorld(rayResultCall);
-	                var normal = out.normal;
-	                normal.x = -bt.btVector3_x(btNormal);
-	                normal.y = bt.btVector3_y(btNormal);
-	                normal.z = bt.btVector3_z(btNormal);
-	            }
-	            return true;
-	        }
-	        else {
-	            if (out)
-	                out.succeeded = false;
-	            return false;
-	        }
-	    }
-	    raycastAllFromTo(from, to, out, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var rayResultCall = this._btAllHitsRayResultCallback;
-	        var rayFrom = PhysicsSimulation._btTempVector30;
-	        var rayTo = PhysicsSimulation._btTempVector31;
-	        out.length = 0;
-	        bt.btVector3_setValue(rayFrom, -from.x, from.y, from.z);
-	        bt.btVector3_setValue(rayTo, -to.x, to.y, to.z);
-	        bt.AllHitsRayResultCallback_set_m_rayFromWorld(rayResultCall, rayFrom);
-	        bt.AllHitsRayResultCallback_set_m_rayToWorld(rayResultCall, rayTo);
-	        bt.RayResultCallback_set_m_collisionFilterGroup(rayResultCall, collisonGroup);
-	        bt.RayResultCallback_set_m_collisionFilterMask(rayResultCall, collisionMask);
-	        var collisionObjects = bt.AllHitsRayResultCallback_get_m_collisionObjects(rayResultCall);
-	        var btPoints = bt.AllHitsRayResultCallback_get_m_hitPointWorld(rayResultCall);
-	        var btNormals = bt.AllHitsRayResultCallback_get_m_hitNormalWorld(rayResultCall);
-	        var btFractions = bt.AllHitsRayResultCallback_get_m_hitFractions(rayResultCall);
-	        bt.tBtCollisionObjectArray_clear(collisionObjects);
-	        bt.tVector3Array_clear(btPoints);
-	        bt.tVector3Array_clear(btNormals);
-	        bt.tScalarArray_clear(btFractions);
-	        bt.btCollisionWorld_rayTest(this._btCollisionWorld, rayFrom, rayTo, rayResultCall);
-	        var count = bt.tBtCollisionObjectArray_size(collisionObjects);
-	        if (count > 0) {
-	            this._collisionsUtils.recoverAllHitResultsPool();
-	            for (var i = 0; i < count; i++) {
-	                var hitResult = this._collisionsUtils.getHitResult();
-	                out.push(hitResult);
-	                hitResult.succeeded = true;
-	                hitResult.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.tBtCollisionObjectArray_at(collisionObjects, i))];
-	                hitResult.hitFraction = bt.tScalarArray_at(btFractions, i);
-	                var btPoint = bt.tVector3Array_at(btPoints, i);
-	                var pointE = hitResult.point;
-	                pointE.x = -bt.btVector3_x(btPoint);
-	                pointE.y = bt.btVector3_y(btPoint);
-	                pointE.z = bt.btVector3_z(btPoint);
-	                var btNormal = bt.tVector3Array_at(btNormals, i);
-	                var normal = hitResult.normal;
-	                normal.x = -bt.btVector3_x(btNormal);
-	                normal.y = bt.btVector3_y(btNormal);
-	                normal.z = bt.btVector3_z(btNormal);
-	            }
-	            return true;
-	        }
-	        else {
-	            return false;
-	        }
-	    }
-	    rayCast(ray, outHitResult = null, distance = 2147483647, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
-	        var from = ray.origin;
-	        var to = PhysicsSimulation._tempVector30;
-	        Vector3.normalize(ray.direction, to);
-	        Vector3.scale(to, distance, to);
-	        Vector3.add(from, to, to);
-	        return this.raycastFromTo(from, to, outHitResult, collisonGroup, collisionMask);
-	    }
-	    rayCastAll(ray, out, distance = 2147483647, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
-	        var from = ray.origin;
-	        var to = PhysicsSimulation._tempVector30;
-	        Vector3.normalize(ray.direction, to);
-	        Vector3.scale(to, distance, to);
-	        Vector3.add(from, to, to);
-	        return this.raycastAllFromTo(from, to, out, collisonGroup, collisionMask);
-	    }
-	    shapeCast(shape, fromPosition, toPosition, out = null, fromRotation = null, toRotation = null, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, allowedCcdPenetration = 0.0) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var convexResultCall = this._btClosestConvexResultCallback;
-	        var convexPosFrom = PhysicsSimulation._btTempVector30;
-	        var convexPosTo = PhysicsSimulation._btTempVector31;
-	        var convexRotFrom = PhysicsSimulation._btTempQuaternion0;
-	        var convexRotTo = PhysicsSimulation._btTempQuaternion1;
-	        var convexTransform = PhysicsSimulation._btTempTransform0;
-	        var convexTransTo = PhysicsSimulation._btTempTransform1;
-	        var sweepShape = shape._btShape;
-	        bt.btVector3_setValue(convexPosFrom, -fromPosition.x, fromPosition.y, fromPosition.z);
-	        bt.btVector3_setValue(convexPosTo, -toPosition.x, toPosition.y, toPosition.z);
-	        bt.ConvexResultCallback_set_m_collisionFilterGroup(convexResultCall, collisonGroup);
-	        bt.ConvexResultCallback_set_m_collisionFilterMask(convexResultCall, collisionMask);
-	        bt.btTransform_setOrigin(convexTransform, convexPosFrom);
-	        bt.btTransform_setOrigin(convexTransTo, convexPosTo);
-	        if (fromRotation) {
-	            bt.btQuaternion_setValue(convexRotFrom, -fromRotation.x, fromRotation.y, fromRotation.z, -fromRotation.w);
-	            bt.btTransform_setRotation(convexTransform, convexRotFrom);
-	        }
-	        else {
-	            bt.btTransform_setRotation(convexTransform, this._btDefaultQuaternion);
-	        }
-	        if (toRotation) {
-	            bt.btQuaternion_setValue(convexRotTo, -toRotation.x, toRotation.y, toRotation.z, -toRotation.w);
-	            bt.btTransform_setRotation(convexTransTo, convexRotTo);
-	        }
-	        else {
-	            bt.btTransform_setRotation(convexTransTo, this._btDefaultQuaternion);
-	        }
-	        bt.ClosestConvexResultCallback_set_m_hitCollisionObject(convexResultCall, null);
-	        bt.ConvexResultCallback_set_m_closestHitFraction(convexResultCall, 1);
-	        bt.btCollisionWorld_convexSweepTest(this._btCollisionWorld, sweepShape, convexTransform, convexTransTo, convexResultCall, allowedCcdPenetration);
-	        if (bt.ConvexResultCallback_hasHit(convexResultCall)) {
-	            if (out) {
-	                out.succeeded = true;
-	                out.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.ClosestConvexResultCallback_get_m_hitCollisionObject(convexResultCall))];
-	                out.hitFraction = bt.ConvexResultCallback_get_m_closestHitFraction(convexResultCall);
-	                var btPoint = bt.ClosestConvexResultCallback_get_m_hitPointWorld(convexResultCall);
-	                var btNormal = bt.ClosestConvexResultCallback_get_m_hitNormalWorld(convexResultCall);
-	                var point = out.point;
-	                var normal = out.normal;
-	                point.x = -bt.btVector3_x(btPoint);
-	                point.y = bt.btVector3_y(btPoint);
-	                point.z = bt.btVector3_z(btPoint);
-	                normal.x = -bt.btVector3_x(btNormal);
-	                normal.y = bt.btVector3_y(btNormal);
-	                normal.z = bt.btVector3_z(btNormal);
-	            }
-	            return true;
-	        }
-	        else {
-	            if (out)
-	                out.succeeded = false;
-	            return false;
-	        }
-	    }
-	    shapeCastAll(shape, fromPosition, toPosition, out, fromRotation = null, toRotation = null, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, allowedCcdPenetration = 0.0) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var convexResultCall = this._btAllConvexResultCallback;
-	        var convexPosFrom = PhysicsSimulation._btTempVector30;
-	        var convexPosTo = PhysicsSimulation._btTempVector31;
-	        var convexRotFrom = PhysicsSimulation._btTempQuaternion0;
-	        var convexRotTo = PhysicsSimulation._btTempQuaternion1;
-	        var convexTransform = PhysicsSimulation._btTempTransform0;
-	        var convexTransTo = PhysicsSimulation._btTempTransform1;
-	        var sweepShape = shape._btShape;
-	        out.length = 0;
-	        bt.btVector3_setValue(convexPosFrom, -fromPosition.x, fromPosition.y, fromPosition.z);
-	        bt.btVector3_setValue(convexPosTo, -toPosition.x, toPosition.y, toPosition.z);
-	        bt.ConvexResultCallback_set_m_collisionFilterGroup(convexResultCall, collisonGroup);
-	        bt.ConvexResultCallback_set_m_collisionFilterMask(convexResultCall, collisionMask);
-	        bt.btTransform_setOrigin(convexTransform, convexPosFrom);
-	        bt.btTransform_setOrigin(convexTransTo, convexPosTo);
-	        if (fromRotation) {
-	            bt.btQuaternion_setValue(convexRotFrom, -fromRotation.x, fromRotation.y, fromRotation.z, -fromRotation.w);
-	            bt.btTransform_setRotation(convexTransform, convexRotFrom);
-	        }
-	        else {
-	            bt.btTransform_setRotation(convexTransform, this._btDefaultQuaternion);
-	        }
-	        if (toRotation) {
-	            bt.btQuaternion_setValue(convexRotTo, -toRotation.x, toRotation.y, toRotation.z, -toRotation.w);
-	            bt.btTransform_setRotation(convexTransTo, convexRotTo);
-	        }
-	        else {
-	            bt.btTransform_setRotation(convexTransTo, this._btDefaultQuaternion);
-	        }
-	        var collisionObjects = bt.AllConvexResultCallback_get_m_collisionObjects(convexResultCall);
-	        bt.tBtCollisionObjectArray_clear(collisionObjects);
-	        bt.btCollisionWorld_convexSweepTest(this._btCollisionWorld, sweepShape, convexTransform, convexTransTo, convexResultCall, allowedCcdPenetration);
-	        var count = bt.tBtCollisionObjectArray_size(collisionObjects);
-	        if (count > 0) {
-	            this._collisionsUtils.recoverAllHitResultsPool();
-	            var btPoints = bt.AllConvexResultCallback_get_m_hitPointWorld(convexResultCall);
-	            var btNormals = bt.AllConvexResultCallback_get_m_hitNormalWorld(convexResultCall);
-	            var btFractions = bt.AllConvexResultCallback_get_m_hitFractions(convexResultCall);
-	            for (var i = 0; i < count; i++) {
-	                var hitResult = this._collisionsUtils.getHitResult();
-	                out.push(hitResult);
-	                hitResult.succeeded = true;
-	                hitResult.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.tBtCollisionObjectArray_at(collisionObjects, i))];
-	                hitResult.hitFraction = bt.tScalarArray_at(btFractions, i);
-	                var btPoint = bt.tVector3Array_at(btPoints, i);
-	                var point = hitResult.point;
-	                point.x = -bt.btVector3_x(btPoint);
-	                point.y = bt.btVector3_y(btPoint);
-	                point.z = bt.btVector3_z(btPoint);
-	                var btNormal = bt.tVector3Array_at(btNormals, i);
-	                var normal = hitResult.normal;
-	                normal.x = -bt.btVector3_x(btNormal);
-	                normal.y = bt.btVector3_y(btNormal);
-	                normal.z = bt.btVector3_z(btNormal);
-	            }
-	            return true;
-	        }
-	        else {
-	            return false;
-	        }
-	    }
-	    addConstraint(constraint, disableCollisionsBetweenLinkedBodies = false) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        ILaya3D.Physics3D._bullet.btCollisionWorld_addConstraint(this._btDiscreteDynamicsWorld, constraint._btConstraint, disableCollisionsBetweenLinkedBodies);
-	        this._currentConstraint[constraint.id] = constraint;
-	    }
-	    removeConstraint(constraint) {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        ILaya3D.Physics3D._bullet.btCollisionWorld_removeConstraint(this._btDiscreteDynamicsWorld, constraint._btConstraint);
-	        delete this._currentConstraint[constraint.id];
-	    }
-	    _updatePhysicsTransformFromRender() {
-	        var elements = this._physicsUpdateList.elements;
-	        for (var i = 0, n = this._physicsUpdateList.length; i < n; i++) {
-	            var physicCollider = elements[i];
-	            physicCollider._derivePhysicsTransformation(false);
-	            physicCollider._inPhysicUpdateListIndex = -1;
-	        }
-	        this._physicsUpdateList.length = 0;
-	    }
-	    _updateCharacters() {
-	        for (var i = 0, n = this._characters.length; i < n; i++) {
-	            var character = this._characters[i];
-	            character._updateTransformComponent(ILaya3D.Physics3D._bullet.btCollisionObject_getWorldTransform(character._btColliderObject));
-	        }
-	    }
-	    _updateCollisions() {
-	        this._collisionsUtils.recoverAllContactPointsPool();
-	        var previous = this._currentFrameCollisions;
-	        this._currentFrameCollisions = this._previousFrameCollisions;
-	        this._currentFrameCollisions.length = 0;
-	        this._previousFrameCollisions = previous;
-	        var loopCount = Laya.Stat.loopCount;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var numManifolds = bt.btDispatcher_getNumManifolds(this._btDispatcher);
-	        for (var i = 0; i < numManifolds; i++) {
-	            var contactManifold = bt.btDispatcher_getManifoldByIndexInternal(this._btDispatcher, i);
-	            var componentA = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.btPersistentManifold_getBody0(contactManifold))];
-	            var componentB = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.btPersistentManifold_getBody1(contactManifold))];
-	            var collision = null;
-	            var isFirstCollision;
-	            var contacts = null;
-	            var isTrigger = componentA.isTrigger || componentB.isTrigger;
-	            if (isTrigger && (componentA.owner._needProcessTriggers || componentB.owner._needProcessTriggers)) {
-	                var numContacts = bt.btPersistentManifold_getNumContacts(contactManifold);
-	                for (var j = 0; j < numContacts; j++) {
-	                    var pt = bt.btPersistentManifold_getContactPoint(contactManifold, j);
-	                    var distance = bt.btManifoldPoint_getDistance(pt);
-	                    if (distance <= 0) {
-	                        collision = this._collisionsUtils.getCollision(componentA, componentB);
-	                        contacts = collision.contacts;
-	                        isFirstCollision = collision._updateFrame !== loopCount;
-	                        if (isFirstCollision) {
-	                            collision._isTrigger = true;
-	                            contacts.length = 0;
-	                        }
-	                        break;
-	                    }
-	                }
-	            }
-	            else if (componentA.owner._needProcessCollisions || componentB.owner._needProcessCollisions) {
-	                if (componentA._enableProcessCollisions || componentB._enableProcessCollisions) {
-	                    numContacts = bt.btPersistentManifold_getNumContacts(contactManifold);
-	                    for (j = 0; j < numContacts; j++) {
-	                        pt = bt.btPersistentManifold_getContactPoint(contactManifold, j);
-	                        distance = bt.btManifoldPoint_getDistance(pt);
-	                        if (distance <= 0) {
-	                            var contactPoint = this._collisionsUtils.getContactPoints();
-	                            contactPoint.colliderA = componentA;
-	                            contactPoint.colliderB = componentB;
-	                            contactPoint.distance = distance;
-	                            var btNormal = bt.btManifoldPoint_get_m_normalWorldOnB(pt);
-	                            var normal = contactPoint.normal;
-	                            normal.x = -bt.btVector3_x(btNormal);
-	                            normal.y = bt.btVector3_y(btNormal);
-	                            normal.z = bt.btVector3_z(btNormal);
-	                            var btPostionA = bt.btManifoldPoint_get_m_positionWorldOnA(pt);
-	                            var positionOnA = contactPoint.positionOnA;
-	                            positionOnA.x = -bt.btVector3_x(btPostionA);
-	                            positionOnA.y = bt.btVector3_y(btPostionA);
-	                            positionOnA.z = bt.btVector3_z(btPostionA);
-	                            var btPostionB = bt.btManifoldPoint_get_m_positionWorldOnB(pt);
-	                            var positionOnB = contactPoint.positionOnB;
-	                            positionOnB.x = -bt.btVector3_x(btPostionB);
-	                            positionOnB.y = bt.btVector3_y(btPostionB);
-	                            positionOnB.z = bt.btVector3_z(btPostionB);
-	                            if (!collision) {
-	                                collision = this._collisionsUtils.getCollision(componentA, componentB);
-	                                contacts = collision.contacts;
-	                                isFirstCollision = collision._updateFrame !== loopCount;
-	                                if (isFirstCollision) {
-	                                    collision._isTrigger = false;
-	                                    contacts.length = 0;
-	                                }
-	                            }
-	                            contacts.push(contactPoint);
-	                        }
-	                    }
-	                }
-	            }
-	            if (collision && isFirstCollision) {
-	                this._currentFrameCollisions.push(collision);
-	                collision._setUpdateFrame(loopCount);
-	            }
-	        }
-	    }
-	    _eventScripts() {
-	        var loopCount = Laya.Stat.loopCount;
-	        for (var i = 0, n = this._currentFrameCollisions.length; i < n; i++) {
-	            var curFrameCol = this._currentFrameCollisions[i];
-	            var colliderA = curFrameCol._colliderA;
-	            var colliderB = curFrameCol._colliderB;
-	            if (colliderA.destroyed || colliderB.destroyed)
-	                continue;
-	            if (loopCount - curFrameCol._lastUpdateFrame === 1) {
-	                var ownerA = colliderA.owner;
-	                var scriptsA = ownerA._scripts;
-	                if (scriptsA) {
-	                    if (curFrameCol._isTrigger) {
-	                        if (ownerA._needProcessTriggers) {
-	                            for (var j = 0, m = scriptsA.length; j < m; j++)
-	                                scriptsA[j].onTriggerStay(colliderB);
-	                        }
-	                    }
-	                    else {
-	                        if (ownerA._needProcessCollisions) {
-	                            for (j = 0, m = scriptsA.length; j < m; j++) {
-	                                curFrameCol.other = colliderB;
-	                                scriptsA[j].onCollisionStay(curFrameCol);
-	                            }
-	                        }
-	                    }
-	                }
-	                var ownerB = colliderB.owner;
-	                var scriptsB = ownerB._scripts;
-	                if (scriptsB) {
-	                    if (curFrameCol._isTrigger) {
-	                        if (ownerB._needProcessTriggers) {
-	                            for (j = 0, m = scriptsB.length; j < m; j++)
-	                                scriptsB[j].onTriggerStay(colliderA);
-	                        }
-	                    }
-	                    else {
-	                        if (ownerB._needProcessCollisions) {
-	                            for (j = 0, m = scriptsB.length; j < m; j++) {
-	                                curFrameCol.other = colliderA;
-	                                scriptsB[j].onCollisionStay(curFrameCol);
-	                            }
-	                        }
-	                    }
-	                }
-	            }
-	            else {
-	                ownerA = colliderA.owner;
-	                scriptsA = ownerA._scripts;
-	                if (scriptsA) {
-	                    if (curFrameCol._isTrigger) {
-	                        if (ownerA._needProcessTriggers) {
-	                            for (j = 0, m = scriptsA.length; j < m; j++)
-	                                scriptsA[j].onTriggerEnter(colliderB);
-	                        }
-	                    }
-	                    else {
-	                        if (ownerA._needProcessCollisions) {
-	                            for (j = 0, m = scriptsA.length; j < m; j++) {
-	                                curFrameCol.other = colliderB;
-	                                scriptsA[j].onCollisionEnter(curFrameCol);
-	                            }
-	                        }
-	                    }
-	                }
-	                ownerB = colliderB.owner;
-	                scriptsB = ownerB._scripts;
-	                if (scriptsB) {
-	                    if (curFrameCol._isTrigger) {
-	                        if (ownerB._needProcessTriggers) {
-	                            for (j = 0, m = scriptsB.length; j < m; j++)
-	                                scriptsB[j].onTriggerEnter(colliderA);
-	                        }
-	                    }
-	                    else {
-	                        if (ownerB._needProcessCollisions) {
-	                            for (j = 0, m = scriptsB.length; j < m; j++) {
-	                                curFrameCol.other = colliderA;
-	                                scriptsB[j].onCollisionEnter(curFrameCol);
-	                            }
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	        for (i = 0, n = this._previousFrameCollisions.length; i < n; i++) {
-	            var preFrameCol = this._previousFrameCollisions[i];
-	            var preColliderA = preFrameCol._colliderA;
-	            var preColliderB = preFrameCol._colliderB;
-	            if (preColliderA.destroyed || preColliderB.destroyed)
-	                continue;
-	            if (loopCount - preFrameCol._updateFrame === 1) {
-	                this._collisionsUtils.recoverCollision(preFrameCol);
-	                ownerA = preColliderA.owner;
-	                scriptsA = ownerA._scripts;
-	                if (scriptsA) {
-	                    if (preFrameCol._isTrigger) {
-	                        if (ownerA._needProcessTriggers) {
-	                            for (j = 0, m = scriptsA.length; j < m; j++)
-	                                scriptsA[j].onTriggerExit(preColliderB);
-	                        }
-	                    }
-	                    else {
-	                        if (ownerA._needProcessCollisions) {
-	                            for (j = 0, m = scriptsA.length; j < m; j++) {
-	                                preFrameCol.other = preColliderB;
-	                                scriptsA[j].onCollisionExit(preFrameCol);
-	                            }
-	                        }
-	                    }
-	                }
-	                ownerB = preColliderB.owner;
-	                scriptsB = ownerB._scripts;
-	                if (scriptsB) {
-	                    if (preFrameCol._isTrigger) {
-	                        if (ownerB._needProcessTriggers) {
-	                            for (j = 0, m = scriptsB.length; j < m; j++)
-	                                scriptsB[j].onTriggerExit(preColliderA);
-	                        }
-	                    }
-	                    else {
-	                        if (ownerB._needProcessCollisions) {
-	                            for (j = 0, m = scriptsB.length; j < m; j++) {
-	                                preFrameCol.other = preColliderA;
-	                                scriptsB[j].onCollisionExit(preFrameCol);
-	                            }
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	        for (var id in this._currentConstraint) {
-	            var constraintObj = this._currentConstraint[id];
-	            var scripts = constraintObj.owner._scripts;
-	            if (constraintObj.enabled && constraintObj._isBreakConstrained() && (!!scripts)) {
-	                if (scripts.length != 0) {
-	                    for (i = 0, n = scripts.length; i < n; i++) {
-	                        scripts[i].onJointBreak();
-	                    }
-	                }
-	            }
-	        }
-	    }
-	    clearForces() {
-	        if (!this._btDiscreteDynamicsWorld)
-	            throw "Cannot perform this action when the physics engine is set to CollisionsOnly";
-	        ILaya3D.Physics3D._bullet.btDiscreteDynamicsWorld_clearForces(this._btDiscreteDynamicsWorld);
-	    }
-	}
-	PhysicsSimulation.PHYSICSENGINEFLAGS_NONE = 0x0;
-	PhysicsSimulation.PHYSICSENGINEFLAGS_COLLISIONSONLY = 0x1;
-	PhysicsSimulation.PHYSICSENGINEFLAGS_SOFTBODYSUPPORT = 0x2;
-	PhysicsSimulation.PHYSICSENGINEFLAGS_MULTITHREADED = 0x4;
-	PhysicsSimulation.PHYSICSENGINEFLAGS_USEHARDWAREWHENPOSSIBLE = 0x8;
-	PhysicsSimulation.SOLVERMODE_RANDMIZE_ORDER = 1;
-	PhysicsSimulation.SOLVERMODE_FRICTION_SEPARATE = 2;
-	PhysicsSimulation.SOLVERMODE_USE_WARMSTARTING = 4;
-	PhysicsSimulation.SOLVERMODE_USE_2_FRICTION_DIRECTIONS = 16;
-	PhysicsSimulation.SOLVERMODE_ENABLE_FRICTION_DIRECTION_CACHING = 32;
-	PhysicsSimulation.SOLVERMODE_DISABLE_VELOCITY_DEPENDENT_FRICTION_DIRECTION = 64;
-	PhysicsSimulation.SOLVERMODE_CACHE_FRIENDLY = 128;
-	PhysicsSimulation.SOLVERMODE_SIMD = 256;
-	PhysicsSimulation.SOLVERMODE_INTERLEAVE_CONTACT_AND_FRICTION_CONSTRAINTS = 512;
-	PhysicsSimulation.SOLVERMODE_ALLOW_ZERO_LENGTH_FRICTION_DIRECTIONS = 1024;
-	PhysicsSimulation._tempVector30 = new Vector3();
-	PhysicsSimulation.disableSimulation = false;
-
-	class TextureGenerator {
-	    constructor() {
-	    }
-	    static lightAttenTexture(x, y, maxX, maxY, index, data) {
-	        var sqrRange = x / maxX;
-	        var atten = 1.0 / (1.0 + 25.0 * sqrRange);
-	        if (sqrRange >= 0.64) {
-	            if (sqrRange > 1.0) {
-	                atten = 0;
-	            }
-	            else {
-	                atten *= 1 - (sqrRange - 0.64) / (1 - 0.64);
-	            }
-	        }
-	        data[index] = Math.floor(atten * 255.0 + 0.5);
-	    }
-	    static haloTexture(x, y, maxX, maxY, index, data) {
-	        maxX >>= 1;
-	        maxY >>= 1;
-	        var xFac = (x - maxX) / maxX;
-	        var yFac = (y - maxY) / maxY;
-	        var sqrRange = xFac * xFac + yFac * yFac;
-	        if (sqrRange > 1.0) {
-	            sqrRange = 1.0;
-	        }
-	        data[index] = Math.floor((1.0 - sqrRange) * 255.0 + 0.5);
-	    }
-	    static _generateTexture2D(texture, textureWidth, textureHeight, func) {
-	        var index = 0;
-	        var size = 0;
-	        switch (texture.format) {
-	            case Laya.TextureFormat.R8G8B8:
-	                size = 3;
-	                break;
-	            case Laya.TextureFormat.R8G8B8A8:
-	                size = 4;
-	                break;
-	            case Laya.TextureFormat.Alpha8:
-	                size = 1;
-	                break;
-	            default:
-	                throw "GeneratedTexture._generateTexture: unkonw texture format.";
-	        }
-	        var data = new Uint8Array(textureWidth * textureHeight * size);
-	        for (var y = 0; y < textureHeight; y++) {
-	            for (var x = 0; x < textureWidth; x++) {
-	                func(x, y, textureWidth, textureHeight, index, data);
-	                index += size;
-	            }
-	        }
-	        texture.setPixels(data);
-	    }
-	}
-
-	class Utils3D {
-	    static _createFloatTextureBuffer(width, height) {
-	        var floatTex = new Laya.Texture2D(width, height, Laya.TextureFormat.R32G32B32A32, false, false);
-	        floatTex.filterMode = Laya.FilterMode.Point;
-	        floatTex.wrapModeU = Laya.WarpMode.Clamp;
-	        floatTex.wrapModeV = Laya.WarpMode.Clamp;
-	        floatTex.anisoLevel = 0;
-	        return floatTex;
-	    }
-	    static _convertToLayaVec3(bVector, out, inverseX) {
-	        var bullet = ILaya3D.Physics3D._bullet;
-	        out.x = inverseX ? -bullet.btVector3_x(bVector) : bullet.btVector3_x(bVector);
-	        out.y = bullet.btVector3_y(bVector);
-	        out.z = bullet.btVector3_z(bVector);
-	    }
-	    static _convertToBulletVec3(lVector, out, inverseX) {
-	        ILaya3D.Physics3D._bullet.btVector3_setValue(out, inverseX ? -lVector.x : lVector.x, lVector.y, lVector.z);
-	    }
-	    static _rotationTransformScaleSkinAnimation(tx, ty, tz, qx, qy, qz, qw, sx, sy, sz, outArray, outOffset) {
-	        var re = Utils3D._tempArray16_0;
-	        var se = Utils3D._tempArray16_1;
-	        var tse = Utils3D._tempArray16_2;
-	        var x2 = qx + qx;
-	        var y2 = qy + qy;
-	        var z2 = qz + qz;
-	        var xx = qx * x2;
-	        var yx = qy * x2;
-	        var yy = qy * y2;
-	        var zx = qz * x2;
-	        var zy = qz * y2;
-	        var zz = qz * z2;
-	        var wx = qw * x2;
-	        var wy = qw * y2;
-	        var wz = qw * z2;
-	        re[15] = 1;
-	        re[0] = 1 - yy - zz;
-	        re[1] = yx + wz;
-	        re[2] = zx - wy;
-	        re[4] = yx - wz;
-	        re[5] = 1 - xx - zz;
-	        re[6] = zy + wx;
-	        re[8] = zx + wy;
-	        re[9] = zy - wx;
-	        re[10] = 1 - xx - yy;
-	        se[15] = 1;
-	        se[0] = sx;
-	        se[5] = sy;
-	        se[10] = sz;
-	        var i, ai0, ai1, ai2, ai3;
-	        for (i = 0; i < 4; i++) {
-	            ai0 = re[i];
-	            ai1 = re[i + 4];
-	            ai2 = re[i + 8];
-	            ai3 = re[i + 12];
-	            tse[i] = ai0;
-	            tse[i + 4] = ai1;
-	            tse[i + 8] = ai2;
-	            tse[i + 12] = ai0 * tx + ai1 * ty + ai2 * tz + ai3;
-	        }
-	        for (i = 0; i < 4; i++) {
-	            ai0 = tse[i];
-	            ai1 = tse[i + 4];
-	            ai2 = tse[i + 8];
-	            ai3 = tse[i + 12];
-	            outArray[i + outOffset] = ai0 * se[0] + ai1 * se[1] + ai2 * se[2] + ai3 * se[3];
-	            outArray[i + outOffset + 4] = ai0 * se[4] + ai1 * se[5] + ai2 * se[6] + ai3 * se[7];
-	            outArray[i + outOffset + 8] = ai0 * se[8] + ai1 * se[9] + ai2 * se[10] + ai3 * se[11];
-	            outArray[i + outOffset + 12] = ai0 * se[12] + ai1 * se[13] + ai2 * se[14] + ai3 * se[15];
-	        }
-	    }
-	    static _computeBoneAndAnimationDatasByBindPoseMatrxix(bones, curData, inverGlobalBindPose, outBonesDatas, outAnimationDatas, boneIndexToMesh) {
-	        var offset = 0;
-	        var matOffset = 0;
-	        var i;
-	        var parentOffset;
-	        var boneLength = bones.length;
-	        for (i = 0; i < boneLength; offset += bones[i].keyframeWidth, matOffset += 16, i++) {
-	            Utils3D._rotationTransformScaleSkinAnimation(curData[offset + 0], curData[offset + 1], curData[offset + 2], curData[offset + 3], curData[offset + 4], curData[offset + 5], curData[offset + 6], curData[offset + 7], curData[offset + 8], curData[offset + 9], outBonesDatas, matOffset);
-	            if (i != 0) {
-	                parentOffset = bones[i].parentIndex * 16;
-	                Utils3D.mulMatrixByArray(outBonesDatas, parentOffset, outBonesDatas, matOffset, outBonesDatas, matOffset);
-	            }
-	        }
-	        var n = inverGlobalBindPose.length;
-	        for (i = 0; i < n; i++) {
-	            Utils3D.mulMatrixByArrayAndMatrixFast(outBonesDatas, boneIndexToMesh[i] * 16, inverGlobalBindPose[i], outAnimationDatas, i * 16);
-	        }
-	    }
-	    static _computeAnimationDatasByArrayAndMatrixFast(inverGlobalBindPose, bonesDatas, outAnimationDatas, boneIndexToMesh) {
-	        for (var i = 0, n = inverGlobalBindPose.length; i < n; i++)
-	            Utils3D.mulMatrixByArrayAndMatrixFast(bonesDatas, boneIndexToMesh[i] * 16, inverGlobalBindPose[i], outAnimationDatas, i * 16);
-	    }
-	    static _computeBoneAndAnimationDatasByBindPoseMatrxixOld(bones, curData, inverGlobalBindPose, outBonesDatas, outAnimationDatas) {
-	        var offset = 0;
-	        var matOffset = 0;
-	        var i;
-	        var parentOffset;
-	        var boneLength = bones.length;
-	        for (i = 0; i < boneLength; offset += bones[i].keyframeWidth, matOffset += 16, i++) {
-	            Utils3D._rotationTransformScaleSkinAnimation(curData[offset + 7], curData[offset + 8], curData[offset + 9], curData[offset + 3], curData[offset + 4], curData[offset + 5], curData[offset + 6], curData[offset + 0], curData[offset + 1], curData[offset + 2], outBonesDatas, matOffset);
-	            if (i != 0) {
-	                parentOffset = bones[i].parentIndex * 16;
-	                Utils3D.mulMatrixByArray(outBonesDatas, parentOffset, outBonesDatas, matOffset, outBonesDatas, matOffset);
-	            }
-	        }
-	        var n = inverGlobalBindPose.length;
-	        for (i = 0; i < n; i++) {
-	            var arrayOffset = i * 16;
-	            Utils3D.mulMatrixByArrayAndMatrixFast(outBonesDatas, arrayOffset, inverGlobalBindPose[i], outAnimationDatas, arrayOffset);
-	        }
-	    }
-	    static _computeAnimationDatasByArrayAndMatrixFastOld(inverGlobalBindPose, bonesDatas, outAnimationDatas) {
-	        var n = inverGlobalBindPose.length;
-	        for (var i = 0; i < n; i++) {
-	            var arrayOffset = i * 16;
-	            Utils3D.mulMatrixByArrayAndMatrixFast(bonesDatas, arrayOffset, inverGlobalBindPose[i], outAnimationDatas, arrayOffset);
-	        }
-	    }
-	    static _computeRootAnimationData(bones, curData, animationDatas) {
-	        for (var i = 0, offset = 0, matOffset = 0, boneLength = bones.length; i < boneLength; offset += bones[i].keyframeWidth, matOffset += 16, i++)
-	            Utils3D.createAffineTransformationArray(curData[offset + 0], curData[offset + 1], curData[offset + 2], curData[offset + 3], curData[offset + 4], curData[offset + 5], curData[offset + 6], curData[offset + 7], curData[offset + 8], curData[offset + 9], animationDatas, matOffset);
-	    }
-	    static transformVector3ArrayByQuat(sourceArray, sourceOffset, rotation, outArray, outOffset) {
-	        var x = sourceArray[sourceOffset], y = sourceArray[sourceOffset + 1], z = sourceArray[sourceOffset + 2], qx = rotation.x, qy = rotation.y, qz = rotation.z, qw = rotation.w, ix = qw * x + qy * z - qz * y, iy = qw * y + qz * x - qx * z, iz = qw * z + qx * y - qy * x, iw = -qx * x - qy * y - qz * z;
-	        outArray[outOffset] = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-	        outArray[outOffset + 1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-	        outArray[outOffset + 2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
-	    }
-	    static mulMatrixByArray(leftArray, leftOffset, rightArray, rightOffset, outArray, outOffset) {
-	        var i, ai0, ai1, ai2, ai3;
-	        if (outArray === rightArray) {
-	            rightArray = Utils3D._tempArray16_3;
-	            for (i = 0; i < 16; ++i) {
-	                rightArray[i] = outArray[outOffset + i];
-	            }
-	            rightOffset = 0;
-	        }
-	        for (i = 0; i < 4; i++) {
-	            ai0 = leftArray[leftOffset + i];
-	            ai1 = leftArray[leftOffset + i + 4];
-	            ai2 = leftArray[leftOffset + i + 8];
-	            ai3 = leftArray[leftOffset + i + 12];
-	            outArray[outOffset + i] = ai0 * rightArray[rightOffset + 0] + ai1 * rightArray[rightOffset + 1] + ai2 * rightArray[rightOffset + 2] + ai3 * rightArray[rightOffset + 3];
-	            outArray[outOffset + i + 4] = ai0 * rightArray[rightOffset + 4] + ai1 * rightArray[rightOffset + 5] + ai2 * rightArray[rightOffset + 6] + ai3 * rightArray[rightOffset + 7];
-	            outArray[outOffset + i + 8] = ai0 * rightArray[rightOffset + 8] + ai1 * rightArray[rightOffset + 9] + ai2 * rightArray[rightOffset + 10] + ai3 * rightArray[rightOffset + 11];
-	            outArray[outOffset + i + 12] = ai0 * rightArray[rightOffset + 12] + ai1 * rightArray[rightOffset + 13] + ai2 * rightArray[rightOffset + 14] + ai3 * rightArray[rightOffset + 15];
-	        }
-	    }
-	    static mulMatrixByArrayFast(leftArray, leftOffset, rightArray, rightOffset, outArray, outOffset) {
-	        var i, ai0, ai1, ai2, ai3;
-	        for (i = 0; i < 4; i++) {
-	            ai0 = leftArray[leftOffset + i];
-	            ai1 = leftArray[leftOffset + i + 4];
-	            ai2 = leftArray[leftOffset + i + 8];
-	            ai3 = leftArray[leftOffset + i + 12];
-	            outArray[outOffset + i] = ai0 * rightArray[rightOffset + 0] + ai1 * rightArray[rightOffset + 1] + ai2 * rightArray[rightOffset + 2] + ai3 * rightArray[rightOffset + 3];
-	            outArray[outOffset + i + 4] = ai0 * rightArray[rightOffset + 4] + ai1 * rightArray[rightOffset + 5] + ai2 * rightArray[rightOffset + 6] + ai3 * rightArray[rightOffset + 7];
-	            outArray[outOffset + i + 8] = ai0 * rightArray[rightOffset + 8] + ai1 * rightArray[rightOffset + 9] + ai2 * rightArray[rightOffset + 10] + ai3 * rightArray[rightOffset + 11];
-	            outArray[outOffset + i + 12] = ai0 * rightArray[rightOffset + 12] + ai1 * rightArray[rightOffset + 13] + ai2 * rightArray[rightOffset + 14] + ai3 * rightArray[rightOffset + 15];
-	        }
-	    }
-	    static mulMatrixByArrayAndMatrixFast(leftArray, leftOffset, rightMatrix, outArray, outOffset) {
-	        var i, ai0, ai1, ai2, ai3;
-	        var rightMatrixE = rightMatrix.elements;
-	        var m11 = rightMatrixE[0], m12 = rightMatrixE[1], m13 = rightMatrixE[2], m14 = rightMatrixE[3];
-	        var m21 = rightMatrixE[4], m22 = rightMatrixE[5], m23 = rightMatrixE[6], m24 = rightMatrixE[7];
-	        var m31 = rightMatrixE[8], m32 = rightMatrixE[9], m33 = rightMatrixE[10], m34 = rightMatrixE[11];
-	        var m41 = rightMatrixE[12], m42 = rightMatrixE[13], m43 = rightMatrixE[14], m44 = rightMatrixE[15];
-	        var ai0LeftOffset = leftOffset;
-	        var ai1LeftOffset = leftOffset + 4;
-	        var ai2LeftOffset = leftOffset + 8;
-	        var ai3LeftOffset = leftOffset + 12;
-	        var ai0OutOffset = outOffset;
-	        var ai1OutOffset = outOffset + 4;
-	        var ai2OutOffset = outOffset + 8;
-	        var ai3OutOffset = outOffset + 12;
-	        for (i = 0; i < 4; i++) {
-	            ai0 = leftArray[ai0LeftOffset + i];
-	            ai1 = leftArray[ai1LeftOffset + i];
-	            ai2 = leftArray[ai2LeftOffset + i];
-	            ai3 = leftArray[ai3LeftOffset + i];
-	            outArray[ai0OutOffset + i] = ai0 * m11 + ai1 * m12 + ai2 * m13 + ai3 * m14;
-	            outArray[ai1OutOffset + i] = ai0 * m21 + ai1 * m22 + ai2 * m23 + ai3 * m24;
-	            outArray[ai2OutOffset + i] = ai0 * m31 + ai1 * m32 + ai2 * m33 + ai3 * m34;
-	            outArray[ai3OutOffset + i] = ai0 * m41 + ai1 * m42 + ai2 * m43 + ai3 * m44;
-	        }
-	    }
-	    static createAffineTransformationArray(tX, tY, tZ, rX, rY, rZ, rW, sX, sY, sZ, outArray, outOffset) {
-	        var x2 = rX + rX, y2 = rY + rY, z2 = rZ + rZ;
-	        var xx = rX * x2, xy = rX * y2, xz = rX * z2, yy = rY * y2, yz = rY * z2, zz = rZ * z2;
-	        var wx = rW * x2, wy = rW * y2, wz = rW * z2;
-	        outArray[outOffset + 0] = (1 - (yy + zz)) * sX;
-	        outArray[outOffset + 1] = (xy + wz) * sX;
-	        outArray[outOffset + 2] = (xz - wy) * sX;
-	        outArray[outOffset + 3] = 0;
-	        outArray[outOffset + 4] = (xy - wz) * sY;
-	        outArray[outOffset + 5] = (1 - (xx + zz)) * sY;
-	        outArray[outOffset + 6] = (yz + wx) * sY;
-	        outArray[outOffset + 7] = 0;
-	        outArray[outOffset + 8] = (xz + wy) * sZ;
-	        outArray[outOffset + 9] = (yz - wx) * sZ;
-	        outArray[outOffset + 10] = (1 - (xx + yy)) * sZ;
-	        outArray[outOffset + 11] = 0;
-	        outArray[outOffset + 12] = tX;
-	        outArray[outOffset + 13] = tY;
-	        outArray[outOffset + 14] = tZ;
-	        outArray[outOffset + 15] = 1;
-	    }
-	    static transformVector3ArrayToVector3ArrayCoordinate(source, sourceOffset, transform, result, resultOffset) {
-	        var coordinateX = source[sourceOffset + 0];
-	        var coordinateY = source[sourceOffset + 1];
-	        var coordinateZ = source[sourceOffset + 2];
-	        var transformElem = transform.elements;
-	        var w = ((coordinateX * transformElem[3]) + (coordinateY * transformElem[7]) + (coordinateZ * transformElem[11]) + transformElem[15]);
-	        result[resultOffset] = (coordinateX * transformElem[0]) + (coordinateY * transformElem[4]) + (coordinateZ * transformElem[8]) + transformElem[12] / w;
-	        result[resultOffset + 1] = (coordinateX * transformElem[1]) + (coordinateY * transformElem[5]) + (coordinateZ * transformElem[9]) + transformElem[13] / w;
-	        result[resultOffset + 2] = (coordinateX * transformElem[2]) + (coordinateY * transformElem[6]) + (coordinateZ * transformElem[10]) + transformElem[14] / w;
-	    }
-	    static transformVector3ArrayToVector3ArrayNormal(source, sourceOffset, transform, result, resultOffset) {
-	        var coordinateX = source[sourceOffset + 0];
-	        var coordinateY = source[sourceOffset + 1];
-	        var coordinateZ = source[sourceOffset + 2];
-	        var transformElem = transform.elements;
-	        result[resultOffset] = coordinateX * transformElem[0] + coordinateY * transformElem[4] + coordinateZ * transformElem[8];
-	        result[resultOffset + 1] = coordinateX * transformElem[1] + coordinateY * transformElem[5] + coordinateZ * transformElem[9];
-	        result[resultOffset + 2] = coordinateX * transformElem[2] + coordinateY * transformElem[6] + coordinateZ * transformElem[10];
-	    }
-	    static transformLightingMapTexcoordArray(source, sourceOffset, lightingMapScaleOffset, result, resultOffset) {
-	        result[resultOffset + 0] = source[sourceOffset + 0] * lightingMapScaleOffset.x + lightingMapScaleOffset.z;
-	        result[resultOffset + 1] = 1.0 - ((1.0 - source[sourceOffset + 1]) * lightingMapScaleOffset.y + lightingMapScaleOffset.w);
-	    }
-	    static getURLVerion(url) {
-	        var index = url.indexOf("?");
-	        return index >= 0 ? url.substr(index) : null;
-	    }
-	    static _createAffineTransformationArray(trans, rot, scale, outE) {
-	        var x = rot.x, y = rot.y, z = rot.z, w = rot.w, x2 = x + x, y2 = y + y, z2 = z + z;
-	        var xx = x * x2, xy = x * y2, xz = x * z2, yy = y * y2, yz = y * z2, zz = z * z2;
-	        var wx = w * x2, wy = w * y2, wz = w * z2, sx = scale.x, sy = scale.y, sz = scale.z;
-	        outE[0] = (1 - (yy + zz)) * sx;
-	        outE[1] = (xy + wz) * sx;
-	        outE[2] = (xz - wy) * sx;
-	        outE[3] = 0;
-	        outE[4] = (xy - wz) * sy;
-	        outE[5] = (1 - (xx + zz)) * sy;
-	        outE[6] = (yz + wx) * sy;
-	        outE[7] = 0;
-	        outE[8] = (xz + wy) * sz;
-	        outE[9] = (yz - wx) * sz;
-	        outE[10] = (1 - (xx + yy)) * sz;
-	        outE[11] = 0;
-	        outE[12] = trans.x;
-	        outE[13] = trans.y;
-	        outE[14] = trans.z;
-	        outE[15] = 1;
-	    }
-	    static _mulMatrixArray(left, right, rightOffset, outArray, outOffset) {
-	        var l = right;
-	        var r = left;
-	        var e = outArray;
-	        var l11 = l[rightOffset], l12 = l[rightOffset + 1], l13 = l[rightOffset + 2], l14 = l[rightOffset + 3];
-	        var l21 = l[rightOffset + 4], l22 = l[rightOffset + 5], l23 = l[rightOffset + 6], l24 = l[rightOffset + 7];
-	        var l31 = l[rightOffset + 8], l32 = l[rightOffset + 9], l33 = l[rightOffset + 10], l34 = l[rightOffset + 11];
-	        var l41 = l[rightOffset + 12], l42 = l[rightOffset + 13], l43 = l[rightOffset + 14], l44 = l[rightOffset + 15];
-	        var r11 = r[0], r12 = r[1], r13 = r[2], r14 = r[3];
-	        var r21 = r[4], r22 = r[5], r23 = r[6], r24 = r[7];
-	        var r31 = r[8], r32 = r[9], r33 = r[10], r34 = r[11];
-	        var r41 = r[12], r42 = r[13], r43 = r[14], r44 = r[15];
-	        e[outOffset] = (l11 * r11) + (l12 * r21) + (l13 * r31) + (l14 * r41);
-	        e[outOffset + 1] = (l11 * r12) + (l12 * r22) + (l13 * r32) + (l14 * r42);
-	        e[outOffset + 2] = (l11 * r13) + (l12 * r23) + (l13 * r33) + (l14 * r43);
-	        e[outOffset + 3] = (l11 * r14) + (l12 * r24) + (l13 * r34) + (l14 * r44);
-	        e[outOffset + 4] = (l21 * r11) + (l22 * r21) + (l23 * r31) + (l24 * r41);
-	        e[outOffset + 5] = (l21 * r12) + (l22 * r22) + (l23 * r32) + (l24 * r42);
-	        e[outOffset + 6] = (l21 * r13) + (l22 * r23) + (l23 * r33) + (l24 * r43);
-	        e[outOffset + 7] = (l21 * r14) + (l22 * r24) + (l23 * r34) + (l24 * r44);
-	        e[outOffset + 8] = (l31 * r11) + (l32 * r21) + (l33 * r31) + (l34 * r41);
-	        e[outOffset + 9] = (l31 * r12) + (l32 * r22) + (l33 * r32) + (l34 * r42);
-	        e[outOffset + 10] = (l31 * r13) + (l32 * r23) + (l33 * r33) + (l34 * r43);
-	        e[outOffset + 11] = (l31 * r14) + (l32 * r24) + (l33 * r34) + (l34 * r44);
-	        e[outOffset + 12] = (l41 * r11) + (l42 * r21) + (l43 * r31) + (l44 * r41);
-	        e[outOffset + 13] = (l41 * r12) + (l42 * r22) + (l43 * r32) + (l44 * r42);
-	        e[outOffset + 14] = (l41 * r13) + (l42 * r23) + (l43 * r33) + (l44 * r43);
-	        e[outOffset + 15] = (l41 * r14) + (l42 * r24) + (l43 * r34) + (l44 * r44);
-	    }
-	    static arcTanAngle(x, y) {
-	        if (x == 0) {
-	            if (y == 1)
-	                return Math.PI / 2;
-	            return -Math.PI / 2;
-	        }
-	        if (x > 0)
-	            return Math.atan(y / x);
-	        if (x < 0) {
-	            if (y > 0)
-	                return Math.atan(y / x) + Math.PI;
-	            return Math.atan(y / x) - Math.PI;
-	        }
-	        return 0;
-	    }
-	    static angleTo(from, location, angle) {
-	        Vector3.subtract(location, from, Quaternion.TEMPVector30);
-	        Vector3.normalize(Quaternion.TEMPVector30, Quaternion.TEMPVector30);
-	        angle.x = Math.asin(Quaternion.TEMPVector30.y);
-	        angle.y = Utils3D.arcTanAngle(-Quaternion.TEMPVector30.z, -Quaternion.TEMPVector30.x);
-	    }
-	    static transformQuat(source, rotation, out) {
-	        var re = rotation;
-	        var x = source.x, y = source.y, z = source.z, qx = re[0], qy = re[1], qz = re[2], qw = re[3], ix = qw * x + qy * z - qz * y, iy = qw * y + qz * x - qx * z, iz = qw * z + qx * y - qy * x, iw = -qx * x - qy * y - qz * z;
-	        out.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-	        out.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-	        out.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
-	    }
-	    static quaternionWeight(f, weight, e) {
-	        e.x = f.x * weight;
-	        e.y = f.y * weight;
-	        e.z = f.z * weight;
-	        e.w = f.w;
-	    }
-	    static quaternionConjugate(value, result) {
-	        result.x = -value.x;
-	        result.y = -value.y;
-	        result.z = -value.z;
-	        result.w = value.w;
-	    }
-	    static scaleWeight(s, w, out) {
-	        var sX = s.x, sY = s.y, sZ = s.z;
-	        out.x = sX > 0 ? Math.pow(Math.abs(sX), w) : -Math.pow(Math.abs(sX), w);
-	        out.y = sY > 0 ? Math.pow(Math.abs(sY), w) : -Math.pow(Math.abs(sY), w);
-	        out.z = sZ > 0 ? Math.pow(Math.abs(sZ), w) : -Math.pow(Math.abs(sZ), w);
-	    }
-	    static scaleBlend(sa, sb, w, out) {
-	        var saw = Utils3D._tempVector3_0;
-	        var sbw = Utils3D._tempVector3_1;
-	        Utils3D.scaleWeight(sa, 1.0 - w, saw);
-	        Utils3D.scaleWeight(sb, w, sbw);
-	        var sng = w > 0.5 ? sb : sa;
-	        out.x = sng.x > 0 ? Math.abs(saw.x * sbw.x) : -Math.abs(saw.x * sbw.x);
-	        out.y = sng.y > 0 ? Math.abs(saw.y * sbw.y) : -Math.abs(saw.y * sbw.y);
-	        out.z = sng.z > 0 ? Math.abs(saw.z * sbw.z) : -Math.abs(saw.z * sbw.z);
-	    }
-	    static matrix4x4MultiplyFFF(a, b, e) {
-	        var i, ai0, ai1, ai2, ai3;
-	        if (e === b) {
-	            b = new Float32Array(16);
-	            for (i = 0; i < 16; ++i) {
-	                b[i] = e[i];
-	            }
-	        }
-	        var b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3];
-	        var b4 = b[4], b5 = b[5], b6 = b[6], b7 = b[7];
-	        var b8 = b[8], b9 = b[9], b10 = b[10], b11 = b[11];
-	        var b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
-	        for (i = 0; i < 4; i++) {
-	            ai0 = a[i];
-	            ai1 = a[i + 4];
-	            ai2 = a[i + 8];
-	            ai3 = a[i + 12];
-	            e[i] = ai0 * b0 + ai1 * b1 + ai2 * b2 + ai3 * b3;
-	            e[i + 4] = ai0 * b4 + ai1 * b5 + ai2 * b6 + ai3 * b7;
-	            e[i + 8] = ai0 * b8 + ai1 * b9 + ai2 * b10 + ai3 * b11;
-	            e[i + 12] = ai0 * b12 + ai1 * b13 + ai2 * b14 + ai3 * b15;
-	        }
-	    }
-	    static matrix4x4MultiplyFFFForNative(a, b, e) {
-	        Laya.LayaGL.instance.matrix4x4Multiply(a, b, e);
-	    }
-	    static matrix4x4MultiplyMFM(left, right, out) {
-	        Utils3D.matrix4x4MultiplyFFF(left.elements, right, out.elements);
-	    }
-	    static _buildTexture2D(width, height, format, colorFunc, mipmaps = false) {
-	        var texture = new Laya.Texture2D(width, height, format, mipmaps, true);
-	        texture.anisoLevel = 1;
-	        texture.filterMode = Laya.FilterMode.Point;
-	        TextureGenerator._generateTexture2D(texture, width, height, colorFunc);
-	        return texture;
-	    }
-	    static _drawBound(debugLine, boundBox, color) {
-	        if (debugLine.lineCount + 12 > debugLine.maxLineCount)
-	            debugLine.maxLineCount += 12;
-	        var start = Utils3D._tempVector3_0;
-	        var end = Utils3D._tempVector3_1;
-	        var min = boundBox.min;
-	        var max = boundBox.max;
-	        start.setValue(min.x, min.y, min.z);
-	        end.setValue(max.x, min.y, min.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(min.x, min.y, min.z);
-	        end.setValue(min.x, min.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(max.x, min.y, min.z);
-	        end.setValue(max.x, min.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(min.x, min.y, max.z);
-	        end.setValue(max.x, min.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(min.x, min.y, min.z);
-	        end.setValue(min.x, max.y, min.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(min.x, min.y, max.z);
-	        end.setValue(min.x, max.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(max.x, min.y, min.z);
-	        end.setValue(max.x, max.y, min.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(max.x, min.y, max.z);
-	        end.setValue(max.x, max.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(min.x, max.y, min.z);
-	        end.setValue(max.x, max.y, min.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(min.x, max.y, min.z);
-	        end.setValue(min.x, max.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(max.x, max.y, min.z);
-	        end.setValue(max.x, max.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	        start.setValue(min.x, max.y, max.z);
-	        end.setValue(max.x, max.y, max.z);
-	        debugLine.addLine(start, end, color, color);
-	    }
-	    static _getHierarchyPath(rootSprite, checkSprite, path) {
-	        path.length = 0;
-	        var sprite = checkSprite;
-	        while (sprite !== rootSprite) {
-	            var parent = sprite._parent;
-	            if (parent)
-	                path.push(parent.getChildIndex(sprite));
-	            else
-	                return null;
-	            sprite = parent;
-	        }
-	        return path;
-	    }
-	    static _getNodeByHierarchyPath(rootSprite, invPath) {
-	        var sprite = rootSprite;
-	        for (var i = invPath.length - 1; i >= 0; i--) {
-	            sprite = sprite.getChildAt(invPath[i]);
-	        }
-	        return sprite;
-	    }
-	}
-	Utils3D._tempVector3_0 = new Vector3();
-	Utils3D._tempVector3_1 = new Vector3();
-	Utils3D._tempArray16_0 = new Float32Array(16);
-	Utils3D._tempArray16_1 = new Float32Array(16);
-	Utils3D._tempArray16_2 = new Float32Array(16);
-	Utils3D._tempArray16_3 = new Float32Array(16);
-	Utils3D._compIdToNode = new Object();
-
-	class CharacterController extends PhysicsComponent {
-	    constructor(stepheight = 0.1, upAxis = null, collisionGroup = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER, canCollideWith = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
-	        super(collisionGroup, canCollideWith);
-	        this._upAxis = new Vector3(0, 1, 0);
-	        this._maxSlope = 45.0;
-	        this._jumpSpeed = 10.0;
-	        this._fallSpeed = 55.0;
-	        this._gravity = new Vector3(0, -9.8 * 3, 0);
-	        this._btKinematicCharacter = null;
-	        this._stepHeight = stepheight;
-	        (upAxis) && (this._upAxis = upAxis);
-	        this._controlBySimulation = true;
-	    }
-	    static __init__() {
-	        CharacterController._btTempVector30 = ILaya3D.Physics3D._bullet.btVector3_create(0, 0, 0);
-	    }
-	    get fallSpeed() {
-	        return this._fallSpeed;
-	    }
-	    set fallSpeed(value) {
-	        this._fallSpeed = value;
-	        ILaya3D.Physics3D._bullet.btKinematicCharacterController_setFallSpeed(this._btKinematicCharacter, value);
-	    }
-	    get jumpSpeed() {
-	        return this._jumpSpeed;
-	    }
-	    set jumpSpeed(value) {
-	        this._jumpSpeed = value;
-	        ILaya3D.Physics3D._bullet.btKinematicCharacterController_setJumpSpeed(this._btKinematicCharacter, value);
-	    }
-	    get gravity() {
-	        return this._gravity;
-	    }
-	    set gravity(value) {
-	        this._gravity = value;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var btGravity = CharacterController._btTempVector30;
-	        bt.btVector3_setValue(btGravity, -value.x, value.y, value.z);
-	        bt.btKinematicCharacterController_setGravity(this._btKinematicCharacter, btGravity);
-	    }
-	    get maxSlope() {
-	        return this._maxSlope;
-	    }
-	    set maxSlope(value) {
-	        this._maxSlope = value;
-	        ILaya3D.Physics3D._bullet.btKinematicCharacterController_setMaxSlope(this._btKinematicCharacter, (value / 180) * Math.PI);
-	    }
-	    get isGrounded() {
-	        return ILaya3D.Physics3D._bullet.btKinematicCharacterController_onGround(this._btKinematicCharacter);
-	    }
-	    get stepHeight() {
-	        return this._stepHeight;
-	    }
-	    set stepHeight(value) {
-	        this._stepHeight = value;
-	        ILaya3D.Physics3D._bullet.btKinematicCharacterController_setStepHeight(this._btKinematicCharacter, value);
-	    }
-	    get upAxis() {
-	        return this._upAxis;
-	    }
-	    set upAxis(value) {
-	        this._upAxis = value;
-	        var btUpAxis = CharacterController._btTempVector30;
-	        Utils3D._convertToBulletVec3(value, btUpAxis, false);
-	        ILaya3D.Physics3D._bullet.btKinematicCharacterController_setUp(this._btKinematicCharacter, btUpAxis);
-	    }
-	    _constructCharacter() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        if (this._btKinematicCharacter)
-	            bt.btKinematicCharacterController_destroy(this._btKinematicCharacter);
-	        var btUpAxis = CharacterController._btTempVector30;
-	        bt.btVector3_setValue(btUpAxis, this._upAxis.x, this._upAxis.y, this._upAxis.z);
-	        this._btKinematicCharacter = bt.btKinematicCharacterController_create(this._btColliderObject, this._colliderShape._btShape, this._stepHeight, btUpAxis);
-	        this.fallSpeed = this._fallSpeed;
-	        this.maxSlope = this._maxSlope;
-	        this.jumpSpeed = this._jumpSpeed;
-	        this.gravity = this._gravity;
-	    }
-	    _onShapeChange(colShape) {
-	        super._onShapeChange(colShape);
-	        this._constructCharacter();
-	    }
-	    _onAdded() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var ghostObject = bt.btPairCachingGhostObject_create();
-	        bt.btCollisionObject_setUserIndex(ghostObject, this.id);
-	        bt.btCollisionObject_setCollisionFlags(ghostObject, PhysicsComponent.COLLISIONFLAGS_CHARACTER_OBJECT);
-	        this._btColliderObject = ghostObject;
-	        (this._colliderShape) && (this._constructCharacter());
-	        super._onAdded();
-	    }
-	    _addToSimulation() {
-	        this._simulation._characters.push(this);
-	        this._simulation._addCharacter(this, this._collisionGroup, this._canCollideWith);
-	    }
-	    _removeFromSimulation() {
-	        this._simulation._removeCharacter(this);
-	        var characters = this._simulation._characters;
-	        characters.splice(characters.indexOf(this), 1);
-	    }
-	    _cloneTo(dest) {
-	        super._cloneTo(dest);
-	        var destCharacterController = dest;
-	        destCharacterController.stepHeight = this._stepHeight;
-	        destCharacterController.upAxis = this._upAxis;
-	        destCharacterController.maxSlope = this._maxSlope;
-	        destCharacterController.jumpSpeed = this._jumpSpeed;
-	        destCharacterController.fallSpeed = this._fallSpeed;
-	        destCharacterController.gravity = this._gravity;
-	    }
-	    _onDestroy() {
-	        ILaya3D.Physics3D._bullet.btKinematicCharacterController_destroy(this._btKinematicCharacter);
-	        super._onDestroy();
-	        this._btKinematicCharacter = null;
-	    }
-	    move(movement) {
-	        var btMovement = CharacterController._btVector30;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btVector3_setValue(btMovement, -movement.x, movement.y, movement.z);
-	        bt.btKinematicCharacterController_setWalkDirection(this._btKinematicCharacter, btMovement);
-	    }
-	    jump(velocity = null) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var btVelocity = CharacterController._btVector30;
-	        if (velocity) {
-	            Utils3D._convertToBulletVec3(velocity, btVelocity, true);
-	            bt.btKinematicCharacterController_jump(this._btKinematicCharacter, btVelocity);
-	        }
-	        else {
-	            bt.btVector3_setValue(btVelocity, 0, 0, 0);
-	            bt.btKinematicCharacterController_jump(this._btKinematicCharacter, btVelocity);
-	        }
-	    }
-	}
-	CharacterController.UPAXIS_X = 0;
-	CharacterController.UPAXIS_Y = 1;
-	CharacterController.UPAXIS_Z = 2;
-
-	class PhysicsTriggerComponent extends PhysicsComponent {
-	    constructor(collisionGroup, canCollideWith) {
-	        super(collisionGroup, canCollideWith);
-	        this._isTrigger = false;
-	    }
-	    get isTrigger() {
-	        return this._isTrigger;
-	    }
-	    set isTrigger(value) {
-	        this._isTrigger = value;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        if (this._btColliderObject) {
-	            var flags = bt.btCollisionObject_getCollisionFlags(this._btColliderObject);
-	            if (value) {
-	                if ((flags & PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE) === 0)
-	                    bt.btCollisionObject_setCollisionFlags(this._btColliderObject, flags | PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE);
-	            }
-	            else {
-	                if ((flags & PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE) !== 0)
-	                    bt.btCollisionObject_setCollisionFlags(this._btColliderObject, flags ^ PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE);
-	            }
-	        }
-	    }
-	    _onAdded() {
-	        super._onAdded();
-	        this.isTrigger = this._isTrigger;
-	    }
-	    _cloneTo(dest) {
-	        super._cloneTo(dest);
-	        dest.isTrigger = this._isTrigger;
-	    }
-	}
-
-	class Rigidbody3D extends PhysicsTriggerComponent {
-	    constructor(collisionGroup = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER, canCollideWith = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
-	        super(collisionGroup, canCollideWith);
-	        this._isKinematic = false;
-	        this._mass = 1.0;
-	        this._gravity = new Vector3(0, -10, 0);
-	        this._angularDamping = 0.0;
-	        this._linearDamping = 0.0;
-	        this._overrideGravity = false;
-	        this._totalTorque = new Vector3(0, 0, 0);
-	        this._totalForce = new Vector3(0, 0, 0);
-	        this._linearVelocity = new Vector3();
-	        this._angularVelocity = new Vector3();
-	        this._linearFactor = new Vector3(1, 1, 1);
-	        this._angularFactor = new Vector3(1, 1, 1);
-	        this._detectCollisions = true;
-	        this._controlBySimulation = true;
-	    }
-	    static __init__() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        Rigidbody3D._btTempVector30 = bt.btVector3_create(0, 0, 0);
-	        Rigidbody3D._btTempVector31 = bt.btVector3_create(0, 0, 0);
-	        Rigidbody3D._btVector3Zero = bt.btVector3_create(0, 0, 0);
-	        Rigidbody3D._btInertia = bt.btVector3_create(0, 0, 0);
-	        Rigidbody3D._btImpulse = bt.btVector3_create(0, 0, 0);
-	        Rigidbody3D._btImpulseOffset = bt.btVector3_create(0, 0, 0);
-	        Rigidbody3D._btGravity = bt.btVector3_create(0, 0, 0);
-	        Rigidbody3D._btTransform0 = bt.btTransform_create();
-	    }
-	    get mass() {
-	        return this._mass;
-	    }
-	    set mass(value) {
-	        value = Math.max(value, 1e-07);
-	        this._mass = value;
-	        (this._isKinematic) || (this._updateMass(value));
-	    }
-	    get isKinematic() {
-	        return this._isKinematic;
-	    }
-	    set isKinematic(value) {
-	        this._isKinematic = value;
-	        this._controlBySimulation = !value;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var canInSimulation = !!(this._simulation && this._enabled && this._colliderShape);
-	        canInSimulation && this._removeFromSimulation();
-	        var natColObj = this._btColliderObject;
-	        var flags = bt.btCollisionObject_getCollisionFlags(natColObj);
-	        if (value) {
-	            flags = flags | PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT;
-	            bt.btCollisionObject_setCollisionFlags(natColObj, flags);
-	            bt.btCollisionObject_forceActivationState(this._btColliderObject, PhysicsComponent.ACTIVATIONSTATE_DISABLE_DEACTIVATION);
-	            this._enableProcessCollisions = false;
-	            this._updateMass(0);
-	        }
-	        else {
-	            if ((flags & PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT) > 0)
-	                flags = flags ^ PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT;
-	            bt.btCollisionObject_setCollisionFlags(natColObj, flags);
-	            bt.btCollisionObject_setActivationState(this._btColliderObject, PhysicsComponent.ACTIVATIONSTATE_ACTIVE_TAG);
-	            this._enableProcessCollisions = true;
-	            this._updateMass(this._mass);
-	        }
-	        var btZero = Rigidbody3D._btVector3Zero;
-	        bt.btCollisionObject_setInterpolationLinearVelocity(natColObj, btZero);
-	        bt.btRigidBody_setLinearVelocity(natColObj, btZero);
-	        bt.btCollisionObject_setInterpolationAngularVelocity(natColObj, btZero);
-	        bt.btRigidBody_setAngularVelocity(natColObj, btZero);
-	        canInSimulation && this._addToSimulation();
-	    }
-	    get linearDamping() {
-	        return this._linearDamping;
-	    }
-	    set linearDamping(value) {
-	        this._linearDamping = value;
-	        if (this._btColliderObject)
-	            ILaya3D.Physics3D._bullet.btRigidBody_setDamping(this._btColliderObject, value, this._angularDamping);
-	    }
-	    get angularDamping() {
-	        return this._angularDamping;
-	    }
-	    set angularDamping(value) {
-	        this._angularDamping = value;
-	        if (this._btColliderObject)
-	            ILaya3D.Physics3D._bullet.btRigidBody_setDamping(this._btColliderObject, this._linearDamping, value);
-	    }
-	    get overrideGravity() {
-	        return this._overrideGravity;
-	    }
-	    set overrideGravity(value) {
-	        this._overrideGravity = value;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        if (this._btColliderObject) {
-	            var flag = bt.btRigidBody_getFlags(this._btColliderObject);
-	            if (value) {
-	                if ((flag & Rigidbody3D._BT_DISABLE_WORLD_GRAVITY) === 0)
-	                    bt.btRigidBody_setFlags(this._btColliderObject, flag | Rigidbody3D._BT_DISABLE_WORLD_GRAVITY);
-	            }
-	            else {
-	                if ((flag & Rigidbody3D._BT_DISABLE_WORLD_GRAVITY) > 0)
-	                    bt.btRigidBody_setFlags(this._btColliderObject, flag ^ Rigidbody3D._BT_DISABLE_WORLD_GRAVITY);
-	            }
-	        }
-	    }
-	    get gravity() {
-	        return this._gravity;
-	    }
-	    set gravity(value) {
-	        this._gravity = value;
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btVector3_setValue(Rigidbody3D._btGravity, -value.x, value.y, value.z);
-	        bt.btRigidBody_setGravity(this._btColliderObject, Rigidbody3D._btGravity);
-	    }
-	    get totalForce() {
-	        if (this._btColliderObject) {
-	            var btTotalForce = ILaya3D.Physics3D._bullet.btRigidBody_getTotalForce(this._btColliderObject);
-	            Utils3D._convertToLayaVec3(btTotalForce, this._totalForce, true);
-	            return this._totalForce;
-	        }
-	        return null;
-	    }
-	    get linearFactor() {
-	        return this._linearFactor;
-	    }
-	    set linearFactor(value) {
-	        this._linearFactor = value;
-	        var btValue = Rigidbody3D._btTempVector30;
-	        Utils3D._convertToBulletVec3(value, btValue, false);
-	        ILaya3D.Physics3D._bullet.btRigidBody_setLinearFactor(this._btColliderObject, btValue);
-	    }
-	    get linearVelocity() {
-	        if (this._btColliderObject)
-	            Utils3D._convertToLayaVec3(ILaya3D.Physics3D._bullet.btRigidBody_getLinearVelocity(this._btColliderObject), this._linearVelocity, true);
-	        return this._linearVelocity;
-	    }
-	    set linearVelocity(value) {
-	        this._linearVelocity = value;
-	        if (this._btColliderObject) {
-	            var btValue = Rigidbody3D._btTempVector30;
-	            Utils3D._convertToBulletVec3(value, btValue, true);
-	            (this.isSleeping) && (this.wakeUp());
-	            ILaya3D.Physics3D._bullet.btRigidBody_setLinearVelocity(this._btColliderObject, btValue);
-	        }
-	    }
-	    get angularFactor() {
-	        return this._angularFactor;
-	    }
-	    set angularFactor(value) {
-	        this._angularFactor = value;
-	        var btValue = Rigidbody3D._btTempVector30;
-	        Utils3D._convertToBulletVec3(value, btValue, false);
-	        ILaya3D.Physics3D._bullet.btRigidBody_setAngularFactor(this._btColliderObject, btValue);
-	    }
-	    get angularVelocity() {
-	        if (this._btColliderObject)
-	            Utils3D._convertToLayaVec3(ILaya3D.Physics3D._bullet.btRigidBody_getAngularVelocity(this._btColliderObject), this._angularVelocity, true);
-	        return this._angularVelocity;
-	    }
-	    set angularVelocity(value) {
-	        this._angularVelocity = value;
-	        if (this._btColliderObject) {
-	            var btValue = Rigidbody3D._btTempVector30;
-	            Utils3D._convertToBulletVec3(value, btValue, true);
-	            (this.isSleeping) && (this.wakeUp());
-	            ILaya3D.Physics3D._bullet.btRigidBody_setAngularVelocity(this._btColliderObject, btValue);
-	        }
-	    }
-	    get totalTorque() {
-	        if (this._btColliderObject) {
-	            var btTotalTorque = ILaya3D.Physics3D._bullet.btRigidBody_getTotalTorque(this._btColliderObject);
-	            Utils3D._convertToLayaVec3(btTotalTorque, this._totalTorque, true);
-	            return this._totalTorque;
-	        }
-	        return null;
-	    }
-	    get detectCollisions() {
-	        return this._detectCollisions;
-	    }
-	    set detectCollisions(value) {
-	        if (this._detectCollisions !== value) {
-	            this._detectCollisions = value;
-	            if (this._colliderShape && this._enabled && this._simulation) {
-	                this._simulation._removeRigidBody(this);
-	                this._simulation._addRigidBody(this, this._collisionGroup, value ? this._canCollideWith : 0);
-	            }
-	        }
-	    }
-	    get isSleeping() {
-	        if (this._btColliderObject)
-	            return ILaya3D.Physics3D._bullet.btCollisionObject_getActivationState(this._btColliderObject) === PhysicsComponent.ACTIVATIONSTATE_ISLAND_SLEEPING;
-	        return false;
-	    }
-	    get sleepLinearVelocity() {
-	        return ILaya3D.Physics3D._bullet.btRigidBody_getLinearSleepingThreshold(this._btColliderObject);
-	    }
-	    set sleepLinearVelocity(value) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btRigidBody_setSleepingThresholds(this._btColliderObject, value, bt.btRigidBody_getAngularSleepingThreshold(this._btColliderObject));
-	    }
-	    get sleepAngularVelocity() {
-	        return ILaya3D.Physics3D._bullet.btRigidBody_getAngularSleepingThreshold(this._btColliderObject);
-	    }
-	    set sleepAngularVelocity(value) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btRigidBody_setSleepingThresholds(this._btColliderObject, bt.btRigidBody_getLinearSleepingThreshold(this._btColliderObject), value);
-	    }
-	    get btColliderObject() {
-	        return this._btColliderObject;
-	    }
-	    set constaintRigidbodyA(value) {
-	        this._constaintRigidbodyA = value;
-	    }
-	    get constaintRigidbodyA() {
-	        return this._constaintRigidbodyA;
-	    }
-	    set constaintRigidbodyB(value) {
-	        this._constaintRigidbodyB = value;
-	    }
-	    get constaintRigidbodyB() {
-	        return this._constaintRigidbodyB;
-	    }
-	    _updateMass(mass) {
-	        if (this._btColliderObject && this._colliderShape) {
-	            var bt = ILaya3D.Physics3D._bullet;
-	            bt.btCollisionShape_calculateLocalInertia(this._colliderShape._btShape, mass, Rigidbody3D._btInertia);
-	            bt.btRigidBody_setMassProps(this._btColliderObject, mass, Rigidbody3D._btInertia);
-	            bt.btRigidBody_updateInertiaTensor(this._btColliderObject);
-	        }
-	    }
-	    _onScaleChange(scale) {
-	        super._onScaleChange(scale);
-	        this._updateMass(this._isKinematic ? 0 : this._mass);
-	    }
-	    _derivePhysicsTransformation(force) {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var btColliderObject = this._btColliderObject;
-	        var oriTransform = bt.btCollisionObject_getWorldTransform(btColliderObject);
-	        var transform = Rigidbody3D._btTransform0;
-	        bt.btTransform_equal(transform, oriTransform);
-	        this._innerDerivePhysicsTransformation(transform, force);
-	        bt.btRigidBody_setCenterOfMassTransform(btColliderObject, transform);
-	    }
-	    _onAdded() {
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var motionState = bt.layaMotionState_create();
-	        bt.layaMotionState_set_rigidBodyID(motionState, this._id);
-	        this._btLayaMotionState = motionState;
-	        var constructInfo = bt.btRigidBodyConstructionInfo_create(0.0, motionState, null, Rigidbody3D._btVector3Zero);
-	        var btRigid = bt.btRigidBody_create(constructInfo);
-	        bt.btCollisionObject_setUserIndex(btRigid, this.id);
-	        this._btColliderObject = btRigid;
-	        super._onAdded();
-	        this.mass = this._mass;
-	        this.linearFactor = this._linearFactor;
-	        this.angularFactor = this._angularFactor;
-	        this.linearDamping = this._linearDamping;
-	        this.angularDamping = this._angularDamping;
-	        this.overrideGravity = this._overrideGravity;
-	        this.gravity = this._gravity;
-	        this.isKinematic = this._isKinematic;
-	        bt.btRigidBodyConstructionInfo_destroy(constructInfo);
-	    }
-	    _onEnable() {
-	        super._onEnable();
-	        if (this._constaintRigidbodyA) {
-	            if (this._constaintRigidbodyA.connectedBody._simulation) {
-	                this._constaintRigidbodyA._createConstraint();
-	                this._constaintRigidbodyA._onEnable();
-	            }
-	        }
-	        if (this._constaintRigidbodyB) {
-	            if (this._constaintRigidbodyB.ownBody._simulation) {
-	                this._constaintRigidbodyB._createConstraint();
-	                this._constaintRigidbodyB._onEnable();
-	            }
-	        }
-	    }
-	    _onShapeChange(colShape) {
-	        super._onShapeChange(colShape);
-	        if (this._isKinematic) {
-	            this._updateMass(0);
-	        }
-	        else {
-	            var bt = ILaya3D.Physics3D._bullet;
-	            bt.btRigidBody_setCenterOfMassTransform(this._btColliderObject, bt.btCollisionObject_getWorldTransform(this._btColliderObject));
-	            this._updateMass(this._mass);
-	        }
-	    }
-	    _parse(data) {
-	        (data.friction != null) && (this.friction = data.friction);
-	        (data.rollingFriction != null) && (this.rollingFriction = data.rollingFriction);
-	        (data.restitution != null) && (this.restitution = data.restitution);
-	        (data.isTrigger != null) && (this.isTrigger = data.isTrigger);
-	        (data.mass != null) && (this.mass = data.mass);
-	        (data.linearDamping != null) && (this.linearDamping = data.linearDamping);
-	        (data.angularDamping != null) && (this.angularDamping = data.angularDamping);
-	        (data.overrideGravity != null) && (this.overrideGravity = data.overrideGravity);
-	        if (data.linearFactor != null) {
-	            var linFac = this.linearFactor;
-	            linFac.fromArray(data.linearFactor);
-	            this.linearFactor = linFac;
-	        }
-	        if (data.angularFactor != null) {
-	            var angFac = this.angularFactor;
-	            angFac.fromArray(data.angularFactor);
-	            this.angularFactor = angFac;
-	        }
-	        if (data.gravity) {
-	            this.gravity.fromArray(data.gravity);
-	            this.gravity = this.gravity;
-	        }
-	        super._parse(data);
-	        this._parseShape(data.shapes);
-	        (data.isKinematic != null) && (this._isKinematic = data.isKinematic);
-	    }
-	    _onDestroy() {
-	        ILaya3D.Physics3D._bullet.btMotionState_destroy(this._btLayaMotionState);
-	        super._onDestroy();
-	        this._btLayaMotionState = null;
-	        this._gravity = null;
-	        this._totalTorque = null;
-	        this._linearVelocity = null;
-	        this._angularVelocity = null;
-	        this._linearFactor = null;
-	        this._angularFactor = null;
-	        if (this.constaintRigidbodyA)
-	            this.constaintRigidbodyA._breakConstrained();
-	        if (this.constaintRigidbodyB) {
-	            this.constaintRigidbodyB.connectedBody = null;
-	            this.constaintRigidbodyB._onDisable();
-	        }
-	    }
-	    _addToSimulation() {
-	        this._simulation._addRigidBody(this, this._collisionGroup, this._detectCollisions ? this._canCollideWith : 0);
-	    }
-	    _removeFromSimulation() {
-	        this._simulation._removeRigidBody(this);
-	    }
-	    _cloneTo(dest) {
-	        super._cloneTo(dest);
-	        var destRigidbody3D = dest;
-	        destRigidbody3D.isKinematic = this._isKinematic;
-	        destRigidbody3D.mass = this._mass;
-	        destRigidbody3D.gravity = this._gravity;
-	        destRigidbody3D.angularDamping = this._angularDamping;
-	        destRigidbody3D.linearDamping = this._linearDamping;
-	        destRigidbody3D.overrideGravity = this._overrideGravity;
-	        destRigidbody3D.linearVelocity = this._linearVelocity;
-	        destRigidbody3D.angularVelocity = this._angularVelocity;
-	        destRigidbody3D.linearFactor = this._linearFactor;
-	        destRigidbody3D.angularFactor = this._angularFactor;
-	        destRigidbody3D.detectCollisions = this._detectCollisions;
-	    }
-	    applyForce(force, localOffset = null) {
-	        if (this._btColliderObject == null)
-	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var btForce = Rigidbody3D._btTempVector30;
-	        bt.btVector3_setValue(btForce, -force.x, force.y, force.z);
-	        if (localOffset) {
-	            var btOffset = Rigidbody3D._btTempVector31;
-	            bt.btVector3_setValue(btOffset, -localOffset.x, localOffset.y, localOffset.z);
-	            bt.btRigidBody_applyForce(this._btColliderObject, btForce, btOffset);
-	        }
-	        else {
-	            bt.btRigidBody_applyCentralForce(this._btColliderObject, btForce);
-	        }
-	    }
-	    applyTorque(torque) {
-	        if (this._btColliderObject == null)
-	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
-	        var bullet = ILaya3D.Physics3D._bullet;
-	        var btTorque = Rigidbody3D._btTempVector30;
-	        bullet.btVector3_setValue(btTorque, -torque.x, torque.y, torque.z);
-	        bullet.btRigidBody_applyTorque(this._btColliderObject, btTorque);
-	    }
-	    applyImpulse(impulse, localOffset = null) {
-	        if (this._btColliderObject == null)
-	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btVector3_setValue(Rigidbody3D._btImpulse, -impulse.x, impulse.y, impulse.z);
-	        if (localOffset) {
-	            bt.btVector3_setValue(Rigidbody3D._btImpulseOffset, -localOffset.x, localOffset.y, localOffset.z);
-	            bt.btRigidBody_applyImpulse(this._btColliderObject, Rigidbody3D._btImpulse, Rigidbody3D._btImpulseOffset);
-	        }
-	        else {
-	            bt.btRigidBody_applyCentralImpulse(this._btColliderObject, Rigidbody3D._btImpulse);
-	        }
-	    }
-	    applyTorqueImpulse(torqueImpulse) {
-	        if (this._btColliderObject == null)
-	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
-	        var bt = ILaya3D.Physics3D._bullet;
-	        var btTorqueImpulse = Rigidbody3D._btTempVector30;
-	        bt.btVector3_setValue(btTorqueImpulse, -torqueImpulse.x, torqueImpulse.y, torqueImpulse.z);
-	        bt.btRigidBody_applyTorqueImpulse(this._btColliderObject, btTorqueImpulse);
-	    }
-	    wakeUp() {
-	        this._btColliderObject && (ILaya3D.Physics3D._bullet.btCollisionObject_activate(this._btColliderObject, false));
-	    }
-	    clearForces() {
-	        var rigidBody = this._btColliderObject;
-	        if (rigidBody == null)
-	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
-	        var bt = ILaya3D.Physics3D._bullet;
-	        bt.btRigidBody_clearForces(rigidBody);
-	        var btZero = Rigidbody3D._btVector3Zero;
-	        bt.btCollisionObject_setInterpolationLinearVelocity(rigidBody, btZero);
-	        bt.btRigidBody_setLinearVelocity(rigidBody, btZero);
-	        bt.btCollisionObject_setInterpolationAngularVelocity(rigidBody, btZero);
-	        bt.btRigidBody_setAngularVelocity(rigidBody, btZero);
-	    }
-	}
-	Rigidbody3D.TYPE_STATIC = 0;
-	Rigidbody3D.TYPE_DYNAMIC = 1;
-	Rigidbody3D.TYPE_KINEMATIC = 2;
-	Rigidbody3D._BT_DISABLE_WORLD_GRAVITY = 1;
-	Rigidbody3D._BT_ENABLE_GYROPSCOPIC_FORCE = 2;
-
-	class Physics3D {
-	    static __bulletinit__() {
-	        this._bullet = window.Physics3D;
-	        if (this._bullet) {
-	            StaticPlaneColliderShape.__init__();
-	            ColliderShape.__init__();
-	            CompoundColliderShape.__init__();
-	            PhysicsComponent.__init__();
-	            PhysicsSimulation.__init__();
-	            BoxColliderShape.__init__();
-	            CylinderColliderShape.__init__();
-	            CharacterController.__init__();
-	            Rigidbody3D.__init__();
-	        }
-	    }
-	    static __cannoninit__() {
-	        this._cannon = window.CANNON;
-	        if (!this._cannon)
-	            return;
-	        Laya.CannonColliderShape.__init__();
-	        Laya.CannonPhysicsComponent.__init__();
-	        Laya.CannonPhysicsSimulation.__init__();
-	        Laya.CannonBoxColliderShape.__init__();
-	        Laya.CannonRigidbody3D.__init__();
-	    }
-	}
-	Physics3D._bullet = null;
-	Physics3D._cannon = null;
-	Physics3D._enablePhysics = false;
-
-	class Config3D {
-	    constructor() {
-	        this._defaultPhysicsMemory = 16;
-	        this._maxLightCount = 32;
-	        this._lightClusterCount = new Vector3(12, 12, 12);
-	        this._editerEnvironment = false;
-	        this.isAntialias = true;
-	        this.isAlpha = false;
-	        this.premultipliedAlpha = true;
-	        this.isStencil = true;
-	        this.enableMultiLight = true;
-	        this.octreeCulling = false;
-	        this.octreeInitialSize = 64.0;
-	        this.octreeInitialCenter = new Vector3(0, 0, 0);
-	        this.octreeMinNodeSize = 2.0;
-	        this.octreeLooseness = 1.25;
-	        this.debugFrustumCulling = false;
-	        this.pbrRenderQuality = exports.PBRRenderQuality.High;
-	        this.isUseCannonPhysicsEngine = false;
-	        this._maxAreaLightCountPerClusterAverage = Math.min(Math.floor(2048 / this._lightClusterCount.z - 1) * 4, this._maxLightCount);
-	    }
-	    static get useCannonPhysics() {
-	        return Config3D._config.isUseCannonPhysicsEngine;
-	    }
-	    static set useCannonPhysics(value) {
-	        Config3D._config.isUseCannonPhysicsEngine = value;
-	        if (value) {
-	            Physics3D.__cannoninit__();
-	            if (!ILaya3D.Scene3D.cannonPhysicsSettings)
-	                ILaya3D.Scene3D.cannonPhysicsSettings = new Laya.CannonPhysicsSettings();
-	        }
-	    }
-	    get defaultPhysicsMemory() {
-	        return this._defaultPhysicsMemory;
-	    }
-	    set defaultPhysicsMemory(value) {
-	        if (value < 16)
-	            throw "defaultPhysicsMemory must large than 16M";
-	        this._defaultPhysicsMemory = value;
-	    }
-	    get maxLightCount() {
-	        return this._maxLightCount;
-	    }
-	    set maxLightCount(value) {
-	        if (value > 2048) {
-	            this._maxLightCount = 2048;
-	            console.warn("Config3D: maxLightCount must less equal 2048.");
-	        }
-	        else {
-	            this._maxLightCount = value;
-	        }
-	    }
-	    get lightClusterCount() {
-	        return this._lightClusterCount;
-	    }
-	    set lightClusterCount(value) {
-	        if (value.x > 128 || value.y > 128 || value.z > 128) {
-	            this._lightClusterCount.setValue(Math.min(value.x, 128), Math.min(value.y, 128), Math.min(value.z, 128));
-	            console.warn("Config3D: lightClusterCount X and Y、Z must less equal 128.");
-	        }
-	        else {
-	            value.cloneTo(this._lightClusterCount);
-	        }
-	        var maxAreaLightCountWithZ = Math.floor(2048 / this._lightClusterCount.z - 1) * 4;
-	        if (maxAreaLightCountWithZ < this._maxLightCount)
-	            console.warn("Config3D: if the area light(PointLight、SpotLight) count is large than " + maxAreaLightCountWithZ + ",maybe the far away culster will ingonre some light.");
-	        this._maxAreaLightCountPerClusterAverage = Math.min(maxAreaLightCountWithZ, this._maxLightCount);
-	    }
-	    cloneTo(dest) {
-	        var destConfig3D = dest;
-	        destConfig3D._defaultPhysicsMemory = this._defaultPhysicsMemory;
-	        destConfig3D._editerEnvironment = this._editerEnvironment;
-	        destConfig3D.isAntialias = this.isAntialias;
-	        destConfig3D.isAlpha = this.isAlpha;
-	        destConfig3D.premultipliedAlpha = this.premultipliedAlpha;
-	        destConfig3D.isStencil = this.isStencil;
-	        destConfig3D.octreeCulling = this.octreeCulling;
-	        this.octreeInitialCenter.cloneTo(destConfig3D.octreeInitialCenter);
-	        destConfig3D.octreeInitialSize = this.octreeInitialSize;
-	        destConfig3D.octreeMinNodeSize = this.octreeMinNodeSize;
-	        destConfig3D.octreeLooseness = this.octreeLooseness;
-	        destConfig3D.debugFrustumCulling = this.debugFrustumCulling;
-	        destConfig3D.maxLightCount = this.maxLightCount;
-	        destConfig3D.enableMultiLight = this.enableMultiLight;
-	        var lightClusterCount = destConfig3D.lightClusterCount;
-	        this.lightClusterCount.cloneTo(lightClusterCount);
-	        destConfig3D.lightClusterCount = lightClusterCount;
-	        destConfig3D.pbrRenderQuality = this.pbrRenderQuality;
-	    }
-	    clone() {
-	        var dest = new Config3D();
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-	Config3D._config = new Config3D();
-	window.Config3D = Config3D;
-
-	class KeyframeNode {
-	    constructor() {
-	        this._ownerPath = [];
-	        this._propertys = [];
-	        this._keyFrames = [];
-	    }
-	    get ownerPathCount() {
-	        return this._ownerPath.length;
-	    }
-	    get propertyCount() {
-	        return this._propertys.length;
-	    }
-	    get keyFramesCount() {
-	        return this._keyFrames.length;
-	    }
-	    _setOwnerPathCount(value) {
-	        this._ownerPath.length = value;
-	    }
-	    _setOwnerPathByIndex(index, value) {
-	        this._ownerPath[index] = value;
-	    }
-	    _joinOwnerPath(sep) {
-	        return this._ownerPath.join(sep);
-	    }
-	    _setPropertyCount(value) {
-	        this._propertys.length = value;
-	    }
-	    _setPropertyByIndex(index, value) {
-	        this._propertys[index] = value;
-	    }
-	    _joinProperty(sep) {
-	        return this._propertys.join(sep);
-	    }
-	    _setKeyframeCount(value) {
-	        this._keyFrames.length = value;
-	    }
-	    _setKeyframeByIndex(index, value) {
-	        this._keyFrames[index] = value;
-	    }
-	    getOwnerPathByIndex(index) {
-	        return this._ownerPath[index];
-	    }
-	    getPropertyByIndex(index) {
-	        return this._propertys[index];
-	    }
-	    getKeyframeByIndex(index) {
-	        return this._keyFrames[index];
-	    }
-	}
-
-	class AnimationEvent {
-	    constructor() {
-	    }
-	}
-
-	class Keyframe {
-	    constructor() {
-	    }
-	    cloneTo(destObject) {
-	        var destKeyFrame = destObject;
-	        destKeyFrame.time = this.time;
-	    }
-	    clone() {
-	        var dest = new Keyframe();
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-
-	class FloatKeyframe extends Keyframe {
-	    constructor() {
-	        super();
-	    }
-	    cloneTo(destObject) {
-	        super.cloneTo(destObject);
-	        var destKeyFrame = destObject;
-	        destKeyFrame.inTangent = this.inTangent;
-	        destKeyFrame.outTangent = this.outTangent;
-	        destKeyFrame.value = this.value;
-	    }
-	}
 
 	class QuaternionKeyframe extends Keyframe {
 	    constructor() {
@@ -5797,6 +1890,515 @@
 	        this._nodes[index] = node;
 	    }
 	}
+
+	class Physics3D {
+	}
+	Physics3D._bullet = null;
+	Physics3D._enablePhysics = false;
+
+	class TextureGenerator {
+	    constructor() {
+	    }
+	    static lightAttenTexture(x, y, maxX, maxY, index, data) {
+	        var sqrRange = x / maxX;
+	        var atten = 1.0 / (1.0 + 25.0 * sqrRange);
+	        if (sqrRange >= 0.64) {
+	            if (sqrRange > 1.0) {
+	                atten = 0;
+	            }
+	            else {
+	                atten *= 1 - (sqrRange - 0.64) / (1 - 0.64);
+	            }
+	        }
+	        data[index] = Math.floor(atten * 255.0 + 0.5);
+	    }
+	    static haloTexture(x, y, maxX, maxY, index, data) {
+	        maxX >>= 1;
+	        maxY >>= 1;
+	        var xFac = (x - maxX) / maxX;
+	        var yFac = (y - maxY) / maxY;
+	        var sqrRange = xFac * xFac + yFac * yFac;
+	        if (sqrRange > 1.0) {
+	            sqrRange = 1.0;
+	        }
+	        data[index] = Math.floor((1.0 - sqrRange) * 255.0 + 0.5);
+	    }
+	    static _generateTexture2D(texture, textureWidth, textureHeight, func) {
+	        var index = 0;
+	        var size = 0;
+	        switch (texture.format) {
+	            case Laya.TextureFormat.R8G8B8:
+	                size = 3;
+	                break;
+	            case Laya.TextureFormat.R8G8B8A8:
+	                size = 4;
+	                break;
+	            case Laya.TextureFormat.Alpha8:
+	                size = 1;
+	                break;
+	            default:
+	                throw "GeneratedTexture._generateTexture: unkonw texture format.";
+	        }
+	        var data = new Uint8Array(textureWidth * textureHeight * size);
+	        for (var y = 0; y < textureHeight; y++) {
+	            for (var x = 0; x < textureWidth; x++) {
+	                func(x, y, textureWidth, textureHeight, index, data);
+	                index += size;
+	            }
+	        }
+	        texture.setPixels(data);
+	    }
+	}
+
+	class Utils3D {
+	    static _createFloatTextureBuffer(width, height) {
+	        var floatTex = new Laya.Texture2D(width, height, Laya.TextureFormat.R32G32B32A32, false, false);
+	        floatTex.filterMode = Laya.FilterMode.Point;
+	        floatTex.wrapModeU = Laya.WarpMode.Clamp;
+	        floatTex.wrapModeV = Laya.WarpMode.Clamp;
+	        floatTex.anisoLevel = 0;
+	        return floatTex;
+	    }
+	    static _convertToLayaVec3(bVector, out, inverseX) {
+	        var bullet = Physics3D._bullet;
+	        out.x = inverseX ? -bullet.btVector3_x(bVector) : bullet.btVector3_x(bVector);
+	        out.y = bullet.btVector3_y(bVector);
+	        out.z = bullet.btVector3_z(bVector);
+	    }
+	    static _convertToBulletVec3(lVector, out, inverseX) {
+	        Physics3D._bullet.btVector3_setValue(out, inverseX ? -lVector.x : lVector.x, lVector.y, lVector.z);
+	    }
+	    static _rotationTransformScaleSkinAnimation(tx, ty, tz, qx, qy, qz, qw, sx, sy, sz, outArray, outOffset) {
+	        var re = Utils3D._tempArray16_0;
+	        var se = Utils3D._tempArray16_1;
+	        var tse = Utils3D._tempArray16_2;
+	        var x2 = qx + qx;
+	        var y2 = qy + qy;
+	        var z2 = qz + qz;
+	        var xx = qx * x2;
+	        var yx = qy * x2;
+	        var yy = qy * y2;
+	        var zx = qz * x2;
+	        var zy = qz * y2;
+	        var zz = qz * z2;
+	        var wx = qw * x2;
+	        var wy = qw * y2;
+	        var wz = qw * z2;
+	        re[15] = 1;
+	        re[0] = 1 - yy - zz;
+	        re[1] = yx + wz;
+	        re[2] = zx - wy;
+	        re[4] = yx - wz;
+	        re[5] = 1 - xx - zz;
+	        re[6] = zy + wx;
+	        re[8] = zx + wy;
+	        re[9] = zy - wx;
+	        re[10] = 1 - xx - yy;
+	        se[15] = 1;
+	        se[0] = sx;
+	        se[5] = sy;
+	        se[10] = sz;
+	        var i, ai0, ai1, ai2, ai3;
+	        for (i = 0; i < 4; i++) {
+	            ai0 = re[i];
+	            ai1 = re[i + 4];
+	            ai2 = re[i + 8];
+	            ai3 = re[i + 12];
+	            tse[i] = ai0;
+	            tse[i + 4] = ai1;
+	            tse[i + 8] = ai2;
+	            tse[i + 12] = ai0 * tx + ai1 * ty + ai2 * tz + ai3;
+	        }
+	        for (i = 0; i < 4; i++) {
+	            ai0 = tse[i];
+	            ai1 = tse[i + 4];
+	            ai2 = tse[i + 8];
+	            ai3 = tse[i + 12];
+	            outArray[i + outOffset] = ai0 * se[0] + ai1 * se[1] + ai2 * se[2] + ai3 * se[3];
+	            outArray[i + outOffset + 4] = ai0 * se[4] + ai1 * se[5] + ai2 * se[6] + ai3 * se[7];
+	            outArray[i + outOffset + 8] = ai0 * se[8] + ai1 * se[9] + ai2 * se[10] + ai3 * se[11];
+	            outArray[i + outOffset + 12] = ai0 * se[12] + ai1 * se[13] + ai2 * se[14] + ai3 * se[15];
+	        }
+	    }
+	    static _computeBoneAndAnimationDatasByBindPoseMatrxix(bones, curData, inverGlobalBindPose, outBonesDatas, outAnimationDatas, boneIndexToMesh) {
+	        var offset = 0;
+	        var matOffset = 0;
+	        var i;
+	        var parentOffset;
+	        var boneLength = bones.length;
+	        for (i = 0; i < boneLength; offset += bones[i].keyframeWidth, matOffset += 16, i++) {
+	            Utils3D._rotationTransformScaleSkinAnimation(curData[offset + 0], curData[offset + 1], curData[offset + 2], curData[offset + 3], curData[offset + 4], curData[offset + 5], curData[offset + 6], curData[offset + 7], curData[offset + 8], curData[offset + 9], outBonesDatas, matOffset);
+	            if (i != 0) {
+	                parentOffset = bones[i].parentIndex * 16;
+	                Utils3D.mulMatrixByArray(outBonesDatas, parentOffset, outBonesDatas, matOffset, outBonesDatas, matOffset);
+	            }
+	        }
+	        var n = inverGlobalBindPose.length;
+	        for (i = 0; i < n; i++) {
+	            Utils3D.mulMatrixByArrayAndMatrixFast(outBonesDatas, boneIndexToMesh[i] * 16, inverGlobalBindPose[i], outAnimationDatas, i * 16);
+	        }
+	    }
+	    static _computeAnimationDatasByArrayAndMatrixFast(inverGlobalBindPose, bonesDatas, outAnimationDatas, boneIndexToMesh) {
+	        for (var i = 0, n = inverGlobalBindPose.length; i < n; i++)
+	            Utils3D.mulMatrixByArrayAndMatrixFast(bonesDatas, boneIndexToMesh[i] * 16, inverGlobalBindPose[i], outAnimationDatas, i * 16);
+	    }
+	    static _computeBoneAndAnimationDatasByBindPoseMatrxixOld(bones, curData, inverGlobalBindPose, outBonesDatas, outAnimationDatas) {
+	        var offset = 0;
+	        var matOffset = 0;
+	        var i;
+	        var parentOffset;
+	        var boneLength = bones.length;
+	        for (i = 0; i < boneLength; offset += bones[i].keyframeWidth, matOffset += 16, i++) {
+	            Utils3D._rotationTransformScaleSkinAnimation(curData[offset + 7], curData[offset + 8], curData[offset + 9], curData[offset + 3], curData[offset + 4], curData[offset + 5], curData[offset + 6], curData[offset + 0], curData[offset + 1], curData[offset + 2], outBonesDatas, matOffset);
+	            if (i != 0) {
+	                parentOffset = bones[i].parentIndex * 16;
+	                Utils3D.mulMatrixByArray(outBonesDatas, parentOffset, outBonesDatas, matOffset, outBonesDatas, matOffset);
+	            }
+	        }
+	        var n = inverGlobalBindPose.length;
+	        for (i = 0; i < n; i++) {
+	            var arrayOffset = i * 16;
+	            Utils3D.mulMatrixByArrayAndMatrixFast(outBonesDatas, arrayOffset, inverGlobalBindPose[i], outAnimationDatas, arrayOffset);
+	        }
+	    }
+	    static _computeAnimationDatasByArrayAndMatrixFastOld(inverGlobalBindPose, bonesDatas, outAnimationDatas) {
+	        var n = inverGlobalBindPose.length;
+	        for (var i = 0; i < n; i++) {
+	            var arrayOffset = i * 16;
+	            Utils3D.mulMatrixByArrayAndMatrixFast(bonesDatas, arrayOffset, inverGlobalBindPose[i], outAnimationDatas, arrayOffset);
+	        }
+	    }
+	    static _computeRootAnimationData(bones, curData, animationDatas) {
+	        for (var i = 0, offset = 0, matOffset = 0, boneLength = bones.length; i < boneLength; offset += bones[i].keyframeWidth, matOffset += 16, i++)
+	            Utils3D.createAffineTransformationArray(curData[offset + 0], curData[offset + 1], curData[offset + 2], curData[offset + 3], curData[offset + 4], curData[offset + 5], curData[offset + 6], curData[offset + 7], curData[offset + 8], curData[offset + 9], animationDatas, matOffset);
+	    }
+	    static transformVector3ArrayByQuat(sourceArray, sourceOffset, rotation, outArray, outOffset) {
+	        var x = sourceArray[sourceOffset], y = sourceArray[sourceOffset + 1], z = sourceArray[sourceOffset + 2], qx = rotation.x, qy = rotation.y, qz = rotation.z, qw = rotation.w, ix = qw * x + qy * z - qz * y, iy = qw * y + qz * x - qx * z, iz = qw * z + qx * y - qy * x, iw = -qx * x - qy * y - qz * z;
+	        outArray[outOffset] = ix * qw + iw * -qx + iy * -qz - iz * -qy;
+	        outArray[outOffset + 1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
+	        outArray[outOffset + 2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+	    }
+	    static mulMatrixByArray(leftArray, leftOffset, rightArray, rightOffset, outArray, outOffset) {
+	        var i, ai0, ai1, ai2, ai3;
+	        if (outArray === rightArray) {
+	            rightArray = Utils3D._tempArray16_3;
+	            for (i = 0; i < 16; ++i) {
+	                rightArray[i] = outArray[outOffset + i];
+	            }
+	            rightOffset = 0;
+	        }
+	        for (i = 0; i < 4; i++) {
+	            ai0 = leftArray[leftOffset + i];
+	            ai1 = leftArray[leftOffset + i + 4];
+	            ai2 = leftArray[leftOffset + i + 8];
+	            ai3 = leftArray[leftOffset + i + 12];
+	            outArray[outOffset + i] = ai0 * rightArray[rightOffset + 0] + ai1 * rightArray[rightOffset + 1] + ai2 * rightArray[rightOffset + 2] + ai3 * rightArray[rightOffset + 3];
+	            outArray[outOffset + i + 4] = ai0 * rightArray[rightOffset + 4] + ai1 * rightArray[rightOffset + 5] + ai2 * rightArray[rightOffset + 6] + ai3 * rightArray[rightOffset + 7];
+	            outArray[outOffset + i + 8] = ai0 * rightArray[rightOffset + 8] + ai1 * rightArray[rightOffset + 9] + ai2 * rightArray[rightOffset + 10] + ai3 * rightArray[rightOffset + 11];
+	            outArray[outOffset + i + 12] = ai0 * rightArray[rightOffset + 12] + ai1 * rightArray[rightOffset + 13] + ai2 * rightArray[rightOffset + 14] + ai3 * rightArray[rightOffset + 15];
+	        }
+	    }
+	    static mulMatrixByArrayFast(leftArray, leftOffset, rightArray, rightOffset, outArray, outOffset) {
+	        var i, ai0, ai1, ai2, ai3;
+	        for (i = 0; i < 4; i++) {
+	            ai0 = leftArray[leftOffset + i];
+	            ai1 = leftArray[leftOffset + i + 4];
+	            ai2 = leftArray[leftOffset + i + 8];
+	            ai3 = leftArray[leftOffset + i + 12];
+	            outArray[outOffset + i] = ai0 * rightArray[rightOffset + 0] + ai1 * rightArray[rightOffset + 1] + ai2 * rightArray[rightOffset + 2] + ai3 * rightArray[rightOffset + 3];
+	            outArray[outOffset + i + 4] = ai0 * rightArray[rightOffset + 4] + ai1 * rightArray[rightOffset + 5] + ai2 * rightArray[rightOffset + 6] + ai3 * rightArray[rightOffset + 7];
+	            outArray[outOffset + i + 8] = ai0 * rightArray[rightOffset + 8] + ai1 * rightArray[rightOffset + 9] + ai2 * rightArray[rightOffset + 10] + ai3 * rightArray[rightOffset + 11];
+	            outArray[outOffset + i + 12] = ai0 * rightArray[rightOffset + 12] + ai1 * rightArray[rightOffset + 13] + ai2 * rightArray[rightOffset + 14] + ai3 * rightArray[rightOffset + 15];
+	        }
+	    }
+	    static mulMatrixByArrayAndMatrixFast(leftArray, leftOffset, rightMatrix, outArray, outOffset) {
+	        var i, ai0, ai1, ai2, ai3;
+	        var rightMatrixE = rightMatrix.elements;
+	        var m11 = rightMatrixE[0], m12 = rightMatrixE[1], m13 = rightMatrixE[2], m14 = rightMatrixE[3];
+	        var m21 = rightMatrixE[4], m22 = rightMatrixE[5], m23 = rightMatrixE[6], m24 = rightMatrixE[7];
+	        var m31 = rightMatrixE[8], m32 = rightMatrixE[9], m33 = rightMatrixE[10], m34 = rightMatrixE[11];
+	        var m41 = rightMatrixE[12], m42 = rightMatrixE[13], m43 = rightMatrixE[14], m44 = rightMatrixE[15];
+	        var ai0LeftOffset = leftOffset;
+	        var ai1LeftOffset = leftOffset + 4;
+	        var ai2LeftOffset = leftOffset + 8;
+	        var ai3LeftOffset = leftOffset + 12;
+	        var ai0OutOffset = outOffset;
+	        var ai1OutOffset = outOffset + 4;
+	        var ai2OutOffset = outOffset + 8;
+	        var ai3OutOffset = outOffset + 12;
+	        for (i = 0; i < 4; i++) {
+	            ai0 = leftArray[ai0LeftOffset + i];
+	            ai1 = leftArray[ai1LeftOffset + i];
+	            ai2 = leftArray[ai2LeftOffset + i];
+	            ai3 = leftArray[ai3LeftOffset + i];
+	            outArray[ai0OutOffset + i] = ai0 * m11 + ai1 * m12 + ai2 * m13 + ai3 * m14;
+	            outArray[ai1OutOffset + i] = ai0 * m21 + ai1 * m22 + ai2 * m23 + ai3 * m24;
+	            outArray[ai2OutOffset + i] = ai0 * m31 + ai1 * m32 + ai2 * m33 + ai3 * m34;
+	            outArray[ai3OutOffset + i] = ai0 * m41 + ai1 * m42 + ai2 * m43 + ai3 * m44;
+	        }
+	    }
+	    static createAffineTransformationArray(tX, tY, tZ, rX, rY, rZ, rW, sX, sY, sZ, outArray, outOffset) {
+	        var x2 = rX + rX, y2 = rY + rY, z2 = rZ + rZ;
+	        var xx = rX * x2, xy = rX * y2, xz = rX * z2, yy = rY * y2, yz = rY * z2, zz = rZ * z2;
+	        var wx = rW * x2, wy = rW * y2, wz = rW * z2;
+	        outArray[outOffset + 0] = (1 - (yy + zz)) * sX;
+	        outArray[outOffset + 1] = (xy + wz) * sX;
+	        outArray[outOffset + 2] = (xz - wy) * sX;
+	        outArray[outOffset + 3] = 0;
+	        outArray[outOffset + 4] = (xy - wz) * sY;
+	        outArray[outOffset + 5] = (1 - (xx + zz)) * sY;
+	        outArray[outOffset + 6] = (yz + wx) * sY;
+	        outArray[outOffset + 7] = 0;
+	        outArray[outOffset + 8] = (xz + wy) * sZ;
+	        outArray[outOffset + 9] = (yz - wx) * sZ;
+	        outArray[outOffset + 10] = (1 - (xx + yy)) * sZ;
+	        outArray[outOffset + 11] = 0;
+	        outArray[outOffset + 12] = tX;
+	        outArray[outOffset + 13] = tY;
+	        outArray[outOffset + 14] = tZ;
+	        outArray[outOffset + 15] = 1;
+	    }
+	    static transformVector3ArrayToVector3ArrayCoordinate(source, sourceOffset, transform, result, resultOffset) {
+	        var coordinateX = source[sourceOffset + 0];
+	        var coordinateY = source[sourceOffset + 1];
+	        var coordinateZ = source[sourceOffset + 2];
+	        var transformElem = transform.elements;
+	        var w = ((coordinateX * transformElem[3]) + (coordinateY * transformElem[7]) + (coordinateZ * transformElem[11]) + transformElem[15]);
+	        result[resultOffset] = (coordinateX * transformElem[0]) + (coordinateY * transformElem[4]) + (coordinateZ * transformElem[8]) + transformElem[12] / w;
+	        result[resultOffset + 1] = (coordinateX * transformElem[1]) + (coordinateY * transformElem[5]) + (coordinateZ * transformElem[9]) + transformElem[13] / w;
+	        result[resultOffset + 2] = (coordinateX * transformElem[2]) + (coordinateY * transformElem[6]) + (coordinateZ * transformElem[10]) + transformElem[14] / w;
+	    }
+	    static transformVector3ArrayToVector3ArrayNormal(source, sourceOffset, transform, result, resultOffset) {
+	        var coordinateX = source[sourceOffset + 0];
+	        var coordinateY = source[sourceOffset + 1];
+	        var coordinateZ = source[sourceOffset + 2];
+	        var transformElem = transform.elements;
+	        result[resultOffset] = coordinateX * transformElem[0] + coordinateY * transformElem[4] + coordinateZ * transformElem[8];
+	        result[resultOffset + 1] = coordinateX * transformElem[1] + coordinateY * transformElem[5] + coordinateZ * transformElem[9];
+	        result[resultOffset + 2] = coordinateX * transformElem[2] + coordinateY * transformElem[6] + coordinateZ * transformElem[10];
+	    }
+	    static transformLightingMapTexcoordArray(source, sourceOffset, lightingMapScaleOffset, result, resultOffset) {
+	        result[resultOffset + 0] = source[sourceOffset + 0] * lightingMapScaleOffset.x + lightingMapScaleOffset.z;
+	        result[resultOffset + 1] = 1.0 - ((1.0 - source[sourceOffset + 1]) * lightingMapScaleOffset.y + lightingMapScaleOffset.w);
+	    }
+	    static getURLVerion(url) {
+	        var index = url.indexOf("?");
+	        return index >= 0 ? url.substr(index) : null;
+	    }
+	    static _createAffineTransformationArray(trans, rot, scale, outE) {
+	        var x = rot.x, y = rot.y, z = rot.z, w = rot.w, x2 = x + x, y2 = y + y, z2 = z + z;
+	        var xx = x * x2, xy = x * y2, xz = x * z2, yy = y * y2, yz = y * z2, zz = z * z2;
+	        var wx = w * x2, wy = w * y2, wz = w * z2, sx = scale.x, sy = scale.y, sz = scale.z;
+	        outE[0] = (1 - (yy + zz)) * sx;
+	        outE[1] = (xy + wz) * sx;
+	        outE[2] = (xz - wy) * sx;
+	        outE[3] = 0;
+	        outE[4] = (xy - wz) * sy;
+	        outE[5] = (1 - (xx + zz)) * sy;
+	        outE[6] = (yz + wx) * sy;
+	        outE[7] = 0;
+	        outE[8] = (xz + wy) * sz;
+	        outE[9] = (yz - wx) * sz;
+	        outE[10] = (1 - (xx + yy)) * sz;
+	        outE[11] = 0;
+	        outE[12] = trans.x;
+	        outE[13] = trans.y;
+	        outE[14] = trans.z;
+	        outE[15] = 1;
+	    }
+	    static _mulMatrixArray(left, right, rightOffset, outArray, outOffset) {
+	        var l = right;
+	        var r = left;
+	        var e = outArray;
+	        var l11 = l[rightOffset], l12 = l[rightOffset + 1], l13 = l[rightOffset + 2], l14 = l[rightOffset + 3];
+	        var l21 = l[rightOffset + 4], l22 = l[rightOffset + 5], l23 = l[rightOffset + 6], l24 = l[rightOffset + 7];
+	        var l31 = l[rightOffset + 8], l32 = l[rightOffset + 9], l33 = l[rightOffset + 10], l34 = l[rightOffset + 11];
+	        var l41 = l[rightOffset + 12], l42 = l[rightOffset + 13], l43 = l[rightOffset + 14], l44 = l[rightOffset + 15];
+	        var r11 = r[0], r12 = r[1], r13 = r[2], r14 = r[3];
+	        var r21 = r[4], r22 = r[5], r23 = r[6], r24 = r[7];
+	        var r31 = r[8], r32 = r[9], r33 = r[10], r34 = r[11];
+	        var r41 = r[12], r42 = r[13], r43 = r[14], r44 = r[15];
+	        e[outOffset] = (l11 * r11) + (l12 * r21) + (l13 * r31) + (l14 * r41);
+	        e[outOffset + 1] = (l11 * r12) + (l12 * r22) + (l13 * r32) + (l14 * r42);
+	        e[outOffset + 2] = (l11 * r13) + (l12 * r23) + (l13 * r33) + (l14 * r43);
+	        e[outOffset + 3] = (l11 * r14) + (l12 * r24) + (l13 * r34) + (l14 * r44);
+	        e[outOffset + 4] = (l21 * r11) + (l22 * r21) + (l23 * r31) + (l24 * r41);
+	        e[outOffset + 5] = (l21 * r12) + (l22 * r22) + (l23 * r32) + (l24 * r42);
+	        e[outOffset + 6] = (l21 * r13) + (l22 * r23) + (l23 * r33) + (l24 * r43);
+	        e[outOffset + 7] = (l21 * r14) + (l22 * r24) + (l23 * r34) + (l24 * r44);
+	        e[outOffset + 8] = (l31 * r11) + (l32 * r21) + (l33 * r31) + (l34 * r41);
+	        e[outOffset + 9] = (l31 * r12) + (l32 * r22) + (l33 * r32) + (l34 * r42);
+	        e[outOffset + 10] = (l31 * r13) + (l32 * r23) + (l33 * r33) + (l34 * r43);
+	        e[outOffset + 11] = (l31 * r14) + (l32 * r24) + (l33 * r34) + (l34 * r44);
+	        e[outOffset + 12] = (l41 * r11) + (l42 * r21) + (l43 * r31) + (l44 * r41);
+	        e[outOffset + 13] = (l41 * r12) + (l42 * r22) + (l43 * r32) + (l44 * r42);
+	        e[outOffset + 14] = (l41 * r13) + (l42 * r23) + (l43 * r33) + (l44 * r43);
+	        e[outOffset + 15] = (l41 * r14) + (l42 * r24) + (l43 * r34) + (l44 * r44);
+	    }
+	    static arcTanAngle(x, y) {
+	        if (x == 0) {
+	            if (y == 1)
+	                return Math.PI / 2;
+	            return -Math.PI / 2;
+	        }
+	        if (x > 0)
+	            return Math.atan(y / x);
+	        if (x < 0) {
+	            if (y > 0)
+	                return Math.atan(y / x) + Math.PI;
+	            return Math.atan(y / x) - Math.PI;
+	        }
+	        return 0;
+	    }
+	    static angleTo(from, location, angle) {
+	        Vector3.subtract(location, from, Quaternion.TEMPVector30);
+	        Vector3.normalize(Quaternion.TEMPVector30, Quaternion.TEMPVector30);
+	        angle.x = Math.asin(Quaternion.TEMPVector30.y);
+	        angle.y = Utils3D.arcTanAngle(-Quaternion.TEMPVector30.z, -Quaternion.TEMPVector30.x);
+	    }
+	    static transformQuat(source, rotation, out) {
+	        var re = rotation;
+	        var x = source.x, y = source.y, z = source.z, qx = re[0], qy = re[1], qz = re[2], qw = re[3], ix = qw * x + qy * z - qz * y, iy = qw * y + qz * x - qx * z, iz = qw * z + qx * y - qy * x, iw = -qx * x - qy * y - qz * z;
+	        out.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
+	        out.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
+	        out.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+	    }
+	    static quaternionWeight(f, weight, e) {
+	        e.x = f.x * weight;
+	        e.y = f.y * weight;
+	        e.z = f.z * weight;
+	        e.w = f.w;
+	    }
+	    static quaternionConjugate(value, result) {
+	        result.x = -value.x;
+	        result.y = -value.y;
+	        result.z = -value.z;
+	        result.w = value.w;
+	    }
+	    static scaleWeight(s, w, out) {
+	        var sX = s.x, sY = s.y, sZ = s.z;
+	        out.x = sX > 0 ? Math.pow(Math.abs(sX), w) : -Math.pow(Math.abs(sX), w);
+	        out.y = sY > 0 ? Math.pow(Math.abs(sY), w) : -Math.pow(Math.abs(sY), w);
+	        out.z = sZ > 0 ? Math.pow(Math.abs(sZ), w) : -Math.pow(Math.abs(sZ), w);
+	    }
+	    static scaleBlend(sa, sb, w, out) {
+	        var saw = Utils3D._tempVector3_0;
+	        var sbw = Utils3D._tempVector3_1;
+	        Utils3D.scaleWeight(sa, 1.0 - w, saw);
+	        Utils3D.scaleWeight(sb, w, sbw);
+	        var sng = w > 0.5 ? sb : sa;
+	        out.x = sng.x > 0 ? Math.abs(saw.x * sbw.x) : -Math.abs(saw.x * sbw.x);
+	        out.y = sng.y > 0 ? Math.abs(saw.y * sbw.y) : -Math.abs(saw.y * sbw.y);
+	        out.z = sng.z > 0 ? Math.abs(saw.z * sbw.z) : -Math.abs(saw.z * sbw.z);
+	    }
+	    static matrix4x4MultiplyFFF(a, b, e) {
+	        var i, ai0, ai1, ai2, ai3;
+	        if (e === b) {
+	            b = new Float32Array(16);
+	            for (i = 0; i < 16; ++i) {
+	                b[i] = e[i];
+	            }
+	        }
+	        var b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3];
+	        var b4 = b[4], b5 = b[5], b6 = b[6], b7 = b[7];
+	        var b8 = b[8], b9 = b[9], b10 = b[10], b11 = b[11];
+	        var b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
+	        for (i = 0; i < 4; i++) {
+	            ai0 = a[i];
+	            ai1 = a[i + 4];
+	            ai2 = a[i + 8];
+	            ai3 = a[i + 12];
+	            e[i] = ai0 * b0 + ai1 * b1 + ai2 * b2 + ai3 * b3;
+	            e[i + 4] = ai0 * b4 + ai1 * b5 + ai2 * b6 + ai3 * b7;
+	            e[i + 8] = ai0 * b8 + ai1 * b9 + ai2 * b10 + ai3 * b11;
+	            e[i + 12] = ai0 * b12 + ai1 * b13 + ai2 * b14 + ai3 * b15;
+	        }
+	    }
+	    static matrix4x4MultiplyFFFForNative(a, b, e) {
+	        Laya.LayaGL.instance.matrix4x4Multiply(a, b, e);
+	    }
+	    static matrix4x4MultiplyMFM(left, right, out) {
+	        Utils3D.matrix4x4MultiplyFFF(left.elements, right, out.elements);
+	    }
+	    static _buildTexture2D(width, height, format, colorFunc, mipmaps = false) {
+	        var texture = new Laya.Texture2D(width, height, format, mipmaps, true);
+	        texture.anisoLevel = 1;
+	        texture.filterMode = Laya.FilterMode.Point;
+	        TextureGenerator._generateTexture2D(texture, width, height, colorFunc);
+	        return texture;
+	    }
+	    static _drawBound(debugLine, boundBox, color) {
+	        if (debugLine.lineCount + 12 > debugLine.maxLineCount)
+	            debugLine.maxLineCount += 12;
+	        var start = Utils3D._tempVector3_0;
+	        var end = Utils3D._tempVector3_1;
+	        var min = boundBox.min;
+	        var max = boundBox.max;
+	        start.setValue(min.x, min.y, min.z);
+	        end.setValue(max.x, min.y, min.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(min.x, min.y, min.z);
+	        end.setValue(min.x, min.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(max.x, min.y, min.z);
+	        end.setValue(max.x, min.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(min.x, min.y, max.z);
+	        end.setValue(max.x, min.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(min.x, min.y, min.z);
+	        end.setValue(min.x, max.y, min.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(min.x, min.y, max.z);
+	        end.setValue(min.x, max.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(max.x, min.y, min.z);
+	        end.setValue(max.x, max.y, min.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(max.x, min.y, max.z);
+	        end.setValue(max.x, max.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(min.x, max.y, min.z);
+	        end.setValue(max.x, max.y, min.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(min.x, max.y, min.z);
+	        end.setValue(min.x, max.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(max.x, max.y, min.z);
+	        end.setValue(max.x, max.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	        start.setValue(min.x, max.y, max.z);
+	        end.setValue(max.x, max.y, max.z);
+	        debugLine.addLine(start, end, color, color);
+	    }
+	    static _getHierarchyPath(rootSprite, checkSprite, path) {
+	        path.length = 0;
+	        var sprite = checkSprite;
+	        while (sprite !== rootSprite) {
+	            var parent = sprite._parent;
+	            if (parent)
+	                path.push(parent.getChildIndex(sprite));
+	            else
+	                return null;
+	            sprite = parent;
+	        }
+	        return path;
+	    }
+	    static _getNodeByHierarchyPath(rootSprite, invPath) {
+	        var sprite = rootSprite;
+	        for (var i = invPath.length - 1; i >= 0; i--) {
+	            sprite = sprite.getChildAt(invPath[i]);
+	        }
+	        return sprite;
+	    }
+	}
+	Utils3D._tempVector3_0 = new Vector3();
+	Utils3D._tempVector3_1 = new Vector3();
+	Utils3D._tempArray16_0 = new Float32Array(16);
+	Utils3D._tempArray16_1 = new Float32Array(16);
+	Utils3D._tempArray16_2 = new Float32Array(16);
+	Utils3D._tempArray16_3 = new Float32Array(16);
+	Utils3D._compIdToNode = new Object();
 
 	class AnimationClip extends Laya.Resource {
 	    constructor() {
@@ -6707,6 +3309,554 @@
 	ConchVector3.ForwardLH = new ConchVector3(0, 0, 1);
 	ConchVector3.Up = new ConchVector3(0, 1, 0);
 	ConchVector3.NAN = new ConchVector3(NaN, NaN, NaN);
+
+	class Matrix4x4 {
+	    constructor(m11 = 1, m12 = 0, m13 = 0, m14 = 0, m21 = 0, m22 = 1, m23 = 0, m24 = 0, m31 = 0, m32 = 0, m33 = 1, m34 = 0, m41 = 0, m42 = 0, m43 = 0, m44 = 1, elements = null) {
+	        var e = elements ? this.elements = elements : this.elements = new Float32Array(16);
+	        e[0] = m11;
+	        e[1] = m12;
+	        e[2] = m13;
+	        e[3] = m14;
+	        e[4] = m21;
+	        e[5] = m22;
+	        e[6] = m23;
+	        e[7] = m24;
+	        e[8] = m31;
+	        e[9] = m32;
+	        e[10] = m33;
+	        e[11] = m34;
+	        e[12] = m41;
+	        e[13] = m42;
+	        e[14] = m43;
+	        e[15] = m44;
+	    }
+	    static createRotationX(rad, out) {
+	        var oe = out.elements;
+	        var s = Math.sin(rad), c = Math.cos(rad);
+	        oe[1] = oe[2] = oe[3] = oe[4] = oe[7] = oe[8] = oe[11] = oe[12] = oe[13] = oe[14] = 0;
+	        oe[0] = oe[15] = 1;
+	        oe[5] = oe[10] = c;
+	        oe[6] = s;
+	        oe[9] = -s;
+	    }
+	    static createRotationY(rad, out) {
+	        var oe = out.elements;
+	        var s = Math.sin(rad), c = Math.cos(rad);
+	        oe[1] = oe[3] = oe[4] = oe[6] = oe[7] = oe[9] = oe[11] = oe[12] = oe[13] = oe[14] = 0;
+	        oe[5] = oe[15] = 1;
+	        oe[0] = oe[10] = c;
+	        oe[2] = -s;
+	        oe[8] = s;
+	    }
+	    static createRotationZ(rad, out) {
+	        var oe = out.elements;
+	        var s = Math.sin(rad), c = Math.cos(rad);
+	        oe[2] = oe[3] = oe[6] = oe[7] = oe[8] = oe[9] = oe[11] = oe[12] = oe[13] = oe[14] = 0;
+	        oe[10] = oe[15] = 1;
+	        oe[0] = oe[5] = c;
+	        oe[1] = s;
+	        oe[4] = -s;
+	    }
+	    static createRotationYawPitchRoll(yaw, pitch, roll, result) {
+	        Quaternion.createFromYawPitchRoll(yaw, pitch, roll, Matrix4x4._tempQuaternion);
+	        Matrix4x4.createRotationQuaternion(Matrix4x4._tempQuaternion, result);
+	    }
+	    static createRotationAxis(axis, angle, result) {
+	        var x = axis.x;
+	        var y = axis.y;
+	        var z = axis.z;
+	        var cos = Math.cos(angle);
+	        var sin = Math.sin(angle);
+	        var xx = x * x;
+	        var yy = y * y;
+	        var zz = z * z;
+	        var xy = x * y;
+	        var xz = x * z;
+	        var yz = y * z;
+	        var resultE = result.elements;
+	        resultE[3] = resultE[7] = resultE[11] = resultE[12] = resultE[13] = resultE[14] = 0;
+	        resultE[15] = 1.0;
+	        resultE[0] = xx + (cos * (1.0 - xx));
+	        resultE[1] = (xy - (cos * xy)) + (sin * z);
+	        resultE[2] = (xz - (cos * xz)) - (sin * y);
+	        resultE[4] = (xy - (cos * xy)) - (sin * z);
+	        resultE[5] = yy + (cos * (1.0 - yy));
+	        resultE[6] = (yz - (cos * yz)) + (sin * x);
+	        resultE[8] = (xz - (cos * xz)) + (sin * y);
+	        resultE[9] = (yz - (cos * yz)) - (sin * x);
+	        resultE[10] = zz + (cos * (1.0 - zz));
+	    }
+	    setRotation(rotation) {
+	        var rotationX = rotation.x;
+	        var rotationY = rotation.y;
+	        var rotationZ = rotation.z;
+	        var rotationW = rotation.w;
+	        var xx = rotationX * rotationX;
+	        var yy = rotationY * rotationY;
+	        var zz = rotationZ * rotationZ;
+	        var xy = rotationX * rotationY;
+	        var zw = rotationZ * rotationW;
+	        var zx = rotationZ * rotationX;
+	        var yw = rotationY * rotationW;
+	        var yz = rotationY * rotationZ;
+	        var xw = rotationX * rotationW;
+	        var e = this.elements;
+	        e[0] = 1.0 - (2.0 * (yy + zz));
+	        e[1] = 2.0 * (xy + zw);
+	        e[2] = 2.0 * (zx - yw);
+	        e[4] = 2.0 * (xy - zw);
+	        e[5] = 1.0 - (2.0 * (zz + xx));
+	        e[6] = 2.0 * (yz + xw);
+	        e[8] = 2.0 * (zx + yw);
+	        e[9] = 2.0 * (yz - xw);
+	        e[10] = 1.0 - (2.0 * (yy + xx));
+	    }
+	    setPosition(position) {
+	        var e = this.elements;
+	        e[12] = position.x;
+	        e[13] = position.y;
+	        e[14] = position.z;
+	    }
+	    static createRotationQuaternion(rotation, result) {
+	        var resultE = result.elements;
+	        var rotationX = rotation.x;
+	        var rotationY = rotation.y;
+	        var rotationZ = rotation.z;
+	        var rotationW = rotation.w;
+	        var xx = rotationX * rotationX;
+	        var yy = rotationY * rotationY;
+	        var zz = rotationZ * rotationZ;
+	        var xy = rotationX * rotationY;
+	        var zw = rotationZ * rotationW;
+	        var zx = rotationZ * rotationX;
+	        var yw = rotationY * rotationW;
+	        var yz = rotationY * rotationZ;
+	        var xw = rotationX * rotationW;
+	        resultE[3] = resultE[7] = resultE[11] = resultE[12] = resultE[13] = resultE[14] = 0;
+	        resultE[15] = 1.0;
+	        resultE[0] = 1.0 - (2.0 * (yy + zz));
+	        resultE[1] = 2.0 * (xy + zw);
+	        resultE[2] = 2.0 * (zx - yw);
+	        resultE[4] = 2.0 * (xy - zw);
+	        resultE[5] = 1.0 - (2.0 * (zz + xx));
+	        resultE[6] = 2.0 * (yz + xw);
+	        resultE[8] = 2.0 * (zx + yw);
+	        resultE[9] = 2.0 * (yz - xw);
+	        resultE[10] = 1.0 - (2.0 * (yy + xx));
+	    }
+	    static createTranslate(trans, out) {
+	        var oe = out.elements;
+	        oe[4] = oe[8] = oe[1] = oe[9] = oe[2] = oe[6] = oe[3] = oe[7] = oe[11] = 0;
+	        oe[0] = oe[5] = oe[10] = oe[15] = 1;
+	        oe[12] = trans.x;
+	        oe[13] = trans.y;
+	        oe[14] = trans.z;
+	    }
+	    static createScaling(scale, out) {
+	        var oe = out.elements;
+	        oe[0] = scale.x;
+	        oe[5] = scale.y;
+	        oe[10] = scale.z;
+	        oe[1] = oe[4] = oe[8] = oe[12] = oe[9] = oe[13] = oe[2] = oe[6] = oe[14] = oe[3] = oe[7] = oe[11] = 0;
+	        oe[15] = 1;
+	    }
+	    static multiply(left, right, out) {
+	        var l = right.elements;
+	        var r = left.elements;
+	        var e = out.elements;
+	        var l11 = l[0], l12 = l[1], l13 = l[2], l14 = l[3];
+	        var l21 = l[4], l22 = l[5], l23 = l[6], l24 = l[7];
+	        var l31 = l[8], l32 = l[9], l33 = l[10], l34 = l[11];
+	        var l41 = l[12], l42 = l[13], l43 = l[14], l44 = l[15];
+	        var r11 = r[0], r12 = r[1], r13 = r[2], r14 = r[3];
+	        var r21 = r[4], r22 = r[5], r23 = r[6], r24 = r[7];
+	        var r31 = r[8], r32 = r[9], r33 = r[10], r34 = r[11];
+	        var r41 = r[12], r42 = r[13], r43 = r[14], r44 = r[15];
+	        e[0] = (l11 * r11) + (l12 * r21) + (l13 * r31) + (l14 * r41);
+	        e[1] = (l11 * r12) + (l12 * r22) + (l13 * r32) + (l14 * r42);
+	        e[2] = (l11 * r13) + (l12 * r23) + (l13 * r33) + (l14 * r43);
+	        e[3] = (l11 * r14) + (l12 * r24) + (l13 * r34) + (l14 * r44);
+	        e[4] = (l21 * r11) + (l22 * r21) + (l23 * r31) + (l24 * r41);
+	        e[5] = (l21 * r12) + (l22 * r22) + (l23 * r32) + (l24 * r42);
+	        e[6] = (l21 * r13) + (l22 * r23) + (l23 * r33) + (l24 * r43);
+	        e[7] = (l21 * r14) + (l22 * r24) + (l23 * r34) + (l24 * r44);
+	        e[8] = (l31 * r11) + (l32 * r21) + (l33 * r31) + (l34 * r41);
+	        e[9] = (l31 * r12) + (l32 * r22) + (l33 * r32) + (l34 * r42);
+	        e[10] = (l31 * r13) + (l32 * r23) + (l33 * r33) + (l34 * r43);
+	        e[11] = (l31 * r14) + (l32 * r24) + (l33 * r34) + (l34 * r44);
+	        e[12] = (l41 * r11) + (l42 * r21) + (l43 * r31) + (l44 * r41);
+	        e[13] = (l41 * r12) + (l42 * r22) + (l43 * r32) + (l44 * r42);
+	        e[14] = (l41 * r13) + (l42 * r23) + (l43 * r33) + (l44 * r43);
+	        e[15] = (l41 * r14) + (l42 * r24) + (l43 * r34) + (l44 * r44);
+	    }
+	    static multiplyForNative(left, right, out) {
+	        Laya.LayaGL.instance.matrix4x4Multiply(left.elements, right.elements, out.elements);
+	    }
+	    static createFromQuaternion(rotation, out) {
+	        var e = out.elements;
+	        var x = rotation.x, y = rotation.y, z = rotation.z, w = rotation.w;
+	        var x2 = x + x;
+	        var y2 = y + y;
+	        var z2 = z + z;
+	        var xx = x * x2;
+	        var yx = y * x2;
+	        var yy = y * y2;
+	        var zx = z * x2;
+	        var zy = z * y2;
+	        var zz = z * z2;
+	        var wx = w * x2;
+	        var wy = w * y2;
+	        var wz = w * z2;
+	        e[0] = 1 - yy - zz;
+	        e[1] = yx + wz;
+	        e[2] = zx - wy;
+	        e[3] = 0;
+	        e[4] = yx - wz;
+	        e[5] = 1 - xx - zz;
+	        e[6] = zy + wx;
+	        e[7] = 0;
+	        e[8] = zx + wy;
+	        e[9] = zy - wx;
+	        e[10] = 1 - xx - yy;
+	        e[11] = 0;
+	        e[12] = 0;
+	        e[13] = 0;
+	        e[14] = 0;
+	        e[15] = 1;
+	    }
+	    static createAffineTransformation(trans, rot, scale, out) {
+	        var oe = out.elements;
+	        var x = rot.x, y = rot.y, z = rot.z, w = rot.w, x2 = x + x, y2 = y + y, z2 = z + z;
+	        var xx = x * x2, xy = x * y2, xz = x * z2, yy = y * y2, yz = y * z2, zz = z * z2;
+	        var wx = w * x2, wy = w * y2, wz = w * z2, sx = scale.x, sy = scale.y, sz = scale.z;
+	        oe[0] = (1 - (yy + zz)) * sx;
+	        oe[1] = (xy + wz) * sx;
+	        oe[2] = (xz - wy) * sx;
+	        oe[3] = 0;
+	        oe[4] = (xy - wz) * sy;
+	        oe[5] = (1 - (xx + zz)) * sy;
+	        oe[6] = (yz + wx) * sy;
+	        oe[7] = 0;
+	        oe[8] = (xz + wy) * sz;
+	        oe[9] = (yz - wx) * sz;
+	        oe[10] = (1 - (xx + yy)) * sz;
+	        oe[11] = 0;
+	        oe[12] = trans.x;
+	        oe[13] = trans.y;
+	        oe[14] = trans.z;
+	        oe[15] = 1;
+	    }
+	    static createLookAt(eye, target, up, out) {
+	        var oE = out.elements;
+	        var xaxis = Matrix4x4._tempVector0;
+	        var yaxis = Matrix4x4._tempVector1;
+	        var zaxis = Matrix4x4._tempVector2;
+	        Vector3.subtract(eye, target, zaxis);
+	        Vector3.normalize(zaxis, zaxis);
+	        Vector3.cross(up, zaxis, xaxis);
+	        Vector3.normalize(xaxis, xaxis);
+	        Vector3.cross(zaxis, xaxis, yaxis);
+	        oE[3] = oE[7] = oE[11] = 0;
+	        oE[15] = 1;
+	        oE[0] = xaxis.x;
+	        oE[4] = xaxis.y;
+	        oE[8] = xaxis.z;
+	        oE[1] = yaxis.x;
+	        oE[5] = yaxis.y;
+	        oE[9] = yaxis.z;
+	        oE[2] = zaxis.x;
+	        oE[6] = zaxis.y;
+	        oE[10] = zaxis.z;
+	        oE[12] = -Vector3.dot(xaxis, eye);
+	        oE[13] = -Vector3.dot(yaxis, eye);
+	        oE[14] = -Vector3.dot(zaxis, eye);
+	    }
+	    static createPerspective(fov, aspect, znear, zfar, out) {
+	        var yScale = 1.0 / Math.tan(fov * 0.5);
+	        var xScale = yScale / aspect;
+	        var halfWidth = znear / xScale;
+	        var halfHeight = znear / yScale;
+	        Matrix4x4.createPerspectiveOffCenter(-halfWidth, halfWidth, -halfHeight, halfHeight, znear, zfar, out);
+	    }
+	    static createPerspectiveOffCenter(left, right, bottom, top, znear, zfar, out) {
+	        var oe = out.elements;
+	        var zRange = zfar / (zfar - znear);
+	        oe[1] = oe[2] = oe[3] = oe[4] = oe[6] = oe[7] = oe[12] = oe[13] = oe[15] = 0;
+	        oe[0] = 2.0 * znear / (right - left);
+	        oe[5] = 2.0 * znear / (top - bottom);
+	        oe[8] = (left + right) / (right - left);
+	        oe[9] = (top + bottom) / (top - bottom);
+	        oe[10] = -zRange;
+	        oe[11] = -1.0;
+	        oe[14] = -znear * zRange;
+	    }
+	    static createOrthoOffCenter(left, right, bottom, top, znear, zfar, out) {
+	        var oe = out.elements;
+	        var zRange = 1.0 / (zfar - znear);
+	        oe[1] = oe[2] = oe[3] = oe[4] = oe[6] = oe[8] = oe[7] = oe[9] = oe[11] = 0;
+	        oe[15] = 1;
+	        oe[0] = 2.0 / (right - left);
+	        oe[5] = 2.0 / (top - bottom);
+	        oe[10] = -zRange;
+	        oe[12] = (left + right) / (left - right);
+	        oe[13] = (top + bottom) / (bottom - top);
+	        oe[14] = -znear * zRange;
+	    }
+	    getElementByRowColumn(row, column) {
+	        if (row < 0 || row > 3)
+	            throw new Error("row Rows and columns for matrices run from 0 to 3, inclusive.");
+	        if (column < 0 || column > 3)
+	            throw new Error("column Rows and columns for matrices run from 0 to 3, inclusive.");
+	        return this.elements[(row * 4) + column];
+	    }
+	    setElementByRowColumn(row, column, value) {
+	        if (row < 0 || row > 3)
+	            throw new Error("row Rows and columns for matrices run from 0 to 3, inclusive.");
+	        if (column < 0 || column > 3)
+	            throw new Error("column Rows and columns for matrices run from 0 to 3, inclusive.");
+	        this.elements[(row * 4) + column] = value;
+	    }
+	    equalsOtherMatrix(other) {
+	        var e = this.elements;
+	        var oe = other.elements;
+	        return (MathUtils3D.nearEqual(e[0], oe[0]) && MathUtils3D.nearEqual(e[1], oe[1]) && MathUtils3D.nearEqual(e[2], oe[2]) && MathUtils3D.nearEqual(e[3], oe[3]) && MathUtils3D.nearEqual(e[4], oe[4]) && MathUtils3D.nearEqual(e[5], oe[5]) && MathUtils3D.nearEqual(e[6], oe[6]) && MathUtils3D.nearEqual(e[7], oe[7]) && MathUtils3D.nearEqual(e[8], oe[8]) && MathUtils3D.nearEqual(e[9], oe[9]) && MathUtils3D.nearEqual(e[10], oe[10]) && MathUtils3D.nearEqual(e[11], oe[11]) && MathUtils3D.nearEqual(e[12], oe[12]) && MathUtils3D.nearEqual(e[13], oe[13]) && MathUtils3D.nearEqual(e[14], oe[14]) && MathUtils3D.nearEqual(e[15], oe[15]));
+	    }
+	    decomposeTransRotScale(translation, rotation, scale) {
+	        var rotationMatrix = Matrix4x4._tempMatrix4x4;
+	        if (this.decomposeTransRotMatScale(translation, rotationMatrix, scale)) {
+	            Quaternion.createFromMatrix4x4(rotationMatrix, rotation);
+	            return true;
+	        }
+	        else {
+	            rotation.identity();
+	            return false;
+	        }
+	    }
+	    decomposeTransRotMatScale(translation, rotationMatrix, scale) {
+	        var e = this.elements;
+	        var te = translation;
+	        var re = rotationMatrix.elements;
+	        var se = scale;
+	        te.x = e[12];
+	        te.y = e[13];
+	        te.z = e[14];
+	        var m11 = e[0], m12 = e[1], m13 = e[2];
+	        var m21 = e[4], m22 = e[5], m23 = e[6];
+	        var m31 = e[8], m32 = e[9], m33 = e[10];
+	        var sX = se.x = Math.sqrt((m11 * m11) + (m12 * m12) + (m13 * m13));
+	        var sY = se.y = Math.sqrt((m21 * m21) + (m22 * m22) + (m23 * m23));
+	        var sZ = se.z = Math.sqrt((m31 * m31) + (m32 * m32) + (m33 * m33));
+	        if (MathUtils3D.isZero(sX) || MathUtils3D.isZero(sY) || MathUtils3D.isZero(sZ)) {
+	            re[1] = re[2] = re[3] = re[4] = re[6] = re[7] = re[8] = re[9] = re[11] = re[12] = re[13] = re[14] = 0;
+	            re[0] = re[5] = re[10] = re[15] = 1;
+	            return false;
+	        }
+	        var at = Matrix4x4._tempVector0;
+	        at.x = m31 / sZ;
+	        at.y = m32 / sZ;
+	        at.z = m33 / sZ;
+	        var tempRight = Matrix4x4._tempVector1;
+	        tempRight.x = m11 / sX;
+	        tempRight.y = m12 / sX;
+	        tempRight.z = m13 / sX;
+	        var up = Matrix4x4._tempVector2;
+	        Vector3.cross(at, tempRight, up);
+	        var right = Matrix4x4._tempVector1;
+	        Vector3.cross(up, at, right);
+	        re[3] = re[7] = re[11] = re[12] = re[13] = re[14] = 0;
+	        re[15] = 1;
+	        re[0] = right.x;
+	        re[1] = right.y;
+	        re[2] = right.z;
+	        re[4] = up.x;
+	        re[5] = up.y;
+	        re[6] = up.z;
+	        re[8] = at.x;
+	        re[9] = at.y;
+	        re[10] = at.z;
+	        ((re[0] * m11 + re[1] * m12 + re[2] * m13) < 0.0) && (se.x = -sX);
+	        ((re[4] * m21 + re[5] * m22 + re[6] * m23) < 0.0) && (se.y = -sY);
+	        ((re[8] * m31 + re[9] * m32 + re[10] * m33) < 0.0) && (se.z = -sZ);
+	        return true;
+	    }
+	    decomposeYawPitchRoll(yawPitchRoll) {
+	        var pitch = Math.asin(-this.elements[9]);
+	        yawPitchRoll.y = pitch;
+	        var test = Math.cos(pitch);
+	        if (test > MathUtils3D.zeroTolerance) {
+	            yawPitchRoll.z = Math.atan2(this.elements[1], this.elements[5]);
+	            yawPitchRoll.x = Math.atan2(this.elements[8], this.elements[10]);
+	        }
+	        else {
+	            yawPitchRoll.z = Math.atan2(-this.elements[4], this.elements[0]);
+	            yawPitchRoll.x = 0.0;
+	        }
+	    }
+	    normalize() {
+	        var v = this.elements;
+	        var c = v[0], d = v[1], e = v[2], g = Math.sqrt(c * c + d * d + e * e);
+	        if (g) {
+	            if (g == 1)
+	                return;
+	        }
+	        else {
+	            v[0] = 0;
+	            v[1] = 0;
+	            v[2] = 0;
+	            return;
+	        }
+	        g = 1 / g;
+	        v[0] = c * g;
+	        v[1] = d * g;
+	        v[2] = e * g;
+	    }
+	    transpose() {
+	        var e, t;
+	        e = this.elements;
+	        t = e[1];
+	        e[1] = e[4];
+	        e[4] = t;
+	        t = e[2];
+	        e[2] = e[8];
+	        e[8] = t;
+	        t = e[3];
+	        e[3] = e[12];
+	        e[12] = t;
+	        t = e[6];
+	        e[6] = e[9];
+	        e[9] = t;
+	        t = e[7];
+	        e[7] = e[13];
+	        e[13] = t;
+	        t = e[11];
+	        e[11] = e[14];
+	        e[14] = t;
+	        return this;
+	    }
+	    invert(out) {
+	        var ae = this.elements;
+	        var oe = out.elements;
+	        var a00 = ae[0], a01 = ae[1], a02 = ae[2], a03 = ae[3], a10 = ae[4], a11 = ae[5], a12 = ae[6], a13 = ae[7], a20 = ae[8], a21 = ae[9], a22 = ae[10], a23 = ae[11], a30 = ae[12], a31 = ae[13], a32 = ae[14], a33 = ae[15], b00 = a00 * a11 - a01 * a10, b01 = a00 * a12 - a02 * a10, b02 = a00 * a13 - a03 * a10, b03 = a01 * a12 - a02 * a11, b04 = a01 * a13 - a03 * a11, b05 = a02 * a13 - a03 * a12, b06 = a20 * a31 - a21 * a30, b07 = a20 * a32 - a22 * a30, b08 = a20 * a33 - a23 * a30, b09 = a21 * a32 - a22 * a31, b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32, det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+	        if (Math.abs(det) === 0.0) {
+	            return;
+	        }
+	        det = 1.0 / det;
+	        oe[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+	        oe[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+	        oe[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+	        oe[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+	        oe[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+	        oe[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+	        oe[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+	        oe[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+	        oe[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+	        oe[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+	        oe[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+	        oe[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+	        oe[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+	        oe[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+	        oe[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+	        oe[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+	    }
+	    static billboard(objectPosition, cameraPosition, cameraRight, cameraUp, cameraForward, mat) {
+	        Vector3.subtract(objectPosition, cameraPosition, Matrix4x4._tempVector0);
+	        var lengthSq = Vector3.scalarLengthSquared(Matrix4x4._tempVector0);
+	        if (MathUtils3D.isZero(lengthSq)) {
+	            Vector3.scale(cameraForward, -1, Matrix4x4._tempVector1);
+	            Matrix4x4._tempVector1.cloneTo(Matrix4x4._tempVector0);
+	        }
+	        else {
+	            Vector3.scale(Matrix4x4._tempVector0, 1 / Math.sqrt(lengthSq), Matrix4x4._tempVector0);
+	        }
+	        Vector3.cross(cameraUp, Matrix4x4._tempVector0, Matrix4x4._tempVector2);
+	        Vector3.normalize(Matrix4x4._tempVector2, Matrix4x4._tempVector2);
+	        Vector3.cross(Matrix4x4._tempVector0, Matrix4x4._tempVector2, Matrix4x4._tempVector3);
+	        var crosse = Matrix4x4._tempVector2;
+	        var finale = Matrix4x4._tempVector3;
+	        var diffee = Matrix4x4._tempVector0;
+	        var obpose = objectPosition;
+	        var mate = mat.elements;
+	        mate[0] = crosse.x;
+	        mate[1] = crosse.y;
+	        mate[2] = crosse.z;
+	        mate[3] = 0.0;
+	        mate[4] = finale.x;
+	        mate[5] = finale.y;
+	        mate[6] = finale.z;
+	        mate[7] = 0.0;
+	        mate[8] = diffee.x;
+	        mate[9] = diffee.y;
+	        mate[10] = diffee.z;
+	        mate[11] = 0.0;
+	        mate[12] = obpose.x;
+	        mate[13] = obpose.y;
+	        mate[14] = obpose.z;
+	        mate[15] = 1.0;
+	    }
+	    identity() {
+	        var e = this.elements;
+	        e[1] = e[2] = e[3] = e[4] = e[6] = e[7] = e[8] = e[9] = e[11] = e[12] = e[13] = e[14] = 0;
+	        e[0] = e[5] = e[10] = e[15] = 1;
+	    }
+	    cloneTo(destObject) {
+	        var i, s, d;
+	        s = this.elements;
+	        d = destObject.elements;
+	        if (s === d) {
+	            return;
+	        }
+	        for (i = 0; i < 16; ++i) {
+	            d[i] = s[i];
+	        }
+	    }
+	    clone() {
+	        var dest = new Matrix4x4();
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	    static translation(v3, out) {
+	        var oe = out.elements;
+	        oe[0] = oe[5] = oe[10] = oe[15] = 1;
+	        oe[12] = v3.x;
+	        oe[13] = v3.y;
+	        oe[14] = v3.z;
+	    }
+	    getTranslationVector(out) {
+	        var me = this.elements;
+	        out.x = me[12];
+	        out.y = me[13];
+	        out.z = me[14];
+	    }
+	    setTranslationVector(translate) {
+	        var me = this.elements;
+	        var ve = translate;
+	        me[12] = ve.x;
+	        me[13] = ve.y;
+	        me[14] = ve.z;
+	    }
+	    getForward(out) {
+	        var me = this.elements;
+	        out.x = -me[8];
+	        out.y = -me[9];
+	        out.z = -me[10];
+	    }
+	    setForward(forward) {
+	        var me = this.elements;
+	        me[8] = -forward.x;
+	        me[9] = -forward.y;
+	        me[10] = -forward.z;
+	    }
+	}
+	Matrix4x4._tempMatrix4x4 = new Matrix4x4();
+	Matrix4x4.TEMPMatrix0 = new Matrix4x4();
+	Matrix4x4.TEMPMatrix1 = new Matrix4x4();
+	Matrix4x4._tempVector0 = new Vector3();
+	Matrix4x4._tempVector1 = new Vector3();
+	Matrix4x4._tempVector2 = new Vector3();
+	Matrix4x4._tempVector3 = new Vector3();
+	Matrix4x4._tempQuaternion = new Quaternion();
+	Matrix4x4.DEFAULT = new Matrix4x4();
+	Matrix4x4.ZERO = new Matrix4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 	class ConchQuaternion {
 	    constructor(x = 0, y = 0, z = 0, w = 1, nativeElements = null) {
@@ -8262,7 +5412,6 @@
 	                            }
 	                        }
 	                        break;
-	                    default:
 	                }
 	                controllerLayer._crossNodesOwnersCount = crossCount;
 	                controllerLayer._crossPlayState = destAnimatorState;
@@ -8901,25 +6050,6 @@
 	            Shader3D._propertyNameMap[name] = id;
 	            return id;
 	        }
-	    }
-	    static getAttributeMapByDefine(defineString, attributeMap) {
-	        var newAttributeMap = {};
-	        for (var value in attributeMap) {
-	            newAttributeMap[value] = attributeMap[value];
-	        }
-	        for (var i = 0, n = defineString.length; i < n; i++) {
-	            var def = defineString[i];
-	            switch (def) {
-	                case "SIMPLEBONE":
-	                    if (attributeMap["a_Texcoord1"]) {
-	                        newAttributeMap["a_SimpleTextureParams"] = attributeMap["a_Texcoord1"];
-	                        delete newAttributeMap["a_Texcoord1"];
-	                    }
-	                    newAttributeMap["a_SimpleTextureParams"] = 7;
-	                    break;
-	            }
-	        }
-	        return newAttributeMap;
 	    }
 	    static addInclude(fileName, txt) {
 	        txt = txt.replace(Laya.ShaderCompile._clearCR, "");
@@ -10110,12 +7240,6 @@
 	        this._albedoColor.w = value;
 	        this.albedoColor = this._albedoColor;
 	    }
-	    get _Color() {
-	        return this._shaderValues.getVector(BlinnPhongMaterial.ALBEDOCOLOR);
-	    }
-	    set _Color(value) {
-	        this.albedoColor = value;
-	    }
 	    get _SpecColorR() {
 	        return this._shaderValues.getVector(BlinnPhongMaterial.MATERIALSPECULAR).x;
 	    }
@@ -10139,12 +7263,6 @@
 	    }
 	    set _SpecColorA(value) {
 	        this._shaderValues.getVector(BlinnPhongMaterial.MATERIALSPECULAR).w = value;
-	    }
-	    get _SpecColor() {
-	        return this._shaderValues.getVector(BlinnPhongMaterial.MATERIALSPECULAR);
-	    }
-	    set _SpecColor(value) {
-	        this.specularColor = value;
 	    }
 	    get _AlbedoIntensity() {
 	        return this._albedoIntensity;
@@ -10195,12 +7313,6 @@
 	        var tilOff = this._shaderValues.getVector(BlinnPhongMaterial.TILINGOFFSET);
 	        tilOff.w = w;
 	        this.tilingOffset = tilOff;
-	    }
-	    get _MainTex_ST() {
-	        return this._shaderValues.getVector(BlinnPhongMaterial.TILINGOFFSET);
-	    }
-	    set _MainTex_ST(value) {
-	        this.tilingOffset = value;
 	    }
 	    get _Cutoff() {
 	        return this.alphaTestValue;
@@ -10502,12 +7614,6 @@
 	        this._color.w = value;
 	        this.color = this._color;
 	    }
-	    get _TintColor() {
-	        return this._shaderValues.getVector(EffectMaterial.TINTCOLOR);
-	    }
-	    set _TintColor(value) {
-	        this.color = value;
-	    }
 	    get _MainTex_STX() {
 	        return this._shaderValues.getVector(EffectMaterial.TILINGOFFSET).x;
 	    }
@@ -10539,12 +7645,6 @@
 	        var tilOff = this._shaderValues.getVector(EffectMaterial.TILINGOFFSET);
 	        tilOff.w = w;
 	        this.tilingOffset = tilOff;
-	    }
-	    get _MainTex_ST() {
-	        return this._shaderValues.getVector(EffectMaterial.TILINGOFFSET);
-	    }
-	    set _MainTex_ST(value) {
-	        this.tilingOffset = value;
 	    }
 	    set renderMode(value) {
 	        switch (value) {
@@ -11341,7 +8441,6 @@
 	                break;
 	            default:
 	                throw new Error("compile shader err!");
-	                break;
 	        }
 	    }
 	    _createShader(gl, str, type) {
@@ -11630,6 +8729,26 @@
 	    _uniformMatrix4fvForNative(one, m) {
 	        Laya.LayaGL.instance.uniformMatrix4fvEx(one.location, false, m);
 	        return 1;
+	    }
+	}
+
+	class SingletonList {
+	    constructor() {
+	        this.elements = [];
+	        this.length = 0;
+	    }
+	    _add(element) {
+	        if (this.length === this.elements.length)
+	            this.elements.push(element);
+	        else
+	            this.elements[this.length] = element;
+	    }
+	    add(element) {
+	        if (this.length === this.elements.length)
+	            this.elements.push(element);
+	        else
+	            this.elements[this.length] = element;
+	        this.length++;
 	    }
 	}
 
@@ -13548,81 +10667,6 @@
 	}
 	Viewport._tempMatrix4x4 = new Matrix4x4();
 
-	class Picker {
-	    constructor() {
-	    }
-	    static calculateCursorRay(point, viewPort, projectionMatrix, viewMatrix, world, out) {
-	        var x = point.x;
-	        var y = point.y;
-	        var nearSource = Picker._tempVector30;
-	        var nerSourceE = nearSource;
-	        nerSourceE.x = x;
-	        nerSourceE.y = y;
-	        nerSourceE.z = viewPort.minDepth;
-	        var farSource = Picker._tempVector31;
-	        var farSourceE = farSource;
-	        farSourceE.x = x;
-	        farSourceE.y = y;
-	        farSourceE.z = viewPort.maxDepth;
-	        var nearPoint = out.origin;
-	        var farPoint = Picker._tempVector32;
-	        viewPort.unprojectFromWVP(nearSource, projectionMatrix, viewMatrix, world, nearPoint);
-	        viewPort.unprojectFromWVP(farSource, projectionMatrix, viewMatrix, world, farPoint);
-	        var outDire = out.direction;
-	        outDire.x = farPoint.x - nearPoint.x;
-	        outDire.y = farPoint.y - nearPoint.y;
-	        outDire.z = farPoint.z - nearPoint.z;
-	        Vector3.normalize(out.direction, out.direction);
-	    }
-	    static rayIntersectsTriangle(ray, vertex1, vertex2, vertex3) {
-	        var result;
-	        var edge1 = Picker._tempVector30, edge2 = Picker._tempVector31;
-	        Vector3.subtract(vertex2, vertex1, edge1);
-	        Vector3.subtract(vertex3, vertex1, edge2);
-	        var directionCrossEdge2 = Picker._tempVector32;
-	        Vector3.cross(ray.direction, edge2, directionCrossEdge2);
-	        var determinant;
-	        determinant = Vector3.dot(edge1, directionCrossEdge2);
-	        if (determinant > -Number.MIN_VALUE && determinant < Number.MIN_VALUE) {
-	            result = Number.NaN;
-	            return result;
-	        }
-	        var inverseDeterminant = 1.0 / determinant;
-	        var distanceVector = Picker._tempVector33;
-	        Vector3.subtract(ray.origin, vertex1, distanceVector);
-	        var triangleU;
-	        triangleU = Vector3.dot(distanceVector, directionCrossEdge2);
-	        triangleU *= inverseDeterminant;
-	        if (triangleU < 0 || triangleU > 1) {
-	            result = Number.NaN;
-	            return result;
-	        }
-	        var distanceCrossEdge1 = Picker._tempVector34;
-	        Vector3.cross(distanceVector, edge1, distanceCrossEdge1);
-	        var triangleV;
-	        triangleV = Vector3.dot(ray.direction, distanceCrossEdge1);
-	        triangleV *= inverseDeterminant;
-	        if (triangleV < 0 || triangleU + triangleV > 1) {
-	            result = Number.NaN;
-	            return result;
-	        }
-	        var rayDistance;
-	        rayDistance = Vector3.dot(edge2, distanceCrossEdge1);
-	        rayDistance *= inverseDeterminant;
-	        if (rayDistance < 0) {
-	            result = Number.NaN;
-	            return result;
-	        }
-	        result = rayDistance;
-	        return result;
-	    }
-	}
-	Picker._tempVector30 = new Vector3();
-	Picker._tempVector31 = new Vector3();
-	Picker._tempVector32 = new Vector3();
-	Picker._tempVector33 = new Vector3();
-	Picker._tempVector34 = new Vector3();
-
 	class BufferState extends Laya.BufferStateBase {
 	    constructor() {
 	        super();
@@ -13956,7 +11000,6 @@
 	            new VertexElement(16, VertexElementFormat.Vector4, VertexMesh.MESH_MVPMATRIX_ROW1),
 	            new VertexElement(32, VertexElementFormat.Vector4, VertexMesh.MESH_MVPMATRIX_ROW2),
 	            new VertexElement(48, VertexElementFormat.Vector4, VertexMesh.MESH_MVPMATRIX_ROW3)]);
-	        VertexMesh.instanceSimpleAnimatorDeclaration = new VertexDeclaration(16, [new VertexElement(0, VertexElementFormat.Vector4, VertexMesh.MESH_SIMPLEANIMATOR)]);
 	    }
 	    static getVertexDeclaration(vertexFlag, compatible = true) {
 	        var verDec = VertexMesh._vertexDeclarationMap[vertexFlag + (compatible ? "_0" : "_1")];
@@ -14032,7 +11075,6 @@
 	VertexMesh.MESH_MVPMATRIX_ROW1 = 13;
 	VertexMesh.MESH_MVPMATRIX_ROW2 = 14;
 	VertexMesh.MESH_MVPMATRIX_ROW3 = 15;
-	VertexMesh.MESH_SIMPLEANIMATOR = 7;
 	VertexMesh._vertexDeclarationMap = {};
 
 	class VertexBuffer3D extends Laya.Buffer {
@@ -14257,6 +11299,507 @@
 	SkyRenderer._tempMatrix1 = new Matrix4x4();
 	SkyRenderer._compileDefine = new DefineDatas();
 
+	class Transform3D extends Laya.EventDispatcher {
+	    constructor(owner) {
+	        super();
+	        this._localPosition = new Vector3(0, 0, 0);
+	        this._localRotation = new Quaternion(0, 0, 0, 1);
+	        this._localScale = new Vector3(1, 1, 1);
+	        this._localRotationEuler = new Vector3(0, 0, 0);
+	        this._localMatrix = new Matrix4x4();
+	        this._position = new Vector3(0, 0, 0);
+	        this._rotation = new Quaternion(0, 0, 0, 1);
+	        this._scale = new Vector3(1, 1, 1);
+	        this._rotationEuler = new Vector3(0, 0, 0);
+	        this._worldMatrix = new Matrix4x4();
+	        this._children = null;
+	        this._parent = null;
+	        this._dummy = null;
+	        this._transformFlag = 0;
+	        this._owner = owner;
+	        this._children = [];
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION | Transform3D.TRANSFORM_LOCALEULER | Transform3D.TRANSFORM_LOCALMATRIX, false);
+	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER | Transform3D.TRANSFORM_WORLDSCALE | Transform3D.TRANSFORM_WORLDMATRIX, true);
+	    }
+	    get _isFrontFaceInvert() {
+	        var scale = this.getWorldLossyScale();
+	        var isInvert = scale.x < 0;
+	        (scale.y < 0) && (isInvert = !isInvert);
+	        (scale.z < 0) && (isInvert = !isInvert);
+	        return isInvert;
+	    }
+	    get owner() {
+	        return this._owner;
+	    }
+	    get worldNeedUpdate() {
+	        return this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX);
+	    }
+	    get localPositionX() {
+	        return this._localPosition.x;
+	    }
+	    set localPositionX(x) {
+	        this._localPosition.x = x;
+	        this.localPosition = this._localPosition;
+	    }
+	    get localPositionY() {
+	        return this._localPosition.y;
+	    }
+	    set localPositionY(y) {
+	        this._localPosition.y = y;
+	        this.localPosition = this._localPosition;
+	    }
+	    get localPositionZ() {
+	        return this._localPosition.z;
+	    }
+	    set localPositionZ(z) {
+	        this._localPosition.z = z;
+	        this.localPosition = this._localPosition;
+	    }
+	    get localPosition() {
+	        return this._localPosition;
+	    }
+	    set localPosition(value) {
+	        if (this._localPosition !== value)
+	            value.cloneTo(this._localPosition);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, true);
+	        this._onWorldPositionTransform();
+	    }
+	    get localRotationX() {
+	        return this.localRotation.x;
+	    }
+	    set localRotationX(x) {
+	        this._localRotation.x = x;
+	        this.localRotation = this._localRotation;
+	    }
+	    get localRotationY() {
+	        return this.localRotation.y;
+	    }
+	    set localRotationY(y) {
+	        this._localRotation.y = y;
+	        this.localRotation = this._localRotation;
+	    }
+	    get localRotationZ() {
+	        return this.localRotation.z;
+	    }
+	    set localRotationZ(z) {
+	        this._localRotation.z = z;
+	        this.localRotation = this._localRotation;
+	    }
+	    get localRotationW() {
+	        return this.localRotation.w;
+	    }
+	    set localRotationW(w) {
+	        this._localRotation.w = w;
+	        this.localRotation = this._localRotation;
+	    }
+	    get localRotation() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION)) {
+	            var eulerE = this._localRotationEuler;
+	            Quaternion.createFromYawPitchRoll(eulerE.y / Transform3D._angleToRandin, eulerE.x / Transform3D._angleToRandin, eulerE.z / Transform3D._angleToRandin, this._localRotation);
+	            this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION, false);
+	        }
+	        return this._localRotation;
+	    }
+	    set localRotation(value) {
+	        if (this._localRotation !== value)
+	            value.cloneTo(this._localRotation);
+	        this._localRotation.normalize(this._localRotation);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER | Transform3D.TRANSFORM_LOCALMATRIX, true);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION, false);
+	        this._onWorldRotationTransform();
+	    }
+	    get localScaleX() {
+	        return this._localScale.x;
+	    }
+	    set localScaleX(value) {
+	        this._localScale.x = value;
+	        this.localScale = this._localScale;
+	    }
+	    get localScaleY() {
+	        return this._localScale.y;
+	    }
+	    set localScaleY(value) {
+	        this._localScale.y = value;
+	        this.localScale = this._localScale;
+	    }
+	    get localScaleZ() {
+	        return this._localScale.z;
+	    }
+	    set localScaleZ(value) {
+	        this._localScale.z = value;
+	        this.localScale = this._localScale;
+	    }
+	    get localScale() {
+	        return this._localScale;
+	    }
+	    set localScale(value) {
+	        if (this._localScale !== value)
+	            value.cloneTo(this._localScale);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, true);
+	        this._onWorldScaleTransform();
+	    }
+	    get localRotationEulerX() {
+	        return this.localRotationEuler.x;
+	    }
+	    set localRotationEulerX(value) {
+	        this._localRotationEuler.x = value;
+	        this.localRotationEuler = this._localRotationEuler;
+	    }
+	    get localRotationEulerY() {
+	        return this.localRotationEuler.y;
+	    }
+	    set localRotationEulerY(value) {
+	        this._localRotationEuler.y = value;
+	        this.localRotationEuler = this._localRotationEuler;
+	    }
+	    get localRotationEulerZ() {
+	        return this.localRotationEuler.z;
+	    }
+	    set localRotationEulerZ(value) {
+	        this._localRotationEuler.z = value;
+	        this.localRotationEuler = this._localRotationEuler;
+	    }
+	    get localRotationEuler() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_LOCALEULER)) {
+	            this._localRotation.getYawPitchRoll(Transform3D._tempVector30);
+	            var euler = Transform3D._tempVector30;
+	            var localRotationEuler = this._localRotationEuler;
+	            localRotationEuler.x = euler.y * Transform3D._angleToRandin;
+	            localRotationEuler.y = euler.x * Transform3D._angleToRandin;
+	            localRotationEuler.z = euler.z * Transform3D._angleToRandin;
+	            this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER, false);
+	        }
+	        return this._localRotationEuler;
+	    }
+	    set localRotationEuler(value) {
+	        if (this._localRotationEuler !== value)
+	            value.cloneTo(this._localRotationEuler);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER, false);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALQUATERNION | Transform3D.TRANSFORM_LOCALMATRIX, true);
+	        this._onWorldRotationTransform();
+	    }
+	    get localMatrix() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX)) {
+	            Matrix4x4.createAffineTransformation(this._localPosition, this.localRotation, this._localScale, this._localMatrix);
+	            this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, false);
+	        }
+	        return this._localMatrix;
+	    }
+	    set localMatrix(value) {
+	        if (this._localMatrix !== value)
+	            value.cloneTo(this._localMatrix);
+	        this._localMatrix.decomposeTransRotScale(this._localPosition, this._localRotation, this._localScale);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALEULER, true);
+	        this._setTransformFlag(Transform3D.TRANSFORM_LOCALMATRIX, false);
+	        this._onWorldTransform();
+	    }
+	    get position() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION)) {
+	            if (this._parent != null) {
+	                var worldMatE = this.worldMatrix.elements;
+	                this._position.x = worldMatE[12];
+	                this._position.y = worldMatE[13];
+	                this._position.z = worldMatE[14];
+	            }
+	            else {
+	                this._localPosition.cloneTo(this._position);
+	            }
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION, false);
+	        }
+	        return this._position;
+	    }
+	    set position(value) {
+	        if (this._parent != null) {
+	            var parentInvMat = Transform3D._tempMatrix0;
+	            this._parent.worldMatrix.invert(parentInvMat);
+	            Vector3.transformCoordinate(value, parentInvMat, this._localPosition);
+	        }
+	        else {
+	            value.cloneTo(this._localPosition);
+	        }
+	        this.localPosition = this._localPosition;
+	        if (this._position !== value)
+	            value.cloneTo(this._position);
+	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION, false);
+	    }
+	    get rotation() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION)) {
+	            if (this._parent != null)
+	                Quaternion.multiply(this._parent.rotation, this.localRotation, this._rotation);
+	            else
+	                this.localRotation.cloneTo(this._rotation);
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION, false);
+	        }
+	        return this._rotation;
+	    }
+	    set rotation(value) {
+	        if (this._parent != null) {
+	            this._parent.rotation.invert(Transform3D._tempQuaternion0);
+	            Quaternion.multiply(Transform3D._tempQuaternion0, value, this._localRotation);
+	        }
+	        else {
+	            value.cloneTo(this._localRotation);
+	        }
+	        this.localRotation = this._localRotation;
+	        if (value !== this._rotation)
+	            value.cloneTo(this._rotation);
+	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION, false);
+	    }
+	    get rotationEuler() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER)) {
+	            this.rotation.getYawPitchRoll(Transform3D._tempVector30);
+	            var eulerE = Transform3D._tempVector30;
+	            var rotationEulerE = this._rotationEuler;
+	            rotationEulerE.x = eulerE.y * Transform3D._angleToRandin;
+	            rotationEulerE.y = eulerE.x * Transform3D._angleToRandin;
+	            rotationEulerE.z = eulerE.z * Transform3D._angleToRandin;
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDEULER, false);
+	        }
+	        return this._rotationEuler;
+	    }
+	    set rotationEuler(value) {
+	        Quaternion.createFromYawPitchRoll(value.y / Transform3D._angleToRandin, value.x / Transform3D._angleToRandin, value.z / Transform3D._angleToRandin, this._rotation);
+	        this.rotation = this._rotation;
+	        if (this._rotationEuler !== value)
+	            value.cloneTo(this._rotationEuler);
+	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDEULER, false);
+	    }
+	    get worldMatrix() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX)) {
+	            if (this._parent != null)
+	                Matrix4x4.multiply(this._parent.worldMatrix, this.localMatrix, this._worldMatrix);
+	            else
+	                this.localMatrix.cloneTo(this._worldMatrix);
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX, false);
+	        }
+	        return this._worldMatrix;
+	    }
+	    set worldMatrix(value) {
+	        if (this._parent === null) {
+	            value.cloneTo(this._localMatrix);
+	        }
+	        else {
+	            this._parent.worldMatrix.invert(this._localMatrix);
+	            Matrix4x4.multiply(this._localMatrix, value, this._localMatrix);
+	        }
+	        this.localMatrix = this._localMatrix;
+	        if (this._worldMatrix !== value)
+	            value.cloneTo(this._worldMatrix);
+	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX, false);
+	    }
+	    _getScaleMatrix() {
+	        var invRotation = Transform3D._tempQuaternion0;
+	        var invRotationMat = Transform3D._tempMatrix3x30;
+	        var worldRotScaMat = Transform3D._tempMatrix3x31;
+	        var scaMat = Transform3D._tempMatrix3x32;
+	        Matrix3x3.createFromMatrix4x4(this.worldMatrix, worldRotScaMat);
+	        this.rotation.invert(invRotation);
+	        Matrix3x3.createRotationQuaternion(invRotation, invRotationMat);
+	        Matrix3x3.multiply(invRotationMat, worldRotScaMat, scaMat);
+	        return scaMat;
+	    }
+	    _setTransformFlag(type, value) {
+	        if (value)
+	            this._transformFlag |= type;
+	        else
+	            this._transformFlag &= ~type;
+	    }
+	    _getTransformFlag(type) {
+	        return (this._transformFlag & type) != 0;
+	    }
+	    _setParent(value) {
+	        if (this._parent !== value) {
+	            if (this._parent) {
+	                var parentChilds = this._parent._children;
+	                var index = parentChilds.indexOf(this);
+	                parentChilds.splice(index, 1);
+	            }
+	            if (value) {
+	                value._children.push(this);
+	                (value) && (this._onWorldTransform());
+	            }
+	            this._parent = value;
+	        }
+	    }
+	    _onWorldPositionRotationTransform() {
+	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER)) {
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER, true);
+	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
+	            for (var i = 0, n = this._children.length; i < n; i++)
+	                this._children[i]._onWorldPositionRotationTransform();
+	        }
+	    }
+	    _onWorldPositionScaleTransform() {
+	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDSCALE, true);
+	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
+	            for (var i = 0, n = this._children.length; i < n; i++)
+	                this._children[i]._onWorldPositionScaleTransform();
+	        }
+	    }
+	    _onWorldPositionTransform() {
+	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION)) {
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION, true);
+	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
+	            for (var i = 0, n = this._children.length; i < n; i++)
+	                this._children[i]._onWorldPositionTransform();
+	        }
+	    }
+	    _onWorldRotationTransform() {
+	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER)) {
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER, true);
+	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
+	            for (var i = 0, n = this._children.length; i < n; i++)
+	                this._children[i]._onWorldPositionRotationTransform();
+	        }
+	    }
+	    _onWorldScaleTransform() {
+	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDSCALE, true);
+	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
+	            for (var i = 0, n = this._children.length; i < n; i++)
+	                this._children[i]._onWorldPositionScaleTransform();
+	        }
+	    }
+	    _onWorldTransform() {
+	        if (!this._getTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDEULER) || !this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDMATRIX | Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDEULER | Transform3D.TRANSFORM_WORLDSCALE, true);
+	            this.event(Laya.Event.TRANSFORM_CHANGED, this._transformFlag);
+	            for (var i = 0, n = this._children.length; i < n; i++)
+	                this._children[i]._onWorldTransform();
+	        }
+	    }
+	    translate(translation, isLocal = true) {
+	        if (isLocal) {
+	            Matrix4x4.createFromQuaternion(this.localRotation, Transform3D._tempMatrix0);
+	            Vector3.transformCoordinate(translation, Transform3D._tempMatrix0, Transform3D._tempVector30);
+	            Vector3.add(this.localPosition, Transform3D._tempVector30, this._localPosition);
+	            this.localPosition = this._localPosition;
+	        }
+	        else {
+	            Vector3.add(this.position, translation, this._position);
+	            this.position = this._position;
+	        }
+	    }
+	    rotate(rotation, isLocal = true, isRadian = true) {
+	        var rot;
+	        if (isRadian) {
+	            rot = rotation;
+	        }
+	        else {
+	            Vector3.scale(rotation, Math.PI / 180.0, Transform3D._tempVector30);
+	            rot = Transform3D._tempVector30;
+	        }
+	        Quaternion.createFromYawPitchRoll(rot.y, rot.x, rot.z, Transform3D._tempQuaternion0);
+	        if (isLocal) {
+	            Quaternion.multiply(this._localRotation, Transform3D._tempQuaternion0, this._localRotation);
+	            this.localRotation = this._localRotation;
+	        }
+	        else {
+	            Quaternion.multiply(Transform3D._tempQuaternion0, this.rotation, this._rotation);
+	            this.rotation = this._rotation;
+	        }
+	    }
+	    getForward(forward) {
+	        var worldMatElem = this.worldMatrix.elements;
+	        forward.x = -worldMatElem[8];
+	        forward.y = -worldMatElem[9];
+	        forward.z = -worldMatElem[10];
+	    }
+	    getUp(up) {
+	        var worldMatElem = this.worldMatrix.elements;
+	        up.x = worldMatElem[4];
+	        up.y = worldMatElem[5];
+	        up.z = worldMatElem[6];
+	    }
+	    getRight(right) {
+	        var worldMatElem = this.worldMatrix.elements;
+	        right.x = worldMatElem[0];
+	        right.y = worldMatElem[1];
+	        right.z = worldMatElem[2];
+	    }
+	    lookAt(target, up, isLocal = false) {
+	        var eye;
+	        if (isLocal) {
+	            eye = this._localPosition;
+	            if (Math.abs(eye.x - target.x) < MathUtils3D.zeroTolerance && Math.abs(eye.y - target.y) < MathUtils3D.zeroTolerance && Math.abs(eye.z - target.z) < MathUtils3D.zeroTolerance)
+	                return;
+	            Quaternion.lookAt(this._localPosition, target, up, this._localRotation);
+	            this._localRotation.invert(this._localRotation);
+	            this.localRotation = this._localRotation;
+	        }
+	        else {
+	            var worldPosition = this.position;
+	            eye = worldPosition;
+	            if (Math.abs(eye.x - target.x) < MathUtils3D.zeroTolerance && Math.abs(eye.y - target.y) < MathUtils3D.zeroTolerance && Math.abs(eye.z - target.z) < MathUtils3D.zeroTolerance)
+	                return;
+	            Quaternion.lookAt(worldPosition, target, up, this._rotation);
+	            this._rotation.invert(this._rotation);
+	            this.rotation = this._rotation;
+	        }
+	    }
+	    getWorldLossyScale() {
+	        if (this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
+	            if (this._parent !== null) {
+	                var scaMatE = this._getScaleMatrix().elements;
+	                this._scale.x = scaMatE[0];
+	                this._scale.y = scaMatE[4];
+	                this._scale.z = scaMatE[8];
+	            }
+	            else {
+	                this._localScale.cloneTo(this._scale);
+	            }
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDSCALE, false);
+	        }
+	        return this._scale;
+	    }
+	    setWorldLossyScale(value) {
+	        if (this._parent !== null) {
+	            var scaleMat = Transform3D._tempMatrix3x33;
+	            var localScaleMat = Transform3D._tempMatrix3x33;
+	            var localScaleMatE = localScaleMat.elements;
+	            var parInvScaleMat = this._parent._getScaleMatrix();
+	            parInvScaleMat.invert(parInvScaleMat);
+	            Matrix3x3.createFromScaling(value, scaleMat);
+	            Matrix3x3.multiply(parInvScaleMat, scaleMat, localScaleMat);
+	            this._localScale.x = localScaleMatE[0];
+	            this._localScale.y = localScaleMatE[4];
+	            this._localScale.z = localScaleMatE[8];
+	        }
+	        else {
+	            value.cloneTo(this._localScale);
+	        }
+	        this.localScale = this._localScale;
+	        if (this._scale !== value)
+	            value.cloneTo(this._scale);
+	        this._setTransformFlag(Transform3D.TRANSFORM_WORLDSCALE, false);
+	    }
+	    get scale() {
+	        console.warn("Transfrm3D: discard function,please use getWorldLossyScale instead.");
+	        return this.getWorldLossyScale();
+	    }
+	    set scale(value) {
+	        console.warn("Transfrm3D: discard function,please use setWorldLossyScale instead.");
+	        this.setWorldLossyScale(value);
+	    }
+	}
+	Transform3D._tempVector30 = new Vector3();
+	Transform3D._tempQuaternion0 = new Quaternion();
+	Transform3D._tempMatrix0 = new Matrix4x4();
+	Transform3D._tempMatrix3x30 = new Matrix3x3();
+	Transform3D._tempMatrix3x31 = new Matrix3x3();
+	Transform3D._tempMatrix3x32 = new Matrix3x3();
+	Transform3D._tempMatrix3x33 = new Matrix3x3();
+	Transform3D.TRANSFORM_LOCALQUATERNION = 0x01;
+	Transform3D.TRANSFORM_LOCALEULER = 0x02;
+	Transform3D.TRANSFORM_LOCALMATRIX = 0x04;
+	Transform3D.TRANSFORM_WORLDPOSITION = 0x08;
+	Transform3D.TRANSFORM_WORLDQUATERNION = 0x10;
+	Transform3D.TRANSFORM_WORLDSCALE = 0x20;
+	Transform3D.TRANSFORM_WORLDMATRIX = 0x40;
+	Transform3D.TRANSFORM_WORLDEULER = 0x80;
+	Transform3D._angleToRandin = 180 / Math.PI;
+
 	class Sprite3D extends Laya.Node {
 	    constructor(name = null, isStatic = false) {
 	        super();
@@ -14287,6 +11830,12 @@
 	    }
 	    static load(url, complete) {
 	        Laya.Laya.loader.create(url, complete, null, Sprite3D.HIERARCHY);
+	    }
+	    get extData() {
+	        return this._extData;
+	    }
+	    set extData(value) {
+	        this._extData = value;
 	    }
 	    get id() {
 	        return this._id;
@@ -14413,6 +11962,9 @@
 	            this.transform.localScale = localScale;
 	        }
 	        (data.layer != undefined) && (this.layer = data.layer);
+	        if (data.extData !== undefined) {
+	            this.extData = data.extData;
+	        }
 	    }
 	    _cloneTo(destObject, srcRoot, dstRoot) {
 	        if (this.destroyed)
@@ -14626,285 +12178,18 @@
 	BaseCamera.CLEARFLAG_DEPTHONLY = 2;
 	BaseCamera.CLEARFLAG_NONE = 3;
 
+	(function (ShadowCascadesMode) {
+	    ShadowCascadesMode[ShadowCascadesMode["NoCascades"] = 0] = "NoCascades";
+	    ShadowCascadesMode[ShadowCascadesMode["TwoCascades"] = 1] = "TwoCascades";
+	    ShadowCascadesMode[ShadowCascadesMode["FourCascades"] = 2] = "FourCascades";
+	})(exports.ShadowCascadesMode || (exports.ShadowCascadesMode = {}));
+
 	(function (ShadowMode) {
 	    ShadowMode[ShadowMode["None"] = 0] = "None";
 	    ShadowMode[ShadowMode["Hard"] = 1] = "Hard";
 	    ShadowMode[ShadowMode["SoftLow"] = 2] = "SoftLow";
 	    ShadowMode[ShadowMode["SoftHigh"] = 3] = "SoftHigh";
 	})(exports.ShadowMode || (exports.ShadowMode = {}));
-
-	class ScreenQuad extends Laya.Resource {
-	    constructor() {
-	        super();
-	        this._bufferState = new BufferState();
-	        this._bufferStateInvertUV = new BufferState();
-	        var gl = Laya.LayaGL.instance;
-	        this._vertexBuffer = new VertexBuffer3D(16 * 4, gl.STATIC_DRAW, false);
-	        this._vertexBuffer.vertexDeclaration = ScreenQuad._vertexDeclaration;
-	        this._vertexBuffer.setData(ScreenQuad._vertices.buffer);
-	        this._bufferState.bind();
-	        this._bufferState.applyVertexBuffer(this._vertexBuffer);
-	        this._bufferState.unBind();
-	        this._vertexBufferInvertUV = new VertexBuffer3D(16 * 4, gl.STATIC_DRAW, false);
-	        this._vertexBufferInvertUV.vertexDeclaration = ScreenQuad._vertexDeclaration;
-	        this._vertexBufferInvertUV.setData(ScreenQuad._verticesInvertUV.buffer);
-	        this._bufferStateInvertUV.bind();
-	        this._bufferStateInvertUV.applyVertexBuffer(this._vertexBufferInvertUV);
-	        this._bufferStateInvertUV.unBind();
-	        this._setGPUMemory(this._vertexBuffer._byteLength + this._vertexBufferInvertUV._byteLength);
-	    }
-	    static __init__() {
-	        ScreenQuad._vertexDeclaration = new VertexDeclaration(16, [new VertexElement(0, VertexElementFormat.Vector4, ScreenQuad.SCREENQUAD_POSITION_UV)]);
-	        ScreenQuad.instance = new ScreenQuad();
-	        ScreenQuad.instance.lock = true;
-	    }
-	    render() {
-	        var gl = Laya.LayaGL.instance;
-	        this._bufferState.bind();
-	        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	        Laya.Stat.renderBatches++;
-	    }
-	    renderInvertUV() {
-	        var gl = Laya.LayaGL.instance;
-	        this._bufferStateInvertUV.bind();
-	        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	        Laya.Stat.renderBatches++;
-	    }
-	    destroy() {
-	        super.destroy();
-	        this._bufferState.destroy();
-	        this._vertexBuffer.destroy();
-	        this._bufferStateInvertUV.destroy();
-	        this._vertexBufferInvertUV.destroy();
-	        this._setGPUMemory(0);
-	    }
-	}
-	ScreenQuad.SCREENQUAD_POSITION_UV = 0;
-	ScreenQuad._vertices = new Float32Array([1, 1, 1, 1, 1, -1, 1, 0, -1, 1, 0, 1, -1, -1, 0, 0]);
-	ScreenQuad._verticesInvertUV = new Float32Array([1, 1, 1, 0, 1, -1, 1, 1, -1, 1, 0, 0, -1, -1, 0, 1]);
-
-	class ScreenTriangle extends Laya.Resource {
-	    constructor() {
-	        super();
-	        this._bufferState = new BufferState();
-	        this._bufferStateInvertUV = new BufferState();
-	        var gl = Laya.LayaGL.instance;
-	        this._vertexBuffer = new VertexBuffer3D(12 * 4, gl.STATIC_DRAW, false);
-	        this._vertexBuffer.vertexDeclaration = ScreenTriangle._vertexDeclaration;
-	        this._vertexBuffer.setData(ScreenTriangle._vertices.buffer);
-	        this._bufferState.bind();
-	        this._bufferState.applyVertexBuffer(this._vertexBuffer);
-	        this._bufferState.unBind();
-	        this._vertexBufferInvertUV = new VertexBuffer3D(12 * 4, gl.STATIC_DRAW, false);
-	        this._vertexBufferInvertUV.vertexDeclaration = ScreenTriangle._vertexDeclaration;
-	        this._vertexBufferInvertUV.setData(ScreenTriangle._verticesInvertUV.buffer);
-	        this._bufferStateInvertUV.bind();
-	        this._bufferStateInvertUV.applyVertexBuffer(this._vertexBufferInvertUV);
-	        this._bufferStateInvertUV.unBind();
-	        this._setGPUMemory(this._vertexBuffer._byteLength + this._vertexBufferInvertUV._byteLength);
-	    }
-	    static __init__() {
-	        ScreenTriangle._vertexDeclaration = new VertexDeclaration(16, [new VertexElement(0, VertexElementFormat.Vector4, ScreenTriangle.SCREENTRIANGLE_POSITION_UV)]);
-	        ScreenTriangle.instance = new ScreenTriangle();
-	        ScreenTriangle.instance.lock = true;
-	    }
-	    render() {
-	        var gl = Laya.LayaGL.instance;
-	        this._bufferState.bind();
-	        gl.drawArrays(gl.TRIANGLES, 0, 3);
-	        Laya.Stat.renderBatches++;
-	    }
-	    renderInvertUV() {
-	        var gl = Laya.LayaGL.instance;
-	        this._bufferStateInvertUV.bind();
-	        gl.drawArrays(gl.TRIANGLES, 0, 3);
-	        Laya.Stat.renderBatches++;
-	    }
-	    destroy() {
-	        super.destroy();
-	        this._bufferState.destroy();
-	        this._vertexBuffer.destroy();
-	        this._bufferStateInvertUV.destroy();
-	        this._vertexBufferInvertUV.destroy();
-	        this._setGPUMemory(0);
-	    }
-	}
-	ScreenTriangle.SCREENTRIANGLE_POSITION_UV = 0;
-	ScreenTriangle._vertices = new Float32Array([-1, -1, 0, 0, -1, 3, 0, 2, 3, -1, 2, 0]);
-	ScreenTriangle._verticesInvertUV = new Float32Array([-1, -1, 0, 1, -1, 3, 0, -1, 3, -1, 2, 1]);
-
-	class Command {
-	    constructor() {
-	        this._commandBuffer = null;
-	    }
-	    static __init__() {
-	        Command._screenShaderData = new ShaderData();
-	        Command._screenShader = Shader3D.find("BlitScreen");
-	    }
-	    run() {
-	    }
-	    recover() {
-	        this._commandBuffer = null;
-	    }
-	}
-	Command.SCREENTEXTURE_NAME = "u_MainTex";
-	Command.SCREENTEXTUREOFFSETSCALE_NAME = "u_OffsetScale";
-	Command.MAINTEXTURE_TEXELSIZE_NAME = "u_MainTex_TexelSize";
-	Command.SCREENTEXTURE_ID = Shader3D.propertyNameToID(Command.SCREENTEXTURE_NAME);
-	Command.SCREENTEXTUREOFFSETSCALE_ID = Shader3D.propertyNameToID(Command.SCREENTEXTUREOFFSETSCALE_NAME);
-	Command.MAINTEXTURE_TEXELSIZE_ID = Shader3D.propertyNameToID(Command.MAINTEXTURE_TEXELSIZE_NAME);
-
-	class BlitScreenQuadCMD extends Command {
-	    constructor() {
-	        super(...arguments);
-	        this._source = null;
-	        this._dest = null;
-	        this._offsetScale = null;
-	        this._shader = null;
-	        this._shaderData = null;
-	        this._subShader = 0;
-	        this._sourceTexelSize = new Vector4();
-	        this._screenType = 0;
-	    }
-	    static create(source, dest, offsetScale = null, shader = null, shaderData = null, subShader = 0, screenType = BlitScreenQuadCMD._SCREENTYPE_QUAD) {
-	        var cmd;
-	        cmd = BlitScreenQuadCMD._pool.length > 0 ? BlitScreenQuadCMD._pool.pop() : new BlitScreenQuadCMD();
-	        cmd._source = source;
-	        cmd._dest = dest;
-	        cmd._offsetScale = offsetScale;
-	        cmd._shader = shader;
-	        cmd._shaderData = shaderData;
-	        cmd._subShader = subShader;
-	        cmd._screenType = screenType;
-	        return cmd;
-	    }
-	    run() {
-	        var shader = this._shader || Command._screenShader;
-	        var shaderData = this._shaderData || Command._screenShaderData;
-	        var dest = this._dest;
-	        Laya.LayaGL.instance.viewport(0, 0, dest ? dest.width : RenderContext3D.clientWidth, dest ? dest.height : RenderContext3D.clientHeight);
-	        shaderData.setTexture(Command.SCREENTEXTURE_ID, this._source);
-	        shaderData.setVector(Command.SCREENTEXTUREOFFSETSCALE_ID, this._offsetScale || BlitScreenQuadCMD._defaultOffsetScale);
-	        this._sourceTexelSize.setValue(1.0 / this._source.width, 1.0 / this._source.height, this._source.width, this._source.height);
-	        shaderData.setVector(Command.MAINTEXTURE_TEXELSIZE_ID, this._sourceTexelSize);
-	        (dest) && (dest._start());
-	        var subShader = shader.getSubShaderAt(this._subShader);
-	        var passes = subShader._passes;
-	        for (var i = 0, n = passes.length; i < n; i++) {
-	            var comDef = BlitScreenQuadCMD._compileDefine;
-	            shaderData._defineDatas.cloneTo(comDef);
-	            var shaderPass = passes[i].withCompile(comDef);
-	            shaderPass.bind();
-	            shaderPass.uploadUniforms(shaderPass._materialUniformParamsMap, shaderData, true);
-	            shaderPass.uploadRenderStateBlendDepth(shaderData);
-	            shaderPass.uploadRenderStateFrontFace(shaderData, false, null);
-	            switch (this._screenType) {
-	                case BlitScreenQuadCMD._SCREENTYPE_QUAD:
-	                    RenderContext3D._instance.invertY ? ScreenQuad.instance.renderInvertUV() : ScreenQuad.instance.render();
-	                    break;
-	                case BlitScreenQuadCMD._SCREENTYPE_TRIANGLE:
-	                    RenderContext3D._instance.invertY ? ScreenTriangle.instance.renderInvertUV() : ScreenTriangle.instance.render();
-	                    break;
-	                default:
-	                    throw "BlitScreenQuadCMD:unknown screen Type.";
-	            }
-	        }
-	        (dest) && (dest._end());
-	    }
-	    recover() {
-	        BlitScreenQuadCMD._pool.push(this);
-	        this._source = null;
-	        this._dest = null;
-	        this._offsetScale = null;
-	        this._shader = null;
-	        this._shaderData = null;
-	        super.recover();
-	    }
-	}
-	BlitScreenQuadCMD._SCREENTYPE_QUAD = 0;
-	BlitScreenQuadCMD._SCREENTYPE_TRIANGLE = 1;
-	BlitScreenQuadCMD._compileDefine = new DefineDatas();
-	BlitScreenQuadCMD._pool = [];
-	BlitScreenQuadCMD._defaultOffsetScale = new Vector4(0, 0, 1, 1);
-
-	class SetRenderTargetCMD extends Command {
-	    constructor() {
-	        super(...arguments);
-	        this._renderTexture = null;
-	    }
-	    static create(renderTexture) {
-	        var cmd;
-	        cmd = SetRenderTargetCMD._pool.length > 0 ? SetRenderTargetCMD._pool.pop() : new SetRenderTargetCMD();
-	        cmd._renderTexture = renderTexture;
-	        return cmd;
-	    }
-	    run() {
-	        this._renderTexture._start();
-	    }
-	    recover() {
-	        SetRenderTargetCMD._pool.push(this);
-	        this._renderTexture = null;
-	    }
-	}
-	SetRenderTargetCMD._pool = [];
-
-	class SetShaderDataTextureCMD extends Command {
-	    constructor() {
-	        super(...arguments);
-	        this._shaderData = null;
-	        this._nameID = 0;
-	        this._texture = null;
-	    }
-	    static create(shaderData, nameID, texture) {
-	        var cmd;
-	        cmd = SetShaderDataTextureCMD._pool.length > 0 ? SetShaderDataTextureCMD._pool.pop() : new SetShaderDataTextureCMD();
-	        cmd._shaderData = shaderData;
-	        cmd._nameID = nameID;
-	        cmd._texture = texture;
-	        return cmd;
-	    }
-	    run() {
-	        this._shaderData.setTexture(this._nameID, this._texture);
-	    }
-	    recover() {
-	        SetShaderDataTextureCMD._pool.push(this);
-	        this._shaderData = null;
-	        this._nameID = 0;
-	        this._texture = null;
-	    }
-	}
-	SetShaderDataTextureCMD._pool = [];
-
-	class CommandBuffer {
-	    constructor() {
-	        this._camera = null;
-	        this._commands = [];
-	    }
-	    _apply() {
-	        for (var i = 0, n = this._commands.length; i < n; i++)
-	            this._commands[i].run();
-	    }
-	    setShaderDataTexture(shaderData, nameID, source) {
-	        this._commands.push(SetShaderDataTextureCMD.create(shaderData, nameID, source));
-	    }
-	    blitScreenQuad(source, dest, offsetScale = null, shader = null, shaderData = null, subShader = 0) {
-	        this._commands.push(BlitScreenQuadCMD.create(source, dest, offsetScale, shader, shaderData, subShader, BlitScreenQuadCMD._SCREENTYPE_QUAD));
-	    }
-	    blitScreenTriangle(source, dest, offsetScale = null, shader = null, shaderData = null, subShader = 0) {
-	        this._commands.push(BlitScreenQuadCMD.create(source, dest, offsetScale, shader, shaderData, subShader, BlitScreenQuadCMD._SCREENTYPE_TRIANGLE));
-	    }
-	    setRenderTarget(renderTexture) {
-	        this._commands.push(SetRenderTargetCMD.create(renderTexture));
-	    }
-	    clear() {
-	        for (var i = 0, n = this._commands.length; i < n; i++)
-	            this._commands[i].recover();
-	        this._commands.length = 0;
-	    }
-	}
-
-	class Scene3DShaderDeclaration {
-	}
 
 	(function (LightType) {
 	    LightType[LightType["Directional"] = 0] = "Directional";
@@ -14995,6 +12280,11 @@
 	        this.color.fromArray(colorData);
 	        this.intensity = data.intensity;
 	        this.lightmapBakedType = data.lightmapBakedType;
+	        (data.shadowMode != undefined) && (this.shadowMode = data.shadowMode);
+	        (data.shadowStrength != undefined) && (this.shadowStrength = data.shadowStrength);
+	        (data.shadowDistance != undefined) && (this.shadowDistance = data.shadowDistance);
+	        (data.shadowNearPlane != undefined) && (this.shadowNearPlane = data.shadowNearPlane);
+	        (data.shadowResolution != undefined) && (this.shadowResolution = data.shadowResolution);
 	    }
 	    _addToScene() {
 	        var scene = this._scene;
@@ -15053,12 +12343,6 @@
 	LightSprite.LIGHTMAPBAKEDTYPE_REALTIME = 0;
 	LightSprite.LIGHTMAPBAKEDTYPE_MIXED = 1;
 	LightSprite.LIGHTMAPBAKEDTYPE_BAKED = 2;
-
-	(function (ShadowCascadesMode) {
-	    ShadowCascadesMode[ShadowCascadesMode["NoCascades"] = 0] = "NoCascades";
-	    ShadowCascadesMode[ShadowCascadesMode["TwoCascades"] = 1] = "TwoCascades";
-	    ShadowCascadesMode[ShadowCascadesMode["FourCascades"] = 2] = "FourCascades";
-	})(exports.ShadowCascadesMode || (exports.ShadowCascadesMode = {}));
 
 	var FrustumFace;
 	(function (FrustumFace) {
@@ -15341,6 +12625,694 @@
 	    [[exports.FrustumCorner.nearTopRight, exports.FrustumCorner.nearTopLeft], [exports.FrustumCorner.FarTopLeft, exports.FrustumCorner.FarTopRight], [exports.FrustumCorner.nearTopLeft, exports.FrustumCorner.FarTopLeft], [exports.FrustumCorner.FarTopRight, exports.FrustumCorner.nearTopRight], [exports.FrustumCorner.unknown, exports.FrustumCorner.unknown], [exports.FrustumCorner.unknown, exports.FrustumCorner.unknown]]
 	];
 	ShadowUtils.atlasBorderSize = 4.0;
+
+	class Scene3DShaderDeclaration {
+	}
+
+	class BoundSphere {
+	    constructor(center, radius) {
+	        this.center = center;
+	        this.radius = radius;
+	    }
+	    toDefault() {
+	        this.center.toDefault();
+	        this.radius = 0;
+	    }
+	    static createFromSubPoints(points, start, count, out) {
+	        if (points == null) {
+	            throw new Error("points");
+	        }
+	        if (start < 0 || start >= points.length) {
+	            throw new Error("start" + start + "Must be in the range [0, " + (points.length - 1) + "]");
+	        }
+	        if (count < 0 || (start + count) > points.length) {
+	            throw new Error("count" + count + "Must be in the range <= " + points.length + "}");
+	        }
+	        var upperEnd = start + count;
+	        var center = BoundSphere._tempVector3;
+	        center.x = 0;
+	        center.y = 0;
+	        center.z = 0;
+	        for (var i = start; i < upperEnd; ++i) {
+	            Vector3.add(points[i], center, center);
+	        }
+	        var outCenter = out.center;
+	        Vector3.scale(center, 1 / count, outCenter);
+	        var radius = 0.0;
+	        for (i = start; i < upperEnd; ++i) {
+	            var distance = Vector3.distanceSquared(outCenter, points[i]);
+	            if (distance > radius)
+	                radius = distance;
+	        }
+	        out.radius = Math.sqrt(radius);
+	    }
+	    static createfromPoints(points, out) {
+	        if (points == null) {
+	            throw new Error("points");
+	        }
+	        BoundSphere.createFromSubPoints(points, 0, points.length, out);
+	    }
+	    intersectsRayDistance(ray) {
+	        return CollisionUtils.intersectsRayAndSphereRD(ray, this);
+	    }
+	    intersectsRayPoint(ray, outPoint) {
+	        return CollisionUtils.intersectsRayAndSphereRP(ray, this, outPoint);
+	    }
+	    cloneTo(destObject) {
+	        var dest = destObject;
+	        this.center.cloneTo(dest.center);
+	        dest.radius = this.radius;
+	    }
+	    clone() {
+	        var dest = new BoundSphere(new Vector3(), 0);
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+	BoundSphere._tempVector3 = new Vector3();
+
+	class ShadowSliceData {
+	    constructor() {
+	        this.cameraShaderValue = new ShaderData();
+	        this.position = new Vector3();
+	        this.viewMatrix = new Matrix4x4();
+	        this.projectionMatrix = new Matrix4x4();
+	        this.viewProjectMatrix = new Matrix4x4();
+	        this.cullPlanes = [new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3())];
+	        this.splitBoundSphere = new BoundSphere(new Vector3(), 0.0);
+	    }
+	}
+	class ShadowSpotData {
+	    constructor() {
+	        this.cameraShaderValue = new ShaderData();
+	        this.position = new Vector3;
+	        this.viewMatrix = new Matrix4x4();
+	        this.projectionMatrix = new Matrix4x4();
+	        this.viewProjectMatrix = new Matrix4x4();
+	        this.cameraCullInfo = new CameraCullInfo();
+	    }
+	}
+
+	(function (ShadowLightType) {
+	    ShadowLightType[ShadowLightType["DirectionLight"] = 0] = "DirectionLight";
+	    ShadowLightType[ShadowLightType["SpotLight"] = 1] = "SpotLight";
+	    ShadowLightType[ShadowLightType["PointLight"] = 2] = "PointLight";
+	})(exports.ShadowLightType || (exports.ShadowLightType = {}));
+	class ShadowCasterPass {
+	    constructor() {
+	        this._shadowBias = new Vector4();
+	        this._shadowParams = new Vector4();
+	        this._shadowMapSize = new Vector4();
+	        this._shadowMatrices = new Float32Array(16 * (ShadowCasterPass._maxCascades));
+	        this._shadowSpotMatrices = new Matrix4x4();
+	        this._splitBoundSpheres = new Float32Array(ShadowCasterPass._maxCascades * 4);
+	        this._cascadeCount = 0;
+	        this._shadowMapWidth = 0;
+	        this._shadowMapHeight = 0;
+	        this._shadowSliceDatas = [new ShadowSliceData(), new ShadowSliceData(), new ShadowSliceData(), new ShadowSliceData()];
+	        this._shadowSpotData = new ShadowSpotData();
+	        this._lightUp = new Vector3();
+	        this._lightSide = new Vector3();
+	        this._lightForward = new Vector3();
+	        this._shadowSpotData.cameraCullInfo.boundFrustum = new BoundFrustum(new Matrix4x4());
+	    }
+	    _setupShadowCasterShaderValues(context, shaderValues, shadowSliceData, LightParam, shadowparams, shadowBias, lightType) {
+	        shaderValues.setVector(ShadowCasterPass.SHADOW_BIAS, shadowBias);
+	        switch (lightType) {
+	            case exports.LightType.Directional:
+	                shaderValues.setVector3(ShadowCasterPass.SHADOW_LIGHT_DIRECTION, LightParam);
+	                break;
+	            case exports.LightType.Spot:
+	                shaderValues.setVector(ShadowCasterPass.SHADOW_PARAMS, shadowparams);
+	                break;
+	            case exports.LightType.Point:
+	                break;
+	        }
+	        var cameraSV = shadowSliceData.cameraShaderValue;
+	        cameraSV.setMatrix4x4(BaseCamera.VIEWMATRIX, shadowSliceData.viewMatrix);
+	        cameraSV.setMatrix4x4(BaseCamera.PROJECTMATRIX, shadowSliceData.projectionMatrix);
+	        cameraSV.setMatrix4x4(BaseCamera.VIEWPROJECTMATRIX, shadowSliceData.viewProjectMatrix);
+	        context.viewMatrix = shadowSliceData.viewMatrix;
+	        context.projectionMatrix = shadowSliceData.projectionMatrix;
+	        context.projectionViewMatrix = shadowSliceData.viewProjectMatrix;
+	    }
+	    _setupShadowReceiverShaderValues(shaderValues) {
+	        var light = this._light;
+	        if (light.shadowCascadesMode !== exports.ShadowCascadesMode.NoCascades)
+	            shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_CASCADE);
+	        else
+	            shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_CASCADE);
+	        switch (light.shadowMode) {
+	            case exports.ShadowMode.Hard:
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_LOW);
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_HIGH);
+	                break;
+	            case exports.ShadowMode.SoftLow:
+	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_LOW);
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_HIGH);
+	                break;
+	            case exports.ShadowMode.SoftHigh:
+	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_HIGH);
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_LOW);
+	                break;
+	        }
+	        shaderValues.setTexture(ShadowCasterPass.SHADOW_MAP, this._shadowDirectLightMap);
+	        shaderValues.setBuffer(ShadowCasterPass.SHADOW_MATRICES, this._shadowMatrices);
+	        shaderValues.setVector(ShadowCasterPass.SHADOW_MAP_SIZE, this._shadowMapSize);
+	        shaderValues.setVector(ShadowCasterPass.SHADOW_PARAMS, this._shadowParams);
+	        shaderValues.setBuffer(ShadowCasterPass.SHADOW_SPLIT_SPHERES, this._splitBoundSpheres);
+	    }
+	    _setupSpotShadowReceiverShaderValues(shaderValues) {
+	        var spotLight = this._light;
+	        switch (spotLight.shadowMode) {
+	            case exports.ShadowMode.Hard:
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_HIGH);
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_LOW);
+	                break;
+	            case exports.ShadowMode.SoftLow:
+	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_LOW);
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_HIGH);
+	                break;
+	            case exports.ShadowMode.SoftHigh:
+	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_HIGH);
+	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_LOW);
+	                break;
+	        }
+	        shaderValues.setTexture(ShadowCasterPass.SHADOW_SPOTMAP, this._shadowSpotLightMap);
+	        shaderValues.setMatrix4x4(ShadowCasterPass.SHADOW_SPOTMATRICES, this._shadowSpotMatrices);
+	        shaderValues.setVector(ShadowCasterPass.SHADOW_MAP_SIZE, this._shadowMapSize);
+	        shaderValues.setVector(ShadowCasterPass.SHADOW_PARAMS, this._shadowParams);
+	    }
+	    update(camera, light, lightType) {
+	        switch (lightType) {
+	            case exports.ShadowLightType.DirectionLight:
+	                this._light = light;
+	                var lightWorld = ShadowCasterPass._tempMatrix0;
+	                var lightWorldE = lightWorld.elements;
+	                var lightUp = this._lightUp;
+	                var lightSide = this._lightSide;
+	                var lightForward = this._lightForward;
+	                Matrix4x4.createFromQuaternion(light._transform.rotation, lightWorld);
+	                lightSide.setValue(lightWorldE[0], lightWorldE[1], lightWorldE[2]);
+	                lightUp.setValue(lightWorldE[4], lightWorldE[5], lightWorldE[6]);
+	                lightForward.setValue(-lightWorldE[8], -lightWorldE[9], -lightWorldE[10]);
+	                var atlasResolution = light._shadowResolution;
+	                var cascadesMode = light._shadowCascadesMode;
+	                var cascadesCount;
+	                var shadowTileResolution;
+	                var shadowMapWidth, shadowMapHeight;
+	                if (cascadesMode == exports.ShadowCascadesMode.NoCascades) {
+	                    cascadesCount = 1;
+	                    shadowTileResolution = atlasResolution;
+	                    shadowMapWidth = atlasResolution;
+	                    shadowMapHeight = atlasResolution;
+	                }
+	                else {
+	                    cascadesCount = cascadesMode == exports.ShadowCascadesMode.TwoCascades ? 2 : 4;
+	                    shadowTileResolution = ShadowUtils.getMaxTileResolutionInAtlas(atlasResolution, atlasResolution, cascadesCount);
+	                    shadowMapWidth = shadowTileResolution * 2;
+	                    shadowMapHeight = cascadesMode == exports.ShadowCascadesMode.TwoCascades ? shadowTileResolution : shadowTileResolution * 2;
+	                }
+	                this._cascadeCount = cascadesCount;
+	                this._shadowMapWidth = shadowMapWidth;
+	                this._shadowMapHeight = shadowMapHeight;
+	                var splitDistance = ShadowCasterPass._cascadesSplitDistance;
+	                var frustumPlanes = ShadowCasterPass._frustumPlanes;
+	                var cameraNear = camera.nearPlane;
+	                var shadowFar = Math.min(camera.farPlane, light._shadowDistance);
+	                var shadowMatrices = this._shadowMatrices;
+	                var boundSpheres = this._splitBoundSpheres;
+	                ShadowUtils.getCascadesSplitDistance(light._shadowTwoCascadeSplits, light._shadowFourCascadeSplits, cameraNear, shadowFar, camera.fieldOfView * MathUtils3D.Deg2Rad, camera.aspectRatio, cascadesMode, splitDistance);
+	                ShadowUtils.getCameraFrustumPlanes(camera.projectionViewMatrix, frustumPlanes);
+	                var forward = ShadowCasterPass._tempVector30;
+	                camera._transform.getForward(forward);
+	                Vector3.normalize(forward, forward);
+	                for (var i = 0; i < cascadesCount; i++) {
+	                    var sliceData = this._shadowSliceDatas[i];
+	                    sliceData.sphereCenterZ = ShadowUtils.getBoundSphereByFrustum(splitDistance[i], splitDistance[i + 1], camera.fieldOfView * MathUtils3D.Deg2Rad, camera.aspectRatio, camera._transform.position, forward, sliceData.splitBoundSphere);
+	                    ShadowUtils.getDirectionLightShadowCullPlanes(frustumPlanes, i, splitDistance, cameraNear, lightForward, sliceData);
+	                    ShadowUtils.getDirectionalLightMatrices(lightUp, lightSide, lightForward, i, light._shadowNearPlane, shadowTileResolution, sliceData, shadowMatrices);
+	                    if (cascadesCount > 1)
+	                        ShadowUtils.applySliceTransform(sliceData, shadowMapWidth, shadowMapHeight, i, shadowMatrices);
+	                }
+	                ShadowUtils.prepareShadowReceiverShaderValues(light, shadowMapWidth, shadowMapHeight, this._shadowSliceDatas, cascadesCount, this._shadowMapSize, this._shadowParams, shadowMatrices, boundSpheres);
+	                break;
+	            case exports.ShadowLightType.SpotLight:
+	                this._light = light;
+	                var lightWorld = ShadowCasterPass._tempMatrix0;
+	                var lightForward = this._lightForward;
+	                var shadowResolution = this._light._shadowResolution;
+	                this._shadowMapWidth = shadowResolution;
+	                this._shadowMapHeight = shadowResolution;
+	                var shadowSpotData = this._shadowSpotData;
+	                ShadowUtils.getSpotLightShadowData(shadowSpotData, this._light, shadowResolution, this._shadowParams, this._shadowSpotMatrices, this._shadowMapSize);
+	                break;
+	            case exports.ShadowLightType.PointLight:
+	                break;
+	            default:
+	                throw ("There is no shadow of this type");
+	        }
+	    }
+	    render(context, scene, lightType) {
+	        switch (lightType) {
+	            case exports.ShadowLightType.DirectionLight:
+	                var shaderValues = scene._shaderValues;
+	                context.pipelineMode = "ShadowCaster";
+	                ShaderData.setRuntimeValueMode(false);
+	                var shadowMap = this._shadowDirectLightMap = ShadowUtils.getTemporaryShadowTexture(this._shadowMapWidth, this._shadowMapHeight, Laya.RenderTextureDepthFormat.DEPTH_16);
+	                shadowMap._start();
+	                var light = this._light;
+	                for (var i = 0, n = this._cascadeCount; i < n; i++) {
+	                    var sliceData = this._shadowSliceDatas[i];
+	                    ShadowUtils.getShadowBias(light, sliceData.projectionMatrix, sliceData.resolution, this._shadowBias);
+	                    this._setupShadowCasterShaderValues(context, shaderValues, sliceData, this._lightForward, this._shadowParams, this._shadowBias, exports.LightType.Directional);
+	                    var shadowCullInfo = FrustumCulling._shadowCullInfo;
+	                    shadowCullInfo.position = sliceData.position;
+	                    shadowCullInfo.cullPlanes = sliceData.cullPlanes;
+	                    shadowCullInfo.cullPlaneCount = sliceData.cullPlaneCount;
+	                    shadowCullInfo.cullSphere = sliceData.splitBoundSphere;
+	                    shadowCullInfo.direction = this._lightForward;
+	                    var needRender = FrustumCulling.cullingShadow(shadowCullInfo, scene, context);
+	                    context.cameraShaderValue = sliceData.cameraShaderValue;
+	                    Camera._updateMark++;
+	                    var gl = Laya.LayaGL.instance;
+	                    var resolution = sliceData.resolution;
+	                    var offsetX = sliceData.offsetX;
+	                    var offsetY = sliceData.offsetY;
+	                    gl.enable(gl.SCISSOR_TEST);
+	                    gl.viewport(offsetX, offsetY, resolution, resolution);
+	                    gl.scissor(offsetX, offsetY, resolution, resolution);
+	                    gl.clear(gl.DEPTH_BUFFER_BIT);
+	                    if (needRender) {
+	                        gl.scissor(offsetX + 1, offsetY + 1, resolution - 2, resolution - 2);
+	                        scene._opaqueQueue._render(context);
+	                    }
+	                }
+	                shadowMap._end();
+	                this._setupShadowReceiverShaderValues(shaderValues);
+	                ShaderData.setRuntimeValueMode(true);
+	                context.pipelineMode = "Forward";
+	                break;
+	            case exports.ShadowLightType.SpotLight:
+	                var shaderValues = scene._shaderValues;
+	                context.pipelineMode = "ShadowCaster";
+	                ShaderData.setRuntimeValueMode(false);
+	                var spotlight = this._light;
+	                var shadowMap = this._shadowSpotLightMap = ShadowUtils.getTemporaryShadowTexture(this._shadowMapWidth, this._shadowMapHeight, Laya.RenderTextureDepthFormat.DEPTH_16);
+	                shadowMap._start();
+	                var shadowSpotData = this._shadowSpotData;
+	                ShadowUtils.getShadowBias(spotlight, shadowSpotData.projectionMatrix, shadowSpotData.resolution, this._shadowBias);
+	                this._setupShadowCasterShaderValues(context, shaderValues, shadowSpotData, this._light.transform.position, this._shadowParams, this._shadowBias, exports.LightType.Spot);
+	                var needRender = FrustumCulling.cullingSpotShadow(shadowSpotData.cameraCullInfo, scene, context);
+	                context.cameraShaderValue = shadowSpotData.cameraShaderValue;
+	                Camera._updateMark++;
+	                var gl = Laya.LayaGL.instance;
+	                gl.enable(gl.SCISSOR_TEST);
+	                gl.viewport(shadowSpotData.offsetX, shadowSpotData.offsetY, shadowSpotData.resolution, shadowSpotData.resolution);
+	                gl.scissor(shadowSpotData.offsetX, shadowSpotData.offsetY, shadowSpotData.resolution, shadowSpotData.resolution);
+	                gl.clear(gl.DEPTH_BUFFER_BIT);
+	                if (needRender) {
+	                    gl.scissor(shadowSpotData.offsetX, shadowSpotData.offsetY, shadowSpotData.resolution, shadowSpotData.resolution);
+	                    scene._opaqueQueue._render(context);
+	                }
+	                shadowMap._end();
+	                this._setupSpotShadowReceiverShaderValues(shaderValues);
+	                ShaderData.setRuntimeValueMode(true);
+	                context.pipelineMode = "Forward";
+	                break;
+	            case exports.ShadowLightType.PointLight:
+	                break;
+	            default:
+	                throw ("There is no shadow of this type");
+	        }
+	    }
+	    cleanUp() {
+	        this._shadowDirectLightMap && RenderTexture.recoverToPool(this._shadowDirectLightMap);
+	        this._shadowSpotLightMap && RenderTexture.recoverToPool(this._shadowSpotLightMap);
+	        this._shadowDirectLightMap = null;
+	        this._shadowSpotLightMap = null;
+	        this._light = null;
+	    }
+	}
+	ShadowCasterPass._tempVector30 = new Vector3();
+	ShadowCasterPass._tempMatrix0 = new Matrix4x4();
+	ShadowCasterPass.SHADOW_BIAS = Shader3D.propertyNameToID("u_ShadowBias");
+	ShadowCasterPass.SHADOW_LIGHT_DIRECTION = Shader3D.propertyNameToID("u_ShadowLightDirection");
+	ShadowCasterPass.SHADOW_SPLIT_SPHERES = Shader3D.propertyNameToID("u_ShadowSplitSpheres");
+	ShadowCasterPass.SHADOW_MATRICES = Shader3D.propertyNameToID("u_ShadowMatrices");
+	ShadowCasterPass.SHADOW_MAP_SIZE = Shader3D.propertyNameToID("u_ShadowMapSize");
+	ShadowCasterPass.SHADOW_MAP = Shader3D.propertyNameToID("u_ShadowMap");
+	ShadowCasterPass.SHADOW_PARAMS = Shader3D.propertyNameToID("u_ShadowParams");
+	ShadowCasterPass.SHADOW_SPOTMAP = Shader3D.propertyNameToID("u_SpotShadowMap");
+	ShadowCasterPass.SHADOW_SPOTMATRICES = Shader3D.propertyNameToID("u_SpotViewProjectMatrix");
+	ShadowCasterPass._maxCascades = 4;
+	ShadowCasterPass._cascadesSplitDistance = new Array(ShadowCasterPass._maxCascades + 1);
+	ShadowCasterPass._frustumPlanes = new Array(new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()));
+
+	class Picker {
+	    constructor() {
+	    }
+	    static calculateCursorRay(point, viewPort, projectionMatrix, viewMatrix, world, out) {
+	        var x = point.x;
+	        var y = point.y;
+	        var nearSource = Picker._tempVector30;
+	        var nerSourceE = nearSource;
+	        nerSourceE.x = x;
+	        nerSourceE.y = y;
+	        nerSourceE.z = viewPort.minDepth;
+	        var farSource = Picker._tempVector31;
+	        var farSourceE = farSource;
+	        farSourceE.x = x;
+	        farSourceE.y = y;
+	        farSourceE.z = viewPort.maxDepth;
+	        var nearPoint = out.origin;
+	        var farPoint = Picker._tempVector32;
+	        viewPort.unprojectFromWVP(nearSource, projectionMatrix, viewMatrix, world, nearPoint);
+	        viewPort.unprojectFromWVP(farSource, projectionMatrix, viewMatrix, world, farPoint);
+	        var outDire = out.direction;
+	        outDire.x = farPoint.x - nearPoint.x;
+	        outDire.y = farPoint.y - nearPoint.y;
+	        outDire.z = farPoint.z - nearPoint.z;
+	        Vector3.normalize(out.direction, out.direction);
+	    }
+	    static rayIntersectsTriangle(ray, vertex1, vertex2, vertex3) {
+	        var result;
+	        var edge1 = Picker._tempVector30, edge2 = Picker._tempVector31;
+	        Vector3.subtract(vertex2, vertex1, edge1);
+	        Vector3.subtract(vertex3, vertex1, edge2);
+	        var directionCrossEdge2 = Picker._tempVector32;
+	        Vector3.cross(ray.direction, edge2, directionCrossEdge2);
+	        var determinant;
+	        determinant = Vector3.dot(edge1, directionCrossEdge2);
+	        if (determinant > -Number.MIN_VALUE && determinant < Number.MIN_VALUE) {
+	            result = Number.NaN;
+	            return result;
+	        }
+	        var inverseDeterminant = 1.0 / determinant;
+	        var distanceVector = Picker._tempVector33;
+	        Vector3.subtract(ray.origin, vertex1, distanceVector);
+	        var triangleU;
+	        triangleU = Vector3.dot(distanceVector, directionCrossEdge2);
+	        triangleU *= inverseDeterminant;
+	        if (triangleU < 0 || triangleU > 1) {
+	            result = Number.NaN;
+	            return result;
+	        }
+	        var distanceCrossEdge1 = Picker._tempVector34;
+	        Vector3.cross(distanceVector, edge1, distanceCrossEdge1);
+	        var triangleV;
+	        triangleV = Vector3.dot(ray.direction, distanceCrossEdge1);
+	        triangleV *= inverseDeterminant;
+	        if (triangleV < 0 || triangleU + triangleV > 1) {
+	            result = Number.NaN;
+	            return result;
+	        }
+	        var rayDistance;
+	        rayDistance = Vector3.dot(edge2, distanceCrossEdge1);
+	        rayDistance *= inverseDeterminant;
+	        if (rayDistance < 0) {
+	            result = Number.NaN;
+	            return result;
+	        }
+	        result = rayDistance;
+	        return result;
+	    }
+	}
+	Picker._tempVector30 = new Vector3();
+	Picker._tempVector31 = new Vector3();
+	Picker._tempVector32 = new Vector3();
+	Picker._tempVector33 = new Vector3();
+	Picker._tempVector34 = new Vector3();
+
+	class ScreenQuad extends Laya.Resource {
+	    constructor() {
+	        super();
+	        this._bufferState = new BufferState();
+	        this._bufferStateInvertUV = new BufferState();
+	        var gl = Laya.LayaGL.instance;
+	        this._vertexBuffer = new VertexBuffer3D(16 * 4, gl.STATIC_DRAW, false);
+	        this._vertexBuffer.vertexDeclaration = ScreenQuad._vertexDeclaration;
+	        this._vertexBuffer.setData(ScreenQuad._vertices.buffer);
+	        this._bufferState.bind();
+	        this._bufferState.applyVertexBuffer(this._vertexBuffer);
+	        this._bufferState.unBind();
+	        this._vertexBufferInvertUV = new VertexBuffer3D(16 * 4, gl.STATIC_DRAW, false);
+	        this._vertexBufferInvertUV.vertexDeclaration = ScreenQuad._vertexDeclaration;
+	        this._vertexBufferInvertUV.setData(ScreenQuad._verticesInvertUV.buffer);
+	        this._bufferStateInvertUV.bind();
+	        this._bufferStateInvertUV.applyVertexBuffer(this._vertexBufferInvertUV);
+	        this._bufferStateInvertUV.unBind();
+	        this._setGPUMemory(this._vertexBuffer._byteLength + this._vertexBufferInvertUV._byteLength);
+	    }
+	    static __init__() {
+	        ScreenQuad._vertexDeclaration = new VertexDeclaration(16, [new VertexElement(0, VertexElementFormat.Vector4, ScreenQuad.SCREENQUAD_POSITION_UV)]);
+	        ScreenQuad.instance = new ScreenQuad();
+	        ScreenQuad.instance.lock = true;
+	    }
+	    render() {
+	        var gl = Laya.LayaGL.instance;
+	        this._bufferState.bind();
+	        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	        Laya.Stat.renderBatches++;
+	    }
+	    renderInvertUV() {
+	        var gl = Laya.LayaGL.instance;
+	        this._bufferStateInvertUV.bind();
+	        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	        Laya.Stat.renderBatches++;
+	    }
+	    destroy() {
+	        super.destroy();
+	        this._bufferState.destroy();
+	        this._vertexBuffer.destroy();
+	        this._bufferStateInvertUV.destroy();
+	        this._vertexBufferInvertUV.destroy();
+	        this._setGPUMemory(0);
+	    }
+	}
+	ScreenQuad.SCREENQUAD_POSITION_UV = 0;
+	ScreenQuad._vertices = new Float32Array([1, 1, 1, 1, 1, -1, 1, 0, -1, 1, 0, 1, -1, -1, 0, 0]);
+	ScreenQuad._verticesInvertUV = new Float32Array([1, 1, 1, 0, 1, -1, 1, 1, -1, 1, 0, 0, -1, -1, 0, 1]);
+
+	class ScreenTriangle extends Laya.Resource {
+	    constructor() {
+	        super();
+	        this._bufferState = new BufferState();
+	        this._bufferStateInvertUV = new BufferState();
+	        var gl = Laya.LayaGL.instance;
+	        this._vertexBuffer = new VertexBuffer3D(12 * 4, gl.STATIC_DRAW, false);
+	        this._vertexBuffer.vertexDeclaration = ScreenTriangle._vertexDeclaration;
+	        this._vertexBuffer.setData(ScreenTriangle._vertices.buffer);
+	        this._bufferState.bind();
+	        this._bufferState.applyVertexBuffer(this._vertexBuffer);
+	        this._bufferState.unBind();
+	        this._vertexBufferInvertUV = new VertexBuffer3D(12 * 4, gl.STATIC_DRAW, false);
+	        this._vertexBufferInvertUV.vertexDeclaration = ScreenTriangle._vertexDeclaration;
+	        this._vertexBufferInvertUV.setData(ScreenTriangle._verticesInvertUV.buffer);
+	        this._bufferStateInvertUV.bind();
+	        this._bufferStateInvertUV.applyVertexBuffer(this._vertexBufferInvertUV);
+	        this._bufferStateInvertUV.unBind();
+	        this._setGPUMemory(this._vertexBuffer._byteLength + this._vertexBufferInvertUV._byteLength);
+	    }
+	    static __init__() {
+	        ScreenTriangle._vertexDeclaration = new VertexDeclaration(16, [new VertexElement(0, VertexElementFormat.Vector4, ScreenTriangle.SCREENTRIANGLE_POSITION_UV)]);
+	        ScreenTriangle.instance = new ScreenTriangle();
+	        ScreenTriangle.instance.lock = true;
+	    }
+	    render() {
+	        var gl = Laya.LayaGL.instance;
+	        this._bufferState.bind();
+	        gl.drawArrays(gl.TRIANGLES, 0, 3);
+	        Laya.Stat.renderBatches++;
+	    }
+	    renderInvertUV() {
+	        var gl = Laya.LayaGL.instance;
+	        this._bufferStateInvertUV.bind();
+	        gl.drawArrays(gl.TRIANGLES, 0, 3);
+	        Laya.Stat.renderBatches++;
+	    }
+	    destroy() {
+	        super.destroy();
+	        this._bufferState.destroy();
+	        this._vertexBuffer.destroy();
+	        this._bufferStateInvertUV.destroy();
+	        this._vertexBufferInvertUV.destroy();
+	        this._setGPUMemory(0);
+	    }
+	}
+	ScreenTriangle.SCREENTRIANGLE_POSITION_UV = 0;
+	ScreenTriangle._vertices = new Float32Array([-1, -1, 0, 0, -1, 3, 0, 2, 3, -1, 2, 0]);
+	ScreenTriangle._verticesInvertUV = new Float32Array([-1, -1, 0, 1, -1, 3, 0, -1, 3, -1, 2, 1]);
+
+	class Command {
+	    constructor() {
+	        this._commandBuffer = null;
+	    }
+	    static __init__() {
+	        Command._screenShaderData = new ShaderData();
+	        Command._screenShader = Shader3D.find("BlitScreen");
+	    }
+	    run() {
+	    }
+	    recover() {
+	        this._commandBuffer = null;
+	    }
+	}
+	Command.SCREENTEXTURE_NAME = "u_MainTex";
+	Command.SCREENTEXTUREOFFSETSCALE_NAME = "u_OffsetScale";
+	Command.MAINTEXTURE_TEXELSIZE_NAME = "u_MainTex_TexelSize";
+	Command.SCREENTEXTURE_ID = Shader3D.propertyNameToID(Command.SCREENTEXTURE_NAME);
+	Command.SCREENTEXTUREOFFSETSCALE_ID = Shader3D.propertyNameToID(Command.SCREENTEXTUREOFFSETSCALE_NAME);
+	Command.MAINTEXTURE_TEXELSIZE_ID = Shader3D.propertyNameToID(Command.MAINTEXTURE_TEXELSIZE_NAME);
+
+	class BlitScreenQuadCMD extends Command {
+	    constructor() {
+	        super(...arguments);
+	        this._source = null;
+	        this._dest = null;
+	        this._offsetScale = null;
+	        this._shader = null;
+	        this._shaderData = null;
+	        this._subShader = 0;
+	        this._sourceTexelSize = new Vector4();
+	        this._screenType = 0;
+	    }
+	    static create(source, dest, offsetScale = null, shader = null, shaderData = null, subShader = 0, screenType = BlitScreenQuadCMD._SCREENTYPE_QUAD) {
+	        var cmd;
+	        cmd = BlitScreenQuadCMD._pool.length > 0 ? BlitScreenQuadCMD._pool.pop() : new BlitScreenQuadCMD();
+	        cmd._source = source;
+	        cmd._dest = dest;
+	        cmd._offsetScale = offsetScale;
+	        cmd._shader = shader;
+	        cmd._shaderData = shaderData;
+	        cmd._subShader = subShader;
+	        cmd._screenType = screenType;
+	        return cmd;
+	    }
+	    run() {
+	        var shader = this._shader || Command._screenShader;
+	        var shaderData = this._shaderData || Command._screenShaderData;
+	        var dest = this._dest;
+	        Laya.LayaGL.instance.viewport(0, 0, dest ? dest.width : RenderContext3D.clientWidth, dest ? dest.height : RenderContext3D.clientHeight);
+	        shaderData.setTexture(Command.SCREENTEXTURE_ID, this._source);
+	        shaderData.setVector(Command.SCREENTEXTUREOFFSETSCALE_ID, this._offsetScale || BlitScreenQuadCMD._defaultOffsetScale);
+	        this._sourceTexelSize.setValue(1.0 / this._source.width, 1.0 / this._source.height, this._source.width, this._source.height);
+	        shaderData.setVector(Command.MAINTEXTURE_TEXELSIZE_ID, this._sourceTexelSize);
+	        (dest) && (dest._start());
+	        var subShader = shader.getSubShaderAt(this._subShader);
+	        var passes = subShader._passes;
+	        for (var i = 0, n = passes.length; i < n; i++) {
+	            var comDef = BlitScreenQuadCMD._compileDefine;
+	            shaderData._defineDatas.cloneTo(comDef);
+	            var shaderPass = passes[i].withCompile(comDef);
+	            shaderPass.bind();
+	            shaderPass.uploadUniforms(shaderPass._materialUniformParamsMap, shaderData, true);
+	            shaderPass.uploadRenderStateBlendDepth(shaderData);
+	            shaderPass.uploadRenderStateFrontFace(shaderData, false, null);
+	            switch (this._screenType) {
+	                case BlitScreenQuadCMD._SCREENTYPE_QUAD:
+	                    RenderContext3D._instance.invertY ? ScreenQuad.instance.renderInvertUV() : ScreenQuad.instance.render();
+	                    break;
+	                case BlitScreenQuadCMD._SCREENTYPE_TRIANGLE:
+	                    RenderContext3D._instance.invertY ? ScreenTriangle.instance.renderInvertUV() : ScreenTriangle.instance.render();
+	                    break;
+	                default:
+	                    throw "BlitScreenQuadCMD:unknown screen Type.";
+	            }
+	        }
+	        (dest) && (dest._end());
+	    }
+	    recover() {
+	        BlitScreenQuadCMD._pool.push(this);
+	        this._source = null;
+	        this._dest = null;
+	        this._offsetScale = null;
+	        this._shader = null;
+	        this._shaderData = null;
+	        super.recover();
+	    }
+	}
+	BlitScreenQuadCMD._SCREENTYPE_QUAD = 0;
+	BlitScreenQuadCMD._SCREENTYPE_TRIANGLE = 1;
+	BlitScreenQuadCMD._compileDefine = new DefineDatas();
+	BlitScreenQuadCMD._pool = [];
+	BlitScreenQuadCMD._defaultOffsetScale = new Vector4(0, 0, 1, 1);
+
+	class SetRenderTargetCMD extends Command {
+	    constructor() {
+	        super(...arguments);
+	        this._renderTexture = null;
+	    }
+	    static create(renderTexture) {
+	        var cmd;
+	        cmd = SetRenderTargetCMD._pool.length > 0 ? SetRenderTargetCMD._pool.pop() : new SetRenderTargetCMD();
+	        cmd._renderTexture = renderTexture;
+	        return cmd;
+	    }
+	    run() {
+	        this._renderTexture._start();
+	    }
+	    recover() {
+	        SetRenderTargetCMD._pool.push(this);
+	        this._renderTexture = null;
+	    }
+	}
+	SetRenderTargetCMD._pool = [];
+
+	class SetShaderDataTextureCMD extends Command {
+	    constructor() {
+	        super(...arguments);
+	        this._shaderData = null;
+	        this._nameID = 0;
+	        this._texture = null;
+	    }
+	    static create(shaderData, nameID, texture) {
+	        var cmd;
+	        cmd = SetShaderDataTextureCMD._pool.length > 0 ? SetShaderDataTextureCMD._pool.pop() : new SetShaderDataTextureCMD();
+	        cmd._shaderData = shaderData;
+	        cmd._nameID = nameID;
+	        cmd._texture = texture;
+	        return cmd;
+	    }
+	    run() {
+	        this._shaderData.setTexture(this._nameID, this._texture);
+	    }
+	    recover() {
+	        SetShaderDataTextureCMD._pool.push(this);
+	        this._shaderData = null;
+	        this._nameID = 0;
+	        this._texture = null;
+	    }
+	}
+	SetShaderDataTextureCMD._pool = [];
+
+	class CommandBuffer {
+	    constructor() {
+	        this._camera = null;
+	        this._commands = [];
+	    }
+	    _apply() {
+	        for (var i = 0, n = this._commands.length; i < n; i++)
+	            this._commands[i].run();
+	    }
+	    setShaderDataTexture(shaderData, nameID, source) {
+	        this._commands.push(SetShaderDataTextureCMD.create(shaderData, nameID, source));
+	    }
+	    blitScreenQuad(source, dest, offsetScale = null, shader = null, shaderData = null, subShader = 0) {
+	        this._commands.push(BlitScreenQuadCMD.create(source, dest, offsetScale, shader, shaderData, subShader, BlitScreenQuadCMD._SCREENTYPE_QUAD));
+	    }
+	    blitScreenTriangle(source, dest, offsetScale = null, shader = null, shaderData = null, subShader = 0) {
+	        this._commands.push(BlitScreenQuadCMD.create(source, dest, offsetScale, shader, shaderData, subShader, BlitScreenQuadCMD._SCREENTYPE_TRIANGLE));
+	    }
+	    setRenderTarget(renderTexture) {
+	        this._commands.push(SetRenderTargetCMD.create(renderTexture));
+	    }
+	    clear() {
+	        for (var i = 0, n = this._commands.length; i < n; i++)
+	            this._commands[i].recover();
+	        this._commands.length = 0;
+	    }
+	}
 
 	(function (CameraClearFlags) {
 	    CameraClearFlags[CameraClearFlags["SolidColor"] = 0] = "SolidColor";
@@ -15685,8 +13657,8 @@
 	            scene._shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT);
 	            scene._shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW);
 	            shadowCasterPass = ILaya3D.Scene3D._shadowCasterPass;
-	            shadowCasterPass.update(this, mainDirectLight, ILaya3D.ShadowLightType.DirectionLight);
-	            shadowCasterPass.render(context, scene, ILaya3D.ShadowLightType.DirectionLight);
+	            shadowCasterPass.update(this, mainDirectLight, exports.ShadowLightType.DirectionLight);
+	            shadowCasterPass.render(context, scene, exports.ShadowLightType.DirectionLight);
 	        }
 	        else {
 	            scene._shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW);
@@ -15697,8 +13669,8 @@
 	            scene._shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW);
 	            scene._shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT);
 	            shadowCasterPass = ILaya3D.Scene3D._shadowCasterPass;
-	            shadowCasterPass.update(this, spotMainLight, ILaya3D.ShadowLightType.SpotLight);
-	            shadowCasterPass.render(context, scene, ILaya3D.ShadowLightType.SpotLight);
+	            shadowCasterPass.update(this, spotMainLight, exports.ShadowLightType.SpotLight);
+	            shadowCasterPass.render(context, scene, exports.ShadowLightType.SpotLight);
 	        }
 	        else {
 	            scene._shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT);
@@ -15837,6 +13809,1684 @@
 	Camera._tempVector20 = new Vector2();
 	Camera._updateMark = 0;
 
+	class HitResult {
+	    constructor() {
+	        this.succeeded = false;
+	        this.collider = null;
+	        this.point = new Vector3();
+	        this.normal = new Vector3();
+	        this.hitFraction = 0;
+	    }
+	}
+
+	class Physics3DUtils {
+	    constructor() {
+	    }
+	    static setColliderCollision(collider1, collider2, collsion) {
+	    }
+	    static getIColliderCollision(collider1, collider2) {
+	        return false;
+	    }
+	}
+	Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER = 0x1;
+	Physics3DUtils.COLLISIONFILTERGROUP_STATICFILTER = 0x2;
+	Physics3DUtils.COLLISIONFILTERGROUP_KINEMATICFILTER = 0x4;
+	Physics3DUtils.COLLISIONFILTERGROUP_DEBRISFILTER = 0x8;
+	Physics3DUtils.COLLISIONFILTERGROUP_SENSORTRIGGER = 0x10;
+	Physics3DUtils.COLLISIONFILTERGROUP_CHARACTERFILTER = 0x20;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER1 = 0x40;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER2 = 0x80;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER3 = 0x100;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER4 = 0x200;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER5 = 0x400;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER6 = 0x800;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER7 = 0x1000;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER8 = 0x2000;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER9 = 0x4000;
+	Physics3DUtils.COLLISIONFILTERGROUP_CUSTOMFILTER10 = 0x8000;
+	Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER = -1;
+	Physics3DUtils.gravity = new Vector3(0, -9.81, 0);
+
+	class PhysicsUpdateList extends SingletonList {
+	    constructor() {
+	        super();
+	    }
+	    add(element) {
+	        var index = element._inPhysicUpdateListIndex;
+	        if (index !== -1)
+	            throw "PhysicsUpdateList:element has  in  PhysicsUpdateList.";
+	        this._add(element);
+	        element._inPhysicUpdateListIndex = this.length++;
+	    }
+	    remove(element) {
+	        var index = element._inPhysicUpdateListIndex;
+	        this.length--;
+	        if (index !== this.length) {
+	            var end = this.elements[this.length];
+	            this.elements[index] = end;
+	            end._inPhysicUpdateListIndex = index;
+	        }
+	        element._inPhysicUpdateListIndex = -1;
+	    }
+	}
+
+	class ContactPoint {
+	    constructor() {
+	        this._idCounter = 0;
+	        this.colliderA = null;
+	        this.colliderB = null;
+	        this.distance = 0;
+	        this.normal = new Vector3();
+	        this.positionOnA = new Vector3();
+	        this.positionOnB = new Vector3();
+	        this._id = ++this._idCounter;
+	    }
+	}
+
+	class Collision {
+	    constructor() {
+	        this._lastUpdateFrame = -2147483648;
+	        this._updateFrame = -2147483648;
+	        this._isTrigger = false;
+	        this.contacts = [];
+	    }
+	    _setUpdateFrame(farme) {
+	        this._lastUpdateFrame = this._updateFrame;
+	        this._updateFrame = farme;
+	    }
+	}
+
+	class CollisionTool {
+	    constructor() {
+	        this._hitResultsPoolIndex = 0;
+	        this._hitResultsPool = [];
+	        this._contactPonintsPoolIndex = 0;
+	        this._contactPointsPool = [];
+	        this._collisionsPool = [];
+	        this._collisions = {};
+	    }
+	    getHitResult() {
+	        var hitResult = this._hitResultsPool[this._hitResultsPoolIndex++];
+	        if (!hitResult) {
+	            hitResult = new HitResult();
+	            this._hitResultsPool.push(hitResult);
+	        }
+	        return hitResult;
+	    }
+	    recoverAllHitResultsPool() {
+	        this._hitResultsPoolIndex = 0;
+	    }
+	    getContactPoints() {
+	        var contactPoint = this._contactPointsPool[this._contactPonintsPoolIndex++];
+	        if (!contactPoint) {
+	            contactPoint = new ContactPoint();
+	            this._contactPointsPool.push(contactPoint);
+	        }
+	        return contactPoint;
+	    }
+	    recoverAllContactPointsPool() {
+	        this._contactPonintsPoolIndex = 0;
+	    }
+	    getCollision(physicComponentA, physicComponentB) {
+	        var collision;
+	        var idA = physicComponentA.id;
+	        var idB = physicComponentB.id;
+	        var subCollisionFirst = this._collisions[idA];
+	        if (subCollisionFirst)
+	            collision = subCollisionFirst[idB];
+	        if (!collision) {
+	            if (!subCollisionFirst) {
+	                subCollisionFirst = {};
+	                this._collisions[idA] = subCollisionFirst;
+	            }
+	            collision = this._collisionsPool.length === 0 ? new Collision() : this._collisionsPool.pop();
+	            collision._colliderA = physicComponentA;
+	            collision._colliderB = physicComponentB;
+	            subCollisionFirst[idB] = collision;
+	        }
+	        return collision;
+	    }
+	    recoverCollision(collision) {
+	        var idA = collision._colliderA.id;
+	        var idB = collision._colliderB.id;
+	        this._collisions[idA][idB] = null;
+	        this._collisionsPool.push(collision);
+	    }
+	    garbageCollection() {
+	        this._hitResultsPoolIndex = 0;
+	        this._hitResultsPool.length = 0;
+	        this._contactPonintsPoolIndex = 0;
+	        this._contactPointsPool.length = 0;
+	        this._collisionsPool.length = 0;
+	        for (var subCollisionsKey in this._collisionsPool) {
+	            var subCollisions = this._collisionsPool[subCollisionsKey];
+	            var wholeDelete = true;
+	            for (var collisionKey in subCollisions) {
+	                if (subCollisions[collisionKey])
+	                    wholeDelete = false;
+	                else
+	                    delete subCollisions[collisionKey];
+	            }
+	            if (wholeDelete)
+	                delete this._collisionsPool[subCollisionsKey];
+	        }
+	    }
+	}
+
+	class ColliderShape {
+	    constructor() {
+	        this._scale = new Vector3(1, 1, 1);
+	        this._centerMatrix = new Matrix4x4();
+	        this._attatched = false;
+	        this._indexInCompound = -1;
+	        this._compoundParent = null;
+	        this._attatchedCollisionObject = null;
+	        this._referenceCount = 0;
+	        this._localOffset = new Vector3(0, 0, 0);
+	        this._localRotation = new Quaternion(0, 0, 0, 1);
+	        this.needsCustomCollisionCallback = false;
+	    }
+	    static __init__() {
+	        var bt = Physics3D._bullet;
+	        ColliderShape._btScale = bt.btVector3_create(1, 1, 1);
+	        ColliderShape._btVector30 = bt.btVector3_create(0, 0, 0);
+	        ColliderShape._btQuaternion0 = bt.btQuaternion_create(0, 0, 0, 1);
+	        ColliderShape._btTransform0 = bt.btTransform_create();
+	    }
+	    static _createAffineTransformation(trans, rot, outE) {
+	        var x = rot.x, y = rot.y, z = rot.z, w = rot.w, x2 = x + x, y2 = y + y, z2 = z + z;
+	        var xx = x * x2, xy = x * y2, xz = x * z2, yy = y * y2, yz = y * z2, zz = z * z2;
+	        var wx = w * x2, wy = w * y2, wz = w * z2;
+	        outE[0] = (1 - (yy + zz));
+	        outE[1] = (xy + wz);
+	        outE[2] = (xz - wy);
+	        outE[3] = 0;
+	        outE[4] = (xy - wz);
+	        outE[5] = (1 - (xx + zz));
+	        outE[6] = (yz + wx);
+	        outE[7] = 0;
+	        outE[8] = (xz + wy);
+	        outE[9] = (yz - wx);
+	        outE[10] = (1 - (xx + yy));
+	        outE[11] = 0;
+	        outE[12] = trans.x;
+	        outE[13] = trans.y;
+	        outE[14] = trans.z;
+	        outE[15] = 1;
+	    }
+	    get type() {
+	        return this._type;
+	    }
+	    get localOffset() {
+	        return this._localOffset;
+	    }
+	    set localOffset(value) {
+	        this._localOffset = value;
+	        if (this._compoundParent)
+	            this._compoundParent._updateChildTransform(this);
+	    }
+	    get localRotation() {
+	        return this._localRotation;
+	    }
+	    set localRotation(value) {
+	        this._localRotation = value;
+	        if (this._compoundParent)
+	            this._compoundParent._updateChildTransform(this);
+	    }
+	    _setScale(value) {
+	        if (this._compoundParent) {
+	            this.updateLocalTransformations();
+	        }
+	        else {
+	            var bt = Physics3D._bullet;
+	            bt.btVector3_setValue(ColliderShape._btScale, value.x, value.y, value.z);
+	            bt.btCollisionShape_setLocalScaling(this._btShape, ColliderShape._btScale);
+	        }
+	    }
+	    _addReference() {
+	        this._referenceCount++;
+	    }
+	    _removeReference() {
+	        this._referenceCount--;
+	    }
+	    updateLocalTransformations() {
+	        if (this._compoundParent) {
+	            var offset = ColliderShape._tempVector30;
+	            Vector3.multiply(this.localOffset, this._scale, offset);
+	            ColliderShape._createAffineTransformation(offset, this.localRotation, this._centerMatrix.elements);
+	        }
+	        else {
+	            ColliderShape._createAffineTransformation(this.localOffset, this.localRotation, this._centerMatrix.elements);
+	        }
+	    }
+	    cloneTo(destObject) {
+	        var destColliderShape = destObject;
+	        this._localOffset.cloneTo(destColliderShape.localOffset);
+	        this._localRotation.cloneTo(destColliderShape.localRotation);
+	        destColliderShape.localOffset = destColliderShape.localOffset;
+	        destColliderShape.localRotation = destColliderShape.localRotation;
+	    }
+	    clone() {
+	        return null;
+	    }
+	    destroy() {
+	        if (this._btShape) {
+	            Physics3D._bullet.btCollisionShape_destroy(this._btShape);
+	            this._btShape = null;
+	        }
+	    }
+	}
+	ColliderShape.SHAPEORIENTATION_UPX = 0;
+	ColliderShape.SHAPEORIENTATION_UPY = 1;
+	ColliderShape.SHAPEORIENTATION_UPZ = 2;
+	ColliderShape.SHAPETYPES_BOX = 0;
+	ColliderShape.SHAPETYPES_SPHERE = 1;
+	ColliderShape.SHAPETYPES_CYLINDER = 2;
+	ColliderShape.SHAPETYPES_CAPSULE = 3;
+	ColliderShape.SHAPETYPES_CONVEXHULL = 4;
+	ColliderShape.SHAPETYPES_COMPOUND = 5;
+	ColliderShape.SHAPETYPES_STATICPLANE = 6;
+	ColliderShape.SHAPETYPES_CONE = 7;
+	ColliderShape._tempVector30 = new Vector3();
+
+	class BoxColliderShape extends ColliderShape {
+	    constructor(sizeX = 1.0, sizeY = 1.0, sizeZ = 1.0) {
+	        super();
+	        this._sizeX = sizeX;
+	        this._sizeY = sizeY;
+	        this._sizeZ = sizeZ;
+	        this._type = ColliderShape.SHAPETYPES_BOX;
+	        var bt = Physics3D._bullet;
+	        bt.btVector3_setValue(BoxColliderShape._btSize, sizeX / 2, sizeY / 2, sizeZ / 2);
+	        this._btShape = bt.btBoxShape_create(BoxColliderShape._btSize);
+	    }
+	    static __init__() {
+	        BoxColliderShape._btSize = Physics3D._bullet.btVector3_create(0, 0, 0);
+	    }
+	    get sizeX() {
+	        return this._sizeX;
+	    }
+	    get sizeY() {
+	        return this._sizeY;
+	    }
+	    get sizeZ() {
+	        return this._sizeZ;
+	    }
+	    clone() {
+	        var dest = new BoxColliderShape(this._sizeX, this._sizeY, this._sizeZ);
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+
+	class CapsuleColliderShape extends ColliderShape {
+	    constructor(radius = 0.5, length = 1.25, orientation = ColliderShape.SHAPEORIENTATION_UPY) {
+	        super();
+	        this._radius = radius;
+	        this._length = length;
+	        this._orientation = orientation;
+	        this._type = ColliderShape.SHAPETYPES_CAPSULE;
+	        var bt = Physics3D._bullet;
+	        switch (orientation) {
+	            case ColliderShape.SHAPEORIENTATION_UPX:
+	                this._btShape = bt.btCapsuleShapeX_create(radius, length - radius * 2);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPY:
+	                this._btShape = bt.btCapsuleShape_create(radius, length - radius * 2);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPZ:
+	                this._btShape = bt.btCapsuleShapeZ_create(radius, length - radius * 2);
+	                break;
+	            default:
+	                throw "CapsuleColliderShape:unknown orientation.";
+	        }
+	    }
+	    get radius() {
+	        return this._radius;
+	    }
+	    get length() {
+	        return this._length;
+	    }
+	    get orientation() {
+	        return this._orientation;
+	    }
+	    _setScale(value) {
+	        var fixScale = CapsuleColliderShape._tempVector30;
+	        switch (this.orientation) {
+	            case ColliderShape.SHAPEORIENTATION_UPX:
+	                fixScale.x = value.x;
+	                fixScale.y = fixScale.z = Math.max(value.y, value.z);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPY:
+	                fixScale.y = value.y;
+	                fixScale.x = fixScale.z = Math.max(value.x, value.z);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPZ:
+	                fixScale.z = value.z;
+	                fixScale.x = fixScale.y = Math.max(value.x, value.y);
+	                break;
+	            default:
+	                throw "CapsuleColliderShape:unknown orientation.";
+	        }
+	        super._setScale(fixScale);
+	    }
+	    clone() {
+	        var dest = new CapsuleColliderShape(this._radius, this._length, this._orientation);
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+	CapsuleColliderShape._tempVector30 = new Vector3();
+
+	class CompoundColliderShape extends ColliderShape {
+	    constructor() {
+	        super();
+	        this._childColliderShapes = [];
+	        this._type = ColliderShape.SHAPETYPES_COMPOUND;
+	        this._btShape = Physics3D._bullet.btCompoundShape_create();
+	    }
+	    static __init__() {
+	        var bt = Physics3D._bullet;
+	        CompoundColliderShape._btVector3One = bt.btVector3_create(1, 1, 1);
+	        CompoundColliderShape._btTransform = bt.btTransform_create();
+	        CompoundColliderShape._btOffset = bt.btVector3_create(0, 0, 0);
+	        CompoundColliderShape._btRotation = bt.btQuaternion_create(0, 0, 0, 1);
+	    }
+	    _clearChildShape(shape) {
+	        shape._attatched = false;
+	        shape._compoundParent = null;
+	        shape._indexInCompound = -1;
+	    }
+	    _addReference() {
+	    }
+	    _removeReference() {
+	    }
+	    _updateChildTransform(shape) {
+	        var bt = Physics3D._bullet;
+	        var offset = shape.localOffset;
+	        var rotation = shape.localRotation;
+	        var btOffset = ColliderShape._btVector30;
+	        var btQuaternion = ColliderShape._btQuaternion0;
+	        var btTransform = ColliderShape._btTransform0;
+	        bt.btVector3_setValue(btOffset, -offset.x, offset.y, offset.z);
+	        bt.btQuaternion_setValue(btQuaternion, -rotation.x, rotation.y, rotation.z, -rotation.w);
+	        bt.btTransform_setOrigin(btTransform, btOffset);
+	        bt.btTransform_setRotation(btTransform, btQuaternion);
+	        bt.btCompoundShape_updateChildTransform(this._btShape, shape._indexInCompound, btTransform, true);
+	    }
+	    addChildShape(shape) {
+	        if (shape._attatched)
+	            throw "CompoundColliderShape: this shape has attatched to other entity.";
+	        shape._attatched = true;
+	        shape._compoundParent = this;
+	        shape._indexInCompound = this._childColliderShapes.length;
+	        this._childColliderShapes.push(shape);
+	        var offset = shape.localOffset;
+	        var rotation = shape.localRotation;
+	        var bt = Physics3D._bullet;
+	        bt.btVector3_setValue(CompoundColliderShape._btOffset, -offset.x, offset.y, offset.z);
+	        bt.btQuaternion_setValue(CompoundColliderShape._btRotation, -rotation.x, rotation.y, rotation.z, -rotation.w);
+	        bt.btTransform_setOrigin(CompoundColliderShape._btTransform, CompoundColliderShape._btOffset);
+	        bt.btTransform_setRotation(CompoundColliderShape._btTransform, CompoundColliderShape._btRotation);
+	        var btScale = bt.btCollisionShape_getLocalScaling(this._btShape);
+	        bt.btCollisionShape_setLocalScaling(this._btShape, CompoundColliderShape._btVector3One);
+	        bt.btCompoundShape_addChildShape(this._btShape, CompoundColliderShape._btTransform, shape._btShape);
+	        bt.btCollisionShape_setLocalScaling(this._btShape, btScale);
+	        (this._attatchedCollisionObject) && (this._attatchedCollisionObject.colliderShape = this);
+	    }
+	    removeChildShape(shape) {
+	        if (shape._compoundParent === this) {
+	            var index = shape._indexInCompound;
+	            this._clearChildShape(shape);
+	            var endShape = this._childColliderShapes[this._childColliderShapes.length - 1];
+	            endShape._indexInCompound = index;
+	            this._childColliderShapes[index] = endShape;
+	            this._childColliderShapes.pop();
+	            Physics3D._bullet.btCompoundShape_removeChildShapeByIndex(this._btShape, index);
+	        }
+	    }
+	    clearChildShape() {
+	        for (var i = 0, n = this._childColliderShapes.length; i < n; i++) {
+	            this._clearChildShape(this._childColliderShapes[i]);
+	            Physics3D._bullet.btCompoundShape_removeChildShapeByIndex(this._btShape, 0);
+	        }
+	        this._childColliderShapes.length = 0;
+	    }
+	    getChildShapeCount() {
+	        return this._childColliderShapes.length;
+	    }
+	    cloneTo(destObject) {
+	        var destCompoundColliderShape = destObject;
+	        destCompoundColliderShape.clearChildShape();
+	        for (var i = 0, n = this._childColliderShapes.length; i < n; i++)
+	            destCompoundColliderShape.addChildShape(this._childColliderShapes[i].clone());
+	    }
+	    clone() {
+	        var dest = new CompoundColliderShape();
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	    destroy() {
+	        super.destroy();
+	        for (var i = 0, n = this._childColliderShapes.length; i < n; i++) {
+	            var childShape = this._childColliderShapes[i];
+	            if (childShape._referenceCount === 0)
+	                childShape.destroy();
+	        }
+	    }
+	}
+
+	class ConeColliderShape extends ColliderShape {
+	    constructor(radius = 0.5, height = 1.0, orientation = ColliderShape.SHAPEORIENTATION_UPY) {
+	        super();
+	        this._radius = 1;
+	        this._height = 0.5;
+	        this._radius = radius;
+	        this._height = height;
+	        this._orientation = orientation;
+	        this._type = ColliderShape.SHAPETYPES_CYLINDER;
+	        var bt = Physics3D._bullet;
+	        switch (orientation) {
+	            case ColliderShape.SHAPEORIENTATION_UPX:
+	                this._btShape = bt.btConeShapeX_create(radius, height);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPY:
+	                this._btShape = bt.btConeShape_create(radius, height);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPZ:
+	                this._btShape = bt.btConeShapeZ_create(radius, height);
+	                break;
+	            default:
+	                throw "ConeColliderShape:unknown orientation.";
+	        }
+	    }
+	    get radius() {
+	        return this._radius;
+	    }
+	    get height() {
+	        return this._height;
+	    }
+	    get orientation() {
+	        return this._orientation;
+	    }
+	    clone() {
+	        var dest = new ConeColliderShape(this._radius, this._height, this._orientation);
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+
+	class CylinderColliderShape extends ColliderShape {
+	    constructor(radius = 0.5, height = 1.0, orientation = ColliderShape.SHAPEORIENTATION_UPY) {
+	        super();
+	        this._radius = 1;
+	        this._height = 0.5;
+	        this._radius = radius;
+	        this._height = height;
+	        this._orientation = orientation;
+	        this._type = ColliderShape.SHAPETYPES_CYLINDER;
+	        var bt = Physics3D._bullet;
+	        switch (orientation) {
+	            case ColliderShape.SHAPEORIENTATION_UPX:
+	                bt.btVector3_setValue(CylinderColliderShape._btSize, height / 2, radius, radius);
+	                this._btShape = bt.btCylinderShapeX_create(CylinderColliderShape._btSize);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPY:
+	                bt.btVector3_setValue(CylinderColliderShape._btSize, radius, height / 2, radius);
+	                this._btShape = bt.btCylinderShape_create(CylinderColliderShape._btSize);
+	                break;
+	            case ColliderShape.SHAPEORIENTATION_UPZ:
+	                bt.btVector3_setValue(CylinderColliderShape._btSize, radius, radius, height / 2);
+	                this._btShape = bt.btCylinderShapeZ_create(CylinderColliderShape._btSize);
+	                break;
+	            default:
+	                throw "CapsuleColliderShape:unknown orientation.";
+	        }
+	    }
+	    static __init__() {
+	        CylinderColliderShape._btSize = Physics3D._bullet.btVector3_create(0, 0, 0);
+	    }
+	    get radius() {
+	        return this._radius;
+	    }
+	    get height() {
+	        return this._height;
+	    }
+	    get orientation() {
+	        return this._orientation;
+	    }
+	    clone() {
+	        var dest = new CylinderColliderShape(this._radius, this._height, this._orientation);
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+
+	class MeshColliderShape extends ColliderShape {
+	    constructor() {
+	        super();
+	        this._mesh = null;
+	        this._convex = false;
+	    }
+	    get mesh() {
+	        return this._mesh;
+	    }
+	    set mesh(value) {
+	        if (this._mesh !== value) {
+	            var bt = Physics3D._bullet;
+	            if (this._mesh) {
+	                bt.btCollisionShape_destroy(this._btShape);
+	            }
+	            if (value) {
+	                this._btShape = bt.btGImpactMeshShape_create(value._getPhysicMesh());
+	                bt.btGImpactShapeInterface_updateBound(this._btShape);
+	            }
+	            this._mesh = value;
+	        }
+	    }
+	    get convex() {
+	        return this._convex;
+	    }
+	    set convex(value) {
+	        this._convex = value;
+	    }
+	    _setScale(value) {
+	        if (this._compoundParent) {
+	            this.updateLocalTransformations();
+	        }
+	        else {
+	            var bt = Physics3D._bullet;
+	            bt.btVector3_setValue(ColliderShape._btScale, value.x, value.y, value.z);
+	            bt.btCollisionShape_setLocalScaling(this._btShape, ColliderShape._btScale);
+	            bt.btGImpactShapeInterface_updateBound(this._btShape);
+	        }
+	    }
+	    cloneTo(destObject) {
+	        var destMeshCollider = destObject;
+	        destMeshCollider.convex = this._convex;
+	        destMeshCollider.mesh = this._mesh;
+	        super.cloneTo(destObject);
+	    }
+	    clone() {
+	        var dest = new MeshColliderShape();
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	    destroy() {
+	        if (this._btShape) {
+	            Physics3D._bullet.btCollisionShape_destroy(this._btShape);
+	            this._btShape = null;
+	        }
+	    }
+	}
+
+	class SphereColliderShape extends ColliderShape {
+	    constructor(radius = 0.5) {
+	        super();
+	        this._radius = radius;
+	        this._type = ColliderShape.SHAPETYPES_SPHERE;
+	        this._btShape = Physics3D._bullet.btSphereShape_create(radius);
+	    }
+	    get radius() {
+	        return this._radius;
+	    }
+	    clone() {
+	        var dest = new SphereColliderShape(this._radius);
+	        this.cloneTo(dest);
+	        return dest;
+	    }
+	}
+
+	class PhysicsComponent extends Laya.Component {
+	    constructor(collisionGroup, canCollideWith) {
+	        super();
+	        this._restitution = 0.0;
+	        this._friction = 0.5;
+	        this._rollingFriction = 0.0;
+	        this._ccdMotionThreshold = 0.0;
+	        this._ccdSweptSphereRadius = 0.0;
+	        this._collisionGroup = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER;
+	        this._canCollideWith = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER;
+	        this._colliderShape = null;
+	        this._transformFlag = 2147483647;
+	        this._controlBySimulation = false;
+	        this._enableProcessCollisions = true;
+	        this._inPhysicUpdateListIndex = -1;
+	        this.canScaleShape = true;
+	        this._collisionGroup = collisionGroup;
+	        this._canCollideWith = canCollideWith;
+	        PhysicsComponent._physicObjectsMap[this.id] = this;
+	    }
+	    static __init__() {
+	        var bt = Physics3D._bullet;
+	        PhysicsComponent._btVector30 = bt.btVector3_create(0, 0, 0);
+	        PhysicsComponent._btQuaternion0 = bt.btQuaternion_create(0, 0, 0, 1);
+	    }
+	    static _createAffineTransformationArray(tranX, tranY, tranZ, rotX, rotY, rotZ, rotW, scale, outE) {
+	        var x2 = rotX + rotX, y2 = rotY + rotY, z2 = rotZ + rotZ;
+	        var xx = rotX * x2, xy = rotX * y2, xz = rotX * z2, yy = rotY * y2, yz = rotY * z2, zz = rotZ * z2;
+	        var wx = rotW * x2, wy = rotW * y2, wz = rotW * z2, sx = scale[0], sy = scale[1], sz = scale[2];
+	        outE[0] = (1 - (yy + zz)) * sx;
+	        outE[1] = (xy + wz) * sx;
+	        outE[2] = (xz - wy) * sx;
+	        outE[3] = 0;
+	        outE[4] = (xy - wz) * sy;
+	        outE[5] = (1 - (xx + zz)) * sy;
+	        outE[6] = (yz + wx) * sy;
+	        outE[7] = 0;
+	        outE[8] = (xz + wy) * sz;
+	        outE[9] = (yz - wx) * sz;
+	        outE[10] = (1 - (xx + yy)) * sz;
+	        outE[11] = 0;
+	        outE[12] = tranX;
+	        outE[13] = tranY;
+	        outE[14] = tranZ;
+	        outE[15] = 1;
+	    }
+	    static _creatShape(shapeData) {
+	        var colliderShape;
+	        switch (shapeData.type) {
+	            case "BoxColliderShape":
+	                var sizeData = shapeData.size;
+	                colliderShape = sizeData ? new BoxColliderShape(sizeData[0], sizeData[1], sizeData[2]) : new BoxColliderShape();
+	                break;
+	            case "SphereColliderShape":
+	                colliderShape = new SphereColliderShape(shapeData.radius);
+	                break;
+	            case "CapsuleColliderShape":
+	                colliderShape = new CapsuleColliderShape(shapeData.radius, shapeData.height, shapeData.orientation);
+	                break;
+	            case "MeshColliderShape":
+	                var meshCollider = new MeshColliderShape();
+	                shapeData.mesh && (meshCollider.mesh = Laya.Loader.getRes(shapeData.mesh));
+	                colliderShape = meshCollider;
+	                break;
+	            case "ConeColliderShape":
+	                colliderShape = new ConeColliderShape(shapeData.radius, shapeData.height, shapeData.orientation);
+	                break;
+	            case "CylinderColliderShape":
+	                colliderShape = new CylinderColliderShape(shapeData.radius, shapeData.height, shapeData.orientation);
+	                break;
+	            default:
+	                throw "unknown shape type.";
+	        }
+	        if (shapeData.center) {
+	            var localOffset = colliderShape.localOffset;
+	            localOffset.fromArray(shapeData.center);
+	            colliderShape.localOffset = localOffset;
+	        }
+	        return colliderShape;
+	    }
+	    static physicVector3TransformQuat(source, qx, qy, qz, qw, out) {
+	        var x = source.x, y = source.y, z = source.z, ix = qw * x + qy * z - qz * y, iy = qw * y + qz * x - qx * z, iz = qw * z + qx * y - qy * x, iw = -qx * x - qy * y - qz * z;
+	        out.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
+	        out.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
+	        out.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+	    }
+	    static physicQuaternionMultiply(lx, ly, lz, lw, right, out) {
+	        var rx = right.x;
+	        var ry = right.y;
+	        var rz = right.z;
+	        var rw = right.w;
+	        var a = (ly * rz - lz * ry);
+	        var b = (lz * rx - lx * rz);
+	        var c = (lx * ry - ly * rx);
+	        var d = (lx * rx + ly * ry + lz * rz);
+	        out.x = (lx * rw + rx * lw) + a;
+	        out.y = (ly * rw + ry * lw) + b;
+	        out.z = (lz * rw + rz * lw) + c;
+	        out.w = lw * rw - d;
+	    }
+	    get restitution() {
+	        return this._restitution;
+	    }
+	    set restitution(value) {
+	        this._restitution = value;
+	        this._btColliderObject && Physics3D._bullet.btCollisionObject_setRestitution(this._btColliderObject, value);
+	    }
+	    get friction() {
+	        return this._friction;
+	    }
+	    set friction(value) {
+	        this._friction = value;
+	        this._btColliderObject && Physics3D._bullet.btCollisionObject_setFriction(this._btColliderObject, value);
+	    }
+	    get rollingFriction() {
+	        return this._rollingFriction;
+	    }
+	    set rollingFriction(value) {
+	        this._rollingFriction = value;
+	        this._btColliderObject && Physics3D._bullet.btCollisionObject_setRollingFriction(this._btColliderObject, value);
+	    }
+	    get ccdMotionThreshold() {
+	        return this._ccdMotionThreshold;
+	    }
+	    set ccdMotionThreshold(value) {
+	        this._ccdMotionThreshold = value;
+	        this._btColliderObject && Physics3D._bullet.btCollisionObject_setCcdMotionThreshold(this._btColliderObject, value);
+	    }
+	    get ccdSweptSphereRadius() {
+	        return this._ccdSweptSphereRadius;
+	    }
+	    set ccdSweptSphereRadius(value) {
+	        this._ccdSweptSphereRadius = value;
+	        this._btColliderObject && Physics3D._bullet.btCollisionObject_setCcdSweptSphereRadius(this._btColliderObject, value);
+	    }
+	    get isActive() {
+	        return this._btColliderObject ? Physics3D._bullet.btCollisionObject_isActive(this._btColliderObject) : false;
+	    }
+	    get colliderShape() {
+	        return this._colliderShape;
+	    }
+	    set colliderShape(value) {
+	        var lastColliderShape = this._colliderShape;
+	        if (lastColliderShape) {
+	            lastColliderShape._attatched = false;
+	            lastColliderShape._attatchedCollisionObject = null;
+	        }
+	        this._colliderShape = value;
+	        if (value) {
+	            if (value._attatched) {
+	                throw "PhysicsComponent: this shape has attatched to other entity.";
+	            }
+	            else {
+	                value._attatched = true;
+	                value._attatchedCollisionObject = this;
+	            }
+	            if (this._btColliderObject) {
+	                Physics3D._bullet.btCollisionObject_setCollisionShape(this._btColliderObject, value._btShape);
+	                var canInSimulation = this._simulation && this._enabled;
+	                (canInSimulation && lastColliderShape) && (this._removeFromSimulation());
+	                this._onShapeChange(value);
+	                if (canInSimulation) {
+	                    this._derivePhysicsTransformation(true);
+	                    this._addToSimulation();
+	                }
+	            }
+	        }
+	        else {
+	            if (this._simulation && this._enabled)
+	                lastColliderShape && this._removeFromSimulation();
+	        }
+	    }
+	    get simulation() {
+	        return this._simulation;
+	    }
+	    get collisionGroup() {
+	        return this._collisionGroup;
+	    }
+	    set collisionGroup(value) {
+	        if (this._collisionGroup !== value) {
+	            this._collisionGroup = value;
+	            if (this._simulation && this._colliderShape && this._enabled) {
+	                this._removeFromSimulation();
+	                this._addToSimulation();
+	            }
+	        }
+	    }
+	    get canCollideWith() {
+	        return this._canCollideWith;
+	    }
+	    set canCollideWith(value) {
+	        if (this._canCollideWith !== value) {
+	            this._canCollideWith = value;
+	            if (this._simulation && this._colliderShape && this._enabled) {
+	                this._removeFromSimulation();
+	                this._addToSimulation();
+	            }
+	        }
+	    }
+	    _parseShape(shapesData) {
+	        var shapeCount = shapesData.length;
+	        if (shapeCount === 1) {
+	            var shape = PhysicsComponent._creatShape(shapesData[0]);
+	            this.colliderShape = shape;
+	        }
+	        else {
+	            var compoundShape = new CompoundColliderShape();
+	            for (var i = 0; i < shapeCount; i++) {
+	                shape = PhysicsComponent._creatShape(shapesData[i]);
+	                compoundShape.addChildShape(shape);
+	            }
+	            this.colliderShape = compoundShape;
+	        }
+	    }
+	    _onScaleChange(scale) {
+	        this._colliderShape._setScale(scale);
+	    }
+	    _onEnable() {
+	        this._simulation = this.owner._scene.physicsSimulation;
+	        Physics3D._bullet.btCollisionObject_setContactProcessingThreshold(this._btColliderObject, 1e30);
+	        if (this._colliderShape) {
+	            this._derivePhysicsTransformation(true);
+	            this._addToSimulation();
+	        }
+	    }
+	    _onDisable() {
+	        if (this._colliderShape) {
+	            this._removeFromSimulation();
+	            (this._inPhysicUpdateListIndex !== -1) && (this._simulation._physicsUpdateList.remove(this));
+	        }
+	        this._simulation = null;
+	    }
+	    _onDestroy() {
+	        delete PhysicsComponent._physicObjectsMap[this.id];
+	        Physics3D._bullet.btCollisionObject_destroy(this._btColliderObject);
+	        this._colliderShape.destroy();
+	        super._onDestroy();
+	        this._btColliderObject = null;
+	        this._colliderShape = null;
+	        this._simulation = null;
+	        this.owner.transform.off(Laya.Event.TRANSFORM_CHANGED, this, this._onTransformChanged);
+	    }
+	    _isValid() {
+	        return this._simulation && this._colliderShape && this._enabled;
+	    }
+	    _parse(data) {
+	        (data.collisionGroup != null) && (this.collisionGroup = data.collisionGroup);
+	        (data.canCollideWith != null) && (this.canCollideWith = data.canCollideWith);
+	        (data.ccdMotionThreshold != null) && (this.ccdMotionThreshold = data.ccdMotionThreshold);
+	        (data.ccdSweptSphereRadius != null) && (this.ccdSweptSphereRadius = data.ccdSweptSphereRadius);
+	    }
+	    _setTransformFlag(type, value) {
+	        if (value)
+	            this._transformFlag |= type;
+	        else
+	            this._transformFlag &= ~type;
+	    }
+	    _getTransformFlag(type) {
+	        return (this._transformFlag & type) != 0;
+	    }
+	    _addToSimulation() {
+	    }
+	    _removeFromSimulation() {
+	    }
+	    _derivePhysicsTransformation(force) {
+	        var bt = Physics3D._bullet;
+	        var btColliderObject = this._btColliderObject;
+	        var btTransform = bt.btCollisionObject_getWorldTransform(btColliderObject);
+	        this._innerDerivePhysicsTransformation(btTransform, force);
+	        bt.btCollisionObject_setWorldTransform(btColliderObject, btTransform);
+	    }
+	    _innerDerivePhysicsTransformation(physicTransformOut, force) {
+	        var bt = Physics3D._bullet;
+	        var transform = this.owner._transform;
+	        if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION)) {
+	            var shapeOffset = this._colliderShape.localOffset;
+	            var position = transform.position;
+	            var btPosition = PhysicsComponent._btVector30;
+	            if (shapeOffset.x !== 0 || shapeOffset.y !== 0 || shapeOffset.z !== 0) {
+	                var physicPosition = PhysicsComponent._tempVector30;
+	                var worldMat = transform.worldMatrix;
+	                Vector3.transformCoordinate(shapeOffset, worldMat, physicPosition);
+	                bt.btVector3_setValue(btPosition, -physicPosition.x, physicPosition.y, physicPosition.z);
+	            }
+	            else {
+	                bt.btVector3_setValue(btPosition, -position.x, position.y, position.z);
+	            }
+	            bt.btTransform_setOrigin(physicTransformOut, btPosition);
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDPOSITION, false);
+	        }
+	        if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION)) {
+	            var shapeRotation = this._colliderShape.localRotation;
+	            var btRotation = PhysicsComponent._btQuaternion0;
+	            var rotation = transform.rotation;
+	            if (shapeRotation.x !== 0 || shapeRotation.y !== 0 || shapeRotation.z !== 0 || shapeRotation.w !== 1) {
+	                var physicRotation = PhysicsComponent._tempQuaternion0;
+	                PhysicsComponent.physicQuaternionMultiply(rotation.x, rotation.y, rotation.z, rotation.w, shapeRotation, physicRotation);
+	                bt.btQuaternion_setValue(btRotation, -physicRotation.x, physicRotation.y, physicRotation.z, -physicRotation.w);
+	            }
+	            else {
+	                bt.btQuaternion_setValue(btRotation, -rotation.x, rotation.y, rotation.z, -rotation.w);
+	            }
+	            bt.btTransform_setRotation(physicTransformOut, btRotation);
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDQUATERNION, false);
+	        }
+	        if (force || this._getTransformFlag(Transform3D.TRANSFORM_WORLDSCALE)) {
+	            this._onScaleChange(transform.getWorldLossyScale());
+	            this._setTransformFlag(Transform3D.TRANSFORM_WORLDSCALE, false);
+	        }
+	    }
+	    _updateTransformComponent(physicsTransform) {
+	        var bt = Physics3D._bullet;
+	        var colliderShape = this._colliderShape;
+	        var localOffset = colliderShape.localOffset;
+	        var localRotation = colliderShape.localRotation;
+	        var transform = this.owner._transform;
+	        var position = transform.position;
+	        var rotation = transform.rotation;
+	        var btPosition = bt.btTransform_getOrigin(physicsTransform);
+	        var btRotation = bt.btTransform_getRotation(physicsTransform);
+	        var btRotX = -bt.btQuaternion_x(btRotation);
+	        var btRotY = bt.btQuaternion_y(btRotation);
+	        var btRotZ = bt.btQuaternion_z(btRotation);
+	        var btRotW = -bt.btQuaternion_w(btRotation);
+	        if (localRotation.x !== 0 || localRotation.y !== 0 || localRotation.z !== 0 || localRotation.w !== 1) {
+	            var invertShapeRotaion = PhysicsComponent._tempQuaternion0;
+	            localRotation.invert(invertShapeRotaion);
+	            PhysicsComponent.physicQuaternionMultiply(btRotX, btRotY, btRotZ, btRotW, invertShapeRotaion, rotation);
+	        }
+	        else {
+	            rotation.x = btRotX;
+	            rotation.y = btRotY;
+	            rotation.z = btRotZ;
+	            rotation.w = btRotW;
+	        }
+	        transform.rotation = rotation;
+	        if (localOffset.x !== 0 || localOffset.y !== 0 || localOffset.z !== 0) {
+	            var btScale = bt.btCollisionShape_getLocalScaling(colliderShape._btShape);
+	            var rotShapePosition = PhysicsComponent._tempVector30;
+	            rotShapePosition.x = localOffset.x * bt.btVector3_x(btScale);
+	            rotShapePosition.y = localOffset.y * bt.btVector3_y(btScale);
+	            rotShapePosition.z = localOffset.z * bt.btVector3_z(btScale);
+	            Vector3.transformQuat(rotShapePosition, rotation, rotShapePosition);
+	            position.x = -bt.btVector3_x(btPosition) - rotShapePosition.x;
+	            position.y = bt.btVector3_y(btPosition) - rotShapePosition.y;
+	            position.z = bt.btVector3_z(btPosition) - rotShapePosition.z;
+	        }
+	        else {
+	            position.x = -bt.btVector3_x(btPosition);
+	            position.y = bt.btVector3_y(btPosition);
+	            position.z = bt.btVector3_z(btPosition);
+	        }
+	        transform.position = position;
+	    }
+	    _onShapeChange(colShape) {
+	        var btColObj = this._btColliderObject;
+	        var bt = Physics3D._bullet;
+	        var flags = bt.btCollisionObject_getCollisionFlags(btColObj);
+	        if (colShape.needsCustomCollisionCallback) {
+	            if ((flags & PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK) === 0)
+	                bt.btCollisionObject_setCollisionFlags(btColObj, flags | PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK);
+	        }
+	        else {
+	            if ((flags & PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK) > 0)
+	                bt.btCollisionObject_setCollisionFlags(btColObj, flags ^ PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK);
+	        }
+	    }
+	    _onAdded() {
+	        this.enabled = this._enabled;
+	        this.restitution = this._restitution;
+	        this.friction = this._friction;
+	        this.rollingFriction = this._rollingFriction;
+	        this.ccdMotionThreshold = this._ccdMotionThreshold;
+	        this.ccdSweptSphereRadius = this._ccdSweptSphereRadius;
+	        this.owner.transform.on(Laya.Event.TRANSFORM_CHANGED, this, this._onTransformChanged);
+	    }
+	    _onTransformChanged(flag) {
+	        if (PhysicsComponent._addUpdateList || !this._controlBySimulation) {
+	            flag &= Transform3D.TRANSFORM_WORLDPOSITION | Transform3D.TRANSFORM_WORLDQUATERNION | Transform3D.TRANSFORM_WORLDSCALE;
+	            if (flag) {
+	                this._transformFlag |= flag;
+	                if (this._isValid() && this._inPhysicUpdateListIndex === -1)
+	                    this._simulation._physicsUpdateList.add(this);
+	            }
+	        }
+	    }
+	    _cloneTo(dest) {
+	        var destPhysicsComponent = dest;
+	        destPhysicsComponent.restitution = this._restitution;
+	        destPhysicsComponent.friction = this._friction;
+	        destPhysicsComponent.rollingFriction = this._rollingFriction;
+	        destPhysicsComponent.ccdMotionThreshold = this._ccdMotionThreshold;
+	        destPhysicsComponent.ccdSweptSphereRadius = this._ccdSweptSphereRadius;
+	        destPhysicsComponent.collisionGroup = this._collisionGroup;
+	        destPhysicsComponent.canCollideWith = this._canCollideWith;
+	        destPhysicsComponent.canScaleShape = this.canScaleShape;
+	        (this._colliderShape) && (destPhysicsComponent.colliderShape = this._colliderShape.clone());
+	    }
+	}
+	PhysicsComponent.ACTIVATIONSTATE_ACTIVE_TAG = 1;
+	PhysicsComponent.ACTIVATIONSTATE_ISLAND_SLEEPING = 2;
+	PhysicsComponent.ACTIVATIONSTATE_WANTS_DEACTIVATION = 3;
+	PhysicsComponent.ACTIVATIONSTATE_DISABLE_DEACTIVATION = 4;
+	PhysicsComponent.ACTIVATIONSTATE_DISABLE_SIMULATION = 5;
+	PhysicsComponent.COLLISIONFLAGS_STATIC_OBJECT = 1;
+	PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT = 2;
+	PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE = 4;
+	PhysicsComponent.COLLISIONFLAGS_CUSTOM_MATERIAL_CALLBACK = 8;
+	PhysicsComponent.COLLISIONFLAGS_CHARACTER_OBJECT = 16;
+	PhysicsComponent.COLLISIONFLAGS_DISABLE_VISUALIZE_OBJECT = 32;
+	PhysicsComponent.COLLISIONFLAGS_DISABLE_SPU_COLLISION_PROCESSING = 64;
+	PhysicsComponent._tempVector30 = new Vector3();
+	PhysicsComponent._tempQuaternion0 = new Quaternion();
+	PhysicsComponent._tempQuaternion1 = new Quaternion();
+	PhysicsComponent._tempMatrix4x40 = new Matrix4x4();
+	PhysicsComponent._physicObjectsMap = {};
+	PhysicsComponent._addUpdateList = true;
+
+	class PhysicsSimulation {
+	    constructor(configuration, flags = 0) {
+	        this._gravity = new Vector3(0, -10, 0);
+	        this._btVector3Zero = Physics3D._bullet.btVector3_create(0, 0, 0);
+	        this._btDefaultQuaternion = Physics3D._bullet.btQuaternion_create(0, 0, 0, -1);
+	        this._collisionsUtils = new CollisionTool();
+	        this._previousFrameCollisions = [];
+	        this._currentFrameCollisions = [];
+	        this._currentConstraint = {};
+	        this._physicsUpdateList = new PhysicsUpdateList();
+	        this._characters = [];
+	        this._updatedRigidbodies = 0;
+	        this.maxSubSteps = 1;
+	        this.fixedTimeStep = 1.0 / 60.0;
+	        this.maxSubSteps = configuration.maxSubSteps;
+	        this.fixedTimeStep = configuration.fixedTimeStep;
+	        var bt = Physics3D._bullet;
+	        this._btCollisionConfiguration = bt.btDefaultCollisionConfiguration_create();
+	        this._btDispatcher = bt.btCollisionDispatcher_create(this._btCollisionConfiguration);
+	        this._btBroadphase = bt.btDbvtBroadphase_create();
+	        bt.btOverlappingPairCache_setInternalGhostPairCallback(bt.btDbvtBroadphase_getOverlappingPairCache(this._btBroadphase), bt.btGhostPairCallback_create());
+	        var conFlags = configuration.flags;
+	        if (conFlags & PhysicsSimulation.PHYSICSENGINEFLAGS_COLLISIONSONLY) {
+	            this._btCollisionWorld = new bt.btCollisionWorld(this._btDispatcher, this._btBroadphase, this._btCollisionConfiguration);
+	        }
+	        else if (conFlags & PhysicsSimulation.PHYSICSENGINEFLAGS_SOFTBODYSUPPORT) {
+	            throw "PhysicsSimulation:SoftBody processing is not yet available";
+	        }
+	        else {
+	            var solver = bt.btSequentialImpulseConstraintSolver_create();
+	            this._btDiscreteDynamicsWorld = bt.btDiscreteDynamicsWorld_create(this._btDispatcher, this._btBroadphase, solver, this._btCollisionConfiguration);
+	            this._btCollisionWorld = this._btDiscreteDynamicsWorld;
+	        }
+	        if (this._btDiscreteDynamicsWorld) {
+	            this._btSolverInfo = bt.btDynamicsWorld_getSolverInfo(this._btDiscreteDynamicsWorld);
+	            this._btDispatchInfo = bt.btCollisionWorld_getDispatchInfo(this._btDiscreteDynamicsWorld);
+	        }
+	        this._btClosestRayResultCallback = bt.ClosestRayResultCallback_create(this._btVector3Zero, this._btVector3Zero);
+	        this._btAllHitsRayResultCallback = bt.AllHitsRayResultCallback_create(this._btVector3Zero, this._btVector3Zero);
+	        this._btClosestConvexResultCallback = bt.ClosestConvexResultCallback_create(this._btVector3Zero, this._btVector3Zero);
+	        this._btAllConvexResultCallback = bt.AllConvexResultCallback_create(this._btVector3Zero, this._btVector3Zero);
+	        bt.btGImpactCollisionAlgorithm_RegisterAlgorithm(this._btDispatcher);
+	    }
+	    static __init__() {
+	        var bt = Physics3D._bullet;
+	        PhysicsSimulation._btTempVector30 = bt.btVector3_create(0, 0, 0);
+	        PhysicsSimulation._btTempVector31 = bt.btVector3_create(0, 0, 0);
+	        PhysicsSimulation._btTempQuaternion0 = bt.btQuaternion_create(0, 0, 0, 1);
+	        PhysicsSimulation._btTempQuaternion1 = bt.btQuaternion_create(0, 0, 0, 1);
+	        PhysicsSimulation._btTempTransform0 = bt.btTransform_create();
+	        PhysicsSimulation._btTempTransform1 = bt.btTransform_create();
+	    }
+	    static createConstraint() {
+	    }
+	    get continuousCollisionDetection() {
+	        return Physics3D._bullet.btCollisionWorld_get_m_useContinuous(this._btDispatchInfo);
+	    }
+	    set continuousCollisionDetection(value) {
+	        Physics3D._bullet.btCollisionWorld_set_m_useContinuous(this._btDispatchInfo, value);
+	    }
+	    get gravity() {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        return this._gravity;
+	    }
+	    set gravity(value) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        this._gravity = value;
+	        var bt = Physics3D._bullet;
+	        var btGravity = PhysicsSimulation._btTempVector30;
+	        bt.btVector3_setValue(btGravity, -value.x, value.y, value.z);
+	        bt.btDiscreteDynamicsWorld_setGravity(this._btDiscreteDynamicsWorld, btGravity);
+	    }
+	    get speculativeContactRestitution() {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        return Physics3D._bullet.btDiscreteDynamicsWorld_getApplySpeculativeContactRestitution(this._btDiscreteDynamicsWorld);
+	    }
+	    set speculativeContactRestitution(value) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        Physics3D._bullet.btDiscreteDynamicsWorld_setApplySpeculativeContactRestitution(this._btDiscreteDynamicsWorld, value);
+	    }
+	    _simulate(deltaTime) {
+	        this._updatedRigidbodies = 0;
+	        var bt = Physics3D._bullet;
+	        if (this._btDiscreteDynamicsWorld)
+	            bt.btDiscreteDynamicsWorld_stepSimulation(this._btDiscreteDynamicsWorld, deltaTime, this.maxSubSteps, this.fixedTimeStep);
+	        else
+	            bt.PerformDiscreteCollisionDetection(this._btCollisionWorld);
+	    }
+	    _destroy() {
+	        var bt = Physics3D._bullet;
+	        if (this._btDiscreteDynamicsWorld) {
+	            bt.btCollisionWorld_destroy(this._btDiscreteDynamicsWorld);
+	            this._btDiscreteDynamicsWorld = null;
+	        }
+	        else {
+	            bt.btCollisionWorld_destroy(this._btCollisionWorld);
+	            this._btCollisionWorld = null;
+	        }
+	        bt.btDbvtBroadphase_destroy(this._btBroadphase);
+	        this._btBroadphase = null;
+	        bt.btCollisionDispatcher_destroy(this._btDispatcher);
+	        this._btDispatcher = null;
+	        bt.btDefaultCollisionConfiguration_destroy(this._btCollisionConfiguration);
+	        this._btCollisionConfiguration = null;
+	    }
+	    _addPhysicsCollider(component, group, mask) {
+	        Physics3D._bullet.btCollisionWorld_addCollisionObject(this._btCollisionWorld, component._btColliderObject, group, mask);
+	    }
+	    _removePhysicsCollider(component) {
+	        Physics3D._bullet.btCollisionWorld_removeCollisionObject(this._btCollisionWorld, component._btColliderObject);
+	    }
+	    _addRigidBody(rigidBody, group, mask) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        Physics3D._bullet.btDiscreteDynamicsWorld_addRigidBody(this._btCollisionWorld, rigidBody._btColliderObject, group, mask);
+	    }
+	    _removeRigidBody(rigidBody) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        Physics3D._bullet.btDiscreteDynamicsWorld_removeRigidBody(this._btCollisionWorld, rigidBody._btColliderObject);
+	    }
+	    _addCharacter(character, group, mask) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        var bt = Physics3D._bullet;
+	        bt.btCollisionWorld_addCollisionObject(this._btCollisionWorld, character._btColliderObject, group, mask);
+	        bt.btDynamicsWorld_addAction(this._btCollisionWorld, character._btKinematicCharacter);
+	    }
+	    _removeCharacter(character) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Simulation:Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        var bt = Physics3D._bullet;
+	        bt.btCollisionWorld_removeCollisionObject(this._btCollisionWorld, character._btColliderObject);
+	        bt.btDynamicsWorld_removeAction(this._btCollisionWorld, character._btKinematicCharacter);
+	    }
+	    raycastFromTo(from, to, out = null, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
+	        var bt = Physics3D._bullet;
+	        var rayResultCall = this._btClosestRayResultCallback;
+	        var rayFrom = PhysicsSimulation._btTempVector30;
+	        var rayTo = PhysicsSimulation._btTempVector31;
+	        bt.btVector3_setValue(rayFrom, -from.x, from.y, from.z);
+	        bt.btVector3_setValue(rayTo, -to.x, to.y, to.z);
+	        bt.ClosestRayResultCallback_set_m_rayFromWorld(rayResultCall, rayFrom);
+	        bt.ClosestRayResultCallback_set_m_rayToWorld(rayResultCall, rayTo);
+	        bt.RayResultCallback_set_m_collisionFilterGroup(rayResultCall, collisonGroup);
+	        bt.RayResultCallback_set_m_collisionFilterMask(rayResultCall, collisionMask);
+	        bt.RayResultCallback_set_m_collisionObject(rayResultCall, null);
+	        bt.RayResultCallback_set_m_closestHitFraction(rayResultCall, 1);
+	        bt.btCollisionWorld_rayTest(this._btCollisionWorld, rayFrom, rayTo, rayResultCall);
+	        if (bt.RayResultCallback_hasHit(rayResultCall)) {
+	            if (out) {
+	                out.succeeded = true;
+	                out.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.RayResultCallback_get_m_collisionObject(rayResultCall))];
+	                out.hitFraction = bt.RayResultCallback_get_m_closestHitFraction(rayResultCall);
+	                var btPoint = bt.ClosestRayResultCallback_get_m_hitPointWorld(rayResultCall);
+	                var point = out.point;
+	                point.x = -bt.btVector3_x(btPoint);
+	                point.y = bt.btVector3_y(btPoint);
+	                point.z = bt.btVector3_z(btPoint);
+	                var btNormal = bt.ClosestRayResultCallback_get_m_hitNormalWorld(rayResultCall);
+	                var normal = out.normal;
+	                normal.x = -bt.btVector3_x(btNormal);
+	                normal.y = bt.btVector3_y(btNormal);
+	                normal.z = bt.btVector3_z(btNormal);
+	            }
+	            return true;
+	        }
+	        else {
+	            if (out)
+	                out.succeeded = false;
+	            return false;
+	        }
+	    }
+	    raycastAllFromTo(from, to, out, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
+	        var bt = Physics3D._bullet;
+	        var rayResultCall = this._btAllHitsRayResultCallback;
+	        var rayFrom = PhysicsSimulation._btTempVector30;
+	        var rayTo = PhysicsSimulation._btTempVector31;
+	        out.length = 0;
+	        bt.btVector3_setValue(rayFrom, -from.x, from.y, from.z);
+	        bt.btVector3_setValue(rayTo, -to.x, to.y, to.z);
+	        bt.AllHitsRayResultCallback_set_m_rayFromWorld(rayResultCall, rayFrom);
+	        bt.AllHitsRayResultCallback_set_m_rayToWorld(rayResultCall, rayTo);
+	        bt.RayResultCallback_set_m_collisionFilterGroup(rayResultCall, collisonGroup);
+	        bt.RayResultCallback_set_m_collisionFilterMask(rayResultCall, collisionMask);
+	        var collisionObjects = bt.AllHitsRayResultCallback_get_m_collisionObjects(rayResultCall);
+	        var btPoints = bt.AllHitsRayResultCallback_get_m_hitPointWorld(rayResultCall);
+	        var btNormals = bt.AllHitsRayResultCallback_get_m_hitNormalWorld(rayResultCall);
+	        var btFractions = bt.AllHitsRayResultCallback_get_m_hitFractions(rayResultCall);
+	        bt.tBtCollisionObjectArray_clear(collisionObjects);
+	        bt.tVector3Array_clear(btPoints);
+	        bt.tVector3Array_clear(btNormals);
+	        bt.tScalarArray_clear(btFractions);
+	        bt.btCollisionWorld_rayTest(this._btCollisionWorld, rayFrom, rayTo, rayResultCall);
+	        var count = bt.tBtCollisionObjectArray_size(collisionObjects);
+	        if (count > 0) {
+	            this._collisionsUtils.recoverAllHitResultsPool();
+	            for (var i = 0; i < count; i++) {
+	                var hitResult = this._collisionsUtils.getHitResult();
+	                out.push(hitResult);
+	                hitResult.succeeded = true;
+	                hitResult.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.tBtCollisionObjectArray_at(collisionObjects, i))];
+	                hitResult.hitFraction = bt.tScalarArray_at(btFractions, i);
+	                var btPoint = bt.tVector3Array_at(btPoints, i);
+	                var pointE = hitResult.point;
+	                pointE.x = -bt.btVector3_x(btPoint);
+	                pointE.y = bt.btVector3_y(btPoint);
+	                pointE.z = bt.btVector3_z(btPoint);
+	                var btNormal = bt.tVector3Array_at(btNormals, i);
+	                var normal = hitResult.normal;
+	                normal.x = -bt.btVector3_x(btNormal);
+	                normal.y = bt.btVector3_y(btNormal);
+	                normal.z = bt.btVector3_z(btNormal);
+	            }
+	            return true;
+	        }
+	        else {
+	            return false;
+	        }
+	    }
+	    rayCast(ray, outHitResult = null, distance = 2147483647, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
+	        var from = ray.origin;
+	        var to = PhysicsSimulation._tempVector30;
+	        Vector3.normalize(ray.direction, to);
+	        Vector3.scale(to, distance, to);
+	        Vector3.add(from, to, to);
+	        return this.raycastFromTo(from, to, outHitResult, collisonGroup, collisionMask);
+	    }
+	    rayCastAll(ray, out, distance = 2147483647, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
+	        var from = ray.origin;
+	        var to = PhysicsSimulation._tempVector30;
+	        Vector3.normalize(ray.direction, to);
+	        Vector3.scale(to, distance, to);
+	        Vector3.add(from, to, to);
+	        return this.raycastAllFromTo(from, to, out, collisonGroup, collisionMask);
+	    }
+	    shapeCast(shape, fromPosition, toPosition, out = null, fromRotation = null, toRotation = null, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, allowedCcdPenetration = 0.0) {
+	        var bt = Physics3D._bullet;
+	        var convexResultCall = this._btClosestConvexResultCallback;
+	        var convexPosFrom = PhysicsSimulation._btTempVector30;
+	        var convexPosTo = PhysicsSimulation._btTempVector31;
+	        var convexRotFrom = PhysicsSimulation._btTempQuaternion0;
+	        var convexRotTo = PhysicsSimulation._btTempQuaternion1;
+	        var convexTransform = PhysicsSimulation._btTempTransform0;
+	        var convexTransTo = PhysicsSimulation._btTempTransform1;
+	        var sweepShape = shape._btShape;
+	        bt.btVector3_setValue(convexPosFrom, -fromPosition.x, fromPosition.y, fromPosition.z);
+	        bt.btVector3_setValue(convexPosTo, -toPosition.x, toPosition.y, toPosition.z);
+	        bt.ConvexResultCallback_set_m_collisionFilterGroup(convexResultCall, collisonGroup);
+	        bt.ConvexResultCallback_set_m_collisionFilterMask(convexResultCall, collisionMask);
+	        bt.btTransform_setOrigin(convexTransform, convexPosFrom);
+	        bt.btTransform_setOrigin(convexTransTo, convexPosTo);
+	        if (fromRotation) {
+	            bt.btQuaternion_setValue(convexRotFrom, -fromRotation.x, fromRotation.y, fromRotation.z, -fromRotation.w);
+	            bt.btTransform_setRotation(convexTransform, convexRotFrom);
+	        }
+	        else {
+	            bt.btTransform_setRotation(convexTransform, this._btDefaultQuaternion);
+	        }
+	        if (toRotation) {
+	            bt.btQuaternion_setValue(convexRotTo, -toRotation.x, toRotation.y, toRotation.z, -toRotation.w);
+	            bt.btTransform_setRotation(convexTransTo, convexRotTo);
+	        }
+	        else {
+	            bt.btTransform_setRotation(convexTransTo, this._btDefaultQuaternion);
+	        }
+	        bt.ClosestConvexResultCallback_set_m_hitCollisionObject(convexResultCall, null);
+	        bt.ConvexResultCallback_set_m_closestHitFraction(convexResultCall, 1);
+	        bt.btCollisionWorld_convexSweepTest(this._btCollisionWorld, sweepShape, convexTransform, convexTransTo, convexResultCall, allowedCcdPenetration);
+	        if (bt.ConvexResultCallback_hasHit(convexResultCall)) {
+	            if (out) {
+	                out.succeeded = true;
+	                out.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.ClosestConvexResultCallback_get_m_hitCollisionObject(convexResultCall))];
+	                out.hitFraction = bt.ConvexResultCallback_get_m_closestHitFraction(convexResultCall);
+	                var btPoint = bt.ClosestConvexResultCallback_get_m_hitPointWorld(convexResultCall);
+	                var btNormal = bt.ClosestConvexResultCallback_get_m_hitNormalWorld(convexResultCall);
+	                var point = out.point;
+	                var normal = out.normal;
+	                point.x = -bt.btVector3_x(btPoint);
+	                point.y = bt.btVector3_y(btPoint);
+	                point.z = bt.btVector3_z(btPoint);
+	                normal.x = -bt.btVector3_x(btNormal);
+	                normal.y = bt.btVector3_y(btNormal);
+	                normal.z = bt.btVector3_z(btNormal);
+	            }
+	            return true;
+	        }
+	        else {
+	            if (out)
+	                out.succeeded = false;
+	            return false;
+	        }
+	    }
+	    shapeCastAll(shape, fromPosition, toPosition, out, fromRotation = null, toRotation = null, collisonGroup = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, collisionMask = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER, allowedCcdPenetration = 0.0) {
+	        var bt = Physics3D._bullet;
+	        var convexResultCall = this._btAllConvexResultCallback;
+	        var convexPosFrom = PhysicsSimulation._btTempVector30;
+	        var convexPosTo = PhysicsSimulation._btTempVector31;
+	        var convexRotFrom = PhysicsSimulation._btTempQuaternion0;
+	        var convexRotTo = PhysicsSimulation._btTempQuaternion1;
+	        var convexTransform = PhysicsSimulation._btTempTransform0;
+	        var convexTransTo = PhysicsSimulation._btTempTransform1;
+	        var sweepShape = shape._btShape;
+	        out.length = 0;
+	        bt.btVector3_setValue(convexPosFrom, -fromPosition.x, fromPosition.y, fromPosition.z);
+	        bt.btVector3_setValue(convexPosTo, -toPosition.x, toPosition.y, toPosition.z);
+	        bt.ConvexResultCallback_set_m_collisionFilterGroup(convexResultCall, collisonGroup);
+	        bt.ConvexResultCallback_set_m_collisionFilterMask(convexResultCall, collisionMask);
+	        bt.btTransform_setOrigin(convexTransform, convexPosFrom);
+	        bt.btTransform_setOrigin(convexTransTo, convexPosTo);
+	        if (fromRotation) {
+	            bt.btQuaternion_setValue(convexRotFrom, -fromRotation.x, fromRotation.y, fromRotation.z, -fromRotation.w);
+	            bt.btTransform_setRotation(convexTransform, convexRotFrom);
+	        }
+	        else {
+	            bt.btTransform_setRotation(convexTransform, this._btDefaultQuaternion);
+	        }
+	        if (toRotation) {
+	            bt.btQuaternion_setValue(convexRotTo, -toRotation.x, toRotation.y, toRotation.z, -toRotation.w);
+	            bt.btTransform_setRotation(convexTransTo, convexRotTo);
+	        }
+	        else {
+	            bt.btTransform_setRotation(convexTransTo, this._btDefaultQuaternion);
+	        }
+	        var collisionObjects = bt.AllConvexResultCallback_get_m_collisionObjects(convexResultCall);
+	        bt.tBtCollisionObjectArray_clear(collisionObjects);
+	        bt.btCollisionWorld_convexSweepTest(this._btCollisionWorld, sweepShape, convexTransform, convexTransTo, convexResultCall, allowedCcdPenetration);
+	        var count = bt.tBtCollisionObjectArray_size(collisionObjects);
+	        if (count > 0) {
+	            this._collisionsUtils.recoverAllHitResultsPool();
+	            var btPoints = bt.AllConvexResultCallback_get_m_hitPointWorld(convexResultCall);
+	            var btNormals = bt.AllConvexResultCallback_get_m_hitNormalWorld(convexResultCall);
+	            var btFractions = bt.AllConvexResultCallback_get_m_hitFractions(convexResultCall);
+	            for (var i = 0; i < count; i++) {
+	                var hitResult = this._collisionsUtils.getHitResult();
+	                out.push(hitResult);
+	                hitResult.succeeded = true;
+	                hitResult.collider = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.tBtCollisionObjectArray_at(collisionObjects, i))];
+	                hitResult.hitFraction = bt.tScalarArray_at(btFractions, i);
+	                var btPoint = bt.tVector3Array_at(btPoints, i);
+	                var point = hitResult.point;
+	                point.x = -bt.btVector3_x(btPoint);
+	                point.y = bt.btVector3_y(btPoint);
+	                point.z = bt.btVector3_z(btPoint);
+	                var btNormal = bt.tVector3Array_at(btNormals, i);
+	                var normal = hitResult.normal;
+	                normal.x = -bt.btVector3_x(btNormal);
+	                normal.y = bt.btVector3_y(btNormal);
+	                normal.z = bt.btVector3_z(btNormal);
+	            }
+	            return true;
+	        }
+	        else {
+	            return false;
+	        }
+	    }
+	    addConstraint(constraint, disableCollisionsBetweenLinkedBodies = false) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        Physics3D._bullet.btCollisionWorld_addConstraint(this._btDiscreteDynamicsWorld, constraint._btConstraint, disableCollisionsBetweenLinkedBodies);
+	        this._currentConstraint[constraint.id] = constraint;
+	    }
+	    removeConstraint(constraint) {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        Physics3D._bullet.btCollisionWorld_removeConstraint(this._btDiscreteDynamicsWorld, constraint._btConstraint);
+	        delete this._currentConstraint[constraint.id];
+	    }
+	    _updatePhysicsTransformFromRender() {
+	        var elements = this._physicsUpdateList.elements;
+	        for (var i = 0, n = this._physicsUpdateList.length; i < n; i++) {
+	            var physicCollider = elements[i];
+	            physicCollider._derivePhysicsTransformation(false);
+	            physicCollider._inPhysicUpdateListIndex = -1;
+	        }
+	        this._physicsUpdateList.length = 0;
+	    }
+	    _updateCharacters() {
+	        for (var i = 0, n = this._characters.length; i < n; i++) {
+	            var character = this._characters[i];
+	            character._updateTransformComponent(Physics3D._bullet.btCollisionObject_getWorldTransform(character._btColliderObject));
+	        }
+	    }
+	    _updateCollisions() {
+	        this._collisionsUtils.recoverAllContactPointsPool();
+	        var previous = this._currentFrameCollisions;
+	        this._currentFrameCollisions = this._previousFrameCollisions;
+	        this._currentFrameCollisions.length = 0;
+	        this._previousFrameCollisions = previous;
+	        var loopCount = Laya.Stat.loopCount;
+	        var bt = Physics3D._bullet;
+	        var numManifolds = bt.btDispatcher_getNumManifolds(this._btDispatcher);
+	        for (var i = 0; i < numManifolds; i++) {
+	            var contactManifold = bt.btDispatcher_getManifoldByIndexInternal(this._btDispatcher, i);
+	            var componentA = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.btPersistentManifold_getBody0(contactManifold))];
+	            var componentB = PhysicsComponent._physicObjectsMap[bt.btCollisionObject_getUserIndex(bt.btPersistentManifold_getBody1(contactManifold))];
+	            var collision = null;
+	            var isFirstCollision;
+	            var contacts = null;
+	            var isTrigger = componentA.isTrigger || componentB.isTrigger;
+	            if (isTrigger && (componentA.owner._needProcessTriggers || componentB.owner._needProcessTriggers)) {
+	                var numContacts = bt.btPersistentManifold_getNumContacts(contactManifold);
+	                for (var j = 0; j < numContacts; j++) {
+	                    var pt = bt.btPersistentManifold_getContactPoint(contactManifold, j);
+	                    var distance = bt.btManifoldPoint_getDistance(pt);
+	                    if (distance <= 0) {
+	                        collision = this._collisionsUtils.getCollision(componentA, componentB);
+	                        contacts = collision.contacts;
+	                        isFirstCollision = collision._updateFrame !== loopCount;
+	                        if (isFirstCollision) {
+	                            collision._isTrigger = true;
+	                            contacts.length = 0;
+	                        }
+	                        break;
+	                    }
+	                }
+	            }
+	            else if (componentA.owner._needProcessCollisions || componentB.owner._needProcessCollisions) {
+	                if (componentA._enableProcessCollisions || componentB._enableProcessCollisions) {
+	                    numContacts = bt.btPersistentManifold_getNumContacts(contactManifold);
+	                    for (j = 0; j < numContacts; j++) {
+	                        pt = bt.btPersistentManifold_getContactPoint(contactManifold, j);
+	                        distance = bt.btManifoldPoint_getDistance(pt);
+	                        if (distance <= 0) {
+	                            var contactPoint = this._collisionsUtils.getContactPoints();
+	                            contactPoint.colliderA = componentA;
+	                            contactPoint.colliderB = componentB;
+	                            contactPoint.distance = distance;
+	                            var btNormal = bt.btManifoldPoint_get_m_normalWorldOnB(pt);
+	                            var normal = contactPoint.normal;
+	                            normal.x = -bt.btVector3_x(btNormal);
+	                            normal.y = bt.btVector3_y(btNormal);
+	                            normal.z = bt.btVector3_z(btNormal);
+	                            var btPostionA = bt.btManifoldPoint_get_m_positionWorldOnA(pt);
+	                            var positionOnA = contactPoint.positionOnA;
+	                            positionOnA.x = -bt.btVector3_x(btPostionA);
+	                            positionOnA.y = bt.btVector3_y(btPostionA);
+	                            positionOnA.z = bt.btVector3_z(btPostionA);
+	                            var btPostionB = bt.btManifoldPoint_get_m_positionWorldOnB(pt);
+	                            var positionOnB = contactPoint.positionOnB;
+	                            positionOnB.x = -bt.btVector3_x(btPostionB);
+	                            positionOnB.y = bt.btVector3_y(btPostionB);
+	                            positionOnB.z = bt.btVector3_z(btPostionB);
+	                            if (!collision) {
+	                                collision = this._collisionsUtils.getCollision(componentA, componentB);
+	                                contacts = collision.contacts;
+	                                isFirstCollision = collision._updateFrame !== loopCount;
+	                                if (isFirstCollision) {
+	                                    collision._isTrigger = false;
+	                                    contacts.length = 0;
+	                                }
+	                            }
+	                            contacts.push(contactPoint);
+	                        }
+	                    }
+	                }
+	            }
+	            if (collision && isFirstCollision) {
+	                this._currentFrameCollisions.push(collision);
+	                collision._setUpdateFrame(loopCount);
+	            }
+	        }
+	    }
+	    _eventScripts() {
+	        var loopCount = Laya.Stat.loopCount;
+	        for (var i = 0, n = this._currentFrameCollisions.length; i < n; i++) {
+	            var curFrameCol = this._currentFrameCollisions[i];
+	            var colliderA = curFrameCol._colliderA;
+	            var colliderB = curFrameCol._colliderB;
+	            if (colliderA.destroyed || colliderB.destroyed)
+	                continue;
+	            if (loopCount - curFrameCol._lastUpdateFrame === 1) {
+	                var ownerA = colliderA.owner;
+	                var scriptsA = ownerA._scripts;
+	                if (scriptsA) {
+	                    if (curFrameCol._isTrigger) {
+	                        if (ownerA._needProcessTriggers) {
+	                            for (var j = 0, m = scriptsA.length; j < m; j++)
+	                                scriptsA[j].onTriggerStay(colliderB);
+	                        }
+	                    }
+	                    else {
+	                        if (ownerA._needProcessCollisions) {
+	                            for (j = 0, m = scriptsA.length; j < m; j++) {
+	                                curFrameCol.other = colliderB;
+	                                scriptsA[j].onCollisionStay(curFrameCol);
+	                            }
+	                        }
+	                    }
+	                }
+	                var ownerB = colliderB.owner;
+	                var scriptsB = ownerB._scripts;
+	                if (scriptsB) {
+	                    if (curFrameCol._isTrigger) {
+	                        if (ownerB._needProcessTriggers) {
+	                            for (j = 0, m = scriptsB.length; j < m; j++)
+	                                scriptsB[j].onTriggerStay(colliderA);
+	                        }
+	                    }
+	                    else {
+	                        if (ownerB._needProcessCollisions) {
+	                            for (j = 0, m = scriptsB.length; j < m; j++) {
+	                                curFrameCol.other = colliderA;
+	                                scriptsB[j].onCollisionStay(curFrameCol);
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            else {
+	                ownerA = colliderA.owner;
+	                scriptsA = ownerA._scripts;
+	                if (scriptsA) {
+	                    if (curFrameCol._isTrigger) {
+	                        if (ownerA._needProcessTriggers) {
+	                            for (j = 0, m = scriptsA.length; j < m; j++)
+	                                scriptsA[j].onTriggerEnter(colliderB);
+	                        }
+	                    }
+	                    else {
+	                        if (ownerA._needProcessCollisions) {
+	                            for (j = 0, m = scriptsA.length; j < m; j++) {
+	                                curFrameCol.other = colliderB;
+	                                scriptsA[j].onCollisionEnter(curFrameCol);
+	                            }
+	                        }
+	                    }
+	                }
+	                ownerB = colliderB.owner;
+	                scriptsB = ownerB._scripts;
+	                if (scriptsB) {
+	                    if (curFrameCol._isTrigger) {
+	                        if (ownerB._needProcessTriggers) {
+	                            for (j = 0, m = scriptsB.length; j < m; j++)
+	                                scriptsB[j].onTriggerEnter(colliderA);
+	                        }
+	                    }
+	                    else {
+	                        if (ownerB._needProcessCollisions) {
+	                            for (j = 0, m = scriptsB.length; j < m; j++) {
+	                                curFrameCol.other = colliderA;
+	                                scriptsB[j].onCollisionEnter(curFrameCol);
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	        for (i = 0, n = this._previousFrameCollisions.length; i < n; i++) {
+	            var preFrameCol = this._previousFrameCollisions[i];
+	            var preColliderA = preFrameCol._colliderA;
+	            var preColliderB = preFrameCol._colliderB;
+	            if (preColliderA.destroyed || preColliderB.destroyed)
+	                continue;
+	            if (loopCount - preFrameCol._updateFrame === 1) {
+	                this._collisionsUtils.recoverCollision(preFrameCol);
+	                ownerA = preColliderA.owner;
+	                scriptsA = ownerA._scripts;
+	                if (scriptsA) {
+	                    if (preFrameCol._isTrigger) {
+	                        if (ownerA._needProcessTriggers) {
+	                            for (j = 0, m = scriptsA.length; j < m; j++)
+	                                scriptsA[j].onTriggerExit(preColliderB);
+	                        }
+	                    }
+	                    else {
+	                        if (ownerA._needProcessCollisions) {
+	                            for (j = 0, m = scriptsA.length; j < m; j++) {
+	                                preFrameCol.other = preColliderB;
+	                                scriptsA[j].onCollisionExit(preFrameCol);
+	                            }
+	                        }
+	                    }
+	                }
+	                ownerB = preColliderB.owner;
+	                scriptsB = ownerB._scripts;
+	                if (scriptsB) {
+	                    if (preFrameCol._isTrigger) {
+	                        if (ownerB._needProcessTriggers) {
+	                            for (j = 0, m = scriptsB.length; j < m; j++)
+	                                scriptsB[j].onTriggerExit(preColliderA);
+	                        }
+	                    }
+	                    else {
+	                        if (ownerB._needProcessCollisions) {
+	                            for (j = 0, m = scriptsB.length; j < m; j++) {
+	                                preFrameCol.other = preColliderA;
+	                                scriptsB[j].onCollisionExit(preFrameCol);
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	        for (var id in this._currentConstraint) {
+	            var constraintObj = this._currentConstraint[id];
+	            var scripts = constraintObj.owner._scripts;
+	            if (constraintObj.enabled && constraintObj._isBreakConstrained()) {
+	                for (i = 0, n = scripts.length; i < n; i++) {
+	                    scripts[i].onJointBreak();
+	                }
+	            }
+	        }
+	    }
+	    clearForces() {
+	        if (!this._btDiscreteDynamicsWorld)
+	            throw "Cannot perform this action when the physics engine is set to CollisionsOnly";
+	        Physics3D._bullet.btDiscreteDynamicsWorld_clearForces(this._btDiscreteDynamicsWorld);
+	    }
+	}
+	PhysicsSimulation.PHYSICSENGINEFLAGS_NONE = 0x0;
+	PhysicsSimulation.PHYSICSENGINEFLAGS_COLLISIONSONLY = 0x1;
+	PhysicsSimulation.PHYSICSENGINEFLAGS_SOFTBODYSUPPORT = 0x2;
+	PhysicsSimulation.PHYSICSENGINEFLAGS_MULTITHREADED = 0x4;
+	PhysicsSimulation.PHYSICSENGINEFLAGS_USEHARDWAREWHENPOSSIBLE = 0x8;
+	PhysicsSimulation.SOLVERMODE_RANDMIZE_ORDER = 1;
+	PhysicsSimulation.SOLVERMODE_FRICTION_SEPARATE = 2;
+	PhysicsSimulation.SOLVERMODE_USE_WARMSTARTING = 4;
+	PhysicsSimulation.SOLVERMODE_USE_2_FRICTION_DIRECTIONS = 16;
+	PhysicsSimulation.SOLVERMODE_ENABLE_FRICTION_DIRECTION_CACHING = 32;
+	PhysicsSimulation.SOLVERMODE_DISABLE_VELOCITY_DEPENDENT_FRICTION_DIRECTION = 64;
+	PhysicsSimulation.SOLVERMODE_CACHE_FRIENDLY = 128;
+	PhysicsSimulation.SOLVERMODE_SIMD = 256;
+	PhysicsSimulation.SOLVERMODE_INTERLEAVE_CONTACT_AND_FRICTION_CONSTRAINTS = 512;
+	PhysicsSimulation.SOLVERMODE_ALLOW_ZERO_LENGTH_FRICTION_DIRECTIONS = 1024;
+	PhysicsSimulation._tempVector30 = new Vector3();
+	PhysicsSimulation.disableSimulation = false;
+
 	class Input3D {
 	    constructor() {
 	        this._eventList = [];
@@ -15884,12 +15534,8 @@
 	    set multiTouchEnabled(value) {
 	        this._multiTouchEnabled = value;
 	    }
-	    _getTouch(touchID, type) {
+	    _getTouch(touchID) {
 	        var touch = this._touchPool[touchID];
-	        if ((type == 0 && touch && touch._getIndexInList() != -1))
-	            return null;
-	        if (type == 1 && touch && (touch._getIndexInList() == -1))
-	            return null;
 	        if (!touch) {
 	            touch = new Touch();
 	            this._touchPool[touchID] = touch;
@@ -15985,8 +15631,8 @@
 	            var identifier = nativeTouch.identifier;
 	            if (!this._multiTouchEnabled && identifier !== 0)
 	                continue;
-	            var touch = this._getTouch(identifier, flag);
-	            var pos = this._touchPool[identifier]._position;
+	            var touch = this._getTouch(identifier);
+	            var pos = touch._position;
 	            var mousePoint = Input3D._tempPoint;
 	            mousePoint.setTo(nativeTouch.pageX, nativeTouch.pageY);
 	            Laya.ILaya.stage._canvasTransform.invertTransformPoint(mousePoint);
@@ -15994,14 +15640,12 @@
 	            var posY = mousePoint.y;
 	            switch (flag) {
 	                case 0:
-	                    if (!!touch)
-	                        this._touches.add(touch);
+	                    this._touches.add(touch);
 	                    offsetX += posX;
 	                    offsetY += posY;
 	                    break;
 	                case 1:
-	                    if (!!touch)
-	                        this._touches.remove(touch);
+	                    this._touches.remove(touch);
 	                    offsetX -= posX;
 	                    offsetY -= posY;
 	                    break;
@@ -16051,7 +15695,7 @@
 	                        var lastLength = this._touches.length;
 	                        this._changeTouches(e.changedTouches, 0);
 	                        if (enablePhysics) {
-	                            (!Config3D._config.isUseCannonPhysicsEngine) && (this._mouseTouchRayCast(cameras));
+	                            rayCast = true;
 	                            (lastLength === 0) && (this._mouseTouchDown());
 	                        }
 	                        break;
@@ -16068,7 +15712,7 @@
 	                        throw "Input3D:unkonwn event type.";
 	                }
 	            }
-	            (rayCast) && (!Config3D._config.isUseCannonPhysicsEngine) && (this._mouseTouchRayCast(cameras));
+	            (rayCast) && (this._mouseTouchRayCast(cameras));
 	            this._eventList.length = 0;
 	        }
 	        if (enablePhysics) {
@@ -16459,12 +16103,6 @@
 	            }
 	        }
 	        return maxIntIndex;
-	    }
-	    normalLightOrdering(brightestIndex) {
-	        var slements = this._elements;
-	        var firstLight = this._elements[0];
-	        this._elements[0] = this._elements[brightestIndex];
-	        this._elements[brightestIndex] = firstLight;
 	    }
 	}
 	class AlternateLightQueue extends LightQueue {
@@ -17076,14 +16714,11 @@
 	        this.maxInstanceCount = 1024;
 	        this.instanceWorldMatrixData = new Float32Array(this.maxInstanceCount * 16);
 	        this.instanceMVPMatrixData = new Float32Array(this.maxInstanceCount * 16);
-	        this.instanceSimpleAnimatorData = new Float32Array(this.maxInstanceCount * 4);
 	        var gl = Laya.LayaGL.instance;
 	        this.instanceWorldMatrixBuffer = new VertexBuffer3D(this.instanceWorldMatrixData.length * 4, gl.DYNAMIC_DRAW);
 	        this.instanceMVPMatrixBuffer = new VertexBuffer3D(this.instanceMVPMatrixData.length * 4, gl.DYNAMIC_DRAW);
 	        this.instanceWorldMatrixBuffer.vertexDeclaration = VertexMesh.instanceWorldMatrixDeclaration;
 	        this.instanceMVPMatrixBuffer.vertexDeclaration = VertexMesh.instanceMVPMatrixDeclaration;
-	        this.instanceSimpleAnimatorBuffer = new VertexBuffer3D(this.instanceSimpleAnimatorData.length * 4, gl.DYNAMIC_DRAW);
-	        this.instanceSimpleAnimatorBuffer.vertexDeclaration = VertexMesh.instanceSimpleAnimatorDeclaration;
 	    }
 	    static __init__() {
 	        SubMeshInstanceBatch.instance = new SubMeshInstanceBatch();
@@ -17236,7 +16871,7 @@
 	                shaderIns._uploadMark = updateMark;
 	            }
 	        }
-	        if (this.renderType !== RenderElement.RENDERTYPE_NORMAL)
+	        if (updateRender && this.renderType !== RenderElement.RENDERTYPE_NORMAL)
 	            this.render._revertBatchRenderUpdate(context);
 	    }
 	    destroy() {
@@ -17523,7 +17158,7 @@
 	            var dynLastElement = queue.lastTransparentRenderElement;
 	            if (dynLastElement) {
 	                var dynLastRender = dynLastElement.render;
-	                if (!dynLastElement._dynamicVertexBatch || dynLastElement._geometry._getType() !== this._geometry._getType() || dynLastElement._geometry._vertexBuffer._vertexDeclaration !== verDec || dynLastElement.material !== this.material || dynLastRender.receiveShadow !== this.render.receiveShadow || dynLastRender.lightmapIndex !== this.render.lightmapIndex) {
+	                if (dynLastElement._geometry._getType() !== this._geometry._getType() || dynLastElement._geometry._vertexBuffer._vertexDeclaration !== verDec || dynLastElement.material !== this.material || dynLastRender.receiveShadow !== this.render.receiveShadow || dynLastRender.lightmapIndex !== this.render.lightmapIndex) {
 	                    queueElements.add(this);
 	                    queue.lastTransparentBatched = false;
 	                }
@@ -18582,7 +18217,6 @@
 	                    max.y = this.center.y - quarter + halfChildSize;
 	                    max.z = this.center.z + quarter + halfChildSize;
 	                    break;
-	                default:
 	            }
 	            return bounds;
 	        }
@@ -18635,7 +18269,6 @@
 	                    childCenter.y = this.center.y - quarter;
 	                    childCenter.z = this.center.z + quarter;
 	                    break;
-	                default:
 	            }
 	            return childCenter;
 	        }
@@ -19191,348 +18824,6 @@
 	class Lightmap {
 	}
 
-	class BoundSphere {
-	    constructor(center, radius) {
-	        this.center = center;
-	        this.radius = radius;
-	    }
-	    toDefault() {
-	        this.center.toDefault();
-	        this.radius = 0;
-	    }
-	    static createFromSubPoints(points, start, count, out) {
-	        if (points == null) {
-	            throw new Error("points");
-	        }
-	        if (start < 0 || start >= points.length) {
-	            throw new Error("start" + start + "Must be in the range [0, " + (points.length - 1) + "]");
-	        }
-	        if (count < 0 || (start + count) > points.length) {
-	            throw new Error("count" + count + "Must be in the range <= " + points.length + "}");
-	        }
-	        var upperEnd = start + count;
-	        var center = BoundSphere._tempVector3;
-	        center.x = 0;
-	        center.y = 0;
-	        center.z = 0;
-	        for (var i = start; i < upperEnd; ++i) {
-	            Vector3.add(points[i], center, center);
-	        }
-	        var outCenter = out.center;
-	        Vector3.scale(center, 1 / count, outCenter);
-	        var radius = 0.0;
-	        for (i = start; i < upperEnd; ++i) {
-	            var distance = Vector3.distanceSquared(outCenter, points[i]);
-	            if (distance > radius)
-	                radius = distance;
-	        }
-	        out.radius = Math.sqrt(radius);
-	    }
-	    static createfromPoints(points, out) {
-	        if (points == null) {
-	            throw new Error("points");
-	        }
-	        BoundSphere.createFromSubPoints(points, 0, points.length, out);
-	    }
-	    intersectsRayDistance(ray) {
-	        return CollisionUtils.intersectsRayAndSphereRD(ray, this);
-	    }
-	    intersectsRayPoint(ray, outPoint) {
-	        return CollisionUtils.intersectsRayAndSphereRP(ray, this, outPoint);
-	    }
-	    cloneTo(destObject) {
-	        var dest = destObject;
-	        this.center.cloneTo(dest.center);
-	        dest.radius = this.radius;
-	    }
-	    clone() {
-	        var dest = new BoundSphere(new Vector3(), 0);
-	        this.cloneTo(dest);
-	        return dest;
-	    }
-	}
-	BoundSphere._tempVector3 = new Vector3();
-
-	class ShadowSliceData {
-	    constructor() {
-	        this.cameraShaderValue = new ShaderData();
-	        this.position = new Vector3();
-	        this.viewMatrix = new Matrix4x4();
-	        this.projectionMatrix = new Matrix4x4();
-	        this.viewProjectMatrix = new Matrix4x4();
-	        this.cullPlanes = [new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3())];
-	        this.splitBoundSphere = new BoundSphere(new Vector3(), 0.0);
-	    }
-	}
-	class ShadowSpotData {
-	    constructor() {
-	        this.cameraShaderValue = new ShaderData();
-	        this.position = new Vector3;
-	        this.viewMatrix = new Matrix4x4();
-	        this.projectionMatrix = new Matrix4x4();
-	        this.viewProjectMatrix = new Matrix4x4();
-	        this.cameraCullInfo = new CameraCullInfo();
-	    }
-	}
-
-	(function (ShadowLightType) {
-	    ShadowLightType[ShadowLightType["DirectionLight"] = 0] = "DirectionLight";
-	    ShadowLightType[ShadowLightType["SpotLight"] = 1] = "SpotLight";
-	    ShadowLightType[ShadowLightType["PointLight"] = 2] = "PointLight";
-	})(exports.ShadowLightType || (exports.ShadowLightType = {}));
-	class ShadowCasterPass {
-	    constructor() {
-	        this._shadowBias = new Vector4();
-	        this._shadowParams = new Vector4();
-	        this._shadowMapSize = new Vector4();
-	        this._shadowMatrices = new Float32Array(16 * (ShadowCasterPass._maxCascades));
-	        this._shadowSpotMatrices = new Matrix4x4();
-	        this._splitBoundSpheres = new Float32Array(ShadowCasterPass._maxCascades * 4);
-	        this._cascadeCount = 0;
-	        this._shadowMapWidth = 0;
-	        this._shadowMapHeight = 0;
-	        this._shadowSliceDatas = [new ShadowSliceData(), new ShadowSliceData(), new ShadowSliceData(), new ShadowSliceData()];
-	        this._shadowSpotData = new ShadowSpotData();
-	        this._lightUp = new Vector3();
-	        this._lightSide = new Vector3();
-	        this._lightForward = new Vector3();
-	        this._shadowSpotData.cameraCullInfo.boundFrustum = new BoundFrustum(new Matrix4x4());
-	    }
-	    _setupShadowCasterShaderValues(context, shaderValues, shadowSliceData, LightParam, shadowparams, shadowBias, lightType) {
-	        shaderValues.setVector(ShadowCasterPass.SHADOW_BIAS, shadowBias);
-	        switch (lightType) {
-	            case exports.LightType.Directional:
-	                shaderValues.setVector3(ShadowCasterPass.SHADOW_LIGHT_DIRECTION, LightParam);
-	                break;
-	            case exports.LightType.Spot:
-	                shaderValues.setVector(ShadowCasterPass.SHADOW_PARAMS, shadowparams);
-	                break;
-	            case exports.LightType.Point:
-	                break;
-	        }
-	        var cameraSV = shadowSliceData.cameraShaderValue;
-	        cameraSV.setMatrix4x4(BaseCamera.VIEWMATRIX, shadowSliceData.viewMatrix);
-	        cameraSV.setMatrix4x4(BaseCamera.PROJECTMATRIX, shadowSliceData.projectionMatrix);
-	        cameraSV.setMatrix4x4(BaseCamera.VIEWPROJECTMATRIX, shadowSliceData.viewProjectMatrix);
-	        context.viewMatrix = shadowSliceData.viewMatrix;
-	        context.projectionMatrix = shadowSliceData.projectionMatrix;
-	        context.projectionViewMatrix = shadowSliceData.viewProjectMatrix;
-	    }
-	    _setupShadowReceiverShaderValues(shaderValues) {
-	        var light = this._light;
-	        if (light.shadowCascadesMode !== exports.ShadowCascadesMode.NoCascades)
-	            shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_CASCADE);
-	        else
-	            shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_CASCADE);
-	        switch (light.shadowMode) {
-	            case exports.ShadowMode.Hard:
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_LOW);
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_HIGH);
-	                break;
-	            case exports.ShadowMode.SoftLow:
-	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_LOW);
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_HIGH);
-	                break;
-	            case exports.ShadowMode.SoftHigh:
-	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_HIGH);
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SOFT_SHADOW_LOW);
-	                break;
-	        }
-	        shaderValues.setTexture(ShadowCasterPass.SHADOW_MAP, this._shadowDirectLightMap);
-	        shaderValues.setBuffer(ShadowCasterPass.SHADOW_MATRICES, this._shadowMatrices);
-	        shaderValues.setVector(ShadowCasterPass.SHADOW_MAP_SIZE, this._shadowMapSize);
-	        shaderValues.setVector(ShadowCasterPass.SHADOW_PARAMS, this._shadowParams);
-	        shaderValues.setBuffer(ShadowCasterPass.SHADOW_SPLIT_SPHERES, this._splitBoundSpheres);
-	    }
-	    _setupSpotShadowReceiverShaderValues(shaderValues) {
-	        var spotLight = this._light;
-	        switch (spotLight.shadowMode) {
-	            case exports.ShadowMode.Hard:
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_HIGH);
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_LOW);
-	                break;
-	            case exports.ShadowMode.SoftLow:
-	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_LOW);
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_HIGH);
-	                break;
-	            case exports.ShadowMode.SoftHigh:
-	                shaderValues.addDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_HIGH);
-	                shaderValues.removeDefine(Scene3DShaderDeclaration.SHADERDEFINE_SHADOW_SPOT_SOFT_SHADOW_LOW);
-	                break;
-	        }
-	        shaderValues.setTexture(ShadowCasterPass.SHADOW_SPOTMAP, this._shadowSpotLightMap);
-	        shaderValues.setMatrix4x4(ShadowCasterPass.SHADOW_SPOTMATRICES, this._shadowSpotMatrices);
-	        shaderValues.setVector(ShadowCasterPass.SHADOW_MAP_SIZE, this._shadowMapSize);
-	        shaderValues.setVector(ShadowCasterPass.SHADOW_PARAMS, this._shadowParams);
-	    }
-	    update(camera, light, lightType) {
-	        switch (lightType) {
-	            case exports.ShadowLightType.DirectionLight:
-	                this._light = light;
-	                var lightWorld = ShadowCasterPass._tempMatrix0;
-	                var lightWorldE = lightWorld.elements;
-	                var lightUp = this._lightUp;
-	                var lightSide = this._lightSide;
-	                var lightForward = this._lightForward;
-	                Matrix4x4.createFromQuaternion(light._transform.rotation, lightWorld);
-	                lightSide.setValue(lightWorldE[0], lightWorldE[1], lightWorldE[2]);
-	                lightUp.setValue(lightWorldE[4], lightWorldE[5], lightWorldE[6]);
-	                lightForward.setValue(-lightWorldE[8], -lightWorldE[9], -lightWorldE[10]);
-	                var atlasResolution = light._shadowResolution;
-	                var cascadesMode = light._shadowCascadesMode;
-	                var cascadesCount;
-	                var shadowTileResolution;
-	                var shadowMapWidth, shadowMapHeight;
-	                if (cascadesMode == exports.ShadowCascadesMode.NoCascades) {
-	                    cascadesCount = 1;
-	                    shadowTileResolution = atlasResolution;
-	                    shadowMapWidth = atlasResolution;
-	                    shadowMapHeight = atlasResolution;
-	                }
-	                else {
-	                    cascadesCount = cascadesMode == exports.ShadowCascadesMode.TwoCascades ? 2 : 4;
-	                    shadowTileResolution = ShadowUtils.getMaxTileResolutionInAtlas(atlasResolution, atlasResolution, cascadesCount);
-	                    shadowMapWidth = shadowTileResolution * 2;
-	                    shadowMapHeight = cascadesMode == exports.ShadowCascadesMode.TwoCascades ? shadowTileResolution : shadowTileResolution * 2;
-	                }
-	                this._cascadeCount = cascadesCount;
-	                this._shadowMapWidth = shadowMapWidth;
-	                this._shadowMapHeight = shadowMapHeight;
-	                var splitDistance = ShadowCasterPass._cascadesSplitDistance;
-	                var frustumPlanes = ShadowCasterPass._frustumPlanes;
-	                var cameraNear = camera.nearPlane;
-	                var shadowFar = Math.min(camera.farPlane, light._shadowDistance);
-	                var shadowMatrices = this._shadowMatrices;
-	                var boundSpheres = this._splitBoundSpheres;
-	                ShadowUtils.getCascadesSplitDistance(light._shadowTwoCascadeSplits, light._shadowFourCascadeSplits, cameraNear, shadowFar, camera.fieldOfView * MathUtils3D.Deg2Rad, camera.aspectRatio, cascadesMode, splitDistance);
-	                ShadowUtils.getCameraFrustumPlanes(camera.projectionViewMatrix, frustumPlanes);
-	                var forward = ShadowCasterPass._tempVector30;
-	                camera._transform.getForward(forward);
-	                Vector3.normalize(forward, forward);
-	                for (var i = 0; i < cascadesCount; i++) {
-	                    var sliceData = this._shadowSliceDatas[i];
-	                    sliceData.sphereCenterZ = ShadowUtils.getBoundSphereByFrustum(splitDistance[i], splitDistance[i + 1], camera.fieldOfView * MathUtils3D.Deg2Rad, camera.aspectRatio, camera._transform.position, forward, sliceData.splitBoundSphere);
-	                    ShadowUtils.getDirectionLightShadowCullPlanes(frustumPlanes, i, splitDistance, cameraNear, lightForward, sliceData);
-	                    ShadowUtils.getDirectionalLightMatrices(lightUp, lightSide, lightForward, i, light._shadowNearPlane, shadowTileResolution, sliceData, shadowMatrices);
-	                    if (cascadesCount > 1)
-	                        ShadowUtils.applySliceTransform(sliceData, shadowMapWidth, shadowMapHeight, i, shadowMatrices);
-	                }
-	                ShadowUtils.prepareShadowReceiverShaderValues(light, shadowMapWidth, shadowMapHeight, this._shadowSliceDatas, cascadesCount, this._shadowMapSize, this._shadowParams, shadowMatrices, boundSpheres);
-	                break;
-	            case exports.ShadowLightType.SpotLight:
-	                this._light = light;
-	                var lightWorld = ShadowCasterPass._tempMatrix0;
-	                var lightForward = this._lightForward;
-	                var shadowResolution = this._light._shadowResolution;
-	                this._shadowMapWidth = shadowResolution;
-	                this._shadowMapHeight = shadowResolution;
-	                var shadowSpotData = this._shadowSpotData;
-	                ShadowUtils.getSpotLightShadowData(shadowSpotData, this._light, shadowResolution, this._shadowParams, this._shadowSpotMatrices, this._shadowMapSize);
-	                break;
-	            case exports.ShadowLightType.PointLight:
-	                break;
-	            default:
-	                throw ("There is no shadow of this type");
-	                break;
-	        }
-	    }
-	    render(context, scene, lightType) {
-	        switch (lightType) {
-	            case exports.ShadowLightType.DirectionLight:
-	                var shaderValues = scene._shaderValues;
-	                context.pipelineMode = "ShadowCaster";
-	                ShaderData.setRuntimeValueMode(false);
-	                var shadowMap = this._shadowDirectLightMap = ShadowUtils.getTemporaryShadowTexture(this._shadowMapWidth, this._shadowMapHeight, Laya.RenderTextureDepthFormat.DEPTH_16);
-	                shadowMap._start();
-	                var light = this._light;
-	                for (var i = 0, n = this._cascadeCount; i < n; i++) {
-	                    var sliceData = this._shadowSliceDatas[i];
-	                    ShadowUtils.getShadowBias(light, sliceData.projectionMatrix, sliceData.resolution, this._shadowBias);
-	                    this._setupShadowCasterShaderValues(context, shaderValues, sliceData, this._lightForward, this._shadowParams, this._shadowBias, exports.LightType.Directional);
-	                    var shadowCullInfo = FrustumCulling._shadowCullInfo;
-	                    shadowCullInfo.position = sliceData.position;
-	                    shadowCullInfo.cullPlanes = sliceData.cullPlanes;
-	                    shadowCullInfo.cullPlaneCount = sliceData.cullPlaneCount;
-	                    shadowCullInfo.cullSphere = sliceData.splitBoundSphere;
-	                    shadowCullInfo.direction = this._lightForward;
-	                    var needRender = FrustumCulling.cullingShadow(shadowCullInfo, scene, context);
-	                    context.cameraShaderValue = sliceData.cameraShaderValue;
-	                    Camera._updateMark++;
-	                    var gl = Laya.LayaGL.instance;
-	                    var resolution = sliceData.resolution;
-	                    var offsetX = sliceData.offsetX;
-	                    var offsetY = sliceData.offsetY;
-	                    gl.enable(gl.SCISSOR_TEST);
-	                    gl.viewport(offsetX, offsetY, resolution, resolution);
-	                    gl.scissor(offsetX, offsetY, resolution, resolution);
-	                    gl.clear(gl.DEPTH_BUFFER_BIT);
-	                    if (needRender) {
-	                        gl.scissor(offsetX + 1, offsetY + 1, resolution - 2, resolution - 2);
-	                        scene._opaqueQueue._render(context);
-	                    }
-	                }
-	                shadowMap._end();
-	                this._setupShadowReceiverShaderValues(shaderValues);
-	                ShaderData.setRuntimeValueMode(true);
-	                context.pipelineMode = "Forward";
-	                break;
-	            case exports.ShadowLightType.SpotLight:
-	                var shaderValues = scene._shaderValues;
-	                context.pipelineMode = "ShadowCaster";
-	                ShaderData.setRuntimeValueMode(false);
-	                var spotlight = this._light;
-	                var shadowMap = this._shadowSpotLightMap = ShadowUtils.getTemporaryShadowTexture(this._shadowMapWidth, this._shadowMapHeight, Laya.RenderTextureDepthFormat.DEPTH_16);
-	                shadowMap._start();
-	                var shadowSpotData = this._shadowSpotData;
-	                ShadowUtils.getShadowBias(spotlight, shadowSpotData.projectionMatrix, shadowSpotData.resolution, this._shadowBias);
-	                this._setupShadowCasterShaderValues(context, shaderValues, shadowSpotData, this._light.transform.position, this._shadowParams, this._shadowBias, exports.LightType.Spot);
-	                var needRender = FrustumCulling.cullingSpotShadow(shadowSpotData.cameraCullInfo, scene, context);
-	                context.cameraShaderValue = shadowSpotData.cameraShaderValue;
-	                Camera._updateMark++;
-	                var gl = Laya.LayaGL.instance;
-	                gl.enable(gl.SCISSOR_TEST);
-	                gl.viewport(shadowSpotData.offsetX, shadowSpotData.offsetY, shadowSpotData.resolution, shadowSpotData.resolution);
-	                gl.scissor(shadowSpotData.offsetX, shadowSpotData.offsetY, shadowSpotData.resolution, shadowSpotData.resolution);
-	                gl.clear(gl.DEPTH_BUFFER_BIT);
-	                if (needRender) {
-	                    gl.scissor(shadowSpotData.offsetX, shadowSpotData.offsetY, shadowSpotData.resolution, shadowSpotData.resolution);
-	                    scene._opaqueQueue._render(context);
-	                }
-	                shadowMap._end();
-	                this._setupSpotShadowReceiverShaderValues(shaderValues);
-	                ShaderData.setRuntimeValueMode(true);
-	                context.pipelineMode = "Forward";
-	                break;
-	            case exports.ShadowLightType.PointLight:
-	                break;
-	            default:
-	                throw ("There is no shadow of this type");
-	                break;
-	        }
-	    }
-	    cleanUp() {
-	        this._shadowDirectLightMap && RenderTexture.recoverToPool(this._shadowDirectLightMap);
-	        this._shadowSpotLightMap && RenderTexture.recoverToPool(this._shadowSpotLightMap);
-	        this._shadowDirectLightMap = null;
-	        this._shadowSpotLightMap = null;
-	        this._light = null;
-	    }
-	}
-	ShadowCasterPass._tempVector30 = new Vector3();
-	ShadowCasterPass._tempMatrix0 = new Matrix4x4();
-	ShadowCasterPass.SHADOW_BIAS = Shader3D.propertyNameToID("u_ShadowBias");
-	ShadowCasterPass.SHADOW_LIGHT_DIRECTION = Shader3D.propertyNameToID("u_ShadowLightDirection");
-	ShadowCasterPass.SHADOW_SPLIT_SPHERES = Shader3D.propertyNameToID("u_ShadowSplitSpheres");
-	ShadowCasterPass.SHADOW_MATRICES = Shader3D.propertyNameToID("u_ShadowMatrices");
-	ShadowCasterPass.SHADOW_MAP_SIZE = Shader3D.propertyNameToID("u_ShadowMapSize");
-	ShadowCasterPass.SHADOW_MAP = Shader3D.propertyNameToID("u_ShadowMap");
-	ShadowCasterPass.SHADOW_PARAMS = Shader3D.propertyNameToID("u_ShadowParams");
-	ShadowCasterPass.SHADOW_SPOTMAP = Shader3D.propertyNameToID("u_SpotShadowMap");
-	ShadowCasterPass.SHADOW_SPOTMATRICES = Shader3D.propertyNameToID("u_SpotViewProjectMatrix");
-	ShadowCasterPass._maxCascades = 4;
-	ShadowCasterPass._cascadesSplitDistance = new Array(ShadowCasterPass._maxCascades + 1);
-	ShadowCasterPass._frustumPlanes = new Array(new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()), new Plane(new Vector3()));
-
 	class DynamicBatchManager {
 	    constructor() {
 	        this._batchRenderElementPool = [];
@@ -19589,11 +18880,8 @@
 	        this._key = new Laya.SubmitKey();
 	        this._pickIdToSprite = new Object();
 	        this._reflectionMode = 0;
-	        if (!Config3D._config.isUseCannonPhysicsEngine && Physics3D._bullet)
+	        if (Physics3D._enablePhysics)
 	            this._physicsSimulation = new PhysicsSimulation(Scene3D.physicsSettings);
-	        else if (Physics3D._cannon) {
-	            this._cannonPhysicsSimulation = new Laya.CannonPhysicsSimulation(Scene3D.cannonPhysicsSettings);
-	        }
 	        this._shaderValues = new ShaderData(null);
 	        this.enableFog = false;
 	        this.fogStart = 300;
@@ -19667,12 +18955,6 @@
 	                break;
 	            default:
 	                throw "Scene3D:unknown shader quality.";
-	        }
-	        if (config.isUseCannonPhysicsEngine) {
-	            Scene3D.cannonPhysicsSettings = new Laya.CannonPhysicsSettings();
-	        }
-	        else {
-	            Scene3D.physicsSettings = new PhysicsSettings();
 	        }
 	    }
 	    static load(url, complete) {
@@ -19761,7 +19043,6 @@
 	    }
 	    set reflection(value) {
 	        if (this._reflection != value) {
-	            value._addReference();
 	            this._shaderValues.setTexture(Scene3D.REFLECTIONTEXTURE, value || TextureCube.blackTexture);
 	            this._reflection = value;
 	        }
@@ -19792,9 +19073,6 @@
 	    }
 	    get physicsSimulation() {
 	        return this._physicsSimulation;
-	    }
-	    get cannonPhysicsSimulation() {
-	        return this._cannonPhysicsSimulation;
 	    }
 	    get timer() {
 	        return this._timer;
@@ -19854,7 +19132,7 @@
 	        this._time += delta;
 	        this._shaderValues.setNumber(Scene3D.TIME, this._time);
 	        var simulation = this._physicsSimulation;
-	        if (Physics3D._enablePhysics && !PhysicsSimulation.disableSimulation && !Config3D._config.isUseCannonPhysicsEngine) {
+	        if (Physics3D._enablePhysics && !PhysicsSimulation.disableSimulation) {
 	            simulation._updatePhysicsTransformFromRender();
 	            PhysicsComponent._addUpdateList = false;
 	            simulation._simulate(delta);
@@ -19863,20 +19141,10 @@
 	            simulation._updateCollisions();
 	            simulation._eventScripts();
 	        }
-	        if (Physics3D._cannon && Config3D._config.isUseCannonPhysicsEngine) {
-	            var cannonSimulation = this._cannonPhysicsSimulation;
-	            cannonSimulation._updatePhysicsTransformFromRender();
-	            Laya.CannonPhysicsComponent._addUpdateList = false;
-	            cannonSimulation._simulate(delta);
-	            Laya.CannonPhysicsComponent._addUpdateList = true;
-	            cannonSimulation._updateCollisions();
-	            cannonSimulation._eventScripts();
-	        }
 	        this._input._update();
 	        this._clearScript();
 	        this._updateScript();
 	        Animator._update(this);
-	        Laya.VideoTexture._update();
 	        this._lateUpdateScript();
 	    }
 	    _binarySearchIndexInCameraPool(camera) {
@@ -19978,7 +19246,6 @@
 	            if (dirCount > 0) {
 	                var sunLightIndex = this._directionLights.getBrightestLight();
 	                this._mainDirectionLight = dirElements[sunLightIndex];
-	                this._directionLights.normalLightOrdering(sunLightIndex);
 	                for (var i = 0; i < dirCount; i++, curCount++) {
 	                    var dirLight = dirElements[i];
 	                    var dir = dirLight._direction;
@@ -19993,7 +19260,7 @@
 	                    ligPix[off + 4] = dir.x;
 	                    ligPix[off + 5] = dir.y;
 	                    ligPix[off + 6] = dir.z;
-	                    if (i == 0) {
+	                    if (i == sunLightIndex) {
 	                        shaderValues.setVector3(Scene3D.SUNLIGHTDIRCOLOR, intCor);
 	                        shaderValues.setVector3(Scene3D.SUNLIGHTDIRECTION, dir);
 	                    }
@@ -20008,7 +19275,6 @@
 	                var poiElements = this._pointLights._elements;
 	                var mainPointLightIndex = this._pointLights.getBrightestLight();
 	                this._mainPointLight = poiElements[mainPointLightIndex];
-	                this._pointLights.normalLightOrdering(mainPointLightIndex);
 	                for (var i = 0; i < poiCount; i++, curCount++) {
 	                    var poiLight = poiElements[i];
 	                    var pos = poiLight.transform.position;
@@ -20033,7 +19299,6 @@
 	                var spoElements = this._spotLights._elements;
 	                var mainSpotLightIndex = this._spotLights.getBrightestLight();
 	                this._mainSpotLight = spoElements[mainSpotLightIndex];
-	                this._spotLights.normalLightOrdering(mainSpotLightIndex);
 	                for (var i = 0; i < spoCount; i++, curCount++) {
 	                    var spoLight = spoElements[i];
 	                    var dir = spoLight._direction;
@@ -20388,8 +19653,6 @@
 	        this._cameraPool = null;
 	        this._octree = null;
 	        this._physicsSimulation && this._physicsSimulation._destroy();
-	        this._reflection._removeReference();
-	        this._reflection = null;
 	        Laya.Loader.clearRes(this.url);
 	    }
 	    render(ctx, x, y) {
@@ -20460,6 +19723,7 @@
 	}
 	Scene3D._shadowCasterPass = new ShadowCasterPass();
 	Scene3D.HIERARCHY = "HIERARCHY";
+	Scene3D.physicsSettings = new PhysicsSettings();
 	Scene3D.octreeCulling = false;
 	Scene3D.octreeInitialSize = 64.0;
 	Scene3D.octreeInitialCenter = new Vector3(0, 0, 0);
@@ -20744,8 +20008,7 @@
 	            psVersion = ps[0] + '\n';
 	            ps.shift();
 	        }
-	        var attibuteMap = Shader3D.getAttributeMapByDefine(defineString, this._owner._attributeMap);
-	        shader = new ShaderInstance(vsVersion + vertexHead + defineStr + vs.join('\n'), psVersion + fragmentHead + defineStr + ps.join('\n'), attibuteMap, this._owner._uniformMap || this._owner._owner._uniformMap, this);
+	        shader = new ShaderInstance(vsVersion + vertexHead + defineStr + vs.join('\n'), psVersion + fragmentHead + defineStr + ps.join('\n'), this._owner._attributeMap || this._owner._owner._attributeMap, this._owner._uniformMap || this._owner._owner._uniformMap, this);
 	        cacheShaders[cacheKey] = shader;
 	        if (Shader3D.debugMode) {
 	            var defStr = "";
@@ -20827,9 +20090,6 @@
 	            'u_LightmapScaleOffset': Shader3D.PERIOD_SPRITE,
 	            'u_LightMap': Shader3D.PERIOD_SPRITE,
 	            'u_LightMapDirection': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTexture': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorParams': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTextureSize': Shader3D.PERIOD_SPRITE,
 	            'u_CameraPos': Shader3D.PERIOD_CAMERA,
 	            'u_View': Shader3D.PERIOD_CAMERA,
 	            'u_ProjectionParams': Shader3D.PERIOD_CAMERA,
@@ -20867,9 +20127,6 @@
 	            'u_ShadowSplitSpheres': Shader3D.PERIOD_SCENE,
 	            'u_ShadowMatrices': Shader3D.PERIOD_SCENE,
 	            'u_ShadowMapSize': Shader3D.PERIOD_SCENE,
-	            'u_SpotShadowMap': Shader3D.PERIOD_SCENE,
-	            'u_SpotViewProjectMatrix': Shader3D.PERIOD_SCENE,
-	            'u_ShadowLightPosition': Shader3D.PERIOD_SCENE,
 	            'u_AmbientSHAr': Shader3D.PERIOD_SCENE,
 	            'u_AmbientSHAg': Shader3D.PERIOD_SCENE,
 	            'u_AmbientSHAb': Shader3D.PERIOD_SCENE,
@@ -20898,7 +20155,7 @@
 	            's_DepthTest': Shader3D.RENDER_STATE_DEPTH_TEST,
 	            's_DepthWrite': Shader3D.RENDER_STATE_DEPTH_WRITE
 	        };
-	        var shader = Shader3D.add("PBRSpecular", attributeMap, uniformMap, true);
+	        var shader = Shader3D.add("PBRSpecular");
 	        var subShader = new SubShader(attributeMap, uniformMap);
 	        shader.addSubShader(subShader);
 	        subShader.addShaderPass(PBRVS, PBRPS, stateMap, "Forward");
@@ -20969,9 +20226,6 @@
 	            'u_LightmapScaleOffset': Shader3D.PERIOD_SPRITE,
 	            'u_LightMap': Shader3D.PERIOD_SPRITE,
 	            'u_LightMapDirection': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTexture': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorParams': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTextureSize': Shader3D.PERIOD_SPRITE,
 	            'u_CameraPos': Shader3D.PERIOD_CAMERA,
 	            'u_View': Shader3D.PERIOD_CAMERA,
 	            'u_ProjectionParams': Shader3D.PERIOD_CAMERA,
@@ -21009,9 +20263,6 @@
 	            'u_ShadowSplitSpheres': Shader3D.PERIOD_SCENE,
 	            'u_ShadowMatrices': Shader3D.PERIOD_SCENE,
 	            'u_ShadowMapSize': Shader3D.PERIOD_SCENE,
-	            'u_SpotShadowMap': Shader3D.PERIOD_SCENE,
-	            'u_SpotViewProjectMatrix': Shader3D.PERIOD_SCENE,
-	            'u_ShadowLightPosition': Shader3D.PERIOD_SCENE,
 	            'u_AmbientSHAr': Shader3D.PERIOD_SCENE,
 	            'u_AmbientSHAg': Shader3D.PERIOD_SCENE,
 	            'u_AmbientSHAb': Shader3D.PERIOD_SCENE,
@@ -21040,7 +20291,7 @@
 	            's_DepthTest': Shader3D.RENDER_STATE_DEPTH_TEST,
 	            's_DepthWrite': Shader3D.RENDER_STATE_DEPTH_WRITE
 	        };
-	        var shader = Shader3D.add("PBR", attributeMap, uniformMap, true);
+	        var shader = Shader3D.add("PBR");
 	        var subShader = new SubShader(attributeMap, uniformMap);
 	        shader.addSubShader(subShader);
 	        subShader.addShaderPass(PBRVS$1, PBRPS$1, stateMap, "Forward");
@@ -21263,12 +20514,6 @@
 	        this._albedoColor.w = value;
 	        this.albedoColor = this._albedoColor;
 	    }
-	    get _Color() {
-	        return this._shaderValues.getVector(UnlitMaterial.ALBEDOCOLOR);
-	    }
-	    set _Color(value) {
-	        this.albedoColor = value;
-	    }
 	    get _AlbedoIntensity() {
 	        return this._albedoIntensity;
 	    }
@@ -21311,12 +20556,6 @@
 	        var tilOff = this._shaderValues.getVector(UnlitMaterial.TILINGOFFSET);
 	        tilOff.w = w;
 	        this.tilingOffset = tilOff;
-	    }
-	    get _MainTex_ST() {
-	        return this._shaderValues.getVector(UnlitMaterial.TILINGOFFSET);
-	    }
-	    set _MainTex_ST(value) {
-	        this.tilingOffset = value;
 	    }
 	    get _Cutoff() {
 	        return this.alphaTestValue;
@@ -22831,15 +22070,12 @@
 	    }
 	    getAverageValue() {
 	        var total = 0;
-	        var count = 0;
 	        for (var i = 0, n = this._currentLength - 2; i < n; i += 2) {
 	            var subValue = this._elements[i + 1];
 	            subValue += this._elements[i + 3];
 	            subValue = subValue * (this._elements[i + 2] - this._elements[i]);
-	            total += subValue;
-	            count++;
 	        }
-	        return total / count;
+	        return total / 2;
 	    }
 	    cloneTo(destObject) {
 	        var destGradientDataNumber = destObject;
@@ -22982,7 +22218,7 @@
 	    get gradientZMax() {
 	        return this._gradientZMax;
 	    }
-	    getMaxSizeInGradient(meshMode = false) {
+	    getMaxSizeInGradient() {
 	        var i, n;
 	        var maxSize = -Number.MAX_VALUE;
 	        switch (this._type) {
@@ -22992,11 +22228,6 @@
 	                        maxSize = Math.max(maxSize, this._gradientX.getValueByIndex(i));
 	                    for (i = 0, n = this._gradientY.gradientCount; i < n; i++)
 	                        maxSize = Math.max(maxSize, this._gradientY.getValueByIndex(i));
-	                    if (meshMode) {
-	                        for (i = 0, n = this._gradientZ.gradientCount; i < n; i++) {
-	                            maxSize = Math.max(maxSize, this._gradientZ.getValueByIndex(i));
-	                        }
-	                    }
 	                }
 	                else {
 	                    for (i = 0, n = this._gradient.gradientCount; i < n; i++)
@@ -23007,9 +22238,7 @@
 	                if (this._separateAxes) {
 	                    maxSize = Math.max(this._constantMinSeparate.x, this._constantMaxSeparate.x);
 	                    maxSize = Math.max(maxSize, this._constantMinSeparate.y);
-	                    if (meshMode) {
-	                        maxSize = maxSize = Math.max(maxSize, this._constantMaxSeparate.z);
-	                    }
+	                    maxSize = Math.max(maxSize, this._constantMaxSeparate.y);
 	                }
 	                else {
 	                    maxSize = Math.max(this._constantMin, this._constantMax);
@@ -23025,14 +22254,6 @@
 	                        maxSize = Math.max(maxSize, this._gradientYMin.getValueByIndex(i));
 	                    for (i = 0, n = this._gradientZMax.gradientCount; i < n; i++)
 	                        maxSize = Math.max(maxSize, this._gradientZMax.getValueByIndex(i));
-	                    if (meshMode) {
-	                        for (i = 0, n = this._gradientZMin.gradientCount; i < n; i++) {
-	                            maxSize = Math.max(maxSize, this._gradientZMin.getValueByIndex(i));
-	                        }
-	                        for (i = 0, n = this._gradientZMax.gradientCount; i < n; i++) {
-	                            maxSize = Math.max(maxSize, this._gradientZMax.getValueByIndex(i));
-	                        }
-	                    }
 	                }
 	                else {
 	                    for (i = 0, n = this._gradientMin.gradientCount; i < n; i++)
@@ -23228,13 +22449,6 @@
 	    }
 	}
 
-	(function (ParticleSystemShapeType) {
-	    ParticleSystemShapeType[ParticleSystemShapeType["Box"] = 0] = "Box";
-	    ParticleSystemShapeType[ParticleSystemShapeType["Circle"] = 1] = "Circle";
-	    ParticleSystemShapeType[ParticleSystemShapeType["Cone"] = 2] = "Cone";
-	    ParticleSystemShapeType[ParticleSystemShapeType["Hemisphere"] = 3] = "Hemisphere";
-	    ParticleSystemShapeType[ParticleSystemShapeType["Sphere"] = 4] = "Sphere";
-	})(exports.ParticleSystemShapeType || (exports.ParticleSystemShapeType = {}));
 	class BaseShape {
 	    constructor() {
 	        this.enable = true;
@@ -23377,7 +22591,6 @@
 	class BoxShape extends BaseShape {
 	    constructor() {
 	        super();
-	        this.shapeType = exports.ParticleSystemShapeType.Box;
 	        this.x = 1.0;
 	        this.y = 1.0;
 	        this.z = 1.0;
@@ -23448,7 +22661,6 @@
 	class CircleShape extends BaseShape {
 	    constructor() {
 	        super();
-	        this.shapeType = exports.ParticleSystemShapeType.Circle;
 	        this.radius = 1.0;
 	        this.arc = 360.0 / 180.0 * Math.PI;
 	        this.emitFromEdge = false;
@@ -23522,7 +22734,6 @@
 	class ConeShape extends BaseShape {
 	    constructor() {
 	        super();
-	        this.shapeType = exports.ParticleSystemShapeType.Cone;
 	        this.angle = 25.0 / 180.0 * Math.PI;
 	        this.radius = 1.0;
 	        this.length = 5.0;
@@ -23718,7 +22929,6 @@
 	class HemisphereShape extends BaseShape {
 	    constructor() {
 	        super();
-	        this.shapeType = exports.ParticleSystemShapeType.Hemisphere;
 	        this.radius = 1.0;
 	        this.emitFromShell = false;
 	    }
@@ -23785,7 +22995,6 @@
 	class SphereShape extends BaseShape {
 	    constructor() {
 	        super();
-	        this.shapeType = exports.ParticleSystemShapeType.Sphere;
 	        this.radius = 1.0;
 	        this.emitFromShell = false;
 	    }
@@ -24100,12 +23309,6 @@
 	        ShurikenParticleMaterial.SHADERDEFINE_ADDTIVEFOG = Shader3D.getDefineByName("ADDTIVEFOG");
 	        ShurikenParticleMaterial.SHADERDEFINE_TILINGOFFSET = Shader3D.getDefineByName("TILINGOFFSET");
 	    }
-	    get _TintColor() {
-	        return this.color;
-	    }
-	    set _TintColor(value) {
-	        this.color = value;
-	    }
 	    get _TintColorR() {
 	        return this._color.x;
 	    }
@@ -24133,14 +23336,6 @@
 	    set _TintColorA(value) {
 	        this._color.w = value;
 	        this.color = this._color;
-	    }
-	    get _MainTex_ST() {
-	        return this._shaderValues.getVector(ShurikenParticleMaterial.TILINGOFFSET);
-	    }
-	    set _MainTex_ST(value) {
-	        var tilOff = this._shaderValues.getVector(ShurikenParticleMaterial.TILINGOFFSET);
-	        tilOff.setValue(value.x, value.y, value.z, value.w);
-	        this.tilingOffset = tilOff;
 	    }
 	    get _MainTex_STX() {
 	        return this._shaderValues.getVector(ShurikenParticleMaterial.TILINGOFFSET).x;
@@ -24409,25 +23604,16 @@
 	        }
 	    }
 	    _calculateBoundingBox() {
-	        var particleSystem = this._owner.particleSystem;
-	        var bounds;
-	        if (particleSystem._useCustomBounds) {
-	            bounds = particleSystem.customBounds;
-	            bounds._tranform(this._owner.transform.worldMatrix, this._bounds);
-	        }
-	        else if (particleSystem._simulationSupported()) {
-	            particleSystem._generateBounds();
-	            bounds = particleSystem._bounds;
-	            bounds._tranform(this._owner.transform.worldMatrix, this._bounds);
-	        }
-	        else {
-	            var min = this._bounds.getMin();
-	            min.setValue(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
-	            this._bounds.setMin(min);
-	            var max = this._bounds.getMax();
-	            max.setValue(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE);
-	            this._bounds.setMax(max);
-	        }
+	        var min = this._bounds.getMin();
+	        min.x = -Number.MAX_VALUE;
+	        min.y = -Number.MAX_VALUE;
+	        min.z = -Number.MAX_VALUE;
+	        this._bounds.setMin(min);
+	        var max = this._bounds.getMax();
+	        max.x = Number.MAX_VALUE;
+	        max.y = Number.MAX_VALUE;
+	        max.z = Number.MAX_VALUE;
+	        this._bounds.setMax(max);
 	        if (Laya.Render.supportWebGLPlusCulling) {
 	            var min = this._bounds.getMin();
 	            var max = this._bounds.getMax();
@@ -24512,12 +23698,12 @@
 	    constructor() {
 	    }
 	}
-	VertexShuriKenParticle.PARTICLE_CORNERTEXTURECOORDINATE0 = 5;
+	VertexShuriKenParticle.PARTICLE_CORNERTEXTURECOORDINATE0 = 0;
 	VertexShuriKenParticle.PARTICLE_POSITION0 = 1;
 	VertexShuriKenParticle.PARTICLE_COLOR0 = 2;
 	VertexShuriKenParticle.PARTICLE_TEXTURECOORDINATE0 = 3;
 	VertexShuriKenParticle.PARTICLE_SHAPEPOSITIONSTARTLIFETIME = 4;
-	VertexShuriKenParticle.PARTICLE_DIRECTIONTIME = 0;
+	VertexShuriKenParticle.PARTICLE_DIRECTIONTIME = 5;
 	VertexShuriKenParticle.PARTICLE_STARTCOLOR0 = 6;
 	VertexShuriKenParticle.PARTICLE_ENDCOLOR0 = 7;
 	VertexShuriKenParticle.PARTICLE_STARTSIZE = 8;
@@ -25148,9 +24334,6 @@
 	        this._boundingSphere = null;
 	        this._boundingBox = null;
 	        this._boundingBoxCorners = null;
-	        this._bounds = null;
-	        this._customBounds = null;
-	        this._useCustomBounds = false;
 	        this._owner = null;
 	        this._ownerRender = null;
 	        this._vertices = null;
@@ -25246,8 +24429,6 @@
 	        this._boundingBoxCorners = [];
 	        this._boundingSphere = new BoundSphere(new Vector3(), Number.MAX_VALUE);
 	        this._boundingBox = new BoundBox(new Vector3(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE), new Vector3(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
-	        this._bounds = new Bounds(this._boundingBox.min, this._boundingBox.max);
-	        this._useCustomBounds = false;
 	        this._currentTime = 0;
 	        this._isEmitting = false;
 	        this._isPlaying = false;
@@ -25821,8 +25002,6 @@
 	                minStartSpeed = this.startLifetimeConstantMin;
 	                maxStartSpeed = this.startLifetimeConstantMax;
 	                break;
-	            case 3:
-	                break;
 	        }
 	        var minPosition, maxPosition, minDirection, maxDirection;
 	        if (this._shape && this._shape.enable) ;
@@ -25938,8 +25117,6 @@
 	                        maxSizeY = this.startSizeConstantMax;
 	                }
 	                break;
-	            case 3:
-	                break;
 	        }
 	        if (this._sizeOverLifetime && this._sizeOverLifetime.enable) {
 	            var size = this._sizeOverLifetime.size;
@@ -26007,234 +25184,6 @@
 	                break;
 	        }
 	        this._boundingBox.getCorners(this._boundingBoxCorners);
-	    }
-	    _generateBounds() {
-	        var particle = this._owner;
-	        var particleRender = particle.particleRenderer;
-	        var boundsMin = this._bounds.getMin();
-	        var boundsMax = this._bounds.getMax();
-	        var time = 0;
-	        switch (this.startLifetimeType) {
-	            case 0:
-	                time = this._startLifetimeConstant;
-	                break;
-	            case 2:
-	                time = this._startLifetimeConstantMax;
-	                break;
-	            case 1:
-	            case 3:
-	            default:
-	                break;
-	        }
-	        var speedOrigan = 0;
-	        switch (this.startSpeedType) {
-	            case 0:
-	                speedOrigan = this.startSpeedConstant;
-	                break;
-	            case 2:
-	                speedOrigan = this.startSpeedConstantMax;
-	                break;
-	            case 1:
-	            case 3:
-	            default:
-	                break;
-	        }
-	        var maxSizeScale = 0;
-	        if (this.threeDStartSize) {
-	            switch (this.startSizeType) {
-	                case 0:
-	                    maxSizeScale = Math.max(this.startSizeConstantSeparate.x, this.startSizeConstantSeparate.y, this.startSizeConstantSeparate.z);
-	                    break;
-	                case 2:
-	                    maxSizeScale = Math.max(this.startSizeConstantMaxSeparate.x, this.startSizeConstantMaxSeparate.y, this.startSizeConstantMaxSeparate.z);
-	                    break;
-	                case 1:
-	                case 3:
-	                default:
-	                    break;
-	            }
-	        }
-	        else {
-	            switch (this.startSizeType) {
-	                case 0:
-	                    maxSizeScale = this.startSizeConstant;
-	                    break;
-	                case 2:
-	                    maxSizeScale = this.startSizeConstantMax;
-	                    break;
-	                case 1:
-	                case 3:
-	                default:
-	                    break;
-	            }
-	        }
-	        var zDirectionSpeed = ShurikenParticleSystem._tempVector30;
-	        var fDirectionSpeed = ShurikenParticleSystem._tempVector31;
-	        var zEmisionOffsetXYZ = ShurikenParticleSystem._tempVector32;
-	        var fEmisionOffsetXYZ = ShurikenParticleSystem._tempVector33;
-	        zDirectionSpeed.setValue(0, 0, 1);
-	        fDirectionSpeed.setValue(0, 0, 0);
-	        zEmisionOffsetXYZ.setValue(0, 0, 0);
-	        fEmisionOffsetXYZ.setValue(0, 0, 0);
-	        if (this.shape && this.shape.enable) {
-	            switch (this.shape.shapeType) {
-	                case exports.ParticleSystemShapeType.Sphere:
-	                    var sphere = this.shape;
-	                    zDirectionSpeed.setValue(1, 1, 1);
-	                    fDirectionSpeed.setValue(1, 1, 1);
-	                    zEmisionOffsetXYZ.setValue(sphere.radius, sphere.radius, sphere.radius);
-	                    fEmisionOffsetXYZ.setValue(sphere.radius, sphere.radius, sphere.radius);
-	                    break;
-	                case exports.ParticleSystemShapeType.Hemisphere:
-	                    var hemiShpere = this.shape;
-	                    zDirectionSpeed.setValue(1, 1, 1);
-	                    fDirectionSpeed.setValue(1, 1, 1);
-	                    zEmisionOffsetXYZ.setValue(hemiShpere.radius, hemiShpere.radius, hemiShpere.radius);
-	                    fEmisionOffsetXYZ.setValue(hemiShpere.radius, hemiShpere.radius, 0.0);
-	                    break;
-	                case exports.ParticleSystemShapeType.Cone:
-	                    var cone = this.shape;
-	                    if (cone.emitType == 0 || cone.emitType == 1) {
-	                        var angle = cone.angle;
-	                        var sinAngle = Math.sin(angle);
-	                        zDirectionSpeed.setValue(sinAngle, sinAngle, 1.0);
-	                        fDirectionSpeed.setValue(sinAngle, sinAngle, 0.0);
-	                        zEmisionOffsetXYZ.setValue(cone.radius, cone.radius, 0.0);
-	                        fEmisionOffsetXYZ.setValue(cone.radius, cone.radius, 0.0);
-	                        break;
-	                    }
-	                    else if (cone.emitType == 2 || cone.emitType == 3) {
-	                        var angle = cone.angle;
-	                        var sinAngle = Math.sin(angle);
-	                        var coneLength = cone.length;
-	                        zDirectionSpeed.setValue(sinAngle, sinAngle, 1.0);
-	                        fDirectionSpeed.setValue(sinAngle, sinAngle, 0.0);
-	                        var tanAngle = Math.tan(angle);
-	                        var rPLCT = cone.radius + coneLength * tanAngle;
-	                        zEmisionOffsetXYZ.setValue(rPLCT, rPLCT, coneLength);
-	                        fEmisionOffsetXYZ.setValue(rPLCT, rPLCT, 0.0);
-	                    }
-	                    break;
-	                case exports.ParticleSystemShapeType.Box:
-	                    var box = this.shape;
-	                    if (this.shape.randomDirection != 0) {
-	                        zDirectionSpeed.setValue(1, 1, 1);
-	                        fDirectionSpeed.setValue(1, 1, 1);
-	                    }
-	                    else {
-	                        zDirectionSpeed.setValue(0, 0, 0);
-	                        fDirectionSpeed.setValue(0, 0, 0);
-	                    }
-	                    zEmisionOffsetXYZ.setValue(box.x / 2, box.y / 2, box.z / 2);
-	                    fEmisionOffsetXYZ.setValue(box.x / 2, box.y / 2, box.z / 2);
-	                    break;
-	                case exports.ParticleSystemShapeType.Circle:
-	                    var circle = this.shape;
-	                    zDirectionSpeed.setValue(1, 1, 1);
-	                    fDirectionSpeed.setValue(1, 1, 1);
-	                    zEmisionOffsetXYZ.setValue(circle.radius, circle.radius, 0);
-	                    fEmisionOffsetXYZ.setValue(circle.radius, circle.radius, 0);
-	                    break;
-	                default:
-	                    break;
-	            }
-	        }
-	        var meshSize = 0;
-	        var meshMode = particleRender.renderMode == 4;
-	        switch (particleRender.renderMode) {
-	            case 0:
-	                meshSize = ShurikenParticleSystem.halfKSqrtOf2;
-	                break;
-	            case 4:
-	                var meshBounds = particleRender.mesh.bounds;
-	                meshSize = Math.sqrt(Math.pow(meshBounds.getExtent().x, 2.0) + Math.pow(meshBounds.getExtent().y, 2.0) + Math.pow(meshBounds.getExtent().z, 2.0));
-	                break;
-	            default:
-	                break;
-	        }
-	        var endSizeOffset = ShurikenParticleSystem._tempVector36;
-	        if (this.sizeOverLifetime && this.sizeOverLifetime.enable) {
-	            var gradientSize = this.sizeOverLifetime.size;
-	            var maxSize = gradientSize.getMaxSizeInGradient(meshMode);
-	            endSizeOffset.setValue(maxSize, maxSize, maxSize);
-	        }
-	        Vector3.scale(endSizeOffset, meshSize * maxSizeScale, endSizeOffset);
-	        var speedZOffset = ShurikenParticleSystem._tempVector34;
-	        var speedFOffset = ShurikenParticleSystem._tempVector35;
-	        if (speedOrigan > 0) {
-	            Vector3.scale(zDirectionSpeed, speedOrigan, speedZOffset);
-	            Vector3.scale(fDirectionSpeed, speedOrigan, speedFOffset);
-	        }
-	        else {
-	            Vector3.scale(zDirectionSpeed, -speedOrigan, speedFOffset);
-	            Vector3.scale(fDirectionSpeed, -speedOrigan, speedZOffset);
-	        }
-	        if (this.velocityOverLifetime && this.velocityOverLifetime.enable) {
-	            var gradientVelocity = this.velocityOverLifetime.velocity;
-	            var velocitySpeedOffset = ShurikenParticleSystem._tempVector37;
-	            switch (gradientVelocity.type) {
-	                case 0:
-	                    gradientVelocity.constant.cloneTo(velocitySpeedOffset);
-	                    break;
-	                case 2:
-	                    gradientVelocity.constantMax.cloneTo(velocitySpeedOffset);
-	                    break;
-	                case 1:
-	                    var curveX = gradientVelocity.gradientX.getAverageValue();
-	                    var curveY = gradientVelocity.gradientY.getAverageValue();
-	                    var curveZ = gradientVelocity.gradientZ.getAverageValue();
-	                    velocitySpeedOffset.setValue(curveX, curveY, curveZ);
-	                    break;
-	                case 3:
-	                    var xMax = gradientVelocity.gradientXMax.getAverageValue();
-	                    var yMax = gradientVelocity.gradientYMax.getAverageValue();
-	                    var zMax = gradientVelocity.gradientZMax.getAverageValue();
-	                    velocitySpeedOffset.setValue(xMax, yMax, zMax);
-	                    break;
-	                default:
-	                    break;
-	            }
-	            if (this.velocityOverLifetime.space == 1) {
-	                Vector3.transformV3ToV3(velocitySpeedOffset, this._owner.transform.worldMatrix, velocitySpeedOffset);
-	            }
-	            Vector3.add(speedZOffset, velocitySpeedOffset, speedZOffset);
-	            Vector3.subtract(speedFOffset, velocitySpeedOffset, speedFOffset);
-	            Vector3.max(speedZOffset, Vector3._ZERO, speedZOffset);
-	            Vector3.max(speedFOffset, Vector3._ZERO, speedFOffset);
-	        }
-	        Vector3.scale(speedZOffset, time, speedZOffset);
-	        Vector3.scale(speedFOffset, time, speedFOffset);
-	        var gravity = this.gravityModifier;
-	        var gravityOffset = 0.5 * ShurikenParticleSystem.g * gravity * time * time;
-	        speedZOffset.y -= gravityOffset;
-	        speedFOffset.y += gravityOffset;
-	        speedZOffset.y = speedZOffset.y > 0 ? speedZOffset.y : 0;
-	        speedFOffset.y = speedFOffset.y > 0 ? speedFOffset.y : 0;
-	        Vector3.add(speedZOffset, endSizeOffset, boundsMax);
-	        Vector3.add(boundsMax, zEmisionOffsetXYZ, boundsMax);
-	        Vector3.add(speedFOffset, endSizeOffset, boundsMin);
-	        Vector3.add(boundsMin, fEmisionOffsetXYZ, boundsMin);
-	        Vector3.scale(boundsMin, -1, boundsMin);
-	        this._bounds.setMin(boundsMin);
-	        this._bounds.setMax(boundsMax);
-	    }
-	    get customBounds() {
-	        return this._customBounds;
-	    }
-	    set customBounds(value) {
-	        if (value) {
-	            this._useCustomBounds = true;
-	        }
-	        else {
-	            this._useCustomBounds = false;
-	        }
-	        this._customBounds = value;
-	    }
-	    _simulationSupported() {
-	        if (this.simulationSpace == 0) {
-	            return false;
-	        }
-	        return true;
 	    }
 	    _updateEmission() {
 	        if (!this.isAlive)
@@ -26482,11 +25431,6 @@
 	        this._vertexBuffer.destroy();
 	        this._indexBuffer.destroy();
 	        this._emission.destroy();
-	        this._boundingBox = null;
-	        this._boundingSphere = null;
-	        this._boundingBoxCorners = null;
-	        this._bounds = null;
-	        this._customBounds = null;
 	        this._bufferState = null;
 	        this._vertexBuffer = null;
 	        this._indexBuffer = null;
@@ -26886,8 +25830,6 @@
 	    }
 	    cloneTo(destObject) {
 	        var dest = destObject;
-	        dest._useCustomBounds = this._useCustomBounds;
-	        (this._customBounds) && (this._customBounds.cloneTo(dest._customBounds));
 	        dest.duration = this.duration;
 	        dest.looping = this.looping;
 	        dest.prewarm = this.prewarm;
@@ -26960,7 +25902,6 @@
 	}
 	ShurikenParticleSystem._RANDOMOFFSET = new Uint32Array([0x23571a3e, 0xc34f56fe, 0x13371337, 0x12460f3b, 0x6aed452e, 0xdec4aea1, 0x96aa4de3, 0x8d2c8431, 0xf3857f6f, 0xe0fbd834, 0x13740583, 0x591bc05c, 0x40eb95e4, 0xbc524e5f, 0xaf502044, 0xa614b381, 0x1034e524, 0xfc524e5f]);
 	ShurikenParticleSystem.halfKSqrtOf2 = 1.42 * 0.5;
-	ShurikenParticleSystem.g = 9.8;
 	ShurikenParticleSystem._maxElapsedTime = 1.0 / 3.0;
 	ShurikenParticleSystem._tempVector30 = new Vector3();
 	ShurikenParticleSystem._tempVector31 = new Vector3();
@@ -28056,7 +26997,6 @@
 	    }
 	    static __init__() {
 	        SkinnedMeshSprite3DShaderDeclaration.SHADERDEFINE_BONE = Shader3D.getDefineByName("BONE");
-	        SkinnedMeshSprite3DShaderDeclaration.SHADERDEFINE_SIMPLEBONE = Shader3D.getDefineByName("SIMPLEBONE");
 	    }
 	    get meshFilter() {
 	        return this._meshFilter;
@@ -28162,9 +27102,6 @@
 	}
 	SkinnedMeshSprite3D._tempArray0 = [];
 	SkinnedMeshSprite3D.BONES = Shader3D.propertyNameToID("u_Bones");
-	SkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORTEXTURE = Shader3D.propertyNameToID("u_SimpleAnimatorTexture");
-	SkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORPARAMS = Shader3D.propertyNameToID("u_SimpleAnimatorParams");
-	SkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORTEXTURESIZE = Shader3D.propertyNameToID("u_SimpleAnimatorTextureSize");
 
 	class TrailMaterial extends Material {
 	    constructor() {
@@ -29095,6 +28032,177 @@
 	    }
 	};
 
+	class CharacterController extends PhysicsComponent {
+	    constructor(stepheight = 0.1, upAxis = null, collisionGroup = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER, canCollideWith = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
+	        super(collisionGroup, canCollideWith);
+	        this._upAxis = new Vector3(0, 1, 0);
+	        this._maxSlope = 45.0;
+	        this._jumpSpeed = 10.0;
+	        this._fallSpeed = 55.0;
+	        this._gravity = new Vector3(0, -9.8 * 3, 0);
+	        this._btKinematicCharacter = null;
+	        this._stepHeight = stepheight;
+	        (upAxis) && (this._upAxis = upAxis);
+	        this._controlBySimulation = true;
+	    }
+	    static __init__() {
+	        CharacterController._btTempVector30 = Physics3D._bullet.btVector3_create(0, 0, 0);
+	    }
+	    get fallSpeed() {
+	        return this._fallSpeed;
+	    }
+	    set fallSpeed(value) {
+	        this._fallSpeed = value;
+	        Physics3D._bullet.btKinematicCharacterController_setFallSpeed(this._btKinematicCharacter, value);
+	    }
+	    get jumpSpeed() {
+	        return this._jumpSpeed;
+	    }
+	    set jumpSpeed(value) {
+	        this._jumpSpeed = value;
+	        Physics3D._bullet.btKinematicCharacterController_setJumpSpeed(this._btKinematicCharacter, value);
+	    }
+	    get gravity() {
+	        return this._gravity;
+	    }
+	    set gravity(value) {
+	        this._gravity = value;
+	        var bt = Physics3D._bullet;
+	        var btGravity = CharacterController._btTempVector30;
+	        bt.btVector3_setValue(btGravity, -value.x, value.y, value.z);
+	        bt.btKinematicCharacterController_setGravity(this._btKinematicCharacter, btGravity);
+	    }
+	    get maxSlope() {
+	        return this._maxSlope;
+	    }
+	    set maxSlope(value) {
+	        this._maxSlope = value;
+	        Physics3D._bullet.btKinematicCharacterController_setMaxSlope(this._btKinematicCharacter, (value / 180) * Math.PI);
+	    }
+	    get isGrounded() {
+	        return Physics3D._bullet.btKinematicCharacterController_onGround(this._btKinematicCharacter);
+	    }
+	    get stepHeight() {
+	        return this._stepHeight;
+	    }
+	    set stepHeight(value) {
+	        this._stepHeight = value;
+	        Physics3D._bullet.btKinematicCharacterController_setStepHeight(this._btKinematicCharacter, value);
+	    }
+	    get upAxis() {
+	        return this._upAxis;
+	    }
+	    set upAxis(value) {
+	        this._upAxis = value;
+	        var btUpAxis = CharacterController._btTempVector30;
+	        Utils3D._convertToBulletVec3(value, btUpAxis, false);
+	        Physics3D._bullet.btKinematicCharacterController_setUp(this._btKinematicCharacter, btUpAxis);
+	    }
+	    _constructCharacter() {
+	        var bt = Physics3D._bullet;
+	        if (this._btKinematicCharacter)
+	            bt.btKinematicCharacterController_destroy(this._btKinematicCharacter);
+	        var btUpAxis = CharacterController._btTempVector30;
+	        bt.btVector3_setValue(btUpAxis, this._upAxis.x, this._upAxis.y, this._upAxis.z);
+	        this._btKinematicCharacter = bt.btKinematicCharacterController_create(this._btColliderObject, this._colliderShape._btShape, this._stepHeight, btUpAxis);
+	        this.fallSpeed = this._fallSpeed;
+	        this.maxSlope = this._maxSlope;
+	        this.jumpSpeed = this._jumpSpeed;
+	        this.gravity = this._gravity;
+	    }
+	    _onShapeChange(colShape) {
+	        super._onShapeChange(colShape);
+	        this._constructCharacter();
+	    }
+	    _onAdded() {
+	        var bt = Physics3D._bullet;
+	        var ghostObject = bt.btPairCachingGhostObject_create();
+	        bt.btCollisionObject_setUserIndex(ghostObject, this.id);
+	        bt.btCollisionObject_setCollisionFlags(ghostObject, PhysicsComponent.COLLISIONFLAGS_CHARACTER_OBJECT);
+	        this._btColliderObject = ghostObject;
+	        (this._colliderShape) && (this._constructCharacter());
+	        super._onAdded();
+	    }
+	    _addToSimulation() {
+	        this._simulation._characters.push(this);
+	        this._simulation._addCharacter(this, this._collisionGroup, this._canCollideWith);
+	    }
+	    _removeFromSimulation() {
+	        this._simulation._removeCharacter(this);
+	        var characters = this._simulation._characters;
+	        characters.splice(characters.indexOf(this), 1);
+	    }
+	    _cloneTo(dest) {
+	        super._cloneTo(dest);
+	        var destCharacterController = dest;
+	        destCharacterController.stepHeight = this._stepHeight;
+	        destCharacterController.upAxis = this._upAxis;
+	        destCharacterController.maxSlope = this._maxSlope;
+	        destCharacterController.jumpSpeed = this._jumpSpeed;
+	        destCharacterController.fallSpeed = this._fallSpeed;
+	        destCharacterController.gravity = this._gravity;
+	    }
+	    _onDestroy() {
+	        Physics3D._bullet.btKinematicCharacterController_destroy(this._btKinematicCharacter);
+	        super._onDestroy();
+	        this._btKinematicCharacter = null;
+	    }
+	    move(movement) {
+	        var btMovement = CharacterController._btVector30;
+	        var bt = Physics3D._bullet;
+	        bt.btVector3_setValue(btMovement, -movement.x, movement.y, movement.z);
+	        bt.btKinematicCharacterController_setWalkDirection(this._btKinematicCharacter, btMovement);
+	    }
+	    jump(velocity = null) {
+	        var bt = Physics3D._bullet;
+	        var btVelocity = CharacterController._btVector30;
+	        if (velocity) {
+	            Utils3D._convertToBulletVec3(velocity, btVelocity, true);
+	            bt.btKinematicCharacterController_jump(this._btKinematicCharacter, btVelocity);
+	        }
+	        else {
+	            bt.btVector3_setValue(btVelocity, 0, 0, 0);
+	            bt.btKinematicCharacterController_jump(this._btKinematicCharacter, btVelocity);
+	        }
+	    }
+	}
+	CharacterController.UPAXIS_X = 0;
+	CharacterController.UPAXIS_Y = 1;
+	CharacterController.UPAXIS_Z = 2;
+
+	class PhysicsTriggerComponent extends PhysicsComponent {
+	    constructor(collisionGroup, canCollideWith) {
+	        super(collisionGroup, canCollideWith);
+	        this._isTrigger = false;
+	    }
+	    get isTrigger() {
+	        return this._isTrigger;
+	    }
+	    set isTrigger(value) {
+	        this._isTrigger = value;
+	        var bt = Physics3D._bullet;
+	        if (this._btColliderObject) {
+	            var flags = bt.btCollisionObject_getCollisionFlags(this._btColliderObject);
+	            if (value) {
+	                if ((flags & PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE) === 0)
+	                    bt.btCollisionObject_setCollisionFlags(this._btColliderObject, flags | PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE);
+	            }
+	            else {
+	                if ((flags & PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE) !== 0)
+	                    bt.btCollisionObject_setCollisionFlags(this._btColliderObject, flags ^ PhysicsComponent.COLLISIONFLAGS_NO_CONTACT_RESPONSE);
+	            }
+	        }
+	    }
+	    _onAdded() {
+	        super._onAdded();
+	        this.isTrigger = this._isTrigger;
+	    }
+	    _cloneTo(dest) {
+	        super._cloneTo(dest);
+	        dest.isTrigger = this._isTrigger;
+	    }
+	}
+
 	class PhysicsCollider extends PhysicsTriggerComponent {
 	    constructor(collisionGroup = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER, canCollideWith = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
 	        super(collisionGroup, canCollideWith);
@@ -29133,6 +28241,430 @@
 	        bt.btCollisionObject_setCollisionFlags(btColObj, flags);
 	        this._btColliderObject = btColObj;
 	        super._onAdded();
+	    }
+	}
+
+	class Rigidbody3D extends PhysicsTriggerComponent {
+	    constructor(collisionGroup = Physics3DUtils.COLLISIONFILTERGROUP_DEFAULTFILTER, canCollideWith = Physics3DUtils.COLLISIONFILTERGROUP_ALLFILTER) {
+	        super(collisionGroup, canCollideWith);
+	        this._isKinematic = false;
+	        this._mass = 1.0;
+	        this._gravity = new Vector3(0, -10, 0);
+	        this._angularDamping = 0.0;
+	        this._linearDamping = 0.0;
+	        this._overrideGravity = false;
+	        this._totalTorque = new Vector3(0, 0, 0);
+	        this._totalForce = new Vector3(0, 0, 0);
+	        this._linearVelocity = new Vector3();
+	        this._angularVelocity = new Vector3();
+	        this._linearFactor = new Vector3(1, 1, 1);
+	        this._angularFactor = new Vector3(1, 1, 1);
+	        this._detectCollisions = true;
+	        this._controlBySimulation = true;
+	    }
+	    static __init__() {
+	        var bt = Physics3D._bullet;
+	        Rigidbody3D._btTempVector30 = bt.btVector3_create(0, 0, 0);
+	        Rigidbody3D._btTempVector31 = bt.btVector3_create(0, 0, 0);
+	        Rigidbody3D._btVector3Zero = bt.btVector3_create(0, 0, 0);
+	        Rigidbody3D._btInertia = bt.btVector3_create(0, 0, 0);
+	        Rigidbody3D._btImpulse = bt.btVector3_create(0, 0, 0);
+	        Rigidbody3D._btImpulseOffset = bt.btVector3_create(0, 0, 0);
+	        Rigidbody3D._btGravity = bt.btVector3_create(0, 0, 0);
+	        Rigidbody3D._btTransform0 = bt.btTransform_create();
+	    }
+	    get mass() {
+	        return this._mass;
+	    }
+	    set mass(value) {
+	        value = Math.max(value, 1e-07);
+	        this._mass = value;
+	        (this._isKinematic) || (this._updateMass(value));
+	    }
+	    get isKinematic() {
+	        return this._isKinematic;
+	    }
+	    set isKinematic(value) {
+	        this._isKinematic = value;
+	        this._controlBySimulation = !value;
+	        var bt = Physics3D._bullet;
+	        var canInSimulation = !!(this._simulation && this._enabled && this._colliderShape);
+	        canInSimulation && this._removeFromSimulation();
+	        var natColObj = this._btColliderObject;
+	        var flags = bt.btCollisionObject_getCollisionFlags(natColObj);
+	        if (value) {
+	            flags = flags | PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT;
+	            bt.btCollisionObject_setCollisionFlags(natColObj, flags);
+	            bt.btCollisionObject_forceActivationState(this._btColliderObject, PhysicsComponent.ACTIVATIONSTATE_DISABLE_DEACTIVATION);
+	            this._enableProcessCollisions = false;
+	            this._updateMass(0);
+	        }
+	        else {
+	            if ((flags & PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT) > 0)
+	                flags = flags ^ PhysicsComponent.COLLISIONFLAGS_KINEMATIC_OBJECT;
+	            bt.btCollisionObject_setCollisionFlags(natColObj, flags);
+	            bt.btCollisionObject_setActivationState(this._btColliderObject, PhysicsComponent.ACTIVATIONSTATE_ACTIVE_TAG);
+	            this._enableProcessCollisions = true;
+	            this._updateMass(this._mass);
+	        }
+	        var btZero = Rigidbody3D._btVector3Zero;
+	        bt.btCollisionObject_setInterpolationLinearVelocity(natColObj, btZero);
+	        bt.btRigidBody_setLinearVelocity(natColObj, btZero);
+	        bt.btCollisionObject_setInterpolationAngularVelocity(natColObj, btZero);
+	        bt.btRigidBody_setAngularVelocity(natColObj, btZero);
+	        canInSimulation && this._addToSimulation();
+	    }
+	    get linearDamping() {
+	        return this._linearDamping;
+	    }
+	    set linearDamping(value) {
+	        this._linearDamping = value;
+	        if (this._btColliderObject)
+	            Physics3D._bullet.btRigidBody_setDamping(this._btColliderObject, value, this._angularDamping);
+	    }
+	    get angularDamping() {
+	        return this._angularDamping;
+	    }
+	    set angularDamping(value) {
+	        this._angularDamping = value;
+	        if (this._btColliderObject)
+	            Physics3D._bullet.btRigidBody_setDamping(this._btColliderObject, this._linearDamping, value);
+	    }
+	    get overrideGravity() {
+	        return this._overrideGravity;
+	    }
+	    set overrideGravity(value) {
+	        this._overrideGravity = value;
+	        var bt = Physics3D._bullet;
+	        if (this._btColliderObject) {
+	            var flag = bt.btRigidBody_getFlags(this._btColliderObject);
+	            if (value) {
+	                if ((flag & Rigidbody3D._BT_DISABLE_WORLD_GRAVITY) === 0)
+	                    bt.btRigidBody_setFlags(this._btColliderObject, flag | Rigidbody3D._BT_DISABLE_WORLD_GRAVITY);
+	            }
+	            else {
+	                if ((flag & Rigidbody3D._BT_DISABLE_WORLD_GRAVITY) > 0)
+	                    bt.btRigidBody_setFlags(this._btColliderObject, flag ^ Rigidbody3D._BT_DISABLE_WORLD_GRAVITY);
+	            }
+	        }
+	    }
+	    get gravity() {
+	        return this._gravity;
+	    }
+	    set gravity(value) {
+	        this._gravity = value;
+	        var bt = Physics3D._bullet;
+	        bt.btVector3_setValue(Rigidbody3D._btGravity, -value.x, value.y, value.z);
+	        bt.btRigidBody_setGravity(this._btColliderObject, Rigidbody3D._btGravity);
+	    }
+	    get totalForce() {
+	        if (this._btColliderObject) {
+	            var btTotalForce = Physics3D._bullet.btRigidBody_getTotalForce(this._btColliderObject);
+	            Utils3D._convertToLayaVec3(btTotalForce, this._totalForce, true);
+	            return this._totalForce;
+	        }
+	        return null;
+	    }
+	    get linearFactor() {
+	        return this._linearFactor;
+	    }
+	    set linearFactor(value) {
+	        this._linearFactor = value;
+	        var btValue = Rigidbody3D._btTempVector30;
+	        Utils3D._convertToBulletVec3(value, btValue, false);
+	        Physics3D._bullet.btRigidBody_setLinearFactor(this._btColliderObject, btValue);
+	    }
+	    get linearVelocity() {
+	        if (this._btColliderObject)
+	            Utils3D._convertToLayaVec3(Physics3D._bullet.btRigidBody_getLinearVelocity(this._btColliderObject), this._linearVelocity, true);
+	        return this._linearVelocity;
+	    }
+	    set linearVelocity(value) {
+	        this._linearVelocity = value;
+	        if (this._btColliderObject) {
+	            var btValue = Rigidbody3D._btTempVector30;
+	            Utils3D._convertToBulletVec3(value, btValue, true);
+	            (this.isSleeping) && (this.wakeUp());
+	            Physics3D._bullet.btRigidBody_setLinearVelocity(this._btColliderObject, btValue);
+	        }
+	    }
+	    get angularFactor() {
+	        return this._angularFactor;
+	    }
+	    set angularFactor(value) {
+	        this._angularFactor = value;
+	        var btValue = Rigidbody3D._btTempVector30;
+	        Utils3D._convertToBulletVec3(value, btValue, false);
+	        Physics3D._bullet.btRigidBody_setAngularFactor(this._btColliderObject, btValue);
+	    }
+	    get angularVelocity() {
+	        if (this._btColliderObject)
+	            Utils3D._convertToLayaVec3(Physics3D._bullet.btRigidBody_getAngularVelocity(this._btColliderObject), this._angularVelocity, true);
+	        return this._angularVelocity;
+	    }
+	    set angularVelocity(value) {
+	        this._angularVelocity = value;
+	        if (this._btColliderObject) {
+	            var btValue = Rigidbody3D._btTempVector30;
+	            Utils3D._convertToBulletVec3(value, btValue, true);
+	            (this.isSleeping) && (this.wakeUp());
+	            Physics3D._bullet.btRigidBody_setAngularVelocity(this._btColliderObject, btValue);
+	        }
+	    }
+	    get totalTorque() {
+	        if (this._btColliderObject) {
+	            var btTotalTorque = Physics3D._bullet.btRigidBody_getTotalTorque(this._btColliderObject);
+	            Utils3D._convertToLayaVec3(btTotalTorque, this._totalTorque, true);
+	            return this._totalTorque;
+	        }
+	        return null;
+	    }
+	    get detectCollisions() {
+	        return this._detectCollisions;
+	    }
+	    set detectCollisions(value) {
+	        if (this._detectCollisions !== value) {
+	            this._detectCollisions = value;
+	            if (this._colliderShape && this._enabled && this._simulation) {
+	                this._simulation._removeRigidBody(this);
+	                this._simulation._addRigidBody(this, this._collisionGroup, value ? this._canCollideWith : 0);
+	            }
+	        }
+	    }
+	    get isSleeping() {
+	        if (this._btColliderObject)
+	            return Physics3D._bullet.btCollisionObject_getActivationState(this._btColliderObject) === PhysicsComponent.ACTIVATIONSTATE_ISLAND_SLEEPING;
+	        return false;
+	    }
+	    get sleepLinearVelocity() {
+	        return Physics3D._bullet.btRigidBody_getLinearSleepingThreshold(this._btColliderObject);
+	    }
+	    set sleepLinearVelocity(value) {
+	        var bt = Physics3D._bullet;
+	        bt.btRigidBody_setSleepingThresholds(this._btColliderObject, value, bt.btRigidBody_getAngularSleepingThreshold(this._btColliderObject));
+	    }
+	    get sleepAngularVelocity() {
+	        return Physics3D._bullet.btRigidBody_getAngularSleepingThreshold(this._btColliderObject);
+	    }
+	    set sleepAngularVelocity(value) {
+	        var bt = Physics3D._bullet;
+	        bt.btRigidBody_setSleepingThresholds(this._btColliderObject, bt.btRigidBody_getLinearSleepingThreshold(this._btColliderObject), value);
+	    }
+	    get btColliderObject() {
+	        return this._btColliderObject;
+	    }
+	    set constaintRigidbodyA(value) {
+	        this._constaintRigidbodyA = value;
+	    }
+	    get constaintRigidbodyA() {
+	        return this._constaintRigidbodyA;
+	    }
+	    set constaintRigidbodyB(value) {
+	        this._constaintRigidbodyB = value;
+	    }
+	    get constaintRigidbodyB() {
+	        return this._constaintRigidbodyB;
+	    }
+	    _updateMass(mass) {
+	        if (this._btColliderObject && this._colliderShape) {
+	            var bt = Physics3D._bullet;
+	            bt.btCollisionShape_calculateLocalInertia(this._colliderShape._btShape, mass, Rigidbody3D._btInertia);
+	            bt.btRigidBody_setMassProps(this._btColliderObject, mass, Rigidbody3D._btInertia);
+	            bt.btRigidBody_updateInertiaTensor(this._btColliderObject);
+	        }
+	    }
+	    _onScaleChange(scale) {
+	        super._onScaleChange(scale);
+	        this._updateMass(this._isKinematic ? 0 : this._mass);
+	    }
+	    _derivePhysicsTransformation(force) {
+	        var bt = Physics3D._bullet;
+	        var btColliderObject = this._btColliderObject;
+	        var oriTransform = bt.btCollisionObject_getWorldTransform(btColliderObject);
+	        var transform = Rigidbody3D._btTransform0;
+	        bt.btTransform_equal(transform, oriTransform);
+	        this._innerDerivePhysicsTransformation(transform, force);
+	        bt.btRigidBody_setCenterOfMassTransform(btColliderObject, transform);
+	    }
+	    _onAdded() {
+	        var bt = Physics3D._bullet;
+	        var motionState = bt.layaMotionState_create();
+	        bt.layaMotionState_set_rigidBodyID(motionState, this._id);
+	        this._btLayaMotionState = motionState;
+	        var constructInfo = bt.btRigidBodyConstructionInfo_create(0.0, motionState, null, Rigidbody3D._btVector3Zero);
+	        var btRigid = bt.btRigidBody_create(constructInfo);
+	        bt.btCollisionObject_setUserIndex(btRigid, this.id);
+	        this._btColliderObject = btRigid;
+	        super._onAdded();
+	        this.mass = this._mass;
+	        this.linearFactor = this._linearFactor;
+	        this.angularFactor = this._angularFactor;
+	        this.linearDamping = this._linearDamping;
+	        this.angularDamping = this._angularDamping;
+	        this.overrideGravity = this._overrideGravity;
+	        this.gravity = this._gravity;
+	        this.isKinematic = this._isKinematic;
+	        bt.btRigidBodyConstructionInfo_destroy(constructInfo);
+	    }
+	    _onShapeChange(colShape) {
+	        super._onShapeChange(colShape);
+	        if (this._isKinematic) {
+	            this._updateMass(0);
+	        }
+	        else {
+	            var bt = Physics3D._bullet;
+	            bt.btRigidBody_setCenterOfMassTransform(this._btColliderObject, bt.btCollisionObject_getWorldTransform(this._btColliderObject));
+	            this._updateMass(this._mass);
+	        }
+	    }
+	    _parse(data) {
+	        (data.friction != null) && (this.friction = data.friction);
+	        (data.rollingFriction != null) && (this.rollingFriction = data.rollingFriction);
+	        (data.restitution != null) && (this.restitution = data.restitution);
+	        (data.isTrigger != null) && (this.isTrigger = data.isTrigger);
+	        (data.mass != null) && (this.mass = data.mass);
+	        (data.isKinematic != null) && (this.isKinematic = data.isKinematic);
+	        (data.linearDamping != null) && (this.linearDamping = data.linearDamping);
+	        (data.angularDamping != null) && (this.angularDamping = data.angularDamping);
+	        (data.overrideGravity != null) && (this.overrideGravity = data.overrideGravity);
+	        if (data.linearFactor != null) {
+	            var linFac = this.linearFactor;
+	            linFac.fromArray(data.linearFactor);
+	            this.linearFactor = linFac;
+	        }
+	        if (data.angularFactor != null) {
+	            var angFac = this.angularFactor;
+	            angFac.fromArray(data.angularFactor);
+	            this.angularFactor = angFac;
+	        }
+	        if (data.gravity) {
+	            this.gravity.fromArray(data.gravity);
+	            this.gravity = this.gravity;
+	        }
+	        super._parse(data);
+	        this._parseShape(data.shapes);
+	    }
+	    _onDestroy() {
+	        Physics3D._bullet.btMotionState_destroy(this._btLayaMotionState);
+	        super._onDestroy();
+	        this._btLayaMotionState = null;
+	        this._gravity = null;
+	        this._totalTorque = null;
+	        this._linearVelocity = null;
+	        this._angularVelocity = null;
+	        this._linearFactor = null;
+	        this._angularFactor = null;
+	        if (this.constaintRigidbodyA)
+	            this.constaintRigidbodyA._breakConstrained();
+	        if (this.constaintRigidbodyB) {
+	            this.constaintRigidbodyB.connectedBody = null;
+	            this.constaintRigidbodyB._onDisable();
+	        }
+	    }
+	    _addToSimulation() {
+	        this._simulation._addRigidBody(this, this._collisionGroup, this._detectCollisions ? this._canCollideWith : 0);
+	    }
+	    _removeFromSimulation() {
+	        this._simulation._removeRigidBody(this);
+	    }
+	    _cloneTo(dest) {
+	        super._cloneTo(dest);
+	        var destRigidbody3D = dest;
+	        destRigidbody3D.isKinematic = this._isKinematic;
+	        destRigidbody3D.mass = this._mass;
+	        destRigidbody3D.gravity = this._gravity;
+	        destRigidbody3D.angularDamping = this._angularDamping;
+	        destRigidbody3D.linearDamping = this._linearDamping;
+	        destRigidbody3D.overrideGravity = this._overrideGravity;
+	        destRigidbody3D.linearVelocity = this._linearVelocity;
+	        destRigidbody3D.angularVelocity = this._angularVelocity;
+	        destRigidbody3D.linearFactor = this._linearFactor;
+	        destRigidbody3D.angularFactor = this._angularFactor;
+	        destRigidbody3D.detectCollisions = this._detectCollisions;
+	    }
+	    applyForce(force, localOffset = null) {
+	        if (this._btColliderObject == null)
+	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
+	        var bt = Physics3D._bullet;
+	        var btForce = Rigidbody3D._btTempVector30;
+	        bt.btVector3_setValue(btForce, -force.x, force.y, force.z);
+	        if (localOffset) {
+	            var btOffset = Rigidbody3D._btTempVector31;
+	            bt.btVector3_setValue(btOffset, -localOffset.x, localOffset.y, localOffset.z);
+	            bt.btRigidBody_applyForce(this._btColliderObject, btForce, btOffset);
+	        }
+	        else {
+	            bt.btRigidBody_applyCentralForce(this._btColliderObject, btForce);
+	        }
+	    }
+	    applyTorque(torque) {
+	        if (this._btColliderObject == null)
+	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
+	        var bullet = Physics3D._bullet;
+	        var btTorque = Rigidbody3D._btTempVector30;
+	        bullet.btVector3_setValue(btTorque, -torque.x, torque.y, torque.z);
+	        bullet.btRigidBody_applyTorque(this._btColliderObject, btTorque);
+	    }
+	    applyImpulse(impulse, localOffset = null) {
+	        if (this._btColliderObject == null)
+	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
+	        var bt = Physics3D._bullet;
+	        bt.btVector3_setValue(Rigidbody3D._btImpulse, -impulse.x, impulse.y, impulse.z);
+	        if (localOffset) {
+	            bt.btVector3_setValue(Rigidbody3D._btImpulseOffset, -localOffset.x, localOffset.y, localOffset.z);
+	            bt.btRigidBody_applyImpulse(this._btColliderObject, Rigidbody3D._btImpulse, Rigidbody3D._btImpulseOffset);
+	        }
+	        else {
+	            bt.btRigidBody_applyCentralImpulse(this._btColliderObject, Rigidbody3D._btImpulse);
+	        }
+	    }
+	    applyTorqueImpulse(torqueImpulse) {
+	        if (this._btColliderObject == null)
+	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
+	        var bt = Physics3D._bullet;
+	        var btTorqueImpulse = Rigidbody3D._btTempVector30;
+	        bt.btVector3_setValue(btTorqueImpulse, -torqueImpulse.x, torqueImpulse.y, torqueImpulse.z);
+	        bt.btRigidBody_applyTorqueImpulse(this._btColliderObject, btTorqueImpulse);
+	    }
+	    wakeUp() {
+	        this._btColliderObject && (Physics3D._bullet.btCollisionObject_activate(this._btColliderObject, false));
+	    }
+	    clearForces() {
+	        var rigidBody = this._btColliderObject;
+	        if (rigidBody == null)
+	            throw "Attempted to call a Physics function that is avaliable only when the Entity has been already added to the Scene.";
+	        var bt = Physics3D._bullet;
+	        bt.btRigidBody_clearForces(rigidBody);
+	        var btZero = Rigidbody3D._btVector3Zero;
+	        bt.btCollisionObject_setInterpolationLinearVelocity(rigidBody, btZero);
+	        bt.btRigidBody_setLinearVelocity(rigidBody, btZero);
+	        bt.btCollisionObject_setInterpolationAngularVelocity(rigidBody, btZero);
+	        bt.btRigidBody_setAngularVelocity(rigidBody, btZero);
+	    }
+	}
+	Rigidbody3D.TYPE_STATIC = 0;
+	Rigidbody3D.TYPE_DYNAMIC = 1;
+	Rigidbody3D.TYPE_KINEMATIC = 2;
+	Rigidbody3D._BT_DISABLE_WORLD_GRAVITY = 1;
+	Rigidbody3D._BT_ENABLE_GYROPSCOPIC_FORCE = 2;
+
+	class StaticPlaneColliderShape extends ColliderShape {
+	    constructor(normal, offset) {
+	        super();
+	        this._normal = normal;
+	        this._offset = offset;
+	        this._type = ColliderShape.SHAPETYPES_STATICPLANE;
+	        var bt = Physics3D._bullet;
+	        bt.btVector3_setValue(StaticPlaneColliderShape._btNormal, -normal.x, normal.y, normal.z);
+	        this._btShape = bt.btStaticPlaneShape_create(StaticPlaneColliderShape._btNormal, offset);
+	    }
+	    static __init__() {
+	        StaticPlaneColliderShape._btNormal = Physics3D._bullet.btVector3_create(0, 0, 0);
+	    }
+	    clone() {
+	        var dest = new StaticPlaneColliderShape(this._normal, this._offset);
+	        this.cloneTo(dest);
+	        return dest;
 	    }
 	}
 
@@ -29242,7 +28774,6 @@
 	        this._bounds = new Bounds(new Vector3(), new Vector3());
 	        this._bufferState = new BufferState();
 	        this._instanceBufferState = new BufferState();
-	        this._instanceBufferStateType = 0;
 	        this._vertexBuffer = null;
 	        this._indexBuffer = null;
 	        this._skinnedMatrixCaches = [];
@@ -29445,19 +28976,12 @@
 	        bufferState.applyVertexBuffer(vertexBuffer);
 	        bufferState.applyIndexBuffer(indexBuffer);
 	        bufferState.unBind();
-	    }
-	    _setInstanceBuffer(instanceBufferStateType) {
 	        var instanceBufferState = this._instanceBufferState;
 	        instanceBufferState.bind();
-	        instanceBufferState.applyVertexBuffer(this._vertexBuffer);
+	        instanceBufferState.applyVertexBuffer(vertexBuffer);
 	        instanceBufferState.applyInstanceVertexBuffer(SubMeshInstanceBatch.instance.instanceWorldMatrixBuffer);
 	        instanceBufferState.applyInstanceVertexBuffer(SubMeshInstanceBatch.instance.instanceMVPMatrixBuffer);
-	        switch (instanceBufferStateType) {
-	            case Mesh.MESH_INSTANCEBUFFER_TYPE_SIMPLEANIMATOR:
-	                instanceBufferState.applyInstanceVertexBuffer(SubMeshInstanceBatch.instance.instanceSimpleAnimatorBuffer);
-	                break;
-	        }
-	        instanceBufferState.applyIndexBuffer(this._indexBuffer);
+	        instanceBufferState.applyIndexBuffer(indexBuffer);
 	        instanceBufferState.unBind();
 	    }
 	    _getPhysicMesh() {
@@ -29753,8 +29277,6 @@
 	    }
 	}
 	Mesh.MESH = "MESH";
-	Mesh.MESH_INSTANCEBUFFER_TYPE_NORMAL = 0;
-	Mesh.MESH_INSTANCEBUFFER_TYPE_SIMPLEANIMATOR = 1;
 
 	class PrimitiveMesh {
 	    static __init__() {
@@ -29772,7 +29294,6 @@
 	        indexBuffer.setData(indices);
 	        mesh._indexBuffer = indexBuffer;
 	        mesh._setBuffer(vertexBuffer, indexBuffer);
-	        mesh._setInstanceBuffer(mesh._instanceBufferStateType);
 	        subMesh._vertexBuffer = vertexBuffer;
 	        subMesh._indexBuffer = indexBuffer;
 	        subMesh._setIndexRange(0, indexBuffer.indexCount);
@@ -30219,7 +29740,7 @@
 
 	var EffectPS = "#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n#else\r\n\tprecision mediump float;\r\n#endif\r\n\r\n#ifdef COLOR\r\n\tvarying vec4 v_Color;\r\n#endif\r\nvarying vec2 v_Texcoord0;\r\n\r\n#ifdef MAINTEXTURE\r\n\tuniform sampler2D u_AlbedoTexture;\r\n#endif\r\n\r\nuniform vec4 u_AlbedoColor;\r\n\r\n#ifdef FOG\r\n\tuniform float u_FogStart;\r\n\tuniform float u_FogRange;\r\n\t#ifdef ADDTIVEFOG\r\n\t#else\r\n\t\tuniform vec3 u_FogColor;\r\n\t#endif\r\n#endif\r\n\r\nvoid main()\r\n{\r\n\tvec4 color =  2.0 * u_AlbedoColor;\r\n\t#ifdef COLOR\r\n\t\tcolor *= v_Color;\r\n\t#endif\r\n\t#ifdef MAINTEXTURE\r\n\t\tcolor *= texture2D(u_AlbedoTexture, v_Texcoord0);\r\n\t#endif\r\n\t\r\n\tgl_FragColor = color;\r\n\t\r\n\t#ifdef FOG\r\n\t\tfloat lerpFact = clamp((1.0 / gl_FragCoord.w - u_FogStart) / u_FogRange, 0.0, 1.0);\r\n\t\t#ifdef ADDTIVEFOG\r\n\t\t\tgl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.0), lerpFact);\r\n\t\t#else\r\n\t\t\tgl_FragColor.rgb = mix(gl_FragColor.rgb, u_FogColor, lerpFact);\r\n\t\t#endif\r\n\t#endif\r\n}\r\n\r\n";
 
-	var EffectVS = "#include \"Lighting.glsl\";\r\n\r\nattribute vec4 a_Position;\r\nattribute vec4 a_Color;\r\nattribute vec2 a_Texcoord0;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\n#ifdef COLOR\r\n\tvarying vec4 v_Color;\r\n#endif\r\nvarying vec2 v_Texcoord0;\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nvoid main()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform;\r\n\t \t#ifdef SIMPLEBONE\r\n\t\t\tfloat currentPixelPos;\r\n\t\t\t#ifdef GPU_INSTANCE\r\n\t\t\t\tcurrentPixelPos = a_SimpleTextureParams.x+a_SimpleTextureParams.y;\r\n\t\t\t#else\r\n\t\t\t\tcurrentPixelPos = u_SimpleAnimatorParams.x+u_SimpleAnimatorParams.y;\r\n\t\t\t#endif\r\n\t\t\tfloat offset = 1.0/u_SimpleAnimatorTextureSize;\r\n\t\t\tskinTransform =  loadMatFromTexture(currentPixelPos,int(a_BoneIndices.x),offset) * a_BoneWeights.x;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.y),offset) * a_BoneWeights.y;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.z),offset) * a_BoneWeights.z;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.w),offset) * a_BoneWeights.w;\r\n\t\t#else\r\n\t\t\tskinTransform =  u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\t#endif\r\n\t\tposition=skinTransform*a_Position;\r\n\t#else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\t\r\n\t#ifdef TILINGOFFSET\r\n\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t#else\r\n\t\tv_Texcoord0=a_Texcoord0;\r\n\t#endif\r\n\t\t\r\n\t#ifdef COLOR\r\n\t\tv_Color = a_Color;\r\n\t#endif\r\n\tgl_Position=remapGLPositionZ(gl_Position);\r\n}";
+	var EffectVS = "#include \"Lighting.glsl\";\r\n\r\nattribute vec4 a_Position;\r\nattribute vec4 a_Color;\r\nattribute vec2 a_Texcoord0;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\n#ifdef COLOR\r\n\tvarying vec4 v_Color;\r\n#endif\r\nvarying vec2 v_Texcoord0;\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nvoid main()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform = u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\tposition=skinTransform*a_Position;\r\n\t#else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\t\r\n\t#ifdef TILINGOFFSET\r\n\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t#else\r\n\t\tv_Texcoord0=a_Texcoord0;\r\n\t#endif\r\n\t\t\r\n\t#ifdef COLOR\r\n\t\tv_Color = a_Color;\r\n\t#endif\r\n\tgl_Position=remapGLPositionZ(gl_Position);\r\n}";
 
 	var extendTerrainPS = "#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n#else\r\n\tprecision mediump float;\r\n#endif\r\n\r\n#include \"Lighting.glsl\";\r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)||defined(FOG)\r\n\tuniform vec3 u_CameraPos;\r\n\tvarying vec3 v_Normal;\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n#ifdef FOG\r\n\tuniform float u_FogStart;\r\n\tuniform float u_FogRange;\r\n\tuniform vec3 u_FogColor;\r\n#endif\r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tuniform DirectionLight u_DirectionLight;\r\n\t\t#endif\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tuniform PointLight u_PointLight;\r\n\t\t#endif\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tuniform SpotLight u_SpotLight;\r\n\t\t#endif\r\n\t#else\r\n\t\tuniform mat4 u_View;\r\n\t\tuniform vec4 u_ProjectionParams;\r\n\t\tuniform vec4 u_Viewport;\r\n\t\tuniform int u_DirationLightCount;\r\n\t\tuniform sampler2D u_LightBuffer;\r\n\t\tuniform sampler2D u_LightClusterBuffer;\r\n\t#endif\r\n#endif\r\n\r\n#include \"Shadow.glsl\"\r\n#ifdef CALCULATE_SHADOWS\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\nvarying float v_posViewZ;\r\n\r\nuniform vec3 u_AmbientColor;\r\n\r\nuniform sampler2D u_SplatAlphaTexture;\r\n\r\nuniform sampler2D u_DiffuseTexture1;\r\nuniform sampler2D u_DiffuseTexture2;\r\nuniform sampler2D u_DiffuseTexture3;\r\nuniform sampler2D u_DiffuseTexture4;\r\nuniform sampler2D u_DiffuseTexture5;\r\n\r\nuniform vec4 u_DiffuseScaleOffset1;\r\nuniform vec4 u_DiffuseScaleOffset2;\r\nuniform vec4 u_DiffuseScaleOffset3;\r\nuniform vec4 u_DiffuseScaleOffset4;\r\nuniform vec4 u_DiffuseScaleOffset5;\r\n\r\nvarying vec2 v_Texcoord0;\r\n\r\n#ifdef LIGHTMAP\r\n\tuniform sampler2D u_LightMap;\r\n\tvarying vec2 v_LightMapUV;\r\n#endif\r\n\r\nvoid main()\r\n{\r\n\tvec4 splatAlpha = vec4(1.0);\r\n\t#ifdef ExtendTerrain_DETAIL_NUM1\r\n\t\tsplatAlpha = texture2D(u_SplatAlphaTexture, v_Texcoord0);\r\n\t\tvec4 color1 = texture2D(u_DiffuseTexture1, v_Texcoord0 * u_DiffuseScaleOffset1.xy);\r\n\t\tgl_FragColor.xyz = color1.xyz * splatAlpha.r;\r\n\t#endif\r\n\t#ifdef ExtendTerrain_DETAIL_NUM2\r\n\t\tsplatAlpha = texture2D(u_SplatAlphaTexture, v_Texcoord0);\r\n\t\tvec4 color1 = texture2D(u_DiffuseTexture1, v_Texcoord0 * u_DiffuseScaleOffset1.xy);\r\n\t\tvec4 color2 = texture2D(u_DiffuseTexture2, v_Texcoord0 * u_DiffuseScaleOffset2.xy);\r\n\t\tgl_FragColor.xyz = color1.xyz * splatAlpha.r + color2.xyz * (1.0 - splatAlpha.r);\r\n\t#endif\r\n\t#ifdef ExtendTerrain_DETAIL_NUM3\r\n\t\tsplatAlpha = texture2D(u_SplatAlphaTexture, v_Texcoord0);\r\n\t\tvec4 color1 = texture2D(u_DiffuseTexture1, v_Texcoord0 * u_DiffuseScaleOffset1.xy);\r\n\t\tvec4 color2 = texture2D(u_DiffuseTexture2, v_Texcoord0 * u_DiffuseScaleOffset2.xy);\r\n\t\tvec4 color3 = texture2D(u_DiffuseTexture3, v_Texcoord0 * u_DiffuseScaleOffset3.xy);\r\n\t\tgl_FragColor.xyz = color1.xyz * splatAlpha.r  + color2.xyz * splatAlpha.g + color3.xyz * (1.0 - splatAlpha.r - splatAlpha.g);\r\n\t#endif\r\n\t#ifdef ExtendTerrain_DETAIL_NUM4\r\n\t\tsplatAlpha = texture2D(u_SplatAlphaTexture, v_Texcoord0);\r\n\t\tvec4 color1 = texture2D(u_DiffuseTexture1, v_Texcoord0 * u_DiffuseScaleOffset1.xy);\r\n\t\tvec4 color2 = texture2D(u_DiffuseTexture2, v_Texcoord0 * u_DiffuseScaleOffset2.xy);\r\n\t\tvec4 color3 = texture2D(u_DiffuseTexture3, v_Texcoord0 * u_DiffuseScaleOffset3.xy);\r\n\t\tvec4 color4 = texture2D(u_DiffuseTexture4, v_Texcoord0 * u_DiffuseScaleOffset4.xy);\r\n\t\tgl_FragColor.xyz = color1.xyz * splatAlpha.r  + color2.xyz * splatAlpha.g + color3.xyz * splatAlpha.b + color4.xyz * (1.0 - splatAlpha.r - splatAlpha.g - splatAlpha.b);\r\n\t#endif\r\n\t#ifdef ExtendTerrain_DETAIL_NUM5\r\n\t\tsplatAlpha = texture2D(u_SplatAlphaTexture, v_Texcoord0);\r\n\t\tvec4 color1 = texture2D(u_DiffuseTexture1, v_Texcoord0 * u_DiffuseScaleOffset1.xy);\r\n\t\tvec4 color2 = texture2D(u_DiffuseTexture2, v_Texcoord0 * u_DiffuseScaleOffset2.xy);\r\n\t\tvec4 color3 = texture2D(u_DiffuseTexture3, v_Texcoord0 * u_DiffuseScaleOffset3.xy);\r\n\t\tvec4 color4 = texture2D(u_DiffuseTexture4, v_Texcoord0 * u_DiffuseScaleOffset4.xy);\r\n\t\tvec4 color5 = texture2D(u_DiffuseTexture5, v_Texcoord0 * u_DiffuseScaleOffset5.xy);\r\n\t\tgl_FragColor.xyz = color1.xyz * splatAlpha.r  + color2.xyz * splatAlpha.g + color3.xyz * splatAlpha.b + color4.xyz * splatAlpha.a + color5.xyz * (1.0 - splatAlpha.r - splatAlpha.g - splatAlpha.b - splatAlpha.a);\r\n\t#endif\r\n\t\tgl_FragColor.w = splatAlpha.a;\r\n\t\t\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tvec3 normal = v_Normal;\r\n\t\tvec3 dif, spe;\r\n\t#endif\r\n\r\n\tvec3 diffuse = vec3(0.0);\r\n\tvec3 specular= vec3(0.0);\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)||defined(FOG)\r\n\t\tvec3 toEye;\r\n\t\t#ifdef FOG\r\n\t\t\ttoEye=u_CameraPos-v_PositionWorld;\r\n\t\t\tfloat toEyeLength=length(toEye);\r\n\t\t\ttoEye/=toEyeLength;\r\n\t\t#else\r\n\t\t\ttoEye=normalize(u_CameraPos-v_PositionWorld);\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tLayaAirBlinnPhongDiectionLight(vec3(0.0),1.0,normal,vec3(1.0),toEye,u_DirectionLight,dif,spe);\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,vec3(0.0),1.0,normal,vec3(1.0),toEye,u_PointLight,dif,spe);\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,vec3(0.0),1.0,normal,vec3(1.0),toEye,u_SpotLight,dif,spe);\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t#else\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t{\r\n\t\t\t\tif(i >= u_DirationLightCount)\r\n\t\t\t\t\tbreak;\r\n\t\t\t\tDirectionLight directionLight = getDirectionLight(u_LightBuffer,i);\r\n\t\t\t\tLayaAirBlinnPhongDiectionLight(vec3(0.0),1.0,normal,vec3(1.0),toEye,directionLight,dif,spe);\r\n\t\t\t\tdiffuse+=dif;\r\n\t\t\t\tspecular+=spe;\r\n\t\t\t}\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tivec4 clusterInfo =getClusterInfo(u_LightClusterBuffer,u_View,u_Viewport, v_PositionWorld,gl_FragCoord,u_ProjectionParams);\r\n\t\t\t#ifdef POINTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.x)//PointLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tPointLight pointLight = getPointLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,vec3(0.0),1.0,normal,vec3(1.0),toEye,pointLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t\t#ifdef SPOTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.y)//SpotLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tSpotLight spotLight = getSpotLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,vec3(0.0),1.0,normal,vec3(1.0),toEye\t,spotLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t#endif\r\n\r\nvec3 globalDiffuse = u_AmbientColor;\r\n#ifdef LIGHTMAP\r\n\tglobalDiffuse += decodeHDR(texture2D(u_LightMap, v_LightMapUV),5.0);\r\n#endif\r\n\r\n#ifdef CALCULATE_SHADOWS\r\n\tfloat shadowValue = shadowValue = sampleShadowmap(v_ShadowCoord);\r\n\tgl_FragColor = vec4(gl_FragColor.rgb * (globalDiffuse + diffuse) * shadowValue, gl_FragColor.a);\r\n#else\r\n\tgl_FragColor = vec4(gl_FragColor.rgb * (globalDiffuse + diffuse), gl_FragColor.a);\r\n#endif\r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t#ifdef CALCULATE_SHADOWS\r\n\t\tgl_FragColor.rgb += specular * shadowValue;\r\n\t#else\r\n\t\tgl_FragColor.rgb += specular;\r\n\t#endif\r\n#endif\r\n\r\n#ifdef FOG\r\n\tfloat lerpFact=clamp((toEyeLength-u_FogStart)/u_FogRange,0.0,1.0);\r\n\tgl_FragColor.rgb=mix(gl_FragColor.rgb,u_FogColor,lerpFact);\r\n#endif\r\n}\r\n\r\n\r\n\r\n\r\n\r\n";
 
@@ -30227,7 +29748,7 @@
 
 	var GlobalIllumination = "struct LayaGIInput\r\n{\r\n\tvec2 lightmapUV;\r\n};\r\n\r\n#define LAYA_SPECCUBE_LOD_STEPS 6.0\r\n\r\nuniform vec3 u_AmbientColor;\r\n\r\n#if defined(GI_AMBIENT_SH)\r\n\tuniform vec4 u_AmbientSHAr;\r\n\tuniform vec4 u_AmbientSHAg;\r\n\tuniform vec4 u_AmbientSHAb;\r\n\tuniform vec4 u_AmbientSHBr;\r\n\tuniform vec4 u_AmbientSHBg;\r\n\tuniform vec4 u_AmbientSHBb;\r\n\tuniform vec4 u_AmbientSHC;\r\n#endif\r\n\r\nuniform samplerCube u_ReflectTexture;\r\nuniform vec4 u_ReflectCubeHDRParams;\r\n\r\n\r\n#ifdef GI_AMBIENT_SH\r\n\tmediump vec3 shEvalLinearL0L1(mediump vec4 normal)\r\n\t{\r\n\t\tmediump vec3 x;\r\n\t\t// Linear (L1) + constant (L0) polynomial terms\r\n\t\tx.r = dot(u_AmbientSHAr, normal);\r\n\t\tx.g = dot(u_AmbientSHAg, normal);\r\n\t\tx.b = dot(u_AmbientSHAb, normal);\r\n\t\treturn x;\r\n\t}\r\n\r\n\tmediump vec3 shEvalLinearL2(mediump vec4 normal)\r\n\t{\r\n\t\tmediump vec3 x1,x2;\r\n\t\t// 4 of the quadratic (L2) polynomials\r\n\t\tmediump vec4 vB = normal.xyzz * normal.yzzx;\r\n\t\tx1.r = dot(u_AmbientSHBr, vB);\r\n\t\tx1.g = dot(u_AmbientSHBg, vB);\r\n\t\tx1.b = dot(u_AmbientSHBb, vB);\r\n\r\n\t\t// Final (5th) quadratic (L2) polynomial\r\n\t\tmediump float vC = normal.x*normal.x - normal.y*normal.y;\r\n\t\tx2 = u_AmbientSHC.rgb * vC;\r\n\r\n\t\treturn x1 + x2;\r\n\t}\r\n\t\r\n\tmediump vec3 shadeSHPerPixel(mediump vec3 normal)\r\n\t{\r\n\t\tmediump vec3 ambientContrib;\r\n\t\tmediump vec4 normalV4=vec4(-normal.x,normal.yz, 1.0);//Note:SH Data is left-hand,so x need inverse\r\n\t\tambientContrib = shEvalLinearL0L1(normalV4);\r\n\t\tambientContrib += shEvalLinearL2(normalV4);\r\n\t\tmediump vec3 ambient = max(vec3(0.0), ambientContrib);\r\n\t\tambient = layaLinearToGammaSpace(ambient);\r\n\t\treturn ambient;\r\n\t}\r\n#endif\r\n\r\nmediump vec3 layaDecodeDirectionalLightmap (mediump vec3 color, lowp vec4 dirTex, mediump vec3 normalWorld)\r\n{\r\n    // In directional (non-specular) mode Enlighten bakes dominant light direction\r\n    // in a way, that using it for half Lambert and then dividing by a \"rebalancing coefficient\"\r\n    // gives a result close to plain diffuse response lightmaps, but normalmapped.\r\n\r\n    // Note that dir is not unit length on purpose. Its length is \"directionality\", like\r\n    // for the directional specular lightmaps.\r\n\tlowp vec3 directional=dirTex.xyz - 0.5;\r\n\tdirectional.x=-directional.x;//NOTE:because coord System\r\n    mediump float halfLambert = dot(normalWorld,directional) + 0.5;\r\n\r\n    return color * halfLambert / max(1e-4, dirTex.w);\r\n}\r\n\r\nvec3 layaGIBase(LayaGIInput giInput,mediump float occlusion, mediump vec3 normalWorld)\r\n{\r\n\tvec3 indirectDiffuse;\r\n\t#ifdef LIGHTMAP\t\r\n\t\tmediump vec3 bakedColor =decodeHDR(texture2D(u_LightMap, giInput.lightmapUV),5.0);\r\n\t\t#ifdef LIGHTMAP_DIRECTIONAL\r\n\t\t\tlowp vec4 bakedDirTex = texture2D (u_LightMapDirection, giInput.lightmapUV);\r\n            indirectDiffuse = layaDecodeDirectionalLightmap (bakedColor, bakedDirTex, normalWorld);\r\n\t\t#else //unDirectional lightmap\r\n\t\t\tindirectDiffuse = bakedColor;\r\n\t\t#endif\r\n\t#else\r\n\t\t#ifdef GI_AMBIENT_SH\r\n\t\t\tindirectDiffuse = shadeSHPerPixel(normalWorld);\r\n\t\t#else\r\n\t\t\tindirectDiffuse = u_AmbientColor; //already in gamma space\r\n\t\t#endif\r\n\t#endif\r\n\r\n\tindirectDiffuse*=occlusion;\r\n\treturn indirectDiffuse;\r\n}\r\n\r\nmediump vec3 layaGlossyEnvironment(mediump vec4 glossIn)\r\n{\r\n\tmediump float perceptualRoughness = glossIn.a;\r\n\r\n\t// use approximation to solve,below is more reasonable,but maybe slow. \r\n\t// float m = perceptualRoughnessToRoughness(perceptualRoughness); // m is the real roughness parameter\r\n    // const float fEps = 1.192092896e-07F;        // smallest such that 1.0+FLT_EPSILON != 1.0  (+1e-4h is NOT good here. is visibly very wrong)\r\n    // float n =  (2.0/max(fEps, m*m))-2.0;        // remap to spec power. See eq. 21 in --> https://dl.dropboxusercontent.com/u/55891920/papers/mm_brdf.pdf\r\n    // n /= 4;                                     // remap from n_dot_h formulatino to n_dot_r. See section \"Pre-convolved Cube Maps vs Path Tracers\" --> https://s3.amazonaws.com/docs.knaldtech.com/knald/1.0.0/lys_power_drops.html\r\n    // perceptualRoughness = pow( 2/(n+2), 0.25);  // remap back to square root of real roughness (0.25 include both the sqrt root of the conversion and sqrt for going from roughness to perceptualRoughness)\r\n\tperceptualRoughness = perceptualRoughness * (1.7 - 0.7*perceptualRoughness);//just a approximation,but fast.\r\n \r\n\tmediump float mip = perceptualRoughness * LAYA_SPECCUBE_LOD_STEPS;\r\n\tmediump vec3 uvw = glossIn.rgb;\r\n\tuvw.x=-uvw.x;//Note:reflectCube is left-hand,so x need inverse\r\n\tmediump vec4 rgbm=textureCubeLodEXT(u_ReflectTexture,uvw,mip);\r\n\treturn decodeHDR(rgbm,u_ReflectCubeHDRParams.x);\r\n}\r\n\r\nmediump vec3 layaGIIndirectSpecular(LayaGIInput giInput,mediump float occlusion, vec4 glossIn)\r\n{\r\n\tmediump vec3 specular = layaGlossyEnvironment(glossIn);\r\n\treturn specular * occlusion;\r\n}\r\n\r\n\r\nLayaGI layaGlobalIllumination(LayaGIInput giInput,mediump float occlusion, mediump vec3 normalWorld,mediump vec4 uvwRoughness)\r\n{\r\n\tLayaGI gi;\r\n\tgi.diffuse = layaGIBase(giInput,occlusion, normalWorld);\r\n\tgi.specular = layaGIIndirectSpecular(giInput,occlusion, uvwRoughness);\r\n\treturn gi;\r\n}\r\n\r\n\r\n";
 
-	var LightingGLSL = "#ifdef GRAPHICS_API_GLES3\r\n\t#define INVERSE_MAT(mat) inverse(mat)\r\n#else\r\n\t#define INVERSE_MAT(mat) inverseMat(mat)\r\n#endif\r\n\r\nstruct DirectionLight {\r\n\tvec3 color;\r\n\tvec3 direction;\r\n};\r\n\r\nstruct PointLight {\r\n\tvec3 color;\r\n\tvec3 position;\r\n\tfloat range;\r\n};\r\n\r\nstruct SpotLight {\r\n\tvec3 color;\r\n\tvec3 position;\r\n\tfloat range;\r\n\tvec3 direction;\r\n\tfloat spot;\r\n};\r\n\r\nstruct LayaGI{\r\n\tvec3 diffuse;\r\n\tvec3 specular;\r\n};\r\n\r\nstruct LayaLight{\r\n\tvec3 color;\r\n\tvec3 dir;\r\n};\r\n\r\nconst int c_ClusterBufferWidth = CLUSTER_X_COUNT*CLUSTER_Y_COUNT;\r\nconst int c_ClusterBufferHeight = CLUSTER_Z_COUNT*(1+int(ceil(float(MAX_LIGHT_COUNT_PER_CLUSTER)/4.0)));\r\nconst int c_ClusterBufferFloatWidth = c_ClusterBufferWidth*4;\r\n\r\n#ifndef GRAPHICS_API_GLES3\r\n\tmat3 inverseMat(mat3 m) {\r\n\t\tfloat a00 = m[0][0], a01 = m[0][1], a02 = m[0][2];\r\n\t\tfloat a10 = m[1][0], a11 = m[1][1], a12 = m[1][2];\r\n\t\tfloat a20 = m[2][0], a21 = m[2][1], a22 = m[2][2];\r\n\r\n\t\tfloat b01 = a22 * a11 - a12 * a21;\r\n\t\tfloat b11 = -a22 * a10 + a12 * a20;\r\n\t\tfloat b21 = a21 * a10 - a11 * a20;\r\n\r\n\t\tfloat det = a00 * b01 + a01 * b11 + a02 * b21;\r\n\r\n\t\treturn mat3(b01, (-a22 * a01 + a02 * a21), (a12 * a01 - a02 * a11),\r\n\t\t\t\t\tb11, (a22 * a00 - a02 * a20), (-a12 * a00 + a02 * a10),\r\n\t\t\t\t\tb21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det;\r\n\t}\r\n#endif\r\n\r\nivec4 getClusterInfo(sampler2D clusterBuffer,mat4 viewMatrix,vec4 viewport,vec3 position,vec4 fragCoord,vec4 projectParams)\r\n{\r\n\tvec3 viewPos = vec3(viewMatrix*vec4(position, 1.0)); //position in viewspace\r\n\r\n\tint clusterXIndex = int(floor(fragCoord.x/ (float(viewport.z)/float(CLUSTER_X_COUNT))));\r\n    int clusterYIndex = int(floor((viewport.w * (projectParams.z <0.0? 0.0 : 1.0) - fragCoord.y * projectParams.z)/ (float(viewport.w)/float(CLUSTER_Y_COUNT))));//Maybe Flipped ProjectMatrix\r\n\tfloat zSliceParam =float(CLUSTER_Z_COUNT)/log2(projectParams.y / projectParams.x);\r\n \tint clusterZIndex = int(floor(log2(-viewPos.z) * zSliceParam- log2(projectParams.x) * zSliceParam));//projectParams x:cameraNear y:cameraFar\r\n\r\n\tvec2 uv= vec2((float(clusterXIndex + clusterYIndex * CLUSTER_X_COUNT)+0.5)/float(c_ClusterBufferWidth),\r\n\t\t\t\t(float(clusterZIndex)+0.5)/float(c_ClusterBufferHeight));\r\n\tvec4 clusterPixel=texture2D(clusterBuffer, uv);\r\n\treturn ivec4(clusterPixel);//X:Point Count Y:Spot Count Z、W:Light Offset\r\n}\r\n\r\n\r\nint getLightIndex(sampler2D clusterBuffer,int offset,int index) \r\n{\r\n\tint totalOffset=offset+index;\r\n\tint row=totalOffset/c_ClusterBufferFloatWidth;\r\n\tint lastRowFloat=totalOffset-row*c_ClusterBufferFloatWidth;\r\n\tint col=lastRowFloat/4;\r\n\tvec2 uv=vec2((float(col)+0.5)/float(c_ClusterBufferWidth),\r\n\t\t\t\t(float(row)+0.5)/float(c_ClusterBufferHeight));\r\n\tvec4 texel = texture2D(clusterBuffer, uv);\r\n    int pixelComponent = lastRowFloat-col*4;\r\n    if (pixelComponent == 0) \r\n      return int(texel.x);\r\n    else if (pixelComponent == 1) \r\n      return int(texel.y);\r\n    else if (pixelComponent == 2) \r\n      return int(texel.z);\r\n    else //pixelComponent==3\r\n      return int(texel.w);\r\n}\r\n\r\nDirectionLight getDirectionLight(sampler2D lightBuffer,int index) \r\n{\r\n    DirectionLight light;\r\n    float v = (float(index)+0.5)/ float(MAX_LIGHT_COUNT);\r\n    vec4 p1 = texture2D(lightBuffer, vec2(0.125,v));\r\n    vec4 p2 = texture2D(lightBuffer, vec2(0.375,v));\r\n\tlight.color=p1.rgb;\r\n    light.direction = p2.rgb;\r\n    return light;\r\n}\r\n\r\nPointLight getPointLight(sampler2D lightBuffer,sampler2D clusterBuffer,ivec4 clusterInfo,int index) \r\n{\r\n    PointLight light;\r\n\tint pointIndex=getLightIndex(clusterBuffer,clusterInfo.z*c_ClusterBufferFloatWidth+clusterInfo.w,index);\r\n    float v = (float(pointIndex)+0.5)/ float(MAX_LIGHT_COUNT);\r\n    vec4 p1 = texture2D(lightBuffer, vec2(0.125,v));\r\n    vec4 p2 = texture2D(lightBuffer, vec2(0.375,v));\r\n\tlight.color=p1.rgb;\r\n\tlight.range = p1.a;\r\n    light.position = p2.rgb;\r\n    return light;\r\n}\r\n\r\nSpotLight getSpotLight(sampler2D lightBuffer,sampler2D clusterBuffer,ivec4 clusterInfo,int index) \r\n{\r\n    SpotLight light;\r\n\tint spoIndex=getLightIndex(clusterBuffer,clusterInfo.z*c_ClusterBufferFloatWidth+clusterInfo.w,clusterInfo.x+index);\r\n    float v = (float(spoIndex)+0.5)/ float(MAX_LIGHT_COUNT);\r\n    vec4 p1 = texture2D(lightBuffer, vec2(0.125,v));\r\n    vec4 p2 = texture2D(lightBuffer, vec2(0.375,v));\r\n\tvec4 p3 = texture2D(lightBuffer, vec2(0.625,v));\r\n    light.color = p1.rgb;\r\n\tlight.range=p1.a;\r\n    light.position = p2.rgb;\r\n\tlight.spot = p2.a;\r\n\tlight.direction = p3.rgb;\r\n    return light;\r\n}\r\n\r\n// Laya中使用衰减纹理\r\nfloat LayaAttenuation(in vec3 L,in float invLightRadius) {\r\n\tfloat fRatio = clamp(length(L) * invLightRadius,0.0,1.0);\r\n\tfRatio *= fRatio;\r\n\treturn 1.0 / (1.0 + 25.0 * fRatio)* clamp(4.0*(1.0 - fRatio),0.0,1.0); //fade to black as if 4 pixel texture\r\n}\r\n\r\n// Same as Just Cause 2 and Crysis 2 (you can read GPU Pro 1 book for more information)\r\nfloat BasicAttenuation(in vec3 L,in float invLightRadius) {\r\n\tvec3 distance = L * invLightRadius;\r\n\tfloat attenuation = clamp(1.0 - dot(distance, distance),0.0,1.0); // Equals float attenuation = saturate(1.0f - dot(L, L) / (lightRadius *  lightRadius));\r\n\treturn attenuation * attenuation;\r\n}\r\n\r\n// Inspired on http://fools.slindev.com/viewtopic.php?f=11&t=21&view=unread#unread\r\nfloat NaturalAttenuation(in vec3 L,in float invLightRadius) {\r\n\tfloat attenuationFactor = 30.0;\r\n\tvec3 distance = L * invLightRadius;\r\n\tfloat attenuation = dot(distance, distance); // Equals float attenuation = dot(L, L) / (lightRadius *  lightRadius);\r\n\tattenuation = 1.0 / (attenuation * attenuationFactor + 1.0);\r\n\t// Second we move down the function therewith it reaches zero at abscissa 1:\r\n\tattenuationFactor = 1.0 / (attenuationFactor + 1.0); //attenuationFactor contains now the value we have to subtract\r\n\tattenuation = max(attenuation - attenuationFactor, 0.0); // The max fixes a bug.\r\n\t// Finally we expand the equation along the y-axis so that it starts with a function value of 1 again.\r\n\tattenuation /= 1.0 - attenuationFactor;\r\n\treturn attenuation;\r\n}\r\n\r\nvoid LayaAirBlinnPhongLight (in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir,in vec3 lightColor, in vec3 lightVec,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tmediump vec3 h = normalize(viewDir-lightVec);\r\n\tlowp float ln = max (0.0, dot (-lightVec,normal));\r\n\tfloat nh = max (0.0, dot (h,normal));\r\n\tdiffuseColor=lightColor * ln;\r\n\tspecularColor=lightColor *specColor*pow (nh, specColorIntensity*128.0) * gloss;\r\n}\r\n\r\nvoid LayaAirBlinnPhongDiectionLight (in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir, in DirectionLight light,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tvec3 lightVec=normalize(light.direction);\r\n\tLayaAirBlinnPhongLight(specColor,specColorIntensity,normal,gloss,viewDir,light.color,lightVec,diffuseColor,specularColor);\r\n}\r\n\r\nvoid LayaAirBlinnPhongPointLight (in vec3 pos,in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir, in PointLight light,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tvec3 lightVec =  pos-light.position;\r\n\tLayaAirBlinnPhongLight(specColor,specColorIntensity,normal,gloss,viewDir,light.color,lightVec/length(lightVec),diffuseColor,specularColor);\r\n\tfloat attenuate = LayaAttenuation(lightVec, 1.0/light.range);\r\n\tdiffuseColor *= attenuate;\r\n\tspecularColor*= attenuate;\r\n}\r\n\r\nvoid LayaAirBlinnPhongSpotLight (in vec3 pos,in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir, in SpotLight light,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tvec3 lightVec =  pos-light.position;\r\n\tvec3 normalLightVec=lightVec/length(lightVec);\r\n\tLayaAirBlinnPhongLight(specColor,specColorIntensity,normal,gloss,viewDir,light.color,normalLightVec,diffuseColor,specularColor);\r\n\tvec2 cosAngles=cos(vec2(light.spot,light.spot*0.5)*0.5);//ConeAttenuation\r\n\tfloat dl=dot(normalize(light.direction),normalLightVec);\r\n\tdl*=smoothstep(cosAngles[0],cosAngles[1],dl);\r\n\tfloat attenuate = LayaAttenuation(lightVec, 1.0/light.range)*dl;\r\n\tdiffuseColor *=attenuate;\r\n\tspecularColor *=attenuate;\r\n}\r\n\r\nvec3 NormalSampleToWorldSpace(vec3 normalMapSample, vec3 unitNormal, vec3 tangent,vec3 binormal) {\r\n\tvec3 normalT =vec3(2.0*normalMapSample.x - 1.0,1.0-2.0*normalMapSample.y,2.0*normalMapSample.z - 1.0);\r\n\tmediump vec3 N = unitNormal;\r\n\tmediump vec3 T = tangent;\r\n\tmediump vec3 B = binormal;\r\n\tmat3 TBN = mat3(T, B, N);\r\n\r\n\t// Transform from tangent space to world space.\r\n\tvec3 bumpedNormal =normalize(TBN*normalT);\r\n\treturn bumpedNormal;\r\n}\r\n\r\nvec3 NormalSampleToWorldSpace1(vec4 normalMapSample, vec3 tangent, vec3 binormal, vec3 unitNormal) {\r\n\tvec3 normalT;\r\n\tnormalT.x = 2.0 * normalMapSample.x - 1.0;\r\n\tnormalT.y = 1.0 - 2.0 * normalMapSample.y;\r\n\tnormalT.z = sqrt(1.0 - clamp(dot(normalT.xy, normalT.xy), 0.0, 1.0));\r\n\r\n\tvec3 T = normalize(tangent);\r\n\tvec3 B = normalize(binormal);\r\n\tvec3 N = normalize(unitNormal);\r\n\tmat3 TBN = mat3(T, B, N);\r\n\r\n\t// Transform from tangent space to world space.\r\n\tvec3 bumpedNormal = TBN * normalize(normalT);\r\n\r\n\treturn bumpedNormal;\r\n}\r\n\r\nvec3 DecodeLightmap(vec4 color) {\r\n\treturn color.rgb*color.a*5.0;\r\n}\r\n\r\nvec3 decodeHDR(vec4 color,float range) {\r\n\treturn color.rgb*color.a*range;\r\n}\r\n\r\nvec2 TransformUV(vec2 texcoord,vec4 tilingOffset) {\r\n\tvec2 transTexcoord=vec2(texcoord.x,texcoord.y-1.0)*tilingOffset.xy+vec2(tilingOffset.z,-tilingOffset.w);\r\n\ttransTexcoord.y+=1.0;\r\n\treturn transTexcoord;\r\n}\r\n\r\nvec4 remapGLPositionZ(vec4 position) {\r\n\tposition.z=position.z * 2.0 - position.w;\r\n\treturn position;\r\n}\r\n\r\nmediump vec3 layaLinearToGammaSpace (mediump vec3 linRGB)\r\n{\r\n    linRGB = max(linRGB, vec3(0.0));\r\n    // An almost-perfect approximation from http://chilliant.blogspot.com.au/2012/08/srgb-approximations-for-hlsl.html?m=1\r\n    return max(1.055 * pow(linRGB,vec3(0.416666667)) - 0.055, 0.0);   \r\n}\r\n\r\nLayaLight layaDirectionLightToLight(in DirectionLight light,in float attenuate)\r\n{\r\n\tLayaLight relight;\r\n\trelight.color = light.color*attenuate;\r\n\trelight.dir = light.direction;\r\n\treturn relight;\r\n}\r\n\r\nLayaLight layaPointLightToLight(in vec3 pos,in vec3 normal, in PointLight light,in float attenuate)\r\n{\r\n\tLayaLight relight;\r\n\tvec3 lightVec =  pos-light.position;\r\n\tattenuate *= LayaAttenuation(lightVec, 1.0/light.range);\r\n\trelight.color = light.color*attenuate;\r\n\trelight.dir = normalize(lightVec);\r\n\treturn relight;\r\n}\r\n\r\nLayaLight layaSpotLightToLight(in vec3 pos,in vec3 normal, in SpotLight light,in float attenuate)\r\n{\r\n\tLayaLight relight;\r\n\tvec3 lightVec =  pos-light.position;\r\n\tvec3 normalLightVec=lightVec/length(lightVec);\r\n\tvec2 cosAngles=cos(vec2(light.spot,light.spot*0.5)*0.5);//ConeAttenuation\r\n\tfloat dl=dot(normalize(light.direction),normalLightVec);\r\n\tdl*=smoothstep(cosAngles[0],cosAngles[1],dl);\r\n\tattenuate *= LayaAttenuation(lightVec, 1.0/light.range)*dl;\r\n\trelight.dir = lightVec;\r\n\trelight.color = light.color*attenuate;\r\n\treturn relight;\r\n}\r\n\r\n\r\n\r\n\r\n";
+	var LightingGLSL = "#ifdef GRAPHICS_API_GLES3\r\n\t#define INVERSE_MAT(mat) inverse(mat)\r\n#else\r\n\t#define INVERSE_MAT(mat) inverseMat(mat)\r\n#endif\r\n\r\nstruct DirectionLight {\r\n\tvec3 color;\r\n\tvec3 direction;\r\n};\r\n\r\nstruct PointLight {\r\n\tvec3 color;\r\n\tvec3 position;\r\n\tfloat range;\r\n};\r\n\r\nstruct SpotLight {\r\n\tvec3 color;\r\n\tvec3 position;\r\n\tfloat range;\r\n\tvec3 direction;\r\n\tfloat spot;\r\n};\r\n\r\nstruct LayaGI{\r\n\tvec3 diffuse;\r\n\tvec3 specular;\r\n};\r\n\r\nstruct LayaLight{\r\n\tvec3 color;\r\n\tvec3 dir;\r\n};\r\n\r\nconst int c_ClusterBufferWidth = CLUSTER_X_COUNT*CLUSTER_Y_COUNT;\r\nconst int c_ClusterBufferHeight = CLUSTER_Z_COUNT*(1+int(ceil(float(MAX_LIGHT_COUNT_PER_CLUSTER)/4.0)));\r\nconst int c_ClusterBufferFloatWidth = c_ClusterBufferWidth*4;\r\n\r\n#ifndef GRAPHICS_API_GLES3\r\n\tmat3 inverseMat(mat3 m) {\r\n\t\tfloat a00 = m[0][0], a01 = m[0][1], a02 = m[0][2];\r\n\t\tfloat a10 = m[1][0], a11 = m[1][1], a12 = m[1][2];\r\n\t\tfloat a20 = m[2][0], a21 = m[2][1], a22 = m[2][2];\r\n\r\n\t\tfloat b01 = a22 * a11 - a12 * a21;\r\n\t\tfloat b11 = -a22 * a10 + a12 * a20;\r\n\t\tfloat b21 = a21 * a10 - a11 * a20;\r\n\r\n\t\tfloat det = a00 * b01 + a01 * b11 + a02 * b21;\r\n\r\n\t\treturn mat3(b01, (-a22 * a01 + a02 * a21), (a12 * a01 - a02 * a11),\r\n\t\t\t\t\tb11, (a22 * a00 - a02 * a20), (-a12 * a00 + a02 * a10),\r\n\t\t\t\t\tb21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det;\r\n\t}\r\n#endif\r\n\r\nivec4 getClusterInfo(sampler2D clusterBuffer,mat4 viewMatrix,vec4 viewport,vec3 position,vec4 fragCoord,vec4 projectParams)\r\n{\r\n\tvec3 viewPos = vec3(viewMatrix*vec4(position, 1.0)); //position in viewspace\r\n\r\n\tint clusterXIndex = int(floor(fragCoord.x/ (float(viewport.z)/float(CLUSTER_X_COUNT))));\r\n    int clusterYIndex = int(floor((viewport.w * (projectParams.z <0.0? 0.0 : 1.0) - fragCoord.y * projectParams.z)/ (float(viewport.w)/float(CLUSTER_Y_COUNT))));//Maybe Flipped ProjectMatrix\r\n\tfloat zSliceParam =float(CLUSTER_Z_COUNT)/log2(projectParams.y / projectParams.x);\r\n \tint clusterZIndex = int(floor(log2(-viewPos.z) * zSliceParam- log2(projectParams.x) * zSliceParam));//projectParams x:cameraNear y:cameraFar\r\n\r\n\tvec2 uv= vec2((float(clusterXIndex + clusterYIndex * CLUSTER_X_COUNT)+0.5)/float(c_ClusterBufferWidth),\r\n\t\t\t\t(float(clusterZIndex)+0.5)/float(c_ClusterBufferHeight));\r\n\tvec4 clusterPixel=texture2D(clusterBuffer, uv);\r\n\treturn ivec4(clusterPixel);//X:Point Count Y:Spot Count Z、W:Light Offset\r\n}\r\n\r\n\r\nint getLightIndex(sampler2D clusterBuffer,int offset,int index) \r\n{\r\n\tint totalOffset=offset+index;\r\n\tint row=totalOffset/c_ClusterBufferFloatWidth;\r\n\tint lastRowFloat=totalOffset-row*c_ClusterBufferFloatWidth;\r\n\tint col=lastRowFloat/4;\r\n\tvec2 uv=vec2((float(col)+0.5)/float(c_ClusterBufferWidth),\r\n\t\t\t\t(float(row)+0.5)/float(c_ClusterBufferHeight));\r\n\tvec4 texel = texture2D(clusterBuffer, uv);\r\n    int pixelComponent = lastRowFloat-col*4;\r\n    if (pixelComponent == 0) \r\n      return int(texel.x);\r\n    else if (pixelComponent == 1) \r\n      return int(texel.y);\r\n    else if (pixelComponent == 2) \r\n      return int(texel.z);\r\n    else //pixelComponent==3\r\n      return int(texel.w);\r\n}\r\n\r\nDirectionLight getDirectionLight(sampler2D lightBuffer,int index) \r\n{\r\n    DirectionLight light;\r\n    float v = (float(index)+0.5)/ float(MAX_LIGHT_COUNT);\r\n    vec4 p1 = texture2D(lightBuffer, vec2(0.125,v));\r\n    vec4 p2 = texture2D(lightBuffer, vec2(0.375,v));\r\n\tlight.color=p1.rgb;\r\n    light.direction = p2.rgb;\r\n    return light;\r\n}\r\n\r\nPointLight getPointLight(sampler2D lightBuffer,sampler2D clusterBuffer,ivec4 clusterInfo,int index) \r\n{\r\n    PointLight light;\r\n\tint pointIndex=getLightIndex(clusterBuffer,clusterInfo.z*c_ClusterBufferFloatWidth+clusterInfo.w,index);\r\n    float v = (float(pointIndex)+0.5)/ float(MAX_LIGHT_COUNT);\r\n    vec4 p1 = texture2D(lightBuffer, vec2(0.125,v));\r\n    vec4 p2 = texture2D(lightBuffer, vec2(0.375,v));\r\n\tlight.color=p1.rgb;\r\n\tlight.range = p1.a;\r\n    light.position = p2.rgb;\r\n    return light;\r\n}\r\n\r\nSpotLight getSpotLight(sampler2D lightBuffer,sampler2D clusterBuffer,ivec4 clusterInfo,int index) \r\n{\r\n    SpotLight light;\r\n\tint spoIndex=getLightIndex(clusterBuffer,clusterInfo.z*c_ClusterBufferFloatWidth+clusterInfo.w,clusterInfo.x+index);\r\n    float v = (float(spoIndex)+0.5)/ float(MAX_LIGHT_COUNT);\r\n    vec4 p1 = texture2D(lightBuffer, vec2(0.125,v));\r\n    vec4 p2 = texture2D(lightBuffer, vec2(0.375,v));\r\n\tvec4 p3 = texture2D(lightBuffer, vec2(0.625,v));\r\n    light.color = p1.rgb;\r\n\tlight.range=p1.a;\r\n    light.position = p2.rgb;\r\n\tlight.spot = p2.a;\r\n\tlight.direction = p3.rgb;\r\n    return light;\r\n}\r\n\r\n// Laya中使用衰减纹理\r\nfloat LayaAttenuation(in vec3 L,in float invLightRadius) {\r\n\tfloat fRatio = clamp(length(L) * invLightRadius,0.0,1.0);\r\n\tfRatio *= fRatio;\r\n\treturn 1.0 / (1.0 + 25.0 * fRatio)* clamp(4.0*(1.0 - fRatio),0.0,1.0); //fade to black as if 4 pixel texture\r\n}\r\n\r\n// Same as Just Cause 2 and Crysis 2 (you can read GPU Pro 1 book for more information)\r\nfloat BasicAttenuation(in vec3 L,in float invLightRadius) {\r\n\tvec3 distance = L * invLightRadius;\r\n\tfloat attenuation = clamp(1.0 - dot(distance, distance),0.0,1.0); // Equals float attenuation = saturate(1.0f - dot(L, L) / (lightRadius *  lightRadius));\r\n\treturn attenuation * attenuation;\r\n}\r\n\r\n// Inspired on http://fools.slindev.com/viewtopic.php?f=11&t=21&view=unread#unread\r\nfloat NaturalAttenuation(in vec3 L,in float invLightRadius) {\r\n\tfloat attenuationFactor = 30.0;\r\n\tvec3 distance = L * invLightRadius;\r\n\tfloat attenuation = dot(distance, distance); // Equals float attenuation = dot(L, L) / (lightRadius *  lightRadius);\r\n\tattenuation = 1.0 / (attenuation * attenuationFactor + 1.0);\r\n\t// Second we move down the function therewith it reaches zero at abscissa 1:\r\n\tattenuationFactor = 1.0 / (attenuationFactor + 1.0); //attenuationFactor contains now the value we have to subtract\r\n\tattenuation = max(attenuation - attenuationFactor, 0.0); // The max fixes a bug.\r\n\t// Finally we expand the equation along the y-axis so that it starts with a function value of 1 again.\r\n\tattenuation /= 1.0 - attenuationFactor;\r\n\treturn attenuation;\r\n}\r\n\r\nvoid LayaAirBlinnPhongLight (in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir,in vec3 lightColor, in vec3 lightVec,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tmediump vec3 h = normalize(viewDir-lightVec);\r\n\tlowp float ln = max (0.0, dot (-lightVec,normal));\r\n\tfloat nh = max (0.0, dot (h,normal));\r\n\tdiffuseColor=lightColor * ln;\r\n\tspecularColor=lightColor *specColor*pow (nh, specColorIntensity*128.0) * gloss;\r\n}\r\n\r\nvoid LayaAirBlinnPhongDiectionLight (in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir, in DirectionLight light,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tvec3 lightVec=normalize(light.direction);\r\n\tLayaAirBlinnPhongLight(specColor,specColorIntensity,normal,gloss,viewDir,light.color,lightVec,diffuseColor,specularColor);\r\n}\r\n\r\nvoid LayaAirBlinnPhongPointLight (in vec3 pos,in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir, in PointLight light,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tvec3 lightVec =  pos-light.position;\r\n\tLayaAirBlinnPhongLight(specColor,specColorIntensity,normal,gloss,viewDir,light.color,lightVec/length(lightVec),diffuseColor,specularColor);\r\n\tfloat attenuate = LayaAttenuation(lightVec, 1.0/light.range);\r\n\tdiffuseColor *= attenuate;\r\n\tspecularColor*= attenuate;\r\n}\r\n\r\nvoid LayaAirBlinnPhongSpotLight (in vec3 pos,in vec3 specColor,in float specColorIntensity,in vec3 normal,in vec3 gloss, in vec3 viewDir, in SpotLight light,out vec3 diffuseColor,out vec3 specularColor) {\r\n\tvec3 lightVec =  pos-light.position;\r\n\tvec3 normalLightVec=lightVec/length(lightVec);\r\n\tLayaAirBlinnPhongLight(specColor,specColorIntensity,normal,gloss,viewDir,light.color,normalLightVec,diffuseColor,specularColor);\r\n\tvec2 cosAngles=cos(vec2(light.spot,light.spot*0.5)*0.5);//ConeAttenuation\r\n\tfloat dl=dot(normalize(light.direction),normalLightVec);\r\n\tdl*=smoothstep(cosAngles[0],cosAngles[1],dl);\r\n\tfloat attenuate = LayaAttenuation(lightVec, 1.0/light.range)*dl;\r\n\tdiffuseColor *=attenuate;\r\n\tspecularColor *=attenuate;\r\n}\r\n\r\nvec3 NormalSampleToWorldSpace(vec3 normalMapSample, vec3 unitNormal, vec3 tangent,vec3 binormal) {\r\n\tvec3 normalT =vec3(2.0*normalMapSample.x - 1.0,1.0-2.0*normalMapSample.y,2.0*normalMapSample.z - 1.0);\r\n\tmediump vec3 N = unitNormal;\r\n\tmediump vec3 T = tangent;\r\n\tmediump vec3 B = binormal;\r\n\tmat3 TBN = mat3(T, B, N);\r\n\r\n\t// Transform from tangent space to world space.\r\n\tvec3 bumpedNormal =normalize(TBN*normalT);\r\n\treturn bumpedNormal;\r\n}\r\n\r\nvec3 NormalSampleToWorldSpace1(vec4 normalMapSample, vec3 tangent, vec3 binormal, vec3 unitNormal) {\r\n\tvec3 normalT;\r\n\tnormalT.x = 2.0 * normalMapSample.x - 1.0;\r\n\tnormalT.y = 1.0 - 2.0 * normalMapSample.y;\r\n\tnormalT.z = sqrt(1.0 - clamp(dot(normalT.xy, normalT.xy), 0.0, 1.0));\r\n\r\n\tvec3 T = normalize(tangent);\r\n\tvec3 B = normalize(binormal);\r\n\tvec3 N = normalize(unitNormal);\r\n\tmat3 TBN = mat3(T, B, N);\r\n\r\n\t// Transform from tangent space to world space.\r\n\tvec3 bumpedNormal = TBN * normalize(normalT);\r\n\r\n\treturn bumpedNormal;\r\n}\r\n\r\nvec3 DecodeLightmap(vec4 color) {\r\n\treturn color.rgb*color.a*5.0;\r\n}\r\n\r\nvec3 decodeHDR(vec4 color,float range) {\r\n\treturn color.rgb*color.a*range;\r\n}\r\n\r\nvec2 TransformUV(vec2 texcoord,vec4 tilingOffset) {\r\n\tvec2 transTexcoord=vec2(texcoord.x,texcoord.y-1.0)*tilingOffset.xy+vec2(tilingOffset.z,-tilingOffset.w);\r\n\ttransTexcoord.y+=1.0;\r\n\treturn transTexcoord;\r\n}\r\n\r\nvec4 remapGLPositionZ(vec4 position) {\r\n\tposition.z=position.z * 2.0 - position.w;\r\n\treturn position;\r\n}\r\n\r\nmediump vec3 layaLinearToGammaSpace (mediump vec3 linRGB)\r\n{\r\n    linRGB = max(linRGB, vec3(0.0));\r\n    // An almost-perfect approximation from http://chilliant.blogspot.com.au/2012/08/srgb-approximations-for-hlsl.html?m=1\r\n    return max(1.055 * pow(linRGB,vec3(0.416666667)) - 0.055, 0.0);   \r\n}\r\n\r\nLayaLight layaDirectionLightToLight(in DirectionLight light,in float attenuate)\r\n{\r\n\tLayaLight relight;\r\n\trelight.color = light.color*attenuate;\r\n\trelight.dir = light.direction;\r\n\treturn relight;\r\n}\r\n\r\nLayaLight layaPointLightToLight(in vec3 pos,in vec3 normal, in PointLight light,in float attenuate)\r\n{\r\n\tLayaLight relight;\r\n\tvec3 lightVec =  pos-light.position;\r\n\tattenuate *= LayaAttenuation(lightVec, 1.0/light.range);\r\n\trelight.color = light.color*attenuate;\r\n\trelight.dir = normalize(lightVec);\r\n\treturn relight;\r\n}\r\n\r\nLayaLight layaSpotLightToLight(in vec3 pos,in vec3 normal, in SpotLight light,in float attenuate)\r\n{\r\n\tLayaLight relight;\r\n\tvec3 lightVec =  pos-light.position;\r\n\tvec3 normalLightVec=lightVec/length(lightVec);\r\n\tvec2 cosAngles=cos(vec2(light.spot,light.spot*0.5)*0.5);//ConeAttenuation\r\n\tfloat dl=dot(normalize(light.direction),normalLightVec);\r\n\tdl*=smoothstep(cosAngles[0],cosAngles[1],dl);\r\n\tattenuate *= LayaAttenuation(lightVec, 1.0/light.range)*dl;\r\n\trelight.dir = lightVec;\r\n\trelight.color = light.color*attenuate;\r\n\treturn relight;\r\n}\r\n\r\n";
 
 	var ShadowSampleTentGLSL = "// ------------------------------------------------------------------\r\n//  PCF Filtering Tent Functions\r\n// ------------------------------------------------------------------\r\n\r\n// Assuming a isoceles right angled triangle of height \"triangleHeight\" (as drawn below).\r\n// This function return the area of the triangle above the first texel(in Y the first texel).\r\n//\r\n// |\\      <-- 45 degree slop isosceles right angled triangle\r\n// | \\\r\n// ----    <-- length of this side is \"triangleHeight\"\r\n// _ _ _ _ <-- texels\r\nfloat sampleShadowGetIRTriangleTexelArea(float triangleHeight)\r\n{\r\n    return triangleHeight - 0.5;\r\n}\r\n\r\n// Assuming a isoceles triangle of 1.5 texels height and 3 texels wide lying on 4 texels.\r\n// This function return the area of the triangle above each of those texels.\r\n//    |    <-- offset from -0.5 to 0.5, 0 meaning triangle is exactly in the center\r\n//   / \\   <-- 45 degree slop isosceles triangle (ie tent projected in 2D)\r\n//  /   \\\r\n// _ _ _ _ <-- texels\r\n// X Y Z W <-- result indices (in computedArea.xyzw and computedAreaUncut.xyzw)\r\n// Top point at (right,top) in a texel,left bottom point at (middle,middle) in a texel,right bottom point at (middle,middle) in a texel.\r\nvoid sampleShadowGetTexelAreasTent3x3(float offset, out vec4 computedArea, out vec4 computedAreaUncut)\r\n{\r\n    // Compute the exterior areas,a and h is same.\r\n    float a = offset + 0.5;\r\n    float offsetSquaredHalved = a * a * 0.5;\r\n    computedAreaUncut.x = computedArea.x = offsetSquaredHalved - offset;\r\n    computedAreaUncut.w = computedArea.w = offsetSquaredHalved;\r\n\r\n    // Compute the middle areas\r\n    // For Y : We find the area in Y of as if the left section of the isoceles triangle would\r\n    // intersect the axis between Y and Z (ie where offset = 0).\r\n    computedAreaUncut.y = sampleShadowGetIRTriangleTexelArea(1.5 - offset);\r\n    // This area is superior to the one we are looking for if (offset < 0) thus we need to\r\n    // subtract the area of the triangle defined by (0,1.5-offset), (0,1.5+offset), (-offset,1.5).\r\n    float clampedOffsetLeft = min(offset,0.0);\r\n    float areaOfSmallLeftTriangle = clampedOffsetLeft * clampedOffsetLeft;\r\n    computedArea.y = computedAreaUncut.y - areaOfSmallLeftTriangle;\r\n\r\n    // We do the same for the Z but with the right part of the isoceles triangle\r\n    computedAreaUncut.z = sampleShadowGetIRTriangleTexelArea(1.5 + offset);\r\n    float clampedOffsetRight = max(offset,0.0);\r\n    float areaOfSmallRightTriangle = clampedOffsetRight * clampedOffsetRight;\r\n    computedArea.z = computedAreaUncut.z - areaOfSmallRightTriangle;\r\n}\r\n\r\n// Assuming a isoceles triangle of 2.5 texel height and 5 texels wide lying on 6 texels.\r\n// This function return the weight of each texels area relative to the full triangle area.\r\n//  /       \\\r\n// _ _ _ _ _ _ <-- texels\r\n// 0 1 2 3 4 5 <-- computed area indices (in texelsWeights[])\r\n// Top point at (right,top) in a texel,left bottom point at (middle,middle) in a texel,right bottom point at (middle,middle) in a texel.\r\nvoid sampleShadowGetTexelWeightsTent5x5(float offset, out vec3 texelsWeightsA, out vec3 texelsWeightsB)\r\n{\r\n    vec4 areaFrom3texelTriangle;\r\n    vec4 areaUncutFrom3texelTriangle;\r\n    sampleShadowGetTexelAreasTent3x3(offset, areaFrom3texelTriangle, areaUncutFrom3texelTriangle);\r\n\r\n    // Triangle slope is 45 degree thus we can almost reuse the result of the 3 texel wide computation.\r\n    // the 5 texel wide triangle can be seen as the 3 texel wide one but shifted up by one unit/texel.\r\n    // 0.16 is 1/(the triangle area)\r\n    texelsWeightsA.x = 0.16 * (areaFrom3texelTriangle.x);\r\n    texelsWeightsA.y = 0.16 * (areaUncutFrom3texelTriangle.y);\r\n    texelsWeightsA.z = 0.16 * (areaFrom3texelTriangle.y + 1.0);\r\n    texelsWeightsB.x = 0.16 * (areaFrom3texelTriangle.z + 1.0);\r\n    texelsWeightsB.y = 0.16 * (areaUncutFrom3texelTriangle.z);\r\n    texelsWeightsB.z = 0.16 * (areaFrom3texelTriangle.w);\r\n}\r\n\r\n// 5x5 Tent filter (45 degree sloped triangles in U and V)\r\nvoid sampleShadowComputeSamplesTent5x5(vec4 shadowMapTextureTexelSize, vec2 coord, out float fetchesWeights[9], out vec2 fetchesUV[9])\r\n{\r\n    // tent base is 5x5 base thus covering from 25 to 36 texels, thus we need 9 bilinear PCF fetches\r\n    vec2 tentCenterInTexelSpace = coord.xy * shadowMapTextureTexelSize.zw;\r\n    vec2 centerOfFetchesInTexelSpace = floor(tentCenterInTexelSpace + 0.5);\r\n    vec2 offsetFromTentCenterToCenterOfFetches = tentCenterInTexelSpace - centerOfFetchesInTexelSpace;\r\n\r\n    // find the weight of each texel based on the area of a 45 degree slop tent above each of them.\r\n    vec3 texelsWeightsUA, texelsWeightsUB;\r\n    vec3 texelsWeightsVA, texelsWeightsVB;\r\n    sampleShadowGetTexelWeightsTent5x5(offsetFromTentCenterToCenterOfFetches.x, texelsWeightsUA, texelsWeightsUB);\r\n    sampleShadowGetTexelWeightsTent5x5(offsetFromTentCenterToCenterOfFetches.y, texelsWeightsVA, texelsWeightsVB);\r\n\r\n    // each fetch will cover a group of 2x2 texels, the weight of each group is the sum of the weights of the texels\r\n    vec3 fetchesWeightsU = vec3(texelsWeightsUA.xz, texelsWeightsUB.y) + vec3(texelsWeightsUA.y, texelsWeightsUB.xz);\r\n    vec3 fetchesWeightsV = vec3(texelsWeightsVA.xz, texelsWeightsVB.y) + vec3(texelsWeightsVA.y, texelsWeightsVB.xz);\r\n\r\n    // move the PCF bilinear fetches to respect texels weights\r\n    vec3 fetchesOffsetsU = vec3(texelsWeightsUA.y, texelsWeightsUB.xz) / fetchesWeightsU.xyz + vec3(-2.5,-0.5,1.5);\r\n    vec3 fetchesOffsetsV = vec3(texelsWeightsVA.y, texelsWeightsVB.xz) / fetchesWeightsV.xyz + vec3(-2.5,-0.5,1.5);\r\n    fetchesOffsetsU *= shadowMapTextureTexelSize.xxx;\r\n    fetchesOffsetsV *= shadowMapTextureTexelSize.yyy;\r\n\r\n    vec2 bilinearFetchOrigin = centerOfFetchesInTexelSpace * shadowMapTextureTexelSize.xy;\r\n    fetchesUV[0] = bilinearFetchOrigin + vec2(fetchesOffsetsU.x, fetchesOffsetsV.x);\r\n    fetchesUV[1] = bilinearFetchOrigin + vec2(fetchesOffsetsU.y, fetchesOffsetsV.x);\r\n    fetchesUV[2] = bilinearFetchOrigin + vec2(fetchesOffsetsU.z, fetchesOffsetsV.x);\r\n    fetchesUV[3] = bilinearFetchOrigin + vec2(fetchesOffsetsU.x, fetchesOffsetsV.y);\r\n    fetchesUV[4] = bilinearFetchOrigin + vec2(fetchesOffsetsU.y, fetchesOffsetsV.y);\r\n    fetchesUV[5] = bilinearFetchOrigin + vec2(fetchesOffsetsU.z, fetchesOffsetsV.y);\r\n    fetchesUV[6] = bilinearFetchOrigin + vec2(fetchesOffsetsU.x, fetchesOffsetsV.z);\r\n    fetchesUV[7] = bilinearFetchOrigin + vec2(fetchesOffsetsU.y, fetchesOffsetsV.z);\r\n    fetchesUV[8] = bilinearFetchOrigin + vec2(fetchesOffsetsU.z, fetchesOffsetsV.z);\r\n\r\n    fetchesWeights[0] = fetchesWeightsU.x * fetchesWeightsV.x;\r\n    fetchesWeights[1] = fetchesWeightsU.y * fetchesWeightsV.x;\r\n    fetchesWeights[2] = fetchesWeightsU.z * fetchesWeightsV.x;\r\n    fetchesWeights[3] = fetchesWeightsU.x * fetchesWeightsV.y;\r\n    fetchesWeights[4] = fetchesWeightsU.y * fetchesWeightsV.y;\r\n    fetchesWeights[5] = fetchesWeightsU.z * fetchesWeightsV.y;\r\n    fetchesWeights[6] = fetchesWeightsU.x * fetchesWeightsV.z;\r\n    fetchesWeights[7] = fetchesWeightsU.y * fetchesWeightsV.z;\r\n    fetchesWeights[8] = fetchesWeightsU.z * fetchesWeightsV.z;\r\n}";
 
@@ -30237,7 +29758,7 @@
 
 	var MeshBlinnPhongPS = "#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n\tprecision highp int;\r\n#else\r\n\tprecision mediump float;\r\n\tprecision mediump int;\r\n#endif\r\n\r\n#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\"\r\n\r\nuniform vec4 u_DiffuseColor;\r\n\r\n#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef ALPHATEST\r\n\tuniform float u_AlphaTestValue;\r\n#endif\r\n\r\n#ifdef DIFFUSEMAP\r\n\tuniform sampler2D u_DiffuseTexture;\r\n#endif\r\n\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tvarying vec2 v_LightMapUV;\r\n\tuniform sampler2D u_LightMap;\r\n#endif\r\n\r\nvarying vec3 v_Normal;\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\tvarying vec3 v_ViewDir; \r\n\r\n\tuniform vec3 u_MaterialSpecular;\r\n\tuniform float u_Shininess;\r\n\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tuniform DirectionLight u_DirectionLight;\r\n\t\t#endif\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tuniform PointLight u_PointLight;\r\n\t\t#endif\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tuniform SpotLight u_SpotLight;\r\n\t\t#endif\r\n\t#else\r\n\t\tuniform mat4 u_View;\r\n\t\tuniform vec4 u_ProjectionParams;\r\n\t\tuniform vec4 u_Viewport;\r\n\t\tuniform int u_DirationLightCount;\r\n\t\tuniform sampler2D u_LightBuffer;\r\n\t\tuniform sampler2D u_LightClusterBuffer;\r\n\t#endif\r\n\r\n\t#ifdef SPECULARMAP \r\n\t\tuniform sampler2D u_SpecularTexture;\r\n\t#endif\r\n#endif\r\n\r\n#ifdef NORMALMAP \r\n\tuniform sampler2D u_NormalTexture;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef FOG\r\n\tuniform float u_FogStart;\r\n\tuniform float u_FogRange;\r\n\tuniform vec3 u_FogColor;\r\n#endif\r\n\r\n#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n\r\n#include \"GlobalIllumination.glsl\";//\"GlobalIllumination.glsl use uniform should at front of this\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\n\r\nvoid main()\r\n{\r\n\tvec3 normal;//light and SH maybe use normal\r\n\t#if defined(NORMALMAP)\r\n\t\tvec3 normalMapSample = texture2D(u_NormalTexture, v_Texcoord0).rgb;\r\n\t\tnormal = normalize(NormalSampleToWorldSpace(normalMapSample, v_Normal, v_Tangent,v_Binormal));\r\n\t#else\r\n\t\tnormal = normalize(v_Normal);\r\n\t#endif\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tvec3 viewDir= normalize(v_ViewDir);\r\n\t#endif\r\n\r\n\tLayaGIInput giInput;\r\n\t#ifdef LIGHTMAP\t\r\n\t\tgiInput.lightmapUV=v_LightMapUV;\r\n\t#endif\r\n\tvec3 globalDiffuse=layaGIBase(giInput,1.0,normal);\r\n\t\r\n\tvec4 mainColor=u_DiffuseColor;\r\n\t#ifdef DIFFUSEMAP\r\n\t\tvec4 difTexColor=texture2D(u_DiffuseTexture, v_Texcoord0);\r\n\t\tmainColor=mainColor*difTexColor;\r\n\t#endif \r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tmainColor=mainColor*v_Color;\r\n\t#endif \r\n    \r\n\t#ifdef ALPHATEST\r\n\t\tif(mainColor.a<u_AlphaTestValue)\r\n\t\t\tdiscard;\r\n\t#endif\r\n  \r\n\t\r\n\tvec3 diffuse = vec3(0.0);\r\n\tvec3 specular= vec3(0.0);\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tvec3 dif,spe;\r\n\t\t#ifdef SPECULARMAP\r\n\t\t\tvec3 gloss=texture2D(u_SpecularTexture, v_Texcoord0).rgb;\r\n\t\t#else\r\n\t\t\t#ifdef DIFFUSEMAP\r\n\t\t\t\tvec3 gloss=vec3(difTexColor.a);\r\n\t\t\t#else\r\n\t\t\t\tvec3 gloss=vec3(1.0);\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t\r\n\t\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tLayaAirBlinnPhongDiectionLight(u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_DirectionLight,dif,spe);\r\n\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t#else\r\n\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t#endif\r\n\t\t\t\tfloat shadowAttenuation=sampleShadowmap(shadowCoord);\r\n\t\t\t\tdif *= shadowAttenuation;\r\n\t\t\t\tspe *= shadowAttenuation;\r\n\t\t\t#endif\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_PointLight,dif,spe);\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,u_SpotLight,dif,spe);\r\n\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\tfloat spotShadowAttenuation = sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t\tdif *= shadowAttenuation;\r\n\t\t\t\tspe *= shadowAttenuation;\r\n\t\t\t#endif\r\n\t\t\tdiffuse+=dif;\r\n\t\t\tspecular+=spe;\r\n\t\t#endif\r\n\t#else\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t{\r\n\t\t\t\tif(i >= u_DirationLightCount)\r\n\t\t\t\t\tbreak;\r\n\t\t\t\tDirectionLight directionLight = getDirectionLight(u_LightBuffer,i);\r\n\t\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t\t\t#else\r\n\t\t\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t\t\t#endif\r\n\t\t\t\t\t\tdirectionLight.color *= sampleShadowmap(shadowCoord);\r\n\t\t\t\t\t}\r\n\t\t\t\t#endif\r\n\t\t\t\tLayaAirBlinnPhongDiectionLight(u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,directionLight,dif,spe);\r\n\t\t\t\tdiffuse+=dif;\r\n\t\t\t\tspecular+=spe;\r\n\t\t\t}\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tivec4 clusterInfo =getClusterInfo(u_LightClusterBuffer,u_View,u_Viewport, v_PositionWorld,gl_FragCoord,u_ProjectionParams);\r\n\t\t\t#ifdef POINTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.x)//PointLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tPointLight pointLight = getPointLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\tLayaAirBlinnPhongPointLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,pointLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t\t#ifdef SPOTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tif(i >= clusterInfo.y)//SpotLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tSpotLight spotLight = getSpotLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\t\t\t\tspotLight.color *= sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t#endif\r\n\t\t\t\t\tLayaAirBlinnPhongSpotLight(v_PositionWorld,u_MaterialSpecular,u_Shininess,normal,gloss,viewDir,spotLight,dif,spe);\r\n\t\t\t\t\tdiffuse+=dif;\r\n\t\t\t\t\tspecular+=spe;\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t#endif\r\n\r\n\tgl_FragColor =vec4(mainColor.rgb*(globalDiffuse + diffuse),mainColor.a);\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\tgl_FragColor.rgb+=specular;\r\n\t#endif\r\n\t  \r\n\t#ifdef FOG\r\n\t\tfloat lerpFact=clamp((1.0/gl_FragCoord.w-u_FogStart)/u_FogRange,0.0,1.0);\r\n\t\tgl_FragColor.rgb=mix(gl_FragColor.rgb,u_FogColor,lerpFact);\r\n\t#endif\r\n}\r\n\r\n";
 
-	var MeshBlinnPhongVS = "#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\";\r\n\r\nattribute vec4 a_Position;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#if defined(LIGHTMAP)&&defined(UV1)\r\n\tattribute vec2 a_Texcoord1;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tuniform vec4 u_LightmapScaleOffset;\r\n\tvarying vec2 v_LightMapUV;\r\n#endif\r\n\r\n#ifdef COLOR\r\n\tattribute vec4 a_Color;\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nattribute vec3 a_Normal;\r\nvarying vec3 v_Normal; \r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\tuniform vec3 u_CameraPos;\r\n\tvarying vec3 v_ViewDir; \r\n#endif\r\n\r\n#if defined(NORMALMAP)\r\n\tattribute vec4 a_Tangent0;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\n#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\n#ifdef SIMPLEBONE\r\n\t#ifdef GPU_INSTANCE\r\n\t\tattribute vec4 a_SimpleTextureParams;\r\n\t#else\r\n\t\tuniform vec4 u_SimpleAnimatorParams;\r\n\t#endif\r\n\tuniform sampler2D u_SimpleAnimatorTexture;\r\n\r\n\tuniform float u_SimpleAnimatorTextureSize; \r\n#endif\r\n\r\n\r\n#ifdef SIMPLEBONE\r\nmat4 loadMatFromTexture(float FramePos,int boneIndices,float offset)\r\n{\r\n\tvec2 uv;\r\n\tfloat PixelPos = FramePos+float(boneIndices)*4.0;\r\n\tfloat halfOffset = offset * 0.5;\r\n\tfloat uvoffset = PixelPos/u_SimpleAnimatorTextureSize;\r\n\tuv.y = floor(uvoffset)*offset+halfOffset;\r\n\tuv.x = mod(float(PixelPos),u_SimpleAnimatorTextureSize)*offset+halfOffset;\r\n\tvec4 mat0row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat1row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat2row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat3row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tmat4 m =mat4(mat0row.x,mat0row.y,mat0row.z,mat0row.w,\r\n\t\t\t  mat1row.x,mat1row.y,mat1row.z,mat1row.w,\r\n\t\t\t  mat2row.x,mat2row.y,mat2row.z,mat2row.w,\r\n\t\t\t  mat3row.x,mat3row.y,mat3row.z,mat3row.w);\r\n\treturn m;\r\n}\r\n#endif\r\n\r\nvoid main()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform;\r\n\t \t#ifdef SIMPLEBONE\r\n\t\t\tfloat currentPixelPos;\r\n\t\t\t#ifdef GPU_INSTANCE\r\n\t\t\t\tcurrentPixelPos = a_SimpleTextureParams.x+a_SimpleTextureParams.y;\r\n\t\t\t#else\r\n\t\t\t\tcurrentPixelPos = u_SimpleAnimatorParams.x+u_SimpleAnimatorParams.y;\r\n\t\t\t#endif\r\n\t\t\tfloat offset = 1.0/u_SimpleAnimatorTextureSize;\r\n\t\t\tskinTransform =  loadMatFromTexture(currentPixelPos,int(a_BoneIndices.x),offset) * a_BoneWeights.x;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.y),offset) * a_BoneWeights.y;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.z),offset) * a_BoneWeights.z;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.w),offset) * a_BoneWeights.w;\r\n\t\t#else\r\n\t\t\tskinTransform =  u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\t#endif\r\n\t\tposition=skinTransform*a_Position;\r\n\t #else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\t\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\r\n\tmat3 worldInvMat;\r\n\t#ifdef BONE\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat*skinTransform));\r\n\t#else\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat));\r\n\t#endif  \r\n\tv_Normal=normalize(a_Normal*worldInvMat);\r\n\t#if defined(NORMALMAP)\r\n\t\tv_Tangent=normalize(a_Tangent0.xyz*worldInvMat);\r\n\t\tv_Binormal=cross(v_Normal,v_Tangent)*a_Tangent0.w;\r\n\t#endif\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\tvec3 positionWS=(worldMat*position).xyz;\r\n\t\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tv_ViewDir = u_CameraPos-positionWS;\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\t\tv_PositionWorld = positionWS;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n\t\t#ifdef TILINGOFFSET\r\n\t\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t\t#else\r\n\t\t\tv_Texcoord0=a_Texcoord0;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#ifdef LIGHTMAP\r\n\t\t#ifdef UV1\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord1.x,1.0-a_Texcoord1.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#else\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord0.x,1.0-a_Texcoord0.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#endif \r\n\t\tv_LightMapUV.y=1.0-v_LightMapUV.y;\r\n\t#endif\r\n\r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tv_Color=a_Color;\r\n\t#endif\r\n\r\n\t#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\t\tv_ShadowCoord =getShadowCoord(vec4(positionWS,1.0));\r\n\t#endif\r\n\r\n\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\tv_SpotShadowCoord = u_SpotViewProjectMatrix*vec4(positionWS,1.0);\r\n\t#endif\r\n\r\n\tgl_Position=remapGLPositionZ(gl_Position);\r\n}";
+	var MeshBlinnPhongVS = "#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\";\r\n\r\nattribute vec4 a_Position;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#if defined(LIGHTMAP)&&defined(UV1)\r\n\tattribute vec2 a_Texcoord1;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tuniform vec4 u_LightmapScaleOffset;\r\n\tvarying vec2 v_LightMapUV;\r\n#endif\r\n\r\n#ifdef COLOR\r\n\tattribute vec4 a_Color;\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nattribute vec3 a_Normal;\r\nvarying vec3 v_Normal; \r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\tuniform vec3 u_CameraPos;\r\n\tvarying vec3 v_ViewDir; \r\n#endif\r\n\r\n#if defined(NORMALMAP)\r\n\tattribute vec4 a_Tangent0;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\n#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\tvarying vec3 v_PositionWorld;\r\n#endif\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\nvoid main()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform = u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\tposition=skinTransform*a_Position;\r\n\t#else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\t\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\r\n\tmat3 worldInvMat;\r\n\t#ifdef BONE\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat*skinTransform));\r\n\t#else\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat));\r\n\t#endif  \r\n\tv_Normal=normalize(a_Normal*worldInvMat);\r\n\t#if defined(NORMALMAP)\r\n\t\tv_Tangent=normalize(a_Tangent0.xyz*worldInvMat);\r\n\t\tv_Binormal=cross(v_Normal,v_Tangent)*a_Tangent0.w;\r\n\t#endif\r\n\r\n\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\tvec3 positionWS=(worldMat*position).xyz;\r\n\t\t#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tv_ViewDir = u_CameraPos-positionWS;\r\n\t\t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)||(defined(CALCULATE_SHADOWS)&&defined(SHADOW_CASCADE))||defined(CALCULATE_SPOTSHADOWS)\r\n\t\t\tv_PositionWorld = positionWS;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n\t\t#ifdef TILINGOFFSET\r\n\t\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t\t#else\r\n\t\t\tv_Texcoord0=a_Texcoord0;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\t#ifdef LIGHTMAP\r\n\t\t#ifdef UV1\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord1.x,1.0-a_Texcoord1.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#else\r\n\t\t\tv_LightMapUV=vec2(a_Texcoord0.x,1.0-a_Texcoord0.y)*u_LightmapScaleOffset.xy+u_LightmapScaleOffset.zw;\r\n\t\t#endif \r\n\t\tv_LightMapUV.y=1.0-v_LightMapUV.y;\r\n\t#endif\r\n\r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tv_Color=a_Color;\r\n\t#endif\r\n\r\n\t#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\t\tv_ShadowCoord =getShadowCoord(vec4(positionWS,1.0));\r\n\t#endif\r\n\r\n\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\tv_SpotShadowCoord = u_SpotViewProjectMatrix*vec4(positionWS,1.0);\r\n\t#endif\r\n\r\n\tgl_Position=remapGLPositionZ(gl_Position);\r\n}";
 
 	var MeshBlinnPhongShadowCasterPS = "#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n\tprecision highp int;\r\n#else\r\n\tprecision mediump float;\r\n\tprecision mediump int;\r\n#endif\r\n\r\n#include \"ShadowCasterFS.glsl\"\r\n\r\nvoid main()\r\n{\r\n\tgl_FragColor=shadowCasterFragment();\r\n}";
 
@@ -30251,11 +29772,11 @@
 
 	var PBRCore = "struct FragmentCommonData{\r\n\tvec3 diffColor;\r\n\tvec3 specColor;\r\n\tfloat oneMinusReflectivity;\r\n\tfloat smoothness;\r\n\t//vec3 eyeVec;TODO:maybe can remove\r\n\t//float alpha;\r\n\t//vec3 reflUVW;\r\n};\r\n\r\n#ifndef SETUP_BRDF_INPUT\r\n    #define SETUP_BRDF_INPUT metallicSetup//default is metallicSetup,also can be other. \r\n#endif\r\n\r\nconst mediump vec4 dielectricSpecularColor = vec4(0.220916301, 0.220916301, 0.220916301, 1.0 - 0.220916301);\r\n\r\nmediump vec3 diffuseAndSpecularFromMetallic(mediump vec3 albedo,mediump float metallic, out mediump vec3 specColor, out mediump float oneMinusReflectivity)\r\n{\r\n\tspecColor = mix(dielectricSpecularColor.rgb, albedo, metallic);\r\n\toneMinusReflectivity= dielectricSpecularColor.a*(1.0-metallic);//diffuse proportion\r\n\treturn albedo * oneMinusReflectivity;\r\n}\r\n\r\nmediump float specularStrength(mediump vec3 specular)\r\n{\r\n    return max (max (specular.r, specular.g), specular.b);\r\n}\r\n\r\n// Diffuse/Spec Energy conservation\r\nmediump vec3 energyConservationBetweenDiffuseAndSpecular (mediump vec3 albedo, mediump vec3 specColor, out mediump float oneMinusReflectivity)\r\n{\r\n\toneMinusReflectivity = 1.0 - specularStrength(specColor);\r\n    return albedo * (vec3(1.0) - specColor);\r\n}\r\n\r\n#ifdef TRANSPARENTBLEND\r\n\tmediump vec3 preMultiplyAlpha (mediump vec3 diffColor, mediump float alpha, mediump float oneMinusReflectivity,out mediump float modifiedAlpha)\r\n\t{\r\n\t\t// Transparency 'removes' from Diffuse component\r\n\t\tdiffColor *= alpha;\r\n\t\t// Reflectivity 'removes' from the rest of components, including Transparency\r\n\t\t// modifiedAlpha = 1.0-(1.0-alpha)*(1.0-reflectivity) = 1.0-(oneMinusReflectivity - alpha*oneMinusReflectivity) = 1.0-oneMinusReflectivity + alpha*oneMinusReflectivity\r\n\t\tmodifiedAlpha = 1.0 - oneMinusReflectivity + alpha*oneMinusReflectivity;\r\n\t\treturn diffColor;\r\n\t}\r\n#endif\r\n\r\nFragmentCommonData metallicSetup(vec2 uv)\r\n{\r\n\tmediump vec2 metallicGloss = getMetallicGloss(uv);\r\n\tmediump float metallic = metallicGloss.x;\r\n\tmediump float smoothness = metallicGloss.y; // this is 1 minus the square root of real roughness m.\r\n\tmediump float oneMinusReflectivity;\r\n\tmediump vec3 specColor;\r\n\tmediump vec3 diffColor = diffuseAndSpecularFromMetallic(albedo(uv), metallic,/*out*/specColor,/*out*/oneMinusReflectivity);\r\n\r\n\tFragmentCommonData o;\r\n\to.diffColor = diffColor;\r\n\to.specColor = specColor;\r\n\to.oneMinusReflectivity = oneMinusReflectivity;\r\n\to.smoothness = smoothness;\r\n\treturn o;\r\n}\r\n\r\nFragmentCommonData specularSetup(vec2 uv)\r\n{\r\n    mediump vec4 specGloss = specularGloss(uv);\r\n    mediump vec3 specColor = specGloss.rgb;\r\n    mediump float smoothness = specGloss.a;\r\n\r\n    mediump float oneMinusReflectivity;\r\n    mediump vec3 diffColor = energyConservationBetweenDiffuseAndSpecular (albedo(uv), specColor, /*out*/ oneMinusReflectivity);\r\n\r\n    FragmentCommonData o;\r\n    o.diffColor = diffColor;\r\n    o.specColor = specColor;\r\n    o.oneMinusReflectivity = oneMinusReflectivity;\r\n    o.smoothness = smoothness;\r\n    return o;\r\n}\r\n\r\nLayaGI fragmentGI(float smoothness,vec3 eyeVec,mediump float occlusion,mediump vec2 lightmapUV,vec3 worldnormal)\r\n{\r\n\tLayaGIInput giInput;\r\n\t#ifdef LIGHTMAP\r\n\t\tgiInput.lightmapUV=lightmapUV;\r\n\t#endif\r\n\r\n\tvec3 worldViewDir = -eyeVec;\r\n\tmediump vec4 uvwRoughness;\r\n\tuvwRoughness.rgb = reflect(worldViewDir, worldnormal);//reflectUVW\r\n\tuvwRoughness.a= smoothnessToPerceptualRoughness(smoothness);//perceptualRoughness\r\n\r\n\treturn layaGlobalIllumination(giInput,occlusion, worldnormal, uvwRoughness);\r\n}\r\n\r\n\r\nvec3 perPixelWorldNormal(vec2 uv,vec3 normal,vec3 binormal,vec3 tangent)\r\n{\r\n\t#ifdef NORMALTEXTURE\r\n\t\tmediump vec3 normalTangent=normalInTangentSpace(uv);\r\n\t\tvec3 normalWorld = normalize(tangent * normalTangent.x + binormal * normalTangent.y + normal * normalTangent.z);\r\n\t#else\r\n\t\tvec3 normalWorld = normalize(normal);\r\n\t#endif\r\n\t\treturn normalWorld;\r\n}\r\n\r\nvoid fragmentForward()\r\n{\r\n\tvec2 uv;\r\n\t#if defined(ALBEDOTEXTURE)||defined(METALLICGLOSSTEXTURE)||defined(NORMALTEXTURE)||defined(EMISSIONTEXTURE)||defined(OCCLUSIONTEXTURE)||defined(PARALLAXTEXTURE)\r\n\t\t#ifdef PARALLAXTEXTURE\r\n\t\t\tuv = parallax(v_Texcoord0,normalize(v_ViewDirForParallax));\r\n\t\t#else\r\n\t\t\tuv = v_Texcoord0;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\tmediump float alpha = getAlpha(uv);\r\n\t#ifdef ALPHATEST\r\n\t\tif(alpha<u_AlphaTestValue)\r\n\t\t\tdiscard;\r\n\t#endif\r\n\r\n\tFragmentCommonData o = SETUP_BRDF_INPUT(uv);\r\n\t\r\n\tvec3 binormal;\r\n\tvec3 tangent;\r\n\t#ifdef NORMALTEXTURE\r\n\t\ttangent = v_Tangent;\r\n\t\tbinormal = v_Binormal;\r\n\t#endif\r\n\r\n\tvec3 normal = v_Normal;\r\n\tvec3 normalWorld = perPixelWorldNormal(uv,normal,binormal,tangent);//In FS if the normal use mediump before normalize will cause precision prolem in mobile device.\r\n\tvec3 eyeVec = normalize(v_EyeVec);\r\n\tvec3 posworld = v_PositionWorld;\r\n\r\n\t#ifdef TRANSPARENTBLEND\r\n\t\to.diffColor=preMultiplyAlpha(o.diffColor,alpha,o.oneMinusReflectivity,/*out*/alpha);// shader relies on pre-multiply alpha-blend (srcBlend = One, dstBlend = OneMinusSrcAlpha)\r\n\t#endif\r\n\r\n\tmediump float occlusion = getOcclusion(uv);\r\n\tmediump vec2 lightMapUV;\r\n\t#ifdef LIGHTMAP\r\n\t\tlightMapUV=v_LightMapUV;\r\n\t#endif\r\n\tfloat perceptualRoughness = smoothnessToPerceptualRoughness(o.smoothness);\r\n\tfloat roughness = perceptualRoughnessToRoughness(perceptualRoughness);\r\n\tfloat nv = abs(dot(normalWorld, eyeVec));\r\n\tLayaGI gi =fragmentGI(o.smoothness,eyeVec,occlusion,lightMapUV,normalWorld);\r\n\tvec4 color = LAYA_BRDF_GI(o.diffColor,o.specColor,o.oneMinusReflectivity,o.smoothness,perceptualRoughness,roughness,nv,normalWorld,eyeVec,gi);\r\n\t\r\n\tfloat shadowAttenuation = 1.0;\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t#else\r\n\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t#endif\r\n\t\t\t\tshadowAttenuation=sampleShadowmap(shadowCoord);\r\n\t\t\t#endif\r\n\t\t\tLayaLight dirLight = layaDirectionLightToLight(u_DirectionLight,shadowAttenuation);\r\n\t\t\tcolor+= LAYA_BRDF_LIGHT(o.diffColor,o.specColor,o.oneMinusReflectivity,perceptualRoughness,roughness,nv,normalWorld,eyeVec,dirLight);\r\n\t\t#endif\r\n\t\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tshadowAttenuation = 1.0;\r\n\t\t\tLayaLight poiLight = layaPointLightToLight(posworld,normalWorld,u_PointLight,shadowAttenuation);\r\n\t\t\tcolor+= LAYA_BRDF_LIGHT(o.diffColor,o.specColor,o.oneMinusReflectivity,perceptualRoughness,roughness,nv,normalWorld,eyeVec,poiLight);\r\n\t\t#endif\r\n\t\t\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tshadowAttenuation = 1.0;\r\n\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\tshadowAttenuation = sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t#endif\r\n\t\t    LayaLight spoLight = layaSpotLightToLight(posworld,normalWorld,u_SpotLight,shadowAttenuation);\r\n\t\t\tcolor+= LAYA_BRDF_LIGHT(o.diffColor,o.specColor,o.oneMinusReflectivity,perceptualRoughness,roughness,nv,normalWorld,eyeVec,spoLight);\r\n\t\t#endif\r\n\t#else\r\n\t \t#ifdef DIRECTIONLIGHT\r\n\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t{\r\n\t\t\t\tshadowAttenuation = 1.0;\r\n\t\t\t\tif(i >= u_DirationLightCount)\r\n\t\t\t\t\tbreak;\r\n\t\t\t\t#ifdef CALCULATE_SHADOWS\r\n\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t#ifdef SHADOW_CASCADE\r\n\t\t\t\t\t\t\tvec4 shadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t\t\t\t\t\t#else\r\n\t\t\t\t\t\t\tvec4 shadowCoord = v_ShadowCoord;\r\n\t\t\t\t\t\t#endif\r\n\t\t\t\t\t\tshadowAttenuation *= sampleShadowmap(shadowCoord);\r\n\t\t\t\t\t}\r\n\t\t\t\t#endif\r\n\t\t\t\tDirectionLight directionLight = getDirectionLight(u_LightBuffer,i);\r\n\t\t\t\tLayaLight dirLight = layaDirectionLightToLight(directionLight,shadowAttenuation);\r\n\t\t\t \tcolor+=LAYA_BRDF_LIGHT(o.diffColor,o.specColor,o.oneMinusReflectivity,perceptualRoughness,roughness,nv,normalWorld,eyeVec,dirLight);\r\n\t\t\t}\r\n\t \t#endif\r\n\t\t#if defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t\t\tivec4 clusterInfo =getClusterInfo(u_LightClusterBuffer,u_View,u_Viewport, v_PositionWorld,gl_FragCoord,u_ProjectionParams);\r\n\t\t\t#ifdef POINTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tshadowAttenuation = 1.0;\r\n\t\t\t\t\tif(i >= clusterInfo.x)//PointLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tPointLight pointLight = getPointLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\tLayaLight poiLight = layaPointLightToLight(posworld,normalWorld,pointLight,shadowAttenuation);\r\n\t\t\t\t\tcolor+= LAYA_BRDF_LIGHT(o.diffColor,o.specColor,o.oneMinusReflectivity,perceptualRoughness,roughness,nv,normalWorld,eyeVec,poiLight);\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t\t#ifdef SPOTLIGHT\r\n\t\t\t\tfor (int i = 0; i < MAX_LIGHT_COUNT; i++) \r\n\t\t\t\t{\r\n\t\t\t\t\tshadowAttenuation = 1.0;\r\n\t\t\t\t\tif(i >= clusterInfo.y)//SpotLightCount\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\t\t\t\t\tif(i == 0)\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tvec4 spotShadowcoord = v_SpotShadowCoord;\r\n\t\t\t\t\t\t\tshadowAttenuation= sampleSpotShadowmap(spotShadowcoord);\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t#endif\r\n\t\t\t\t\tSpotLight spotLight = getSpotLight(u_LightBuffer,u_LightClusterBuffer,clusterInfo,i);\r\n\t\t\t\t\tLayaLight spoLight = layaSpotLightToLight(posworld,normalWorld,spotLight,shadowAttenuation);\r\n\t\t\t\t\tcolor+= LAYA_BRDF_LIGHT(o.diffColor,o.specColor,o.oneMinusReflectivity,perceptualRoughness,roughness,nv,normalWorld,eyeVec,spoLight);\r\n\t\t\t\t}\r\n\t\t\t#endif\r\n\t\t#endif\r\n\t #endif\r\n\r\n\t#ifdef EMISSION\r\n\t\tcolor.rgb += emission(uv);\r\n\t#endif\r\n\r\n\t#ifdef FOG\r\n\t\tfloat lerpFact=clamp((1.0/gl_FragCoord.w-u_FogStart)/u_FogRange,0.0,1.0);\r\n\t\tcolor.rgb=mix(color.rgb,u_FogColor,lerpFact);\r\n\t#endif\r\n\t\r\n\tgl_FragColor=vec4(color.rgb,alpha);\r\n}\r\n\r\n\r\n";
 
-	var PBRVSInput = "attribute vec4 a_Position;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nattribute vec3 a_Normal;\r\nvarying vec3 v_Normal; \r\n\r\n#if defined(NORMALTEXTURE)||defined(PARALLAXTEXTURE)\r\n\tattribute vec4 a_Tangent0;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n    #ifdef PARALLAXTEXTURE\r\n\t    varying vec3 v_ViewDirForParallax;\r\n    #endif\r\n#endif\r\n\r\n#if defined(ALBEDOTEXTURE)||defined(METALLICGLOSSTEXTURE)||defined(NORMALTEXTURE)||defined(EMISSIONTEXTURE)||defined(OCCLUSIONTEXTURE)||defined(PARALLAXTEXTURE)||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#if defined(LIGHTMAP)&&defined(UV1)\r\n\tattribute vec2 a_Texcoord1;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tuniform vec4 u_LightmapScaleOffset;\r\n\tvarying vec2 v_LightMapUV;\r\n#endif\r\n\r\nuniform vec3 u_CameraPos;\r\nvarying vec3 v_EyeVec;\r\nvarying vec3 v_PositionWorld;\r\nvarying float v_posViewZ;\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\n\r\n#ifdef SIMPLEBONE\r\n\t#ifdef GPU_INSTANCE\r\n\t\tattribute vec4 a_SimpleTextureParams;\r\n\t#else\r\n\t\tuniform vec4 u_SimpleAnimatorParams;\r\n\t#endif\r\n\tuniform sampler2D u_SimpleAnimatorTexture;\r\n\r\n\tuniform float u_SimpleAnimatorTextureSize; \r\n#endif\r\n\r\n\r\n#ifdef SIMPLEBONE\r\nmat4 loadMatFromTexture(float FramePos,int boneIndices,float offset)\r\n{\r\n\tvec2 uv;\r\n\tfloat PixelPos = FramePos+float(boneIndices)*4.0;\r\n\tfloat halfOffset = offset * 0.5;\r\n\tfloat uvoffset = PixelPos/u_SimpleAnimatorTextureSize;\r\n\tuv.y = floor(uvoffset)*offset+halfOffset;\r\n\tuv.x = mod(float(PixelPos),u_SimpleAnimatorTextureSize)*offset+halfOffset;\r\n\tvec4 mat0row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat1row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat2row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat3row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tmat4 m =mat4(mat0row.x,mat0row.y,mat0row.z,mat0row.w,\r\n\t\t\t  mat1row.x,mat1row.y,mat1row.z,mat1row.w,\r\n\t\t\t  mat2row.x,mat2row.y,mat2row.z,mat2row.w,\r\n\t\t\t  mat3row.x,mat3row.y,mat3row.z,mat3row.w);\r\n\treturn m;\r\n}\r\n#endif";
+	var PBRVSInput = "attribute vec4 a_Position;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nattribute vec3 a_Normal;\r\nvarying vec3 v_Normal; \r\n\r\n#if defined(NORMALTEXTURE)||defined(PARALLAXTEXTURE)\r\n\tattribute vec4 a_Tangent0;\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n    #ifdef PARALLAXTEXTURE\r\n\t    varying vec3 v_ViewDirForParallax;\r\n    #endif\r\n#endif\r\n\r\n#if defined(ALBEDOTEXTURE)||defined(METALLICGLOSSTEXTURE)||defined(NORMALTEXTURE)||defined(EMISSIONTEXTURE)||defined(OCCLUSIONTEXTURE)||defined(PARALLAXTEXTURE)||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#if defined(LIGHTMAP)&&defined(UV1)\r\n\tattribute vec2 a_Texcoord1;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tuniform vec4 u_LightmapScaleOffset;\r\n\tvarying vec2 v_LightMapUV;\r\n#endif\r\n\r\nuniform vec3 u_CameraPos;\r\nvarying vec3 v_EyeVec;\r\nvarying vec3 v_PositionWorld;\r\nvarying float v_posViewZ;\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif";
 
 	var PBRFSInput = "#ifdef ALPHATEST\r\n\tuniform float u_AlphaTestValue;\r\n#endif\r\n\r\nuniform vec4 u_AlbedoColor;\r\n\r\n#ifdef NORMALTEXTURE\r\n\tuniform sampler2D u_NormalTexture;\r\n\tuniform float u_NormalScale;\r\n#endif\r\n\r\n#ifdef ALBEDOTEXTURE\r\n\tuniform sampler2D u_AlbedoTexture;\r\n#endif\r\n\r\n#ifdef METALLICGLOSSTEXTURE\r\n\tuniform sampler2D u_MetallicGlossTexture;\r\n#endif\r\nuniform float u_Metallic;\r\n\r\n#ifdef SPECULARGLOSSTEXTURE\r\n\tuniform sampler2D u_SpecGlossTexture;\r\n#endif\r\nuniform vec3 u_SpecularColor;\r\n\r\nuniform float u_Smoothness;\r\nuniform float u_SmoothnessScale;\r\n\r\n#ifdef PARALLAXTEXTURE\r\n\tuniform sampler2D u_ParallaxTexture;\r\n\tuniform float u_ParallaxScale;\r\n\tvarying vec3 v_ViewDirForParallax;\r\n#endif\r\n\r\n#ifdef OCCLUSIONTEXTURE\r\n\tuniform sampler2D u_OcclusionTexture;\r\n\tuniform float u_occlusionStrength;\r\n#endif\r\n\r\n#ifdef EMISSION \r\n\t#ifdef EMISSIONTEXTURE\r\n\t\tuniform sampler2D u_EmissionTexture;\r\n\t#endif\r\n\tuniform vec4 u_EmissionColor;\r\n#endif\r\n\r\n#if defined(ALBEDOTEXTURE)||defined(METALLICGLOSSTEXTURE)||defined(NORMALTEXTURE)||defined(EMISSIONTEXTURE)||defined(OCCLUSIONTEXTURE)||defined(PARALLAXTEXTURE)\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\n#ifdef LIGHTMAP\r\n\tvarying vec2 v_LightMapUV;\r\n\tuniform sampler2D u_LightMap;\r\n\t#ifdef LIGHTMAP_DIRECTIONAL\r\n\t\tuniform sampler2D u_LightMapDirection;\r\n\t#endif\r\n#endif\r\n\r\nvarying vec3 v_Normal; \r\n\r\n#if defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT)\r\n\t#ifdef LEGACYSINGLELIGHTING\r\n\t\t#ifdef DIRECTIONLIGHT\r\n\t\t\tuniform DirectionLight u_DirectionLight;\r\n\t\t#endif\r\n\t\t#ifdef POINTLIGHT\r\n\t\t\tuniform PointLight u_PointLight;\r\n\t\t#endif\r\n\t\t#ifdef SPOTLIGHT\r\n\t\t\tuniform SpotLight u_SpotLight;\r\n\t\t#endif\r\n\t#else\r\n\t\tuniform mat4 u_View;\r\n\t\tuniform vec4 u_ProjectionParams;\r\n\t\tuniform vec4 u_Viewport;\r\n\t\tuniform int u_DirationLightCount;\r\n\t\tuniform sampler2D u_LightBuffer;\r\n\t\tuniform sampler2D u_LightClusterBuffer;\r\n\t#endif\r\n#endif\r\n\r\nvarying vec3 v_EyeVec;\r\n\r\n#ifdef NORMALTEXTURE\r\n\tvarying vec3 v_Tangent;\r\n\tvarying vec3 v_Binormal;\r\n#endif\r\n\r\n#ifdef FOG\r\n\tuniform float u_FogStart;\r\n\tuniform float u_FogRange;\r\n\tuniform vec3 u_FogColor;\r\n#endif\r\n\r\n\r\n//后面考虑宏TODO\r\nvarying vec3 v_PositionWorld;\r\n\r\n#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\tvarying vec4 v_ShadowCoord;\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tvarying vec4 v_SpotShadowCoord;\r\n#endif\r\n\r\nmediump float lerpOneTo(mediump float b, mediump float t)\r\n{\r\n    mediump float oneMinusT = 1.0 - t;\r\n    return oneMinusT + b * t;\r\n}\r\n\r\n#ifdef EMISSION \r\n\tvec3 emission(vec2 uv)\r\n\t{\r\n\t\t#ifdef EMISSIONTEXTURE\r\n\t\t\treturn texture2D(u_EmissionTexture, uv).rgb * u_EmissionColor.rgb;\r\n\t\t#else\r\n\t\t\treturn u_EmissionColor.rgb;\r\n\t\t#endif\r\n\t}\r\n#endif\r\n\r\nmediump float getAlpha(vec2 uv)\r\n{\r\n\t#ifdef SMOOTHNESSSOURCE_ALBEDOTEXTURE_ALPHA\r\n\t\treturn u_AlbedoColor.a;\r\n\t#else\r\n\t\t#ifdef ALBEDOTEXTURE\r\n\t\t\treturn texture2D(u_AlbedoTexture, uv).a * u_AlbedoColor.a;\r\n\t\t#else\r\n\t\t\treturn u_AlbedoColor.a;\r\n\t\t#endif\r\n\t#endif\r\n}\r\n\r\nmediump float getOcclusion(vec2 uv)\r\n{\r\n\t#ifdef OCCLUSIONTEXTURE\r\n\t\tmediump float occ = texture2D(u_OcclusionTexture, uv).g;\r\n\t\treturn lerpOneTo(occ, u_occlusionStrength);\r\n\t#else\r\n\t\treturn 1.0;\r\n\t#endif\r\n}\r\n\r\nmediump vec3 albedo(vec2 uv)\r\n{\r\n\t#ifdef ALBEDOTEXTURE\r\n\t\treturn u_AlbedoColor.rgb * texture2D(u_AlbedoTexture, uv).rgb;\r\n\t#else\r\n\t\treturn u_AlbedoColor.rgb;\r\n\t#endif\r\n\t//TODO:Detail Texture\r\n}\r\n\r\nmediump vec2 getMetallicGloss(vec2 uv)\r\n{\r\n\tmediump vec2 ms;//x is metallic,y is smoothness\r\n\t#ifdef METALLICGLOSSTEXTURE\r\n\t\t#ifdef SMOOTHNESSSOURCE_ALBEDOTEXTURE_ALPHA\r\n\t\t\tms.x = texture2D(u_MetallicGlossTexture, uv).r;\r\n\t\t\t#ifdef ALBEDOTEXTURE\r\n\t\t\t\tms.y = texture2D(u_AlbedoTexture, uv).a*u_SmoothnessScale;\r\n\t\t\t#else\r\n\t\t\t\tms.y = u_SmoothnessScale;\r\n\t\t\t#endif\r\n\t\t#else\r\n\t\t\tms = texture2D(u_MetallicGlossTexture, uv).ra;\r\n\t\t\tms.y *= u_SmoothnessScale;\r\n\t\t#endif\r\n\t#else\r\n\t\tms.x = u_Metallic;\r\n\t\t#ifdef SMOOTHNESSSOURCE_ALBEDOTEXTURE_ALPHA\r\n\t\t\t#ifdef ALBEDOTEXTURE\r\n\t\t\t\tms.y = texture2D(u_AlbedoTexture, uv).a * u_SmoothnessScale;\r\n\t\t\t#else\r\n\t\t\t\tms.y = u_SmoothnessScale;\r\n\t\t\t#endif\r\n\t\t#else\r\n\t\t\tms.y = u_Smoothness;\r\n\t\t#endif\r\n\t#endif\r\n\treturn ms;\r\n}\r\n\r\nmediump vec4 specularGloss(vec2 uv)\r\n{\r\n\tmediump vec4 sg;\r\n\t#ifdef SPECULARGLOSSTEXTURE\r\n\t\t#ifdef SMOOTHNESSSOURCE_ALBEDOTEXTURE_ALPHA\r\n\t\t\tsg.rgb = texture2D(u_SpecGlossTexture, uv).rgb;\r\n\t\t\t#ifdef ALBEDOTEXTURE\r\n\t\t\t\tsg.a = texture2D(u_AlbedoTexture, uv).a*u_SmoothnessScale;\r\n\t\t\t#else\r\n\t\t\t\tsg.a = u_SmoothnessScale;\r\n\t\t\t#endif\r\n\t\t#else\r\n\t\t\tsg = texture2D(u_SpecGlossTexture, uv);\r\n\t\t\tsg.a *= u_SmoothnessScale;\r\n\t\t#endif\r\n\t#else\r\n\t\tsg.rgb = u_SpecularColor.rgb;\r\n\t\t#ifdef SMOOTHNESSSOURCE_ALBEDOTEXTURE_ALPHA\r\n\t\t\t#ifdef ALBEDOTEXTURE\r\n\t\t\t\tsg.a = texture2D(u_AlbedoTexture, uv).a * u_SmoothnessScale;\r\n\t\t\t#else\r\n\t\t\t\tsg.a = u_SmoothnessScale;\r\n\t\t\t#endif\r\n\t\t#else\r\n\t\t\tsg.a = u_Smoothness;\r\n\t\t#endif\r\n\t#endif\r\n\t\treturn sg;\r\n}\r\n\r\n\r\n#ifdef NORMALTEXTURE\r\n\tmediump vec3 unpackScaleNormal(mediump vec3 packednormal, mediump float bumpScale)\r\n\t{\r\n\t\tmediump vec3 normal = packednormal.xyz * 2.0 - 1.0;\r\n\t\tnormal.y=-normal.y;//NOTE:because unity to LayaAir coordSystem.\r\n\t\tnormal.xy *= bumpScale;\r\n\t\treturn normal;\r\n\t}\r\n\t\r\n\tmediump vec3 normalInTangentSpace(vec2 texcoords)\r\n\t{\r\n\t\tmediump vec3 normalTangent = unpackScaleNormal(texture2D(u_NormalTexture, texcoords).rgb,u_NormalScale);\r\n\t\treturn normalTangent;\r\n\t}\r\n#endif\r\n\r\n#ifdef PARALLAXTEXTURE\r\n\tmediump vec2 parallaxOffset1Step(mediump float h, mediump float height, mediump vec3 viewDir)\r\n\t{\r\n\t\th = h * height - height / 2.0;\r\n\t\tviewDir.z += 0.42;\r\n\t\treturn h * (viewDir.xy / viewDir.z);\r\n\t}\r\n\r\n\tvec2 parallax(vec2 texcoords, mediump vec3 viewDir)\r\n\t{\r\n\t\tmediump float h = texture2D(u_ParallaxTexture, texcoords.xy).g;\r\n\t\tvec2 offset = parallaxOffset1Step(h, u_ParallaxScale, viewDir);\r\n\t\treturn texcoords+offset;\r\n\t}\r\n#endif\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
 
-	var PBRVertex = "vec2 transformLightMapUV(in vec2 texcoord,in vec4 lightmapScaleOffset)\r\n{\r\n\tvec2 lightMapUV=vec2(texcoord.x,1.0-texcoord.y)*lightmapScaleOffset.xy+lightmapScaleOffset.zw;\r\n\tlightMapUV.y=1.0-lightMapUV.y;\r\n\treturn lightMapUV; \r\n}\r\n\r\nvoid vertexForward()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform;\r\n\t \t#ifdef SIMPLEBONE\r\n\t\t\tfloat currentPixelPos;\r\n\t\t\t#ifdef GPU_INSTANCE\r\n\t\t\t\tcurrentPixelPos = a_SimpleTextureParams.x+a_SimpleTextureParams.y;\r\n\t\t\t#else\r\n\t\t\t\tcurrentPixelPos = u_SimpleAnimatorParams.x+u_SimpleAnimatorParams.y;\r\n\t\t\t#endif\r\n\t\t\tfloat offset = 1.0/u_SimpleAnimatorTextureSize;\r\n\t\t\tskinTransform =  loadMatFromTexture(currentPixelPos,int(a_BoneIndices.x),offset) * a_BoneWeights.x;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.y),offset) * a_BoneWeights.y;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.z),offset) * a_BoneWeights.z;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.w),offset) * a_BoneWeights.w;\r\n\t\t#else\r\n\t\t\tskinTransform =  u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\t#endif\r\n\t\tposition=skinTransform*a_Position;\r\n\t #else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\r\n\tv_PositionWorld=(worldMat*position).xyz;\r\n\r\n\t#if defined(ALBEDOTEXTURE)||defined(METALLICGLOSSTEXTURE)||defined(NORMALTEXTURE)||defined(EMISSIONTEXTURE)||defined(OCCLUSIONTEXTURE)||defined(PARALLAXTEXTURE)\r\n\t\t#ifdef TILINGOFFSET\r\n\t\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t\t#else\r\n\t\t\tv_Texcoord0=a_Texcoord0;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\tv_EyeVec =u_CameraPos-v_PositionWorld;//will normalize per-pixel\r\n\r\n\t#ifdef LIGHTMAP\r\n\t\tvec2 texcoord;\r\n\t\t#ifdef UV1\r\n\t\t\ttexcoord=a_Texcoord1;\r\n\t\t#else\r\n\t\t\ttexcoord=a_Texcoord0;\r\n\t\t#endif\r\n\t\tv_LightMapUV=transformLightMapUV(texcoord,u_LightmapScaleOffset);\r\n\t#endif\r\n\r\n\tmat3 worldInvMat;\r\n\t#ifdef BONE\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat*skinTransform));\r\n\t#else\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat));\r\n\t#endif\r\n\r\n\tv_Normal=normalize(a_Normal*worldInvMat);//if no normalize will cause precision problem.\r\n\r\n\t#ifdef NORMALTEXTURE\r\n\t\tv_Tangent=normalize(a_Tangent0.xyz*worldInvMat);\r\n\t\tv_Binormal=cross(v_Normal,v_Tangent)*a_Tangent0.w;\r\n\t#endif\r\n\r\n\t#ifdef PARALLAXTEXTURE\r\n\t\tvec3 binormal = cross(a_Normal, a_Tangent0.xyz)*a_Tangent0.w;\r\n\t\tmat3 objectTBN = mat3(a_Tangent0.xyz, binormal, a_Normal);\r\n\t\tv_ViewDirForParallax=(worldInvMat*u_CameraPos-position.xyz)*objectTBN;\r\n\t#endif\r\n\r\n\t#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\t\tv_ShadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t#endif\r\n\r\n\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\tv_SpotShadowCoord = u_SpotViewProjectMatrix*vec4(v_PositionWorld,1.0);\r\n\t#endif\r\n}";
+	var PBRVertex = "vec2 transformLightMapUV(in vec2 texcoord,in vec4 lightmapScaleOffset)\r\n{\r\n\tvec2 lightMapUV=vec2(texcoord.x,1.0-texcoord.y)*lightmapScaleOffset.xy+lightmapScaleOffset.zw;\r\n\tlightMapUV.y=1.0-lightMapUV.y;\r\n\treturn lightMapUV; \r\n}\r\n\r\nvoid vertexForward()\r\n{\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform = u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\tposition=skinTransform*a_Position;\r\n\t#else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\r\n\tv_PositionWorld=(worldMat*position).xyz;\r\n\r\n\t#if defined(ALBEDOTEXTURE)||defined(METALLICGLOSSTEXTURE)||defined(NORMALTEXTURE)||defined(EMISSIONTEXTURE)||defined(OCCLUSIONTEXTURE)||defined(PARALLAXTEXTURE)\r\n\t\t#ifdef TILINGOFFSET\r\n\t\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t\t#else\r\n\t\t\tv_Texcoord0=a_Texcoord0;\r\n\t\t#endif\r\n\t#endif\r\n\r\n\tv_EyeVec =u_CameraPos-v_PositionWorld;//will normalize per-pixel\r\n\r\n\t#ifdef LIGHTMAP\r\n\t\tvec2 texcoord;\r\n\t\t#ifdef UV1\r\n\t\t\ttexcoord=a_Texcoord1;\r\n\t\t#else\r\n\t\t\ttexcoord=a_Texcoord0;\r\n\t\t#endif\r\n\t\tv_LightMapUV=transformLightMapUV(texcoord,u_LightmapScaleOffset);\r\n\t#endif\r\n\r\n\tmat3 worldInvMat;\r\n\t#ifdef BONE\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat*skinTransform));\r\n\t#else\r\n\t\tworldInvMat=INVERSE_MAT(mat3(worldMat));\r\n\t#endif\r\n\r\n\tv_Normal=normalize(a_Normal*worldInvMat);//if no normalize will cause precision problem.\r\n\r\n\t#ifdef NORMALTEXTURE\r\n\t\tv_Tangent=normalize(a_Tangent0.xyz*worldInvMat);\r\n\t\tv_Binormal=cross(v_Normal,v_Tangent)*a_Tangent0.w;\r\n\t#endif\r\n\r\n\t#ifdef PARALLAXTEXTURE\r\n\t\tvec3 binormal = cross(a_Normal, a_Tangent0.xyz)*a_Tangent0.w;\r\n\t\tmat3 objectTBN = mat3(a_Tangent0.xyz, binormal, a_Normal);\r\n\t\tv_ViewDirForParallax=(worldInvMat*u_CameraPos-position.xyz)*objectTBN;\r\n\t#endif\r\n\r\n\t#if defined(CALCULATE_SHADOWS)&&!defined(SHADOW_CASCADE)\r\n\t\tv_ShadowCoord = getShadowCoord(vec4(v_PositionWorld,1.0));\r\n\t#endif\r\n\r\n\t#ifdef CALCULATE_SPOTSHADOWS\r\n\t\tv_SpotShadowCoord = u_SpotViewProjectMatrix*vec4(positionWS,1.0);\r\n\t#endif\r\n}";
 
 	var BloomVS = "#include \"Lighting.glsl\";\r\n\r\nattribute vec4 a_PositionTexcoord;\r\nvarying vec2 v_Texcoord0;\r\n\r\nvoid main() {\r\n\tgl_Position = vec4(a_PositionTexcoord.xy, 0.0, 1.0);\r\n\tv_Texcoord0 = a_PositionTexcoord.zw;\r\n\tgl_Position = remapGLPositionZ(gl_Position);\r\n}";
 
@@ -30281,9 +29802,9 @@
 
 	var StdLibGLSL = "#define HALF_MAX       65504.0 // (2 - 2^-10) * 2^15\r\n\r\n#define FLT_EPSILON    1.192092896e-07 // Smallest positive number, such that 1.0 + FLT_EPSILON != 1.0\r\n\r\nmediump vec4 safeHDR(mediump vec4 c)\r\n{\r\n    return min(c, HALF_MAX);\r\n}\r\n\r\nfloat max3(float a, float b, float c)\r\n{\r\n    return max(max(a, b), c);\r\n}\r\n\r\nvec3 positivePow(vec3 base, vec3 power)\r\n{\r\n    return pow(max(abs(base), vec3(FLT_EPSILON, FLT_EPSILON, FLT_EPSILON)), power);\r\n}";
 
-	var ShadowGLSL = "#ifndef GRAPHICS_API_GLES3\r\n\t#define NO_NATIVE_SHADOWMAP\r\n#endif\r\n\r\n#ifdef NO_NATIVE_SHADOWMAP\r\n\t#define TEXTURE2D_SHADOW(textureName) uniform mediump sampler2D textureName\r\n\t#define SAMPLE_TEXTURE2D_SHADOW(textureName, coord3) (texture2D(textureName,coord3.xy).r<coord3.z?0.0:1.0)\r\n\t#define TEXTURE2D_SHADOW_PARAM(shadowMap) mediump sampler2D shadowMap\r\n#else\r\n\t#define TEXTURE2D_SHADOW(textureName) uniform mediump sampler2DShadow textureName\r\n\t#define SAMPLE_TEXTURE2D_SHADOW(textureName, coord3) textureLod(textureName,coord3,0.0)\r\n\t#define TEXTURE2D_SHADOW_PARAM(shadowMap) mediump sampler2DShadow shadowMap\r\n#endif\r\n\r\n#if defined(RECEIVESHADOW)&&defined(SHADOW)\r\n    #define CALCULATE_SHADOWS\r\n#endif\r\n\r\n#if defined(RECEIVESHADOW)&&defined(SHADOW_SPOT)\r\n\t#define CALCULATE_SPOTSHADOWS\r\n#endif\r\n\r\nuniform vec4 u_ShadowBias; // x: depth bias, y: normal bias\r\n\r\n#if defined(CALCULATE_SHADOWS)||defined(CALCULATE_SPOTSHADOWS)\r\n\t#include \"ShadowSampleTent.glsl\"\r\n\tuniform vec4 u_ShadowMapSize;\r\n\tuniform vec4 u_ShadowParams; // x: shadowStrength y: ShadowSpotLightStrength\r\n\r\n\t\r\n\tfloat sampleShdowMapFiltered4(TEXTURE2D_SHADOW_PARAM(shadowMap),vec3 shadowCoord,vec4 shadowMapSize)\r\n\t{\r\n\t\tfloat attenuation;\r\n\t\tvec4 attenuation4;\r\n\t\tvec2 offset=shadowMapSize.xy/2.0;\r\n\t\tvec3 shadowCoord0=shadowCoord + vec3(-offset,0.0);\r\n\t\tvec3 shadowCoord1=shadowCoord + vec3(offset.x,-offset.y,0.0);\r\n\t\tvec3 shadowCoord2=shadowCoord + vec3(-offset.x,offset.y,0.0);\r\n\t\tvec3 shadowCoord3=shadowCoord + vec3(offset,0.0);\r\n\t\tattenuation4.x = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord0);\r\n\t\tattenuation4.y = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord1);\r\n\t\tattenuation4.z = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord2);\r\n\t\tattenuation4.w = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord3);\r\n\t\tattenuation = dot(attenuation4, vec4(0.25));\r\n\t\treturn attenuation;\r\n\t}\r\n\r\n\tfloat sampleShdowMapFiltered9(TEXTURE2D_SHADOW_PARAM(shadowMap),vec3 shadowCoord,vec4 shadowmapSize)\r\n\t{\r\n\t\tfloat attenuation;\r\n\t\tfloat fetchesWeights[9];\r\n\t\tvec2 fetchesUV[9];\r\n\t\tsampleShadowComputeSamplesTent5x5(shadowmapSize, shadowCoord.xy, fetchesWeights, fetchesUV);\r\n\t\tattenuation = fetchesWeights[0] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[0].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[1] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[1].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[2] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[2].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[3] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[3].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[4] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[4].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[5] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[5].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[6] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[6].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[7] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[7].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[8] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[8].xy, shadowCoord.z));\r\n\t\treturn attenuation;\r\n\t}\r\n\r\n#endif\r\n\r\n\r\n\r\n\r\n#ifdef CALCULATE_SHADOWS\r\n\r\n\tTEXTURE2D_SHADOW(u_ShadowMap);\r\n\r\n\tuniform mat4 u_ShadowMatrices[4];\r\n\tuniform vec4 u_ShadowSplitSpheres[4];// max cascade is 4\r\n\r\n\tmediump int computeCascadeIndex(vec3 positionWS)\r\n\t{\r\n\t\tvec3 fromCenter0 = positionWS - u_ShadowSplitSpheres[0].xyz;\r\n\t\tvec3 fromCenter1 = positionWS - u_ShadowSplitSpheres[1].xyz;\r\n\t\tvec3 fromCenter2 = positionWS - u_ShadowSplitSpheres[2].xyz;\r\n\t\tvec3 fromCenter3 = positionWS - u_ShadowSplitSpheres[3].xyz;\r\n\r\n\t\tmediump vec4 comparison = vec4(\r\n\t\t\tdot(fromCenter0, fromCenter0)<u_ShadowSplitSpheres[0].w,\r\n\t\t\tdot(fromCenter1, fromCenter1)<u_ShadowSplitSpheres[1].w,\r\n\t\t\tdot(fromCenter2, fromCenter2)<u_ShadowSplitSpheres[2].w,\r\n\t\t\tdot(fromCenter3, fromCenter3)<u_ShadowSplitSpheres[3].w);\r\n\t\tcomparison.yzw = clamp(comparison.yzw - comparison.xyz,0.0,1.0);//keep the nearest\r\n\t\tmediump vec4 indexCoefficient = vec4(4.0,3.0,2.0,1.0);\r\n\t\tmediump int index = 4 - int(dot(comparison, indexCoefficient));\r\n\t\treturn index;\r\n\t}\r\n\r\n\tvec4 getShadowCoord(vec4 positionWS)\r\n\t{\r\n\t\t#ifdef SHADOW_CASCADE\r\n\t\t\tmediump int cascadeIndex = computeCascadeIndex(positionWS.xyz);\r\n\t\t\tif(cascadeIndex > 3)// out of shadow range cascadeIndex is 4.\r\n\t\t\t\treturn vec4(0.0);\r\n\t\t\t\r\n\t\t\t#ifdef GRAPHICS_API_GLES3\r\n\t\t\t\treturn u_ShadowMatrices[cascadeIndex] * positionWS;\r\n\t\t\t#else\r\n\t\t\t\tmat4 shadowMat;\r\n\t\t\t\tif(cascadeIndex == 0)\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[0];\r\n\t\t\t\telse if(cascadeIndex == 1)\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[1];\r\n\t\t\t\telse if(cascadeIndex == 2)\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[2];\r\n\t\t\t\telse\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[3];\r\n\t\t\t\treturn shadowMat * positionWS;\r\n\t\t\t#endif\r\n\t\t#else\r\n\t\t\treturn u_ShadowMatrices[0] * positionWS;\r\n\t\t#endif\r\n\t}\r\n\r\n\tfloat sampleShadowmap(vec4 shadowCoord)\r\n\t{\r\n\t\tshadowCoord.xyz /= shadowCoord.w;\r\n\t\tfloat attenuation = 1.0;\r\n\t\tif(shadowCoord.z > 0.0 && shadowCoord.z < 1.0)\r\n\t\t{\r\n\t\t\t#if defined(SHADOW_SOFT_SHADOW_HIGH)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered9(u_ShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#elif defined(SHADOW_SOFT_SHADOW_LOW)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered4(u_ShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#else\r\n\t\t\t\tattenuation = SAMPLE_TEXTURE2D_SHADOW(u_ShadowMap,shadowCoord.xyz);\r\n\t\t\t#endif\r\n\t\t\tattenuation = mix(1.0,attenuation,u_ShadowParams.x);//shadowParams.x:shadow strength\r\n\t\t}\r\n\t\treturn attenuation;\r\n\t}\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tTEXTURE2D_SHADOW(u_SpotShadowMap);\r\n\tuniform mat4 u_SpotViewProjectMatrix;\r\n\tfloat sampleSpotShadowmap(vec4 shadowCoord)\r\n\t{\r\n\t\tshadowCoord.xyz /= shadowCoord.w;\r\n\t\tfloat attenuation = 1.0;\r\n\t\tshadowCoord.xy +=1.0;\r\n\t\tshadowCoord.xy/=2.0; \r\n\t\tif(shadowCoord.z > 0.0 && shadowCoord.z < 1.0)\r\n\t\t{\r\n\t\t\t#if defined(SHADOW_SPOT_SOFT_SHADOW_HIGH)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered9(u_SpotShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#elif defined(SHADOW_SPOT_SOFT_SHADOW_LOW)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered4(u_SpotShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#else\r\n\t\t\t\tattenuation = SAMPLE_TEXTURE2D_SHADOW(u_SpotShadowMap,shadowCoord.xyz);\r\n\t\t\t#endif\r\n\t\t\tattenuation = mix(1.0,attenuation,u_ShadowParams.y);//shadowParams.y:shadow strength\r\n\t\t}\r\n\t\treturn attenuation;\r\n\t}\r\n#endif\r\n\r\nvec3 applyShadowBias(vec3 positionWS, vec3 normalWS, vec3 lightDirection)\r\n{\r\n    float invNdotL = 1.0 - clamp(dot(-lightDirection, normalWS),0.0,1.0);\r\n    float scale = invNdotL * u_ShadowBias.y;\r\n\r\n    // normal bias is negative since we want to apply an inset normal offset\r\n    positionWS += -lightDirection * u_ShadowBias.xxx;\r\n    positionWS += normalWS * vec3(scale);\r\n    return positionWS;\r\n}\r\n";
+	var ShadowGLSL = "#ifndef GRAPHICS_API_GLES3\r\n\t#define NO_NATIVE_SHADOWMAP\r\n#endif\r\n\r\n#ifdef NO_NATIVE_SHADOWMAP\r\n\t#define TEXTURE2D_SHADOW(textureName) uniform mediump sampler2D textureName\r\n\t#define SAMPLE_TEXTURE2D_SHADOW(textureName, coord3) (texture2D(textureName,coord3.xy).r<coord3.z?0.0:1.0)\r\n\t#define TEXTURE2D_SHADOW_PARAM(shadowMap) mediump sampler2D shadowMap\r\n#else\r\n\t#define TEXTURE2D_SHADOW(textureName) uniform mediump sampler2DShadow textureName\r\n\t#define SAMPLE_TEXTURE2D_SHADOW(textureName, coord3) textureLod(textureName,coord3,0.0)\r\n\t#define TEXTURE2D_SHADOW_PARAM(shadowMap) mediump sampler2DShadow shadowMap\r\n#endif\r\n\r\n#if defined(RECEIVESHADOW)&&defined(SHADOW)\r\n    #define CALCULATE_SHADOWS\r\n#endif\r\n\r\n#if defined(RECEIVESHADOW)&&defined(SHADOW_SPOT)\r\n\t#define CALCULATE_SPOTSHADOWS\r\n#endif\r\n\r\nuniform vec4 u_ShadowBias; // x: depth bias, y: normal bias\r\n\r\n#if defined(CALCULATE_SHADOWS)||defined(CALCULATE_SPOTSHADOWS)\r\n\t#include \"ShadowSampleTent.glsl\"\r\n\tuniform vec4 u_ShadowMapSize;\r\n\tuniform vec4 u_ShadowParams; // x: shadowStrength y: ShadowSpotLightStrength\r\n\r\n\t\r\n\tfloat sampleShdowMapFiltered4(TEXTURE2D_SHADOW_PARAM(shadowMap),vec3 shadowCoord,vec4 shadowMapSize)\r\n\t{\r\n\t\tfloat attenuation;\r\n\t\tvec4 attenuation4;\r\n\t\tvec2 offset=shadowMapSize.xy/2.0;\r\n\t\tvec3 shadowCoord0=shadowCoord + vec3(-offset,0.0);\r\n\t\tvec3 shadowCoord1=shadowCoord + vec3(offset.x,-offset.y,0.0);\r\n\t\tvec3 shadowCoord2=shadowCoord + vec3(-offset.x,offset.y,0.0);\r\n\t\tvec3 shadowCoord3=shadowCoord + vec3(offset,0.0);\r\n\t\tattenuation4.x = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord0);\r\n\t\tattenuation4.y = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord1);\r\n\t\tattenuation4.z = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord2);\r\n\t\tattenuation4.w = SAMPLE_TEXTURE2D_SHADOW(shadowMap, shadowCoord3);\r\n\t\tattenuation = dot(attenuation4, vec4(0.25));\r\n\t\treturn attenuation;\r\n\t}\r\n\r\n\tfloat sampleShdowMapFiltered9(TEXTURE2D_SHADOW_PARAM(shadowMap),vec3 shadowCoord,vec4 shadowmapSize)\r\n\t{\r\n\t\tfloat attenuation;\r\n\t\tfloat fetchesWeights[9];\r\n\t\tvec2 fetchesUV[9];\r\n\t\tsampleShadowComputeSamplesTent5x5(shadowmapSize, shadowCoord.xy, fetchesWeights, fetchesUV);\r\n\t\tattenuation = fetchesWeights[0] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[0].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[1] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[1].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[2] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[2].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[3] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[3].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[4] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[4].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[5] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[5].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[6] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[6].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[7] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[7].xy, shadowCoord.z));\r\n\t\tattenuation += fetchesWeights[8] * SAMPLE_TEXTURE2D_SHADOW(shadowMap, vec3(fetchesUV[8].xy, shadowCoord.z));\r\n\t\treturn attenuation;\r\n\t}\r\n\r\n#endif\r\n\r\n\r\n\r\n\r\n#ifdef CALCULATE_SHADOWS\r\n\r\n\tTEXTURE2D_SHADOW(u_ShadowMap);\r\n\r\n\tuniform mat4 u_ShadowMatrices[4];\r\n\tuniform vec4 u_ShadowSplitSpheres[4];// max cascade is 4\r\n\r\n\tmediump int computeCascadeIndex(vec3 positionWS)\r\n\t{\r\n\t\tvec3 fromCenter0 = positionWS - u_ShadowSplitSpheres[0].xyz;\r\n\t\tvec3 fromCenter1 = positionWS - u_ShadowSplitSpheres[1].xyz;\r\n\t\tvec3 fromCenter2 = positionWS - u_ShadowSplitSpheres[2].xyz;\r\n\t\tvec3 fromCenter3 = positionWS - u_ShadowSplitSpheres[3].xyz;\r\n\r\n\t\tmediump vec4 comparison = vec4(\r\n\t\t\tdot(fromCenter0, fromCenter0)<u_ShadowSplitSpheres[0].w,\r\n\t\t\tdot(fromCenter1, fromCenter1)<u_ShadowSplitSpheres[1].w,\r\n\t\t\tdot(fromCenter2, fromCenter2)<u_ShadowSplitSpheres[2].w,\r\n\t\t\tdot(fromCenter3, fromCenter3)<u_ShadowSplitSpheres[3].w);\r\n\t\tcomparison.yzw = clamp(comparison.yzw - comparison.xyz,0.0,1.0);//keep the nearest\r\n\t\tmediump vec4 indexCoefficient = vec4(4.0,3.0,2.0,1.0);\r\n\t\tmediump int index = 4 - int(dot(comparison, indexCoefficient));\r\n\t\treturn index;\r\n\t}\r\n\r\n\tvec4 getShadowCoord(vec4 positionWS)\r\n\t{\r\n\t\t#ifdef SHADOW_CASCADE\r\n\t\t\tmediump int cascadeIndex = computeCascadeIndex(positionWS.xyz);\r\n\t\t\tif(cascadeIndex > 3)// out of shadow range cascadeIndex is 4.\r\n\t\t\t\treturn vec4(0.0);\r\n\t\t\t\r\n\t\t\t#ifdef GRAPHICS_API_GLES3\r\n\t\t\t\treturn u_ShadowMatrices[cascadeIndex] * positionWS;\r\n\t\t\t#else\r\n\t\t\t\tmat4 shadowMat;\r\n\t\t\t\tif(cascadeIndex == 0)\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[0];\r\n\t\t\t\telse if(cascadeIndex == 1)\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[1];\r\n\t\t\t\telse if(cascadeIndex == 2)\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[2];\r\n\t\t\t\telse\r\n\t\t\t\t\tshadowMat = u_ShadowMatrices[3];\r\n\t\t\t\treturn shadowMat * positionWS;\r\n\t\t\t#endif\r\n\t\t#else\r\n\t\t\treturn u_ShadowMatrices[0] * positionWS;\r\n\t\t#endif\r\n\t}\r\n\r\n\tfloat sampleShadowmap(vec4 shadowCoord)\r\n\t{\r\n\t\tshadowCoord.xyz /= shadowCoord.w;\r\n\t\tfloat attenuation = 1.0;\r\n\t\tif(shadowCoord.z > 0.0 && shadowCoord.z < 1.0)\r\n\t\t{\r\n\t\t\t#if defined(SHADOW_SOFT_SHADOW_HIGH)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered9(u_ShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#elif defined(SHADOW_SOFT_SHADOW_LOW)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered4(u_ShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#else\r\n\t\t\t\tattenuation = SAMPLE_TEXTURE2D_SHADOW(u_ShadowMap,shadowCoord.xyz);\r\n\t\t\t#endif\r\n\t\t\tattenuation = mix(1.0,attenuation,u_ShadowParams.x);//shadowParams.x:shadow strength\r\n\t\t}\r\n\t\treturn attenuation;\r\n\t}\r\n#endif\r\n\r\n#ifdef CALCULATE_SPOTSHADOWS\r\n\tTEXTURE2D_SHADOW(u_SpotShadowMap);\r\n\tuniform mat4 u_SpotViewProjectMatrix;\r\n\tfloat sampleSpotShadowmap(vec4 shadowCoord)\r\n\t{\r\n\t\tshadowCoord.xyz /= shadowCoord.w;\r\n\t\tfloat attenuation = 1.0;\r\n\t\tshadowCoord.xy +=1.0;\r\n\t\tshadowCoord.xy/=2.0; \r\n\t\tif(shadowCoord.z > 0.0 && shadowCoord.z < 1.0)\r\n\t\t{\r\n\t\t\t#if defined(SHADOW_SOFT_SHADOW_HIGH)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered9(u_SpotShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#elif defined(SHADOW_SOFT_SHADOW_LOW)\r\n\t\t\t\tattenuation = sampleShdowMapFiltered4(u_SpotShadowMap,shadowCoord.xyz,u_ShadowMapSize);\r\n\t\t\t#else\r\n\t\t\t\tattenuation = SAMPLE_TEXTURE2D_SHADOW(u_SpotShadowMap,shadowCoord.xyz);\r\n\t\t\t#endif\r\n\t\t\tattenuation = mix(1.0,attenuation,u_ShadowParams.y);//shadowParams.y:shadow strength\r\n\t\t}\r\n\t\treturn attenuation;\r\n\t}\r\n#endif\r\n\r\nvec3 applyShadowBias(vec3 positionWS, vec3 normalWS, vec3 lightDirection)\r\n{\r\n    float invNdotL = 1.0 - clamp(dot(-lightDirection, normalWS),0.0,1.0);\r\n    float scale = invNdotL * u_ShadowBias.y;\r\n\r\n    // normal bias is negative since we want to apply an inset normal offset\r\n    positionWS += -lightDirection * u_ShadowBias.xxx;\r\n    positionWS += normalWS * vec3(scale);\r\n    return positionWS;\r\n}\r\n";
 
-	var ShadowCasterVSGLSL = "#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\"\r\n\r\nattribute vec4 a_Position;\r\nattribute vec3 a_Normal;\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\nuniform mat4 u_ViewProjection;\r\n\r\n#ifdef SHADOW\r\n\tuniform vec3 u_ShadowLightDirection;\r\n#endif\r\n\r\n\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\nvec4 shadowCasterVertex()\r\n{\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\t\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform;\r\n\t \t#ifdef SIMPLEBONE\r\n\t\t\tfloat currentPixelPos;\r\n\t\t\t#ifdef GPU_INSTANCE\r\n\t\t\t\tcurrentPixelPos = a_SimpleTextureParams.x+a_SimpleTextureParams.y;\r\n\t\t\t#else\r\n\t\t\t\tcurrentPixelPos = u_SimpleAnimatorParams.x+u_SimpleAnimatorParams.y;\r\n\t\t\t#endif\r\n\t\t\tfloat offset = 1.0/u_SimpleAnimatorTextureSize;\r\n\t\t\tskinTransform =  loadMatFromTexture(currentPixelPos,int(a_BoneIndices.x),offset) * a_BoneWeights.x;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.y),offset) * a_BoneWeights.y;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.z),offset) * a_BoneWeights.z;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.w),offset) * a_BoneWeights.w;\r\n\t\t#else\r\n\t\t\tskinTransform =  u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\t#endif\r\n\t\tworldMat = worldMat * skinTransform;\r\n\t#endif\r\n\r\n\tvec4 positionWS = worldMat * a_Position;\r\n\tvec3 normalWS = normalize(a_Normal*INVERSE_MAT(mat3(worldMat)));//if no normalize will cause precision problem\r\n\r\n\t#ifdef SHADOW\r\n\t\tpositionWS.xyz = applyShadowBias(positionWS.xyz,normalWS,u_ShadowLightDirection);\r\n\t#endif\r\n\r\n\tvec4 positionCS = u_ViewProjection * positionWS;\r\n\t#ifdef SHADOW_SPOT\r\n\t\tpositionCS.z = positionCS.z-u_ShadowBias.x/positionCS.w;\r\n\t#endif\r\n\tpositionCS.z = max(positionCS.z, 0.0);//min ndc z is 0.0\r\n\t\r\n\t// //TODO没考虑UV动画呢\r\n\t// #if defined(DIFFUSEMAP)&&defined(ALPHATEST)\r\n\t// \tv_Texcoord0=a_Texcoord0;\r\n\t// #endif\r\n    return positionCS;\r\n}\r\n";
+	var ShadowCasterVSGLSL = "#include \"Lighting.glsl\";\r\n#include \"Shadow.glsl\"\r\n\r\nattribute vec4 a_Position;\r\nattribute vec3 a_Normal;\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_WorldMat;\r\n#else\r\n\tuniform mat4 u_WorldMat;\r\n#endif\r\n\r\nuniform mat4 u_ViewProjection;\r\n\r\n#ifdef SHADOW\r\n\tuniform vec3 u_ShadowLightDirection;\r\n#endif\r\n\r\n\r\n\r\n#if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))||(defined(LIGHTMAP)&&defined(UV))\r\n\tattribute vec2 a_Texcoord0;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\nvec4 shadowCasterVertex()\r\n{\r\n\tmat4 worldMat;\r\n\t#ifdef GPU_INSTANCE\r\n\t\tworldMat = a_WorldMat;\r\n\t#else\r\n\t\tworldMat = u_WorldMat;\r\n\t#endif\r\n\t\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform = u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\tworldMat = worldMat * skinTransform;\r\n\t#endif\r\n\r\n\tvec4 positionWS = worldMat * a_Position;\r\n\tvec3 normalWS = normalize(a_Normal*INVERSE_MAT(mat3(worldMat)));//if no normalize will cause precision problem\r\n\r\n\t#ifdef SHADOW\r\n\t\tpositionWS.xyz = applyShadowBias(positionWS.xyz,normalWS,u_ShadowLightDirection);\r\n\t#endif\r\n\r\n\tvec4 positionCS = u_ViewProjection * positionWS;\r\n\t#ifdef SHADOW_SPOT\r\n\t\tpositionCS.z = positionCS.z-u_ShadowBias.x/positionCS.w;\r\n\t#endif\r\n\tpositionCS.z = max(positionCS.z, 0.0);//min ndc z is 0.0\r\n\t\r\n\t// //TODO没考虑UV动画呢\r\n\t// #if defined(DIFFUSEMAP)&&defined(ALPHATEST)\r\n\t// \tv_Texcoord0=a_Texcoord0;\r\n\t// #endif\r\n    return positionCS;\r\n}\r\n";
 
 	var ShadowCasterFSGLSL = "// #ifdef ALPHATEST\r\n// \tuniform float u_AlphaTestValue;\r\n// #endif\r\n\r\n// #ifdef DIFFUSEMAP\r\n// \tuniform sampler2D u_DiffuseTexture;\r\n// #endif\r\n\r\n// #if defined(DIFFUSEMAP)||((defined(DIRECTIONLIGHT)||defined(POINTLIGHT)||defined(SPOTLIGHT))&&(defined(SPECULARMAP)||defined(NORMALMAP)))\r\n// \tvarying vec2 v_Texcoord0;\r\n// #endif\r\n\r\nvec4 shadowCasterFragment()\r\n{\r\n    return vec4(0.0);\r\n    // #if defined(DIFFUSEMAP)&&defined(ALPHATEST)\r\n\t// \tfloat alpha = texture2D(u_DiffuseTexture,v_Texcoord0).w;\r\n\t// \tif( alpha < u_AlphaTestValue )\r\n\t// \t{\r\n\t// \t\tdiscard;\r\n\t// \t}\r\n\t// #endif\r\n}\r\n";
 
@@ -30301,7 +29822,7 @@
 
 	var UnlitPS = "#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n#else\r\n\tprecision mediump float;\r\n#endif\r\n\r\n#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\tvarying vec4 v_Color;\r\n#endif\r\n\r\n#ifdef ALBEDOTEXTURE\r\n\tuniform sampler2D u_AlbedoTexture;\r\n\tvarying vec2 v_Texcoord0;\r\n#endif\r\n\r\nuniform vec4 u_AlbedoColor;\r\n\r\n#ifdef ALPHATEST\r\n\tuniform float u_AlphaTestValue;\r\n#endif\r\n\r\n#ifdef FOG\r\n\tuniform float u_FogStart;\r\n\tuniform float u_FogRange;\r\n\t#ifdef ADDTIVEFOG\r\n\t#else\r\n\t\tuniform vec3 u_FogColor;\r\n\t#endif\r\n#endif\r\n\r\nvoid main()\r\n{\r\n\tvec4 color =  u_AlbedoColor;\r\n\t#ifdef ALBEDOTEXTURE\r\n\t\tcolor *= texture2D(u_AlbedoTexture, v_Texcoord0);\r\n\t#endif\r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tcolor *= v_Color;\r\n\t#endif\r\n\t\r\n\t#ifdef ALPHATEST\r\n\t\tif(color.a < u_AlphaTestValue)\r\n\t\t\tdiscard;\r\n\t#endif\r\n\t\r\n\tgl_FragColor = color;\r\n\t\r\n\t#ifdef FOG\r\n\t\tfloat lerpFact = clamp((1.0 / gl_FragCoord.w - u_FogStart) / u_FogRange, 0.0, 1.0);\r\n\t\t#ifdef ADDTIVEFOG\r\n\t\t\tgl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.0), lerpFact);\r\n\t\t#else\r\n\t\t\tgl_FragColor.rgb = mix(gl_FragColor.rgb, u_FogColor, lerpFact);\r\n\t\t#endif\r\n\t#endif\r\n\t\r\n}\r\n\r\n";
 
-	var UnlitVS = "#include \"Lighting.glsl\";\r\n\r\nattribute vec4 a_Position;\r\n\r\nattribute vec2 a_Texcoord0;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\nattribute vec4 a_Color;\r\nvarying vec4 v_Color;\r\nvarying vec2 v_Texcoord0;\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\n#ifdef SIMPLEBONE\r\n\t#ifdef GPU_INSTANCE\r\n\t\tattribute vec4 a_SimpleTextureParams;\r\n\t#else\r\n\t\tuniform vec4 u_SimpleAnimatorParams;\r\n\t#endif\r\n\tuniform sampler2D u_SimpleAnimatorTexture;\r\n\r\n\tuniform float u_SimpleAnimatorTextureSize; \r\n#endif\r\n\r\n\r\n#ifdef SIMPLEBONE\r\nmat4 loadMatFromTexture(float FramePos,int boneIndices,float offset)\r\n{\r\n\tvec2 uv;\r\n\tfloat PixelPos = FramePos+float(boneIndices)*4.0;\r\n\tfloat halfOffset = offset * 0.5;\r\n\tfloat uvoffset = PixelPos/u_SimpleAnimatorTextureSize;\r\n\tuv.y = floor(uvoffset)*offset+halfOffset;\r\n\tuv.x = mod(float(PixelPos),u_SimpleAnimatorTextureSize)*offset+halfOffset;\r\n\tvec4 mat0row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat1row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat2row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tuv.x+=offset;\r\n\tvec4 mat3row = texture2D(u_SimpleAnimatorTexture,uv);\r\n\tmat4 m =mat4(mat0row.x,mat0row.y,mat0row.z,mat0row.w,\r\n\t\t\t  mat1row.x,mat1row.y,mat1row.z,mat1row.w,\r\n\t\t\t  mat2row.x,mat2row.y,mat2row.z,mat2row.w,\r\n\t\t\t  mat3row.x,mat3row.y,mat3row.z,mat3row.w);\r\n\treturn m;\r\n}\r\n#endif\r\nvoid main() {\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform;\r\n\t \t#ifdef SIMPLEBONE\r\n\t\t\tfloat currentPixelPos;\r\n\t\t\t#ifdef GPU_INSTANCE\r\n\t\t\t\tcurrentPixelPos = a_SimpleTextureParams.x+a_SimpleTextureParams.y;\r\n\t\t\t#else\r\n\t\t\t\tcurrentPixelPos = u_SimpleAnimatorParams.x+u_SimpleAnimatorParams.y;\r\n\t\t\t#endif\r\n\t\t\tfloat offset = 1.0/u_SimpleAnimatorTextureSize;\r\n\t\t\tskinTransform =  loadMatFromTexture(currentPixelPos,int(a_BoneIndices.x),offset) * a_BoneWeights.x;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.y),offset) * a_BoneWeights.y;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.z),offset) * a_BoneWeights.z;\r\n\t\t\tskinTransform += loadMatFromTexture(currentPixelPos,int(a_BoneIndices.w),offset) * a_BoneWeights.w;\r\n\t\t#else\r\n\t\t\tskinTransform =  u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\t#endif\r\n\t\tposition=skinTransform*a_Position;\r\n\t #else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\r\n\t#ifdef TILINGOFFSET\r\n\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t#else\r\n\t\tv_Texcoord0=a_Texcoord0;\r\n\t#endif\r\n\r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tv_Color = a_Color;\r\n\t#endif\r\n\tgl_Position=remapGLPositionZ(gl_Position);\r\n}";
+	var UnlitVS = "#include \"Lighting.glsl\";\r\n\r\nattribute vec4 a_Position;\r\n\r\nattribute vec2 a_Texcoord0;\r\n\r\n#ifdef GPU_INSTANCE\r\n\tattribute mat4 a_MvpMatrix;\r\n#else\r\n\tuniform mat4 u_MvpMatrix;\r\n#endif\r\n\r\nattribute vec4 a_Color;\r\nvarying vec4 v_Color;\r\nvarying vec2 v_Texcoord0;\r\n\r\n#ifdef TILINGOFFSET\r\n\tuniform vec4 u_TilingOffset;\r\n#endif\r\n\r\n#ifdef BONE\r\n\tconst int c_MaxBoneCount = 24;\r\n\tattribute vec4 a_BoneIndices;\r\n\tattribute vec4 a_BoneWeights;\r\n\tuniform mat4 u_Bones[c_MaxBoneCount];\r\n#endif\r\n\r\nvoid main() {\r\n\tvec4 position;\r\n\t#ifdef BONE\r\n\t\tmat4 skinTransform = u_Bones[int(a_BoneIndices.x)] * a_BoneWeights.x;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.y)] * a_BoneWeights.y;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.z)] * a_BoneWeights.z;\r\n\t\tskinTransform += u_Bones[int(a_BoneIndices.w)] * a_BoneWeights.w;\r\n\t\tposition=skinTransform*a_Position;\r\n\t#else\r\n\t\tposition=a_Position;\r\n\t#endif\r\n\t#ifdef GPU_INSTANCE\r\n\t\tgl_Position = a_MvpMatrix * position;\r\n\t#else\r\n\t\tgl_Position = u_MvpMatrix * position;\r\n\t#endif\r\n\r\n\t#ifdef TILINGOFFSET\r\n\t\tv_Texcoord0=TransformUV(a_Texcoord0,u_TilingOffset);\r\n\t#else\r\n\t\tv_Texcoord0=a_Texcoord0;\r\n\t#endif\r\n\r\n\t#if defined(COLOR)&&defined(ENABLEVERTEXCOLOR)\r\n\t\tv_Color = a_Color;\r\n\t#endif\r\n\tgl_Position=remapGLPositionZ(gl_Position);\r\n}";
 
 	var WaterPrimaryPS = "#ifdef GL_FRAGMENT_PRECISION_HIGH\r\n\tprecision highp float;\r\n#else\r\n\tprecision mediump float;\r\n#endif\r\n\r\n#ifdef MAINTEXTURE\r\n\tuniform sampler2D u_MainTexture;\r\n#endif\r\n\r\n#ifdef NORMALTEXTURE\r\n\tuniform sampler2D u_NormalTexture;\r\n#endif\r\n\r\nuniform vec4 u_HorizonColor;\r\n\r\nvarying vec3 v_Normal;\r\nvarying vec3 v_Tangent;\r\nvarying vec3 v_Binormal;\r\nvarying vec3 v_ViewDir;\r\nvarying vec2 v_Texcoord0;\r\nvarying vec2 v_Texcoord1;\r\n\r\n\r\n#include \"Lighting.glsl\"\r\n\r\n\r\n\r\nvec3 NormalSampleToWorldSpace(vec4 normalMapSample) {\r\n\tvec3 normalT;\r\n\tnormalT.x = 2.0 * normalMapSample.x - 1.0;\r\n\tnormalT.y = 1.0 - 2.0 * normalMapSample.y;\r\n\tnormalT.z = sqrt(1.0 - clamp(dot(normalT.xy, normalT.xy), 0.0, 1.0));\r\n\r\n\tvec3 bumpedNormal = normalize(normalT);\r\n\r\n\treturn bumpedNormal;\r\n}\r\n\r\n\r\nvoid main()\r\n{\r\n\tvec4 bumpColor1 = texture2D(u_NormalTexture, v_Texcoord0);\r\n\tvec4 bumpColor2 = texture2D(u_NormalTexture, v_Texcoord1);\r\n\r\n\tvec3 normal1 = NormalSampleToWorldSpace(bumpColor1);\r\n\tvec3 normal2 = NormalSampleToWorldSpace(bumpColor2);\r\n\t\r\n\tvec3 normal = normalize((normal1 + normal2) * 0.5);\r\n\tvec3 viewDir = normalize(v_ViewDir);\r\n\tfloat fresnel = dot(viewDir, normal);\r\n\t\r\n\tvec4 waterColor = texture2D(u_MainTexture, vec2(fresnel, fresnel));\r\n\t\r\n\tvec4 color;\r\n\tcolor.rgb = mix(waterColor.rgb, u_HorizonColor.rgb, vec3(waterColor.a));\r\n\tcolor.a = u_HorizonColor.a;\r\n\t\r\n\tgl_FragColor = color;\r\n}\r\n\r\n\r\n";
 
@@ -30355,9 +29876,6 @@
 	            'u_LightmapScaleOffset': Shader3D.PERIOD_SPRITE,
 	            'u_LightMap': Shader3D.PERIOD_SPRITE,
 	            'u_LightMapDirection': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTexture': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorParams': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTextureSize': Shader3D.PERIOD_SPRITE,
 	            'u_CameraPos': Shader3D.PERIOD_CAMERA,
 	            'u_Viewport': Shader3D.PERIOD_CAMERA,
 	            'u_ProjectionParams': Shader3D.PERIOD_CAMERA,
@@ -30448,9 +29966,6 @@
 	            'u_TilingOffset': Shader3D.PERIOD_MATERIAL,
 	            'u_AlphaTestValue': Shader3D.PERIOD_MATERIAL,
 	            'u_MvpMatrix': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTexture': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorParams': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTextureSize': Shader3D.PERIOD_SPRITE,
 	            'u_FogStart': Shader3D.PERIOD_SCENE,
 	            'u_FogRange': Shader3D.PERIOD_SCENE,
 	            'u_FogColor': Shader3D.PERIOD_SCENE
@@ -30481,9 +29996,6 @@
 	            'u_TilingOffset': Shader3D.PERIOD_MATERIAL,
 	            'u_AlphaTestValue': Shader3D.PERIOD_MATERIAL,
 	            'u_MvpMatrix': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTexture': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorParams': Shader3D.PERIOD_SPRITE,
-	            'u_SimpleAnimatorTextureSize': Shader3D.PERIOD_SPRITE,
 	            'u_FogStart': Shader3D.PERIOD_SCENE,
 	            'u_FogRange': Shader3D.PERIOD_SCENE,
 	            'u_FogColor': Shader3D.PERIOD_SCENE
@@ -30875,6 +30387,10 @@
 	    _removeFromLightQueue() {
 	        this._scene._directionLights.remove(this);
 	    }
+	    _parse(data, spriteMap) {
+	        super._parse(data, spriteMap);
+	        (data.shadowCascadesMode != undefined) && (this.shadowCascadesMode = data.shadowCascadesMode);
+	    }
 	}
 
 	class PointLight extends LightSprite {
@@ -30934,274 +30450,6 @@
 	    }
 	}
 
-	class SimpleSkinnedMeshRenderer extends SkinnedMeshRenderer {
-	    constructor(owner) {
-	        super(owner);
-	        this._simpleAnimatorParams = new Vector4();
-	        this._simpleAnimatorOffset = new Vector2();
-	        this._shaderValues.addDefine(SkinnedMeshSprite3DShaderDeclaration.SHADERDEFINE_SIMPLEBONE);
-	        this._shaderValues.addDefine(SkinnedMeshSprite3DShaderDeclaration.SHADERDEFINE_BONE);
-	    }
-	    get simpleAnimatorTexture() {
-	        return this._simpleAnimatorTexture;
-	    }
-	    set simpleAnimatorTexture(value) {
-	        this._simpleAnimatorTexture = value;
-	        this._simpleAnimatorTextureSize = value.width;
-	        this._shaderValues.setTexture(SimpleSkinnedMeshRenderer.SIMPLE_SIMPLEANIMATORTEXTURE, value);
-	        value._addReference();
-	        this._shaderValues.setNumber(SimpleSkinnedMeshRenderer.SIMPLE_SIMPLEANIMATORTEXTURESIZE, this._simpleAnimatorTextureSize);
-	    }
-	    get simpleAnimatorOffset() {
-	        return this._simpleAnimatorOffset;
-	    }
-	    set simpleAnimatorOffset(value) {
-	        value.cloneTo(this._simpleAnimatorOffset);
-	    }
-	    _computeAnimatorParamsData() {
-	        if (this._cacheMesh) {
-	            this._bonesNums = this.bones.length;
-	            this._simpleAnimatorParams.x = this._simpleAnimatorOffset.x;
-	            this._simpleAnimatorParams.y = Math.round(this._simpleAnimatorOffset.y) * this._bonesNums * 4;
-	        }
-	    }
-	    _createRenderElement() {
-	        return new SubMeshRenderElement();
-	    }
-	    _setCacheAnimator(animator) {
-	        this._cacheAnimator = animator;
-	        this._shaderValues.addDefine(SkinnedMeshSprite3DShaderDeclaration.SHADERDEFINE_SIMPLEBONE);
-	    }
-	    _onMeshChange(value) {
-	        super._onMeshChange(value);
-	        this._cacheMesh = value;
-	    }
-	    _renderUpdate(context, transform) {
-	        var element = context.renderElement;
-	        switch (element.renderType) {
-	            case RenderElement.RENDERTYPE_NORMAL:
-	                if (this._cacheAnimator) {
-	                    var worldMat = this._cacheAnimator.owner.transform.worldMatrix;
-	                    this._shaderValues.setMatrix4x4(Sprite3D.WORLDMATRIX, worldMat);
-	                }
-	                else {
-	                    this._shaderValues.setMatrix4x4(Sprite3D.WORLDMATRIX, transform.worldMatrix);
-	                }
-	                this._computeAnimatorParamsData();
-	                this._shaderValues.setVector(SimpleSkinnedMeshRenderer.SIMPLE_SIMPLEANIMATORPARAMS, this._simpleAnimatorParams);
-	                break;
-	            case RenderElement.RENDERTYPE_INSTANCEBATCH:
-	                var worldMatrixData = SubMeshInstanceBatch.instance.instanceWorldMatrixData;
-	                var insBatches = element.instanceBatchElementList;
-	                var elements = insBatches.elements;
-	                var count = insBatches.length;
-	                if (this._cacheAnimator) {
-	                    for (var i = 0; i < count; i++) {
-	                        var mat = (elements[i].render)._cacheAnimator.owner._transform.worldMatrix;
-	                        worldMatrixData.set(mat.elements, i * 16);
-	                    }
-	                }
-	                else {
-	                    for (var i = 0; i < count; i++)
-	                        worldMatrixData.set(elements[i]._transform.worldMatrix.elements, i * 16);
-	                }
-	                var worldBuffer = SubMeshInstanceBatch.instance.instanceWorldMatrixBuffer;
-	                worldBuffer.orphanStorage();
-	                worldBuffer.setData(worldMatrixData.buffer, 0, 0, count * 16 * 4);
-	                this._shaderValues.addDefine(MeshSprite3DShaderDeclaration.SHADERDEFINE_GPU_INSTANCE);
-	                var simpleAnimatorData = SubMeshInstanceBatch.instance.instanceSimpleAnimatorData;
-	                if (this._cacheAnimator) {
-	                    for (var i = 0; i < count; i++) {
-	                        var render = (elements[i].render);
-	                        render._computeAnimatorParamsData();
-	                        var simpleAnimatorParams = render._simpleAnimatorParams;
-	                        var offset = i * 4;
-	                        simpleAnimatorData[offset] = simpleAnimatorParams.x;
-	                        simpleAnimatorData[offset + 1] = simpleAnimatorParams.y;
-	                    }
-	                }
-	                else {
-	                    for (var i = 0; i < count; i++) {
-	                        simpleAnimatorData[offset] = 0;
-	                        simpleAnimatorData[offset + 1] = 0;
-	                    }
-	                }
-	                var simpleAnimatorBuffer = SubMeshInstanceBatch.instance.instanceSimpleAnimatorBuffer;
-	                simpleAnimatorBuffer.orphanStorage();
-	                simpleAnimatorBuffer.setData(simpleAnimatorData.buffer, 0, 0, count * 4 * 4);
-	                break;
-	        }
-	    }
-	    _renderUpdateWithCamera(context, transform) {
-	        var projectionView = context.projectionViewMatrix;
-	        if (projectionView) {
-	            var element = context.renderElement;
-	            switch (element.renderType) {
-	                case RenderElement.RENDERTYPE_NORMAL:
-	                    if (this._cacheAnimator) {
-	                        var mat = this._cacheAnimator.owner._transform.worldMatrix;
-	                        Matrix4x4.multiply(projectionView, mat, this._projectionViewWorldMatrix);
-	                        this._shaderValues.setMatrix4x4(Sprite3D.MVPMATRIX, this._projectionViewWorldMatrix);
-	                    }
-	                    else {
-	                        Matrix4x4.multiply(projectionView, transform.worldMatrix, this._projectionViewWorldMatrix);
-	                        this._shaderValues.setMatrix4x4(Sprite3D.MVPMATRIX, this._projectionViewWorldMatrix);
-	                    }
-	                    break;
-	                case RenderElement.RENDERTYPE_INSTANCEBATCH:
-	                    var mvpMatrixData = SubMeshInstanceBatch.instance.instanceMVPMatrixData;
-	                    var insBatches = element.instanceBatchElementList;
-	                    var elements = insBatches.elements;
-	                    var count = insBatches.length;
-	                    if (this._cacheAnimator) {
-	                        for (var i = 0; i < count; i++) {
-	                            var worldMat = (elements[i].render)._cacheAnimator.owner._transform.worldMatrix;
-	                            Utils3D.mulMatrixByArray(projectionView.elements, 0, worldMat.elements, 0, mvpMatrixData, i * 16);
-	                        }
-	                    }
-	                    else {
-	                        for (var i = 0; i < count; i++) {
-	                            var worldMat = elements[i]._transform.worldMatrix;
-	                            Utils3D.mulMatrixByArray(projectionView.elements, 0, worldMat.elements, 0, mvpMatrixData, i * 16);
-	                        }
-	                    }
-	                    var mvpBuffer = SubMeshInstanceBatch.instance.instanceMVPMatrixBuffer;
-	                    mvpBuffer.orphanStorage();
-	                    mvpBuffer.setData(mvpMatrixData.buffer, 0, 0, count * 16 * 4);
-	                    break;
-	            }
-	        }
-	    }
-	    _destroy() {
-	        if (this._cacheRootBone)
-	            (!this._cacheRootBone.destroyed) && (this._cacheRootBone.transform.off(Laya.Event.TRANSFORM_CHANGED, this, this._onWorldMatNeedChange));
-	        (this._simpleAnimatorTexture) && this._simpleAnimatorTexture._removeReference();
-	        this._simpleAnimatorTexture = null;
-	    }
-	}
-
-	class SimpleSkinnedMeshSprite3D extends RenderableSprite3D {
-	    constructor(mesh = null, name = null) {
-	        super(name);
-	        this._meshFilter = new MeshFilter(this);
-	        this._render = new SimpleSkinnedMeshRenderer(this);
-	        (mesh) && (this._meshFilter.sharedMesh = mesh);
-	    }
-	    static __init__() {
-	        SimpleSkinnedMeshRenderer.SIMPLE_SIMPLEANIMATORPARAMS = SimpleSkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORPARAMS;
-	        SimpleSkinnedMeshRenderer.SIMPLE_SIMPLEANIMATORTEXTURE = SimpleSkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORTEXTURE;
-	        SimpleSkinnedMeshRenderer.SIMPLE_SIMPLEANIMATORTEXTURESIZE = SimpleSkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORTEXTURESIZE;
-	    }
-	    get meshFilter() {
-	        return this._meshFilter;
-	    }
-	    get simpleSkinnedMeshRenderer() {
-	        return this._render;
-	    }
-	    _parse(data, spriteMap) {
-	        super._parse(data, spriteMap);
-	        var render = this.simpleSkinnedMeshRenderer;
-	        var lightmapIndex = data.lightmapIndex;
-	        (lightmapIndex != null) && (render.lightmapIndex = lightmapIndex);
-	        var lightmapScaleOffsetArray = data.lightmapScaleOffset;
-	        (lightmapScaleOffsetArray) && (render.lightmapScaleOffset = new Vector4(lightmapScaleOffsetArray[0], lightmapScaleOffsetArray[1], lightmapScaleOffsetArray[2], lightmapScaleOffsetArray[3]));
-	        (data.enableRender != undefined) && (render.enable = data.enableRender);
-	        (data.receiveShadows != undefined) && (render.receiveShadow = data.receiveShadows);
-	        (data.castShadow != undefined) && (render.castShadow = data.castShadow);
-	        var meshPath;
-	        meshPath = data.meshPath;
-	        if (meshPath) {
-	            var mesh = Laya.Loader.getRes(meshPath);
-	            (mesh) && (this.meshFilter.sharedMesh = mesh);
-	        }
-	        var materials = data.materials;
-	        if (materials) {
-	            var sharedMaterials = render.sharedMaterials;
-	            var materialCount = materials.length;
-	            sharedMaterials.length = materialCount;
-	            for (var i = 0; i < materialCount; i++) {
-	                sharedMaterials[i] = Laya.Loader.getRes(materials[i].path);
-	            }
-	            render.sharedMaterials = sharedMaterials;
-	        }
-	        var boundBox = data.boundBox;
-	        var min = boundBox.min;
-	        var max = boundBox.max;
-	        render.localBounds.setMin(new Vector3(min[0], min[1], min[2]));
-	        render.localBounds.setMax(new Vector3(max[0], max[1], max[2]));
-	        if (spriteMap) {
-	            var rootBoneData = data.rootBone;
-	            render.rootBone = spriteMap[rootBoneData];
-	            var bonesData = data.bones;
-	            var n;
-	            for (i = 0, n = bonesData.length; i < n; i++)
-	                render.bones.push(spriteMap[bonesData[i]]);
-	        }
-	        else {
-	            (data.rootBone) && (render._setRootBone(data.rootBone));
-	        }
-	        var animatorTexture = data.animatorTexture;
-	        if (animatorTexture) {
-	            var animatortexture = Laya.Loader.getRes(animatorTexture);
-	            render.simpleAnimatorTexture = animatortexture;
-	        }
-	    }
-	    _changeHierarchyAnimator(animator) {
-	        super._changeHierarchyAnimator(animator);
-	        this.simpleSkinnedMeshRenderer._setCacheAnimator(animator);
-	    }
-	    _cloneTo(destObject, srcRoot, dstRoot) {
-	        var meshSprite3D = destObject;
-	        meshSprite3D.meshFilter.sharedMesh = this.meshFilter.sharedMesh;
-	        var meshRender = this._render;
-	        var destMeshRender = meshSprite3D._render;
-	        destMeshRender.enable = meshRender.enable;
-	        destMeshRender.sharedMaterials = meshRender.sharedMaterials;
-	        destMeshRender.castShadow = meshRender.castShadow;
-	        var lightmapScaleOffset = meshRender.lightmapScaleOffset;
-	        lightmapScaleOffset && (destMeshRender.lightmapScaleOffset = lightmapScaleOffset.clone());
-	        destMeshRender.receiveShadow = meshRender.receiveShadow;
-	        destMeshRender.sortingFudge = meshRender.sortingFudge;
-	        destMeshRender._rootBone = meshRender._rootBone;
-	        var bones = meshRender.bones;
-	        var destBones = destMeshRender.bones;
-	        var bonesCount = bones.length;
-	        destBones.length = bonesCount;
-	        var rootBone = meshRender.rootBone;
-	        if (rootBone) {
-	            var pathes = Utils3D._getHierarchyPath(srcRoot, rootBone, SimpleSkinnedMeshSprite3D._tempArray0);
-	            if (pathes)
-	                destMeshRender.rootBone = Utils3D._getNodeByHierarchyPath(dstRoot, pathes);
-	            else
-	                destMeshRender.rootBone = rootBone;
-	        }
-	        for (var i = 0; i < bones.length; i++) {
-	            pathes = Utils3D._getHierarchyPath(srcRoot, bones[i], SimpleSkinnedMeshSprite3D._tempArray0);
-	            if (pathes)
-	                destBones[i] = Utils3D._getNodeByHierarchyPath(dstRoot, pathes);
-	            else
-	                destBones[i] = bones[i];
-	        }
-	        var lbb = meshRender.localBounds;
-	        (lbb) && (lbb.cloneTo(destMeshRender.localBounds));
-	        destMeshRender.simpleAnimatorTexture = meshRender.simpleAnimatorTexture;
-	        super._cloneTo(destObject, srcRoot, dstRoot);
-	    }
-	    destroy(destroyChild = true) {
-	        if (this.destroyed)
-	            return;
-	        super.destroy(destroyChild);
-	        this._meshFilter.destroy();
-	    }
-	    _create() {
-	        return new SimpleSkinnedMeshSprite3D();
-	    }
-	}
-	SimpleSkinnedMeshSprite3D._tempArray0 = [];
-	SimpleSkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORTEXTURE = Shader3D.propertyNameToID("u_SimpleAnimatorTexture");
-	SimpleSkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORPARAMS = Shader3D.propertyNameToID("u_SimpleAnimatorParams");
-	SimpleSkinnedMeshSprite3D.SIMPLE_SIMPLEANIMATORTEXTURESIZE = Shader3D.propertyNameToID("u_SimpleAnimatorTextureSize");
-
 	class Scene3DUtils {
 	    static _createSprite3DInstance(nodeData, spriteMap, outBatchSprites) {
 	        var node;
@@ -31218,9 +30466,6 @@
 	                break;
 	            case "SkinnedMeshSprite3D":
 	                node = new SkinnedMeshSprite3D();
-	                break;
-	            case "SimpleSkinnedMeshSprite3D":
-	                node = new SimpleSkinnedMeshSprite3D();
 	                break;
 	            case "ShuriKenParticle3D":
 	                node = new ShuriKenParticle3D();
@@ -31241,6 +30486,7 @@
 	                node = new TrailSprite3D();
 	                break;
 	            default:
+	                console.error("未定义的类型", nodeData);
 	                throw new Error("Utils3D:unidentified class type in (.lh) file.");
 	        }
 	        var childData = nodeData.child;
@@ -31253,13 +30499,13 @@
 	        spriteMap[nodeData.instanceID] = node;
 	        return node;
 	    }
-	    static _createComponentInstance(nodeData, spriteMap, interactMap) {
+	    static _createComponentInstance(nodeData, spriteMap) {
 	        var node = spriteMap[nodeData.instanceID];
 	        node._parse(nodeData.props, spriteMap);
 	        var childData = nodeData.child;
 	        if (childData) {
 	            for (var i = 0, n = childData.length; i < n; i++)
-	                Scene3DUtils._createComponentInstance(childData[i], spriteMap, interactMap);
+	                Scene3DUtils._createComponentInstance(childData[i], spriteMap);
 	        }
 	        var componentsData = nodeData.components;
 	        if (componentsData) {
@@ -31268,7 +30514,7 @@
 	                var clas = Laya.ClassUtils.getRegClass(data.type);
 	                if (clas) {
 	                    var component = node.addComponent(clas);
-	                    component._parse(data, interactMap);
+	                    component._parse(data);
 	                }
 	                else {
 	                    console.warn("Unkown component type.");
@@ -31278,18 +30524,9 @@
 	    }
 	    static _createNodeByJson02(nodeData, outBatchSprites) {
 	        var spriteMap = {};
-	        var interactMap = { component: [], data: [] };
 	        var node = Scene3DUtils._createSprite3DInstance(nodeData, spriteMap, outBatchSprites);
-	        Scene3DUtils._createComponentInstance(nodeData, spriteMap, interactMap);
-	        Scene3DUtils._createInteractInstance(interactMap, spriteMap);
+	        Scene3DUtils._createComponentInstance(nodeData, spriteMap);
 	        return node;
-	    }
-	    static _createInteractInstance(interatMap, spriteMap) {
-	        var components = interatMap.component;
-	        var data = interatMap.data;
-	        for (var i = 0, n = components.length; i < n; i++) {
-	            components[i]._parseInteractive(data[i], spriteMap);
-	        }
 	    }
 	    static _parse(data, propertyParams = null, constructParams = null) {
 	        var json = data.data;
@@ -31489,11 +30726,6 @@
 	        var bindPoseFloatCount = bindPoseDatas.length;
 	        var bindPoseBuffer = LoadModelV04._mesh._inverseBindPosesBuffer = new ArrayBuffer(bindPoseFloatCount * 4);
 	        LoadModelV04._mesh._inverseBindPoses = [];
-	        if (bindPoseFloatCount != 0)
-	            LoadModelV04._mesh._instanceBufferStateType = Mesh.MESH_INSTANCEBUFFER_TYPE_SIMPLEANIMATOR;
-	        else
-	            LoadModelV04._mesh._instanceBufferStateType = Mesh.MESH_INSTANCEBUFFER_TYPE_NORMAL;
-	        LoadModelV04._mesh._setInstanceBuffer(LoadModelV04._mesh._instanceBufferStateType);
 	        for (i = 0; i < bindPoseFloatCount; i += 16) {
 	            var inverseGlobalBindPose = new Matrix4x4(bindPoseDatas[i + 0], bindPoseDatas[i + 1], bindPoseDatas[i + 2], bindPoseDatas[i + 3], bindPoseDatas[i + 4], bindPoseDatas[i + 5], bindPoseDatas[i + 6], bindPoseDatas[i + 7], bindPoseDatas[i + 8], bindPoseDatas[i + 9], bindPoseDatas[i + 10], bindPoseDatas[i + 11], bindPoseDatas[i + 12], bindPoseDatas[i + 13], bindPoseDatas[i + 14], bindPoseDatas[i + 15], new Float32Array(bindPoseBuffer, i * 4, 16));
 	            LoadModelV04._mesh._inverseBindPoses[i / 16] = inverseGlobalBindPose;
@@ -31744,11 +30976,6 @@
 	        var bindPoseFloatCount = bindPoseDatas.length;
 	        var bindPoseBuffer = mesh._inverseBindPosesBuffer = new ArrayBuffer(bindPoseFloatCount * 4);
 	        mesh._inverseBindPoses = [];
-	        if (bindPoseFloatCount != 0)
-	            mesh._instanceBufferStateType = Mesh.MESH_INSTANCEBUFFER_TYPE_SIMPLEANIMATOR;
-	        else
-	            mesh._instanceBufferStateType = Mesh.MESH_INSTANCEBUFFER_TYPE_NORMAL;
-	        mesh._setInstanceBuffer(mesh._instanceBufferStateType);
 	        for (i = 0; i < bindPoseFloatCount; i += 16) {
 	            var inverseGlobalBindPose = new Matrix4x4(bindPoseDatas[i + 0], bindPoseDatas[i + 1], bindPoseDatas[i + 2], bindPoseDatas[i + 3], bindPoseDatas[i + 4], bindPoseDatas[i + 5], bindPoseDatas[i + 6], bindPoseDatas[i + 7], bindPoseDatas[i + 8], bindPoseDatas[i + 9], bindPoseDatas[i + 10], bindPoseDatas[i + 11], bindPoseDatas[i + 12], bindPoseDatas[i + 13], bindPoseDatas[i + 14], bindPoseDatas[i + 15], new Float32Array(bindPoseBuffer, i * 4, 16));
 	            mesh._inverseBindPoses[i / 16] = inverseGlobalBindPose;
@@ -31909,685 +31136,6 @@
 	SkyPanoramicMaterial.TEXTURE = Shader3D.propertyNameToID("u_Texture");
 	SkyPanoramicMaterial.TEXTURE_HDR_PARAMS = Shader3D.propertyNameToID("u_TextureHDRParams");
 
-	class ConstraintComponent extends Laya.Component {
-	    constructor(constraintType) {
-	        super();
-	        this._anchor = new Vector3();
-	        this._connectAnchor = new Vector3();
-	        this._feedbackEnabled = false;
-	        this._getJointFeedBack = false;
-	        this._currentForce = new Vector3();
-	        this._currentTorque = new Vector3();
-	        this._constraintType = constraintType;
-	        var bt = Physics3D._bullet;
-	        this._btframATrans = bt.btTransform_create();
-	        this._btframBTrans = bt.btTransform_create();
-	        bt.btTransform_setIdentity(this._btframATrans);
-	        bt.btTransform_setIdentity(this._btframBTrans);
-	        this._btframAPos = bt.btVector3_create(0, 0, 0);
-	        this._btframBPos = bt.btVector3_create(0, 0, 0);
-	        bt.btTransform_setOrigin(this._btframATrans, this._btframAPos);
-	        bt.btTransform_setOrigin(this._btframBTrans, this._btframBPos);
-	        this._breakForce = -1;
-	        this._breakTorque = -1;
-	    }
-	    get enabled() {
-	        return super.enabled;
-	    }
-	    set enabled(value) {
-	        super.enabled = value;
-	    }
-	    get appliedImpulse() {
-	        if (!this._feedbackEnabled) {
-	            this._btConstraint.EnableFeedback(true);
-	            this._feedbackEnabled = true;
-	        }
-	        return this._btConstraint.AppliedImpulse;
-	    }
-	    set connectedBody(value) {
-	        this._connectedBody = value;
-	        value.constaintRigidbodyB = this;
-	    }
-	    get connectedBody() {
-	        return this._connectedBody;
-	    }
-	    get ownBody() {
-	        return this._ownBody;
-	    }
-	    set ownBody(value) {
-	        this._ownBody = value;
-	        value.constaintRigidbodyA = this;
-	    }
-	    get currentForce() {
-	        if (!this._getJointFeedBack)
-	            this._getFeedBackInfo();
-	        return this._currentForce;
-	    }
-	    get currentTorque() {
-	        if (!this._getJointFeedBack)
-	            this._getFeedBackInfo();
-	        return this._currentTorque;
-	    }
-	    get breakForce() {
-	        return this._breakForce;
-	    }
-	    set breakForce(value) {
-	        this._breakForce = value;
-	    }
-	    get breakTorque() {
-	        return this._breakTorque;
-	    }
-	    set breakTorque(value) {
-	        this._breakTorque = value;
-	    }
-	    set anchor(value) {
-	        value.cloneTo(this._anchor);
-	        this.setFrames();
-	    }
-	    get anchor() {
-	        return this._anchor;
-	    }
-	    set connectAnchor(value) {
-	        value.cloneTo(this._connectAnchor);
-	        this.setFrames();
-	    }
-	    get connectAnchor() {
-	        return this._connectAnchor;
-	    }
-	    setOverrideNumSolverIterations(overideNumIterations) {
-	        var bt = Physics3D._bullet;
-	        bt.btTypedConstraint_setOverrideNumSolverIterations(this._btConstraint, overideNumIterations);
-	    }
-	    setConstraintEnabled(enable) {
-	        var bt = Physics3D._bullet;
-	        bt.btTypedConstraint_setEnabled(this._btConstraint, enable);
-	    }
-	    _onEnable() {
-	        super._onEnable();
-	        this.enabled = true;
-	    }
-	    _onDisable() {
-	        super._onDisable();
-	        this.enabled = false;
-	    }
-	    setFrames() {
-	        var bt = Physics3D._bullet;
-	        bt.btVector3_setValue(this._btframAPos, -this._anchor.x, this.anchor.y, this.anchor.z);
-	        bt.btVector3_setValue(this._btframBPos, -this._connectAnchor.x, this._connectAnchor.y, this._connectAnchor.z);
-	        bt.btTransform_setOrigin(this._btframATrans, this._btframAPos);
-	        bt.btTransform_setOrigin(this._btframBTrans, this._btframBPos);
-	    }
-	    _addToSimulation() {
-	    }
-	    _removeFromSimulation() {
-	    }
-	    _createConstraint() {
-	    }
-	    setConnectRigidBody(ownerRigid, connectRigidBody) {
-	        var ownerCanInSimulation = (ownerRigid) && (!!(ownerRigid._simulation && ownerRigid._enabled && ownerRigid.colliderShape));
-	        var connectCanInSimulation = (connectRigidBody) && (!!(connectRigidBody._simulation && connectRigidBody._enabled && connectRigidBody.colliderShape));
-	        if (!(ownerCanInSimulation && connectCanInSimulation))
-	            throw "ownerRigid or connectRigidBody is not in Simulation";
-	        if (ownerRigid != this._ownBody || connectRigidBody != this._connectedBody) {
-	            var canInSimulation = !!(this.enabled && this._simulation);
-	            canInSimulation && this._removeFromSimulation();
-	            this._ownBody = ownerRigid;
-	            this._connectedBody = connectRigidBody;
-	            this._ownBody.constaintRigidbodyA = this;
-	            this._connectedBody.constaintRigidbodyB = this;
-	            this._createConstraint();
-	        }
-	    }
-	    getcurrentForce(out) {
-	        if (!this._btJointFeedBackObj)
-	            throw "this Constraint is not simulation";
-	        var bt = Physics3D._bullet;
-	        var applyForce = bt.btJointFeedback_getAppliedForceBodyA(this._btJointFeedBackObj);
-	        out.setValue(bt.btVector3_x(applyForce), bt.btVector3_y(applyForce), bt.btVector3_z(applyForce));
-	        return;
-	    }
-	    getcurrentTorque(out) {
-	        if (!this._btJointFeedBackObj)
-	            throw "this Constraint is not simulation";
-	        var bt = Physics3D._bullet;
-	        var applyTorque = bt.btJointFeedback_getAppliedTorqueBodyA(this._btJointFeedBackObj);
-	        out.setValue(bt.btVector3_x(applyTorque), bt.btVector3_y(applyTorque), bt.btVector3_z(applyTorque));
-	        return;
-	    }
-	    _onDestroy() {
-	        var physics3D = Physics3D._bullet;
-	        this._removeFromSimulation();
-	        if (this._btConstraint && this._btJointFeedBackObj && this._simulation) {
-	            physics3D.btTypedConstraint_destroy(this._btConstraint);
-	            physics3D.btJointFeedback_destroy(this._btJointFeedBackObj);
-	            this._btJointFeedBackObj = null;
-	            this._btConstraint = null;
-	        }
-	        super._onDisable();
-	    }
-	    _isBreakConstrained() {
-	        this._getJointFeedBack = false;
-	        if (this.breakForce == -1 && this.breakTorque == -1)
-	            return false;
-	        this._getFeedBackInfo();
-	        var isBreakForce = this._breakForce != -1 && (Vector3.scalarLength(this._currentForce) > this._breakForce);
-	        var isBreakTorque = this._breakTorque != -1 && (Vector3.scalarLength(this._currentTorque) > this._breakTorque);
-	        if (isBreakForce || isBreakTorque) {
-	            this._breakConstrained();
-	            return true;
-	        }
-	        return false;
-	    }
-	    _parse(data) {
-	        this._anchor.fromArray(data.anchor);
-	        this._connectAnchor.fromArray(data.connectAnchor);
-	        this.setFrames();
-	    }
-	    _getFeedBackInfo() {
-	        var bt = Physics3D._bullet;
-	        var applyForce = bt.btJointFeedback_getAppliedForceBodyA(this._btJointFeedBackObj);
-	        var applyTorque = bt.btJointFeedback_getAppliedTorqueBodyA(this._btJointFeedBackObj);
-	        this._currentTorque.setValue(bt.btVector3_x(applyTorque), bt.btVector3_y(applyTorque), bt.btVector3_z(applyTorque));
-	        this._currentForce.setValue(bt.btVector3_x(applyForce), bt.btVector3_y(applyForce), bt.btVector3_z(applyForce));
-	        this._getJointFeedBack = true;
-	    }
-	    _breakConstrained() {
-	        this.ownBody.constaintRigidbodyA = null;
-	        this.connectedBody.constaintRigidbodyB = null;
-	        this.destroy();
-	    }
-	}
-	ConstraintComponent.CONSTRAINT_POINT2POINT_CONSTRAINT_TYPE = 3;
-	ConstraintComponent.CONSTRAINT_HINGE_CONSTRAINT_TYPE = 4;
-	ConstraintComponent.CONSTRAINT_CONETWIST_CONSTRAINT_TYPE = 5;
-	ConstraintComponent.CONSTRAINT_D6_CONSTRAINT_TYPE = 6;
-	ConstraintComponent.CONSTRAINT_SLIDER_CONSTRAINT_TYPE = 7;
-	ConstraintComponent.CONSTRAINT_CONTACT_CONSTRAINT_TYPE = 8;
-	ConstraintComponent.CONSTRAINT_D6_SPRING_CONSTRAINT_TYPE = 9;
-	ConstraintComponent.CONSTRAINT_GEAR_CONSTRAINT_TYPE = 10;
-	ConstraintComponent.CONSTRAINT_FIXED_CONSTRAINT_TYPE = 11;
-	ConstraintComponent.CONSTRAINT_MAX_CONSTRAINT_TYPE = 12;
-	ConstraintComponent.CONSTRAINT_CONSTRAINT_ERP = 1;
-	ConstraintComponent.CONSTRAINT_CONSTRAINT_STOP_ERP = 2;
-	ConstraintComponent.CONSTRAINT_CONSTRAINT_CFM = 3;
-	ConstraintComponent.CONSTRAINT_CONSTRAINT_STOP_CFM = 4;
-	ConstraintComponent.tempForceV3 = new Vector3();
-
-	class FixedConstraint extends ConstraintComponent {
-	    constructor() {
-	        super(ConstraintComponent.CONSTRAINT_FIXED_CONSTRAINT_TYPE);
-	        this.breakForce = -1;
-	        this.breakTorque = -1;
-	    }
-	    _addToSimulation() {
-	        this._simulation && this._simulation.addConstraint(this, this.enabled);
-	    }
-	    _removeFromSimulation() {
-	        this._simulation.removeConstraint(this);
-	        this._simulation = null;
-	    }
-	    _createConstraint() {
-	        if (this.ownBody && this.ownBody._simulation && this.connectedBody && this.connectedBody._simulation) {
-	            var bt = Physics3D._bullet;
-	            this._btConstraint = bt.btFixedConstraint_create(this.ownBody.btColliderObject, this._btframATrans, this.connectedBody.btColliderObject, this._btframBTrans);
-	            this._btJointFeedBackObj = bt.btJointFeedback_create(this._btConstraint);
-	            bt.btTypedConstraint_setJointFeedback(this._btConstraint, this._btJointFeedBackObj);
-	            this._simulation = this.owner._scene.physicsSimulation;
-	            this._addToSimulation();
-	            Physics3D._bullet.btTypedConstraint_setEnabled(this._btConstraint, true);
-	        }
-	    }
-	    _onAdded() {
-	        super._onAdded();
-	    }
-	    _onEnable() {
-	        if (!this._btConstraint)
-	            return;
-	        super._onEnable();
-	        if (this._btConstraint)
-	            Physics3D._bullet.btTypedConstraint_setEnabled(this._btConstraint, true);
-	    }
-	    _onDisable() {
-	        super._onDisable();
-	        if (!this.connectedBody)
-	            this._removeFromSimulation();
-	        if (this._btConstraint)
-	            Physics3D._bullet.btTypedConstraint_setEnabled(this._btConstraint, false);
-	    }
-	    _onDestroy() {
-	        super._onDestroy();
-	    }
-	    _parse(data, interactMap = null) {
-	        super._parse(data);
-	        if (data.rigidbodyID != -1 && data.connectRigidbodyID != -1) {
-	            interactMap.component.push(this);
-	            interactMap.data.push(data);
-	        }
-	        (data.breakForce != undefined) && (this.breakForce = data.breakForce);
-	        (data.breakTorque != undefined) && (this.breakTorque = data.breakTorque);
-	    }
-	    _parseInteractive(data = null, spriteMap = null) {
-	        var rigidBodySprite = spriteMap[data.rigidbodyID];
-	        var rigidBody = rigidBodySprite.getComponent(Rigidbody3D);
-	        var connectSprite = spriteMap[data.connectRigidbodyID];
-	        var connectRigidbody = connectSprite.getComponent(Rigidbody3D);
-	        this.ownBody = rigidBody;
-	        this.connectedBody = connectRigidbody;
-	    }
-	    _cloneTo(dest) {
-	    }
-	}
-
-	class ConfigurableConstraint extends ConstraintComponent {
-	    constructor() {
-	        super(ConstraintComponent.CONSTRAINT_D6_SPRING_CONSTRAINT_TYPE);
-	        this._axis = new Vector3();
-	        this._secondaryAxis = new Vector3();
-	        this._minLinearLimit = new Vector3();
-	        this._maxLinearLimit = new Vector3();
-	        this._minAngularLimit = new Vector3();
-	        this._maxAngularLimit = new Vector3();
-	        this._linearLimitSpring = new Vector3();
-	        this._angularLimitSpring = new Vector3();
-	        this._linearBounce = new Vector3();
-	        this._angularBounce = new Vector3();
-	        this._linearDamp = new Vector3();
-	        this._angularDamp = new Vector3();
-	        this._xMotion = 0;
-	        this._yMotion = 0;
-	        this._zMotion = 0;
-	        this._angularXMotion = 0;
-	        this._angularYMotion = 0;
-	        this._angularZMotion = 0;
-	        var bt = Physics3D._bullet;
-	        this._btAxis = bt.btVector3_create(-1.0, 0.0, 0.0);
-	        this._btSecondaryAxis = bt.btVector3_create(0.0, 1.0, 0.0);
-	    }
-	    get axis() {
-	        return this._axis;
-	    }
-	    get secondaryAxis() {
-	        return this._secondaryAxis;
-	    }
-	    set maxAngularLimit(value) {
-	        value.cloneTo(this._maxAngularLimit);
-	    }
-	    set minAngularLimit(value) {
-	        value.cloneTo(this._minAngularLimit);
-	    }
-	    get maxAngularLimit() {
-	        return this._maxAngularLimit;
-	    }
-	    get minAngularLimit() {
-	        return this._minAngularLimit;
-	    }
-	    set maxLinearLimit(value) {
-	        value.cloneTo(this._maxLinearLimit);
-	    }
-	    set minLinearLimit(value) {
-	        value.cloneTo(this._minLinearLimit);
-	    }
-	    get maxLinearLimit() {
-	        return this._maxLinearLimit;
-	    }
-	    get minLinearLimit() {
-	        return this._minLinearLimit;
-	    }
-	    set XMotion(value) {
-	        if (this._xMotion != value) {
-	            this._xMotion = value;
-	            this.setLimit(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, value, -this._maxLinearLimit.x, -this._minLinearLimit.x);
-	        }
-	    }
-	    get XMotion() {
-	        return this._xMotion;
-	    }
-	    set YMotion(value) {
-	        if (this._yMotion != value) {
-	            this._yMotion = value;
-	            this.setLimit(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, value, this._minLinearLimit.y, this._maxLinearLimit.y);
-	        }
-	    }
-	    get YMotion() {
-	        return this._yMotion;
-	    }
-	    set ZMotion(value) {
-	        if (this._zMotion != value) {
-	            this._zMotion = value;
-	            this.setLimit(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, value, this._minLinearLimit.z, this._maxLinearLimit.z);
-	        }
-	    }
-	    get ZMotion() {
-	        return this._zMotion;
-	    }
-	    set angularXMotion(value) {
-	        if (this._angularXMotion != value) {
-	            this._angularXMotion = value;
-	            this.setLimit(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, value, -this._maxAngularLimit.x, -this._minAngularLimit.x);
-	        }
-	    }
-	    get angularXMotion() {
-	        return this._angularXMotion;
-	    }
-	    set angularYMotion(value) {
-	        if (this._angularYMotion != value) {
-	            this._angularYMotion = value;
-	            this.setLimit(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, value, this._minAngularLimit.y, this._maxAngularLimit.y);
-	        }
-	    }
-	    get angularYMotion() {
-	        return this._angularYMotion;
-	    }
-	    set angularZMotion(value) {
-	        if (this._angularZMotion != value) {
-	            this._angularZMotion = value;
-	            this.setLimit(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, value, this._minAngularLimit.z, this._maxAngularLimit.z);
-	        }
-	    }
-	    get angularZMotion() {
-	        return this._angularZMotion;
-	    }
-	    set linearLimitSpring(value) {
-	        if (!Vector3.equals(this._linearLimitSpring, value)) {
-	            value.cloneTo(this._linearLimitSpring);
-	            this.setSpring(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, value.x);
-	            this.setSpring(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, value.y);
-	            this.setSpring(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, value.z);
-	        }
-	    }
-	    get linearLimitSpring() {
-	        return this._linearLimitSpring;
-	    }
-	    set angularLimitSpring(value) {
-	        if (!Vector3.equals(this._angularLimitSpring, value)) {
-	            value.cloneTo(this._angularLimitSpring);
-	            this.setSpring(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, value.x);
-	            this.setSpring(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, value.y);
-	            this.setSpring(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, value.z);
-	        }
-	    }
-	    get angularLimitSpring() {
-	        return this._angularLimitSpring;
-	    }
-	    set linearBounce(value) {
-	        if (!Vector3.equals(this._linearBounce, value)) {
-	            value.cloneTo(this._linearBounce);
-	            this.setBounce(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, value.x);
-	            this.setBounce(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, value.y);
-	            this.setBounce(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, value.z);
-	        }
-	    }
-	    get linearBounce() {
-	        return this._linearBounce;
-	    }
-	    set angularBounce(value) {
-	        if (!Vector3.equals(this._angularBounce, value)) {
-	            value.cloneTo(this._angularBounce);
-	            this.setBounce(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, value.x);
-	            this.setBounce(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, value.y);
-	            this.setBounce(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, value.z);
-	        }
-	    }
-	    get angularBounce() {
-	        return this._angularBounce;
-	    }
-	    set linearDamp(value) {
-	        if (!Vector3.equals(this._linearDamp, value)) {
-	            value.cloneTo(this._linearDamp);
-	            this.setDamping(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, value.x);
-	            this.setDamping(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, value.y);
-	            this.setDamping(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, value.z);
-	        }
-	    }
-	    get linearDamp() {
-	        return this._linearDamp;
-	    }
-	    set angularDamp(value) {
-	        if (!Vector3.equals(this._angularDamp, value)) {
-	            value.cloneTo(this._angularDamp);
-	            this.setDamping(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, value.x);
-	            this.setDamping(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, value.y);
-	            this.setDamping(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, value.z);
-	        }
-	    }
-	    get angularDamp() {
-	        return this._angularDamp;
-	    }
-	    set anchor(value) {
-	        value.cloneTo(this._anchor);
-	        this.setFrames();
-	    }
-	    get anchor() {
-	        return this._anchor;
-	    }
-	    set connectAnchor(value) {
-	        value.cloneTo(this._connectAnchor);
-	        this.setFrames();
-	    }
-	    get connectAnchor() {
-	        return this._connectAnchor;
-	    }
-	    setAxis(axis, secondaryAxis) {
-	        if (!this._btConstraint)
-	            return;
-	        var bt = Physics3D._bullet;
-	        this._axis.setValue(axis.x, axis.y, axis.y);
-	        this._secondaryAxis.setValue(secondaryAxis.x, secondaryAxis.y, secondaryAxis.z);
-	        this._btAxis = bt.btVector3_setValue(-axis.x, axis.y, axis.z);
-	        this._btSecondaryAxis = bt.btVector3_setValue(-secondaryAxis.x, secondaryAxis.y, secondaryAxis.z);
-	        bt.btGeneric6DofSpring2Constraint_setAxis(this._btConstraint, this._btAxis, this._btSecondaryAxis);
-	    }
-	    setLimit(axis, motionType, low, high) {
-	        if (!this._btConstraint)
-	            return;
-	        var bt = Physics3D._bullet;
-	        switch (motionType) {
-	            case ConfigurableConstraint.CONFIG_MOTION_TYPE_LOCKED:
-	                bt.btGeneric6DofSpring2Constraint_setLimit(this._btConstraint, axis, 0, 0);
-	                break;
-	            case ConfigurableConstraint.CONFIG_MOTION_TYPE_LIMITED:
-	                if (low < high)
-	                    bt.btGeneric6DofSpring2Constraint_setLimit(this._btConstraint, axis, low, high);
-	                break;
-	            case ConfigurableConstraint.CONFIG_MOTION_TYPE_FREE:
-	                bt.btGeneric6DofSpring2Constraint_setLimit(this._btConstraint, axis, 1, 0);
-	                break;
-	            default:
-	                throw "No Type of Axis Motion";
-	        }
-	    }
-	    setSpring(axis, springValue, limitIfNeeded = true) {
-	        if (!this._btConstraint)
-	            return;
-	        var bt = Physics3D._bullet;
-	        var enableSpring = springValue > 0;
-	        bt.btGeneric6DofSpring2Constraint_enableSpring(this._btConstraint, axis, enableSpring);
-	        if (enableSpring)
-	            bt.btGeneric6DofSpring2Constraint_setStiffness(this._btConstraint, axis, springValue, limitIfNeeded);
-	    }
-	    setBounce(axis, bounce) {
-	        if (!this._btConstraint)
-	            return;
-	        var bt = Physics3D._bullet;
-	        bounce = bounce <= 0 ? 0 : bounce;
-	        bt.btGeneric6DofSpring2Constraint_setBounce(this._btConstraint, axis, bounce);
-	    }
-	    setDamping(axis, damp, limitIfNeeded = true) {
-	        if (!this._btConstraint)
-	            return;
-	        var bt = Physics3D._bullet;
-	        damp = damp <= 0 ? 0 : damp;
-	        bt.btGeneric6DofSpring2Constraint_setDamping(this._btConstraint, axis, damp, limitIfNeeded);
-	    }
-	    setEquilibriumPoint(axis, equilibriumPoint) {
-	        var bt = Physics3D._bullet;
-	        bt.btGeneric6DofSpring2Constraint_setEquilibriumPoint(this._btConstraint, axis, equilibriumPoint);
-	    }
-	    enableMotor(axis, isEnableMotor) {
-	        var bt = Physics3D._bullet;
-	        bt.btGeneric6DofSpring2Constraint_enableMotor(this._btConstraint, axis, isEnableMotor);
-	    }
-	    setServo(axis, onOff) {
-	        var bt = Physics3D._bullet;
-	        bt.btGeneric6DofSpring2Constraint_setServo(this._btConstraint, axis, onOff);
-	    }
-	    setTargetVelocity(axis, velocity) {
-	        var bt = Physics3D._bullet;
-	        bt.btGeneric6DofSpring2Constraint_setTargetVelocity(this._btConstraint, axis, velocity);
-	    }
-	    setTargetPosition(axis, target) {
-	        var bt = Physics3D._bullet;
-	        bt.btGeneric6DofSpring2Constraint_setServoTarget(this._btConstraint, axis, target);
-	    }
-	    setMaxMotorForce(axis, force) {
-	        var bt = Physics3D._bullet;
-	        bt.btGeneric6DofSpring2Constraint_setMaxMotorForce(this._btConstraint, axis, force);
-	    }
-	    setParam(axis, constraintParams, value) {
-	        var bt = Physics3D._bullet;
-	        bt.btTypedConstraint_setParam(this._btConstraint, axis, constraintParams, value);
-	    }
-	    setFrames() {
-	        super.setFrames();
-	        var bt = Physics3D._bullet;
-	        if (!this._btConstraint)
-	            return;
-	        bt.btGeneric6DofSpring2Constraint_setFrames(this._btConstraint, this._btframATrans, this._btframBTrans);
-	    }
-	    _addToSimulation() {
-	        this._simulation && this._simulation.addConstraint(this, this.enabled);
-	    }
-	    _removeFromSimulation() {
-	        this._simulation.removeConstraint(this);
-	        this._simulation = null;
-	    }
-	    _createConstraint() {
-	        var bt = Physics3D._bullet;
-	        this._btConstraint = bt.btGeneric6DofSpring2Constraint_create(this.ownBody.btColliderObject, this._btframAPos, this.connectedBody.btColliderObject, this._btframBPos, ConfigurableConstraint.RO_XYZ);
-	        this._btJointFeedBackObj = bt.btJointFeedback_create(this._btConstraint);
-	        bt.btTypedConstraint_setJointFeedback(this._btConstraint, this._btJointFeedBackObj);
-	        this._simulation = this.owner._scene.physicsSimulation;
-	        this._initAllConstraintInfo();
-	        this._addToSimulation();
-	        Physics3D._bullet.btTypedConstraint_setEnabled(this._btConstraint, true);
-	    }
-	    _initAllConstraintInfo() {
-	        this.setLimit(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, this._xMotion, -this._maxLinearLimit.x, -this._minLinearLimit.x);
-	        this.setLimit(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, this._yMotion, this._minLinearLimit.y, this._maxLinearLimit.y);
-	        this.setLimit(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, this._zMotion, this._minLinearLimit.z, this._maxLinearLimit.z);
-	        this.setLimit(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, this._angularXMotion, -this._maxAngularLimit.x, -this._minAngularLimit.x);
-	        this.setLimit(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, this._angularYMotion, this._minAngularLimit.y, this._maxAngularLimit.y);
-	        this.setLimit(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, this._angularZMotion, this._minAngularLimit.z, this._maxAngularLimit.z);
-	        this.setSpring(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, this._linearLimitSpring.x);
-	        this.setSpring(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, this._linearLimitSpring.y);
-	        this.setSpring(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, this._linearLimitSpring.z);
-	        this.setSpring(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, this._angularLimitSpring.x);
-	        this.setSpring(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, this._angularLimitSpring.y);
-	        this.setSpring(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, this._angularLimitSpring.z);
-	        this.setBounce(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, this._linearBounce.x);
-	        this.setBounce(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, this._linearBounce.y);
-	        this.setBounce(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, this._linearBounce.z);
-	        this.setBounce(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, this._angularBounce.x);
-	        this.setBounce(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, this._angularBounce.y);
-	        this.setBounce(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, this._angularBounce.z);
-	        this.setDamping(ConfigurableConstraint.MOTION_LINEAR_INDEX_X, this._linearDamp.x);
-	        this.setDamping(ConfigurableConstraint.MOTION_LINEAR_INDEX_Y, this._linearDamp.y);
-	        this.setDamping(ConfigurableConstraint.MOTION_LINEAR_INDEX_Z, this._linearDamp.z);
-	        this.setDamping(ConfigurableConstraint.MOTION_ANGULAR_INDEX_X, this._angularDamp.x);
-	        this.setDamping(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y, this._angularDamp.y);
-	        this.setDamping(ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z, this._angularDamp.z);
-	        this.setFrames();
-	        this.setEquilibriumPoint(0, 0);
-	    }
-	    _onAdded() {
-	        super._onAdded();
-	    }
-	    _onEnable() {
-	        if (!this._btConstraint)
-	            return;
-	        super._onEnable();
-	        if (this._btConstraint)
-	            Physics3D._bullet.btTypedConstraint_setEnabled(this._btConstraint, true);
-	    }
-	    _onDisable() {
-	        super._onDisable();
-	        if (!this.connectedBody)
-	            this._removeFromSimulation();
-	        if (this._btConstraint)
-	            Physics3D._bullet.btTypedConstraint_setEnabled(this._btConstraint, false);
-	    }
-	    _parse(data, interactMap = null) {
-	        super._parse(data);
-	        this._axis.fromArray(data.axis);
-	        this._secondaryAxis.fromArray(data.secondaryAxis);
-	        var limitlimit = data.linearLimit;
-	        this._minLinearLimit.setValue(-limitlimit, -limitlimit, -limitlimit);
-	        this._maxLinearLimit.setValue(limitlimit, limitlimit, limitlimit);
-	        var limitSpring = data.linearLimitSpring;
-	        this._linearLimitSpring.setValue(limitSpring, limitSpring, limitSpring);
-	        var limitDamp = data.linearLimitDamper;
-	        this._linearDamp.setValue(limitDamp, limitDamp, limitDamp);
-	        var limitBounciness = data.linearLimitBounciness;
-	        this._linearBounce.setValue(limitBounciness, limitBounciness, limitBounciness);
-	        var xlowAngularLimit = data.lowAngularXLimit;
-	        var xhighAngularLimit = data.highAngularXLimit;
-	        var yAngularLimit = data.angularYLimit;
-	        var zAngularLimit = data.angularZLimit;
-	        this._minAngularLimit.setValue(xlowAngularLimit, -yAngularLimit, -zAngularLimit);
-	        this._maxAngularLimit.setValue(xhighAngularLimit, yAngularLimit, zAngularLimit);
-	        var xhighAngularBounciness = data.highAngularXLimitBounciness;
-	        var ybounciness = data.angularYLimitBounciness;
-	        var zbounciness = data.angularZLimitBounciness;
-	        this._angularBounce.setValue(xhighAngularBounciness, ybounciness, zbounciness);
-	        var xAngularSpring = data.angularXLimitSpring;
-	        var yzAngularSpriny = data.angularYZLimitSpring;
-	        this._angularLimitSpring.setValue(xAngularSpring, yzAngularSpriny, yzAngularSpriny);
-	        var xAngularDamper = data.angularXLimitDamper;
-	        var yzAngularDamper = data.angularYZLimitDamper;
-	        this._angularDamp.setValue(xAngularDamper, yzAngularDamper, yzAngularDamper);
-	        this.XMotion = data.xMotion;
-	        this.YMotion = data.yMotion;
-	        this.ZMotion = data.zMotion;
-	        this.angularXMotion = data.angularXMotion;
-	        this.angularYMotion = data.angularYMotion;
-	        this.angularZMotion = data.angularZMotion;
-	        if (data.rigidbodyID != -1 && data.connectRigidbodyID != -1) {
-	            interactMap.component.push(this);
-	            interactMap.data.push(data);
-	        }
-	        (data.breakForce != undefined) && (this.breakForce = data.breakForce);
-	        (data.breakTorque != undefined) && (this.breakTorque = data.breakTorque);
-	    }
-	    _parseInteractive(data = null, spriteMap = null) {
-	        var rigidBodySprite = spriteMap[data.rigidbodyID];
-	        var rigidBody = rigidBodySprite.getComponent(Rigidbody3D);
-	        var connectSprite = spriteMap[data.connectRigidbodyID];
-	        var connectRigidbody = connectSprite.getComponent(Rigidbody3D);
-	        this.ownBody = rigidBody;
-	        this.connectedBody = connectRigidbody;
-	    }
-	    _onDestroy() {
-	        super._onDestroy();
-	    }
-	    _cloneTo(dest) {
-	    }
-	}
-	ConfigurableConstraint.CONFIG_MOTION_TYPE_LOCKED = 0;
-	ConfigurableConstraint.CONFIG_MOTION_TYPE_LIMITED = 1;
-	ConfigurableConstraint.CONFIG_MOTION_TYPE_FREE = 2;
-	ConfigurableConstraint.MOTION_LINEAR_INDEX_X = 0;
-	ConfigurableConstraint.MOTION_LINEAR_INDEX_Y = 1;
-	ConfigurableConstraint.MOTION_LINEAR_INDEX_Z = 2;
-	ConfigurableConstraint.MOTION_ANGULAR_INDEX_X = 3;
-	ConfigurableConstraint.MOTION_ANGULAR_INDEX_Y = 4;
-	ConfigurableConstraint.MOTION_ANGULAR_INDEX_Z = 5;
-	ConfigurableConstraint.RO_XYZ = 0;
-	ConfigurableConstraint.RO_XZY = 1;
-	ConfigurableConstraint.RO_YXZ = 2;
-	ConfigurableConstraint.RO_YZX = 3;
-	ConfigurableConstraint.RO_ZXY = 4;
-	ConfigurableConstraint.RO_ZYX = 5;
-
 	class Laya3D {
 	    constructor() {
 	    }
@@ -32632,12 +31180,7 @@
 	        ILaya3D.SubMeshDynamicBatch = SubMeshDynamicBatch;
 	        ILaya3D.Laya3D = Laya3D;
 	        ILaya3D.Matrix4x4 = Matrix4x4;
-	        ILaya3D.Physics3D = Physics3D;
-	        ILaya3D.ShadowLightType = exports.ShadowLightType;
 	        Laya3D.enableNative3D();
-	        if (config.isUseCannonPhysicsEngine)
-	            Physics3D.__cannoninit__();
-	        Physics3D.__bulletinit__();
 	        VertexElementFormat.__init__();
 	        VertexMesh.__init__();
 	        VertexShurikenParticleBillboard.__init__();
@@ -32648,6 +31191,18 @@
 	        PixelLineVertex.__init__();
 	        SubMeshInstanceBatch.__init__();
 	        SubMeshDynamicBatch.__init__();
+	        Physics3D._bullet = window.Physics3D;
+	        if (Physics3D._bullet) {
+	            StaticPlaneColliderShape.__init__();
+	            ColliderShape.__init__();
+	            CompoundColliderShape.__init__();
+	            PhysicsComponent.__init__();
+	            PhysicsSimulation.__init__();
+	            BoxColliderShape.__init__();
+	            CylinderColliderShape.__init__();
+	            CharacterController.__init__();
+	            Rigidbody3D.__init__();
+	        }
 	        ShaderInit3D.__init__();
 	        ShadowUtils.init();
 	        PBRMaterial.__init__();
@@ -32660,7 +31215,6 @@
 	        RenderableSprite3D.__init__();
 	        MeshSprite3D.__init__();
 	        SkinnedMeshSprite3D.__init__();
-	        SimpleSkinnedMeshSprite3D.__init__();
 	        ShuriKenParticle3D.__init__();
 	        TrailSprite3D.__init__();
 	        PostProcess.__init__();
@@ -32699,8 +31253,6 @@
 	        Laya.ClassUtils.regClass("CharacterController", CharacterController);
 	        Laya.ClassUtils.regClass("Animator", Animator);
 	        Laya.ClassUtils.regClass("Rigidbody3D", Rigidbody3D);
-	        Laya.ClassUtils.regClass("FixedConstraint", FixedConstraint);
-	        Laya.ClassUtils.regClass("ConfigurableConstraint", ConfigurableConstraint);
 	        PixelLineMaterial.defaultMaterial = new PixelLineMaterial();
 	        BlinnPhongMaterial.defaultMaterial = new BlinnPhongMaterial();
 	        EffectMaterial.defaultMaterial = new EffectMaterial();
@@ -32744,8 +31296,6 @@
 	        createMap["lav"] = [Laya3D.AVATAR, Avatar._parse];
 	        createMap["ltc"] = [Laya3D.TEXTURECUBE, TextureCube._parse];
 	        createMap["ltcb"] = [Laya3D.TEXTURECUBEBIN, TextureCube._parseBin];
-	        createMap["ltcb.ls"] = [Laya3D.TEXTURECUBEBIN, TextureCube._parseBin];
-	        createMap["lanit.ls"] = [Laya3D.TEXTURE2D, Laya.Texture2D._SimpleAnimatorTextureParse];
 	        var parserMap = Laya.Loader.parserMap;
 	        parserMap[Laya3D.HIERARCHY] = Laya3D._loadHierarchy;
 	        parserMap[Laya3D.MESH] = Laya3D._loadMesh;
@@ -32755,7 +31305,6 @@
 	        parserMap[Laya3D.TEXTURE2D] = Laya3D._loadTexture2D;
 	        parserMap[Laya3D.ANIMATIONCLIP] = Laya3D._loadAnimationClip;
 	        parserMap[Laya3D.AVATAR] = Laya3D._loadAvatar;
-	        parserMap[Laya3D.SIMPLEANIMATORBIN] = Laya3D._loadSimpleAnimator;
 	        Laya3D._innerFirstLevelLoaderManager.on(Laya.Event.ERROR, null, Laya3D._eventLoadManagerError);
 	        Laya3D._innerSecondLevelLoaderManager.on(Laya.Event.ERROR, null, Laya3D._eventLoadManagerError);
 	        Laya3D._innerThirdLevelLoaderManager.on(Laya.Event.ERROR, null, Laya3D._eventLoadManagerError);
@@ -32881,16 +31430,12 @@
 	            case "TrailSprite3D":
 	            case "MeshSprite3D":
 	            case "SkinnedMeshSprite3D":
-	            case "SimpleSkinnedMeshSprite3D":
 	                var meshPath = props.meshPath;
 	                (meshPath) && (props.meshPath = Laya3D._addHierarchyInnerUrls(firstLevelUrls, subUrls, urlVersion, hierarchyBasePath, meshPath, Laya3D.MESH));
 	                var materials = props.materials;
 	                if (materials)
 	                    for (i = 0, n = materials.length; i < n; i++)
 	                        materials[i].path = Laya3D._addHierarchyInnerUrls(secondLevelUrls, subUrls, urlVersion, hierarchyBasePath, materials[i].path, Laya3D.MATERIAL);
-	                if (node.type == "SimpleSkinnedMeshSprite3D")
-	                    if (props.animatorTexture)
-	                        props.animatorTexture = Laya3D._addHierarchyInnerUrls(fourthLelUrls, subUrls, urlVersion, hierarchyBasePath, props.animatorTexture, Laya3D.SIMPLEANIMATORBIN);
 	                break;
 	            case "ShuriKenParticle3D":
 	                if (props.main) {
@@ -32955,7 +31500,6 @@
 	            Laya3D._getSprite3DHierarchyInnerUrls(children[i], firstLevelUrls, secondLevelUrls, thirdLevelUrls, fourthLelUrls, subUrls, urlVersion, hierarchyBasePath);
 	    }
 	    static _loadHierarchy(loader) {
-	        loader._originType = loader.type;
 	        loader.on(Laya.Event.LOADED, null, Laya3D._onHierarchylhLoaded, [loader]);
 	        loader.load(loader.url, Laya.Loader.JSON, false, null, true);
 	    }
@@ -33088,14 +31632,6 @@
 	        });
 	        loader.load(loader.url, Laya.Loader.JSON, false, null, true);
 	    }
-	    static _loadSimpleAnimator(loader) {
-	        loader.on(Laya.Event.LOADED, null, function (data) {
-	            loader._cache = loader._createCache;
-	            var texture = Laya.Texture2D._SimpleAnimatorTextureParse(data, loader._propertyParams, loader._constructParams);
-	            Laya3D._endLoad(loader, texture);
-	        });
-	        loader.load(loader.url, Laya.Loader.BUFFER, false, null, true);
-	    }
 	    static _loadAnimationClip(loader) {
 	        loader.on(Laya.Event.LOADED, null, function (data) {
 	            loader._cache = loader._createCache;
@@ -33192,7 +31728,7 @@
 	    }
 	    static _onProcessChange(loader, offset, weight, process) {
 	        process = offset + process * weight;
-	        (process < 1.0) && (loader.event(Laya.Event.PROGRESS, process * 2 / 3 + 1 / 3));
+	        (process < 1.0) && (loader.event(Laya.Event.PROGRESS, process));
 	    }
 	    static init(width, height, config = null, compolete = null) {
 	        if (Laya3D._isInit) {
@@ -33210,7 +31746,7 @@
 	        Scene3D.octreeMinNodeSize = config.octreeMinNodeSize;
 	        Scene3D.octreeLooseness = config.octreeLooseness;
 	        var physics3D = window.Physics3D;
-	        if (physics3D == null || config.isUseCannonPhysicsEngine) {
+	        if (physics3D == null) {
 	            Physics3D._enablePhysics = false;
 	            Laya3D.__init__(width, height, config);
 	            compolete && compolete.run();
@@ -33234,7 +31770,6 @@
 	Laya3D.AVATAR = "AVATAR";
 	Laya3D.TERRAINHEIGHTDATA = "TERRAINHEIGHTDATA";
 	Laya3D.TERRAINRES = "TERRAIN";
-	Laya3D.SIMPLEANIMATORBIN = "SIMPLEANIMATOR";
 	Laya3D._innerFirstLevelLoaderManager = new Laya.LoaderManager();
 	Laya3D._innerSecondLevelLoaderManager = new Laya.LoaderManager();
 	Laya3D._innerThirdLevelLoaderManager = new Laya.LoaderManager();
@@ -33955,6 +32490,199 @@
 	    }
 	}
 
+	class ConstraintComponent extends Laya.Component {
+	    constructor(constraintType) {
+	        super();
+	        this._feedbackEnabled = false;
+	        this._getJointFeedBack = false;
+	        this._currentForce = new Vector3();
+	        this._currentTorque = new Vector3();
+	        this._constraintType = constraintType;
+	    }
+	    get enabled() {
+	        return super.enabled;
+	    }
+	    set enabled(value) {
+	        super.enabled = value;
+	    }
+	    get appliedImpulse() {
+	        if (!this._feedbackEnabled) {
+	            this._btConstraint.EnableFeedback(true);
+	            this._feedbackEnabled = true;
+	        }
+	        return this._btConstraint.AppliedImpulse;
+	    }
+	    set connectedBody(value) {
+	        this._connectedBody = value;
+	    }
+	    get connectedBody() {
+	        return this._connectedBody;
+	    }
+	    get ownBody() {
+	        return this._ownBody;
+	    }
+	    get currentForce() {
+	        if (!this._getJointFeedBack)
+	            this._getFeedBackInfo();
+	        return this._currentForce;
+	    }
+	    get currentToque() {
+	        if (!this._getJointFeedBack)
+	            this._getFeedBackInfo();
+	        return this._currentTorque;
+	    }
+	    get breakForce() {
+	        return this._breakForce;
+	    }
+	    set breakForce(value) {
+	        this._breakForce = value;
+	    }
+	    get breakTorque() {
+	        return this._breakTorque;
+	    }
+	    set breakTorque(value) {
+	        this._breakTorque = value;
+	    }
+	    _onEnable() {
+	        super._onEnable();
+	        this.enabled = true;
+	    }
+	    _onDisable() {
+	        super._onDisable();
+	        this.enabled = false;
+	    }
+	    _addToSimulation() {
+	    }
+	    _removeFromSimulation() {
+	    }
+	    _createConstraint() {
+	    }
+	    setConnectRigidBody(ownerRigid, connectRigidBody) {
+	        var ownerCanInSimulation = (ownerRigid) && (!!(ownerRigid._simulation && ownerRigid._enabled && ownerRigid.colliderShape));
+	        var connectCanInSimulation = (connectRigidBody) && (!!(connectRigidBody._simulation && connectRigidBody._enabled && connectRigidBody.colliderShape));
+	        if (!(ownerCanInSimulation && connectCanInSimulation))
+	            throw "ownerRigid or connectRigidBody is not in Simulation";
+	        if (ownerRigid != this._ownBody || connectRigidBody != this._connectedBody) {
+	            var canInSimulation = !!(this.enabled && this._simulation);
+	            canInSimulation && this._removeFromSimulation();
+	            this._ownBody = ownerRigid;
+	            this._connectedBody = connectRigidBody;
+	            this._ownBody.constaintRigidbodyA = this;
+	            this._connectedBody.constaintRigidbodyB = this;
+	            this._createConstraint();
+	            this._addToSimulation();
+	        }
+	    }
+	    getcurrentForce(out) {
+	        if (!this._btJointFeedBackObj)
+	            throw "this Constraint is not simulation";
+	        var bt = Physics3D._bullet;
+	        var applyForce = bt.btJointFeedback_getAppliedForceBodyA(this._btJointFeedBackObj);
+	        out.setValue(bt.btVector3_x(applyForce), bt.btVector3_y(applyForce), bt.btVector3_z(applyForce));
+	        return;
+	    }
+	    getcurrentTorque(out) {
+	        if (!this._btJointFeedBackObj)
+	            throw "this Constraint is not simulation";
+	        var bt = Physics3D._bullet;
+	        var applyTorque = bt.btJointFeedback_getAppliedTorqueBodyA(this._btJointFeedBackObj);
+	        out.setValue(bt.btVector3_x(applyTorque), bt.btVector3_y(applyTorque), bt.btVector3_z(applyTorque));
+	        return;
+	    }
+	    _onDestroy() {
+	        var physics3D = Physics3D._bullet;
+	        this._removeFromSimulation();
+	        if (this._btConstraint && this._btJointFeedBackObj && this._simulation) {
+	            physics3D.btFixedConstraint_destroy(this._btConstraint);
+	            physics3D.btJointFeedback_destroy(this._btJointFeedBackObj);
+	            this._btJointFeedBackObj = null;
+	            this._btConstraint = null;
+	        }
+	        super._onDisable();
+	    }
+	    _isBreakConstrained() {
+	        this._getJointFeedBack = false;
+	        if (this.breakForce == -1 && this.breakTorque == -1)
+	            return false;
+	        this._getFeedBackInfo();
+	        var isBreakForce = this._breakForce != -1 && (Vector3.scalarLength(this._currentForce) > this._breakForce);
+	        var isBreakToque = this._breakTorque != -1 && (Vector3.scalarLength(this._currentTorque) > this._breakTorque);
+	        if (isBreakForce || isBreakToque) {
+	            this._breakConstrained();
+	            return true;
+	        }
+	        return false;
+	    }
+	    _getFeedBackInfo() {
+	        var bt = Physics3D._bullet;
+	        var applyForce = bt.btJointFeedback_getAppliedForceBodyA(this._btJointFeedBackObj);
+	        var applyTorque = bt.btJointFeedback_getAppliedTorqueBodyA(this._btJointFeedBackObj);
+	        this._currentTorque.setValue(bt.btVector3_x(applyTorque), bt.btVector3_y(applyTorque), bt.btVector3_z(applyTorque));
+	        this._currentForce.setValue(bt.btVector3_x(applyForce), bt.btVector3_y(applyForce), bt.btVector3_z(applyForce));
+	        this._getJointFeedBack = true;
+	    }
+	    _breakConstrained() {
+	        this.ownBody.constaintRigidbodyA = null;
+	        this.connectedBody.constaintRigidbodyB = null;
+	        this.destroy();
+	    }
+	}
+	ConstraintComponent.CONSTRAINT_POINT2POINT_CONSTRAINT_TYPE = 3;
+	ConstraintComponent.CONSTRAINT_HINGE_CONSTRAINT_TYPE = 4;
+	ConstraintComponent.CONSTRAINT_CONETWIST_CONSTRAINT_TYPE = 5;
+	ConstraintComponent.CONSTRAINT_D6_CONSTRAINT_TYPE = 6;
+	ConstraintComponent.CONSTRAINT_SLIDER_CONSTRAINT_TYPE = 7;
+	ConstraintComponent.CONSTRAINT_CONTACT_CONSTRAINT_TYPE = 8;
+	ConstraintComponent.CONSTRAINT_D6_SPRING_CONSTRAINT_TYPE = 9;
+	ConstraintComponent.CONSTRAINT_GEAR_CONSTRAINT_TYPE = 10;
+	ConstraintComponent.CONSTRAINT_FIXED_CONSTRAINT_TYPE = 11;
+	ConstraintComponent.CONSTRAINT_MAX_CONSTRAINT_TYPE = 12;
+	ConstraintComponent.tempForceV3 = new Vector3();
+
+	class FixedConstraint extends ConstraintComponent {
+	    constructor() {
+	        super(ConstraintComponent.CONSTRAINT_FIXED_CONSTRAINT_TYPE);
+	        this.breakForce = -1;
+	        this.breakTorque = -1;
+	    }
+	    _addToSimulation() {
+	        this._simulation && this._simulation.addConstraint(this, this.enabled);
+	    }
+	    _removeFromSimulation() {
+	        this._simulation.removeConstraint(this);
+	        this._simulation = null;
+	    }
+	    _createConstraint() {
+	        var bt = Physics3D._bullet;
+	        var physicsTransform = bt.btCollisionObject_getWorldTransform(this.ownBody.btColliderObject);
+	        var origin = bt.btTransform_getOrigin(physicsTransform);
+	        this._btConstraint = bt.btFixedConstraint_create(this.ownBody.btColliderObject, this.connectedBody.btColliderObject, origin);
+	        this._btJointFeedBackObj = bt.btJointFeedback_create(this._btConstraint);
+	        bt.btFixedConstraint_setJointFeedback(this._btConstraint, this._btJointFeedBackObj);
+	        this._simulation = this.owner._scene.physicsSimulation;
+	    }
+	    _onAdded() {
+	        super._onAdded();
+	    }
+	    _onEnable() {
+	        super._onEnable();
+	        if (this._btConstraint)
+	            Physics3D._bullet.btFixedConstraint_setEnabled(this._btConstraint, true);
+	    }
+	    _onDisable() {
+	        super._onDisable();
+	        if (!this.connectedBody)
+	            this._removeFromSimulation();
+	        if (this._btConstraint)
+	            Physics3D._bullet.btFixedConstraint_setEnabled(this._btConstraint, false);
+	    }
+	    _onDestroy() {
+	        super._onDestroy();
+	    }
+	    _cloneTo(dest) {
+	    }
+	}
+
 	class Point2PointConstraint {
 	    constructor() {
 	        this._pivotInA = new Vector3();
@@ -34102,7 +32830,6 @@
 	exports.ConeColliderShape = ConeColliderShape;
 	exports.ConeShape = ConeShape;
 	exports.Config3D = Config3D;
-	exports.ConfigurableConstraint = ConfigurableConstraint;
 	exports.Constraint3D = Constraint3D;
 	exports.ConstraintComponent = ConstraintComponent;
 	exports.ContactPoint = ContactPoint;
@@ -34231,8 +32958,6 @@
 	exports.ShurikenParticleRenderer = ShurikenParticleRenderer;
 	exports.ShurikenParticleSystem = ShurikenParticleSystem;
 	exports.SimpleSingletonList = SimpleSingletonList;
-	exports.SimpleSkinnedMeshRenderer = SimpleSkinnedMeshRenderer;
-	exports.SimpleSkinnedMeshSprite3D = SimpleSkinnedMeshSprite3D;
 	exports.SingletonList = SingletonList;
 	exports.Size = Size;
 	exports.SizeOverLifetime = SizeOverLifetime;

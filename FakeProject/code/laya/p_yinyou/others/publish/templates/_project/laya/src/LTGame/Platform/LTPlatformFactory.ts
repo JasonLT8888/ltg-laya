@@ -14,9 +14,10 @@ export default class LTPlatformFactory {
     public static CreateInstance(): IPlatform {
 
         let isQTT = window["qttGame"] != null;
+        let isTT = window["tt"] != null;
 
         let result: IPlatform;
-        if (Laya.Browser.onTTMiniGame) {
+        if (isTT) {
             result = new TTPlatform();
         } else if (Laya.Browser.onMiniGame) {
             result = new WXPlatform();

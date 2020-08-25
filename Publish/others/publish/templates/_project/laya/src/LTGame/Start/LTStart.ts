@@ -9,7 +9,6 @@ import LTVersion from "../LTVersion";
 import { EScreenOrientation } from "../Commom/EScreenOrientation";
 import LTSDK from "../../SDK/LTSDK";
 import SDK_Default from "../../SDK/Impl/SDK_Default";
-import Awaiters from "../Async/Awaiters";
 
 export class LTStart {
 
@@ -58,12 +57,12 @@ export class LTStart {
         this._Init();
     }
 
-    private async _Init() {
+    private _Init() {
         let platformData = new LTPlatformData();
 
         this._HandleInitPlatform(LTPlatform.instance.platform, platformData);
         LTPlatform.instance.Init(platformData);
-
+        
         this._HandleSDK();
         if (!LTSDK.isInited) {
             LTSDK.CreateInstace(SDK_Default, "default", "default", "default");
@@ -75,11 +74,6 @@ export class LTStart {
             Laya.Shader3D.debugMode = false;
         }
         */
-        if (LTPlatform.instance.platform != EPlatformType.Web) {
-            while (!LTPlatform.instance.safeArea) {
-                await Awaiters.NextFrame();
-            }
-        }
 
         FGuiEx.Init(LTPlatform.instance.safeArea);
 

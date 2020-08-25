@@ -23,6 +23,7 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
     }
 
     _OnShow() {
+        this._needFilScreen = false;
         super._OnShow();
         this.cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (!this.cacheAds) {
@@ -89,5 +90,9 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
     protected _OnHide() {
         Laya.timer.clearAll(this);
         // LTPlatform.instance.ShowBannerAd();
+        if (this._openParam) {
+            this._openParam();
+        }
+
     }
 }

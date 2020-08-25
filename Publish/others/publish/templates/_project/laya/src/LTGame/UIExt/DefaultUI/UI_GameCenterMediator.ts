@@ -48,7 +48,6 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
             this.ui.m_centerList.scrollPane.scrollDown(0.005, true);
         });
         this.ui.m_btn_close.onClick(this, this.Hide);
-        this.ui.m_btn_back.onClick(this, this.Hide);
         LTPlatform.instance.HideBannerAd();
         this.ui.m_btn_close.visible = false;
         Laya.timer.once(3000, this, () => {
@@ -87,7 +86,6 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
         }
     }
     protected _OnHide() {
-        Laya.timer.clearAll(this);
         // LTPlatform.instance.ShowBannerAd();
     }
 }

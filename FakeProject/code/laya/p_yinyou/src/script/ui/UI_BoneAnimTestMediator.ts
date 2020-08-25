@@ -25,8 +25,8 @@ export default class UI_BoneAnimTestMediator extends BaseUIMediator<UI_BoneAnimT
     }
 
     private _sampleObj: Laya.Sprite3D;
-    private _xBorder = [-3, 3];
-    private _zBorder = [0, 4];
+    private _xBorder = [-10, 10];
+    private _zBorder = [-10, 30];
     private _cacheAnims: Laya.Sprite3D[];
     private _fakeObj: Laya.Sprite3D;
 
@@ -70,11 +70,10 @@ export default class UI_BoneAnimTestMediator extends BaseUIMediator<UI_BoneAnimT
     }
 
     private _GetGenPos(): Laya.Vector3 {
-        const unit = 0.4;
-        let xCount = Math.floor((this._xBorder[1] - this._xBorder[0]) / unit);
+        let xCount = this._xBorder[1] - this._xBorder[0];
         let zIndex = Math.floor(this._cacheAnims.length / xCount);
         let xIndex = this._cacheAnims.length % xCount;
-        return new Laya.Vector3(xIndex * unit + this._xBorder[0], 0, this._zBorder[0] + zIndex * unit);
+        return new Laya.Vector3(xIndex + this._xBorder[0], 0, this._zBorder[0] + zIndex);
     }
 
     private _OnClickBack() {

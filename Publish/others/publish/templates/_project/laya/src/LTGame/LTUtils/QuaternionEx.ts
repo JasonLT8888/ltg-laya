@@ -5,8 +5,6 @@ export default class QuaternionEx {
 
     public static get identify(): Laya.Quaternion { return QuaternionEx.FromEulerAngle(0, 0, 0); }
 
-    static cacheVec0: Laya.Quaternion = new Laya.Quaternion();
-
     public static FromVector3(elurAngle: Laya.Vector3) {
         return this.FromEulerAngle(elurAngle.x, elurAngle.y, elurAngle.z);
     }

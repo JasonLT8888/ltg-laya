@@ -5978,10 +5978,7 @@
 	        Laya.Laya.timer.clear(this, this._onLoop);
 	    }
 	    _onLoop() {
-	        let _canvas = window.sharedCanvas;
-	        this.texture.sourceWidth = _canvas.width;
-	        this.texture.sourceHeight = _canvas.height;
-	        this.texture.bitmap.loadImageSource(_canvas);
+	        this.texture.bitmap.loadImageSource(window.sharedCanvas);
 	    }
 	    set width(value) {
 	        super.width = value;

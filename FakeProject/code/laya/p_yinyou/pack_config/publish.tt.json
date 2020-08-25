@@ -3,14 +3,11 @@
     "bannerId": "",
     "rewardVideoId": "",
     "interstitialId": "",
-    "forceRemote": [
-        "res/config"
-    ],
+    "forceRemote": [],
     "forceInPack": [
         "res/fgui_load"
     ],
     "maxSinglePackSize": 8,
-    "maxTotalPackSize": 8,
-    "packType": 0,
+    "maxTotalPackSize": 16,
     "compress": true
 }

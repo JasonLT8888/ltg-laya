@@ -1,19 +1,18 @@
-import StringEx from "../LTUtils/StringEx";
-import LTUI from "../UIExt/LTUI";
-import LTPlatformData from "./Data/LTPlatformData";
+import WXPlatform from "./WXPlatform";
 import { EPlatformType } from "./EPlatformType";
+import LTPlatformData from "./Data/LTPlatformData";
+import { ShareInfo } from "./ShareInfo";
+import StringEx from "../LTUtils/StringEx";
+import IRecordManager from "./IRecordManager";
+import TTRecordManager from "./Impl/TT/TTRecordManager";
 import { IDevice } from "./IDevice";
 import TTDevice from "./Impl/TT/TTDevice";
-import TTRecordManager from "./Impl/TT/TTRecordManager";
-import IRecordManager from "./IRecordManager";
-import LTPlatform from "./LTPlatform";
-import { ShareInfo } from "./ShareInfo";
-import WXPlatform from "./WXPlatform";
+import LTUI from "../UIExt/LTUI";
 
 export default class TTPlatform extends WXPlatform {
 
     platform: EPlatformType = EPlatformType.TT;
-    userInfo: LTGame.UserInfo;
+
     protected _showVideoLoad: boolean = false;
 
     recordManager: IRecordManager;
@@ -21,7 +20,6 @@ export default class TTPlatform extends WXPlatform {
 
     Init(platformData: LTPlatformData) {
         this._base = window["tt"];
-        this.base = this._base;
         if (this._base == null) {
             console.error("平台初始化错误");
             return;
@@ -43,7 +41,7 @@ export default class TTPlatform extends WXPlatform {
         }
 
         this._InitLauchOption();
-        this._Login();
+        // this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
         this._CreateBannerAd();
@@ -54,67 +52,6 @@ export default class TTPlatform extends WXPlatform {
         this.device = new TTDevice(this._base);
 
         window["iplatform"] = this;
-    }
-
-    protected _Login() {
-        this.loginState = {
-            isLogin: false,
-            code: ""
-        };
-        let loginData = {
-            force: false,
-            success: (res: { code: string, anonymousCode: string, isLogin: boolean }) => {
-                this.loginCode = res.code;
-                this._OnLoginSuccess(res);
-                console.log(this.loginState);
-            },
-            fail: (res: { errMsg: string }) => {
-                console.error(LTPlatform.platformStr, "登录失败", res);
-                this.loginState.isLogin = false;
-                this.loginState.code = "";
-            },
-            complete: () => {
-                if (this.onLoginEnd != null) {
-                    this.onLoginEnd.run();
-                }
-            }
-        };
-
-        this._base.login(loginData);
-    }
-
-    getUserInfo() {
-        console.log('开始授权')
-        window["tt"].authorize({
-            scope: "scope.userInfo",
-            success: () => {
-                console.log('授权成功')
-                window["tt"].getUserInfo({
-                    withCredentials: false,
-                    lang: 'zh_CN',
-                    success: (result) => {
-                        console.log('获取信息成功')
-                        console.log(result);
-                        this.userInfo = { avatarUrl: result.avatarUrl, nickName: result.nickName }
-                    },
-                    fail: () => {
-                        console.log('获取信息失败')
-                    },
-                    complete: () => {
-                        console.log('获取信息comp')
-                    }
-                })
-            },
-        });
-
-    }
-
-    protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
-        console.log(LTPlatform.platformStr, "登录成功", res);
-        LTUI.Toast('登录成功');
-        this.getUserInfo();
-        // this.loginState.isLogin = true;
-        // this.loginState.code = res.code;
     }
 
     protected _CreateBannerAd() {

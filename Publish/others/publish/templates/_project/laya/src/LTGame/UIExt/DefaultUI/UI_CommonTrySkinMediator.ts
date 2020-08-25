@@ -5,8 +5,8 @@ import { EPlatformType } from "../../Platform/EPlatformType";
 import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
-import TrySkinOpenData from "./Data/TrySkinOpenData"; 
-import UI_TrySkin from "./UI/LTUI/UI_TrySkin";
+import TrySkinOpenData from "./Data/TrySkinOpenData";
+import UI_TrySkin from "./UI/LTGame/UI_TrySkin";
 
 
 
@@ -68,15 +68,15 @@ export default class UI_TrySkinMediator extends BaseUIMediator<UI_TrySkin>{
 
     }
     _onClickNo() {
-        this.Hide();
-        // if (LTSDK.instance.checkState == ECheckState.InCheck || LTPlatform.instance.platform == EPlatformType.Oppo) {
-        // } else {
-        //     if (this.ui.m_btn_pay.m_select.selectedIndex == 1) {
-        //         this.onVideoClick();
-        //     } else {
-        //         this.Hide();
-        //     }
-        // }
+        if (LTSDK.instance.checkState == ECheckState.InCheck || LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this.Hide();
+        } else {
+            if (this.ui.m_btn_pay.m_select.selectedIndex == 1) {
+                this.onVideoClick();
+            } else {
+                this.Hide();
+            }
+        }
     }
     _onToggleClick() {
         if (LTSDK.instance.checkState == ECheckState.InCheck) {

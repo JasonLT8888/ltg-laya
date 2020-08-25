@@ -763,11 +763,8 @@
 	    }
 	    _simulate(deltaTime) {
 	        this._updatedRigidbodies = 0;
-	        if (this._btDiscreteDynamicsWorld) {
-	            this._btDiscreteDynamicsWorld.callBackBody.length = 0;
-	            this._btDiscreteDynamicsWorld.allContacts.length = 0;
+	        if (this._btDiscreteDynamicsWorld)
 	            this._btDiscreteDynamicsWorld.step(this.fixedTimeStep, deltaTime, this.maxSubSteps);
-	        }
 	        var callBackBody = this._btDiscreteDynamicsWorld.callBackBody;
 	        for (var i = 0, n = callBackBody.length; i < n; i++) {
 	            var cannonBody = callBackBody[i];

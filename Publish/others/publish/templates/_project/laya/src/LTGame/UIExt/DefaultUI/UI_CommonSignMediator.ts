@@ -6,9 +6,9 @@ import CommonSaveData from "../../Commom/CommonSaveData";
 import LTPlatform from "../../Platform/LTPlatform";
 import BaseUIMediator from "../FGui/BaseUIMediator";
 import LTUI from "../LTUI";
-import { CommonRewardData } from "./Data/CommonRewardData"; 
-import UI_CommonSign2 from "./UI/LTUI/UI_CommonSign2";
-import UI_SignItem from "./UI/LTUI/UI_SignItem";
+import { CommonRewardData } from "./Data/CommonRewardData";
+import UI_CommonSign2 from "./UI/LTGame/UI_CommonSign2";
+import UI_SignItem from "./UI/LTGame/UI_SignItem";
 
 
 /** 签到 */

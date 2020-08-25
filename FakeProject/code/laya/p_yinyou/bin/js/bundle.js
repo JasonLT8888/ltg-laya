@@ -14324,8 +14324,9 @@ __webpack_require__.r(__webpack_exports__);
 class LTPlatformFactory {
     static CreateInstance() {
         let isQTT = window["qttGame"] != null;
+        let isTT = window["tt"] != null;
         let result;
-        if (Laya.Browser.onTTMiniGame) {
+        if (isTT) {
             result = new _TTPlatform__WEBPACK_IMPORTED_MODULE_0__["default"]();
         }
         else if (Laya.Browser.onMiniGame) {
@@ -15603,6 +15604,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Impl_TT_TTRecordManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Impl/TT/TTRecordManager */ "./src/LTGame/Platform/Impl/TT/TTRecordManager.ts");
 /* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
 /* harmony import */ var _WXPlatform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./WXPlatform */ "./src/LTGame/Platform/WXPlatform.ts");
+/* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+
 
 
 
@@ -15615,6 +15618,7 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_6__["default"] {
         super(...arguments);
         this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].TT;
         this._showVideoLoad = false;
+        this.loginCode = null;
     }
     Init(platformData) {
         this._base = window["tt"];
@@ -15653,11 +15657,12 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_6__["default"] {
             code: ""
         };
         let loginData = {
-            force: false,
+            force: true,
             success: (res) => {
                 this.loginCode = res.code;
+                this.loginState.isLogin = true;
+                this.loginState.code = res.code;
                 this._OnLoginSuccess(res);
-                console.log(this.loginState);
             },
             fail: (res) => {
                 console.error(_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].platformStr, "登录失败", res);
@@ -15670,7 +15675,7 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_6__["default"] {
                 }
             }
         };
-        this._base.login(loginData);
+        window["tt"].login(loginData);
     }
     getUserInfo() {
         console.log('开始授权');
@@ -15702,6 +15707,41 @@ class TTPlatform extends _WXPlatform__WEBPACK_IMPORTED_MODULE_6__["default"] {
         this.getUserInfo();
         // this.loginState.isLogin = true;
         // this.loginState.code = res.code;
+    }
+    _InitLauchOption() {
+        // 绑定onShow事件
+        this._base.onShow(this._OnShow);
+        this._base.onHide(this._OnHide);
+        // 自动获取一次启动参数
+        let res = this._base.getLaunchOptionsSync();
+        this._OnShow(res);
+    }
+    /**
+    * 小游戏回到前台的事件
+    */
+    _OnShow(res) {
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].platformStr, "OnShow", res);
+        _LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.lauchOption = res;
+        _LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance._CheckUpdate();
+        _Async_Awaiters__WEBPACK_IMPORTED_MODULE_7__["default"].NextFrame().then(() => {
+            if (_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.onResume) {
+                _LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.onResume.runWith(res);
+            }
+            let cacheOnShow = _LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance["_cacheOnShowHandle"];
+            if (cacheOnShow) {
+                cacheOnShow.run();
+                _LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance["_cacheOnShowHandle"] = null;
+            }
+        });
+    }
+    /**
+     * 小游戏退出前台的事件
+     */
+    _OnHide(res) {
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].platformStr, "OnHide", res);
+        if (_LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.onPause) {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_5__["default"].instance.onPause.runWith(res);
+        }
     }
     _CreateBannerAd() {
         if (_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__["default"].IsNullOrEmpty(this.platformData.bannerId)) {
@@ -22887,6 +22927,7 @@ class UI_GameCenterMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
         return this._instance;
     }
     _OnShow() {
+        this._needFilScreen = false;
         super._OnShow();
         this.cacheAds = _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_3__["default"].instance.adManager.GetADListByLocationId(this._posId);
         if (!this.cacheAds) {
@@ -22951,6 +22992,9 @@ class UI_GameCenterMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODUL
     _OnHide() {
         Laya.timer.clearAll(this);
         // LTPlatform.instance.ShowBannerAd();
+        if (this._openParam) {
+            this._openParam();
+        }
     }
 }
 
@@ -23630,21 +23674,26 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
      * @param score 分数/时长
      */
     RecordRankInfo(levelID, score) {
-        let uid = this.appId;
-        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
-            uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState && _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code) {
+            console.error('登录信息未获取');
         }
-        let sendData = {
-            appid: uid,
-            openId: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code,
-            times: score,
-            nickname: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.nickName,
-            avatar: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.avatarUrl,
-            type: levelID
-        };
-        _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/rank/times", Laya.Handler.create(this, this._OnRcordRank), Laya.Handler.create(this, (res) => {
-            console.log("上报排名接口失败", res);
-        }), true, sendData);
+        else {
+            let uid = this.appId;
+            if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
+                uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+            }
+            let sendData = {
+                appid: uid,
+                openId: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code,
+                times: score,
+                nickname: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.nickName,
+                avatar: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.avatarUrl,
+                type: levelID
+            };
+            _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/rank/times", Laya.Handler.create(this, this._OnRcordRank), Laya.Handler.create(this, (res) => {
+                console.log("上报排名接口失败", res);
+            }), true, sendData);
+        }
     }
     /**查询周排名
      * @param levelID 关卡
@@ -23652,24 +23701,29 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
     * @param onGetList 回调处理
      */
     getWeekRankList(levelID, score, onGetList) {
-        let uid = this.appId;
-        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
-            uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState && _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code) {
+            console.error('登录信息未获取');
         }
-        let sendData = {
-            appid: uid,
-            openId: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code,
-            times: score,
-            nickname: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.nickName,
-            avatar: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.avatarUrl,
-            type: levelID
-        };
-        // LTHttp.Send(this._headPrefix + "/api/rank/week/time", Laya.Handler.create(this, this._OnGetRankList), Laya.Handler.create(this, (res) => {
-        //     console.log("获取单日排行接口访问失败", res);
-        // }), true, sendData);
-        _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/rank/week/time", Laya.Handler.create(this, onGetList), Laya.Handler.create(this, (res) => {
-            console.log("获取单日排行接口访问失败", res);
-        }), true, sendData);
+        else {
+            let uid = this.appId;
+            if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
+                uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+            }
+            let sendData = {
+                appid: uid,
+                openId: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code,
+                times: score,
+                nickname: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.nickName,
+                avatar: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.avatarUrl,
+                type: levelID
+            };
+            // LTHttp.Send(this._headPrefix + "/api/rank/week/time", Laya.Handler.create(this, this._OnGetRankList), Laya.Handler.create(this, (res) => {
+            //     console.log("获取单日排行接口访问失败", res);
+            // }), true, sendData);
+            _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/rank/week/time", Laya.Handler.create(this, onGetList), Laya.Handler.create(this, (res) => {
+                console.log("获取周排行接口访问失败", res);
+            }), true, sendData);
+        }
     }
     /**
      * 查询日排名
@@ -23678,24 +23732,26 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
      * @param onGetList 回调处理
      */
     getDayRankList(levelID, score, onGetList) {
-        let uid = this.appId;
-        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
-            uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+        if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState && _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code) {
+            console.error('登录信息未获取');
         }
-        let sendData = {
-            appid: uid,
-            openId: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code,
-            times: score,
-            nickname: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.nickName,
-            avatar: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.avatarUrl,
-            type: levelID
-        };
-        _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/rank/day/time", Laya.Handler.create(this, onGetList), Laya.Handler.create(this, (res) => {
-            console.log("获取本周排行接口访问失败", res);
-        }), true, sendData);
-        // LTHttp.Send(this._headPrefix + "/api/rank/day/time", Laya.Handler.create(this, this._OnGetRankList), Laya.Handler.create(this, (res) => {
-        //     console.log("获取本周排行接口访问失败", res);
-        // }), true, sendData);
+        else {
+            let uid = this.appId;
+            if (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo) {
+                uid = _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey;
+            }
+            let sendData = {
+                appid: uid,
+                openId: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.loginState.code,
+                times: score,
+                nickname: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.nickName,
+                avatar: _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.userInfo.avatarUrl,
+                type: levelID
+            };
+            _LTGame_Net_LTHttp__WEBPACK_IMPORTED_MODULE_1__["default"].Send(this._headPrefix + "/api/rank/day/time", Laya.Handler.create(this, onGetList), Laya.Handler.create(this, (res) => {
+                console.log("获取当天排行接口访问失败", res);
+            }), true, sendData);
+        }
     }
     _OnRcordRank(res) {
         let getObj = JSON.parse(res);
@@ -25984,161 +26040,6 @@ class CannonPhysicTest {
 
 /***/ }),
 
-/***/ "./src/script/test/HXOimoPhysicTest.ts":
-/*!*********************************************!*\
-  !*** ./src/script/test/HXOimoPhysicTest.ts ***!
-  \*********************************************/
-/*! exports provided: HXOimoPhysicTest */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HXOimoPhysicTest", function() { return HXOimoPhysicTest; });
-/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
-/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
-/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
-/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
-/* harmony import */ var _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/QuaternionEx */ "./src/LTGame/LTUtils/QuaternionEx.ts");
-
-
-
-
-
-
-class HXOimoPhysicTest {
-    constructor() {
-        this.name = "HXOimo物理";
-        this._isPressed = false;
-        this._panelSize = 50;
-    }
-    Create() {
-        this._s3d = new Laya.Scene3D();
-        Laya.stage.addChildAt(this._s3d, 1);
-        this._world = new OIMO.World(OIMO.BroadPhaseType.BRUTE_FORCE, new OIMO.Vec3(0, -9.8, 0));
-        console.log(this._world);
-        let panelMesh = Laya.PrimitiveMesh.createPlane(this._panelSize, this._panelSize, 1, 1);
-        let panelMat = new Laya.BlinnPhongMaterial();
-        panelMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
-        let panelObj = new Laya.MeshSprite3D(panelMesh, "floor");
-        panelObj.meshRenderer.material = panelMat;
-        panelObj.meshRenderer.receiveShadow = true;
-        this._s3d.addChild(panelObj);
-        panelObj.transform.localPosition = new Laya.Vector3(0, 0, 0);
-        let rigConfig = new OIMO.RigidBodyConfig();
-        rigConfig.position = new OIMO.Vec3(0, -0.5, 0);
-        let q = panelObj.transform.rotation;
-        rigConfig.rotation.fromQuat(q);
-        rigConfig.type = OIMO.RigidBodyType.STATIC;
-        let rig = new OIMO.RigidBody(rigConfig);
-        let boxGeometry = new OIMO.BoxGeometry(new OIMO.Vec3(this._panelSize / 2, 1, this._panelSize / 2));
-        let shapeConfig = new OIMO.ShapeConfig();
-        shapeConfig.geometry = boxGeometry;
-        let shape = new OIMO.Shape(shapeConfig);
-        rig.addShape(shape);
-        this._world.addRigidBody(rig);
-        let camera = new Laya.Camera();
-        camera.name = "camera";
-        this._s3d.addChild(camera);
-        camera.transform.localPosition = new Laya.Vector3(0, this._panelSize * 1.2, this._panelSize * 1.2);
-        camera.transform.localRotationEuler = new Laya.Vector3(-45, 0, 0);
-        let light = new Laya.DirectionLight();
-        this._s3d.addChild(light);
-        light.transform.localRotationEuler = new Laya.Vector3(-75, 0, 0);
-        light.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
-        light.shadowMode = Laya.ShadowMode.SoftHigh;
-        light.shadowDistance = 200;
-        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
-        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(Laya.Handler.create(this, this.Clear));
-        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_img_bg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
-        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
-        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.on(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
-        this._cacheMaterial = new Laya.BlinnPhongMaterial();
-        this._cacheMaterial.albedoColor = new Laya.Vector4(0.1, 0.1, 0.6, 1);
-        this._sleepMaterial = new Laya.BlinnPhongMaterial();
-        this._sleepMaterial.albedoColor = new Laya.Vector4(0.5, 0.5, 0, 1);
-        this._cacheMesh = Laya.PrimitiveMesh.createBox(1, 1, 1);
-        this._cubeRigs = [];
-        this._cubeObjs = [];
-        this._s3d.physicsSimulation.maxSubSteps = 2;
-        this._s3d.physicsSimulation.fixedTimeStep = 1 / 30;
-    }
-    _LogicUpdate() {
-        let dt = Laya.timer.delta * 0.001;
-        if (this._isPressed) {
-            this._remainTime -= dt;
-            if (this._remainTime < 0) {
-                this._GenCube();
-                this._remainTime = 0.1;
-            }
-        }
-        this._world.step(dt);
-        for (let i = 0; i < this._cubeObjs.length; ++i) {
-            let cubeObj = this._cubeObjs[i];
-            let rig = this._cubeRigs[i];
-            let pos = rig.getPosition();
-            _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0.setValue(pos.x, pos.y, pos.z);
-            cubeObj.transform.position = _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_4__["default"].cacheVec0;
-            let rot = rig.getOrientation();
-            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.x = rot.x;
-            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.y = rot.y;
-            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.z = rot.z;
-            _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0.w = rot.w;
-            cubeObj.transform.rotation = _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].cacheVec0;
-            cubeObj.meshRenderer.sharedMaterial = rig._sleeping ? this._sleepMaterial : this._cacheMaterial;
-        }
-    }
-    _GenCube() {
-        let cubeObj = new Laya.MeshSprite3D(this._cacheMesh, "cube");
-        cubeObj.meshRenderer.sharedMaterial = this._cacheMaterial;
-        this._s3d.addChild(cubeObj);
-        let size = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0.5, 2));
-        let pos = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5), this._panelSize, _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(-5, 5));
-        cubeObj.transform.localPosition = pos;
-        cubeObj.transform.localRotationEuler = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Random(0, 360));
-        cubeObj.transform.localScale = size;
-        cubeObj.meshRenderer.castShadow = true;
-        cubeObj.meshRenderer.receiveShadow = true;
-        let rigConfig = new OIMO.RigidBodyConfig();
-        rigConfig.position = new OIMO.Vec3(pos.x, pos.y, pos.z);
-        let q = cubeObj.transform.rotation;
-        rigConfig.rotation.fromQuat(q);
-        rigConfig.type = OIMO.RigidBodyType.DYNAMIC;
-        let rig = new OIMO.RigidBody(rigConfig);
-        let boxGeometry = new OIMO.BoxGeometry(new OIMO.Vec3(size.x / 2, size.y / 2, size.z / 2));
-        let shapeConfig = new OIMO.ShapeConfig();
-        shapeConfig.geometry = boxGeometry;
-        let shape = new OIMO.Shape(shapeConfig);
-        rig.addShape(shape);
-        this._world.addRigidBody(rig);
-        this._cubeObjs.push(cubeObj);
-        this._cubeRigs.push(rig);
-        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.ui.m_text_notice.text = "物体数量:" + this._cubeObjs.length;
-    }
-    _OnMouseDown(event) {
-        if (this._isPressed)
-            return;
-        this._isPressed = true;
-        this._touchId = event.touchId;
-        this._remainTime = 0;
-    }
-    _OnMouseUp(event) {
-        if (!this._isPressed)
-            return;
-        if (this._touchId != event.touchId)
-            return;
-        this._isPressed = false;
-    }
-    Clear() {
-        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_2__["EActionType"].Update, this, this._LogicUpdate);
-        this._s3d.destroy();
-        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show();
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/script/test/HeightFogTest.ts":
 /*!******************************************!*\
   !*** ./src/script/test/HeightFogTest.ts ***!
@@ -26948,8 +26849,8 @@ __webpack_require__.r(__webpack_exports__);
 class UI_BoneAnimTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor() {
         super(...arguments);
-        this._xBorder = [-3, 3];
-        this._zBorder = [0, 4];
+        this._xBorder = [-10, 10];
+        this._zBorder = [-10, 30];
     }
     static get instance() {
         if (this._instance == null) {
@@ -27005,11 +26906,10 @@ class UI_BoneAnimTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
         this.ui.m_text_total.text = "当前总数量:" + (this._cacheAnims.length + 1);
     }
     _GetGenPos() {
-        const unit = 0.4;
-        let xCount = Math.floor((this._xBorder[1] - this._xBorder[0]) / unit);
+        let xCount = this._xBorder[1] - this._xBorder[0];
         let zIndex = Math.floor(this._cacheAnims.length / xCount);
         let xIndex = this._cacheAnims.length % xCount;
-        return new Laya.Vector3(xIndex * unit + this._xBorder[0], 0, this._zBorder[0] + zIndex * unit);
+        return new Laya.Vector3(xIndex + this._xBorder[0], 0, this._zBorder[0] + zIndex);
     }
     _OnClickBack() {
         this.Hide();
@@ -27348,8 +27248,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../test/OimoPhysicTest */ "./src/script/test/OimoPhysicTest.ts");
 /* harmony import */ var _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../test/HybridPhysicTest */ "./src/script/test/HybridPhysicTest.ts");
 /* harmony import */ var _test_CannonPhysicTest__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../test/CannonPhysicTest */ "./src/script/test/CannonPhysicTest.ts");
-/* harmony import */ var _test_HXOimoPhysicTest__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../test/HXOimoPhysicTest */ "./src/script/test/HXOimoPhysicTest.ts");
-
 
 
 
@@ -27373,7 +27271,6 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
             new _test_OimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["OimoPhysicTest"](),
             new _test_HybridPhysicTest__WEBPACK_IMPORTED_MODULE_9__["HybridPhysicTest"](),
             new _test_CannonPhysicTest__WEBPACK_IMPORTED_MODULE_10__["CannonPhysicTest"](),
-            new _test_HXOimoPhysicTest__WEBPACK_IMPORTED_MODULE_11__["HXOimoPhysicTest"](),
         ];
     }
     static get instance() {

@@ -74,10 +74,6 @@ export default interface IPlatform {
      * 系统信息
      */
     systemInfo: any;
-    /**
-     * 系统信息
-     */
-    userInfo: LTGame.UserInfo;
 
     /**
      * 初始化
