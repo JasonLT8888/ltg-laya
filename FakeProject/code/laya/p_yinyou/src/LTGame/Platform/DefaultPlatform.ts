@@ -139,4 +139,8 @@ export default class DefaultPlatform implements IPlatform {
     checkFollowState(): any {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
     }
+
+    SetClipboardData(str: string) {
+        console.log("暂不支持拷贝剪切板", str);
+    }
 }

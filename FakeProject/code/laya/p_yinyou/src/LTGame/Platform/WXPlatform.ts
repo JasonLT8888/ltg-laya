@@ -122,7 +122,6 @@ export default class WXPlatform implements IPlatform {
         });
     }
 
-
     protected _Login() {
 
         this.loginState = {
@@ -696,5 +695,9 @@ export default class WXPlatform implements IPlatform {
     }
     checkFollowState(): any {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
+    }
+
+    SetClipboardData(str: string) {
+        this._base.setClipboardData({ data: str });
     }
 }

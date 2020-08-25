@@ -224,6 +224,12 @@
     <component id="8gel6b" name="btn_addshortcut.xml" path="/cmp/"/>
     <component id="8gel6c" name="btn_findgame.xml" path="/cmp/"/>
     <image id="odt06d" name="sp_shou(1).png" path="/img/"/>
+    <component id="odt06e" name="WatchGuide.xml" path="/ui/" exported="true"/>
+    <image id="odt06f" name="关注.jpg" path="/效果图/"/>
+    <image id="odt06g" name="sp_erjibg.png" path="/img/" scale="9grid" scale9grid="45,129,90,45"/>
+    <image id="odt06h" name="sp_guanzhu.png" path="/img/"/>
+    <image id="odt06i" name="sp_tu.png" path="/img/"/>
+    <component id="odt06j" name="view_watchguide.xml" path="/cmp/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

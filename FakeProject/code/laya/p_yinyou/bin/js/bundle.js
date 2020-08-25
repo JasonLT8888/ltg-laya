@@ -259,6 +259,66 @@ class LTG_Com_RollData {
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_WatchDYData.ts":
+/*!******************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_WatchDYData.ts ***!
+  \******************************************************/
+/*! exports provided: LTG_Com_WatchDYData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_WatchDYData", function() { return LTG_Com_WatchDYData; });
+/* harmony import */ var _Mediator_LTG_UI_WatchDYMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_WatchDYMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_WatchDYMediator.ts");
+
+/**
+ * -关注抖音号-
+ * @param dyId 抖音号
+ * @param iconUrl 素材图标,建议在工程内替换
+ */
+class LTG_Com_WatchDYData {
+    constructor() {
+        this.dyId = "wysgs";
+        this.iconUrl = null;
+    }
+    Send() {
+        _Mediator_LTG_UI_WatchDYMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_WatchGuideData.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_WatchGuideData.ts ***!
+  \*********************************************************/
+/*! exports provided: LTG_Com_WatchGuideData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_WatchGuideData", function() { return LTG_Com_WatchGuideData; });
+/* harmony import */ var _Mediator_LTG_UI_WatchGuideMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_WatchGuideMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_WatchGuideMediator.ts");
+
+/**
+ * -关注抖音指引-
+ * @param iconUrl 素材图标,建议在工程内替换
+ */
+class LTG_Com_WatchGuideData {
+    constructor() {
+        this.iconUrl = null;
+    }
+    Send() {
+        _Mediator_LTG_UI_WatchGuideMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Data/LTG_Com_ZhuaWawaData.ts":
 /*!*******************************************************!*\
   !*** ./src/LTG_CommonUI/Data/LTG_Com_ZhuaWawaData.ts ***!
@@ -755,6 +815,108 @@ class LTG_UI_RollMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_WatchDYMediator.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_WatchDYMediator.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_WatchDYMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_WatchDY__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_WatchDY */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchDY.ts");
+/* harmony import */ var _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _Data_LTG_Com_WatchGuideData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Data/LTG_Com_WatchGuideData */ "./src/LTG_CommonUI/Data/LTG_Com_WatchGuideData.ts");
+
+
+
+
+
+class LTG_UI_WatchDYMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_WatchDYMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_WatchDY__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._cacheData = this._openParam;
+        if (this._cacheData == null) {
+            throw new Error("请调用LTG_Com_ZhuaWawaData进行界面打开操作");
+        }
+        this.ui.m_view.m_text_code.text = this._cacheData.dyId;
+        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+        this.ui.m_view.m_btn_copy.onClick(this, this._OnClickCopy);
+        this.ui.m_view.m_btn_watch.onClick(this, this._OnClickWatch);
+    }
+    _OnClickCopy() {
+        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].Toast("已拷贝到剪切板");
+        _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.SetClipboardData(this._cacheData.dyId);
+    }
+    _OnClickClose() {
+        this.Hide();
+    }
+    _OnClickWatch() {
+        let data = new _Data_LTG_Com_WatchGuideData__WEBPACK_IMPORTED_MODULE_4__["LTG_Com_WatchGuideData"]();
+        data.iconUrl = this._cacheData.iconUrl;
+        data.Send();
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_WatchGuideMediator.ts":
+/*!****************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_WatchGuideMediator.ts ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_WatchGuideMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_WatchGuide__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_WatchGuide */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchGuide.ts");
+/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+
+
+
+class LTG_UI_WatchGuideMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_WatchGuideMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_WatchGuide__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        let openData = this._openParam;
+        if (openData == null) {
+            throw new Error("请调用LTG_Com_WatchGuideData进行界面打开操作");
+        }
+        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_2__["default"].IsNullOrEmpty(openData.iconUrl)) {
+            this.ui.m_view.m_loader_icon.url = openData.iconUrl;
+        }
+        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+    }
+    _OnClickClose() {
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Mediator/LTG_UI_ZhuawawaMediator.ts":
 /*!**************************************************************!*\
   !*** ./src/LTG_CommonUI/Mediator/LTG_UI_ZhuawawaMediator.ts ***!
@@ -914,7 +1076,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTG_UI_view_set__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./LTG_UI_view_set */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_set.ts");
 /* harmony import */ var _LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./LTG_UI_RewardCode */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_RewardCode.ts");
 /* harmony import */ var _LTG_UI_view_rewardcode__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./LTG_UI_view_rewardcode */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_rewardcode.ts");
+/* harmony import */ var _LTG_UI_WatchGuide__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./LTG_UI_WatchGuide */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchGuide.ts");
+/* harmony import */ var _LTG_UI_view_watchguide__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./LTG_UI_view_watchguide */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchguide.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
 
 
 
@@ -1007,6 +1173,8 @@ class LTComBinder {
         fgui.UIObjectFactory.setExtension(_LTG_UI_view_set__WEBPACK_IMPORTED_MODULE_42__["default"].URL, _LTG_UI_view_set__WEBPACK_IMPORTED_MODULE_42__["default"]);
         fgui.UIObjectFactory.setExtension(_LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_43__["default"].URL, _LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_43__["default"]);
         fgui.UIObjectFactory.setExtension(_LTG_UI_view_rewardcode__WEBPACK_IMPORTED_MODULE_44__["default"].URL, _LTG_UI_view_rewardcode__WEBPACK_IMPORTED_MODULE_44__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_WatchGuide__WEBPACK_IMPORTED_MODULE_45__["default"].URL, _LTG_UI_WatchGuide__WEBPACK_IMPORTED_MODULE_45__["default"]);
+        fgui.UIObjectFactory.setExtension(_LTG_UI_view_watchguide__WEBPACK_IMPORTED_MODULE_46__["default"].URL, _LTG_UI_view_watchguide__WEBPACK_IMPORTED_MODULE_46__["default"]);
     }
 }
 
@@ -1411,6 +1579,34 @@ class LTG_UI_WatchDY extends fgui.GComponent {
     }
 }
 LTG_UI_WatchDY.URL = "ui://hbq27te38gel46";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchGuide.ts":
+/*!********************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_WatchGuide.ts ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_WatchGuide; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_WatchGuide extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "WatchGuide"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_view = (this.getChildAt(1));
+    }
+}
+LTG_UI_WatchGuide.URL = "ui://hbq27te3odt06e";
 
 
 /***/ }),
@@ -2269,10 +2465,40 @@ class LTG_UI_view_watchdy extends fgui.GComponent {
     }
     onConstruct() {
         this.m_btn_copy = (this.getChildAt(1));
-        this.m_btn_close = (this.getChildAt(3));
+        this.m_btn_close = (this.getChildAt(2));
+        this.m_text_code = (this.getChildAt(3));
+        this.m_btn_watch = (this.getChildAt(4));
     }
 }
 LTG_UI_view_watchdy.URL = "ui://hbq27te38gel4g";
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchguide.ts":
+/*!*************************************************************!*\
+  !*** ./src/LTG_CommonUI/UI/LTCom/LTG_UI_view_watchguide.ts ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_view_watchguide; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class LTG_UI_view_watchguide extends fgui.GComponent {
+    constructor() {
+        super();
+    }
+    static createInstance() {
+        return (fgui.UIPackage.createObject("LTCom", "view_watchguide"));
+    }
+    onConstruct() {
+        this.m_btn_close = (this.getChildAt(1));
+        this.m_loader_icon = (this.getChildAt(3));
+    }
+}
+LTG_UI_view_watchguide.URL = "ui://hbq27te3odt06j";
 
 
 /***/ }),
@@ -5194,6 +5420,9 @@ class DefaultPlatform {
     checkFollowState() {
         console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_7__["default"].platformStr, "暂不支持关注");
     }
+    SetClipboardData(str) {
+        console.log("暂不支持拷贝剪切板", str);
+    }
 }
 
 
@@ -7552,6 +7781,9 @@ class VivoPlatform {
         console.log('暂不支持');
         return;
     }
+    SetClipboardData(str) {
+        this.base.setClipboardData({ data: str });
+    }
 }
 
 
@@ -8205,6 +8437,9 @@ class WXPlatform {
     }
     checkFollowState() {
         console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_10__["default"].platformStr, "暂不支持关注");
+    }
+    SetClipboardData(str) {
+        this._base.setClipboardData({ data: str });
     }
 }
 
@@ -18014,6 +18249,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_ZhuaWawaData__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_ZhuaWawaData */ "./src/LTG_CommonUI/Data/LTG_Com_ZhuaWawaData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_LimitSkinData */ "./src/LTG_CommonUI/Data/LTG_Com_LimitSkinData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_RollData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_RollData */ "./src/LTG_CommonUI/Data/LTG_Com_RollData.ts");
+/* harmony import */ var _LTG_CommonUI_Data_LTG_Com_WatchDYData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_WatchDYData */ "./src/LTG_CommonUI/Data/LTG_Com_WatchDYData.ts");
+
 
 
 
@@ -18064,6 +18301,9 @@ class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IM
                 data.onRolled = Laya.Handler.create(null, (c) => { }, null, false);
                 data.onSpecial = Laya.Handler.create(null, (c) => { }, null, false);
                 data.Send();
+            }),
+            new UIDemoData("关注抖音号", () => {
+                new _LTG_CommonUI_Data_LTG_Com_WatchDYData__WEBPACK_IMPORTED_MODULE_8__["LTG_Com_WatchDYData"]().Send();
             }),
         ];
     }

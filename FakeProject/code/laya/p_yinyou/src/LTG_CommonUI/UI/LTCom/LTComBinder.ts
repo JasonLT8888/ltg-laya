@@ -45,6 +45,8 @@ import LTG_UI_toggle_01 from "./LTG_UI_toggle_01";
 import LTG_UI_view_set from "./LTG_UI_view_set";
 import LTG_UI_RewardCode from "./LTG_UI_RewardCode";
 import LTG_UI_view_rewardcode from "./LTG_UI_view_rewardcode";
+import LTG_UI_WatchGuide from "./LTG_UI_WatchGuide";
+import LTG_UI_view_watchguide from "./LTG_UI_view_watchguide";
 
 export default class LTComBinder{
 	public static bindAll():void {
@@ -93,5 +95,7 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_set.URL, LTG_UI_view_set);
 		fgui.UIObjectFactory.setExtension(LTG_UI_RewardCode.URL, LTG_UI_RewardCode);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_rewardcode.URL, LTG_UI_view_rewardcode);
+		fgui.UIObjectFactory.setExtension(LTG_UI_WatchGuide.URL, LTG_UI_WatchGuide);
+		fgui.UIObjectFactory.setExtension(LTG_UI_view_watchguide.URL, LTG_UI_view_watchguide);
 	}
 }

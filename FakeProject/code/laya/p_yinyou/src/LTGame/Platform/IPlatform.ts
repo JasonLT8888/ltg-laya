@@ -128,6 +128,12 @@ export default interface IPlatform {
     // HideNativeAd();
 
     /**
+     * 设置剪切板内容
+     * @param str 内容
+     */
+    SetClipboardData(str: string);
+
+    /**
      * 展示有奖视频
      * @param onSuccess 
      * @param onSkipped 

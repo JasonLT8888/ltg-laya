@@ -314,4 +314,8 @@ export default class VivoPlatform implements IPlatform {
         return;
     }
 
+    SetClipboardData(str: string) {
+        this.base.setClipboardData({ data: str });
+    }
+
 }
