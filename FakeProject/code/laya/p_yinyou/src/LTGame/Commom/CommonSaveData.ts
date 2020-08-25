@@ -53,6 +53,7 @@ export class SaveData {
      * 免费抽奖次数
      */
     public freeRollCount: number = 1;
+    public totalRollCount: number = 0;
     /**
      * 限定皮肤观看广告次数
      */

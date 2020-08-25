@@ -237,6 +237,28 @@ class LTG_Com_NoticeData {
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_RollData.ts":
+/*!***************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_RollData.ts ***!
+  \***************************************************/
+/*! exports provided: LTG_Com_RollData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_RollData", function() { return LTG_Com_RollData; });
+/* harmony import */ var _Mediator_LTG_UI_RollMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_RollMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_RollMediator.ts");
+
+class LTG_Com_RollData {
+    Send() {
+        _Mediator_LTG_UI_RollMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Data/LTG_Com_ZhuaWawaData.ts":
 /*!*******************************************************!*\
   !*** ./src/LTG_CommonUI/Data/LTG_Com_ZhuaWawaData.ts ***!
@@ -592,6 +614,138 @@ class LTG_UI_NoticeMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_I
         }
         this.ui.m_view.m_text_notice.text = openData.content;
         this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+    }
+    _OnClickClose() {
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_RollMediator.ts":
+/*!**********************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_RollMediator.ts ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_RollMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_Roll__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_Roll */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Roll.ts");
+/* harmony import */ var _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
+/* harmony import */ var _script_config_GameConst__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../script/config/GameConst */ "./src/script/config/GameConst.ts");
+/* harmony import */ var _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _script_config_RollConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../script/config/RollConfig */ "./src/script/config/RollConfig.ts");
+
+
+
+
+
+
+
+
+class LTG_UI_RollMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_RollMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_Roll__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        if (_script_config_RollConfig__WEBPACK_IMPORTED_MODULE_7__["RollConfig"].data == null) {
+            throw new Error("请先加载配置表RollConfig");
+        }
+        this._cacheData = this._openParam;
+        if (this._cacheData == null) {
+            throw new Error("请调用LTG_Com_RollData进行界面打开操作");
+        }
+        this.ui.m_btn_close.onClick(this, this._OnClickClose);
+        for (let i = 1; i <= 6; ++i) {
+            let itemName = 'm_item_0' + i.toFixed(0);
+            let itemUI = this.ui.m_view.m_view_roll[itemName];
+            let data = _script_config_RollConfig__WEBPACK_IMPORTED_MODULE_7__["RollConfig"].data[i];
+            itemUI.m_text_name.text = data.show_str;
+            itemUI.m_text_name.color = data.text_color;
+            itemUI.m_loader_icon.url = data.icon_path;
+        }
+        this.ui.m_view.m_btn_freeget.onClick(this, this._OnClickFreeRoll);
+        this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickWatchAd);
+        this._UpdateUI();
+        this._rollIndex = [];
+        this._rollWeight = [];
+        for (let i = 0; i < 6; ++i) {
+            this._rollIndex.push(i + 1);
+            this._rollWeight.push(_script_config_RollConfig__WEBPACK_IMPORTED_MODULE_7__["RollConfig"].data[i + 1].roll_weight);
+        }
+    }
+    _UpdateUI() {
+        if (_LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.freeRollCount > 0) {
+            this.ui.m_view.m_btn_freeget.visible = true;
+            this.ui.m_view.m_btn_watchad.visible = false;
+        }
+        else {
+            this.ui.m_view.m_btn_freeget.visible = false;
+            this.ui.m_view.m_btn_watchad.visible = true;
+        }
+        let currentRollCount = _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.totalRollCount % _script_config_GameConst__WEBPACK_IMPORTED_MODULE_3__["GameConst"].data.special_roll_count;
+        if (_LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.totalRollCount > 0 && currentRollCount == 0) {
+            currentRollCount = _script_config_GameConst__WEBPACK_IMPORTED_MODULE_3__["GameConst"].data.special_roll_count;
+        }
+        let remainCount = _script_config_GameConst__WEBPACK_IMPORTED_MODULE_3__["GameConst"].data.special_roll_count - currentRollCount;
+        if (remainCount > 0) {
+            this._isSpecialRoll = false;
+            this.ui.m_view.m_text_notice.text = remainCount + "次之后必得特殊奖励";
+        }
+        else {
+            this.ui.m_view.m_text_notice.text = " 本次必得特殊奖励";
+            this._isSpecialRoll = true;
+        }
+        let progress100 = (currentRollCount / _script_config_GameConst__WEBPACK_IMPORTED_MODULE_3__["GameConst"].data.special_roll_count) * 100;
+        this.ui.m_view.m_progress_supper.value = progress100;
+    }
+    _DoRoll() {
+        _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.totalRollCount++;
+        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].LockScreen();
+        this.ui.m_view.m_btn_freeget.visible = false;
+        this.ui.m_view.m_btn_watchad.visible = false;
+        this._cacheFinalIndex = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].RandomFromWithWeight(this._rollIndex, this._rollWeight);
+        let targetRotate = -(this._cacheFinalIndex - 1) * 60 - 360 * 3;
+        Laya.Tween.to(this.ui.m_view.m_view_roll, { rotation: targetRotate }, 2000, Laya.Ease.quadOut, Laya.Handler.create(this, this._OnRollEnd));
+    }
+    _OnRollEnd() {
+        var _a, _b;
+        this.ui.m_view.m_view_roll.rotation = this.ui.m_view.m_view_roll.rotation % 360;
+        let rewardConfig = _script_config_RollConfig__WEBPACK_IMPORTED_MODULE_7__["RollConfig"].data[this._cacheFinalIndex];
+        (_a = this._cacheData.onRolled) === null || _a === void 0 ? void 0 : _a.runWith([rewardConfig]);
+        if (this._isSpecialRoll) {
+            let specialConfig = _script_config_RollConfig__WEBPACK_IMPORTED_MODULE_7__["RollConfig"].data[7];
+            (_b = this._cacheData.onSpecial) === null || _b === void 0 ? void 0 : _b.runWith([specialConfig]);
+        }
+        this._UpdateUI();
+        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].UnlockScreen();
+    }
+    _OnClickWatchAd() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let result = yield _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.ShowRewardVideoAdAsync();
+            if (result) {
+                this._DoRoll();
+            }
+            else {
+                _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过广告无法获得奖励");
+            }
+        });
+    }
+    _OnClickFreeRoll() {
+        _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.freeRollCount--;
+        this._DoRoll();
     }
     _OnClickClose() {
         this.Hide();
@@ -1925,9 +2079,10 @@ class LTG_UI_view_roll extends fgui.GComponent {
         return (fgui.UIPackage.createObject("LTCom", "view_roll"));
     }
     onConstruct() {
+        this.m_view_roll = (this.getChildAt(0));
         this.m_progress_supper = (this.getChildAt(3));
         this.m_btn_watchad = (this.getChildAt(5));
-        this.m_btn_free = (this.getChildAt(6));
+        this.m_btn_freeget = (this.getChildAt(6));
         this.m_text_notice = (this.getChildAt(7));
     }
 }
@@ -2300,6 +2455,7 @@ class SaveData {
          * 免费抽奖次数
          */
         this.freeRollCount = 1;
+        this.totalRollCount = 0;
         /**
         * 彩蛋获得数据
         */
@@ -16688,6 +16844,27 @@ var PackConst;
 
 /***/ }),
 
+/***/ "./src/script/config/RollConfig.ts":
+/*!*****************************************!*\
+  !*** ./src/script/config/RollConfig.ts ***!
+  \*****************************************/
+/*! exports provided: RollConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RollConfig", function() { return RollConfig; });
+var RollConfig;
+(function (RollConfig) {
+    class config {
+    }
+    RollConfig.config = config;
+    RollConfig.path = "res/config/RollConfig.json";
+})(RollConfig || (RollConfig = {}));
+
+
+/***/ }),
+
 /***/ "./src/script/config/SignConfig.ts":
 /*!*****************************************!*\
   !*** ./src/script/config/SignConfig.ts ***!
@@ -17061,6 +17238,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_PackConst__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../config/PackConst */ "./src/script/config/PackConst.ts");
 /* harmony import */ var _config_SignConfig__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../config/SignConfig */ "./src/script/config/SignConfig.ts");
 /* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
+/* harmony import */ var _config_RollConfig__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../config/RollConfig */ "./src/script/config/RollConfig.ts");
+
 
 
 
@@ -17092,6 +17271,7 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_2
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PackConst__WEBPACK_IMPORTED_MODULE_11__["PackConst"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_EggConfig__WEBPACK_IMPORTED_MODULE_9__["EggConfig"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_SignConfig__WEBPACK_IMPORTED_MODULE_12__["SignConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RollConfig__WEBPACK_IMPORTED_MODULE_14__["RollConfig"]);
     }
     _OnGameResPrepared(urls) {
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_6__["default"].InitAll();
@@ -17833,6 +18013,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_MyGameData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_MyGameData */ "./src/LTG_CommonUI/Data/LTG_Com_MyGameData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_ZhuaWawaData__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_ZhuaWawaData */ "./src/LTG_CommonUI/Data/LTG_Com_ZhuaWawaData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_LimitSkinData */ "./src/LTG_CommonUI/Data/LTG_Com_LimitSkinData.ts");
+/* harmony import */ var _LTG_CommonUI_Data_LTG_Com_RollData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_RollData */ "./src/LTG_CommonUI/Data/LTG_Com_RollData.ts");
+
 
 
 
@@ -17875,6 +18057,12 @@ class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IM
                         _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__["LTG_Com_LimitSkinData"].UpdateCount(data.watchCount);
                     }
                 }, null, false);
+                data.Send();
+            }),
+            new UIDemoData("大转盘", () => {
+                let data = new _LTG_CommonUI_Data_LTG_Com_RollData__WEBPACK_IMPORTED_MODULE_7__["LTG_Com_RollData"]();
+                data.onRolled = Laya.Handler.create(null, (c) => { }, null, false);
+                data.onSpecial = Laya.Handler.create(null, (c) => { }, null, false);
                 data.Send();
             }),
         ];

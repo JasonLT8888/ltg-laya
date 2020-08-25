@@ -5,6 +5,7 @@ import LTG_UI_HideMenuMediator from "../../LTG_CommonUI/Mediator/LTG_UI_HideMenu
 import { LTG_Com_MyGameData } from "../../LTG_CommonUI/Data/LTG_Com_MyGameData";
 import { LTG_Com_ZhuaWawaData } from "../../LTG_CommonUI/Data/LTG_Com_ZhuaWawaData";
 import { LTG_Com_LimitSkinData } from "../../LTG_CommonUI/Data/LTG_Com_LimitSkinData";
+import { LTG_Com_RollData } from "../../LTG_CommonUI/Data/LTG_Com_RollData";
 
 class UIDemoData {
 
@@ -54,6 +55,12 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
                     LTG_Com_LimitSkinData.UpdateCount(data.watchCount);
                 }
             }, null, false);
+            data.Send();
+        }),
+        new UIDemoData("大转盘", () => {
+            let data = new LTG_Com_RollData();
+            data.onRolled = Laya.Handler.create(null, (c) => { }, null, false);
+            data.onSpecial = Laya.Handler.create(null, (c) => { }, null, false);
             data.Send();
         }),
     ];
