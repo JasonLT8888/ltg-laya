@@ -223,6 +223,7 @@
     <component id="8gel6a" name="btn_notice.xml" path="/cmp/"/>
     <component id="8gel6b" name="btn_addshortcut.xml" path="/cmp/"/>
     <component id="8gel6c" name="btn_findgame.xml" path="/cmp/"/>
+    <image id="odt06d" name="sp_shou(1).png" path="/img/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

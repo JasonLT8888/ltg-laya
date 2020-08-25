@@ -144,6 +144,31 @@ class LTG_Com_FindGameData {
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_MyGameData.ts":
+/*!*****************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_MyGameData.ts ***!
+  \*****************************************************/
+/*! exports provided: LTG_Com_MyGameData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_MyGameData", function() { return LTG_Com_MyGameData; });
+/* harmony import */ var _Mediator_LTG_UI_MyGameMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_MyGameMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_MyGameMediator.ts");
+
+/**
+ * -我的小程序-
+ */
+class LTG_Com_MyGameData {
+    Send() {
+        _Mediator_LTG_UI_MyGameMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Data/LTG_Com_NoticeData.ts":
 /*!*****************************************************!*\
   !*** ./src/LTG_CommonUI/Data/LTG_Com_NoticeData.ts ***!
@@ -318,6 +343,41 @@ class LTG_UI_HideMenuMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
     _OnClickFindGame() {
         let data = new _Data_LTG_Com_FindGameData__WEBPACK_IMPORTED_MODULE_4__["LTG_Com_FindGameData"]();
         data.Send();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_MyGameMediator.ts":
+/*!************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_MyGameMediator.ts ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_MyGameMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_MyGame__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_MyGame */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_MyGame.ts");
+
+
+class LTG_UI_MyGameMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_MyGameMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_MyGame__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this.ui.m_view.m_btn_back.onClick(this, this._OnClickBack);
+    }
+    _OnClickBack() {
+        this.Hide();
     }
 }
 
@@ -17478,6 +17538,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ui_Main_UI_CommonUI2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_CommonUI2 */ "./src/ui/Main/UI_CommonUI2.ts");
 /* harmony import */ var _UI_MainMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
 /* harmony import */ var _LTG_CommonUI_Mediator_LTG_UI_HideMenuMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator.ts");
+/* harmony import */ var _LTG_CommonUI_Data_LTG_Com_MyGameData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_MyGameData */ "./src/LTG_CommonUI/Data/LTG_Com_MyGameData.ts");
+
 
 
 
@@ -17494,6 +17556,9 @@ class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IM
         this._demos = [
             new UIDemoData("隐藏菜单", () => {
                 _LTG_CommonUI_Mediator_LTG_UI_HideMenuMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
+            }),
+            new UIDemoData("我的小程序", () => {
+                new _LTG_CommonUI_Data_LTG_Com_MyGameData__WEBPACK_IMPORTED_MODULE_4__["LTG_Com_MyGameData"]().Send();
             }),
         ];
     }

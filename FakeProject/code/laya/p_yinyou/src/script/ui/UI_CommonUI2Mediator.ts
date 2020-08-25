@@ -2,6 +2,7 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_CommonUI2 from "../../ui/Main/UI_CommonUI2";
 import { UI_MainMediator } from "./UI_MainMediator";
 import LTG_UI_HideMenuMediator from "../../LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator";
+import { LTG_Com_MyGameData } from "../../LTG_CommonUI/Data/LTG_Com_MyGameData";
 
 class UIDemoData {
 
@@ -29,6 +30,9 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
     private _demos: UIDemoData[] = [
         new UIDemoData("隐藏菜单", () => {
             LTG_UI_HideMenuMediator.instance.Show();
+        }),
+        new UIDemoData("我的小程序", () => {
+            new LTG_Com_MyGameData().Send();
         }),
     ];
 
