@@ -72,9 +72,9 @@
     <image id="8gel1z" name="sp_jx2.png" path="/img/"/>
     <component id="8gel20" name="progress_01.xml" path="/cmp/"/>
     <image id="8gel21" name="sp_xingyun.png" path="/img/"/>
-    <image id="8gel22" name="sp_wawaji1.png" path="/img/"/>
-    <image id="8gel23" name="sp_wawaji.png" path="/img/"/>
-    <image id="8gel24" name="sp_zhuzi.png" path="/img/" scale="tile"/>
+    <image id="8gel22" name="sp_wawaji1.png" path="/img/" duplicatePadding="true"/>
+    <image id="8gel23" name="sp_wawaji.png" path="/img/" duplicatePadding="true"/>
+    <image id="8gel24" name="sp_zhuzi.png" path="/img/" scale="tile" duplicatePadding="true"/>
     <image id="8gel25" name="sp_zhua1.png" path="/img/"/>
     <image id="8gel26" name="sp_zhua2.png" path="/img/"/>
     <component id="8gel27" name="view_zhuazi.xml" path="/cmp/"/>

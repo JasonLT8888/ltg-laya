@@ -2,15 +2,19 @@
 <component size="454,1572">
   <displayList>
     <component id="n1_8gel" name="btn_push" src="8gel28" fileName="cmp/btn_push.xml" xy="139,1437"/>
-    <image id="n2_8gel" name="n2" src="8gel1x" fileName="img/sp_shou.png" xy="182,1348"/>
     <component id="n4_8gel" name="progress_push" src="8gel20" fileName="cmp/progress_01.xml" xy="68,1253">
       <ProgressBar value="57" max="100"/>
     </component>
-    <image id="n7_8gel" name="n7" src="8gel22" fileName="img/sp_wawaji1.png" xy="0,696"/>
     <image id="n6_8gel" name="n6" src="8gel21" fileName="img/sp_xingyun.png" xy="83,1145"/>
-    <component id="n9_8gel" name="view_pick" src="8gel27" fileName="cmp/view_zhuazi.xml" xy="151,0"/>
     <image id="n8_8gel" name="n8" src="8gel23" fileName="img/sp_wawaji.png" xy="80,674"/>
+    <component id="n9_8gel" name="view_pick" src="8gel27" fileName="cmp/view_zhuazi.xml" xy="151,0"/>
+    <image id="n7_8gel" name="n7" src="8gel22" fileName="img/sp_wawaji1.png" xy="0,696"/>
     <text id="n12_8gel" name="n12" xy="88,1202" size="149,31" fontSize="24" color="#eee682" text="结束倒计时："/>
     <text id="n13_8gel" name="text_time" xy="228,1202" size="110,31" fontSize="24" color="#c61108" text="00:01:530"/>
+    <image id="n2_8gel" name="img_hand" src="8gel1x" fileName="img/sp_shou.png" xy="182,1348"/>
   </displayList>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="XY" target="n2_8gel" tween="true" startValue="182,1348" endValue="182,1314" duration="6"/>
+    <item time="6" type="XY" target="n2_8gel" tween="true" startValue="182,1314" endValue="182,1348" duration="6"/>
+  </transition>
 </component>

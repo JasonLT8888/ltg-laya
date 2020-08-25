@@ -4,7 +4,7 @@
     <graph id="n0_8gel" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n1_8gel" name="btn_push" src="8gel29" fileName="cmp/view_zww.xml" xy="147,-459">
+    <component id="n1_8gel" name="view" src="8gel29" fileName="cmp/view_zww.xml" xy="147,-459">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
   </displayList>
