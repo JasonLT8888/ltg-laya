@@ -7,6 +7,7 @@ import { LTG_Com_ZhuaWawaData } from "../../LTG_CommonUI/Data/LTG_Com_ZhuaWawaDa
 import { LTG_Com_LimitSkinData } from "../../LTG_CommonUI/Data/LTG_Com_LimitSkinData";
 import { LTG_Com_RollData } from "../../LTG_CommonUI/Data/LTG_Com_RollData";
 import { LTG_Com_WatchDYData } from "../../LTG_CommonUI/Data/LTG_Com_WatchDYData";
+import { LTG_Com_ShareVideoData } from "../../LTG_CommonUI/Data/LTG_Com_ShareVideoData";
 
 class UIDemoData {
 
@@ -66,6 +67,11 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }),
         new UIDemoData("关注抖音号", () => {
             new LTG_Com_WatchDYData().Send();
+        }),
+        new UIDemoData("视频分享", () => {
+            let data = new LTG_Com_ShareVideoData();
+            data.onClosed = Laya.Handler.create(null, (code) => { });
+            data.Send();
         }),
     ];
 

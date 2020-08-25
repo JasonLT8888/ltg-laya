@@ -259,6 +259,41 @@ class LTG_Com_RollData {
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_ShareVideoData.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_ShareVideoData.ts ***!
+  \*********************************************************/
+/*! exports provided: LTG_Com_ShareVideoData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_ShareVideoData", function() { return LTG_Com_ShareVideoData; });
+/* harmony import */ var _Mediator_LTG_UI_ShareVideoMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_ShareVideoMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_ShareVideoMediator.ts");
+
+/**
+ * -分享视频-
+ * @param iconPath 图标路径,建议工程内替换
+ * @param textPath 文字路径,建议工程内替换
+ */
+class LTG_Com_ShareVideoData {
+    constructor() {
+        this.iconPath = null;
+        this.textPath = null;
+        /**
+         * code: int 0 未分享, 1 已分享
+         */
+        this.onClosed = null;
+    }
+    Send() {
+        _Mediator_LTG_UI_ShareVideoMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Data/LTG_Com_WatchDYData.ts":
 /*!******************************************************!*\
   !*** ./src/LTG_CommonUI/Data/LTG_Com_WatchDYData.ts ***!
@@ -809,6 +844,73 @@ class LTG_UI_RollMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
     }
     _OnClickClose() {
         this.Hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_ShareVideoMediator.ts":
+/*!****************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_ShareVideoMediator.ts ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_ShareVideoMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_ShareVideo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_ShareVideo */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_ShareVideo.ts");
+/* harmony import */ var _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+/* harmony import */ var _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
+
+
+
+
+
+class LTG_UI_ShareVideoMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_ShareVideoMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_ShareVideo__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._cacheData = this._openParam;
+        if (this._cacheData == null) {
+            throw new Error("请调用LTG_Com_ShareVideoData进行界面打开操作");
+        }
+        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_4__["default"].IsNullOrEmpty(this._cacheData.iconPath)) {
+            this.ui.m_view.m_loader_icon.url = this._cacheData.iconPath;
+        }
+        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_4__["default"].IsNullOrEmpty(this._cacheData.textPath)) {
+            this.ui.m_view.m_loader_text.url = this._cacheData.textPath;
+        }
+        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+        this.ui.m_view.m_btn_share.onClick(this, this._OnClickShare);
+    }
+    _OnClickClose() {
+        var _a;
+        (_a = this._cacheData.onClosed) === null || _a === void 0 ? void 0 : _a.runWith([0]);
+        this.Hide();
+    }
+    _OnClickShare() {
+        return __awaiter(this, void 0, void 0, function* () {
+            _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.recordManager.ShareVideo(Laya.Handler.create(null, () => {
+                var _a;
+                (_a = this._cacheData.onClosed) === null || _a === void 0 ? void 0 : _a.runWith([1]);
+                this.Hide();
+            }), Laya.Handler.create(null, () => {
+                _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].Toast("取消分享无法获得奖励");
+            }), Laya.Handler.create(null, () => {
+                _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_3__["default"].Toast("分享错误");
+            }));
+        });
     }
 }
 
@@ -18250,6 +18352,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_LimitSkinData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_LimitSkinData */ "./src/LTG_CommonUI/Data/LTG_Com_LimitSkinData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_RollData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_RollData */ "./src/LTG_CommonUI/Data/LTG_Com_RollData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_WatchDYData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_WatchDYData */ "./src/LTG_CommonUI/Data/LTG_Com_WatchDYData.ts");
+/* harmony import */ var _LTG_CommonUI_Data_LTG_Com_ShareVideoData__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_ShareVideoData */ "./src/LTG_CommonUI/Data/LTG_Com_ShareVideoData.ts");
+
 
 
 
@@ -18304,6 +18408,11 @@ class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IM
             }),
             new UIDemoData("关注抖音号", () => {
                 new _LTG_CommonUI_Data_LTG_Com_WatchDYData__WEBPACK_IMPORTED_MODULE_8__["LTG_Com_WatchDYData"]().Send();
+            }),
+            new UIDemoData("视频分享", () => {
+                let data = new _LTG_CommonUI_Data_LTG_Com_ShareVideoData__WEBPACK_IMPORTED_MODULE_9__["LTG_Com_ShareVideoData"]();
+                data.onClosed = Laya.Handler.create(null, (code) => { });
+                data.Send();
             }),
         ];
     }
