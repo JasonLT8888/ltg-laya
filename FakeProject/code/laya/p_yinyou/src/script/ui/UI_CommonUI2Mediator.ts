@@ -11,6 +11,7 @@ import { LTG_Com_ShareVideoData } from "../../LTG_CommonUI/Data/LTG_Com_ShareVid
 import { LTG_Com_SignData } from "../../LTG_CommonUI/Data/LTG_Com_SignData";
 import { SignConfig } from "../config/SignConfig";
 import { RollConfig } from "../config/RollConfig";
+import { LTG_Com_SetData } from "../../LTG_CommonUI/Data/LTG_Com_SetData";
 
 class UIDemoData {
 
@@ -97,6 +98,13 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             let data = new LTG_Com_SignData();
             data.onSign = Laya.Handler.create(null, (config: SignConfig.config, isWatched: boolean) => {
                 console.log("签到", config, "是否观看视频", isWatched);
+            });
+            data.Send();
+        }),
+        new UIDemoData("设置", ()=>{
+            let data = new LTG_Com_SetData();
+            data.onCodeEntered = Laya.Handler.create(null, (code: string)=>{
+                console.log("输入兑换码", code);
             });
             data.Send();
         }),

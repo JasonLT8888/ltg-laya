@@ -237,6 +237,32 @@ class LTG_Com_NoticeData {
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_RewardCodeData.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_RewardCodeData.ts ***!
+  \*********************************************************/
+/*! exports provided: LTG_Com_RewardCodeData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_RewardCodeData", function() { return LTG_Com_RewardCodeData; });
+/* harmony import */ var _Mediator_LTG_UI_RewardCodeMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_RewardCodeMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_RewardCodeMediator.ts");
+
+/**
+ * -兑换码界面-
+ * @param onCodeEntered
+ */
+class LTG_Com_RewardCodeData {
+    Send() {
+        _Mediator_LTG_UI_RewardCodeMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Data/LTG_Com_RollData.ts":
 /*!***************************************************!*\
   !*** ./src/LTG_CommonUI/Data/LTG_Com_RollData.ts ***!
@@ -252,6 +278,31 @@ __webpack_require__.r(__webpack_exports__);
 class LTG_Com_RollData {
     Send() {
         _Mediator_LTG_UI_RollMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
+        return 0;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Data/LTG_Com_SetData.ts":
+/*!**************************************************!*\
+  !*** ./src/LTG_CommonUI/Data/LTG_Com_SetData.ts ***!
+  \**************************************************/
+/*! exports provided: LTG_Com_SetData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LTG_Com_SetData", function() { return LTG_Com_SetData; });
+/* harmony import */ var _Mediator_LTG_UI_SetMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Mediator/LTG_UI_SetMediator */ "./src/LTG_CommonUI/Mediator/LTG_UI_SetMediator.ts");
+
+/**
+ * -设置界面-
+ */
+class LTG_Com_SetData {
+    Send() {
+        _Mediator_LTG_UI_SetMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(this);
         return 0;
     }
 }
@@ -745,6 +796,51 @@ class LTG_UI_NoticeMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_I
 
 /***/ }),
 
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_RewardCodeMediator.ts":
+/*!****************************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_RewardCodeMediator.ts ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_RewardCodeMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_RewardCode */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_RewardCode.ts");
+
+
+class LTG_UI_RewardCodeMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_RewardCodeMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_RewardCode__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._cacheData = this._openParam;
+        if (this._cacheData == null) {
+            throw new Error("请调用LTG_Com_RewardCodeData进行界面打开操作");
+        }
+        this.ui.m_view.m_btn_cancel.onClick(this, this._OnClickCancel);
+        this.ui.m_view.m_btn_confirm.onClick(this, this._OnClickOk);
+    }
+    _OnClickOk() {
+        var _a;
+        this.Hide();
+        (_a = this._cacheData.onCodeEntered) === null || _a === void 0 ? void 0 : _a.runWith([this.ui.m_view.m_text_input.text]);
+    }
+    _OnClickCancel() {
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTG_CommonUI/Mediator/LTG_UI_RollMediator.ts":
 /*!**********************************************************!*\
   !*** ./src/LTG_CommonUI/Mediator/LTG_UI_RollMediator.ts ***!
@@ -868,6 +964,74 @@ class LTG_UI_RollMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
     _OnClickFreeRoll() {
         _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.freeRollCount--;
         this._DoRoll();
+    }
+    _OnClickClose() {
+        this.Hide();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/LTG_CommonUI/Mediator/LTG_UI_SetMediator.ts":
+/*!*********************************************************!*\
+  !*** ./src/LTG_CommonUI/Mediator/LTG_UI_SetMediator.ts ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTG_UI_SetMediator; });
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _UI_LTCom_LTG_UI_Set__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UI/LTCom/LTG_UI_Set */ "./src/LTG_CommonUI/UI/LTCom/LTG_UI_Set.ts");
+/* harmony import */ var _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
+/* harmony import */ var _Data_LTG_Com_RewardCodeData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Data/LTG_Com_RewardCodeData */ "./src/LTG_CommonUI/Data/LTG_Com_RewardCodeData.ts");
+
+
+
+
+class LTG_UI_SetMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new LTG_UI_SetMediator();
+            this._instance._classDefine = _UI_LTCom_LTG_UI_Set__WEBPACK_IMPORTED_MODULE_1__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        // your code
+        this._cacheData = this._openParam;
+        if (this._cacheData == null) {
+            throw new Error("请调用LTG_Com_SetData进行界面打开操作");
+        }
+        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
+        this.ui.m_view.m_toggle_music.onClick(this, this._OnClickMusic);
+        this.ui.m_view.m_toggle_shake.onClick(this, this._OnClickShake);
+        this.ui.m_view.m_btn_code.onClick(this, this._OnClickCode);
+        this.ui.m_view.m_toggle_music.m_toggle_state.selectedIndex = _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isMusicOn ? 1 : 0;
+        this.ui.m_view.m_toggle_shake.m_toggle_state.selectedIndex = _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isShakeOn ? 1 : 0;
+    }
+    _OnClickCode() {
+        this.Hide();
+        let data = new _Data_LTG_Com_RewardCodeData__WEBPACK_IMPORTED_MODULE_3__["LTG_Com_RewardCodeData"]();
+        data.onCodeEntered = this._cacheData.onCodeEntered;
+        data.Send();
+    }
+    _OnClickMusic() {
+        var _a;
+        _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isMusicOn = !_LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isMusicOn;
+        _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].SaveToDisk();
+        this.ui.m_view.m_toggle_music.m_toggle_state.selectedIndex = _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isMusicOn ? 1 : 0;
+        (_a = this._cacheData.onMusicToggled) === null || _a === void 0 ? void 0 : _a.run();
+    }
+    _OnClickShake() {
+        var _a;
+        _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isShakeOn = !_LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isShakeOn;
+        _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].SaveToDisk();
+        this.ui.m_view.m_toggle_shake.m_toggle_state.selectedIndex = _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isShakeOn ? 1 : 0;
+        (_a = this._cacheData.onShakeToggled) === null || _a === void 0 ? void 0 : _a.run();
     }
     _OnClickClose() {
         this.Hide();
@@ -10780,335 +10944,6 @@ class View_WxSideGames {
 
 /***/ }),
 
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/CommonRewardData.ts":
-/*!*************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/CommonRewardData.ts ***!
-  \*************************************************************/
-/*! exports provided: CommonRewardData, RewardItem */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommonRewardData", function() { return CommonRewardData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RewardItem", function() { return RewardItem; });
-class CommonRewardData {
-}
-class RewardItem {
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/EndLoseOpenData.ts":
-/*!************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/EndLoseOpenData.ts ***!
-  \************************************************************/
-/*! exports provided: EndLoseOpenData */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EndLoseOpenData", function() { return EndLoseOpenData; });
-class EndLoseOpenData {
-    constructor() {
-        /**
-         * 是否显示导流位
-         */
-        this.enableShowGames = true;
-        /**
-         * 展示文字
-         */
-        this.showText = null;
-        /**
-         * 关闭事件
-         * closeType: number
-         *  0 :  重新开始
-         *  1 :  观看完广告
-         */
-        this.onClose = null;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/EndRewardOpenData.ts":
-/*!**************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/EndRewardOpenData.ts ***!
-  \**************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EndRewardOpenData; });
-/**
- * 结算奖励界面(导流)
- */
-class EndRewardOpenData {
-    constructor() {
-        /**
-         * 是否显示导流位
-         */
-        this.enableShowGames = true;
-        /**
-         * 奖励图片图标
-         */
-        this.iconPath = null;
-        /**
-         * 展示文字
-         */
-        this.showText = null;
-        /**
-         * 奖励金币数量
-         */
-        this.rewardCount = 30;
-        /**
-         * 关闭事件(部分平台数据为伪造数据)
-         * closeType: number
-         *      0 :  普通领取
-         *      1 :  多倍领取
-         *      2 :  点击返回按钮
-         * fromObj: fgui.GObject
-         *      用于作为飞金币的起点
-         */
-        this.onClose = null;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/EndShareOpenData.ts":
-/*!*************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/EndShareOpenData.ts ***!
-  \*************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EndShareOpenData; });
-/**
- * 结算分享界面
- */
-class EndShareOpenData {
-    constructor() {
-        /**
-         * 提示信息
-         */
-        this.noticeStr = "让所有人都知道你的厉害";
-        /**
-         * 奖励物品图标,如果为null则使用默认
-         */
-        this.rewardIcon = null;
-        /**
-         * 奖励文字内容
-         */
-        this.rewardText = "x500";
-        /**
-         * 关闭事件(部分平台数据为伪造数据)
-         * closeType: number
-         *      0 :  未分享
-         *      1 :  已分享
-         * fromObj: fgui.GObject
-         *      用于作为飞金币的起点
-         */
-        this.onClose = null;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/OfflineOpenData.ts":
-/*!************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/OfflineOpenData.ts ***!
-  \************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return OfflineOpenData; });
-/**
- * 离线收益界面数据
- */
-class OfflineOpenData {
-    constructor() {
-        /**
-         * 离线时间,分钟
-         */
-        this.offlineMinutes = 0;
-        /**
-         * 离线奖励
-         */
-        this.rewardCount = 1234;
-        /**
-         * 看视频倍数
-         */
-        this.rewardScake = 3.5;
-        /**
-         * 关闭事件(部分平台数据为伪造数据)
-         * closeType: number
-         *      0 :  未分享
-         *      1 :  已分享
-         * fromObj: fgui.GObject
-         *      用于作为飞金币的起点
-         */
-        this.onClose = null;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/OneMoreOpenData.ts":
-/*!************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/OneMoreOpenData.ts ***!
-  \************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return OneMoreOpenData; });
-class OneMoreOpenData {
-    constructor() {
-        this.rewardText = "+300";
-        this.rewardIcon = null;
-        /**
-         * 关闭事件
-         * closeType: number
-         *      0 :  直接关闭
-         *      1 :  普通领取
-         *      2 :  双倍领取
-         * fromObj: fgui.GObject
-         *      用于作为飞金币的起点
-         */
-        this.onClose = null;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/RollOpenData.ts":
-/*!*********************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/RollOpenData.ts ***!
-  \*********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RollOpenData; });
-class RollOpenData {
-    constructor() {
-        /**
-         * 图标列表
-         */
-        this.iconList = [];
-        /**
-         * 名字列表
-         */
-        this.titleList = [];
-        /**
-         * 随机权重
-         */
-        this.rollWeight = [1, 1, 1, 1, 1, 1, 1];
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/SetOpenData.ts":
-/*!********************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/SetOpenData.ts ***!
-  \********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SetOpenData; });
-class SetOpenData {
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/TrySkinOpenData.ts":
-/*!************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/TrySkinOpenData.ts ***!
-  \************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TrySkinOpenData; });
-/**
- * 皮肤试用界面数据
- */
-class TrySkinOpenData {
-    constructor() {
-        /**
-         * 关闭事件(部分平台数据为伪造数据)
-         * closeType: number
-         *      -1 :  不试用
-         *      >=0 :  试用
-         */
-        this.onClose = null;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/Data/UnlockProgressOpenData.ts":
-/*!*******************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/Data/UnlockProgressOpenData.ts ***!
-  \*******************************************************************/
-/*! exports provided: UnlockProgressOpenData */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnlockProgressOpenData", function() { return UnlockProgressOpenData; });
-class UnlockProgressOpenData {
-    constructor() {
-        /**
-         * 起始进度
-         */
-        this.startProgress = 0;
-        /**
-         * 最终进度
-         */
-        this.endProgress = 50;
-        /**
-         * 插值时间
-         */
-        this.tweenTime = 1;
-        /**
-         * 解锁的图标
-         */
-        this.iconPath = null;
-        /**
-         * 关闭事件
-         * closeType: number
-         *  0 :  直接关闭
-         *  1 :  观看完广告
-         *  2 :  点击领取关闭
-         */
-        this.onClose = null;
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/LTGame/UIExt/DefaultUI/UI/LTGame/LTGameBinder.ts":
 /*!**************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/UI/LTGame/LTGameBinder.ts ***!
@@ -13560,177 +13395,6 @@ UI_view_roll_bg_new.URL = "ui://xwcraheakntfiy";
 
 /***/ }),
 
-/***/ "./src/LTGame/UIExt/DefaultUI/UI_BonusBoxMediator.ts":
-/*!***********************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/UI_BonusBoxMediator.ts ***!
-  \***********************************************************/
-/*! exports provided: UI_BonusBoxMediator */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_BonusBoxMediator", function() { return UI_BonusBoxMediator; });
-/* harmony import */ var _script_common_GameData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../script/common/GameData */ "./src/script/common/GameData.ts");
-/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
-/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-/* harmony import */ var _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Data/CommonRewardData */ "./src/LTGame/UIExt/DefaultUI/Data/CommonRewardData.ts");
-/* harmony import */ var _UI_LTUI_UI_BonusBox__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UI/LTUI/UI_BonusBox */ "./src/LTGame/UIExt/DefaultUI/UI/LTUI/UI_BonusBox.ts");
-
-
-
-
-
-
-
-class UI_BonusBoxMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_3__["default"] {
-    constructor() {
-        super(...arguments);
-        this.keyCount = 3;
-        this.weight = [20, 20, 20, 5, 5, 5, 5, 1, 1];
-        this.adItems = [];
-        this.datas = [];
-    }
-    get ui() {
-        return this._ui;
-    }
-    static get instance() {
-        if (this._instance == null) {
-            this._instance = new UI_BonusBoxMediator();
-            this._instance._classDefine = _UI_LTUI_UI_BonusBox__WEBPACK_IMPORTED_MODULE_6__["default"];
-        }
-        return this._instance;
-    }
-    _OnShow() {
-        super._OnShow();
-        this._openData = new _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_5__["CommonRewardData"]();
-        if (this._openParam == null) {
-            console.error("请传入CommonRewardData用于初始化宝箱界面");
-        }
-        else {
-            for (let key in this._openParam) {
-                this._openData[key] = this._openParam[key];
-            }
-        }
-        this.keyCount = 3;
-        if (this._openData) {
-            this.datas = this._openData.datas;
-        }
-        this.adItems = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__["default"].RandomArrayFromArray([0, 1, 2, 3, 4, 5, 6, 7, 8], 3);
-        this.ui.m_btn_close.visible = false; // LTPlatform.instance.platform == EPlatformType.Oppo;
-        this.ui.m_keyList.setVirtual();
-        this.ui.m_keyList.itemRenderer = Laya.Handler.create(this, this.renderKeyItem, null, false);
-        this.ui.m_keyList.numItems = 3;
-        this.ui.m_keyList.refreshVirtualList();
-        this.ui.m_boxList.setVirtual();
-        this.ui.m_boxList.itemRenderer = Laya.Handler.create(this, this.renderBoxItem, null, false);
-        this.ui.m_boxList.on(fairygui.Events.CLICK_ITEM, this, this.clickBox);
-        this.ui.m_boxList.numItems = 9;
-        this.ui.m_boxList.refreshVirtualList();
-        this.ui.m_btn_close.onClick(this, this.Hide);
-        this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
-        this.ui.m_btn_ad.onClick(this, this.addKey);
-        this.ui.m_tog.visible = false;
-        this.ui.m_tog.m_selected.selectedIndex = 1;
-        // this.ui.m_tog.m_selected.selectedIndex = LTSDK.instance.checkState == ECheckState.InCheck ? 0 : 1;
-        // this.ui.m_tog.onClick(this, () => {
-        //     this.ui.m_tog.m_selected.selectedIndex = (this.ui.m_tog.m_selected.selectedIndex + 1) % 2;
-        //     this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
-        // });
-        this.ui.m_btn_ad.m_ad.selectedIndex = 1; //this.ui.m_tog.m_selected.selectedIndex; 
-    }
-    addKey() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.ui.m_tog.m_selected.selectedIndex == 1) {
-                let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ShowRewardVideoAdAsync();
-                if (result) {
-                    this.keyCount = 3;
-                    this.ui.m_keyList.refreshVirtualList();
-                    this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
-                }
-                else {
-                    _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过广告无法获得奖励");
-                }
-            }
-            else {
-                this.Hide();
-            }
-        });
-    }
-    clickBox(item) {
-        if (item.m_isclicked.selectedIndex == 1) {
-            return;
-        }
-        if (parseInt(item.data.toString()) == 1 || this.keyCount == 0) {
-            this.getAdBonus(item);
-        }
-        else {
-            this.getBonus(item);
-        }
-    }
-    getAdBonus(item) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ShowRewardVideoAdAsync();
-            if (result) {
-                this.getBonus(item);
-            }
-            else {
-                _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast("跳过广告无法获得奖励");
-            }
-        });
-    }
-    getBonus(item) {
-        let data = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__["default"].RandomFromWithWeight(this.datas, this.weight);
-        item.m_title.text = `${data.type == 1 ? '皮肤' : '金币'}${data.value}`;
-        item.m_icon.url = data.icon;
-        _LTUI__WEBPACK_IMPORTED_MODULE_4__["default"].Toast(`恭喜获得${data.type == 1 ? '皮肤' : '金币'}${data.value}`);
-        item.m_isclicked.selectedIndex = 1;
-        if (data.type == 0) {
-            _script_common_GameData__WEBPACK_IMPORTED_MODULE_0__["default"].instance.coinCount += data.value;
-            _script_common_GameData__WEBPACK_IMPORTED_MODULE_0__["default"].SaveToDisk();
-        }
-        else {
-            this._openData.onGetSkin();
-        }
-        if (this.keyCount > 0) {
-            this.keyCount -= 1;
-            this.ui.m_keyList.refreshVirtualList();
-            if (this.ui.m_canclose.selectedIndex == 0) {
-                this.ui.m_canclose.selectedIndex = this.keyCount < 1 ? 1 : 0;
-            }
-            if (!this.ui.m_btn_close.visible && this.ui.m_canclose.selectedIndex == 1) {
-                this.ui.m_btn_close.visible = true;
-                this.ui.m_delay.play();
-            }
-        }
-        this.ui.m_txt_count.text = `可免费开启${this.keyCount}个宝箱`;
-    }
-    renderKeyItem(indx, item) {
-        if (indx < this.keyCount) {
-            item.m_select.selectedIndex = 1;
-        }
-        else {
-            item.m_select.selectedIndex = 0;
-        }
-    }
-    renderBoxItem(indx, item) {
-        if (this.adItems.indexOf(indx) >= 0) {
-            item.m_ad.selectedIndex = 1;
-            item.data = 1;
-        }
-        else {
-            item.m_ad.selectedIndex = 0;
-            item.data = 0;
-        }
-    }
-    _OnHide() {
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/LTGame/UIExt/DefaultUI/UI_CommomToastMediator.ts":
 /*!**************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/UI_CommomToastMediator.ts ***!
@@ -13856,414 +13520,6 @@ class UI_CommonLockScreenMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED
         this._sortOrder = Number.MAX_SAFE_INTEGER;
         super._OnShow();
         // your code
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/UI_CommonTrySkinMediator.ts":
-/*!****************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/UI_CommonTrySkinMediator.ts ***!
-  \****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_TrySkinMediator; });
-/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
-/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-/* harmony import */ var _Data_TrySkinOpenData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Data/TrySkinOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/TrySkinOpenData.ts");
-/* harmony import */ var _UI_LTUI_UI_TrySkin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI/LTUI/UI_TrySkin */ "./src/LTGame/UIExt/DefaultUI/UI/LTUI/UI_TrySkin.ts");
-
-
-
-
-
-
-
-
-
-class UI_TrySkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_5__["default"] {
-    constructor() {
-        super(...arguments);
-        this.needPay = false;
-    }
-    static get instance() {
-        if (this._instance == null) {
-            this._instance = new UI_TrySkinMediator();
-            this._instance._classDefine = _UI_LTUI_UI_TrySkin__WEBPACK_IMPORTED_MODULE_8__["default"];
-        }
-        return this._instance;
-    }
-    _OnShow() {
-        super._OnShow();
-        this._openData = new _Data_TrySkinOpenData__WEBPACK_IMPORTED_MODULE_7__["default"]();
-        if (this._openParam == null) {
-            console.error("请传入TrySkinOpenData用于初始化皮肤试用界面");
-        }
-        else {
-            for (let key in this._openParam) {
-                this._openData[key] = this._openParam[key];
-            }
-        }
-        this.Init();
-        //LTPlatform.instance.ShowBannerAd();
-    }
-    Init() {
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].InCheck:
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].Normal:
-            default:
-                this.ui.m_check_type.selectedIndex = 1;
-                this.ui.m_btn_no.title = '不了，谢谢';
-                this.ui.m_btn_watch.title = "点击试用";
-                if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo) {
-                    this.ui.m_check_type.selectedIndex = 1;
-                    this.ui.m_btn_pay.m_select.selectedIndex = 0;
-                    this.ui.m_btn_no.title = '不了，谢谢';
-                    this.ui.m_btn_watch.title = "点击试用";
-                    this.ui.m_oppo.selectedIndex = 1;
-                }
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].NoGame:
-                this.ui.m_check_type.selectedIndex = 2;
-                this.ui.m_btn_no.title = '试用，谢谢';
-                break;
-        }
-        this.ui.m_btn_close.onClick(this, this.Hide);
-        this.ui.m_btn_watch.onClick(this, this.onVideoClick);
-        this.ui.m_btn_try.onClick(this, this.onVideoClick);
-        this.ui.m_btn_pay.onClick(this, this._onToggleClick);
-        this.ui.m_btn_no.onClick(this, this._onClickNo);
-        if (this._openData && this._openData.iconPaths) {
-            this._ui.m_icon.url = this._openData.iconPaths[0];
-        }
-    }
-    _onClickNo() {
-        this.Hide();
-        // if (LTSDK.instance.checkState == ECheckState.InCheck || LTPlatform.instance.platform == EPlatformType.Oppo) {
-        // } else {
-        //     if (this.ui.m_btn_pay.m_select.selectedIndex == 1) {
-        //         this.onVideoClick();
-        //     } else {
-        //         this.Hide();
-        //     }
-        // }
-    }
-    _onToggleClick() {
-        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].InCheck) {
-            // this.ui.m_btn_pay
-            return;
-        }
-        else if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].Normal) {
-            this.ui.m_btn_pay.m_select.selectedIndex = (this.ui.m_btn_pay.m_select.selectedIndex + 1) % 2;
-            return;
-        }
-        let rand = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_2__["default"].RandomInt(0, 100);
-        this.needPay = rand < _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.payRate;
-        if (this.needPay) {
-            this.onVideoClick();
-        }
-        else {
-            this.ui.m_btn_pay.m_select.selectedIndex = (this.ui.m_btn_pay.m_select.selectedIndex + 1) % 2;
-            this.ui.m_btn_no.title = this.ui.m_btn_pay.m_select.selectedIndex == 1 ? '试用，谢谢' : '不用，谢谢';
-        }
-    }
-    onVideoClick() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let res = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
-            if (res) {
-                if (this._openData && this._openData.onClose) {
-                    this._openData.onClose.runWith(0);
-                    this.Hide();
-                }
-            }
-            else {
-                _LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].Toast('完整观看视频可获得奖励');
-            }
-        });
-    }
-    _OnHide() {
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/UI_CommonUnlockProgressMediator.ts":
-/*!***********************************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/UI_CommonUnlockProgressMediator.ts ***!
-  \***********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonUnlockProgressMediator; });
-/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
-/* harmony import */ var _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
-/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-/* harmony import */ var _Data_UnlockProgressOpenData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Data/UnlockProgressOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/UnlockProgressOpenData.ts");
-/* harmony import */ var _UI_LTUI_UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI/LTUI/UI_CommonUnlockProgress */ "./src/LTGame/UIExt/DefaultUI/UI/LTUI/UI_CommonUnlockProgress.ts");
-
-
-
-
-
-
-
-
-
-class UI_CommonUnlockProgressMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_5__["default"] {
-    static get instance() {
-        if (this._instance == null) {
-            this._instance = new UI_CommonUnlockProgressMediator();
-            this._instance._classDefine = _UI_LTUI_UI_CommonUnlockProgress__WEBPACK_IMPORTED_MODULE_8__["default"];
-        }
-        return this._instance;
-    }
-    _OnShow() {
-        super._OnShow();
-        // your code
-        this._openData = new _Data_UnlockProgressOpenData__WEBPACK_IMPORTED_MODULE_7__["UnlockProgressOpenData"]();
-        if (this._openParam == null) {
-            console.error("请传入UnlockProgressOpenData用于初始化进度解锁界面");
-        }
-        else {
-            for (let key in this._openParam) {
-                this._openData[key] = this._openParam[key];
-            }
-        }
-        let urlPath = this.ui.m_icon_bg.resourceURL;
-        this.ui.m_icon_bg.visible = false;
-        let index = this.ui.getChildIndex(this.ui.m_icon_bg) + 1;
-        if (this._openData.iconPath) {
-            urlPath = this._openData.iconPath;
-            // this.ui.m_icon_bg.url = this._openData.iconPath;
-            // this.ui.m_icon_front.url = this._openData.iconPath;
-        }
-        let imgbg = fgui.UIPackage.createObjectFromURL(urlPath).asImage;
-        this.ui.addChildAt(imgbg, index);
-        imgbg.setPivot(this.ui.m_icon_bg.pivotX, this.ui.m_icon_bg.pivotY, true);
-        imgbg.setXY(this.ui.m_icon_bg.x, this.ui.m_icon_bg.y);
-        imgbg.grayed = true;
-        this._imgFront = fgui.UIPackage.createObjectFromURL(urlPath).asImage;
-        this.ui.addChildAt(this._imgFront, index + 1);
-        this._imgFront.setPivot(this.ui.m_icon_bg.pivotX, this.ui.m_icon_bg.pivotY, true);
-        this._imgFront.setXY(this.ui.m_icon_bg.x, this.ui.m_icon_bg.y);
-        this._imgFront.fillMethod = fgui.FillMethod.Vertical;
-        this._imgFront.fillOrigin = fgui.FillOrigin.Bottom;
-        this._imgFront.fillAmount = this._openData.startProgress * 0.01;
-        this.ui.m_text_progress.text = this._openData.startProgress + "%";
-        this._TweenProgress();
-        switch (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState) {
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].InCheck:
-                this.ui.m_check_state.selectedIndex = 1;
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].NoGame:
-                this.ui.m_check_state.selectedIndex = 0;
-                break;
-            case _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].Normal:
-                this.ui.m_check_state.selectedIndex = 0;
-                break;
-        }
-        this.ui.m_btn_get.visible = false;
-        this.ui.m_btn_get.onClick(this, this._OnClickGet);
-        this.ui.m_btn_nothanks.onClick(this, this._OnClickClose);
-    }
-    _TweenProgress() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let time = 0;
-            while (time < this._openData.tweenTime) {
-                yield _Async_Awaiters__WEBPACK_IMPORTED_MODULE_2__["default"].Frames(1);
-                time += Laya.timer.delta / 1000;
-                let progress = _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Lerp(this._openData.startProgress, this._openData.endProgress, _LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_3__["default"].Clamp01(time / this._openData.tweenTime));
-                this._imgFront.fillAmount = 0.01 * progress;
-                this.ui.m_text_progress.text = progress.toFixed(0) + "%";
-            }
-            if (this._openData.endProgress < 100) {
-                this._OnClickClose();
-            }
-            else {
-                // this.ui.m_btn_get.m_bg_type.selectedIndex = 1;
-                // this.ui.m_btn_get.m_btn_type.selectedIndex = LTSDK.instance.checkState == ECheckState.NoGame ? 0 : 3;
-                this.ui.m_btn_get.visible = true;
-                this.ui.m_show_close.play();
-            }
-        });
-    }
-    _OnClickClose() {
-        if (this._openData.onClose) {
-            this._openData.onClose.runWith([0]);
-        }
-        this.Hide();
-    }
-    _OnClickGet() {
-        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].NoGame) {
-            this._OnClickWatchAd();
-        }
-        else {
-            if (this._openData.onClose) {
-                this._openData.onClose.runWith([2]);
-            }
-            this.Hide();
-        }
-    }
-    _OnClickWatchAd() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
-            if (result) {
-                if (this._openData.onClose) {
-                    this._openData.onClose.runWith([1]);
-                }
-                this.Hide();
-            }
-            else {
-                _LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].Toast("跳过广告无法获得奖励");
-            }
-        });
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/LTGame/UIExt/DefaultUI/UI_ExSkinMediator.ts":
-/*!*********************************************************!*\
-  !*** ./src/LTGame/UIExt/DefaultUI/UI_ExSkinMediator.ts ***!
-  \*********************************************************/
-/*! exports provided: UI_ExSkinMediator */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_ExSkinMediator", function() { return UI_ExSkinMediator; });
-/* harmony import */ var _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../SDK/common/ECheckState */ "./src/SDK/common/ECheckState.ts");
-/* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
-/* harmony import */ var _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
-/* harmony import */ var _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Platform/EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
-/* harmony import */ var _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Platform/LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
-/* harmony import */ var _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
-/* harmony import */ var _LTUI__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-/* harmony import */ var _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Data/CommonRewardData */ "./src/LTGame/UIExt/DefaultUI/Data/CommonRewardData.ts");
-/* harmony import */ var _UI_LTUI_UI_ExSkin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./UI/LTUI/UI_ExSkin */ "./src/LTGame/UIExt/DefaultUI/UI/LTUI/UI_ExSkin.ts");
-
-
-
-
-
-
-
-
-
-/**限定皮肤 */
-class UI_ExSkinMediator extends _FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_5__["default"] {
-    get ui() {
-        return this._ui;
-    }
-    static get instance() {
-        if (this._instance == null) {
-            this._instance = new UI_ExSkinMediator();
-            this._instance._classDefine = _UI_LTUI_UI_ExSkin__WEBPACK_IMPORTED_MODULE_8__["default"];
-        }
-        return this._instance;
-    }
-    _OnShow() {
-        super._OnShow();
-        this._openData = new _Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_7__["CommonRewardData"]();
-        console.log(this.ui);
-        if (this._openParam == null) {
-            console.error("请传入CommonRewardData用于初始化限定皮肤界面");
-        }
-        else {
-            for (let key in this._openParam) {
-                this._openData[key] = this._openParam[key];
-            }
-        }
-        if (this._openData && this._openData.datas) {
-            console.log(this.ui.m_icon);
-            this.ui.m_icon.url = this._openData.datas[0].icon;
-        }
-        if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ExSkinAdCount >= 3) {
-            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ExSkinAdCount = 0;
-            _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].SaveToDisk();
-        }
-        this.ui.m_list_pro.setVirtual();
-        this.ui.m_list_pro.itemRenderer = Laya.Handler.create(this, this.showProgress, null, false);
-        this.ui.m_list_pro.numItems = 3;
-        this.ui.m_list_pro.refreshVirtualList();
-        this.ui.m_btn_close.onClick(this, () => {
-            this.Hide();
-        });
-        this.ui.m_btn_ad.onClick(this, this.getReward);
-        this.ui.m_tog.onClick(this, () => {
-            this.ui.m_tog.m_selected.selectedIndex = (this.ui.m_tog.m_selected.selectedIndex + 1) % 2;
-            this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
-        });
-        if (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.platform == _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_3__["EPlatformType"].Oppo) {
-            this.ui.m_btn_close.visible = true;
-            this.ui.m_tog.visible = false;
-            this.ui.m_tog.m_selected.selectedIndex = 1;
-        }
-        if (_SDK_LTSDK__WEBPACK_IMPORTED_MODULE_1__["default"].instance.checkState == _SDK_common_ECheckState__WEBPACK_IMPORTED_MODULE_0__["ECheckState"].InCheck) {
-            this.ui.m_tog.m_selected.selectedIndex = 0;
-        }
-        else {
-            this.ui.m_tog.m_selected.selectedIndex = 1;
-        }
-        this.ui.m_btn_ad.m_ad.selectedIndex = this.ui.m_tog.m_selected.selectedIndex;
-        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowBannerAd();
-    }
-    getReward() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.ui.m_tog.m_selected.selectedIndex == 1) {
-                let result = yield _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.ShowRewardVideoAdAsync();
-                if (result) {
-                    _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ExSkinAdCount += 1;
-                    _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].SaveToDisk();
-                    this.ui.m_list_pro.refreshVirtualList();
-                    if (_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ExSkinAdCount >= 3) {
-                        this.getSkin();
-                    }
-                }
-                else {
-                    _LTUI__WEBPACK_IMPORTED_MODULE_6__["default"].Toast("跳过广告无法获得奖励");
-                }
-            }
-            else {
-                this.Hide();
-            }
-        });
-    }
-    getSkin() {
-        if (this._openData && this._openData.onGetSkin) {
-            this._openData.onGetSkin();
-        }
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ExSkinAdCount = 0;
-        _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].SaveToDisk();
-        this.Hide();
-    }
-    showProgress(index, item) {
-        if (index < _Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.ExSkinAdCount) {
-            item.m_select.selectedIndex = 1;
-        }
-        else {
-            item.m_select.selectedIndex = 0;
-        }
-    }
-    _OnHide() {
-        _Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_4__["default"].instance.HideBannerAd();
     }
 }
 
@@ -15129,27 +14385,10 @@ class LoadUIPack {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LTUI; });
-/* harmony import */ var _DefaultUI_Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultUI/Data/CommonRewardData */ "./src/LTGame/UIExt/DefaultUI/Data/CommonRewardData.ts");
-/* harmony import */ var _DefaultUI_UI_CommomToastMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DefaultUI/UI_CommomToastMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommomToastMediator.ts");
-/* harmony import */ var _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DefaultUI/UI_CommonLoadMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonLoadMediator.ts");
-/* harmony import */ var _DefaultUI_UI_CommonLockScreenMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DefaultUI/UI_CommonLockScreenMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonLockScreenMediator.ts");
-/* harmony import */ var _DefaultUI_UI_CommonTrySkinMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DefaultUI/UI_CommonTrySkinMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonTrySkinMediator.ts");
-/* harmony import */ var _DefaultUI_UI_CommonUnlockProgressMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DefaultUI/UI_CommonUnlockProgressMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonUnlockProgressMediator.ts");
-/* harmony import */ var _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
-/* harmony import */ var _DefaultUI_UI_BonusBoxMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./DefaultUI/UI_BonusBoxMediator */ "./src/LTGame/UIExt/DefaultUI/UI_BonusBoxMediator.ts");
-/* harmony import */ var _DefaultUI_UI_ExSkinMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./DefaultUI/UI_ExSkinMediator */ "./src/LTGame/UIExt/DefaultUI/UI_ExSkinMediator.ts");
-
-
-// import UI_CommonEndLoseMediator from "./DefaultUI/UI_CommonEndLoseMediator";
-// import UI_CommonEndRewardMediator from "./DefaultUI/UI_CommonEndRewardMediator";
-// import UI_CommonEndShareMediator from "./DefaultUI/UI_CommonEndShareMediator";
-
-
-// import UI_CommonOfflineMediator from "./DefaultUI/UI_CommonOfflineMediator";
-// import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
-// import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
-// import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
-
+/* harmony import */ var _DefaultUI_UI_CommomToastMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultUI/UI_CommomToastMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommomToastMediator.ts");
+/* harmony import */ var _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DefaultUI/UI_CommonLoadMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonLoadMediator.ts");
+/* harmony import */ var _DefaultUI_UI_CommonLockScreenMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DefaultUI/UI_CommonLockScreenMediator */ "./src/LTGame/UIExt/DefaultUI/UI_CommonLockScreenMediator.ts");
+/* harmony import */ var _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DefaultUI/UI_FlyPanelMediator */ "./src/LTGame/UIExt/DefaultUI/UI_FlyPanelMediator.ts");
 
 
 
@@ -15157,103 +14396,43 @@ __webpack_require__.r(__webpack_exports__);
 class LTUI {
     static Toast(str) {
         console.log("[Toast]" + str);
-        _DefaultUI_UI_CommomToastMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show(str);
+        _DefaultUI_UI_CommomToastMediator__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Show(str);
     }
     static ShowLoading(str, isBig = false) {
-        if (_DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.isShow) {
+        if (_DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.isShow) {
             console.log("加载弹窗界面已打开");
             return;
         }
-        _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show([str, isBig]);
+        _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Show([str, isBig]);
     }
     static HideLoading() {
-        _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Hide();
+        _DefaultUI_UI_CommonLoadMediator__WEBPACK_IMPORTED_MODULE_1__["default"].instance.Hide();
     }
     static BoomObjs(fromObj, boomCount = 10, flyTime = 1, circleRadius = 60) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_6__["default"].instance.BoomObjs(fromObj, boomCount, flyTime, circleRadius);
+            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.BoomObjs(fromObj, boomCount, flyTime, circleRadius);
         });
     }
     static FlyObjsTo(fromObj, toObj, flyCount = 10, flyTime = 1, circleRadius = 60) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_6__["default"].instance.FlyObjs(fromObj, toObj, flyCount, flyTime, circleRadius);
+            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.FlyObjs(fromObj, toObj, flyCount, flyTime, circleRadius);
         });
     }
     static FlyCoinsTo(fromObj, toObj, flyIcon = null, flyCount = 10, flyTime = 1, circleRadius = 60) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_6__["default"].instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
+            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.FlyCoins(fromObj, toObj, flyIcon, flyCount, flyTime, circleRadius);
         });
     }
     static BoomCoins(fromObj, flyIcon = null, flyCount = 10, flyTime = 1, circleRadius = 60) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_6__["default"].instance.BoomCoins(fromObj, flyIcon, flyCount, flyTime, circleRadius);
+            yield _DefaultUI_UI_FlyPanelMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.BoomCoins(fromObj, flyIcon, flyCount, flyTime, circleRadius);
         });
     }
-    /**
-     * 打开再来一份界面
-     * @param openData
-     */
-    static ShowOneMore(openData) {
-        //   UI_CommonOneMoreMediator.instance.Show(openData);
-    }
-    static ShowEndShare(openData) {
-        // 不在内部进行平台判断,防止开发过程中功能遗漏
-        //   UI_CommonEndShareMediator.instance.Show(openData);
-    }
-    static ShowEndReward(openData) {
-        // UI_CommonEndRewardMediator.instance.Show(openData);
-    }
-    static ShowEndLose(openData) {
-        // UI_CommonEndLoseMediator.instance.Show(openData);
-    }
-    static ShowUnlockProgress(openData) {
-        _DefaultUI_UI_CommonUnlockProgressMediator__WEBPACK_IMPORTED_MODULE_5__["default"].instance.Show(openData);
-    }
-    static ShowOffline(openData) {
-        // UI_CommonOfflineMediator.instance.Show(openData);
-    }
-    static ShowTrySkin(openData) {
-        _DefaultUI_UI_CommonTrySkinMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show(openData);
-    }
-    static ShowSet(openData) {
-        // UI_CommonSetMediator.instance.Show(openData);
-    }
-    static ShowRoll(openData) {
-        // UI_CommonRollMediator.instance.Show(openData);
-    }
     static LockScreen() {
-        _DefaultUI_UI_CommonLockScreenMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show();
+        _DefaultUI_UI_CommonLockScreenMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show();
     }
     static UnlockScreen() {
-        _DefaultUI_UI_CommonLockScreenMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Hide();
-    }
-    /**展示九宫宝箱 demo */
-    static ShowBonusBox() {
-        console.error('demo 数据');
-        let openData = new _DefaultUI_Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_0__["CommonRewardData"]();
-        openData.datas = [
-            { type: 0, value: 10, icon: 'ui://75kiu87kbg0016' },
-            { type: 0, value: 20, icon: 'ui://75kiu87kbg0016' },
-            { type: 0, value: 30, icon: 'ui://75kiu87kbg0016' },
-            { type: 0, value: 40, icon: 'ui://75kiu87kbg0016' },
-            { type: 0, value: 50, icon: 'ui://75kiu87kbg0016' },
-            { type: 0, value: 60, icon: 'ui://75kiu87kbg0016' },
-            { type: 0, value: 70, icon: 'ui://75kiu87kbg0016' },
-            { type: 0, value: 80, icon: 'ui://75kiu87kbg0016' },
-            { type: 1, value: 9, icon: 'test/test.png' }
-        ];
-        openData.onGetSkin = () => { LTUI.Toast('恭喜获得皮肤'); };
-        _DefaultUI_UI_BonusBoxMediator__WEBPACK_IMPORTED_MODULE_7__["UI_BonusBoxMediator"].instance.Show(openData);
-    }
-    /**展示限定皮肤 demo */
-    static ShowExSKin() {
-        console.error('demo 数据');
-        let openData = new _DefaultUI_Data_CommonRewardData__WEBPACK_IMPORTED_MODULE_0__["CommonRewardData"]();
-        openData.datas = [
-            { type: 1, value: 9, icon: 'test/test.png' }
-        ];
-        openData.onGetSkin = () => { LTUI.Toast(`恭喜获得限定 皮肤 ${openData.datas[0].value}`); };
-        _DefaultUI_UI_ExSkinMediator__WEBPACK_IMPORTED_MODULE_8__["UI_ExSkinMediator"].instance.Show(openData);
+        _DefaultUI_UI_CommonLockScreenMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Hide();
     }
 }
 
@@ -16916,63 +16095,6 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_3__["LTSt
 
 /***/ }),
 
-/***/ "./src/script/common/GameData.ts":
-/*!***************************************!*\
-  !*** ./src/script/common/GameData.ts ***!
-  \***************************************/
-/*! exports provided: SaveData, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SaveData", function() { return SaveData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameData; });
-/* harmony import */ var _LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/StringEx */ "./src/LTGame/LTUtils/StringEx.ts");
-/* harmony import */ var _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/Commom/CommonSaveData */ "./src/LTGame/Commom/CommonSaveData.ts");
-
-
-class SaveData {
-    constructor() {
-        /**
-         * 金币数量
-         */
-        this.coinCount = 0;
-    }
-}
-class GameData {
-    constructor() {
-        this._savePath = "game01.sav";
-    }
-    static get instance() {
-        if (this._instance == null) {
-            this._instance = new GameData();
-            this._instance._ReadFromFile();
-        }
-        return this._instance._saveData;
-    }
-    static SaveToDisk() {
-        if (!this._instance)
-            return;
-        let json = JSON.stringify(this._instance._saveData);
-        Laya.LocalStorage.setJSON(this._instance._savePath, json);
-        _LTGame_Commom_CommonSaveData__WEBPACK_IMPORTED_MODULE_1__["default"].SaveToDisk();
-    }
-    _ReadFromFile() {
-        let readStr = Laya.LocalStorage.getJSON(this._savePath);
-        this._saveData = new SaveData();
-        if (!_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__["default"].IsNullOrEmpty(readStr)) {
-            let jsonData = JSON.parse(readStr);
-            for (let key in jsonData) {
-                this._saveData[key] = jsonData[key];
-            }
-        }
-        console.log(this._saveData);
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/script/common/GlobalUnit.ts":
 /*!*****************************************!*\
   !*** ./src/script/common/GlobalUnit.ts ***!
@@ -18290,6 +17412,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_WatchDYData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_WatchDYData */ "./src/LTG_CommonUI/Data/LTG_Com_WatchDYData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_ShareVideoData__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_ShareVideoData */ "./src/LTG_CommonUI/Data/LTG_Com_ShareVideoData.ts");
 /* harmony import */ var _LTG_CommonUI_Data_LTG_Com_SignData__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_SignData */ "./src/LTG_CommonUI/Data/LTG_Com_SignData.ts");
+/* harmony import */ var _LTG_CommonUI_Data_LTG_Com_SetData__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../LTG_CommonUI/Data/LTG_Com_SetData */ "./src/LTG_CommonUI/Data/LTG_Com_SetData.ts");
+
 
 
 
@@ -18376,6 +17500,13 @@ class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IM
                 });
                 data.Send();
             }),
+            new UIDemoData("设置", () => {
+                let data = new _LTG_CommonUI_Data_LTG_Com_SetData__WEBPACK_IMPORTED_MODULE_11__["LTG_Com_SetData"]();
+                data.onCodeEntered = Laya.Handler.create(null, (code) => {
+                    console.log("输入兑换码", code);
+                });
+                data.Send();
+            }),
         ];
     }
     static get instance() {
@@ -18417,37 +17548,17 @@ class UI_CommonUI2Mediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IM
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_CommonUIMediator; });
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_EndLoseOpenData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/EndLoseOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/EndLoseOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_EndRewardOpenData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/EndRewardOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/EndRewardOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_EndShareOpenData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/EndShareOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/EndShareOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_OfflineOpenData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/OfflineOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/OfflineOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_OneMoreOpenData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/OneMoreOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/OneMoreOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_RollOpenData__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/RollOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/RollOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_SetOpenData__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/SetOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/SetOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_TrySkinOpenData__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/TrySkinOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/TrySkinOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_DefaultUI_Data_UnlockProgressOpenData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../LTGame/UIExt/DefaultUI/Data/UnlockProgressOpenData */ "./src/LTGame/UIExt/DefaultUI/Data/UnlockProgressOpenData.ts");
-/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
-/* harmony import */ var _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../LTGame/UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
-/* harmony import */ var _ui_Main_UI_CommonUI__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../ui/Main/UI_CommonUI */ "./src/ui/Main/UI_CommonUI.ts");
-/* harmony import */ var _UI_MoudleDemoMediator__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./UI_MoudleDemoMediator */ "./src/script/ui/UI_MoudleDemoMediator.ts");
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_CommonUI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_CommonUI */ "./src/ui/Main/UI_CommonUI.ts");
+/* harmony import */ var _UI_MoudleDemoMediator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_MoudleDemoMediator */ "./src/script/ui/UI_MoudleDemoMediator.ts");
 
 
 
-
-
-
-
-
-
-
-
-
-
-class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_9__["default"] {
+class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
     static get instance() {
         if (this._instance == null) {
             this._instance = new UI_CommonUIMediator();
-            this._instance._classDefine = _ui_Main_UI_CommonUI__WEBPACK_IMPORTED_MODULE_11__["default"];
+            this._instance._classDefine = _ui_Main_UI_CommonUI__WEBPACK_IMPORTED_MODULE_1__["default"];
         }
         return this._instance;
     }
@@ -18455,165 +17566,12 @@ class UI_CommonUIMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMP
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
-        this.ui.m_btn_endshare.onClick(this, this._OnClickEndShare);
-        this.ui.m_btn_endreward.onClick(this, this._OnClickEndReward);
-        this.ui.m_btn_offline.onClick(this, this._OnClickOffline);
-        this.ui.m_btn_tryskin.onClick(this, this._OnClickTrySkin);
-        this.ui.m_btn_set.onClick(this, this._OnClickSet);
-        this.ui.m_btn_roll.onClick(this, this._OnClickRoll);
-        this.ui.m_btn_onemore.onClick(this, this._OnClickOneMore);
         this.ui.m_btn_moudle.onClick(this, this._OnClickModule);
-        this.ui.m_btn_endlose.onClick(this, this._OnClickEndLose);
-        this.ui.m_btn_unlockprogress.onClick(this, this._OnClickUnlockProgress);
-        this.ui.m_btn_bonus.onClick(this, _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowBonusBox);
-        this.ui.m_btn_exskin.onClick(this, _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowExSKin);
     }
     _OnClickModule() {
         // LTUI.Toast('完善中');
         // return;
-        _UI_MoudleDemoMediator__WEBPACK_IMPORTED_MODULE_12__["default"].instance.Show();
-    }
-    _OnClickRoll() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_RollOpenData__WEBPACK_IMPORTED_MODULE_5__["default"]();
-        openData.onRolled = Laya.Handler.create(null, (index, fromObj) => {
-            _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("转中" + index);
-        }, null, false);
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowRoll(openData);
-    }
-    _OnClickSet() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_SetOpenData__WEBPACK_IMPORTED_MODULE_6__["default"]();
-        openData.onToggleChange = Laya.Handler.create(null, () => {
-            _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("改变设置");
-        }, null, false);
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowSet(openData);
-    }
-    _OnClickTrySkin() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_TrySkinOpenData__WEBPACK_IMPORTED_MODULE_7__["default"]();
-        console.error('demo 数据');
-        openData.iconPaths = ['test/test.png'];
-        openData.onClose = Laya.Handler.create(null, (type) => {
-            if (type < 0) {
-                _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("不试用皮肤");
-            }
-            else {
-                _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("试用皮肤" + type);
-            }
-        });
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowTrySkin(openData);
-    }
-    _OnClickOffline() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_OfflineOpenData__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        openData.onClose = Laya.Handler.create(null, (type, fromObj) => {
-            switch (type) {
-                case 0:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("单倍领取");
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                case 1:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("双倍领取");
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                default:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("未处理相应类型" + type);
-                    break;
-            }
-        });
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowOffline(openData);
-    }
-    _OnClickEndLose() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_EndLoseOpenData__WEBPACK_IMPORTED_MODULE_0__["EndLoseOpenData"]();
-        openData.onClose = Laya.Handler.create(null, (type) => {
-            switch (type) {
-                case 0:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击重新开始");
-                    break;
-                case 1:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("观看视频跳过");
-                    break;
-            }
-        });
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowEndLose(openData);
-    }
-    _OnClickEndReward() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_EndRewardOpenData__WEBPACK_IMPORTED_MODULE_1__["default"]();
-        // openData.enableShowGames = false;
-        openData.onClose = Laya.Handler.create(null, (type, fromObj) => {
-            switch (type) {
-                case 0:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("单倍领取");
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                case 1:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("多倍领取");
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                case 2:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击返回");
-                    break;
-                default:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("未处理相应类型" + type);
-                    break;
-            }
-        });
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowEndReward(openData);
-    }
-    _OnClickEndShare() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_EndShareOpenData__WEBPACK_IMPORTED_MODULE_2__["default"]();
-        openData.onClose = Laya.Handler.create(null, (type, fromObj) => {
-            switch (type) {
-                case 0:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("未分享");
-                    break;
-                case 1:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("已分享");
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                default:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("未处理相应类型" + type);
-                    break;
-            }
-        });
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowEndShare(openData);
-    }
-    _OnClickOneMore() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_OneMoreOpenData__WEBPACK_IMPORTED_MODULE_4__["default"]();
-        openData.onClose = Laya.Handler.create(null, (type, fromObj) => {
-            switch (type) {
-                case 0:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击了关闭按钮");
-                    break;
-                case 1:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击了普通领取按钮");
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                case 2:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击了双倍领取按钮");
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                default:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("未处理相应类型" + type);
-                    break;
-            }
-        });
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowOneMore(openData);
-    }
-    _OnClickUnlockProgress() {
-        let openData = new _LTGame_UIExt_DefaultUI_Data_UnlockProgressOpenData__WEBPACK_IMPORTED_MODULE_8__["UnlockProgressOpenData"]();
-        openData.endProgress = 100;
-        openData.onClose = Laya.Handler.create(null, (type) => {
-            switch (type) {
-                case 0:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击正常关闭");
-                    break;
-                case 1:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击视频领取");
-                    break;
-                case 2:
-                    _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].Toast("点击正常领取");
-                    break;
-            }
-        });
-        _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_10__["default"].ShowUnlockProgress(openData);
+        _UI_MoudleDemoMediator__WEBPACK_IMPORTED_MODULE_2__["default"].instance.Show();
     }
     _OnClickBack() {
         this.Hide();
