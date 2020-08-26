@@ -8,6 +8,10 @@ import LTG_UI_EggWallMediator from "../Mediator/LTG_UI_EggWallMediator";
 export class LTG_Com_EggWallData implements ILTG_Com_Data {
 
     public eggWallDatas: EggWallData[] = [];
+    /**
+     * @param data EggWallData
+     */
+    public onUnlockEgg: Laya.Handler;
 
     public static UnlockEgg(id: number) {
         let index = CommonSaveData.instance.eggWallIds.indexOf(id);
@@ -72,6 +76,10 @@ export class EggWallData {
      * 展示图标
      */
     public displayIcon: string;
+    /**
+     * 是否展示
+     */
+    public canShow: boolean;
 }
 
 export enum EEggState {
@@ -79,5 +87,5 @@ export enum EEggState {
     Locked = 0,
     Unlocked = 1,
     CanHint = 2
-    
+
 }

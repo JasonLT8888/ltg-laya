@@ -62,9 +62,6 @@ export default class LTSplashScene extends BaseState {
     _DoEnter() {
 
         this._needLoadOtherUIPack.push(
-            new LoadUIPack("res/ltgame/ui/LTUI")
-        );
-        this._needLoadOtherUIPack.push(
             new LoadUIPack("res/ltgame/ui/LTGame")
         );
 
@@ -97,7 +94,7 @@ export default class LTSplashScene extends BaseState {
         LTPlatform.instance.RecordEvent("开始初始化启动界面", null);
         LTGameBinder.bindAll();
         LTUIBinder.bindAll();
-        if(this._useCommonUI) {
+        if (this._useCommonUI) {
             LTComBinder.bindAll();
         }
         this._OnBindUI();

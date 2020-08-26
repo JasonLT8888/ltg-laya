@@ -33,7 +33,7 @@ export default class SplashScene extends LTSplashScene {
         ConfigManager.AddConfig(GameConst);
         ConfigManager.AddConfig(PackConst);
         ConfigManager.AddConfig(EggConfig);
-        ConfigManager.AddConfig(SignConfig); 
+        ConfigManager.AddConfig(SignConfig);
         ConfigManager.AddConfig(RollConfig);
     }
 

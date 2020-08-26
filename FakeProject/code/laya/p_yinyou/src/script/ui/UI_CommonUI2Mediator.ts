@@ -12,6 +12,7 @@ import { LTG_Com_SignData } from "../../LTG_CommonUI/Data/LTG_Com_SignData";
 import { SignConfig } from "../config/SignConfig";
 import { RollConfig } from "../config/RollConfig";
 import { LTG_Com_SetData } from "../../LTG_CommonUI/Data/LTG_Com_SetData";
+import { LTG_Com_EggWallData, EggWallData } from "../../LTG_CommonUI/Data/LTG_Com_EggWallData";
 
 class UIDemoData {
 
@@ -101,11 +102,23 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             });
             data.Send();
         }),
-        new UIDemoData("设置", ()=>{
+        new UIDemoData("设置", () => {
             let data = new LTG_Com_SetData();
-            data.onCodeEntered = Laya.Handler.create(null, (code: string)=>{
+            data.onCodeEntered = Laya.Handler.create(null, (code: string) => {
                 console.log("输入兑换码", code);
             });
+            data.Send();
+        }),
+        new UIDemoData("彩蛋墙", () => {
+            let data = new LTG_Com_EggWallData();
+            for (let i = 0; i < 10; ++i) {
+                let fakeData = new EggWallData();
+                fakeData.eggId = i;
+                fakeData.noticeStr = "测试消息" + i;
+                fakeData.canShow = true;
+                data.eggWallDatas.push(fakeData);
+            }
+            data.eggWallDatas[9].canShow = false;
             data.Send();
         }),
     ];
