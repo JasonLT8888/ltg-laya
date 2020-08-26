@@ -6,6 +6,7 @@ export default class CommonConfig {
     static needCopy = [
         'src/LTGame',
         'src/SDK',
+        'src/LTG_CommonUI',
         'bin/res/ltgame',
         'bin/libs',
         'bin/index.js',
