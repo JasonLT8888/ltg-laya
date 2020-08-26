@@ -77,7 +77,7 @@ export default class LTG_UI_ZhuawawaMediator extends BaseUIMediator<LTG_UI_Zhuaw
                 if (LTSDK.instance.checkState != ECheckState.InCheck) {
                     LTPlatform.instance.ShowInterstitalAd();
                 }
-            } else {
+            } else if (!this.ui.m_view.m_img_hand.visible) {
                 this._remainTime -= dt;
                 this._progress -= dt * 4;
                 this._UpdateView();

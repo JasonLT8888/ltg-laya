@@ -1734,7 +1734,7 @@ class LTG_UI_ZhuawawaMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
                     _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.ShowInterstitalAd();
                 }
             }
-            else {
+            else if (!this.ui.m_view.m_img_hand.visible) {
                 this._remainTime -= dt;
                 this._progress -= dt * 4;
                 this._UpdateView();
