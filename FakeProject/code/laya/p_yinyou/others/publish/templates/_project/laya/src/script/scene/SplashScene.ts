@@ -12,12 +12,14 @@ import { GameConst } from "../config/GameConst";
 import { PackConst } from "../config/PackConst";
 import { SignConfig } from "../config/SignConfig";
 import { EffectManager } from "../manager/EffectManager";
+import { RollConfig } from "../config/RollConfig";
 
 export default class SplashScene extends LTSplashScene {
 
     constructor() {
         super();
         this._splashUIClass = UI_splash;
+        this._useCommonUI = true;
     }
 
     _OnBindUI() {
@@ -31,7 +33,8 @@ export default class SplashScene extends LTSplashScene {
         ConfigManager.AddConfig(GameConst);
         ConfigManager.AddConfig(PackConst);
         ConfigManager.AddConfig(EggConfig);
-        ConfigManager.AddConfig(SignConfig); 
+        ConfigManager.AddConfig(SignConfig);
+        ConfigManager.AddConfig(RollConfig);
     }
 
     _OnGameResPrepared(urls: string[]) {

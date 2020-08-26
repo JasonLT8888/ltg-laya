@@ -1,12 +1,12 @@
-import UI_hot_game from "../UI/LTGame/UI_hot_game";
+import { ECheckState } from "../../../../SDK/common/ECheckState";
+import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 import LTSDK from "../../../../SDK/LTSDK";
 import Awaiters from "../../../Async/Awaiters";
-import LTPlatform from "../../../Platform/LTPlatform";
-import { EPlatformType } from "../../../Platform/EPlatformType";
-import MathEx from "../../../LTUtils/MathEx";
 import { CommonEventId } from "../../../Commom/CommonEventId";
-import { ECheckState } from "../../../../SDK/common/ECheckState";
-import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
+import MathEx from "../../../LTUtils/MathEx";
+import { EPlatformType } from "../../../Platform/EPlatformType";
+import LTPlatform from "../../../Platform/LTPlatform";
+import UI_hot_game from "../UI/LTGame/UI_hot_game";
 
 export default class View_HotGame {
 
@@ -60,7 +60,7 @@ export default class View_HotGame {
     private _posId: number = 0;
 
     private _Init() {
-        if (LTPlatform.instance.platform == EPlatformType.WX || LTPlatform.instance.platform == EPlatformType.Web) {
+        if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);

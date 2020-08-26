@@ -74,6 +74,10 @@ export default interface IPlatform {
      * 系统信息
      */
     systemInfo: any;
+    /**
+     * 系统信息
+     */
+    userInfo: LTGame.UserInfo;
 
     /**
      * 初始化
@@ -122,6 +126,12 @@ export default interface IPlatform {
     //  * 隐藏Native广告
     //  */
     // HideNativeAd();
+
+    /**
+     * 设置剪切板内容
+     * @param str 内容
+     */
+    SetClipboardData(str: string);
 
     /**
      * 展示有奖视频

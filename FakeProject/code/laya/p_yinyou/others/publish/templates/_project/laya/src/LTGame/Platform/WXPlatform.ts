@@ -1,23 +1,23 @@
-import IPlatform from "./IPlatform";
+import LTSDK from "../../SDK/LTSDK";
+import Awaiters from "../Async/Awaiters";
+import { CommonEventId } from "../Commom/CommonEventId";
 import StringEx from "../LTUtils/StringEx";
-import { EPlatformType } from "./EPlatformType";
+import { UI_GameCenterMediator } from "../UIExt/DefaultUI/UI_GameCenterMediator";
+import { UI_SelfBannerMediator } from "../UIExt/DefaultUI/UI_SelfBannerMediator";
+import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
+import DefaultDevice from "./DefaultDevice";
+import DefaultRecordManager from "./DefaultRecordManager";
+import { EPlatformType } from "./EPlatformType";
+import { IDevice } from "./IDevice";
+import IPlatform from "./IPlatform";
+import IRecordManager from "./IRecordManager";
+import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import ShareManager from "./ShareManager";
-import LTPlatform from "./LTPlatform";
-import { CommonEventId } from "../Commom/CommonEventId";
-import IRecordManager from "./IRecordManager";
-import DefaultRecordManager from "./DefaultRecordManager";
-import LTUI from "../UIExt/LTUI";
-import Awaiters from "../Async/Awaiters";
-import { IDevice } from "./IDevice";
-import DefaultDevice from "./DefaultDevice";
-import { UI_SelfBannerMediator } from "../UIExt/DefaultUI/UI_SelfBannerMediator";
-import { UI_GameCenterMediator } from "../UIExt/DefaultUI/UI_GameCenterMediator";
-import GlobalUnit from "../../script/common/GlobalUnit";
-import LTSDK from "../../SDK/LTSDK";
 
 export default class WXPlatform implements IPlatform {
+    userInfo: LTGame.UserInfo;
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -123,6 +123,7 @@ export default class WXPlatform implements IPlatform {
     }
 
     protected _Login() {
+
         this.loginState = {
             isLogin: false,
             code: ""
@@ -132,6 +133,7 @@ export default class WXPlatform implements IPlatform {
             this.loginCode = res.code;
             this._OnLoginSuccess(res);
             console.error(this.loginState);
+            this.getUserInfo();
         };
         loginData.fail = (res) => {
             console.error(LTPlatform.platformStr, "登录失败", res);
@@ -144,6 +146,17 @@ export default class WXPlatform implements IPlatform {
             }
         };
         this._base.login(loginData);
+    }
+    getUserInfo() {
+        this.base.getUserInfo({
+            withCredentials: true,
+            lang: 'zh_CN',
+            success: (result: _getUserInfoSuccessObject) => {
+                console.log(result);
+            },
+            fail: () => { },
+            complete: () => { }
+        })
     }
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
@@ -682,5 +695,9 @@ export default class WXPlatform implements IPlatform {
     }
     checkFollowState(): any {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持关注");
+    }
+
+    SetClipboardData(str: string) {
+        this._base.setClipboardData({ data: str });
     }
 }

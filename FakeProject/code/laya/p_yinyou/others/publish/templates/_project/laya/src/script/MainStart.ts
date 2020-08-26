@@ -13,7 +13,7 @@ export default class MainStart extends LTStart {
 
     constructor() {
         super();
-        this.enableStat = true;
+        // this.enableStat = true;
     }
 
     private _appId: string = "ttbe90c82d21ba845b";
@@ -29,8 +29,8 @@ export default class MainStart extends LTStart {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
                 this._gameVersion = '1.0.1';//1.0.1 为全策略模式 
-                platformData.appId = "100006589"//'88888888';
-                platformData.appKey = '100006589';
+                platformData.appId = "11111111111"//'88888888';
+                platformData.appKey = '11111111111';
                 break;
             case EPlatformType.TT:
                 this._gameVersion = "v0.0.2";

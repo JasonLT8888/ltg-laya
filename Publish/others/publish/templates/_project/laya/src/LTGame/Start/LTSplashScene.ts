@@ -1,16 +1,6 @@
-import BaseState from "../Fsm/BaseState";
-import LTPlatform from "../Platform/LTPlatform";
-import FGuiData from "../UIExt/FGui/FGuiData";
-import LTRespackManager from "../Res/LTRespackManager";
-import { ConfigManager } from "../Config/ConfigManager";
-import FGuiEx from "../UIExt/FGui/FGuiEx";
-import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
-import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
-import { ESceneType } from "./ESceneType";
-import { EPlatformType } from "../Platform/EPlatformType";
-import { LoadPackConfig } from "../Config/LoadPackConfig";
-import { LoadUIPack } from "../UIExt/FGui/LoadUIPack";
-import OppoPlatform from "../Platform/OppoPlatform";
+import BaseState from "../Fsm/BaseState"; import { LoadUIPack } from "../UIExt/FGui/LoadUIPack"; import { ESceneType } from "./ESceneType"; import LTPlatform from "../Platform/LTPlatform"; import { EPlatformType } from "../Platform/EPlatformType"; import { LoadPackConfig } from "../Config/LoadPackConfig"; import LTRespackManager from "../Res/LTRespackManager"; import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder"; import FGuiData from "../UIExt/FGui/FGuiData"; import FGuiEx from "../UIExt/FGui/FGuiEx"; import OppoPlatform from "../Platform/OppoPlatform"; import { ConfigManager } from "../Config/ConfigManager"; import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
+import LTUIBinder from "../UIExt/DefaultUI/UI/LTUI/LTUIBinder";
+import LTComBinder from "../../LTG_CommonUI/UI/LTCom/LTComBinder";
 
 export default class LTSplashScene extends BaseState {
 
@@ -54,6 +44,8 @@ export default class LTSplashScene extends BaseState {
 
     private _jsonPath = "subpack.json";
 
+    protected _useCommonUI: boolean = false;
+
     constructor() {
         super(ESceneType.Splash);
         switch (LTPlatform.instance.platform) {
@@ -72,6 +64,13 @@ export default class LTSplashScene extends BaseState {
         this._needLoadOtherUIPack.push(
             new LoadUIPack("res/ltgame/ui/LTGame")
         );
+
+        if (this._useCommonUI) {
+            this._needLoadOtherUIPack.push(
+                new LoadUIPack("res/ltgame/ui/LTCom", 2)
+            );
+        }
+
 
         Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
     }
@@ -94,6 +93,10 @@ export default class LTSplashScene extends BaseState {
     private _InitUI() {
         LTPlatform.instance.RecordEvent("开始初始化启动界面", null);
         LTGameBinder.bindAll();
+        LTUIBinder.bindAll();
+        if (this._useCommonUI) {
+            LTComBinder.bindAll();
+        }
         this._OnBindUI();
         let loadUrl = [];
         this._initUiPack.PushUrl(loadUrl);

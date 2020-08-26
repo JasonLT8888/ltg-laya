@@ -17,6 +17,6 @@ export default class UI_view_end_games extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_sharegames = <UI_view_sharegames_big><any>(this.getChildAt(1));
+		this.m_sharegames = <UI_view_sharegames_big><any>(this.getChildAt(0));
 	}
 }

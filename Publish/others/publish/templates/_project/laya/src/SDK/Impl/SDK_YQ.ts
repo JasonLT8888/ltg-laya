@@ -179,17 +179,17 @@ export default class SDK_YQ extends SDK_Default {
             let result = res.result;
             if (result != null) {
                 let config = result["config"];
-                let ad = result["config"];
-                // for (let key in config) {
-                //     if (key == this.controlVersion) {
-                //         this.isConfigEnable = config[key] == "1";
-                //         break;
-                //     }
-                // }
+                let ad = result["ad"];
+                for (let key in config) {
+                    if (key == this.controlVersion) {
+                        this.isConfigEnable = config[key] == "1" && this.channel != "own";
+                        break;
+                    }
+                }
                 for (let key in ad) {
                     if (key == this.controlVersion) {
                         console.log('YQ ad:', key, ad[key]);
-                        this.isADEnable = (ad[key] == "1" && this.channel != "own");
+                        this.isADEnable = (ad[key] == "1");
                         break;
                     }
                 }

@@ -4,7 +4,7 @@
 
 export default class UI_view_sharegames_big extends fgui.GComponent {
 
-	public m_img_game_bg:fgui.GImage;
+	public m_img_game_bg:fgui.GGraph;
 	public m_list_games:fgui.GList;
 
 	public static URL:string = "ui://75kiu87kwjpo4i";
@@ -18,7 +18,7 @@ export default class UI_view_sharegames_big extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_img_game_bg = <fgui.GImage><any>(this.getChildAt(0));
+		this.m_img_game_bg = <fgui.GGraph><any>(this.getChildAt(0));
 		this.m_list_games = <fgui.GList><any>(this.getChildAt(1));
 	}
 }

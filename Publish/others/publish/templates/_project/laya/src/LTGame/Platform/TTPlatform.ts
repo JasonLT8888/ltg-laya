@@ -1,24 +1,29 @@
-import WXPlatform from "./WXPlatform";
-import { EPlatformType } from "./EPlatformType";
-import LTPlatformData from "./Data/LTPlatformData";
-import { ShareInfo } from "./ShareInfo";
 import StringEx from "../LTUtils/StringEx";
-import IRecordManager from "./IRecordManager";
-import TTRecordManager from "./Impl/TT/TTRecordManager";
+import LTUI from "../UIExt/LTUI";
+import LTPlatformData from "./Data/LTPlatformData";
+import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
 import TTDevice from "./Impl/TT/TTDevice";
+import TTRecordManager from "./Impl/TT/TTRecordManager";
+import IRecordManager from "./IRecordManager";
+import LTPlatform from "./LTPlatform";
+import { ShareInfo } from "./ShareInfo";
+import WXPlatform from "./WXPlatform";
+import Awaiters from "../Async/Awaiters";
 
 export default class TTPlatform extends WXPlatform {
 
     platform: EPlatformType = EPlatformType.TT;
-
+    userInfo: LTGame.UserInfo;
     protected _showVideoLoad: boolean = false;
 
     recordManager: IRecordManager;
     device: IDevice;
+    loginCode: string = null;
 
     Init(platformData: LTPlatformData) {
         this._base = window["tt"];
+        this.base = this._base;
         if (this._base == null) {
             console.error("平台初始化错误");
             return;
@@ -40,7 +45,7 @@ export default class TTPlatform extends WXPlatform {
         }
 
         this._InitLauchOption();
-        // this._Login();
+        this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
         this._CreateBannerAd();
@@ -52,6 +57,105 @@ export default class TTPlatform extends WXPlatform {
 
         window["iplatform"] = this;
     }
+    protected _Login() {
+        this.loginState = {
+            isLogin: false,
+            code: ""
+        };
+        let loginData = {
+            force: true,
+            success: (res) => {
+                this.loginCode = res.code;
+                this.loginState.isLogin = true;
+                this.loginState.code = res.code;
+                this._OnLoginSuccess(res);
+
+            },
+            fail: (res) => {
+                console.error(LTPlatform.platformStr, "登录失败", res);
+                this.loginState.isLogin = false;
+                this.loginState.code = "";
+            },
+            complete: () => {
+                if (this.onLoginEnd != null) {
+                    this.onLoginEnd.run();
+                }
+            }
+        };
+
+        window["tt"].login(loginData);
+    }
+    getUserInfo() {
+        console.log('开始授权')
+        window["tt"].authorize({
+            scope: "scope.userInfo",
+            success: () => {
+                console.log('授权成功')
+                window["tt"].getUserInfo({
+                    withCredentials: false,
+                    lang: 'zh_CN',
+                    success: (result) => {
+                        console.log('获取信息成功')
+                        console.log(result);
+                        this.userInfo = { avatarUrl: result.avatarUrl, nickName: result.nickName }
+                    },
+                    fail: () => {
+                        console.log('获取信息失败')
+                    },
+                    complete: () => {
+                        console.log('获取信息comp')
+                    }
+                })
+            },
+        });
+
+    }
+
+    protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
+        console.log(LTPlatform.platformStr, "登录成功", res);
+        LTUI.Toast('登录成功');
+        this.getUserInfo();
+        // this.loginState.isLogin = true;
+        // this.loginState.code = res.code;
+    }
+
+    protected _InitLauchOption() {
+        // 绑定onShow事件
+        this._base.onShow(this._OnShow);
+        this._base.onHide(this._OnHide);
+        // 自动获取一次启动参数
+        let res = this._base.getLaunchOptionsSync() as LTGame.LaunchOption;
+        this._OnShow(res);
+    }
+    /**
+    * 小游戏回到前台的事件
+    */
+    protected _OnShow(res: LTGame.LaunchOption) {
+        console.log(LTPlatform.platformStr, "OnShow", res);
+        LTPlatform.instance.lauchOption = res;
+        LTPlatform.instance._CheckUpdate();
+        Awaiters.NextFrame().then(() => {
+            if (LTPlatform.instance.onResume) {
+                LTPlatform.instance.onResume.runWith(res);
+            }
+            let cacheOnShow = LTPlatform.instance["_cacheOnShowHandle"];
+            if (cacheOnShow) {
+                cacheOnShow.run();
+                LTPlatform.instance["_cacheOnShowHandle"] = null;
+            }
+        });
+    }
+
+    /**
+     * 小游戏退出前台的事件
+     */
+    protected _OnHide(res: LTGame.LaunchOption) {
+        console.log(LTPlatform.platformStr, "OnHide", res);
+        if (LTPlatform.instance.onPause) {
+            LTPlatform.instance.onPause.runWith(res);
+        }
+    }
+
 
     protected _CreateBannerAd() {
         if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
@@ -146,7 +250,7 @@ export default class TTPlatform extends WXPlatform {
             appLaunchOptions: openData
         });
     }
-    
+
     NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
             if (!this.isSupportJumpOther) {
@@ -173,5 +277,33 @@ export default class TTPlatform extends WXPlatform {
             }
         });
     }
+    followOfficialAccount(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.followOfficialAccount({
+                success(res) {
+                    if (res.errCode === 0) {
+                        resolve(true);
+                    } else {
+                        console.log(res.errMsg);
+                        resolve(false);
+                    }
+                },
+            });
 
+        })
+    }
+    checkFollowState(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.checkFollowState({
+                success(res) {
+                    if (res.result) {
+                        resolve(true);
+                    } else {
+                        resolve(false)
+                    }
+                    console.log(res.result); // true:已关注 /  false:未关注
+                },
+            });
+        });
+    }
 }

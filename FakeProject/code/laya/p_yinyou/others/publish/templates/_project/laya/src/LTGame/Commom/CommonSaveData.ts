@@ -53,14 +53,15 @@ export class SaveData {
      * 免费抽奖次数
      */
     public freeRollCount: number = 1;
+    public totalRollCount: number = 0;
     /**
      * 限定皮肤观看广告次数
      */
     public ExSkinAdCount: number;
 
     /**
-* 彩蛋获得数据
-*/
+    * 彩蛋获得数据
+    */
     public EggPassIds: number[] = [];
     /**
     * 彩蛋密语数据
@@ -70,6 +71,12 @@ export class SaveData {
     * 彩蛋暗号数据
     */
     public EggPasswordIds: number[] = [];
+
+    /**
+     * 彩蛋ID
+     */
+    public eggWallIds: number[] = [];
+    public eggWallStates: number[] = [];
 
 }
 

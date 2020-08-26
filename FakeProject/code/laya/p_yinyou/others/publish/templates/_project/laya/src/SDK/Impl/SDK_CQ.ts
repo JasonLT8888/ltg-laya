@@ -7,7 +7,6 @@ import ShareManager from "../../LTGame/Platform/ShareManager";
 import { ECheckState } from "../common/ECheckState";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
-import LTPlatformData from "../../LTGame/Platform/Data/LTPlatformData";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -27,6 +26,7 @@ export default class SDK_CQ extends SDK_Default {
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
+        // this.RecordRankInfo(1, 0);
     }
 
     private _RequestShareInfo() {
@@ -41,7 +41,112 @@ export default class SDK_CQ extends SDK_Default {
             console.log("获取分享接口访问失败", res);
         }), true, sendData);
     }
+    /**
+     * 按关卡上报排名 
+     * @param levelID 关卡
+     * @param score 分数/时长
+     */
+    public RecordRankInfo(levelID: number, score: number) {
 
+        if (LTPlatform.instance.loginState && LTPlatform.instance.loginState.code) {
+            console.error('登录信息未获取');
+        } else {
+            let uid = this.appId;
+            if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+                uid = LTPlatform.instance.platformData.appKey
+            }
+            let sendData = {
+                appid: uid,
+                openId: LTPlatform.instance.loginState.code,
+                times: score,
+                nickname: LTPlatform.instance.userInfo.nickName,
+                avatar: LTPlatform.instance.userInfo.avatarUrl,
+                type: levelID
+            };
+            LTHttp.Send(this._headPrefix + "/api/rank/times", Laya.Handler.create(this, this._OnRcordRank), Laya.Handler.create(this, (res) => {
+                console.log("上报排名接口失败", res);
+            }), true, sendData);
+        }
+    }
+    /**查询周排名 
+     * @param levelID 关卡
+     * @param score 分数/时长
+    * @param onGetList 回调处理
+     */
+    getWeekRankList(levelID: number, score: number, onGetList: Function) {
+        if (LTPlatform.instance.loginState && LTPlatform.instance.loginState.code) {
+            console.error('登录信息未获取');
+        } else {
+            let uid = this.appId;
+            if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+                uid = LTPlatform.instance.platformData.appKey
+            }
+            let sendData = {
+                appid: uid,
+                openId: LTPlatform.instance.loginState.code,
+                times: score,
+                nickname: LTPlatform.instance.userInfo.nickName,
+                avatar: LTPlatform.instance.userInfo.avatarUrl,
+                type: levelID
+            };
+            // LTHttp.Send(this._headPrefix + "/api/rank/week/time", Laya.Handler.create(this, this._OnGetRankList), Laya.Handler.create(this, (res) => {
+            //     console.log("获取单日排行接口访问失败", res);
+            // }), true, sendData);
+            LTHttp.Send(this._headPrefix + "/api/rank/week/time", Laya.Handler.create(this, onGetList), Laya.Handler.create(this, (res) => {
+                console.log("获取周排行接口访问失败", res);
+            }), true, sendData);
+        }
+    }
+    /**
+     * 查询日排名 
+     * @param levelID 关卡
+     * @param score 分数/时长
+     * @param onGetList 回调处理
+     */
+    getDayRankList(levelID: number, score: number, onGetList: Function) {
+        if (LTPlatform.instance.loginState && LTPlatform.instance.loginState.code) {
+            console.error('登录信息未获取');
+        } else {
+            let uid = this.appId;
+            if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+                uid = LTPlatform.instance.platformData.appKey
+            }
+            let sendData = {
+                appid: uid,
+                openId: LTPlatform.instance.loginState.code,
+                times: score,
+                nickname: LTPlatform.instance.userInfo.nickName,
+                avatar: LTPlatform.instance.userInfo.avatarUrl,
+                type: levelID
+            };
+            LTHttp.Send(this._headPrefix + "/api/rank/day/time", Laya.Handler.create(this, onGetList), Laya.Handler.create(this, (res) => {
+                console.log("获取当天排行接口访问失败", res);
+            }), true, sendData);
+        }
+    }
+
+    private _OnRcordRank(res) {
+        let getObj = JSON.parse(res);
+        if (this.enableDebug) {
+            console.log("上报排名返回消息", getObj);
+        }
+        if (getObj.code == 1) {
+            console.log('排名上报成功');
+        } else {
+            console.error("上报排名接口返回错误", getObj);
+        }
+    }
+    private _OnGetRankList(res) {
+        let getObj = JSON.parse(res);
+        if (this.enableDebug) {
+            console.log("获取排名返回消息", getObj);
+        }
+        if (getObj.code == 1) {
+            console.log('获取排名成功');
+        } else {
+            console.error("获取排名接口返回错误", getObj);
+        }
+    }
     private _OnRequestShareInfo(res) {
         let getObj = JSON.parse(res);
         if (this.enableDebug) {
