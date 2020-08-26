@@ -28,7 +28,6 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
         super._OnShow();
         // your code
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
-        this.ui.m_btn_sign.onClick(this, this._OnClickSign);
         this.ui.m_btn_endshare.onClick(this, this._OnClickEndShare);
         this.ui.m_btn_endreward.onClick(this, this._OnClickEndReward);
         this.ui.m_btn_offline.onClick(this, this._OnClickOffline);
@@ -178,31 +177,6 @@ export default class UI_CommonUIMediator extends BaseUIMediator<UI_CommonUI> {
             }
         });
         LTUI.ShowOneMore(openData);
-    }
-
-    private _OnClickSign() {
-        let openData = new SignOpenData();
-        // 强制未签到
-        openData.isSigned = false;
-        openData.onClose = Laya.Handler.create(null, (type: number, fromObj: fgui.GObject, dayCount: number) => {
-            switch (type) {
-                case 0:
-                    LTUI.Toast("点击了关闭按钮");
-                    break;
-                case 1:
-                    LTUI.Toast("点击了普通领取按钮" + dayCount);
-                    LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                case 2:
-                    LTUI.Toast("点击了双倍领取按钮" + dayCount);
-                    LTUI.FlyCoinsTo(fromObj, this.ui.m_title);
-                    break;
-                default:
-                    LTUI.Toast("未处理相应类型" + type);
-                    break;
-            }
-        });
-        LTUI.ShowSignUI(openData);
     }
 
     private _OnClickUnlockProgress() {

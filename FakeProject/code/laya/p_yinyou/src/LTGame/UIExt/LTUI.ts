@@ -19,7 +19,6 @@ import UI_CommonLockScreenMediator from "./DefaultUI/UI_CommonLockScreenMediator
 // import UI_CommonOneMoreMediator from "./DefaultUI/UI_CommonOneMoreMediator";
 // import UI_CommonRollMediator from "./DefaultUI/UI_CommonRollMediator";
 // import UI_CommonSetMediator from "./DefaultUI/UI_CommonSetMediator";
-import { UI_CommonSignMediator } from "./DefaultUI/UI_CommonSignMediator";
 import UI_CommonTrySkinMediator from "./DefaultUI/UI_CommonTrySkinMediator";
 import UI_CommonUnlockProgressMediator from "./DefaultUI/UI_CommonUnlockProgressMediator";
 import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
@@ -63,14 +62,6 @@ export default class LTUI {
     public static async BoomCoins(fromObj: fgui.GObject, flyIcon: string = null, flyCount: number = 10,
         flyTime: number = 1, circleRadius: number = 60) {
         await UI_FlyPanelMediator.instance.BoomCoins(fromObj, flyIcon, flyCount, flyTime, circleRadius);
-    }
-
-    /**
-     * 打开签到界面
-     * @param openData 
-     */
-    public static ShowSignUI(openData: SignOpenData) {
-        UI_CommonSignMediator.instance.Show(openData);
     }
 
     /**

@@ -3,6 +3,9 @@ import LTG_UI_Zhuawawa from "../UI/LTCom/LTG_UI_Zhuawawa";
 import MonoHelper, { EActionType } from "../../LTGame/LTUtils/MonoHelper";
 import MathEx from "../../LTGame/LTUtils/MathEx";
 import { LTG_Com_ZhuaWawaData } from "../Data/LTG_Com_ZhuaWawaData";
+import LTSDK from "../../SDK/LTSDK";
+import { ECheckState } from "../../SDK/common/ECheckState";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
 
 export default class LTG_UI_ZhuawawaMediator extends BaseUIMediator<LTG_UI_Zhuawawa> {
 
@@ -71,6 +74,9 @@ export default class LTG_UI_ZhuawawaMediator extends BaseUIMediator<LTG_UI_Zhuaw
                 this._UpdateView();
                 this.ui.m_view.m_view_pick.m_state_pick.selectedIndex = 1;
                 this._isStoped = true;
+                if (LTSDK.instance.checkState != ECheckState.InCheck) {
+                    LTPlatform.instance.ShowInterstitalAd();
+                }
             } else {
                 this._remainTime -= dt;
                 this._progress -= dt * 4;

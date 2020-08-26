@@ -1,11 +1,12 @@
 export namespace SignConfig {
     export class config {
-        /** 天数 */ readonly id: number;
-        /** 图标路径 */ readonly icon: string;
-        /** 额外奖励数量 */ readonly money: number;
-        /** 默认奖励类型 */ readonly type: number;
-        /** 默认奖励数量 */ readonly value: number;
-        /** 描述 */ readonly title: string;
+        /** 签到天数 */ readonly id: number;
+        /** 展示文字 */ readonly show_str: string;
+        /** 展示图标 */ readonly show_icon: string;
+        /** 实际奖励内容 */ readonly reward_type: number;
+        /** 实际奖励值 */ readonly reward_value: number;
+        /** 看视频时额外奖励内容 */ readonly ad_reward_type: number;
+        /** 看视频时额外奖励值 */ readonly ad_reward_value: number;
     }
     export var data : {[key: number]: SignConfig.config};
     export var dataList : SignConfig.config[];

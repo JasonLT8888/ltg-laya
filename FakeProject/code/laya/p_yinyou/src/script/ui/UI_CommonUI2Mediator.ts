@@ -8,6 +8,9 @@ import { LTG_Com_LimitSkinData } from "../../LTG_CommonUI/Data/LTG_Com_LimitSkin
 import { LTG_Com_RollData } from "../../LTG_CommonUI/Data/LTG_Com_RollData";
 import { LTG_Com_WatchDYData } from "../../LTG_CommonUI/Data/LTG_Com_WatchDYData";
 import { LTG_Com_ShareVideoData } from "../../LTG_CommonUI/Data/LTG_Com_ShareVideoData";
+import { LTG_Com_SignData } from "../../LTG_CommonUI/Data/LTG_Com_SignData";
+import { SignConfig } from "../config/SignConfig";
+import { RollConfig } from "../config/RollConfig";
 
 class UIDemoData {
 
@@ -41,8 +44,12 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }),
         new UIDemoData("抓娃娃", () => {
             let data = new LTG_Com_ZhuaWawaData();
-            data.onPickup = Laya.Handler.create(null, () => { });
-            data.onTimeout = Laya.Handler.create(null, () => { });
+            data.onPickup = Laya.Handler.create(null, () => {
+                console.log("抓娃娃完成");
+            });
+            data.onTimeout = Laya.Handler.create(null, () => {
+                console.log("超时退出");
+            });
             data.Send();
         }),
         new UIDemoData("限定皮肤", () => {
@@ -61,8 +68,12 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }),
         new UIDemoData("大转盘", () => {
             let data = new LTG_Com_RollData();
-            data.onRolled = Laya.Handler.create(null, (c) => { }, null, false);
-            data.onSpecial = Laya.Handler.create(null, (c) => { }, null, false);
+            data.onRolled = Laya.Handler.create(null, (config: RollConfig.config) => {
+                console.log("转到奖励", config);
+            }, null, false);
+            data.onSpecial = Laya.Handler.create(null, (config: RollConfig.config) => {
+                console.log("特殊奖励", config);
+            }, null, false);
             data.Send();
         }),
         new UIDemoData("关注抖音号", () => {
@@ -70,7 +81,23 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }),
         new UIDemoData("视频分享", () => {
             let data = new LTG_Com_ShareVideoData();
-            data.onClosed = Laya.Handler.create(null, (code) => { });
+            data.onClosed = Laya.Handler.create(null, (code: number) => {
+                switch (code) {
+                    case 0:
+                        console.log("未分享");
+                        break;
+                    case 1:
+                        console.log("已分享");
+                        break;
+                }
+            });
+            data.Send();
+        }),
+        new UIDemoData("签到", () => {
+            let data = new LTG_Com_SignData();
+            data.onSign = Laya.Handler.create(null, (config: SignConfig.config, isWatched: boolean) => {
+                console.log("签到", config, "是否观看视频", isWatched);
+            });
             data.Send();
         }),
     ];
