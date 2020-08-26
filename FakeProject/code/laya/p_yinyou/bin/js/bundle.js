@@ -17035,7 +17035,7 @@ class HXOimoPhysicTest {
     Create() {
         this._s3d = new Laya.Scene3D();
         Laya.stage.addChildAt(this._s3d, 1);
-        this._world = new OIMO.World(OIMO.BroadPhaseType.BRUTE_FORCE, new OIMO.Vec3(0, -9.8, 0));
+        this._world = new OIMO.World(OIMO.BroadPhaseType.BVH, new OIMO.Vec3(0, -9.8, 0));
         console.log(this._world);
         let panelMesh = Laya.PrimitiveMesh.createPlane(this._panelSize, this._panelSize, 1, 1);
         let panelMat = new Laya.BlinnPhongMaterial();
