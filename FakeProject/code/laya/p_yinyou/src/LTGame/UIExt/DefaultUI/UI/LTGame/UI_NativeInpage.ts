@@ -5,9 +5,10 @@ import UI_btn_normal from "./UI_btn_normal";
 
 export default class UI_NativeInPage extends fgui.GComponent {
 
-	public m_bg1:fgui.GGraph;
+	public m_btn_pos:fgui.Controller;
 	public m_ad:UI_AdInpageComp;
 	public m_btn_close:UI_btn_normal;
+	public m_btn_clickad:UI_btn_normal;
 
 	public static URL:string = "ui://75kiu87k92486v";
 
@@ -20,8 +21,9 @@ export default class UI_NativeInPage extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_bg1 = <fgui.GGraph><any>(this.getChildAt(0));
-		this.m_ad = <UI_AdInpageComp><any>(this.getChildAt(1));
-		this.m_btn_close = <UI_btn_normal><any>(this.getChildAt(2));
+		this.m_btn_pos = this.getControllerAt(0);
+		this.m_ad = <UI_AdInpageComp><any>(this.getChildAt(0));
+		this.m_btn_close = <UI_btn_normal><any>(this.getChildAt(1));
+		this.m_btn_clickad = <UI_btn_normal><any>(this.getChildAt(2));
 	}
 }

@@ -55,7 +55,7 @@ export default class View_SideGames {
     private _Init() {
         if (LTPlatform.instance.platform == EPlatformType.TT) {
             this.ui.m_ads.dispose();
-            this.ui.m_btn_show.onClick(this, () => {
+            this.ui.m_ads.onClick(this, () => {
                 this.ui.m_red.visible = false;
                 LTPlatform.instance.OpenGameBox([]);
             });
@@ -77,13 +77,13 @@ export default class View_SideGames {
                 this.ui.m_ads.m_list.scrollPane.scrollDown(0.01, true);
             });
             this.ui.displayObject.zOrder = 99999;
-            this.ui.m_btn_show.onClick(this, () => {
-                this.ui.m_red.visible = false;
-                this.ui.m_show.selectedIndex = 1;
-            });
             this.ui.m_ads.m_btn_return.onClick(this, () => {
-                this.ui.m_show.selectedIndex = 0;
+                this.ui.m_red.visible = false;
+                this.ui.m_show.selectedIndex = (this.ui.m_show.selectedIndex + 1) % 2;
             });
+            // this.ui.m_ads.m_btn_return.onClick(this, () => {
+            //     this.ui.m_show.selectedIndex = 0;
+            // });
             this.ui.m_bg.onClick(this, () => {
                 this.ui.m_show.selectedIndex = 0;
             });
