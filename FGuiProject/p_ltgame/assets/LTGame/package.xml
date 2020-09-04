@@ -68,7 +68,6 @@
     <component id="r3yg7g" name="GameIconF.xml" path="/cmp/"/>
     <component id="r3yg7h" name="WxSideGames.xml" path="/ui_nav/" exported="true"/>
     <component id="r3yg7i" name="item_gameSmall.xml" path="/cmp/"/>
-    <component id="i816ad" name="NativeInPageOld.xml" path="/cmp/native/"/>
     <component id="i816ae" name="End3X3Ad.xml" path="/ui_nav/" exported="true"/>
     <image id="9vu5af" name="热门游戏.png" path="/img/"/>
     <component id="9vu5ag" name="OpenAds.xml" path="/ui_nav/" exported="true"/>
@@ -77,6 +76,11 @@
     <component id="t3oybl" name="view_item_game128.xml" path="/cmp/cache/" exported="true"/>
     <image id="kntfbm" name="btn-fanhui2.png" path="/img/"/>
     <image id="kntfgm" name="sp_jiazai.png" path="/img/"/>
+    <image id="lquign" name="组2(1).png" path="/img/"/>
+    <image id="lquigo" name="图层7.png" path="/img/" scale="9grid" scale9grid="12,23,16,46"/>
+    <image id="lquigp" name="更多游戏.jpg" path="/img/"/>
+    <component id="ebhigq" name="view_item_game164.xml" path="/cmp/cache/" exported="true"/>
+    <image id="ebhigr" name="hxjy.png" path="/img/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

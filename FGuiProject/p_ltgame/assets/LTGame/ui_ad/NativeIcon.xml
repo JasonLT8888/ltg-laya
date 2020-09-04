@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="240,240">
+  <displayList>
+    <loader id="n0_h8ea" name="icon_img" xy="0,0" size="240,240" align="center" vAlign="middle" fill="scale">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <loader id="n1_h8ea" name="icon_tip" xy="170,200" size="62,32" align="center" vAlign="middle" fill="scale">
+      <relation target="" sidePair="left-right,bottom-bottom"/>
+    </loader>
+  </displayList>
+</component>

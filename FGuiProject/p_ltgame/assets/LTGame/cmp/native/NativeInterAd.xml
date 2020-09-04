@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,320">
+  <displayList>
+    <graph id="n6_ocvx" name="bg" xy="0,0" size="640,320" type="rect" lineColor="#ffffffff" corner="20"/>
+    <loader id="n0_ocvx" name="img" xy="449,136" pivot="0.5,0.5" anchor="true" size="320,210" align="center" vAlign="middle" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <loader id="n2_ocvx" name="icon" xy="23,8" pivot="0.5,0.5" size="100,100" visible="false" vAlign="middle" fill="scaleMatchHeight">
+      <relation target="" sidePair="left-left,top-top"/>
+    </loader>
+    <text id="n3_ocvx" name="title" xy="135,258" size="210,48" font="DengXian" fontSize="20" color="#999999" vAlign="middle" autoSize="none" bold="true" text="">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <text id="n4_ocvx" name="desc" xy="149,172" pivot="0.5,0.5" anchor="true" size="264,117" font="DengXian" fontSize="30" color="#333333" vAlign="middle" autoSize="none" bold="true" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <graph id="n7_ocvx" name="n7" xy="406,257" size="189,47" type="rect" lineColor="#ffff3333" fillColor="#ffff3333" corner="6"/>
+    <graph id="n9_ocvx" name="n9" xy="35,254" size="60,60" type="rect" lineSize="2" lineColor="#ff666666" corner="10"/>
+    <text id="n1_ocvx" name="tag" xy="34,261" pivot="0.5,0.5" size="62,48" font="DengXian" fontSize="26" color="#999999" align="center" vAlign="middle" autoSize="none" text="广告">
+      <relation target="n0_ocvx" sidePair="left-right,bottom-bottom"/>
+    </text>
+    <text id="n8_ocvx" name="n8" xy="410,260" size="175,41" font="DengXian" fontSize="24" color="#ffffff" align="center" vAlign="middle" autoSize="none" bold="true" text="查看广告"/>
+  </displayList>
+</component>

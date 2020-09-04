@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="128,179">
+  <displayList>
+    <graph id="n8_r3yg" name="n8" xy="0,0" size="128,179" type="rect" lineSize="0" corner="8">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n5_r3yg" name="icon" src="r3yg7g" fileName="ad_res/GameIconF.xml" xy="0,0" size="130,128" aspect="true"/>
+    <text id="n6_r3yg" name="title" xy="63,155" pivot="0.5,0.5" anchor="true" size="85,25" font="DengXian" fontSize="20" align="center" vAlign="middle" bold="true" text="带我上车"/>
+    <image id="n7_r3yg" name="red" src="r3yg7a" fileName="ad_res/wx/红点大@2x.png" xy="108,-2" size="25,25" aspect="true"/>
+  </displayList>
+</component>

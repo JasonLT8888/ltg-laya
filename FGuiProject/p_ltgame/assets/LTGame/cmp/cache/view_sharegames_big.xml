@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="680,408">
+  <displayList>
+    <graph id="n4_bg00" name="img_game_bg" xy="0,0" size="680,408" type="rect" lineSize="0" fillColor="#ff333333" corner="10"/>
+    <list id="n7_bg00" name="list_games" xy="12,13" size="658,388" layout="flow_hz" overflow="scroll" lineGap="15" colGap="15" lineItemCount="4" defaultItem="ui://75kiu87kp2ld6o" align="center">
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>
