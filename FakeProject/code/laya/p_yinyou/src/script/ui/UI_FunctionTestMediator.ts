@@ -26,9 +26,6 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
         new RenderTextureTest(),
         new UIEffectTest(),
         new PhysicTest(),
-        //new OimoPhysicTest(),
-        //new HybridPhysicTest(),
-        //new CannonPhysicTest(),
         new HXOimoPhysicTest(),
     ];
 

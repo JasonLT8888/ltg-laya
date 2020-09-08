@@ -16810,9 +16810,6 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
             new _test_RenderTextureTest__WEBPACK_IMPORTED_MODULE_5__["RenderTextureTest"](),
             new _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__["UIEffectTest"](),
             new _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__["PhysicTest"](),
-            //new OimoPhysicTest(),
-            //new HybridPhysicTest(),
-            //new CannonPhysicTest(),
             new _test_HXOimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["HXOimoPhysicTest"](),
         ];
     }
