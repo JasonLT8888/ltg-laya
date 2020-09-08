@@ -7,9 +7,6 @@ import { HeightFogTest } from "../test/HeightFogTest";
 import { RenderTextureTest } from "../test/RenderTextureTest";
 import { UIEffectTest } from "../test/UIEffectTest";
 import { PhysicTest } from "../test/PhysicTest";
-import { OimoPhysicTest } from "../test/OimoPhysicTest";
-import { HybridPhysicTest } from "../test/HybridPhysicTest";
-import { CannonPhysicTest } from "../test/CannonPhysicTest";
 import { HXOimoPhysicTest } from "../test/HXOimoPhysicTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
