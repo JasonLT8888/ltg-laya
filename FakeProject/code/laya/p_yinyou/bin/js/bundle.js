@@ -9539,7 +9539,14 @@ class LTSplashScene extends _Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default
         if (this._useCommonUI) {
             this._needLoadOtherUIPack.push(new _UIExt_FGui_LoadUIPack__WEBPACK_IMPORTED_MODULE_1__["LoadUIPack"]("res/ltgame/ui/LTCom", 2));
         }
-        Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        switch (_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform) {
+            case _Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].Web:
+                this._InitUI();
+                break;
+            default:
+                Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+                break;
+        }
     }
     _OnJsonLoaded() {
         let loadJson = Laya.loader.getRes(this._jsonPath);
@@ -15054,7 +15061,7 @@ class SDK_CQ extends _SDK_Default__WEBPACK_IMPORTED_MODULE_7__["default"] {
         Laya.stage.event(_LTGame_Commom_CommonEventId__WEBPACK_IMPORTED_MODULE_0__["CommonEventId"].AD_CONFIG_GETTED);
     }
     Login(code, fromAppId) {
-        console.error('登录参数：code:', code);
+        console.log('登录参数：code:', code);
         let uid = (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Oppo || _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platform == _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_2__["EPlatformType"].Vivo) ? _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_3__["default"].instance.platformData.appKey : this.appId;
         let sendData = {
             appid: uid,
@@ -16356,7 +16363,7 @@ __webpack_require__.r(__webpack_exports__);
 class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_3__["LTStart"] {
     constructor() {
         super();
-        this._appId = "ttbe90c82d21ba845b";
+        this._appId = "";
         /**SDK云控版本名 */
         this._gameVersion = "1.0.0";
         /**资源版本 */
@@ -16428,7 +16435,7 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_3__["LTSt
         switch (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform) {
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].WX:
                 // case EPlatformType.Web:
-                _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_YQ__WEBPACK_IMPORTED_MODULE_5__["default"], 'yfct', this._gameVersion, this._appId); //
+                _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_YQ__WEBPACK_IMPORTED_MODULE_5__["default"], this._gameName, this._gameVersion, this._appId); //
                 break;
             // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
             // break;

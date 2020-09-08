@@ -71,8 +71,14 @@ export default class LTSplashScene extends BaseState {
             );
         }
 
-
-        Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+        switch (LTPlatform.instance.platform) {
+            case EPlatformType.Web:
+                this._InitUI();
+                break;
+            default:
+                Laya.loader.load(this._jsonPath, Laya.Handler.create(this, this._OnJsonLoaded));
+                break;
+        }
     }
 
     private _OnJsonLoaded() {

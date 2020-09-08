@@ -255,7 +255,7 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     Login(code: string, fromAppId: string) {
-        console.error('登录参数：code:', code);
+        console.log('登录参数：code:', code);
         let uid = (LTPlatform.instance.platform == EPlatformType.Oppo || LTPlatform.instance.platform == EPlatformType.Vivo) ? LTPlatform.instance.platformData.appKey : this.appId;
         let sendData = {
             appid: uid,

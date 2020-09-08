@@ -18,7 +18,7 @@ export default class UI_side_ads extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_list = <fgui.GList><any>(this.getChildAt(2));
-		this.m_btn_return = <fgui.GButton><any>(this.getChildAt(3));
+		this.m_list = <fgui.GList><any>(this.getChildAt(1));
+		this.m_btn_return = <fgui.GButton><any>(this.getChildAt(2));
 	}
 }

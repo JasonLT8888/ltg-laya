@@ -4,6 +4,7 @@
 
 export default class UI_btn_normal extends fgui.GButton {
 
+	public m_bg:fgui.GLoader;
 	public m_t0:fgui.Transition;
 
 	public static URL:string = "ui://75kiu87kl2ax4l";
@@ -17,6 +18,7 @@ export default class UI_btn_normal extends fgui.GButton {
 	}
 
 	protected onConstruct(): void {
+		this.m_bg = <fgui.GLoader><any>(this.getChildAt(0));
 		this.m_t0 = this.getTransitionAt(0);
 	}
 }
