@@ -14397,7 +14397,7 @@ class BaseUIMediator {
         /**
          * 是否适配顶部刘海屏
          */
-        this._needFilScreen = true;
+        this._needFilScreen = false;
         this._isShow = false;
         this._sortOrder = 10;
     }
@@ -14432,8 +14432,8 @@ class BaseUIMediator {
         uiData.needFitScreen = this._needFilScreen;
         this._ui = _FGuiEx__WEBPACK_IMPORTED_MODULE_0__["default"].AddUI(this._classDefine, uiData);
         this._InitSelfAd();
-        this._ui.sortingOrder = this._sortOrder;
         this._OnShow();
+        this._ui.sortingOrder = this._sortOrder;
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter] && _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_8__["default"].instance.isDelayClose) {
             let anim = this._ui[anim_enter];

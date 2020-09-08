@@ -16,7 +16,7 @@ export default class MainStart extends LTStart {
         // this.enableStat = true;
     }
 
-    private _appId: string = "ttbe90c82d21ba845b";
+    private _appId: string = "";
     /**SDK云控版本名 */
     private _gameVersion = "1.0.0";
     /**资源版本 */
@@ -88,7 +88,7 @@ export default class MainStart extends LTStart {
         switch (LTPlatform.instance.platform) {
             case EPlatformType.WX:
                 // case EPlatformType.Web:
-                LTSDK.CreateInstace(SDK_YQ, 'yfct', this._gameVersion, this._appId);//
+                LTSDK.CreateInstace(SDK_YQ, this._gameName, this._gameVersion, this._appId);//
                 break;
             // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
             // break;
