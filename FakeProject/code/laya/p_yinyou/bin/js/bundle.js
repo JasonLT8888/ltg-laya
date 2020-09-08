@@ -16351,6 +16351,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../SDK/LTSDK */ "./src/SDK/LTSDK.ts");
 /* harmony import */ var _scene_MainScene__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scene/MainScene */ "./src/script/scene/MainScene.ts");
 /* harmony import */ var _scene_SplashScene__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./scene/SplashScene */ "./src/script/scene/SplashScene.ts");
+/* harmony import */ var _SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../SDK/Impl/SDK_Default */ "./src/SDK/Impl/SDK_Default.ts");
+
 
 
 
@@ -16434,15 +16436,13 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_3__["LTSt
     _HandleSDK() {
         switch (_LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].instance.platform) {
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].WX:
-                // case EPlatformType.Web:
                 _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_YQ__WEBPACK_IMPORTED_MODULE_5__["default"], this._gameName, this._gameVersion, this._appId); //
                 break;
-            // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
-            // break;
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].Oppo:
             case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].TT:
-            default:
                 _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_CQ__WEBPACK_IMPORTED_MODULE_4__["default"], this._gameName, this._gameVersion, this._appId);
+            default:
+                _SDK_LTSDK__WEBPACK_IMPORTED_MODULE_6__["default"].CreateInstace(_SDK_Impl_SDK_Default__WEBPACK_IMPORTED_MODULE_9__["default"], this._gameName, this._gameVersion, this._appId);
                 break;
         }
     }
