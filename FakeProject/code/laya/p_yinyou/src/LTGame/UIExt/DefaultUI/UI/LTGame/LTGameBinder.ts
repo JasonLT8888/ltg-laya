@@ -8,6 +8,7 @@ import UI_iconLongComp from "./UI_iconLongComp";
 import UI_OpenAds from "./UI_OpenAds";
 import UI_view_game_icon from "./UI_view_game_icon";
 import UI_view_end_games from "./UI_view_end_games";
+import UI_view_item_game164 from "./UI_view_item_game164";
 import UI_SideGames from "./UI_SideGames";
 import UI_FlyPanel from "./UI_FlyPanel";
 import UI_view_fly_coin from "./UI_view_fly_coin";
@@ -51,6 +52,7 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_OpenAds.URL, UI_OpenAds);
 		fgui.UIObjectFactory.setExtension(UI_view_game_icon.URL, UI_view_game_icon);
 		fgui.UIObjectFactory.setExtension(UI_view_end_games.URL, UI_view_end_games);
+		fgui.UIObjectFactory.setExtension(UI_view_item_game164.URL, UI_view_item_game164);
 		fgui.UIObjectFactory.setExtension(UI_SideGames.URL, UI_SideGames);
 		fgui.UIObjectFactory.setExtension(UI_FlyPanel.URL, UI_FlyPanel);
 		fgui.UIObjectFactory.setExtension(UI_view_fly_coin.URL, UI_view_fly_coin);

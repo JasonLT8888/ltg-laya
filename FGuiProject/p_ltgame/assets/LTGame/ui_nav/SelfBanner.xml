@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" opaque="false">
+  <displayList>
+    <component id="n0_r3yg" name="banner" src="l2ax4l" fileName="ad_res/btn_normal.xml" xy="375,1224" pivot="0.5,0.5" anchor="true" size="634,220" aspect="true">
+      <relation target="" sidePair="width-width,bottom-bottom"/>
+    </component>
+  </displayList>
+</component>

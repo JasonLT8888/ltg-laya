@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,360">
+  <controller name="btn_pos" exported="true" pages="0,,1,,2," selected="1"/>
+  <displayList>
+    <component id="n15_9248" name="ad" src="92486w" fileName="cmp/native/AdInpageComp.xml" xy="0,0" size="640,320">
+      <gearXY controller="btn_pos" pages="0" values="0,39" default="0,0"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n14_9248" name="btn_close" src="l2ax4l" fileName="ui_common/btn_normal.xml" xy="592,1" size="46,46" aspect="true">
+      <relation target="n15_9248" sidePair="left-right,top-top"/>
+      <Button titleFontSize="30" icon="ui://75kiu87kl2ax4m"/>
+    </component>
+    <component id="n16_e8mb" name="btn_clickad" src="l2ax4l" fileName="ui_common/btn_normal.xml" xy="221,330" size="198,38">
+      <gearDisplay controller="btn_pos" pages="0,1"/>
+      <gearXY controller="btn_pos" pages="0,1" values="221,-2|221,330" default="204,-57"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="查看广告" titleFontSize="32"/>
+      <property target="bg" propertyId="1" value=""/>
+    </component>
+  </displayList>
+</component>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" opaque="false">
+  <displayList>
+    <component id="n0_ovsy" name="toast" src="ovsy8" fileName="cmp/view_toast.xml" xy="375,247">
+      <relation target="" sidePair="center-center,top-top%"/>
+    </component>
+  </displayList>
+</component>
