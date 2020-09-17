@@ -6959,12 +6959,8 @@ class KSPlatform {
             if (this._rewardVideo) {
                 this._rewardVideo.show({
                     success: () => {
-                        if (this._rewardSuccessed)
-                            this._rewardSuccessed.run();
                     },
                     fail: (error) => {
-                        if (this._rewardSkipped)
-                            this._rewardSkipped.run();
                     }
                 });
             }
