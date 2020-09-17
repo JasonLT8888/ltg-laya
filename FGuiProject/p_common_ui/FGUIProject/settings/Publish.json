@@ -1,12 +1,13 @@
 {
 	"atlasSetting":{
 		"paging":true,
-		"sizeOption":"pot"
+		"sizeOption":"pot",
+		"trimImage":true
 	},
 	"binaryFormat":true,
 	"codeGeneration":{
 		"classNamePrefix":"LTG_UI_",
-		"codePath":"D:\\Work_Projects\\ltg-laya\\FakeProject\\code\\laya\\p_yinyou\\src\\LTG_CommonUI\\UI",
+		"codePath":"..\\..\\laya\\p_yinyou\\src\\LTG_CommonUI\\UI",
 		"codeType":"TS-2",
 		"getMemberByName":false,
 		"ignoreNoname":true,
@@ -16,5 +17,5 @@
 	"compressDesc":false,
 	"fileExtension":"bin",
 	"packageCount":2,
-	"path":"D:\\Work_Projects\\ltg-laya\\FakeProject\\code\\laya\\p_yinyou\\bin\\res\\ltgame\\ui"
+	"path":"..\\..\\laya\\p_yinyou\\bin\\res\\ltgame\\ui"
 }
