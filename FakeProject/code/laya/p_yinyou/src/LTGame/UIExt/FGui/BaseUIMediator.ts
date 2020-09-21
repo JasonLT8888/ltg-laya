@@ -71,6 +71,8 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         if (this._ui[anim_enter] && LTSDK.instance.isDelayClose) {
             let anim = this._ui[anim_enter] as fgui.Transition;
             anim.play(Laya.Handler.create(this, this._CallEnterAnimEnd));
+        } else {
+            this._CallEnterAnimEnd();
         }
     }
 

@@ -4,9 +4,9 @@
     <graph id="n1_8gel" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n5_8gel" name="btn_close" src="8gel1d" fileName="cmp/btn_close_01.xml" xy="31,122"/>
-    <component id="n2_8gel" name="view" src="8gel42" fileName="cmp/view_roll.xml" xy="13,81">
+    <component id="n2_8gel" name="view" src="8gel42" fileName="cmp/view_roll.xml" xy="0,81">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
+    <component id="n5_8gel" name="btn_close" src="8gel1d" fileName="cmp/btn_close_01.xml" xy="31,122"/>
   </displayList>
 </component>

@@ -49,6 +49,8 @@ export default class LTPlatform {
                 return "微信";
             case EPlatformType.QTT:
                 return "趣头条";
+            case EPlatformType.KS:
+                return "快手";
             case EPlatformType.Native_IOS:
                 return "IOS原生"
             default:

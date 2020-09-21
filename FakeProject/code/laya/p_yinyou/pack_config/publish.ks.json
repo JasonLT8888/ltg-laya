@@ -1,0 +1,14 @@
+{
+    "appid": "",
+    "bannerId": "",
+    "rewardVideoId": "",
+    "interstitialId": "",
+    "forceRemote": [],
+    "forceInPack": [],
+    "maxSinglePackSize": 10,
+    "maxTotalPackSize": 40,
+    "packType": 1,
+    "compress": true,
+    "es5": false,
+    "isDebug": true
+}

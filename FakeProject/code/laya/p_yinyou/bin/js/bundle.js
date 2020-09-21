@@ -6329,7 +6329,181 @@ var EPlatformType;
     EPlatformType[EPlatformType["TT"] = 7] = "TT";
     EPlatformType[EPlatformType["QTT"] = 8] = "QTT";
     EPlatformType[EPlatformType["Native_IOS"] = 9] = "Native_IOS";
+    EPlatformType[EPlatformType["KS"] = 10] = "KS";
 })(EPlatformType || (EPlatformType = {}));
+
+
+/***/ }),
+
+/***/ "./src/LTGame/Platform/Impl/KS/KSRecordManager.ts":
+/*!********************************************************!*\
+  !*** ./src/LTGame/Platform/Impl/KS/KSRecordManager.ts ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return KSRecordManager; });
+/* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+
+class KSRecordManager {
+    constructor(base) {
+        this.supportRecord = true;
+        this._base = base;
+        this.isRecording = false;
+        this.isRecordSuccess = false;
+        this.isPausing = false;
+    }
+    get isSupportRecord() {
+        if (this._nativeManager) {
+            this.supportRecord = true;
+            return true;
+        }
+        return false;
+    }
+    StartRecord(onStart, onOverTime) {
+        console.log("KS调用开始录屏");
+        this._cacheStartHandle = onStart;
+        this._cacheOverTimeHandle = onOverTime;
+        this._cacheStopHandle = null;
+        if (!this._nativeManager) {
+            try {
+                console.log("创建录屏组件");
+                this._nativeManager = this._base.createMediaRecorder();
+            }
+            catch (error) {
+                console.error('创建录屏组件错误', JSON.stringify(error));
+            }
+        }
+        _Async_Awaiters__WEBPACK_IMPORTED_MODULE_0__["default"].Seconds(1).then(() => {
+            if (this._nativeManager) {
+                this.supportRecord = true;
+                this._nativeManager.init({
+                    callback: (error) => {
+                        if (error != null && error != undefined) {
+                            console.log("录屏初始化失败: " + JSON.stringify(error));
+                            return;
+                        }
+                        console.log("录屏初始化成功");
+                    }
+                });
+                this._nativeManager.onError({
+                    listener: (error) => {
+                        console.log("录屏错误 终止录屏: " + error);
+                        if (this._cacheStopHandle)
+                            this._cacheStopHandle.run();
+                    }
+                });
+                this._nativeManager.start({
+                    callback: (error) => {
+                        if (error != null && error != undefined) {
+                            console.log("开始录屏失败: " + JSON.stringify(error));
+                            return;
+                        }
+                        console.log("开始录屏成功");
+                        if (this._cacheStartHandle)
+                            this._cacheStartHandle.run();
+                    }
+                });
+            }
+            else {
+                console.error(" 无录屏组件");
+            }
+        });
+    }
+    Pause(onPause) {
+        if (!this.isRecording) {
+            console.error("当前未开始录制,无法暂停录制");
+            return;
+        }
+        if (this.isPausing) {
+            console.log("当前录制状态已暂停");
+            return;
+        }
+        console.log("调用暂停录制");
+        this._cachePauseHandle = onPause;
+        this._nativeManager.pause({
+            callback: (error) => {
+                if (error != null && error != undefined) {
+                    console.log("暂停录屏失败: " + JSON.stringify(error));
+                    return;
+                }
+                console.log("暂停录屏成功");
+                if (this._cachePauseHandle)
+                    this._cachePauseHandle.run();
+            }
+        });
+    }
+    Resume(onReume) {
+        if (!this.isRecording) {
+            console.error("当前未开始录制,无法恢复录制");
+            return;
+        }
+        if (!this.isPausing) {
+            console.log("当前录制状态正在进行中");
+            return;
+        }
+        console.log("调用恢复录制");
+        this._cacheResumeHandle = onReume;
+        this._nativeManager.resume({
+            callback: (error) => {
+                if (error != null && error != undefined) {
+                    console.log("恢复录屏失败: " + JSON.stringify(error));
+                    return;
+                }
+                if (this._cacheResumeHandle)
+                    this._cacheResumeHandle.run();
+                console.log("恢复录屏成功");
+            }
+        });
+    }
+    RecordClip(timeRange) {
+    }
+    StopRecord(onStop) {
+        console.log("调用结束录屏");
+        if (!this.supportRecord)
+            return;
+        if (!this._nativeManager)
+            return;
+        this._cacheStopHandle = onStop;
+        this._nativeManager.stop({
+            callback: (error) => {
+                if (error != null && error != undefined) {
+                    console.log("停止录屏失败: " + JSON.stringify(error));
+                    return;
+                }
+                console.log("停止录屏成功");
+                this.isRecordSuccess = true;
+                if (this._cacheStopHandle)
+                    this._cacheStopHandle.run();
+            }
+        });
+    }
+    ShareVideo(onSuccess, onCancel, onFailed) {
+        if (this.isRecordSuccess) {
+            this._nativeManager.publishVideo({
+                callback: (error) => {
+                    if (error != null && error != undefined) {
+                        console.log("分享录屏失败: " + JSON.stringify(error));
+                        if (onCancel)
+                            onCancel.run();
+                        return;
+                    }
+                    console.log("分享录屏成功");
+                    if (onSuccess)
+                        onSuccess.run();
+                }
+            });
+        }
+        else {
+            console.log("无视频可以分享");
+            if (onFailed) {
+                onFailed.run();
+            }
+        }
+    }
+}
 
 
 /***/ }),
@@ -6661,6 +6835,369 @@ class WebRecordManager extends _DefaultRecordManager__WEBPACK_IMPORTED_MODULE_0_
 
 /***/ }),
 
+/***/ "./src/LTGame/Platform/KSPlatform.ts":
+/*!*******************************************!*\
+  !*** ./src/LTGame/Platform/KSPlatform.ts ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return KSPlatform; });
+/* harmony import */ var _script_manager_AudioManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../script/manager/AudioManager */ "./src/script/manager/AudioManager.ts");
+/* harmony import */ var _Async_Awaiters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+/* harmony import */ var _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _DefaultDevice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DefaultDevice */ "./src/LTGame/Platform/DefaultDevice.ts");
+/* harmony import */ var _EPlatformType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EPlatformType */ "./src/LTGame/Platform/EPlatformType.ts");
+/* harmony import */ var _Impl_KS_KSRecordManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Impl/KS/KSRecordManager */ "./src/LTGame/Platform/Impl/KS/KSRecordManager.ts");
+/* harmony import */ var _LTPlatform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./LTPlatform */ "./src/LTGame/Platform/LTPlatform.ts");
+
+
+
+
+
+
+
+class KSPlatform {
+    constructor() {
+        this.platform = _EPlatformType__WEBPACK_IMPORTED_MODULE_4__["EPlatformType"].KS;
+        this.safeArea = null;
+        this.device = new _DefaultDevice__WEBPACK_IMPORTED_MODULE_3__["default"]();
+        this.systemInfo = null;
+        /**
+         * 是否支持直接跳转到其他小程序
+         * 默认平台进行强制fake true,方便进行调试
+         */
+        this.isSupportJumpOther = false;
+    }
+    Init(platformData) {
+        this.loginState = {
+            isLogin: false,
+            code: null
+        };
+        this.base = window["kwaigame"];
+        if (this.base == null) {
+            console.error("平台初始化错误", _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr);
+            return;
+        }
+        else {
+            console.error("平台初始化", _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr);
+        }
+        this.platformData = platformData;
+        // this._InitLauchOption(); 
+        this.readyGo();
+        this.base.init({ "appId": platformData.appId });
+        this.recordManager = new _Impl_KS_KSRecordManager__WEBPACK_IMPORTED_MODULE_5__["default"](this.base);
+        try {
+            this.getSystemInfo();
+        }
+        catch (error) {
+            console.error('获取系统信息失败', JSON.stringify(error));
+        }
+        // console.log(112);
+        // console.log(113);
+        // this.createVideo();
+    }
+    readyGo() {
+        this.base.readyGo();
+    }
+    willClose() {
+        this.base.willClose();
+    }
+    _InitLauchOption() {
+        // 绑定onShow事件
+        // this.base.onShow(this._OnShow);
+        // this.base.onHide(this._OnHide);
+        // // 自动获取一次启动参数
+        // let res = this.base.getLaunchOptionsSync() as LTGame.LaunchOption;
+        // this._OnShow(res);
+    }
+    _login() {
+        this.base.login({
+            success: (res) => {
+                console.log('快手 登录成功', res);
+                if (res.gameToken) {
+                    this.loginState = { code: res.gameToken, isLogin: true };
+                    this.onLoginEnd.run();
+                }
+            },
+            fail: (err) => {
+                console.error('快手 登录失败', err);
+                this.loginState = { code: 'null', isLogin: false };
+            }
+        });
+    }
+    authorize() {
+        this.base.authorize({
+            scope: "Scope.userInfo",
+            success: () => {
+                console.log("授权获取用户信息成功");
+            },
+            fail: (error) => {
+                console.log("授权获取用户信息失败: " + JSON.stringify(error));
+            },
+            complete: () => {
+                console.log("授权获取用户信息完成");
+            }
+        });
+    }
+    getSetting() {
+        this.base.getSetting({
+            success: (result) => {
+                console.log("查询授权结果成功：" + JSON.stringify(result));
+            },
+            fail: (error) => {
+                console.log("查询授权结果失败: " + JSON.stringify(error));
+            },
+            complete: () => {
+                console.log("查询授权结果完成");
+            }
+        });
+    }
+    getUserInfo() {
+        this.base.getUserInfo({
+            success: (result) => {
+                console.log("获取用户信息成功：" + JSON.stringify(result));
+            },
+            fail: (error) => {
+                console.log("获取用户信息失败: " + JSON.stringify(error));
+            },
+            complete: () => {
+                console.log("获取用户信息完成");
+            }
+        });
+    }
+    /**
+     * 小游戏回到前台的事件
+     */
+    _OnShow(res) {
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr, "OnShow", res);
+        _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.lauchOption = res;
+        _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance._CheckUpdate();
+        _script_manager_AudioManager__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Resume();
+        _Async_Awaiters__WEBPACK_IMPORTED_MODULE_1__["default"].NextFrame().then(() => {
+            if (_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.onResume) {
+                _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.onResume.runWith(res);
+            }
+            let cacheOnShow = _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance["_cacheOnShowHandle"];
+            console.log(cacheOnShow);
+            if (cacheOnShow) {
+                cacheOnShow.run();
+                _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance["_cacheOnShowHandle"] = null;
+            }
+        });
+    }
+    SetClipboardData(str) {
+        console.log('KS SetClipboardData 暂未实现');
+    }
+    /**
+    * 小游戏退出前台的事件
+    */
+    _OnHide(res) {
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr, "OnHide", res);
+        _script_manager_AudioManager__WEBPACK_IMPORTED_MODULE_0__["default"].instance.Pause();
+        if (_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.onPause) {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.onPause.runWith(res);
+        }
+    }
+    getSystemInfo() {
+        this.safeArea = { top: 80, bottom: Laya.stage.height, left: 0, right: Laya.stage.width, height: Laya.stage.height - 80, width: Laya.stage.width };
+        window["kwaigame"].getSystemInfo({
+            response: (res) => {
+                this.systemInfo = res;
+                console.log('systeminfo', JSON.stringify(res));
+                // this.safeArea = res['safeArea']
+                // this._cacheScreenScale = this.safeArea.width / Laya.stage.width;
+                console.log(this.safeArea);
+                // if (!this.safeArea) {
+                // } 
+            }
+            // ,
+            // fail: (err) => {
+            //     console.error('systeminfo', JSON.stringify(err));
+            // }
+        });
+    }
+    IsBannerAvaliable() {
+        return;
+    }
+    IsVideoAvaliable() {
+        return this.base.isSupport(this.base.Support.features.RewardVideo);
+    }
+    IsInterstitalAvaliable() {
+        return;
+    }
+    ShowInterstitalAd() {
+        console.log('todo');
+        let interad = this.base.createInterstitialAd({
+            posId: this.platformData.interstitialId
+        });
+        if (interad) {
+            interad.show();
+        }
+    }
+    ShowBannerAd() {
+    }
+    HideBannerAd() {
+    }
+    ShowRewardVideoAd(onSuccess, onSkipped) {
+        this._rewardSuccessed = onSuccess;
+        this._rewardSkipped = onSkipped;
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            if (this._rewardVideo) {
+                this._rewardVideo.show({
+                    success: () => {
+                    },
+                    fail: (error) => {
+                    }
+                });
+            }
+            else {
+                this._rewardVideo = this.base.createRewardedVideoAd({
+                    adUnitId: this.platformData.rewardVideoId
+                });
+                this._rewardVideo.onClose((res) => {
+                    console.log("激励视频关闭: " + JSON.stringify(res));
+                    if (this._rewardSkipped)
+                        this._rewardSkipped.run();
+                });
+                this._rewardVideo.onReward((result) => {
+                    console.log("激励视频奖励回调: " + JSON.stringify(result));
+                    if (this._rewardSuccessed)
+                        this._rewardSuccessed.run();
+                });
+                if (this._rewardVideo) {
+                    this._rewardVideo.show({
+                        success: () => {
+                        },
+                        fail: (error) => {
+                        }
+                    });
+                }
+                else {
+                    console.log("请先获取激励视频组件");
+                }
+            }
+        }));
+    }
+    createVideo() {
+        this._rewardVideo = this.base.createRewardedVideoAd({
+            adUnitId: this.platformData.rewardVideoId
+        });
+        if (this._rewardVideo) {
+            console.log("激励广告组件获取成功");
+            this._rewardVideo.onClose((result) => {
+                console.log("激励视频关闭回调: " + JSON.stringify(result));
+            });
+            this._rewardVideo.onReward((result) => {
+                console.log("激励视频奖励回调: " + JSON.stringify(result));
+            });
+        }
+        else {
+            console.log("激励广告组件获取失败");
+        }
+    }
+    ShowRewardVideoAdAsync() {
+        return new Promise(function (resolve) {
+            _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
+                resolve(true);
+            }), Laya.Handler.create(this, () => {
+                resolve(false);
+            }));
+        });
+    }
+    GetFromAppId() {
+        return null;
+    }
+    ShareAppMessage(obj, onSuccess = null, onFailed = null) {
+        console.log("分享消息", obj);
+        let params = {
+            title: "游戏名",
+            desc: "游戏描述",
+            iconUrl: "游戏icon",
+            imageUrl: "分享图片",
+            extension: {
+                name: "test"
+            },
+            response: (result) => {
+                console.log("分享完成: " + JSON.stringify(result));
+                if (onSuccess) {
+                    onSuccess.run();
+                }
+            }
+        };
+        this.base.shareToMsg(params);
+    }
+    LoadSubpackage(name, onSuccess, onFailed) {
+        var subpackageSupport = this.base.isSupport(this.base.Support.features.Subpackage);
+        console.log(`加载分包${name}`, subpackageSupport);
+        if (!subpackageSupport) {
+            //不支持信令，则是旧版本APP，自己加载子包路径中的main.js 即可，该路径为开发时设置的子包路径一致，我这里的子包未sence2，所以为sence2/main.js
+            window.require(`${name}/main.js`);
+            //执行你需要的逻辑，如加载场景    
+            return;
+        }
+        let loadTask = this.base.loadSubpackage({
+            name: name, success: function (res) {
+                //执行你需要的逻辑，如加载场景	
+                if (onSuccess) {
+                    onSuccess.run();
+                }
+            }, fail: function (err) {
+                console.log(err);
+            }
+        });
+        loadTask.onProgressUpdate(res => {
+            console.log(res);
+        });
+    }
+    RecordEvent(eventId, param) {
+        console.log("记录事件", eventId, param);
+    }
+    ShareVideoInfo() {
+        console.log(_LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr, "暂未实现录屏功能");
+    }
+    _CheckUpdate() {
+    }
+    ShowToast(str) {
+        _UIExt_LTUI__WEBPACK_IMPORTED_MODULE_2__["default"].Toast(str);
+    }
+    OpenGameBox() {
+        console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr, "暂不支持互推游戏盒子");
+    }
+    NavigateToApp(appid, path, extra) {
+        return new Promise((resolve, reject) => {
+            console.error("当前平台", _LTPlatform__WEBPACK_IMPORTED_MODULE_6__["default"].platformStr, `暂不支持小程序跳转appid:${appid}`);
+            // 这里使用resolve
+            resolve(false);
+        });
+    }
+    createShortcut() {
+        console.log('创建桌面图标');
+        return;
+    }
+    GetStorage(key) {
+        console.log('读本地存储');
+        return Laya.LocalStorage.getItem(key);
+    }
+    SetStorage(key, data) {
+        console.log('写本地存储');
+        Laya.LocalStorage.setItem(key, data);
+    }
+    followOfficialAccount() {
+        console.log('暂不支持');
+        return;
+    }
+    checkFollowState() {
+        console.log('暂不支持');
+        return;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTGame/Platform/LTPlatform.ts":
 /*!*******************************************!*\
   !*** ./src/LTGame/Platform/LTPlatform.ts ***!
@@ -6716,6 +7253,8 @@ class LTPlatform {
                 return "微信";
             case _EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].QTT:
                 return "趣头条";
+            case _EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].KS:
+                return "快手";
             case _EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].Native_IOS:
                 return "IOS原生";
             default:
@@ -6746,6 +7285,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _OppoPlatform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./OppoPlatform */ "./src/LTGame/Platform/OppoPlatform.ts");
 /* harmony import */ var _Impl_Native_IOS_NativeIOSPlatform__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Impl/Native_IOS/NativeIOSPlatform */ "./src/LTGame/Platform/Impl/Native_IOS/NativeIOSPlatform.ts");
 /* harmony import */ var _VivoPlatform__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./VivoPlatform */ "./src/LTGame/Platform/VivoPlatform.ts");
+/* harmony import */ var _KSPlatform__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./KSPlatform */ "./src/LTGame/Platform/KSPlatform.ts");
+
 
 
 
@@ -6780,6 +7321,9 @@ class LTPlatformFactory {
         }
         else if (Laya.Browser.onVVMiniGame) {
             result = new _VivoPlatform__WEBPACK_IMPORTED_MODULE_8__["default"]();
+        }
+        else if (window['kwaigame']) {
+            result = new _KSPlatform__WEBPACK_IMPORTED_MODULE_9__["default"]();
         }
         else if (window['conch']) {
             let conchConfig = window['conchConfig'];
@@ -9529,12 +10073,58 @@ class LTMain {
             //打开调试面板（通过IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
             // if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
             // if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
+            //快手
+            if (window['kwaigame']) {
+                var stage = Laya.stage;
+                var info = this.getAdapterInfo({
+                    width: 750, height: 1334,
+                    scaleMode: Laya.Stage.SCALE_FIXED_AUTO
+                });
+                stage.designWidth = info.w;
+                stage.designHeight = info.h;
+                stage.width = info.rw;
+                stage.height = info.rh;
+                stage.scale(info.scaleX, info.scaleY);
+            }
             if (this._mainLogic.enableStat) {
                 Laya.Stat.show(0, 100);
             }
             Laya.alertGlobalError(false);
             this._mainLogic.InitGame();
         }));
+    }
+    //ks
+    getAdapterInfo(config) {
+        let scaleX = 1;
+        let scaleY = 1;
+        let vw = window.innerWidth;
+        let vh = window.innerHeight;
+        let w = config.width;
+        let h = config.height;
+        config.scaleMode = config.scaleMode.toLowerCase();
+        switch (config.scaleMode) {
+            case "exactfit":
+                scaleX = vw / w;
+                scaleY = vh / h;
+                break;
+            case "fixedwidth":
+                scaleX = scaleY = vw / w;
+                break;
+            default:
+                scaleX = vw / w;
+                scaleY = vh / h;
+                break;
+        }
+        return {
+            scaleX: scaleX,
+            scaleY: scaleY,
+            w: w,
+            h: h,
+            vw: vw,
+            vh: vh,
+            rw: w * scaleX,
+            rh: h * scaleY
+        };
     }
 }
 
@@ -13386,6 +13976,9 @@ class BaseUIMediator {
             let anim = this._ui[anim_enter];
             anim.play(Laya.Handler.create(this, this._CallEnterAnimEnd));
         }
+        else {
+            this._CallEnterAnimEnd();
+        }
     }
     _CallEnterAnimEnd() {
         this._OnEnterAnimEnd();
@@ -13553,6 +14146,14 @@ class FGuiEx {
             ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height - this.top - this.bottom);
             ui.y = this.top;
         }
+        if (window['kwaigame']) {
+            let scale = (1334 / 750) / (Laya.stage.height / Laya.stage.width);
+            ui.asCom._children.forEach(c => {
+                if (ui.asCom._children.indexOf(c) > 0) {
+                    c.scaleY = scale;
+                }
+            });
+        }
         this._cacheMap.set(ui.constructor.name, param);
         window[ui.constructor.name] = ui;
         console.log("打开界面", ui.constructor.name);
@@ -13564,9 +14165,14 @@ class FGuiEx {
         if (this.safeArea != null) {
             let scale = Laya.stage.width / this.safeArea.width;
             this.top = this.safeArea.top * scale;
-            this.bottom = this.safeArea.bottom - this.safeArea.height - this.safeArea.top * scale;
+            this.bottom = (this.safeArea.bottom - this.safeArea.height - this.safeArea.top) * scale;
         }
-        fgui.GRoot.inst.setSize(setWidth, setHeight);
+        if (window['kwaigame']) {
+            fgui.GRoot.inst.setSize(750, 1334);
+        }
+        else {
+            fgui.GRoot.inst.setSize(setWidth, setHeight);
+        }
         let childCount = fgui.GRoot.inst.numChildren;
         for (let i = 0; i < childCount; ++i) {
             let ui = fgui.GRoot.inst.getChildAt(i);
@@ -13577,6 +14183,9 @@ class FGuiEx {
             else {
                 ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height - this.top - this.bottom);
                 ui.y = this.top;
+            }
+            if (window['kwaigame']) {
+                ui.setScale(1, (Laya.stage.height / Laya.stage.width) / (1334 / 750));
             }
         }
     }
@@ -15331,6 +15940,15 @@ class MainStart extends _LTGame_Start_LTStart__WEBPACK_IMPORTED_MODULE_3__["LTSt
                 platformData.nativeIconIds = ['91686cf4a42a4144b884f8843d947727', 'd987f0a85f724700aa098631c751ca7e'];
                 platformData.nativeinpageIds = ['b82fb9b9d97d4a5c8281a943d41ea0aa', '4de349a96b6a432bb1b2f215493f1b07'];
                 _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_2__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
+                break;
+            case _LTGame_Platform_EPlatformType__WEBPACK_IMPORTED_MODULE_0__["EPlatformType"].KS:
+                this._gameVersion = "1.0.0";
+                this._resVersion = "0910";
+                platformData.appId = "ks660058823026773759";
+                // platformData.bannerId = "f3h5a48j44l2jfopn8";
+                platformData.rewardVideoId = "2300000126_01";
+                // platformData.interstitialId = "3nmlb1smr5h1f9clmk";
+                _LTGame_Res_LTRespackManager__WEBPACK_IMPORTED_MODULE_2__["default"].instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/tt_${this._resVersion}/`);
                 break;
             default:
                 console.error("未处理平台内容", _LTGame_Platform_LTPlatform__WEBPACK_IMPORTED_MODULE_1__["default"].platformStr, "请在MainStart中添加处理");
