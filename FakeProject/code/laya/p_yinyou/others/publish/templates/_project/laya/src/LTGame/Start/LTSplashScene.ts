@@ -1,5 +1,4 @@
 import BaseState from "../Fsm/BaseState"; import { LoadUIPack } from "../UIExt/FGui/LoadUIPack"; import { ESceneType } from "./ESceneType"; import LTPlatform from "../Platform/LTPlatform"; import { EPlatformType } from "../Platform/EPlatformType"; import { LoadPackConfig } from "../Config/LoadPackConfig"; import LTRespackManager from "../Res/LTRespackManager"; import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder"; import FGuiData from "../UIExt/FGui/FGuiData"; import FGuiEx from "../UIExt/FGui/FGuiEx"; import OppoPlatform from "../Platform/OppoPlatform"; import { ConfigManager } from "../Config/ConfigManager"; import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
-import LTUIBinder from "../UIExt/DefaultUI/UI/LTUI/LTUIBinder";
 import LTComBinder from "../../LTG_CommonUI/UI/LTCom/LTComBinder";
 
 export default class LTSplashScene extends BaseState {
@@ -99,7 +98,6 @@ export default class LTSplashScene extends BaseState {
     private _InitUI() {
         LTPlatform.instance.RecordEvent("开始初始化启动界面", null);
         LTGameBinder.bindAll();
-        LTUIBinder.bindAll();
         if (this._useCommonUI) {
             LTComBinder.bindAll();
         }

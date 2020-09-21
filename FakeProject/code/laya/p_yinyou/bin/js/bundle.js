@@ -5777,6 +5777,95 @@ LTHttp.enableDebug = false;
 
 /***/ }),
 
+/***/ "./src/LTGame/Physics/OimoHelper.ts":
+/*!******************************************!*\
+  !*** ./src/LTGame/Physics/OimoHelper.ts ***!
+  \******************************************/
+/*! exports provided: OimoHelper */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OimoHelper", function() { return OimoHelper; });
+class OimoHelper {
+    static _Init() {
+        if (this._isInited)
+            return;
+        this._isInited = true;
+        this._cacheVec3 = new OIMO.Vec3();
+    }
+    static CreateRigbody(pos = null, rot = null, type = 0) {
+        let rigConfig = new OIMO.RigidBodyConfig();
+        rigConfig.type = type;
+        if (pos != null) {
+            rigConfig.position.init(pos.x, pos.y, pos.z);
+        }
+        if (rot != null) {
+            rigConfig.rotation.fromQuat(rot);
+        }
+        let rig = new OIMO.RigidBody(rigConfig);
+        return rig;
+    }
+    static CreateSphere(radius, layer = 1, mask = 1, localPos = null, localRot = null) {
+        this._Init();
+        let shapeConfig = new OIMO.ShapeConfig();
+        let boxGeo = new OIMO.SphereGeometry(radius);
+        shapeConfig.geometry = boxGeo;
+        shapeConfig.collisionGroup = layer;
+        shapeConfig.collisionMask = mask;
+        if (localPos != null) {
+            shapeConfig.position.init(localPos.x, localPos.y, localPos.z);
+        }
+        if (localRot != null) {
+            shapeConfig.rotation.fromQuat(localRot);
+        }
+        let shape = new OIMO.Shape(shapeConfig);
+        return shape;
+    }
+    static CreateBox(size, layer = 1, mask = 1, localPos = null, localRot = null) {
+        this._Init();
+        let shapeConfig = new OIMO.ShapeConfig();
+        this._cacheVec3.init(size.x / 2, size.y / 2, size.z / 2);
+        let boxGeo = new OIMO.BoxGeometry(this._cacheVec3);
+        shapeConfig.geometry = boxGeo;
+        shapeConfig.collisionGroup = layer;
+        shapeConfig.collisionMask = mask;
+        if (localPos != null) {
+            shapeConfig.position.init(localPos.x, localPos.y, localPos.z);
+        }
+        if (localRot != null) {
+            shapeConfig.rotation.fromQuat(localRot);
+        }
+        let shape = new OIMO.Shape(shapeConfig);
+        return shape;
+    }
+    static SyncTransToRig(trans, rig) {
+        rig.setPosition(trans.position);
+        this._cacheRigMat3.fromQuat(trans.rotation);
+        rig.setRotation(this._cacheRigMat3);
+    }
+    static SyncTransFromRig(trans, rig) {
+        rig.getPositionTo(this._cacheRigPos);
+        rig.getOrientationTo(this._cacheRigQuat);
+        this._cacheTransPos.setValue(this._cacheRigPos.x, this._cacheRigPos.y, this._cacheRigPos.z);
+        this._cacheTransQuat.x = this._cacheRigQuat.x;
+        this._cacheTransQuat.y = this._cacheRigQuat.y;
+        this._cacheTransQuat.z = this._cacheRigQuat.z;
+        this._cacheTransQuat.w = this._cacheRigQuat.w;
+        trans.position = this._cacheTransPos;
+        trans.rotation = this._cacheTransQuat;
+    }
+}
+OimoHelper._isInited = false;
+OimoHelper._cacheTransPos = new Laya.Vector3();
+OimoHelper._cacheTransQuat = new Laya.Quaternion();
+OimoHelper._cacheRigMat3 = new OIMO.Mat3();
+OimoHelper._cacheRigPos = new OIMO.Vec3();
+OimoHelper._cacheRigQuat = new OIMO.Quat();
+
+
+/***/ }),
+
 /***/ "./src/LTGame/Platform/BDPlatform.ts":
 /*!*******************************************!*\
   !*** ./src/LTGame/Platform/BDPlatform.ts ***!
@@ -16082,6 +16171,234 @@ class HeightFogTest {
 
 /***/ }),
 
+/***/ "./src/script/test/OimoTest/BaseOimoTest.ts":
+/*!**************************************************!*\
+  !*** ./src/script/test/OimoTest/BaseOimoTest.ts ***!
+  \**************************************************/
+/*! exports provided: BaseOimoTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BaseOimoTest", function() { return BaseOimoTest; });
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/Physics/OimoHelper */ "./src/LTGame/Physics/OimoHelper.ts");
+/* harmony import */ var _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/LTUtils/Vector3Ex */ "./src/LTGame/LTUtils/Vector3Ex.ts");
+/* harmony import */ var _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../ui/UI_TestMediator */ "./src/script/ui/UI_TestMediator.ts");
+/* harmony import */ var _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../ui/UI_FunctionTestMediator */ "./src/script/ui/UI_FunctionTestMediator.ts");
+/* harmony import */ var _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../LTGame/Async/Awaiters */ "./src/LTGame/Async/Awaiters.ts");
+
+
+
+
+
+
+class BaseOimoTest {
+    constructor() {
+        this.name = "OimoTest";
+    }
+    Create() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._s3d = new Laya.Scene3D();
+            Laya.stage.addChildAt(this._s3d, 1);
+            this._camera = new Laya.Camera();
+            this._camera.name = "camera";
+            this._s3d.addChild(this._camera);
+            this._camera.transform.position = new Laya.Vector3(0, 15, 15);
+            this._camera.transform.rotationEuler = new Laya.Vector3(-45, 0, 0);
+            let light = new Laya.DirectionLight();
+            light.name = "light";
+            this._s3d.addChild(light);
+            light.transform.rotationEuler = new Laya.Vector3(-45, 45, 0);
+            light.shadowCascadesMode = Laya.ShadowCascadesMode.FourCascades;
+            light.shadowMode = Laya.ShadowMode.SoftHigh;
+            this._world = new OIMO.World(OIMO.BroadPhaseType.BVH);
+            this._CreateMats();
+            yield this._OnCreate();
+            yield _LTGame_Async_Awaiters__WEBPACK_IMPORTED_MODULE_5__["default"].NextFrame();
+            _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].Update, this, this._LogicUpdate);
+            _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Show(Laya.Handler.create(this, this.Clear, null, false));
+        });
+    }
+    _OnCreate() {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
+    _CreateMats() {
+        this._awakeMat = new Laya.BlinnPhongMaterial();
+        this._awakeMat.albedoColor = new Laya.Vector4(0, 0.73, 0.83, 1);
+        this._sleepMat = new Laya.BlinnPhongMaterial();
+        this._sleepMat.albedoColor = new Laya.Vector4(0, 0.27, 0.31, 1);
+        this._staticMat = new Laya.BlinnPhongMaterial();
+        this._staticMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
+    }
+    _LogicUpdate() {
+        let dt = Laya.timer.delta / 1000;
+        this._world.step(dt);
+        let workRig = this._world.getRigidBodyList();
+        while (workRig != null) {
+            if (workRig.userData != null) {
+                let obj = workRig.userData;
+                _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_1__["OimoHelper"].SyncTransFromRig(obj.transform, workRig);
+                let render = obj['_render'];
+                if (render != null) {
+                    switch (workRig.getType()) {
+                        case OIMO.RigidBodyType.DYNAMIC:
+                            if (workRig.isSleeping()) {
+                                render.sharedMaterial = this._sleepMat;
+                            }
+                            else {
+                                render.sharedMaterial = this._awakeMat;
+                            }
+                            break;
+                    }
+                }
+            }
+            workRig = workRig.getNext();
+        }
+    }
+    Clear() {
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.RemoveAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].Update, this, this._LogicUpdate);
+        this._s3d.destroy();
+        _ui_UI_TestMediator__WEBPACK_IMPORTED_MODULE_3__["default"].instance.Hide();
+        _ui_UI_FunctionTestMediator__WEBPACK_IMPORTED_MODULE_4__["default"].instance.Show();
+    }
+    _CreateBox(pos, rot, size) {
+        let objMesh = Laya.PrimitiveMesh.createBox();
+        let obj = new Laya.MeshSprite3D(objMesh, "box");
+        obj.meshRenderer.sharedMaterial = this._awakeMat;
+        obj.meshRenderer.castShadow = true;
+        obj.meshRenderer.receiveShadow = true;
+        obj.transform.position = pos;
+        if (rot != null) {
+            obj.transform.rotation = rot;
+        }
+        this._s3d.addChild(obj);
+        let rig = _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_1__["OimoHelper"].CreateRigbody(pos, rot, OIMO.RigidBodyType.DYNAMIC);
+        let shape = _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_1__["OimoHelper"].CreateBox(size);
+        rig.addShape(shape);
+        rig.userData = obj;
+        this._world.addRigidBody(rig);
+    }
+    _CreateStaticPanel(pos, xSize, zSize) {
+        let objMesh = Laya.PrimitiveMesh.createPlane(xSize, zSize);
+        let obj = new Laya.MeshSprite3D(objMesh, "panel");
+        obj.meshRenderer.sharedMaterial = this._staticMat;
+        obj.meshRenderer.castShadow = false;
+        obj.meshRenderer.receiveShadow = true;
+        obj.transform.position = pos;
+        this._s3d.addChild(obj);
+        let rig = _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_1__["OimoHelper"].CreateRigbody(pos, null, OIMO.RigidBodyType.STATIC);
+        _LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_2__["default"].cacheVec0.setValue(xSize, 0.1, zSize);
+        let shape = _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_1__["OimoHelper"].CreateBox(_LTGame_LTUtils_Vector3Ex__WEBPACK_IMPORTED_MODULE_2__["default"].cacheVec0);
+        rig.addShape(shape);
+        rig.userData = obj;
+        this._world.addRigidBody(rig);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/OimoTest/BasicTest.ts":
+/*!***********************************************!*\
+  !*** ./src/script/test/OimoTest/BasicTest.ts ***!
+  \***********************************************/
+/*! exports provided: BasicTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BasicTest", function() { return BasicTest; });
+/* harmony import */ var _BaseOimoTest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseOimoTest */ "./src/script/test/OimoTest/BaseOimoTest.ts");
+
+class BasicTest extends _BaseOimoTest__WEBPACK_IMPORTED_MODULE_0__["BaseOimoTest"] {
+    constructor() {
+        super(...arguments);
+        this.name = "基础测试";
+    }
+    _OnCreate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._CreateStaticPanel(new Laya.Vector3(0, 0, 0), 20, 20);
+            for (let i = -2; i <= 2; ++i) {
+                for (let j = -2; j <= 2; ++j) {
+                    for (let k = -2; k <= 2; ++k) {
+                        this._CreateBox(new Laya.Vector3(k * 1.01, 5 + i * 1.2, j * 1.01), null, new Laya.Vector3(1, 1, 1));
+                    }
+                }
+            }
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/test/OimoTest/CompoundShapeTest.ts":
+/*!*******************************************************!*\
+  !*** ./src/script/test/OimoTest/CompoundShapeTest.ts ***!
+  \*******************************************************/
+/*! exports provided: CompoundShapeTest */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CompoundShapeTest", function() { return CompoundShapeTest; });
+/* harmony import */ var _BaseOimoTest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseOimoTest */ "./src/script/test/OimoTest/BaseOimoTest.ts");
+/* harmony import */ var _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/UIExt/LTUI */ "./src/LTGame/UIExt/LTUI.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../LTGame/LTUtils/QuaternionEx */ "./src/LTGame/LTUtils/QuaternionEx.ts");
+/* harmony import */ var _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../LTGame/Physics/OimoHelper */ "./src/LTGame/Physics/OimoHelper.ts");
+
+
+
+
+
+
+
+const shape_01 = "compound_01";
+class CompoundShapeTest extends _BaseOimoTest__WEBPACK_IMPORTED_MODULE_0__["BaseOimoTest"] {
+    constructor() {
+        super(...arguments);
+        this.name = "组合碰撞体测试";
+    }
+    _OnCreate() {
+        return __awaiter(this, void 0, void 0, function* () {
+            _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__["default"].ShowLoading("资源加载中...");
+            this._CreateStaticPanel(new Laya.Vector3(0, 0, 0), 20, 20);
+            let sampleObj = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].LoadAndGet(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(shape_01), true);
+            for (let i = 0; i < 5; ++i) {
+                let obj = sampleObj.clone();
+                let randomPos = new Laya.Vector3(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__["default"].Random(-3, 3), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__["default"].Random(5, 8), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__["default"].Random(-3, 3));
+                let randomRot = _LTGame_LTUtils_QuaternionEx__WEBPACK_IMPORTED_MODULE_5__["default"].Euler(_LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__["default"].Random(0, 360), _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_4__["default"].Random(0, 360));
+                this._s3d.addChild(obj);
+                obj.transform.position = randomPos;
+                obj.transform.rotation = randomRot;
+                let rig = _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_6__["OimoHelper"].CreateRigbody(randomPos, randomRot, OIMO.RigidBodyType.DYNAMIC);
+                for (let j = 0; j < obj.numChildren; ++j) {
+                    let getChild = obj.getChildAt(j);
+                    if (getChild.name.startsWith("Sphere ")) {
+                        let shape = _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_6__["OimoHelper"].CreateSphere(getChild.transform.localScale.x / 2, 1, 1, getChild.transform.localPosition, getChild.transform.localRotation);
+                        rig.addShape(shape);
+                    }
+                    else {
+                        let shape = _LTGame_Physics_OimoHelper__WEBPACK_IMPORTED_MODULE_6__["OimoHelper"].CreateBox(getChild.transform.localScale, 1, 1, getChild.transform.localPosition, getChild.transform.localRotation);
+                        rig.addShape(shape);
+                    }
+                }
+                rig.userData = obj;
+                this._world.addRigidBody(rig);
+            }
+            _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_1__["default"].HideLoading();
+        });
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/test/PBRTest.ts":
 /*!************************************!*\
   !*** ./src/script/test/PBRTest.ts ***!
@@ -16792,6 +17109,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../test/UIEffectTest */ "./src/script/test/UIEffectTest.ts");
 /* harmony import */ var _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../test/PhysicTest */ "./src/script/test/PhysicTest.ts");
 /* harmony import */ var _test_HXOimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../test/HXOimoPhysicTest */ "./src/script/test/HXOimoPhysicTest.ts");
+/* harmony import */ var _test_OimoTest_BasicTest__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../test/OimoTest/BasicTest */ "./src/script/test/OimoTest/BasicTest.ts");
+/* harmony import */ var _test_OimoTest_CompoundShapeTest__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../test/OimoTest/CompoundShapeTest */ "./src/script/test/OimoTest/CompoundShapeTest.ts");
+
+
 
 
 
@@ -16811,6 +17132,8 @@ class UI_FunctionTestMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK
             new _test_UIEffectTest__WEBPACK_IMPORTED_MODULE_6__["UIEffectTest"](),
             new _test_PhysicTest__WEBPACK_IMPORTED_MODULE_7__["PhysicTest"](),
             new _test_HXOimoPhysicTest__WEBPACK_IMPORTED_MODULE_8__["HXOimoPhysicTest"](),
+            new _test_OimoTest_BasicTest__WEBPACK_IMPORTED_MODULE_9__["BasicTest"](),
+            new _test_OimoTest_CompoundShapeTest__WEBPACK_IMPORTED_MODULE_10__["CompoundShapeTest"](),
         ];
     }
     static get instance() {

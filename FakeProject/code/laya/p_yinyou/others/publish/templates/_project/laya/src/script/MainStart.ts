@@ -8,6 +8,7 @@ import SDK_YQ from "../SDK/Impl/SDK_YQ";
 import LTSDK from "../SDK/LTSDK";
 import MainScene from "./scene/MainScene";
 import SplashScene from "./scene/SplashScene";
+import SDK_Default from "../SDK/Impl/SDK_Default";
 
 export default class MainStart extends LTStart {
 
@@ -87,15 +88,13 @@ export default class MainStart extends LTStart {
     _HandleSDK() {
         switch (LTPlatform.instance.platform) {
             case EPlatformType.WX:
-                // case EPlatformType.Web:
                 LTSDK.CreateInstace(SDK_YQ, this._gameName, this._gameVersion, this._appId);//
                 break;
-            // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
-            // break;
             case EPlatformType.Oppo:
             case EPlatformType.TT:
-            default:
                 LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
+            default:
+                LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
                 break;
         }
     }
