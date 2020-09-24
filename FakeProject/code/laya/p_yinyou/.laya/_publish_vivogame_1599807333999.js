@@ -1,4 +1,4 @@
-// v1.8.1
+// v1.8.0
 const ideModuleDir = global.ideModuleDir;
 const workSpaceDir = global.workSpaceDir;
 
@@ -10,7 +10,6 @@ const childProcess = require("child_process");
 const del = require(ideModuleDir + "del");
 const iconv =  require(ideModuleDir + "iconv-lite");
 const revCollector = require(ideModuleDir + 'gulp-rev-collector');
-const request = require(ideModuleDir + "request");
 
 let fullRemoteEngineList = ["laya.core.js", "laya.webgl.js", "laya.filter.js", "laya.ani.js", "laya.d3.js", "laya.html.js", "laya.particle.js", "laya.ui.js", "laya.d3Plugin.js", "bytebuffer.js", "laya.device.js", "laya.physics.js", "laya.physics3D.js", "laya.tiledmap.js", "worker.js", "workerloader.js"];
 
@@ -617,10 +616,10 @@ gulp.task("dealNoCompile1_VIVO", ["dealEngineFolder2_VIVO"], function() {
 	return stream.pipe(gulp.dest(path.join(projDir, "engine")));
 });
 
-function configVivoConfigFile(engineFileList, isAppend) {
+function configVivoConfigFile(engineFileList) {
 	let vvConfigPath = path.join(projDir, "minigame.config.js");
 	let content = fs.readFileSync(vvConfigPath, "utf8");
-	let externalsStr = "";
+	let externalsStr = 'const externals = [\n';
 	let libName;
 	// let engineStr = '';
 	let inLayaLibs = false, dirName, newLibPath;
@@ -639,16 +638,7 @@ function configVivoConfigFile(engineFileList, isAppend) {
 			externalsStr += `\t{\n\t\tmodule_name:'./${libName}',\n\t\tmodule_path:'./${libName}',\n\t\tmodule_from:'${dirName}/${libName}'\n\t}`;
 		}
 	}
-	if (isAppend) { // 只有源码项目会走这个逻辑
-		let oldExternalsReg = content.match(/const externals = (\[([^*].|\n|\r)*\])/);
-		if (!oldExternalsReg) {
-			throw new Error("源码项目适配vivo引擎插件，设置配置文件出错，请与服务提供商联系(code 3)!");
-		}
-		externalsStr = oldExternalsReg[1].replace(/\]$/, `,${externalsStr}\n]`);
-		externalsStr = `const externals = ${externalsStr}`;
-	} else {
-		externalsStr = `const externals = [\n${externalsStr}\n]`;
-	}
+	externalsStr += '\t]';
 	content = content.replace(/const externals = \[([^*].|\n|\r)*\]/gm, externalsStr);
 	fs.writeFileSync(vvConfigPath, content, "utf8");
 }
@@ -663,6 +653,7 @@ gulp.task("dealNoCompile2_VIVO", ["dealNoCompile1_VIVO"], function() {
 // 处理引擎插件
 // 我们会将所有的libs下的文件放到engine里，但不能认定libs下全是我们的引擎，所以还是要加判断
 gulp.task("pluginEngin_VIVO", ["dealNoCompile2_VIVO"], function(cb) {
+	
 	let manifestJsonPath = path.join(projSrc, "manifest.json");
 	let manifestJsonContent = fs.readFileSync(manifestJsonPath, "utf8");
 	let conJson = JSON.parse(manifestJsonContent);
@@ -675,13 +666,14 @@ gulp.task("pluginEngin_VIVO", ["dealNoCompile2_VIVO"], function(cb) {
 		return cb();
 	}
 	// 引擎源码项目
+	// TODO
 	// 将所有的min拷贝进来
 	if (config.useMinJsLibs) {
 		copyBinPath = path.join(workSpaceDir, "bin", "libs", "min");
 	} else { // 如果不是min
 		copyBinPath = path.join(workSpaceDir, "bin", "libs");
 	}
-	// 针对min引擎文件，很多配置文件也需要该，同时改
+	// TODO 针对min引擎文件，很多配置文件也需要该，同时改
 	if (config.version) {
 		let versionPath = projSrc + "/version.json";
 		versionCon = fs.readFileSync(versionPath, "utf8");
@@ -696,239 +688,123 @@ gulp.task("pluginEngin_VIVO", ["dealNoCompile2_VIVO"], function(cb) {
 	let isNewTsProj = fs.existsSync(`${workSpaceDir}/src/tsconfig.json`) && !isHasCoreLib;
 	let EngineVersion = getEngineVersion();
 	if (isOldAsProj || isNewTsProj) {
-		// 下载对应版本js引擎，按照普通项目走
-		console.log(`ts源码项目(${isNewTsProj})或as源码项目(${isOldAsProj})，开始处理引擎`);
-		let engineNum = EngineVersion.replace("beta", "");
-		let suffix = EngineVersion.includes("beta") ? "_beta" : "";
-		let engineURL = `http://ldc.layabox.com/download/LayaAirJS_${engineNum}${suffix}.zip`;
-		let engineDownPath = path.join(releaseDir, `LayaAirJS_${engineNum}${suffix}.zip`);
-		let engineExtractPath = path.join(releaseDir, `LayaAirJS_${engineNum}${suffix}`);
-		if (config.useMinJsLibs) {
-			copyBinPath = path.join(engineExtractPath, "js", "libs", "min");
-		} else { // 如果不是min
-			copyBinPath = path.join(engineExtractPath, "js", "libs");
-		}
-		// 情况1) 如果已经下载过引擎了，直接开始处理引擎插件
-		if (fs.existsSync(copyBinPath)) {
-			console.log("情况1) 如果已经下载过引擎了，直接开始处理引擎插件");
-			return dealPluginEngine().then(() => {
-				// return cb();
-			}).catch((err) => {
-				console.error("ts源码项目及as源码项目，下载或处理vivo引擎插件项目失败(code 1)!");
-				throw err;
-			});
-		}
-		// 情况2) 下载并解压引擎，然后开始处理引擎插件
-		console.log("情况2) 下载并解压引擎，然后开始处理引擎插件");
-		return downFileToDir(engineURL, engineDownPath).then(() => {
-			console.log("下载引擎库成功，开始解压");
-			return extractZipFile(engineDownPath, engineExtractPath);
-		}).then(() => {
-			console.log("解压成功，开始处理引擎插件");
-			return dealPluginEngine();
-		}).then(() => {
-			// return cb();
-		}).catch((err) => {
-			console.error("ts源码项目及as源码项目，下载或处理vivo引擎插件项目失败(code 2)!");
-			throw err;
-		})
+		console.log("ts源码项目及as源码项目，无法使用引擎插件功能!");
+		return cb();
 	}
-	// 情况3) 非源码项目，开始处理引擎插件
-	console.log("情况3) 非源码项目，开始处理引擎插件");
-	return dealPluginEngine().then(() => {
-		// return cb();
-	}).catch((err) => {
-		throw err;
-	});
-
-	function dealPluginEngine() {
-		// 使用引擎插件
-		let localUseEngineList = [];
-		let copyEnginePathList;
+	// 使用引擎插件
+	let localUseEngineList = [];
+	let copyEnginePathList;
+	new Promise(function(resolve, reject) {
+		console.log(`修改game.js和game.json`);
+		// 1) 修改game.js和game.json
+		// 修改game.js
+		let gameJsPath = path.join(projSrc, "game.js");
+		let gameJscontent = fs.readFileSync(gameJsPath, "utf8");
+		gameJscontent = gameJscontent.replace(`require("./${indexJsStr}");`, `requirePlugin('layaPlugin');\nrequire("./${indexJsStr}");`);
+		fs.writeFileSync(gameJsPath, gameJscontent, "utf8");
+		
+		// 修改manifest.json，使其支持引擎插件
+		conJson.plugins = {
+			"laya-library": {
+				"version": EngineVersion,
+				"provider": "",
+				"path": "laya-library"
+			}
+		}
+		manifestJsonContent = JSON.stringify(conJson, null, 4);
+		fs.writeFileSync(manifestJsonPath, manifestJsonContent, "utf8");
+		resolve();
+	}).then(function() {
 		return new Promise(function(resolve, reject) {
-			console.log(`修改game.js和game.json`);
-			// 1) 修改game.js和game.json
-			// 修改game.js
+			console.log(`确定用到的插件引擎`);
+			// 2) 确定用到了那些插件引擎，并将插件引擎从index.js的引用中去掉
+			let indexJsPath = path.join(projSrc, indexJsStr);
+			let indexJsCon = fs.readFileSync(indexJsPath, "utf8");
+			let item, fullRequireItem;
+			for (let i = 0, len = fullRemoteEngineList.length; i < len; i++) {
+				item = fullRemoteEngineList[i];
+				fullRequireItem = config.useMinJsLibs ? `require("./libs/min/${item}")` : `require("./libs/${item}")`;
+				if (indexJsCon.includes(fullRequireItem)) {
+					localUseEngineList.push(item);
+					indexJsCon = indexJsCon.replace(fullRequireItem + ";", "").replace(fullRequireItem + ",", "").replace(fullRequireItem, "");
+				}
+			}
+			fs.writeFileSync(indexJsPath, indexJsCon, "utf8");
+			// 再次修改game.js，仅引用使用到的类库
+			let pluginCon = "", normalCon = "";
+			localUseEngineList.forEach(function(item) {
+				pluginCon += `\trequirePlugin("laya-library/${item}");\n`;
+				normalCon += `\trequire("laya-library/${item}");\n`;
+			});
+			let finalyPluginCon = `if (window.requirePlugin) {\n${pluginCon}\n} else {\n${normalCon}\n}`;
 			let gameJsPath = path.join(projSrc, "game.js");
-			let gameJscontent = fs.readFileSync(gameJsPath, "utf8");
-			gameJscontent = gameJscontent.replace(`require("./${indexJsStr}");`, `requirePlugin('layaPlugin');\nrequire("./${indexJsStr}");`);
-			fs.writeFileSync(gameJsPath, gameJscontent, "utf8");
-			
-			// 修改manifest.json，使其支持引擎插件
-			conJson.plugins = {
-				"laya-library": {
-					"version": EngineVersion,
-					"provider": "",
-					"path": "laya-library"
-				}
-			}
-			manifestJsonContent = JSON.stringify(conJson, null, 4);
-			fs.writeFileSync(manifestJsonPath, manifestJsonContent, "utf8");
+			let gameJsCon = fs.readFileSync(gameJsPath, "utf8");
+			gameJsCon = gameJsCon.replace(`requirePlugin('layaPlugin');`, finalyPluginCon);
+			fs.writeFileSync(gameJsPath, gameJsCon, "utf8");
 			resolve();
-		}).then(function() {
-			return new Promise(function(resolve, reject) {
-				console.log(`确定用到的插件引擎`);
-				// 2) 确定用到了那些插件引擎，并将插件引擎从index.js的引用中去掉
-				let indexJsPath = path.join(projSrc, indexJsStr);
-				let indexJsCon = fs.readFileSync(indexJsPath, "utf8");
-				let item, fullRequireItem;
-				for (let i = 0, len = fullRemoteEngineList.length; i < len; i++) {
-					item = fullRemoteEngineList[i];
-					fullRequireItem = config.useMinJsLibs ? `require("./libs/min/${item}")` : `require("./libs/${item}")`;
-					if (indexJsCon.includes(fullRequireItem)) {
-						localUseEngineList.push(item);
-						indexJsCon = indexJsCon.replace(fullRequireItem + ";", "").replace(fullRequireItem + ",", "").replace(fullRequireItem, "");
-					}
-				}
-				// 源码项目需要特殊处理
-				if (isNewTsProj || isOldAsProj) {
-					indexJsCon = indexJsCon.replace(`require("./laya.js");`, "").replace(`require("./laya.js"),`, "").replace(`require("./laya.js")`, "");
-					let item, libPath, vivoConfigList = [];
-					for (let i = 0, len = fullRemoteEngineList.length; i < len; i++) {
-						item = fullRemoteEngineList[i];
-						libPath = path.join(copyBinPath, item);
-						if (fs.existsSync(libPath) && !["bytebuffer", "laya.physics3D", "worker", "workerloader"].includes(item.replace(".min.js", "").replace(".js", ""))) {
-							localUseEngineList.push(item);
-							config.useMinJsLibs ?  vivoConfigList.push(`libs/min/${item}`) : vivoConfigList.push(`libs/${item}`);
-						}
-					}
-					// let bundleJsStr = (versionCon && versionCon["js/bundle.js"]) ? versionCon["js/bundle.js"] :  "js/bundle.js";
-					// vivoConfigList.push(bundleJsStr);
-					configVivoConfigFile(vivoConfigList, true);
-				}
-				fs.writeFileSync(indexJsPath, indexJsCon, "utf8");
-				// 再次修改game.js，仅引用使用到的类库
-				let pluginCon = "", normalCon = "";
-				localUseEngineList.forEach(function(item) {
-					pluginCon += `\trequirePlugin("laya-library/${item}");\n`;
-					normalCon += `\trequire("laya-library/${item}");\n`;
-				});
-				let finalyPluginCon = `if (window.requirePlugin) {\n${pluginCon}\n} else {\n${normalCon}\n}`;
-				let gameJsPath = path.join(projSrc, "game.js");
-				let gameJsCon = fs.readFileSync(gameJsPath, "utf8");
-				gameJsCon = gameJsCon.replace(`requirePlugin('layaPlugin');`, finalyPluginCon);
-				fs.writeFileSync(gameJsPath, gameJsCon, "utf8");
-				resolve();
+		});
+	}).then(function() {
+		return new Promise(function(resolve, reject) {
+			console.log(`将本地的引擎插件移动到laya-libs中`);
+			// 3) 将本地的引擎插件移动到laya-libs中
+			copyEnginePathList = [`${copyBinPath}/{${fullRemoteEngineList.join(",")}}`];
+			gulp.src(copyEnginePathList).pipe(gulp.dest(`${projDir}/laya-library`));
+			setTimeout(resolve, 500);
+		});
+	}).then(function() {
+		return new Promise(function(resolve, reject) {
+			console.log(`将libs中的本地引擎插件删掉`);
+			// 4) 将libs中的本地引擎插件删掉
+			let deleteList = [`${projDir}/engine/libs/{${localUseEngineList.join(",")}}`, `${projDir}/engine/libs/min/{${localUseEngineList.join(",")}}`];
+			del(deleteList, { force: true }).then(resolve);
+		});
+	}).then(function() {
+		return new Promise(async function(resolve, reject) {
+			console.log(`完善引擎插件目录`);
+			// 5) 引擎插件目录laya-libs中还需要新建几个文件，使该目录能够使用
+			let 
+				layalibsPath = path.join(projDir, "laya-library"),
+				engineIndex = path.join(layalibsPath, "index.js"),
+				engineplugin = path.join(layalibsPath, "plugin.json");
+				// enginesignature = path.join(layalibsPath, "signature.json");
+			// index.js
+			if (!fs.existsSync(layalibsPath)) {
+				throw new Error("引擎插件目录创建失败，请与服务提供商联系!");
+			}
+			let layaLibraryList = fs.readdirSync(layalibsPath);
+			let indexCon = "";
+			layaLibraryList.forEach(function(item) {
+				indexCon += `require("./${item}");\n`;
 			});
-		}).then(function() {
-			return new Promise(function(resolve, reject) {
-				console.log(`将本地的引擎插件移动到laya-libs中`);
-				// 3) 将本地的引擎插件移动到laya-libs中
-				copyEnginePathList = [`${copyBinPath}/{${fullRemoteEngineList.join(",")}}`];
-				gulp.src(copyEnginePathList).pipe(gulp.dest(`${projDir}/laya-library`));
-				setTimeout(resolve, 500);
-			});
-		}).then(function() {
-			return new Promise(function(resolve, reject) {
-				console.log(`将libs中的本地引擎插件删掉`);
-				// 4) 将libs中的本地引擎插件删掉
-				let deleteList = [`${projDir}/engine/libs/{${localUseEngineList.join(",")}}`, `${projDir}/engine/libs/min/{${localUseEngineList.join(",")}}`];
-				del(deleteList, { force: true }).then(resolve);
-			});
-		}).then(function() {
-			return new Promise(async function(resolve, reject) {
-				console.log(`完善引擎插件目录`);
-				// 5) 引擎插件目录laya-libs中还需要新建几个文件，使该目录能够使用
-				let 
-					layalibsPath = path.join(projDir, "laya-library"),
-					engineIndex = path.join(layalibsPath, "index.js"),
-					engineplugin = path.join(layalibsPath, "plugin.json");
-					// enginesignature = path.join(layalibsPath, "signature.json");
-				// index.js
-				if (!fs.existsSync(layalibsPath)) {
-					throw new Error("引擎插件目录创建失败，请与服务提供商联系!");
-				}
-				let layaLibraryList = fs.readdirSync(layalibsPath);
-				let indexCon = "";
-				layaLibraryList.forEach(function(item) {
-					indexCon += `require("./${item}");\n`;
-				});
-				fs.writeFileSync(engineIndex, indexCon, "utf8");
-				// plugin.json
-				let pluginCon = {"main": "index.js"};
-				fs.writeFileSync(engineplugin, JSON.stringify(pluginCon, null, 4), "utf8");
-				// signature.json
-				// let signatureCon = {
-				// 	"provider": provider,
-				// 	"signature": []
-				// };
-				// localUseEngineList.unshift("index.js");
-				// let fileName, md5Str;
-				// for (let i = 0, len = localUseEngineList.length; i < len; i++) {
-				// 	fileName = localUseEngineList[i];
-				// 	let md5Str = await getFileMd5(path.join(projDir, "laya-library", fileName));
-				// 	signatureCon.signature.push({
-				// 		"path": fileName,
-				// 		"md5": md5Str
-				// 	});
-				// }
-				// fs.writeFileSync(enginesignature, JSON.stringify(signatureCon, null, 4), "utf8");
-				resolve();
-			});
-		}).catch(function(e) {
-			throw e;
-		})
-	}
+			fs.writeFileSync(engineIndex, indexCon, "utf8");
+			// plugin.json
+			let pluginCon = {"main": "index.js"};
+			fs.writeFileSync(engineplugin, JSON.stringify(pluginCon, null, 4), "utf8");
+			// signature.json
+			// let signatureCon = {
+			// 	"provider": provider,
+			// 	"signature": []
+			// };
+			// localUseEngineList.unshift("index.js");
+			// let fileName, md5Str;
+			// for (let i = 0, len = localUseEngineList.length; i < len; i++) {
+			// 	fileName = localUseEngineList[i];
+			// 	let md5Str = await getFileMd5(path.join(projDir, "laya-library", fileName));
+			// 	signatureCon.signature.push({
+			// 		"path": fileName,
+			// 		"md5": md5Str
+			// 	});
+			// }
+			// fs.writeFileSync(enginesignature, JSON.stringify(signatureCon, null, 4), "utf8");
+			resolve();
+		});
+	})
+	.then(function() {
+		cb();
+	}).catch(function(e) {
+		throw e;
+	})
 });
-
-function downFileToDir(uri, dest){
-	return new Promise((resolve, reject) => {
-		if (!uri || !dest) {
-			reject(new Error(`downFileToDir 参数不全: ${uri}/${dest}`));
-			return;
-		}
-
-		let 
-			totalLen = 9999,
-			progress = 0,
-			layaresponse;
-		var stream = fs.createWriteStream(dest);
-		request(uri).on('error', function(err) {
-			console.log("tool down err:" + err);
-			reject(err);
-		}).on("data", function(data) {
-			progress += data.length;
-			let downPercent = (progress / totalLen * 100).toFixed(3);
-			// console.log(`down: ${downPercent}%`);
-		}).on("response", function(response) {
-			layaresponse = response;
-			totalLen = response.caseless.dict['content-length'];
-		}).pipe(stream).on('close', function() {
-			if (layaresponse.statusCode == 200) {
-				console.log("下载成功!");
-				resolve();
-			} else {
-				reject(new Error(`下载失败，连接关闭 -> ${uri}`));
-			}
-		});
-	});
-}
-
-function extractZipFile(zipPath, extractDir) {
-	return new Promise((resolve, reject) => {
-		if (!zipPath || !extractDir) {
-			reject(new Error(`extractZipFile 参数不全: ${zipPath}/${extractDir}`));
-			return false;
-		}
-
-		zipPath = `"${zipPath}"`;
-		let unzipexepath = path.join(ideModuleDir, "../", "out", "codeextension", "updateversion", "tools", "unzip.exe");
-		unzipexepath = `"${unzipexepath}"`;
-		let cmd;
-        if (process.platform === 'darwin') {
-            cmd = "unzip -o " + zipPath + " -d " + "\"" + extractDir + "\"";
-        } else {
-            cmd = unzipexepath + " -o " + zipPath + " -d " + "\"" + extractDir + "\"";
-		}
-		childProcess.exec(cmd, (error, stdout, stderr) => {
-			if (error || stderr) {
-				reject(error || stderr);
-				return;
-			}
-			resolve();
-		});
-	});
-}
 
 // 打包rpk
 gulp.task("buildRPK_VIVO", ["pluginEngin_VIVO"], function() {

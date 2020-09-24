@@ -1702,7 +1702,7 @@ declare namespace OIMO {
         private updateTransformExt;
         getPosition(): Vec3;
         getPositionTo(position: Vec3): void;
-        setPosition(position: Vec3): void;
+        setPosition(position: Vec3| Laya.Vector3): void;
         translate(translation: Vec3): void;
         getRotation(): Mat3;
         getRotationTo(rotation: Mat3): void;

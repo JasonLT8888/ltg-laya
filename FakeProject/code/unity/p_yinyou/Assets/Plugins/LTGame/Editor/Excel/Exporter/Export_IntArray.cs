@@ -20,6 +20,12 @@ namespace LTGame
 
         public override void DoExport(JsonData jsonData, CSFiled filed, ICell cell)
         {
+            if (cell == null)
+            {
+                jsonData[filed.name] = new JsonData();
+                jsonData[filed.name].SetJsonType(JsonType.Array);
+                return;
+            }
             var cellStr = cell.StringCellValue;
             if (cellStr.StartsWith("[") && cellStr.EndsWith("]"))
             {
