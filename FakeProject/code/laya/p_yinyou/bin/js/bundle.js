@@ -1481,27 +1481,31 @@ class LTG_UI_UnlockItemMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPA
         if (this._cacheData == null) {
             throw new Error("请调用LTG_Com_UnlockItemData进行界面打开操作");
         }
-        // TODO: 临时处理
-        this._rootObj = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].Get(_script_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(_script_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].display_s3d_url), true);
-        _script_common_GlobalUnit__WEBPACK_IMPORTED_MODULE_4__["default"].s3d.addChild(this._rootObj);
-        this._renderCamera = this._rootObj.getChildByName("watchCamera");
-        this._playerParent = this._rootObj.getChildByName("point_player");
-        // 注意格式只能用r8g8b8a8否则ip6不支持
-        this._cacheRT = new Laya.RenderTexture(this.ui.m_view.m_img_display.width, this.ui.m_view.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8, Laya.RenderTextureDepthFormat.DEPTH_16);
-        this._renderCamera.renderTarget = this._cacheRT;
-        this._renderCamera.enableRender = true;
-        this._renderCamera.cullingMask = Math.pow(2, 3);
-        this._cacheImage = new fgui.GImage();
-        this.ui.m_view.addChildAt(this._cacheImage, this.ui.m_view.getChildIndex(this.ui.m_view.m_img_display) + 1);
-        this._cacheImage.image.texture = new Laya.Texture(this._cacheRT);
-        this._cacheImage.setPivot(this.ui.m_view.m_img_display.pivotX, this.ui.m_view.m_img_display.pivotY, this.ui.m_view.m_img_display.pivotAsAnchor);
-        this._cacheImage.setXY(this.ui.m_view.m_img_display.x, this.ui.m_view.m_img_display.y);
-        this.ui.m_view.m_img_display.dispose();
-        this.ui.m_view.m_loader_title.url = this._cacheData.rewardConfig.title_icon_path;
         this.ui.m_view.m_btn_no.onClick(this, this._OnClickNo);
         this.ui.m_view.m_btn_unlock.onClick(this, this._OnClickUnlock);
         this.ui.m_view.m_btn_unlock.m_text_progress.text = _Data_LTG_Com_EggWallData__WEBPACK_IMPORTED_MODULE_9__["LTG_Com_EggWallData"].GetCodeUnlockProgress(this._cacheData.rewardConfig.id);
-        this._LoadModel();
+        this.ui.m_view.m_loader_title.url = this._cacheData.rewardConfig.title_icon_path;
+        this._CreateCamera();
+    }
+    _CreateCamera() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._rootObj = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].LoadAndGet("res/ltgame/prefab/try_display.lh", true);
+            _script_common_GlobalUnit__WEBPACK_IMPORTED_MODULE_4__["default"].s3d.addChild(this._rootObj);
+            this._renderCamera = this._rootObj.getChildByName("watchCamera");
+            this._playerParent = this._rootObj.getChildByName("point_player");
+            // 注意格式只能用r8g8b8a8否则ip6不支持
+            this._cacheRT = new Laya.RenderTexture(this.ui.m_view.m_img_display.width, this.ui.m_view.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8, Laya.RenderTextureDepthFormat.DEPTH_16);
+            this._cacheImage = new fgui.GImage();
+            this.ui.m_view.addChildAt(this._cacheImage, this.ui.m_view.getChildIndex(this.ui.m_view.m_img_display) + 1);
+            this._cacheImage.image.texture = new Laya.Texture(this._cacheRT);
+            this._cacheImage.setPivot(this.ui.m_view.m_img_display.pivotX, this.ui.m_view.m_img_display.pivotY, this.ui.m_view.m_img_display.pivotAsAnchor);
+            this._cacheImage.setXY(this.ui.m_view.m_img_display.x, this.ui.m_view.m_img_display.y);
+            this.ui.m_view.m_img_display.dispose();
+            this._renderCamera.renderTarget = this._cacheRT;
+            this._renderCamera.enableRender = true;
+            this._renderCamera.cullingMask = Math.pow(2, 3);
+            this._LoadModel();
+        });
     }
     _OnClickUnlock() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -1539,6 +1543,10 @@ class LTG_UI_UnlockItemMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPA
             _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].ShowLoading("资源加载中...");
             let playerObj = yield _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].LoadAndGet(_script_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(this._cacheData.rewardConfig.model_path));
             _LTGame_UIExt_LTUI__WEBPACK_IMPORTED_MODULE_5__["default"].HideLoading();
+            if (playerObj == null) {
+                console.error("无法加载资源,请检查资源及配置");
+                return;
+            }
             if (!this.isShow) {
                 playerObj.destroy();
                 return;
@@ -15990,7 +15998,6 @@ class ResDefine {
         return "res/export/Conventional/" + filePath + ".lh";
     }
 }
-ResDefine.display_s3d_url = "try_display";
 
 
 /***/ }),
