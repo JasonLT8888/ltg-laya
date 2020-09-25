@@ -30,6 +30,7 @@ echo "Export Kwai Tools: v.${VERSION_CODE}"
 
 echo "remove dist"
 rm -rf "$OUT_DIR"
+rm -rf "release/ks/index.js"
 
 function boolToInt() {
 	if [ "$1" == "true" ]
