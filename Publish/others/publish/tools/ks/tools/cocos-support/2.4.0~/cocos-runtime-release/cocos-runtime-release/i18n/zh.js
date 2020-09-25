@@ -1,0 +1,1 @@
+module.exports = { platform_name: 'Cocos 小游戏', screen_orientation: '屏幕方向', horizontal_screen: '横屏', vertical_screen: '竖屏', small_packet_path: '资源服务器地址', small_packet_path_hint: '可不填', status_bar_display: '状态栏显示', runtime_version: "runtime版本", pack_res_to_first_pack: '初始场景分包', had_set_remote_without_tiny_mode: '当前已设置远程包，且未设置资源服务器地址' };
