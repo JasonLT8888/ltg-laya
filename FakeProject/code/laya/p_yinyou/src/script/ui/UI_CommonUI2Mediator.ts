@@ -4,7 +4,6 @@ import { UI_MainMediator } from "./UI_MainMediator";
 import LTG_UI_HideMenuMediator from "../../LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator";
 import { LTG_Com_MyGameData } from "../../LTG_CommonUI/Data/LTG_Com_MyGameData";
 import { LTG_Com_ZhuaWawaData } from "../../LTG_CommonUI/Data/LTG_Com_ZhuaWawaData";
-import { LTG_Com_LimitSkinData } from "../../LTG_CommonUI/Data/LTG_Com_LimitSkinData";
 import { LTG_Com_RollData } from "../../LTG_CommonUI/Data/LTG_Com_RollData";
 import { LTG_Com_WatchDYData } from "../../LTG_CommonUI/Data/LTG_Com_WatchDYData";
 import { LTG_Com_ShareVideoData } from "../../LTG_CommonUI/Data/LTG_Com_ShareVideoData";
@@ -12,7 +11,10 @@ import { LTG_Com_SignData } from "../../LTG_CommonUI/Data/LTG_Com_SignData";
 import { SignConfig } from "../config/SignConfig";
 import { RollConfig } from "../config/RollConfig";
 import { LTG_Com_SetData } from "../../LTG_CommonUI/Data/LTG_Com_SetData";
-import { LTG_Com_EggWallData, EggWallData } from "../../LTG_CommonUI/Data/LTG_Com_EggWallData";
+import { LTG_Com_EggWallData } from "../../LTG_CommonUI/Data/LTG_Com_EggWallData";
+import { GameConst } from "../config/GameConst";
+import { LTG_Com_UnlockItemData } from "../../LTG_CommonUI/Data/LTG_Com_UnlockItemData";
+import { RewardCodeConfig } from "../config/RewardCodeConfig";
 
 class UIDemoData {
 
@@ -55,17 +57,14 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             data.Send();
         }),
         new UIDemoData("限定皮肤", () => {
-            let data = new LTG_Com_LimitSkinData();
-            data.watchCount = 0;
-            data.onWatchedAd = Laya.Handler.create(null, () => {
-                data.watchCount++;
-                if (data.watchCount >= 3) {
-                    LTG_Com_LimitSkinData.Hide();
-                    console.log("获取皮肤");
-                } else {
-                    LTG_Com_LimitSkinData.UpdateCount(data.watchCount);
-                }
-            }, null, false);
+            let data = new LTG_Com_UnlockItemData();
+            data.rewardConfig = RewardCodeConfig.dataList[0];
+            data.onUnlocked = Laya.Handler.create(null, (rewardType: number, rewardValue: number) => {
+
+            });
+            data.onClose = Laya.Handler.create(null, () => {
+
+            });
             data.Send();
         }),
         new UIDemoData("大转盘", () => {
@@ -79,7 +78,9 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             data.Send();
         }),
         new UIDemoData("关注抖音号", () => {
-            new LTG_Com_WatchDYData().Send();
+            let data = new LTG_Com_WatchDYData();
+            data.dyId = GameConst.data.douyin_id;
+            data.Send();
         }),
         new UIDemoData("视频分享", () => {
             let data = new LTG_Com_ShareVideoData();
@@ -111,14 +112,9 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }),
         new UIDemoData("彩蛋墙", () => {
             let data = new LTG_Com_EggWallData();
-            for (let i = 0; i < 10; ++i) {
-                let fakeData = new EggWallData();
-                fakeData.eggId = i;
-                fakeData.noticeStr = "测试消息" + i;
-                fakeData.canShow = true;
-                data.eggWallDatas.push(fakeData);
-            }
-            data.eggWallDatas[9].canShow = false;
+            data.onUnlocked = Laya.Handler.create(null, (rewardCode: number, rewardValue: number) => {
+
+            }, null, false);
             data.Send();
         }),
     ];

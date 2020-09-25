@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="145,38" extention="Button">
+  <displayList>
+    <image id="n2_n2g1" name="n2" src="n2g16u" fileName="img/皮肤试用/sp_rentongjujue.png" xy="0,0"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

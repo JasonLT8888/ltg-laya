@@ -8,9 +8,10 @@ export namespace SignConfig {
         /** 看视频时额外奖励内容 */ readonly ad_reward_type: number;
         /** 看视频时额外奖励值 */ readonly ad_reward_value: number;
     }
-    export var data : {[key: number]: SignConfig.config};
-    export var dataList : SignConfig.config[];
-    export var lastData : SignConfig.config;
+    export var isConst: boolean = false;
+    export var data: {[key: number]: SignConfig.config};
+    export var dataList: SignConfig.config[];
+    export var lastData: SignConfig.config;
     export const path = "res/config/SignConfig.json";
 }
 

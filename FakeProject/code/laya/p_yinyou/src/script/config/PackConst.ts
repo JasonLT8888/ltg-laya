@@ -4,7 +4,8 @@ export namespace PackConst {
         /** 头条话题 第三个为当前游戏名称 */ readonly topics: string[];
         /** 头条分享id，在头条后台-设置-分享设置中 */ readonly share_id: string;
     }
-    export var data : PackConst.config;
+    export var isConst: boolean = true;
+    export var data: PackConst.config;
     export const path = "res/config/PackConst.json";
 }
 

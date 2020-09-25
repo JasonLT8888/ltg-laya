@@ -6,5 +6,5 @@ Laya.stage.scaleMode = Laya.Stage.SCALE_FULL;
 Laya.stage.screenMode = Laya.Stage.SCREEN_NONE;
 Laya.Stat.show();
 var scene = Laya.stage.addChild(new Laya.Scene3D());
-Laya.Sprite3D.load('.previewres/export/Conventional/SampleScene.lh', Laya.Handler.create(null, function(sprite){scene.addChild(sprite); }));
+Laya.Sprite3D.load('.previewres/export/Conventional/LTGame.lh', Laya.Handler.create(null, function(sprite){scene.addChild(sprite); }));
 })(this);

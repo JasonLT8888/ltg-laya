@@ -13,6 +13,7 @@ import { PackConst } from "../config/PackConst";
 import { SignConfig } from "../config/SignConfig";
 import { EffectManager } from "../manager/EffectManager";
 import { RollConfig } from "../config/RollConfig";
+import { RewardCodeConfig } from "../config/RewardCodeConfig";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -33,6 +34,7 @@ export default class SplashScene extends LTSplashScene {
         ConfigManager.AddConfig(GameConst);
         ConfigManager.AddConfig(PackConst);
         ConfigManager.AddConfig(EggConfig);
+        ConfigManager.AddConfig(RewardCodeConfig);
         ConfigManager.AddConfig(SignConfig);
         ConfigManager.AddConfig(RollConfig);
     }
