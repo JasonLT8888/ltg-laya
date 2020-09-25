@@ -23,28 +23,20 @@ class UpdateProject {
 
     private _CopyFGUI(currentWorkPath: string) {
         let projectName = LTUtils.GetDirName(currentWorkPath);
-        let srcPath = path.join(currentWorkPath, './others/publish/templates/_project/fgui');
         let targetPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/');
         if (LTUtils.IsFileExist(targetPath)) {
             console.log("fgui工程仅在创建第一次进行拷贝,已跳过");
             return;
         }
 
-        for (let value of CommonConfig.needUpdateFGUI) {
-            let combieSrc = path.join(srcPath, value);
-            let fileType = LTUtils.IsFileOrDir(combieSrc);
-            if (fileType == EFileType.NotExist) {
-                console.log(combieSrc, "不存在");
-                continue;
-            }
-            let combieTarget = path.join(targetPath, value);
-            if (fileType == EFileType.File) {
-                LTUtils.CopyFile(combieSrc, combieTarget);
-            } else {
-                LTUtils.CopyDir(combieSrc, combieTarget);
-            }
-            console.log("拷贝", combieSrc, "完成");
-        }
+        let srcPath = path.join(currentWorkPath, './others/publish/templates/_project/fgui/p_yinyou/');
+        LTUtils.CopyDir(srcPath, targetPath);
+        console.log("拷贝", srcPath, "完成");
+
+        srcPath = path.join(currentWorkPath, './others/publish/templates/_project/fgui/p_common_ui/');
+        targetPath = path.join(currentWorkPath, './../../fgui/p_common_ui/');
+        LTUtils.CopyDir(srcPath, targetPath);
+        console.log("拷贝", srcPath, "完成");
 
         // 处理发布路径
         // fgui
