@@ -10,9 +10,7 @@ class Main {
             return;
         }
 
-        let useCompress = this._GetParam("-c") == "true" ? true : false;
-
-        new PublishHandler(platformPath, useCompress).Start();
+        new PublishHandler(platformPath).Start();
     }
 
     private _GetParam(paramName: string): string {

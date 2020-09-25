@@ -3,7 +3,6 @@ import * as process from 'process';
 import CommonConfig from 'Config/CommonConfig';
 import { LTUtils } from 'Utils/LTUtils';
 import { EFileType } from 'Config/EFileType';
-import * as fs from 'fs';
 
 
 /**

@@ -33,6 +33,21 @@ export class SubpackHelper {
      * 进行分析
      */
     public Analyze() {
+
+        let packModel = "";
+        switch (this._packConfig.packType) {
+            case EPackResolveType.AllIn:
+                packModel = "全入包";
+                break;
+            case EPackResolveType.AllOut:
+                packModel = "全出包";
+                break;
+            case EPackResolveType.AutoSearch:
+                packModel = "自动分析";
+                break;
+        }
+        console.log("打包模式:", packModel);
+
         this._AnalyzeDir(this._rootPath, this._rootNode);
         this._CombieNode(this._rootNode);
         let kb = Math.ceil(this._rootNode.size / 1024);

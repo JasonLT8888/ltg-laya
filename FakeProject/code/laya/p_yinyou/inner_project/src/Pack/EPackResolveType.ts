@@ -3,7 +3,7 @@ export enum EPackResolveType {
     /**
      * 自动生成game.js,配置json等
      */
-    AutoSearch,
+    AutoSearch = 0,
     /**
      * 全打入包内,不生成game.js,也不生成json等
      */
