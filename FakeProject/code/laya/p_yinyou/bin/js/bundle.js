@@ -1216,9 +1216,11 @@ class LTG_UI_ScreenShootMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBP
         this._cacheImage.setPivot(this.ui.m_view.m_img_display.pivotX, this.ui.m_view.m_img_display.pivotY, this.ui.m_view.m_img_display.pivotAsAnchor);
         this._cacheImage.setXY(this.ui.m_view.m_img_display.x, this.ui.m_view.m_img_display.y);
         this.ui.m_view.m_img_display.dispose();
-        this._cacheData.camera.renderTarget = this._cacheRT;
-        this._cacheData.camera.render();
-        this._cacheData.camera.renderTarget = null;
+        if (this._cacheData.camera != null) {
+            this._cacheData.camera.renderTarget = this._cacheRT;
+            this._cacheData.camera.render();
+            this._cacheData.camera.renderTarget = null;
+        }
         this.ui.m_view.m_view_play.onClick(this, this._OnClickShare);
         this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
         this.ui.m_view.m_btn_share.onClick(this, this._OnClickShare);

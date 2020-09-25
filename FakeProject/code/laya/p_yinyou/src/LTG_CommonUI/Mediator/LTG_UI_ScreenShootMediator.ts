@@ -42,9 +42,12 @@ export default class LTG_UI_ScreenShootMediator extends BaseUIMediator<LTG_UI_Sc
         this._cacheImage.setXY(this.ui.m_view.m_img_display.x, this.ui.m_view.m_img_display.y);
         this.ui.m_view.m_img_display.dispose();
 
-        this._cacheData.camera.renderTarget = this._cacheRT;
-        this._cacheData.camera.render();
-        this._cacheData.camera.renderTarget = null;
+        if (this._cacheData.camera != null) {
+            this._cacheData.camera.renderTarget = this._cacheRT;
+            this._cacheData.camera.render();
+            this._cacheData.camera.renderTarget = null;
+        }
+
 
         this.ui.m_view.m_view_play.onClick(this, this._OnClickShare);
         this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
