@@ -76,6 +76,15 @@ export default class MainStart extends LTStart {
                 platformData.nativeinpageIds = ['b82fb9b9d97d4a5c8281a943d41ea0aa', '4de349a96b6a432bb1b2f215493f1b07'];
                 LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
                 break;
+            case EPlatformType.KS:
+                this._gameVersion = "1.0.0";
+                this._resVersion = "0910";
+                platformData.appId = "ks660058823026773759";
+                // platformData.bannerId = "f3h5a48j44l2jfopn8";
+                platformData.rewardVideoId = "2300000126_01";
+                // platformData.interstitialId = "3nmlb1smr5h1f9clmk";
+                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/tt_${this._resVersion}/`);
+                break;
             default:
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");
                 break;

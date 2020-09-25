@@ -30,6 +30,15 @@ export default class FGuiEx {
             ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height - this.top - this.bottom);
             ui.y = this.top;
         }
+        if (window['kwaigame']) {
+            let scale = (1334 / 750) / (Laya.stage.height / Laya.stage.width);
+            ui.asCom._children.forEach(c => {
+                if (ui.asCom._children.indexOf(c) > 0) {
+                    c.scaleY = scale;
+                }
+            });
+        }
+
         this._cacheMap.set(ui.constructor.name, param);
 
         window[ui.constructor.name] = ui;
@@ -45,9 +54,13 @@ export default class FGuiEx {
         if (this.safeArea != null) {
             let scale = Laya.stage.width / this.safeArea.width;
             this.top = this.safeArea.top * scale;
-            this.bottom = this.safeArea.bottom - this.safeArea.height - this.safeArea.top * scale;
+            this.bottom = (this.safeArea.bottom - this.safeArea.height - this.safeArea.top) * scale;
         }
-        fgui.GRoot.inst.setSize(setWidth, setHeight);
+        if (window['kwaigame']) {
+            fgui.GRoot.inst.setSize(750, 1334);
+        } else {
+            fgui.GRoot.inst.setSize(setWidth, setHeight);
+        }
         let childCount = fgui.GRoot.inst.numChildren;
         for (let i = 0; i < childCount; ++i) {
             let ui = fgui.GRoot.inst.getChildAt(i);
@@ -57,6 +70,9 @@ export default class FGuiEx {
             } else {
                 ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height - this.top - this.bottom);
                 ui.y = this.top;
+            }
+            if (window['kwaigame']) {
+                ui.setScale(1, (Laya.stage.height / Laya.stage.width) / (1334 / 750));
             }
         }
     }

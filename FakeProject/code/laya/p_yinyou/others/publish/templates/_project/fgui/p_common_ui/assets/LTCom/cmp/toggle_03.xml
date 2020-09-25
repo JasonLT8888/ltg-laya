@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="260,36">
+  <controller name="state_toggle" pages="0,,1," selected="0"/>
+  <displayList>
+    <image id="n10_8gel" name="n10" src="8gel3h" fileName="img/sp_yuan1.png" xy="0,3"/>
+    <image id="n11_8gel" name="n11" src="8gel3i" fileName="img/sp_yuan.png" xy="5,8">
+      <gearDisplay controller="state_toggle" pages="1"/>
+    </image>
+    <text id="n12_8gel" name="n12" xy="29,0" size="229,36" fontSize="28" color="#ffffff" align="center" vAlign="middle" text="观看视频获取皮肤"/>
+  </displayList>
+</component>

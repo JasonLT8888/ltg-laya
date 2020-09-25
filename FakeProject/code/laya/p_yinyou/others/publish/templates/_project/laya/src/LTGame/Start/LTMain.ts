@@ -35,7 +35,19 @@ export default class LTMain {
                 //打开调试面板（通过IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
                 // if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
                 // if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
-
+                //快手
+                if (window['kwaigame']) {
+                    var stage = Laya.stage;
+                    var info = this.getAdapterInfo({
+                        width: 750, height: 1334,
+                        scaleMode: Laya.Stage.SCALE_FIXED_AUTO
+                    });
+                    stage.designWidth = info.w;
+                    stage.designHeight = info.h;
+                    stage.width = info.rw;
+                    stage.height = info.rh;
+                    stage.scale(info.scaleX, info.scaleY);
+                }
                 if (this._mainLogic.enableStat) {
                     Laya.Stat.show(0, 100);
                 }
@@ -44,6 +56,40 @@ export default class LTMain {
                 this._mainLogic.InitGame();
             }));
 
+    }
+    //ks
+    getAdapterInfo(config) {
+        let scaleX = 1;
+        let scaleY = 1;
+        let vw = window.innerWidth;
+        let vh = window.innerHeight;
+        let w = config.width;
+        let h = config.height;
+        config.scaleMode = config.scaleMode.toLowerCase();
+        switch (config.scaleMode) {
+            case "exactfit":
+                scaleX = vw / w;
+                scaleY = vh / h;
+                break;
+
+            case "fixedwidth":
+                scaleX = scaleY = vw / w;
+                break;
+            default:
+                scaleX = vw / w;
+                scaleY = vh / h;
+                break;
+        }
+        return {
+            scaleX: scaleX,
+            scaleY: scaleY,
+            w: w,
+            h: h,
+            vw: vw,
+            vh: vh,
+            rw: w * scaleX,
+            rh: h * scaleY
+        };
     }
 
 }

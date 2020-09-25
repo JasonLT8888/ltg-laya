@@ -1,3 +1,4 @@
+/*
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_EggNotice from "../UI/LTCom/LTG_UI_EggNotice";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
@@ -50,3 +51,4 @@ export default class LTG_UI_EggNoticeMediator extends BaseUIMediator<LTG_UI_EggN
     }
 
 }
+*/

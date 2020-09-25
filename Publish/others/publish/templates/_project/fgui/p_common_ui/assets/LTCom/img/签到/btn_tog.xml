@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="297,49" extention="Button">
+  <controller name="selected" pages="0,未选中,1,已选中" selected="0"/>
+  <displayList>
+    <image id="n16_gxi8" name="n16" src="8gel5q" fileName="img/签到/new/sp_yuan2.png" xy="7,11"/>
+    <image id="n17_gxi8" name="n17" src="8gel5r" fileName="img/签到/new/sp_yuan1.png" xy="7,11">
+      <gearDisplay controller="selected" pages="1"/>
+    </image>
+    <text id="n18_gxi8" name="title" xy="44,11" size="250,30" fontSize="22" color="#ffffff" vAlign="middle" autoSize="none" bold="true" text="看视频获得额外奖励">
+      <relation target="" sidePair="middle-middle"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>

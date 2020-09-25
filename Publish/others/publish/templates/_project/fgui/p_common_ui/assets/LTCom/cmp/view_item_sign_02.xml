@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="148,180">
+  <controller name="state_get" pages="0,未到时间,1,可领取,2,已领取" selected="0"/>
+  <displayList>
+    <image id="n4_uo3l" name="img_bg" src="8gel50" fileName="img/sp_kuang1.png" xy="-4,-1" size="157,184">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n10_uo3l" name="n10" src="8gel54" fileName="img/sp_kuang2.png" xy="-5,0">
+      <relation target="" sidePair="width-width"/>
+    </image>
+    <image id="n5_uo3l" name="img_can_get" src="8gel51" fileName="img/sp_kelingqu.png" xy="-17,-38">
+      <gearDisplay controller="state_get" pages="1"/>
+    </image>
+    <image id="n6_uo3l" name="img_got" src="8gel52" fileName="img/sp_yihuode.png" xy="16,13">
+      <gearDisplay controller="state_get" pages="2"/>
+    </image>
+    <loader id="n9_uo3l" name="loader_icon" xy="6,9" size="135,126" align="center" vAlign="middle" fill="scale">
+      <gearDisplay controller="state_get" pages="0,1"/>
+    </loader>
+    <text id="n7_uo3l" name="text_day" xy="44,140" size="55,29" fontSize="20" color="#9092ad" align="center" vAlign="middle" text="第2天">
+      <relation target="" sidePair="center-center"/>
+    </text>
+    <text id="n8_uo3l" name="text_name" xy="41,109" size="64,36" fontSize="26" color="#ffffff" align="center" vAlign="middle" strokeColor="#000000" text="+800">
+      <gearDisplay controller="state_get" pages="0,1"/>
+      <relation target="" sidePair="center-center"/>
+    </text>
+  </displayList>
+  <customProperty target="text_day" propertyId="0"/>
+</component>

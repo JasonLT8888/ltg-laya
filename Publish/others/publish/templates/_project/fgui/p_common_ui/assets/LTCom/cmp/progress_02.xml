@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="381,46" extention="ProgressBar">
+  <displayList>
+    <image id="n7_8gel" name="n7" src="8gel3q" fileName="img/sp_jindutiao1.png" xy="0,0" size="381,46"/>
+    <image id="n8_8gel" name="bar" src="8gel3r" fileName="img/sp_jindutiao2.png" xy="2,1" size="378,42"/>
+  </displayList>
+  <ProgressBar/>
+</component>

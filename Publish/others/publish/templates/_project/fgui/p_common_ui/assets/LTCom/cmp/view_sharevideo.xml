@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="608,868">
+  <displayList>
+    <image id="n1_8gel" name="n1" src="8gel4j" fileName="img/sp_diban(1).png" xy="0,0"/>
+    <image id="n2_8gel" name="n2" src="8gel4k" fileName="img/sp_dianfeng.png" xy="182,173"/>
+    <loader id="n6_8gel" name="loader_text" xy="158,548" size="299,151" url="ui://hbq27te38gel4r" align="center" vAlign="middle"/>
+    <loader id="n5_8gel" name="loader_icon" xy="164,287" size="273,256" url="ui://hbq27te38gel4q" align="center" vAlign="middle"/>
+    <image id="n7_8gel" name="n7" src="8gel4s" fileName="img/sp_xingguang.png" xy="58,14"/>
+    <component id="n4_8gel" name="btn_share" src="8gel4n" fileName="cmp/btn_share_01.xml" xy="226,713"/>
+    <component id="n3_8gel" name="btn_close" src="8gel4p" fileName="cmp/btn_close_04.xml" xy="452,163"/>
+  </displayList>
+</component>

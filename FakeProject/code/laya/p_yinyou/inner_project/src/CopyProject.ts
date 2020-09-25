@@ -79,7 +79,7 @@ class CopyProject {
     private _CopyFGUI(rootPath: string) {
         let projectName = LTUtils.GetDirName(rootPath);
 
-        let targetPath = path.join(rootPath, 'others/publish/templates/_project/fgui/');
+        let targetPath = path.join(rootPath, 'others/publish/templates/_project/fgui/' + projectName + "/");
         let srcPath = path.join(rootPath, './../../fgui/' + projectName + '/');
         for (let value of CommonConfig.needCopyFGUI) {
             let combieSrc = path.join(srcPath, value);
@@ -98,10 +98,16 @@ class CopyProject {
         }
 
         // 单独拷贝main
-        let targetMainPath = path.join(rootPath, 'others/publish/templates/_project/fgui/assets/Main');
+        let targetMainPath = path.join(rootPath, 'others/publish/templates/_project/fgui/' + projectName + '/assets/Main');
         let srcMainPath = path.join(rootPath, 'fake_res/fgui/Main');
         LTUtils.CopyDir(srcMainPath, targetMainPath);
         console.log("拷贝", srcMainPath, "完成");
+
+        // 拷贝公用ui
+        targetPath = path.join(rootPath, 'others/publish/templates/_project/fgui/p_common_ui/');
+        srcPath = path.join(rootPath, './../../fgui/p_common_ui/');
+        LTUtils.CopyDir(srcPath, targetPath);
+        console.log("拷贝", srcPath, "完成");
     }
 
     /**

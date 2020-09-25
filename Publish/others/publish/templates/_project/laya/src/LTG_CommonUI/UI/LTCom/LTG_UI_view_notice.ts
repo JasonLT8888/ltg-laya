@@ -4,7 +4,7 @@
 
 export default class LTG_UI_view_notice extends fgui.GComponent {
 
-	public m_text_notice:fgui.GRichTextField;
+	public m_text_notice:fgui.GTextField;
 	public m_btn_close:fgui.GButton;
 
 	public static URL:string = "ui://hbq27te38gel16";
@@ -18,7 +18,7 @@ export default class LTG_UI_view_notice extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_text_notice = <fgui.GRichTextField><any>(this.getChildAt(4));
+		this.m_text_notice = <fgui.GTextField><any>(this.getChildAt(4));
 		this.m_btn_close = <fgui.GButton><any>(this.getChildAt(5));
 	}
 }

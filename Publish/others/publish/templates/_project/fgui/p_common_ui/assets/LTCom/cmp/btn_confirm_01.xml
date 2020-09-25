@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="201,92" extention="Button">
+  <displayList>
+    <image id="n5_8gel" name="n5" src="8gell" fileName="img/btn_lvanniu.png" xy="0,0" size="201,92"/>
+    <image id="n6_8gel" name="n6" src="8gels" fileName="img/确定.png" xy="62,24"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

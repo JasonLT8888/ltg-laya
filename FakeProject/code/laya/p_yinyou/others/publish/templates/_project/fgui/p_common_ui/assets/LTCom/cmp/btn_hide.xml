@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="66,100" extention="Button">
+  <displayList>
+    <graph id="n5_8gel" name="n5" xy="0,0" size="66,100" type="rect" lineSize="0" fillColor="#00ffffff"/>
+  </displayList>
+  <Button/>
+</component>

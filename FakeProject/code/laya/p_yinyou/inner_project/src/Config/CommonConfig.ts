@@ -72,10 +72,14 @@ export default class CommonConfig {
      * 需要初始化的配置内容
      */
     static needCopyExcel = [
-        "game_const.xlsx",
-        "pack_const.xlsx",
-        "effect_config.xlsx",
-        "audio_config.xlsx"
+        "game_const.xlsx", // 游戏配置
+        "pack_const.xlsx", // 版本控制
+        "effect_config.xlsx", // 特效
+        "audio_config.xlsx", // 音效
+        "roll_config.xlsx", // 转盘(商业化)
+        "sign_config.xlsx", // 签到(商业化)
+        "reward_code_config.xlsx", // 兑换码(商业化)
+        "egg_config.xlsx", // 彩蛋(商业化)依赖于兑换码
     ];
 
 }

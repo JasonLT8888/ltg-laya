@@ -2,7 +2,14 @@ import MathEx from "./MathEx";
 
 export default class Vector2Ex {
 
+    public static cacheVec: Laya.Vector2 = new Laya.Vector2();
+
     public static get up(): Laya.Vector2 { return new Laya.Vector2(0, 1); }
+
+    private static _up: Laya.Vector2 = new Laya.Vector2(0, 1);
+    public static get s_up(): Laya.Vector2 {
+        return this._up;
+    }
 
     public static Dot(left: Laya.Vector2, right: Laya.Vector2): number {
         return left.x * right.x + left.y * right.y;
@@ -28,6 +35,10 @@ export default class Vector2Ex {
 
     public static MagnitudeSqrt(vec: Laya.Vector2): number {
         return vec.x * vec.x + vec.y * vec.y;
+    }
+
+    public static Magnitude(vec: Laya.Vector2): number {
+        return Math.sqrt(this.MagnitudeSqrt(vec));
     }
 
 }

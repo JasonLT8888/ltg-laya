@@ -5,9 +5,10 @@ export namespace AudioConfig {
         /** 音效类型 */ readonly audio_type: number;
         /** 音效路径 */ readonly audio_path: string;
     }
-    export var data : {[key: number]: AudioConfig.config};
-    export var dataList : AudioConfig.config[];
-    export var lastData : AudioConfig.config;
+    export var isConst: boolean = false;
+    export var data: {[key: number]: AudioConfig.config};
+    export var dataList: AudioConfig.config[];
+    export var lastData: AudioConfig.config;
     export const path = "res/config/AudioConfig.json";
 }
 

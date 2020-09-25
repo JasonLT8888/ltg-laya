@@ -64,13 +64,15 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         let uiData = new FGuiData();
         uiData.needFitScreen = this._needFilScreen;
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
+        this._ui.sortingOrder = this._sortOrder;
         this._InitSelfAd();
         this._OnShow();
-        this._ui.sortingOrder = this._sortOrder;
         const anim_enter = "m_anim_enter";
         if (this._ui[anim_enter] && LTSDK.instance.isDelayClose) {
             let anim = this._ui[anim_enter] as fgui.Transition;
             anim.play(Laya.Handler.create(this, this._CallEnterAnimEnd));
+        } else {
+            this._CallEnterAnimEnd();
         }
     }
 

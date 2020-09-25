@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="626,870">
+  <displayList>
+    <image id="n2_8gel" name="n2" src="8gel3" fileName="img/sp_diban1.png" xy="0,30" size="626,840"/>
+    <image id="n3_8gel" name="n3" src="8gel4" fileName="img/sp_biaotikuang.png" xy="143,0"/>
+    <image id="n4_8gel" name="n4" src="8gel19" fileName="img/添加桌面.png" xy="237,18"/>
+    <image id="n6_8gel" name="n6" src="8gel11" fileName="img/sp_dikuang2.png" xy="37,93" size="550,656"/>
+    <loader id="n5_8gel" name="loader_icon" xy="38,116" size="550,613" url="ui://hbq27te38gel1a"/>
+    <component id="n7_8gel" name="btn_close" src="8gel1d" fileName="cmp/btn_close_01.xml" xy="546,44"/>
+    <component id="n8_8gel" name="btn_ok" src="8gel1c" fileName="cmp/btn_confirm_02.xml" xy="204,757"/>
+  </displayList>
+</component>

@@ -8,6 +8,7 @@ import DefaultPlatform from "./DefaultPlatform";
 import OppoPlatform from "./OppoPlatform";
 import { NativeIOSPlatform } from "./Impl/Native_IOS/NativeIOSPlatform";
 import VivoPlatform from "./VivoPlatform";
+import KSPlatform from "./KSPlatform";
 
 export default class LTPlatformFactory {
 
@@ -30,7 +31,9 @@ export default class LTPlatformFactory {
         } else if (Laya.Browser.onQGMiniGame) {
             result = new OppoPlatform();
         } else if (Laya.Browser.onVVMiniGame) {
-            result = new VivoPlatform(); 
+            result = new VivoPlatform();
+        } else if (window['kwaigame']) {
+            result = new KSPlatform();
         } else if (window['conch']) {
             let conchConfig = window['conchConfig'];
             let os = conchConfig.getOS();

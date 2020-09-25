@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="76,19">
+  <controller name="state_toggle" pages="0,off,1,on" selected="0"/>
+  <displayList>
+    <image id="n2_8gel" name="n2" src="8gel3a" fileName="img/sp_juxing.png" xy="0,0">
+      <gearDisplay controller="state_toggle" pages="0"/>
+    </image>
+    <image id="n3_8gel" name="n3" src="8gel3b" fileName="img/sp_juxing1.png" xy="0,0">
+      <gearDisplay controller="state_toggle" pages="1"/>
+    </image>
+  </displayList>
+</component>

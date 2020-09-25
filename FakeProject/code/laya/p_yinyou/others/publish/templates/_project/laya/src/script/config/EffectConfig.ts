@@ -5,9 +5,10 @@ export namespace EffectConfig {
         /** 是否需要预加载 */ readonly need_preload: boolean;
         /** 是否是UI特效 */ readonly isUIEffect: boolean;
     }
-    export var data : {[key: number]: EffectConfig.config};
-    export var dataList : EffectConfig.config[];
-    export var lastData : EffectConfig.config;
+    export var isConst: boolean = false;
+    export var data: {[key: number]: EffectConfig.config};
+    export var dataList: EffectConfig.config[];
+    export var lastData: EffectConfig.config;
     export const path = "res/config/EffectConfig.json";
 }
 

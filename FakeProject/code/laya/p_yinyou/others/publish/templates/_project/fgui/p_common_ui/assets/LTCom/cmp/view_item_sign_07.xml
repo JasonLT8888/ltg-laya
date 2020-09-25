@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="540,210" designImage="ui://hbq27te38gel5h" designImageOffsetX="-103" designImageOffsetY="-684" designImageLayer="1">
+  <controller name="state_get" pages="0,未到时间,1,可领取,2,已领取" selected="0"/>
+  <displayList>
+    <image id="n12_uo3l" name="n12" src="8gel5c" fileName="img/sp_kuang5.png" xy="-5,0"/>
+    <image id="n11_uo3l" name="n11" src="8gel57" fileName="img/sp_kuang3.png" xy="-5,153" size="550,65">
+      <relation target="" sidePair="width-width"/>
+    </image>
+    <image id="n5_uo3l" name="img_can_get" src="8gel51" fileName="img/sp_kelingqu.png" xy="-17,-38">
+      <gearDisplay controller="state_get" pages="1"/>
+    </image>
+    <loader id="n9_uo3l" name="loader_icon" xy="193,17" size="278,126" url="ui://hbq27te38gel5d" align="center" vAlign="middle" fill="scale" clearOnPublish="true"/>
+    <image id="n13_uo3l" name="n13" src="8gel5e" fileName="img/sp_diqitian1.png" xy="210,160"/>
+    <loader id="n14_uo3l" name="loader_title" xy="11,25" size="244,154" url="ui://hbq27te38gel5f"/>
+    <image id="n15_uo3l" name="n15" src="8gel5g" fileName="img/sp_diqitian.png" xy="9,3"/>
+    <text id="n16_uo3l" name="n16" xy="24,25" size="81,42" rotation="-12.8" fontSize="30" color="#ffffff" text="第7天"/>
+    <image id="n6_uo3l" name="img_got" src="8gel52" fileName="img/sp_yihuode.png" xy="273,30">
+      <gearDisplay controller="state_get" pages="2"/>
+    </image>
+  </displayList>
+</component>

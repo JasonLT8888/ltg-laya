@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="163,300">
+  <displayList>
+    <image id="n1_8gel" name="n1" src="8gel63" fileName="img/btn_chouti1.png" xy="0,0"/>
+    <component id="n2_8gel" name="btn_notice" src="8gel6a" fileName="cmp/btn_notice.xml" xy="9,4"/>
+    <component id="n3_8gel" name="btn_addshortcut" src="8gel6b" fileName="cmp/btn_addshortcut.xml" xy="12,102"/>
+    <component id="n4_8gel" name="btn_findgame" src="8gel6c" fileName="cmp/btn_findgame.xml" xy="9,200"/>
+    <component id="n5_8gel" name="btn_hide" src="8gel69" fileName="cmp/btn_hide.xml" xy="104,117"/>
+  </displayList>
+</component>

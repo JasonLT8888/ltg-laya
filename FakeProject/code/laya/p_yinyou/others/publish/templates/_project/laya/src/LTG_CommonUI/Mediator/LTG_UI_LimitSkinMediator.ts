@@ -1,3 +1,4 @@
+/*
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_LimitSkin from "../UI/LTCom/LTG_UI_LimitSkin";
 import { LTG_Com_LimitSkinData } from "../Data/LTG_Com_LimitSkinData";
@@ -98,3 +99,4 @@ export default class LTG_UI_LimitSkinMediator extends BaseUIMediator<LTG_UI_Limi
     }
 
 }
+*/
