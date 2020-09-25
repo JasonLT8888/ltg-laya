@@ -42,6 +42,7 @@ export class SaveData {
     * 界面开关 误点套路
     */
     public checkFlag: boolean = true;
+
     /**
      * 结算界面误点
      * 0 勾中看视频
@@ -54,29 +55,20 @@ export class SaveData {
      */
     public freeRollCount: number = 1;
     public totalRollCount: number = 0;
+
     /**
      * 限定皮肤观看广告次数
      */
-    public ExSkinAdCount: number;
+    public ExSkinAdCount: number = 0;
 
     /**
-    * 彩蛋获得数据
-    */
-    public EggPassIds: number[] = [];
-    /**
-    * 彩蛋密语数据
-    */
-    public EggSecretIds: number[] = [];
-    /**
-    * 彩蛋暗号数据
-    */
-    public EggPasswordIds: number[] = [];
-
-    /**
-     * 彩蛋ID
+     * 兑换码内容
      */
-    public eggWallIds: number[] = [];
-    public eggWallStates: number[] = [];
+    public codeStrList: string[] = [];
+    /**
+     * 与兑换码对应的次数(已观看)
+     */
+    public codeADCounts: number[] = [];
 
 }
 

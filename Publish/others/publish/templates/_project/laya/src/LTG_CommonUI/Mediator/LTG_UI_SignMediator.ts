@@ -73,9 +73,9 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
             this.ui.m_view.m_text_signed.visible = false;
             this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickGet);
         }
-        this._isToggled = LTSDK.instance.checkState == ECheckState.InCheck ? false : true;
+        this._isToggled = LTSDK.instance.isADEnable;//LTSDK.instance.checkState == ECheckState.InCheck ? false : true;
+        this.ui.m_view.m_tog.visible = LTSDK.instance.isADEnable;
         this.ui.m_view.m_tog.m_selected.selectedIndex = this._isToggled ? 1 : 0;
-
         this.ui.m_view.m_tog.onClick(this, this._OnClickToggle);
     }
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="270,92" extention="Button">
+  <displayList>
+    <image id="n15_8gel" name="n15" src="8gelg" fileName="img/btn_lananniu.png" xy="0,0" size="270,92"/>
+    <image id="n17_8gel" name="n17" src="8geli" fileName="img/兑换码_02.png" xy="129,26"/>
+    <image id="n18_8gel" name="n18" src="8gelj" fileName="img/sp_liwu.png" xy="21,14"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

@@ -23,28 +23,20 @@ class UpdateProject {
 
     private _CopyFGUI(currentWorkPath: string) {
         let projectName = LTUtils.GetDirName(currentWorkPath);
-        let srcPath = path.join(currentWorkPath, './others/publish/templates/_project/fgui');
         let targetPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/');
         if (LTUtils.IsFileExist(targetPath)) {
             console.log("fgui工程仅在创建第一次进行拷贝,已跳过");
             return;
         }
 
-        for (let value of CommonConfig.needUpdateFGUI) {
-            let combieSrc = path.join(srcPath, value);
-            let fileType = LTUtils.IsFileOrDir(combieSrc);
-            if (fileType == EFileType.NotExist) {
-                console.log(combieSrc, "不存在");
-                continue;
-            }
-            let combieTarget = path.join(targetPath, value);
-            if (fileType == EFileType.File) {
-                LTUtils.CopyFile(combieSrc, combieTarget);
-            } else {
-                LTUtils.CopyDir(combieSrc, combieTarget);
-            }
-            console.log("拷贝", combieSrc, "完成");
-        }
+        let srcPath = path.join(currentWorkPath, './others/publish/templates/_project/fgui/p_yinyou/');
+        LTUtils.CopyDir(srcPath, targetPath);
+        console.log("拷贝", srcPath, "完成");
+
+        srcPath = path.join(currentWorkPath, './others/publish/templates/_project/fgui/p_common_ui/');
+        targetPath = path.join(currentWorkPath, './../../fgui/p_common_ui/');
+        LTUtils.CopyDir(srcPath, targetPath);
+        console.log("拷贝", srcPath, "完成");
 
         // 处理发布路径
         // fgui
@@ -70,34 +62,7 @@ class UpdateProject {
         }
 
 
-        // Unity
-        {
-            // laya导出路径
-            let loadConfigurationPath = path.join(currentWorkPath, './../../unity/' + projectName + '/Assets/LayaAir3D/LayaTool/Configuration.xml');
-            let oldStr = '<SavePath>D:/Work_Projects/ltg-laya/FakeProject/code/laya/p_yinyou/bin/res</SavePath>';
-            let newStr = '<SavePath>' + path.join(currentWorkPath, './../../laya/' + projectName + '/bin/res') + '</SavePath>';
-            let readStr = LTUtils.ReadStrFrom(loadConfigurationPath);
-            readStr = LTUtils.ReplaceAll(readStr, oldStr, newStr);
-            LTUtils.WriteStrTo(loadConfigurationPath, readStr);
 
-            // 框架导出路径
-            let loadAssetPath = path.join(currentWorkPath, './../../unity/' + projectName + '/Assets/LTEditorData.asset');
-            let oldStrs = [
-                '/../../../laya/p_yinyou/src/script/config/',
-                '/../../../laya/p_yinyou/bin/res/config/'
-            ];
-            let newStrs = [
-                '/../../../laya/' + projectName + '/src/script/config/',
-                '/../../../laya/' + projectName + '/bin/res/config/'
-            ];
-            readStr = LTUtils.ReadStrFrom(loadAssetPath);
-            for (let i = 0; i < oldStrs.length; ++i) {
-                let oldStr = oldStrs[i];
-                let newStr = newStrs[i];
-                readStr = LTUtils.ReplaceAll(readStr, oldStr, newStr);
-            }
-            LTUtils.WriteStrTo(loadAssetPath, readStr);
-        }
 
 
     }
@@ -140,6 +105,35 @@ class UpdateProject {
                 });
             }
             console.log("拷贝", combieSrc, "完成");
+        }
+
+        // Unity
+        {
+            // laya导出路径
+            let loadConfigurationPath = path.join(currentWorkPath, './../../unity/' + projectName + '/Assets/LayaAir3D/LayaTool/Configuration.xml');
+            let oldStr = '<SavePath>D:/Work_Projects/ltg-laya/FakeProject/code/laya/p_yinyou/bin/res</SavePath>';
+            let newStr = '<SavePath>' + path.join(currentWorkPath, './../../laya/' + projectName + '/bin/res') + '</SavePath>';
+            let readStr = LTUtils.ReadStrFrom(loadConfigurationPath);
+            readStr = LTUtils.ReplaceAll(readStr, oldStr, newStr);
+            LTUtils.WriteStrTo(loadConfigurationPath, readStr);
+
+            // 框架导出路径
+            let loadAssetPath = path.join(currentWorkPath, './../../unity/' + projectName + '/Assets/LTEditorData.asset');
+            let oldStrs = [
+                '/../../../laya/p_yinyou/src/script/config/',
+                '/../../../laya/p_yinyou/bin/res/config/'
+            ];
+            let newStrs = [
+                '/../../../laya/' + projectName + '/src/script/config/',
+                '/../../../laya/' + projectName + '/bin/res/config/'
+            ];
+            readStr = LTUtils.ReadStrFrom(loadAssetPath);
+            for (let i = 0; i < oldStrs.length; ++i) {
+                let oldStr = oldStrs[i];
+                let newStr = newStrs[i];
+                readStr = LTUtils.ReplaceAll(readStr, oldStr, newStr);
+            }
+            LTUtils.WriteStrTo(loadAssetPath, readStr);
         }
     }
 

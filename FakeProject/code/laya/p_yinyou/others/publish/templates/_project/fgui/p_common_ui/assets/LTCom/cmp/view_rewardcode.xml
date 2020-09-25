@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="625,439">
+  <displayList>
+    <image id="n1_8gel" name="n1" src="8gel3" fileName="img/sp_diban1.png" xy="0,29" size="625,410"/>
+    <image id="n2_8gel" name="n2" src="8gelr" fileName="img/请在下方输入您的兑换码.png" xy="150,113"/>
+    <image id="n3_8gel" name="n3" src="8gel4" fileName="img/sp_biaotikuang.png" xy="143,0"/>
+    <image id="n4_8gel" name="n4" src="8gelh" fileName="img/兑换码_01.png" xy="254,20"/>
+    <component id="n5_8gel" name="btn_confirm" src="8gelt" fileName="cmp/btn_confirm_01.xml" xy="333,309"/>
+    <component id="n7_8gel" name="btn_cancel" src="8gelw" fileName="cmp/btn_cancel_01.xml" xy="51,310"/>
+    <image id="n9_8gel" name="n9" src="8gelx" fileName="img/sp_dikuang1.png" xy="51,183" size="505,58"/>
+    <text id="n10_8gel" name="text_input" xy="58,193" size="221,45" input="true" prompt="请输入兑换码" fontSize="36" color="#919191" text=""/>
+  </displayList>
+</component>

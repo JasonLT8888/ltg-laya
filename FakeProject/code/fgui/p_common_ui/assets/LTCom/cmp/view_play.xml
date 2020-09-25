@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="516,586">
+  <displayList>
+    <image id="n4_8ven" name="n4" src="t2mg7e" fileName="img/改版UI/神级操作/sp_bofang.png" xy="163,198">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+</component>

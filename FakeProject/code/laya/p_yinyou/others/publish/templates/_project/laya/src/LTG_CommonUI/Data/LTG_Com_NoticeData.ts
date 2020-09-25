@@ -7,7 +7,7 @@ import LTG_UI_NoticeMediator from "../Mediator/LTG_UI_NoticeMediator";
  */
 export class LTG_Com_NoticeData implements ILTG_Com_Data {
 
-    public content: string = "<font color='#ff0000'>游戏公告</font>七个字";
+    public content: string = "游戏公告\n七个字";
 
     Send(): number {
         LTG_UI_NoticeMediator.instance.Show(this);

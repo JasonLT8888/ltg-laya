@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="624,526">
+  <displayList>
+    <image id="n0_8gel" name="n0" src="8gel48" fileName="img/sp_guanzhudouying.png" xy="0,0"/>
+    <component id="n2_8gel" name="btn_copy" src="8gel4f" fileName="cmp/btn_copy.xml" xy="109,299"/>
+    <component id="n5_8gel" name="btn_close" src="8gel4e" fileName="cmp/btn_close_03.xml" xy="166,421"/>
+    <text id="n6_odt0" name="text_code" xy="167,226" size="161,53" visible="false" fontSize="42" color="#cccccc" align="center" vAlign="middle" bold="true" text="WYSGS">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <graph id="n7_odt0" name="btn_watch" xy="524,59" size="100,310" type="rect" lineSize="0" fillColor="#00ffffff"/>
+    <image id="n8_n2g1" name="n8" src="n2g16k" fileName="img/qiangzhanwan93.png" xy="52,236"/>
+  </displayList>
+</component>

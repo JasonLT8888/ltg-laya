@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://hbq27te38gel1l" designImageLayer="1">
+  <displayList>
+    <graph id="n0_8gel" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n1_8gel" name="view" src="8gel1t" fileName="cmp/view_mygame.xml" xy="19,136">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+  </displayList>
+</component>

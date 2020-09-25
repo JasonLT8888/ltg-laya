@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,109">
+  <displayList>
+    <image id="n1_8gel" name="n1" src="8gel39" fileName="img/sp_diban.png" xy="0,0">
+      <relation target="" sidePair="width-width,middle-middle"/>
+    </image>
+    <component id="n2_8gel" name="toggle_01" src="8gel3c" fileName="cmp/toggle_02.xml" xy="244,64"/>
+    <text id="n4_8gel" name="n4" xy="216,16" size="335,39" fontSize="30" color="#fcfcfc" align="center" vAlign="middle" text="累计看广告三次即可获得">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n5_8gel" name="toggle_02" src="8gel3c" fileName="cmp/toggle_02.xml" xy="337,64"/>
+    <component id="n6_8gel" name="toggle_03" src="8gel3c" fileName="cmp/toggle_02.xml" xy="430,64"/>
+  </displayList>
+</component>

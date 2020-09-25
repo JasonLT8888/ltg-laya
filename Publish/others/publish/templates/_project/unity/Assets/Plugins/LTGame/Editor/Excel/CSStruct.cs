@@ -72,13 +72,15 @@ namespace LTGame
 
             if (isConst)
             {
-                sb.AppendLine("    export var data : {0}.config;".ReplaceAll("{0}", className));
+                sb.AppendLine("    export var isConst: boolean = true;");
+                sb.AppendLine("    export var data: {0}.config;".ReplaceAll("{0}", className));
             }
             else
             {
-                sb.AppendLine("    export var data : {[key: number]: {0}.config};".ReplaceAll("{0}", className));
-                sb.AppendLine("    export var dataList : {0}.config[];".ReplaceAll("{0}", className));
-                sb.AppendLine("    export var lastData : {0}.config;".ReplaceAll("{0}", className));
+                sb.AppendLine("    export var isConst: boolean = false;");
+                sb.AppendLine("    export var data: {[key: number]: {0}.config};".ReplaceAll("{0}", className));
+                sb.AppendLine("    export var dataList: {0}.config[];".ReplaceAll("{0}", className));
+                sb.AppendLine("    export var lastData: {0}.config;".ReplaceAll("{0}", className));
             }
             sb.AppendLine("    export const path = \"res/config/{0}.json\";".ReplaceAll("{0}", className));
             sb.AppendLine("}");

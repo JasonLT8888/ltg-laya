@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="551,569">
+  <displayList>
+    <image id="n2_8gel" name="n2" src="8gel3m" fileName="img/sp_zhuanpan.png" xy="0,0"/>
+    <component id="n15_8gel" name="item_01" src="8gel40" fileName="cmp/item_view_roll.xml" xy="276,272" pivot="0.5,1" anchor="true" size="150,217"/>
+    <component id="n18_8gel" name="item_02" src="8gel40" fileName="cmp/item_view_roll.xml" xy="276,272" pivot="0.5,1" anchor="true" size="150,217" rotation="60"/>
+    <component id="n19_8gel" name="item_03" src="8gel40" fileName="cmp/item_view_roll.xml" xy="276,272" pivot="0.5,1" anchor="true" size="150,217" rotation="120"/>
+    <component id="n20_8gel" name="item_04" src="8gel40" fileName="cmp/item_view_roll.xml" xy="276,272" pivot="0.5,1" anchor="true" size="150,217" rotation="180"/>
+    <component id="n21_8gel" name="item_05" src="8gel40" fileName="cmp/item_view_roll.xml" xy="276,272" pivot="0.5,1" anchor="true" size="150,217" rotation="240"/>
+    <component id="n22_8gel" name="item_06" src="8gel40" fileName="cmp/item_view_roll.xml" xy="276,272" pivot="0.5,1" anchor="true" size="150,217" rotation="-60"/>
+  </displayList>
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="377,128" extention="Button">
+  <displayList>
+    <image id="n3_n2g1" name="n3" src="n2g16z" fileName="img/皮肤试用/btn_anniuhuang.png" xy="0,0" size="377,128"/>
+    <image id="n4_n2g1" name="n4" src="n2g16y" fileName="img/皮肤试用/sp_shipin.png" xy="34,33"/>
+    <image id="n5_n2g1" name="n5" src="n2g16x" fileName="img/皮肤试用/sp_yongjiujiesuo.png" xy="181,33"/>
+    <text id="n6_n2g1" name="text_progress" xy="107,29" size="63,53" fontSize="42" color="#ffffff" align="center" vAlign="middle" bold="true" text="1/3">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

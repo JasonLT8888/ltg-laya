@@ -3,6 +3,7 @@ import LTG_UI_HideMenu from "../UI/LTCom/LTG_UI_HideMenu";
 import { LTG_Com_NoticeData } from "../Data/LTG_Com_NoticeData";
 import { LTG_Com_AddShortcutData } from "../Data/LTG_Com_AddShortcutData";
 import { LTG_Com_FindGameData } from "../Data/LTG_Com_FindGameData";
+import { GameConst } from "../../script/config/GameConst";
 
 export default class LTG_UI_HideMenuMediator extends BaseUIMediator<LTG_UI_HideMenu> {
 
@@ -36,6 +37,7 @@ export default class LTG_UI_HideMenuMediator extends BaseUIMediator<LTG_UI_HideM
 
     private _OnClickNotice() {
         let data = new LTG_Com_NoticeData();
+        data.content = GameConst.data.notice_str;
         data.Send();
     }
 

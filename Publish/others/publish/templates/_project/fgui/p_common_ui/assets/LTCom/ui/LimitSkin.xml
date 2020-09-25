@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://hbq27te38gel36" designImageLayer="1">
+  <displayList>
+    <graph id="n0_8gel" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ff00ffff">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n8_8gel" name="view" src="8gel45" fileName="cmp/view_limit_skin.xml" xy="0,14">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n1_8gel" name="view_ad_progress" src="8gel3d" fileName="cmp/view_watchad_progress.xml" xy="0,690">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n10_8gel" name="toggle_watchad" src="8gel3j" fileName="cmp/toggle_03.xml" xy="245,822">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n13_8gel" name="btn_get" src="8gel44" fileName="cmp/btn_text_01.xml" xy="231,868">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+  </displayList>
+</component>

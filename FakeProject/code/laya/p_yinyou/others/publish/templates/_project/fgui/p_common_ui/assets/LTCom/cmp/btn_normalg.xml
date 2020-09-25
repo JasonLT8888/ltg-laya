@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="300,100" pivot="0.5,0.5" anchor="true" extention="Button">
+  <controller name="red" exported="true" pages="0,无,1,右,2,左" selected="1"/>
+  <displayList>
+    <loader id="n6_fbqn" name="bg" xy="0,0" pivot="0.5,0.5" size="300,100" align="center" vAlign="middle" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <loader id="n4_xoi5" name="icon" xy="0,0" pivot="0.5,0.5" size="300,100" align="center" vAlign="middle" fill="scaleMatchHeight">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <text id="n3_xoi5" name="title" xy="0,0" pivot="0.5,0.5" size="300,100" font="DengXian" fontSize="36" color="#ffffff" align="center" vAlign="middle" autoSize="none" underline="true" bold="true" singleLine="true" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <image id="n5_i3bu" name="n5" src="8gel5t" fileName="img/sp_hongdian.png" xy="272,1" size="24,24">
+      <gearDisplay controller="red" pages="1"/>
+      <relation target="" sidePair="right-right,top-top"/>
+    </image>
+    <image id="n7_g3d5" name="n7" src="8gel5t" fileName="img/sp_hongdian.png" xy="1,0" size="24,24">
+      <gearDisplay controller="red" pages="2"/>
+      <relation target="" sidePair="left-left,top-top"/>
+    </image>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+  <customProperty target="bg" propertyId="1"/>
+</component>

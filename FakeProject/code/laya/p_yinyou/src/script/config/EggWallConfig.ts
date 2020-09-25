@@ -8,9 +8,10 @@ export namespace EggWallConfig {
         /** 是否投放 */ readonly need_show: boolean;
         /** 提示文本 */ readonly notice: string;
     }
-    export var data : {[key: number]: EggWallConfig.config};
-    export var dataList : EggWallConfig.config[];
-    export var lastData : EggWallConfig.config;
+    export var isConst: boolean = false;
+    export var data: {[key: number]: EggWallConfig.config};
+    export var dataList: EggWallConfig.config[];
+    export var lastData: EggWallConfig.config;
     export const path = "res/config/EggWallConfig.json";
 }
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="153,43" extention="Button">
+  <displayList>
+    <image id="n4_8gel" name="n4" src="8gel4m" fileName="img/btn_liji.png" xy="0,0"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

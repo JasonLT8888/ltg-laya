@@ -1,3 +1,4 @@
+/*
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_ShareVideo from "../UI/LTCom/LTG_UI_ShareVideo";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
@@ -58,3 +59,4 @@ export default class LTG_UI_ShareVideoMediator extends BaseUIMediator<LTG_UI_Sha
     }
 
 }
+*/

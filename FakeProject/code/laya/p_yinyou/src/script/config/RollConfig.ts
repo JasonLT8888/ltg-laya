@@ -10,9 +10,10 @@ export namespace RollConfig {
         /** 已领取之后的奖励内容 */ readonly re_reward_value: number;
         /** 随机权重 */ readonly roll_weight: number;
     }
-    export var data : {[key: number]: RollConfig.config};
-    export var dataList : RollConfig.config[];
-    export var lastData : RollConfig.config;
+    export var isConst: boolean = false;
+    export var data: {[key: number]: RollConfig.config};
+    export var dataList: RollConfig.config[];
+    export var lastData: RollConfig.config;
     export const path = "res/config/RollConfig.json";
 }
 

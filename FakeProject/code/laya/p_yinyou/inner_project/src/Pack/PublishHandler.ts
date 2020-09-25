@@ -42,7 +42,7 @@ export class PublishHandler {
     private _cdnPath: string;
     private _packConfig: LTPackConfig;
 
-    constructor(platformStr: string, useCompress: boolean = true) {
+    constructor(platformStr: string) {
         this._platformStr = platformStr;
     }
 

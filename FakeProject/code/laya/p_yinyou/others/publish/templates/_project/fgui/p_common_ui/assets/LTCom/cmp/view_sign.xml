@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="649,1092" designImage="ui://hbq27te38gel5v" designImageOffsetX="-47" designImageOffsetY="-73" designImageLayer="1">
+  <controller name="state" exported="true" pages="0,tosign,1,signed" selected="0"/>
+  <displayList>
+    <image id="n1_uo3l" name="n1" src="8gel4x" fileName="img/sp_diban(2).png" xy="0,81" size="649,834"/>
+    <image id="n2_uo3l" name="n2" src="8gel4y" fileName="img/sp_biaoti.png" xy="146,0"/>
+    <component id="n4_uo3l" name="day_1" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="39,203"/>
+    <component id="n10_uo3l" name="day_2" src="8gel53" fileName="cmp/view_item_sign_02.xml" xy="200,202"/>
+    <component id="n11_uo3l" name="day_3" src="8gel55" fileName="cmp/view_item_sign_03.xml" xy="360,203" size="252,180"/>
+    <component id="n12_uo3l" name="day_4" src="8gel53" fileName="cmp/view_item_sign_02.xml" xy="39,406">
+      <property target="text_day" propertyId="0" value="第4天"/>
+    </component>
+    <component id="n14_uo3l" name="day_5" src="8gel59" fileName="cmp/view_item_sign_05.xml" xy="199,406" size="148,180"/>
+    <component id="n15_uo3l" name="day_6" src="8gel5a" fileName="cmp/view_item_sign_06.xml" xy="360,406" size="251,180"/>
+    <component id="n17_uo3l" name="day_7" src="8gel5b" fileName="cmp/view_item_sign_07.xml" xy="52,612"/>
+    <text id="n18_uo3l" name="text_signed" xy="211,830" size="236,79" fontSize="32" color="#ffffff" align="center" vAlign="middle" bold="true" text="今日已领取&#xA;欢迎明天再来！">
+      <gearDisplay controller="state" pages="1"/>
+    </text>
+    <component id="n19_uo3l" name="btn_watchad" src="8gel5i" fileName="cmp/btn_watchad01.xml" xy="168,977">
+      <gearDisplay controller="state" pages="0"/>
+    </component>
+    <component id="n24_xzxr" name="tog" src="8gel5p" fileName="img/签到/btn_tog.xml" xy="190,919">
+      <gearDisplay controller="state" pages="0"/>
+      <Button title="看视频获得大量钞票"/>
+    </component>
+  </displayList>
+</component>

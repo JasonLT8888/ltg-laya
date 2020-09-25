@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="184,60" extention="Button">
+  <displayList>
+    <image id="n12_8gel" name="n12" src="8gel2r" fileName="img/btn_anniuhuang.png" xy="0,0" size="184,60"/>
+    <image id="n14_t2mg" name="n14" src="t2mg73" fileName="img/皮肤试用/sp_huode.png" xy="100,14"/>
+    <text id="n15_t2mg" name="text_progress" xy="39,9" size="45,37" fontSize="28" color="#ffffff" align="center" vAlign="middle" bold="true" text="0/3">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

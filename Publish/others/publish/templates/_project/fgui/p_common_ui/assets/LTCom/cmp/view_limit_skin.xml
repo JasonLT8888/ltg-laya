@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,716">
+  <displayList>
+    <image id="n8_8gel" name="n8" src="8gel3f" fileName="img/sp_guang(1).png" xy="0,0"/>
+    <loader id="n9_8gel" name="loader_icon" xy="155,25" size="454,524" url="ui://hbq27te38gel3g" align="center" vAlign="middle"/>
+    <loader id="n7_8gel" name="loader_text" xy="0,439" size="750,277" url="ui://hbq27te38gel3e" align="center" vAlign="middle"/>
+  </displayList>
+</component>

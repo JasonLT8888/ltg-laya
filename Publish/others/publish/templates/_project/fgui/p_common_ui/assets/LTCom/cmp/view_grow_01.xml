@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="498,497">
+  <displayList>
+    <image id="n2_8gel" name="n2" src="8gel2g" fileName="img/sp_guang.png" xy="249,248" pivot="0.5,0.5" anchor="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Rotation" target="n2_8gel" tween="true" startValue="0" endValue="360" duration="120" ease="Linear"/>
+  </transition>
+</component>

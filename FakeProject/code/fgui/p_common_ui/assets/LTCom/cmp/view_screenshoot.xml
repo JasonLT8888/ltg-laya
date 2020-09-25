@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="625,965">
+  <displayList>
+    <image id="n0_8ven" name="n0" src="t2mg76" fileName="img/改版UI/神级操作/sp_erjibg.png" xy="0,51" size="625,914"/>
+    <image id="n1_8ven" name="n1" src="t2mg77" fileName="img/改版UI/神级操作/sp_shengjicaozuo.png" xy="71,0"/>
+    <component id="n2_8ven" name="btn_close" src="t2mg78" fileName="cmp/btn_close_03(1).xml" xy="476,5"/>
+    <image id="n3_8ven" name="n3" src="t2mg7a" fileName="img/改版UI/神级操作/sp_shipinjietubg.png" xy="28,127" size="572,684"/>
+    <component id="n5_8ven" name="btn_share" src="t2mg7b" fileName="cmp/btn_share_01(1).xml" xy="121,828"/>
+    <graph id="n8_8ven" name="img_display" xy="37,136" size="554,666" type="rect" lineSize="0" fillColor="#ffcccccc">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <component id="n4_8ven" name="view_play" src="t2mg7g" fileName="cmp/view_play.xml" xy="54,185"/>
+  </displayList>
+</component>
