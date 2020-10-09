@@ -1,18 +1,6 @@
 {
 	"backgroundColor": 6710886,
-	"libview.twoColumn": true,
-	"libview.expandedNodes": [
-		"hbq27te3",
-		"/",
-		"hbq27te3",
-		"/cmp/",
-		"hbq27te3",
-		"/img/",
-		"hbq27te3",
-		"/ui/",
-		"hbq27te3",
-		"/效果图/"
-	],
+	"libview.currentGroup": "",
 	"doc.openedDocs": [
 		"ui://hbq27te38gel1",
 		"ui://hbq27te38gelo",
@@ -34,10 +22,22 @@
 		"ui://hbq27te38gel4v",
 		"ui://hbq27te38gel60"
 	],
-	"auxline1": true,
-	"libview.currentGroup": "",
-	"doc.activeDoc": "ui://hbq27te38gel40",
+	"libview.twoColumn": true,
 	"auxline2": true,
+	"canvasColor": 10066329,
 	"libview.firstColumnWidth": 200,
-	"canvasColor": 10066329
+	"auxline1": true,
+	"doc.activeDoc": "ui://hbq27te38gel40",
+	"libview.expandedNodes": [
+		"hbq27te3",
+		"/",
+		"hbq27te3",
+		"/cmp/",
+		"hbq27te3",
+		"/img/",
+		"hbq27te3",
+		"/ui/",
+		"hbq27te3",
+		"/效果图/"
+	]
 }
