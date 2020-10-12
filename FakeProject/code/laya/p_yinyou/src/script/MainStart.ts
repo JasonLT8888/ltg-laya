@@ -30,7 +30,7 @@ export default class MainStart extends LTStart {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
                 this._gameVersion = '1.0.1';//1.0.1 为全策略模式 
-                platformData.appId = "11111111111"//'88888888';
+                platformData.appId = "88888888"//'88888888';
                 platformData.appKey = '11111111111';
                 break;
             case EPlatformType.TT:
@@ -101,6 +101,7 @@ export default class MainStart extends LTStart {
                 break;
             case EPlatformType.Oppo:
             case EPlatformType.TT:
+            case EPlatformType.Web:
                 LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
             default:
                 LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
