@@ -45,7 +45,8 @@ export default class TTPlatform extends WXPlatform {
         }
 
         this._InitLauchOption();
-        this._Login();
+        // TT禁止启动调用login 否则不能过审
+        // this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
         this._CreateBannerAd();
