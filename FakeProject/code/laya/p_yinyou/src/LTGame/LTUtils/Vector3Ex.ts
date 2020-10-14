@@ -97,6 +97,10 @@ export default class Vector3Ex {
         return new Laya.Vector3(1, 0, 0);
     }
 
+    public static IsZero(vec: Laya.Vector3): boolean {
+        return vec.x && vec.y == 0 && vec.z == 0;
+    }
+
     public static Cross(right: Laya.Vector3, left: Laya.Vector3): Laya.Vector3 {
         var result = new Laya.Vector3(0, 0, 0);
         Laya.Vector3.cross(right, left, result);
