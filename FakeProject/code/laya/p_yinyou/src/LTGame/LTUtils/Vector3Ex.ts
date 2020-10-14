@@ -109,6 +109,10 @@ export default class Vector3Ex {
         return result;
     }
 
+    public static SubtractTo(right: Laya.Vector3, left: Laya.Vector3, to: Laya.Vector3) {
+        Laya.Vector3.subtract(right, left, to);
+    }
+
     public static ClampMagnitude(vector: Laya.Vector3, maxLength: number) {
         var result = new Laya.Vector3(0, 0, 0);
         var sqrMagnitude = 0;
