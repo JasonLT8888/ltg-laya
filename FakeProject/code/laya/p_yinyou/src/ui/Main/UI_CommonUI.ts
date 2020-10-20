@@ -19,6 +19,7 @@ export default class UI_CommonUI extends fgui.GComponent {
 	public m_btn_unlockprogress:fgui.GButton;
 	public m_btn_exskin:fgui.GButton;
 	public m_btn_bonus:fgui.GButton;
+	public m___sidegames:fgui.GGraph;
 
 	public static URL:string = "ui://kk7g5mmmfkl1g";
 
@@ -46,5 +47,6 @@ export default class UI_CommonUI extends fgui.GComponent {
 		this.m_btn_unlockprogress = <fgui.GButton><any>(this.getChildAt(13));
 		this.m_btn_exskin = <fgui.GButton><any>(this.getChildAt(14));
 		this.m_btn_bonus = <fgui.GButton><any>(this.getChildAt(15));
+		this.m___sidegames = <fgui.GGraph><any>(this.getChildAt(16));
 	}
 }

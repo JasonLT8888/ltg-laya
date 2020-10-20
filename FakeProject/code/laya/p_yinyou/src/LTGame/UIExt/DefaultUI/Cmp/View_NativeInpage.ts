@@ -27,16 +27,13 @@ export class View_NativeInPage {
         tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
         uiInstance.setSize(tagUI.width, tagUI.height);
-        let forceAdIdsStr = tagUI.data as string;
-        let forceAdIds = [];
-        if (!StringEx.IsNullOrEmpty(forceAdIdsStr)) {
-            let splitStrs = forceAdIdsStr.split(',');
-            for (let i = 0; i < splitStrs.length; ++i) {
-                forceAdIds.push(splitStrs[i]);
-            }
+        let posStr = tagUI.data as string;
+        let btnPos: number = 0;
+        if (!StringEx.IsNullOrEmpty(posStr)) {
+            btnPos = parseInt(posStr);
         }
         tagUI.dispose();
-        return new View_NativeInPage(uiInstance, forceAdIds);
+        return new View_NativeInPage(uiInstance, btnPos);
     }
 
     private _ui: UI_NativeInPage;
@@ -56,18 +53,17 @@ export class View_NativeInPage {
         this.ui.visible = v;
     }
 
-    private constructor(ui: UI_NativeInPage, ids: string[]) {
+    private constructor(ui: UI_NativeInPage, btnPos: number) {
         this._ui = ui;
-        if (ids == null || ids.length == 0) {
-            this._cacheIds = LTPlatform.instance.platformData.nativeinpageIds;
-        } else {
-            this._cacheIds = ids;
-        }
+        this._cacheIds = LTPlatform.instance.platformData.nativeinpageIds;
+
         console.log("初始化 内嵌 native广告id", this._cacheIds);
 
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
         this.ui.m_btn_close.onClick(this, this.clickClose);
+        this.ui.m_btn_pos.selectedIndex = btnPos;
+
     }
 
     public ClickAd() {
@@ -108,6 +104,7 @@ export class View_NativeInPage {
         View_NativeInPage._cacheNativeAd.reportAdShow({
             adId: this._cacheAdData.adId
         });
+        LTPlatform.instance.HideBannerAd();
         console.log("内嵌 native广告已展示", this._cacheAdData);
     }
 
