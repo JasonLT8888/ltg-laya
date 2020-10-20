@@ -1701,7 +1701,7 @@ declare namespace OIMO {
         private updateInvInertia;
         private updateTransformExt;
         getPosition(): Vec3;
-        getPositionTo(position: Vec3): void;
+        getPositionTo(position: Vec3| Laya.Vector3): void;
         setPosition(position: Vec3| Laya.Vector3): void;
         translate(translation: Vec3): void;
         getRotation(): Mat3;
@@ -1723,20 +1723,20 @@ declare namespace OIMO {
         getMassDataTo(massData: MassData): void;
         setMassData(massData: MassData): void;
         getRotationFactor(): Vec3;
-        setRotationFactor(rotationFactor: Vec3): void;
+        setRotationFactor(rotationFactor: Vec3 | Laya.Vector3): void;
         getLinearVelocity(): Vec3;
         getLinearVelocityTo(linearVelocity: Vec3): void;
-        setLinearVelocity(linearVelocity: Vec3): void;
+        setLinearVelocity(linearVelocity: Vec3| Laya.Vector3): void;
         getAngularVelocity(): Vec3;
         getAngularVelocityTo(angularVelocity: Vec3): void;
         setAngularVelocity(angularVelocity: Vec3): void;
         addLinearVelocity(linearVelocityChange: Vec3): void;
         addAngularVelocity(angularVelocityChange: Vec3): void;
         applyImpulse(impulse: Vec3, positionInWorld: Vec3): void;
-        applyLinearImpulse(impulse: Vec3): void;
+        applyLinearImpulse(impulse: Vec3| Laya.Vector3): void;
         applyAngularImpulse(impulse: Vec3): void;
         applyForce(force: Vec3, positionInWorld: Vec3): void;
-        applyForceToCenter(force: Vec3): void;
+        applyForceToCenter(force: Vec3| Laya.Vector3): void;
         applyTorque(torque: Vec3): void;
         getGravityScale(): number;
         setGravityScale(gravityScale: number): void;
@@ -2209,7 +2209,7 @@ declare namespace OIMO {
         identity(): Transform;
         getPosition(): Vec3;
         getPositionTo(position: Vec3): void;
-        setPosition(position: Vec3): Transform;
+        setPosition(position: Vec3| Laya.Vector3): Transform;
         translate(translation: Vec3): void;
         getRotation(): Mat3;
         getRotationTo(out: Mat3): void;
@@ -2219,7 +2219,7 @@ declare namespace OIMO {
         rotateXyz(eulerAngles: Vec3): void;
         getOrientation(): Quat;
         getOrientationTo(orientation: Quat): void;
-        setOrientation(quaternion: Quat): Transform;
+        setOrientation(quaternion: Quat| Laya.Quaternion): Transform;
         clone(): Transform;
         copyFrom(transform: Transform): Transform;
     }
