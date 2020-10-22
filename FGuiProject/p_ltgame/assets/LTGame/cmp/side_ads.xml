@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="600,660">
+<component size="680,680" opaque="false">
   <displayList>
-    <image id="n3_kvo6" name="n3" src="lquigo" fileName="img/图层7.png" xy="0,0" size="600,660">
+    <image id="n3_kvo6" name="n3" src="xx3jgt" fileName="img/sp_heisebgban.png" xy="0,0" size="560,680">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <list id="n0_kvo6" name="list" xy="294,308" pivot="0.5,0.5" anchor="true" size="574,616" layout="flow_hz" overflow="scroll" margin="11,0,0,0" lineGap="17" colGap="30" lineItemCount="3" defaultItem="ui://75kiu87kebhigq" align="center" autoClearItems="true">
+    <list id="n0_kvo6" name="list" xy="279,340" pivot="0.5,0.5" anchor="true" size="546,658" layout="flow_hz" overflow="scroll" margin="11,0,0,0" lineGap="10" colGap="10" lineItemCount="3" defaultItem="ui://75kiu87kebhigq" align="center" autoClearItems="true">
       <relation target="" sidePair="center-center,topext-top,bottomext-bottom"/>
       <item/>
       <item/>
@@ -17,7 +17,7 @@
       <item/>
       <item/>
     </list>
-    <component id="n12_zutp" name="btn_return" src="74v83q" fileName="cmp/btn.xml" xy="596,264" pivot="0.5,0.5" size="116,132">
+    <component id="n12_zutp" name="btn_return" src="74v83q" fileName="cmp/btn.xml" xy="556,274" pivot="0.5,0.5" size="116,132">
       <relation target="" sidePair="middle-middle,right-right"/>
       <Button icon="ui://75kiu87klquign"/>
     </component>

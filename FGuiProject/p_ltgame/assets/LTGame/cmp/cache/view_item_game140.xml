@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="140,140">
+<component size="144,144">
   <displayList>
-    <component id="n0_p2ld" name="icon" src="bg001h" fileName="cache/view_game_icon.xml" xy="70,70" pivot="0.5,0.5" anchor="true" size="140,140" aspect="true">
+    <component id="n0_p2ld" name="icon" src="bg001h" fileName="cmp/cache/view_game_icon1.xml" xy="72,72" pivot="0.5,0.5" anchor="true" size="142,142" aspect="true">
       <relation target="" sidePair="width-width,height-height"/>
     </component>
-    <text id="n1_p2ld" name="text_name" xy="77,166" pivot="0.5,0.5" anchor="true" size="93,29" fontSize="22" color="#ffffff" align="center" vAlign="middle" text="快来划水">
+    <text id="n1_p2ld" name="text_name" xy="71,166" pivot="0.5,0.5" anchor="true" size="93,29" fontSize="22" color="#ffffff" align="center" vAlign="middle" text="快来划水">
       <relation target="" sidePair="center-center"/>
     </text>
   </displayList>

@@ -6,10 +6,17 @@
       <gearDisplay controller="show" pages="0"/>
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="-601,-270" pivot="0.5,0.5" size="600,660">
-      <gearXY controller="show" pages="1,0" values="-601,-270|0,-248" tween="true"/>
+    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="-561,-280" pivot="0.5,0.5">
+      <gearXY controller="show" pages="1,0" values="-561,-280|0,-280" tween="true"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <image id="n15_gsbn" name="red" src="r1gt73" fileName="img/ad_res/res/sp_tips.png" xy="78,-25" pivot="0.5,0.5"/>
+    <image id="n15_gsbn" name="red" src="r1gt73" fileName="img/ad_res/res/sp_tips.png" xy="68,-24" pivot="0.3,1">
+      <gearDisplay controller="show" pages="1"/>
+      <relation target="" sidePair="right-right,top-top"/>
+    </image>
   </displayList>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Scale" target="n15_gsbn" tween="true" startValue="1,1" endValue="1.2,1.2" duration="12" ease="Quart.Out"/>
+    <item time="12" type="Scale" target="n15_gsbn" tween="true" startValue="1.2,1.2" endValue="1,1" duration="12"/>
+  </transition>
 </component>

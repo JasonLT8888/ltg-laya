@@ -12,7 +12,7 @@
     <component id="mhase" name="view_load.xml" path="/cmp/cache/"/>
     <component id="h75rf" name="FlyPanel.xml" path="/ui_common/" exported="true"/>
     <component id="h75rh" name="view_fly_coin.xml" path="/cmp/cache/" exported="true"/>
-    <component id="bg001h" name="view_game_icon.xml" path="/cmp/cache/"/>
+    <component id="bg001h" name="view_game_icon1.xml" path="/cmp/cache/"/>
     <component id="bg001k" name="view_end_games.xml" path="/cmp/cache/" exported="true"/>
     <component id="i2wq2s" name="CommonLockScreen.xml" path="/ui_common/" exported="true"/>
     <component id="wjpo4i" name="view_sharegames_big.xml" path="/cmp/cache/"/>
@@ -26,7 +26,6 @@
     <component id="74v84c" name="side_ads.xml" path="/cmp/"/>
     <component id="74v84g" name="hot_game.xml" path="/ui_nav/" exported="true"/>
     <image id="74v84h" name="爆款游戏.png" path="/img/ad_res/"/>
-    <component id="l2ax4j" name="NativeInterstitial.xml" path="/cmp/native/"/>
     <component id="l2ax4k" name="NativeBigAd.xml" path="/cmp/native/"/>
     <component id="l2ax4l" name="btn_normal.xml" path="/ui_common/" exported="true"/>
     <image id="l2ax4m" name="sp_guanbi.png" path="/img/ad_res/res/"/>
@@ -81,6 +80,29 @@
     <image id="lquigp" name="更多游戏.jpg" path="/img/"/>
     <component id="ebhigq" name="view_item_game164.xml" path="/cmp/cache/" exported="true"/>
     <image id="ebhigr" name="hxjy.png" path="/img/"/>
+    <image id="xx3jgs" name="btn_anniuhui.png" path="/img/" scale="9grid" scale9grid="20,20,30,23"/>
+    <image id="xx3jgt" name="sp_heisebgban.png" path="/img/" scale="9grid" scale9grid="22,21,44,42"/>
+    <image id="xx3jgu" name="sp_iconbg.png" path="/img/" scale="9grid" scale9grid="43,23,86,120"/>
+    <image id="cqevgv" name="guanggaobg.png" path="/img/" scale="9grid" scale9grid="36,36,72,72"/>
+    <component id="cqevgw" name="view_game_icon.xml" path="/cmp/cache/" exported="true"/>
+    <component id="vo5igx" name="OppoEnd.xml" path="/ui_common/" exported="true"/>
+    <component id="vo5igy" name="btn_scaler_yellow.xml" path="/img/按钮/" exported="true"/>
+    <image id="vo5igz" name="btn_anniuhuang2.png" path="/img/btns/" scale="9grid" scale9grid="94,32,44,52"/>
+    <image id="vo5ih0" name="sp_shipin.png" path="/img/按钮/"/>
+    <image id="vo5ih1" name="双.png" path="/img/font/"/>
+    <component id="vo5ih2" name="normal_ad_btn.xml" path="/img/按钮/"/>
+    <image id="vo5ih3" name="btn_anniuhuang.png" path="/img/按钮/" scale="9grid" scale9grid="19,31,38,62"/>
+    <image id="vo5ih4" name="sp_chakanguanggao.png" path="/img/font/"/>
+    <component id="vo5ih5" name="btn_red_scale.xml" path="/img/按钮/" exported="true"/>
+    <image id="vo5ih6" name="btn_anniuhong.png" path="/img/btns/" scale="9grid" scale9grid="95,40,37,43"/>
+    <image id="vo5ih7" name="sp_liwu.png" path="/img/按钮/"/>
+    <image id="vo5ih8" name="礼.png" path="/img/font/"/>
+    <image id="vo5ih9" name="title_red.png" path="/img/按钮/" scale="9grid" scale9grid="81,21,51,42"/>
+    <image id="vo5iha" name="挑战成功.png" path="/img/font/"/>
+    <image id="vo5ihb" name="sp_jixu.png" path="/img/按钮/"/>
+    <image id="vo5ihc" name="sp_jixuyouxi.png" path="/img/font/"/>
+    <image id="vo5ihd" name="sp_biaoti4.png" path="/img/按钮/"/>
+    <image id="vo5ihf" name="btn_huiseanniu.png" path="/img/按钮/" scale="9grid" scale9grid="11,11,48,51"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
