@@ -79,7 +79,7 @@ export default class View_SideGames {
                 this.ui.m_show.selectedIndex = (this.ui.m_show.selectedIndex + 1) % 2;
                 if (this.ui.m_show.selectedIndex == 1) {
                     this.ui.m_ads.m_list.addSelection(0, true);
-                    Laya.timer.loop(15, this, () => {
+                    Laya.timer.loop(25, this, () => {
                         this.ui.m_ads.m_list.scrollPane.scrollDown(0.005, true);
                         if (this.ui.m_ads.m_list.scrollPane.isBottomMost) {
                             this.ui.m_ads.m_list.scrollPane.scrollTop(true);

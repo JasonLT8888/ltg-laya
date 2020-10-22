@@ -55,7 +55,7 @@ export default class View_HotGame {
     /**
      * 每五秒更新一次
      */
-    private _updateTime: number = 5000;
+    private _updateTime: number = 3000;
 
     private _posId: number = 0;
 
