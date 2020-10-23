@@ -280,16 +280,17 @@ export default class TTPlatform extends WXPlatform {
     }
     followOfficialAccount(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            this.base.followOfficialAccount({
-                success(res) {
-                    if (res.errCode === 0) {
-                        resolve(true);
-                    } else {
-                        console.log(res.errMsg);
-                        resolve(false);
-                    }
-                },
-            });
+            this.base.openAwemeUserProfile();
+            // this.base.followOfficialAccount({
+            //     success(res) {
+            //         if (res.errCode === 0) {
+            //             resolve(true);
+            //         } else {
+            //             console.log(res.errMsg);
+            //             resolve(false);
+            //         }
+            //     },
+            // });
 
         })
     }
