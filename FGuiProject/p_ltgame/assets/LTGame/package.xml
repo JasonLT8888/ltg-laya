@@ -103,6 +103,7 @@
     <image id="vo5ihc" name="sp_jixuyouxi.png" path="/img/font/"/>
     <image id="vo5ihd" name="sp_biaoti4.png" path="/img/按钮/"/>
     <image id="vo5ihf" name="btn_huiseanniu.png" path="/img/按钮/" scale="9grid" scale9grid="11,11,48,51"/>
+    <component id="gn6shg" name="Channel.xml" path="/ui_common/" exported="true"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
