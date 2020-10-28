@@ -7,6 +7,8 @@ import FakeAdDefine from "../common/FakeAdDefine";
 import { ISDK } from "../Interface/ISDK";
 import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
+import StringEx from "../../LTGame/LTUtils/StringEx";
+import GameData from "../../script/common/GameData";
 
 export default class SDK_Default implements ISDK {
 
@@ -24,8 +26,9 @@ export default class SDK_Default implements ISDK {
     appId: string;
     controlVersion: string;
     adManager: SDKADManager;
-    uid: string = "sdk_test";
+    uid: string = "";
     dateInfo: DateInfo[];
+    token: string;
 
     Init(flg: string, channel: string, controlVersion: string, appid: string) {
         this.isADConfigInited = true;
@@ -44,6 +47,23 @@ export default class SDK_Default implements ISDK {
         this.adManager = new SDKADManager();
         this._RequestSelfAdInfo();
         console.log("SDK:Init", this);
+        if (StringEx.IsNullOrEmpty(GameData.instance.uid)) {
+            GameData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
+            GameData.SaveToDisk();
+        }
+        this.uid = GameData.instance.uid;
+    }
+    public getToken() {
+        let sendData = {
+            appid: LTPlatform.instance.platformData.appId
+        };
+        LTHttp.Send('https://games.api.gugudang.com//api/get/games/token', Laya.Handler.create(this, (res) => {
+            console.log(res);
+            res = JSON.parse(res);
+            if (res && res.code == 0) {
+                this.token = res.data.data.access_token;
+            }
+        }), null, true, sendData);
     }
     /**CDN 节假日信息配置 年底需更新次年数据 */
     RequestRemoteDateInfo() {

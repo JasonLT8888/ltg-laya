@@ -21,6 +21,10 @@ export interface ISDK {
    * 渠道信息,可能为null
    */
   channel: string;
+  /**
+   * token
+   */
+  token: string;
 
   /**
    * 云控版本号
@@ -28,7 +32,7 @@ export interface ISDK {
   controlVersion: string;
 
   /**
-   * uid 用户唯一id
+   * uid 用户唯一id /已登录用户openid
    */
   uid: string;
 

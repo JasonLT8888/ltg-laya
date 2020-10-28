@@ -1,10 +1,6 @@
-import { ISDK } from "./Interface/ISDK";
 import LTPlatform from "../LTGame/Platform/LTPlatform";
-import { EPlatformType } from "../LTGame/Platform/EPlatformType";
-import WXPlatform from "../LTGame/Platform/WXPlatform";
-import GameData from "../script/common/GameData";
-import StringEx from "../LTGame/LTUtils/StringEx";
 import SDK_CQ from "./Impl/SDK_CQ";
+import { ISDK } from "./Interface/ISDK";
 
 export default class LTSDK {
 
@@ -55,22 +51,13 @@ export default class LTSDK {
                 LTSDK.instance.Login(LTPlatform.instance.loginState.code, LTPlatform.instance.GetFromAppId());
             } else {
                 console.log("平台未登录,跳过登录sdk");
-                LTSDK.instance.Login(LTSDK.uuid, LTPlatform.instance.GetFromAppId());
+                LTSDK.instance.Login(LTSDK.instance.uid, LTPlatform.instance.GetFromAppId());
             }
             // }
 
         });
         return this._instance;
     }
-    public static get uuid() {
-        console.log(GameData.instance.uid);
-        if (StringEx.IsNullOrEmpty(GameData.instance.uid)) {
-            GameData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
-            GameData.SaveToDisk();
-        }
-        return GameData.instance.uid;
-    }
-
     private static getChannel() {
         let channel = LTPlatform.instance.GetStorage('user_from_channel');
         let options = LTPlatform.instance.lauchOption as any;

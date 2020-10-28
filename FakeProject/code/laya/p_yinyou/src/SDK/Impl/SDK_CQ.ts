@@ -46,7 +46,7 @@ export default class SDK_CQ extends SDK_Default {
         }), true, sendData);
     }
 
-    reportShareInfo(videoId: string, shareId: string) {
+    public reportShareInfo(videoId: string, shareId: string) {
         let sendData = {
             appid: this.appId,
             openId: GameData.instance.uid,
@@ -321,8 +321,7 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     private _OnLoginFailed(res: SDK.LoginResult) {
-        console.error("SDK登录失败", this.appId, res, LTSDK.uuid);
-        this.uid = LTSDK.uuid;
+        console.error("SDK登录失败", this.appId, res);
         this.reportFromVideo();
     }
     /**上报视频来源用户*/
@@ -344,19 +343,21 @@ export default class SDK_CQ extends SDK_Default {
                     if (query.channelId) {
                         fromChannel = query.channelId;
                     }
+                    let sendData = {
+                        appid: this.appId,
+                        fromId: `${fromId}|${fromChannel}`,
+                        openId: GameData.instance.uid,
+                        shareId: shareId
+                    };
+                    console.log(sendData);
+                    LTHttp.Send(this._headPrefix + "/api/share/start/report", Laya.Handler.create(this, () => {
+                        console.log('上报视频来源用户 上报成功');
+                    }), Laya.Handler.create(this, (res) => {
+                        console.log(" 上报视频来源用户 上报失败", res);
+                    }), true, sendData);
+                } else {
+                    console.log('自由渠道');
                 }
-                let sendData = {
-                    appid: this.appId,
-                    fromId: `${fromId}|${fromChannel}`,
-                    openId: GameData.instance.uid,
-                    shareId: shareId
-                };
-                console.log(sendData);
-                LTHttp.Send(this._headPrefix + "/api/share/start/report", Laya.Handler.create(this, () => {
-                    console.log('上报视频来源用户 上报成功');
-                }), Laya.Handler.create(this, (res) => {
-                    console.log(" 上报视频来源用户 上报失败", res);
-                }), true, sendData);
             } catch (error) {
                 console.error(error);
             }
