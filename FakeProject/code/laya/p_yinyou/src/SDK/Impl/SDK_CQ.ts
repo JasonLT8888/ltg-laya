@@ -7,6 +7,9 @@ import ShareManager from "../../LTGame/Platform/ShareManager";
 import { ECheckState } from "../common/ECheckState";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
+import GameData from "../../script/common/GameData";
+import TTPlatform from "../../LTGame/Platform/TTPlatform";
+import LTSDK from "../LTSDK";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -17,6 +20,7 @@ export default class SDK_CQ extends SDK_Default {
     appId: string;
     controlVersion: string;
     adManager: SDKADManager;
+    /**openid */
     uid: string = "sdk_test";
     enableDebug: boolean = true;
     dateInfo: DateInfo[] = [];
@@ -40,6 +44,25 @@ export default class SDK_CQ extends SDK_Default {
         LTHttp.Send(this._headPrefix + "/api/shares", Laya.Handler.create(this, this._OnRequestShareInfo), Laya.Handler.create(this, (res) => {
             console.log("获取分享接口访问失败", res);
         }), true, sendData);
+    }
+
+    reportShareInfo(videoId: string, shareId: string) {
+        let sendData = {
+            appid: this.appId,
+            openId: GameData.instance.uid,
+            videoId: videoId,
+            shareId: shareId
+        };
+        try {
+            LTHttp.Send(this._headPrefix + "/api/share/video/post", Laya.Handler.create(this, () => {
+                console.log('ShareVideo上报成功');
+            }), Laya.Handler.create(this, (res) => {
+                console.log("ShareVideo上报失败", res);
+            }), true, sendData);
+        } catch (error) {
+            console.error(error);
+        }
+
     }
     /**
      * 按关卡上报排名 
@@ -256,9 +279,9 @@ export default class SDK_CQ extends SDK_Default {
 
     Login(code: string, fromAppId: string) {
         console.log('登录参数：code:', code);
-        let uid = (LTPlatform.instance.platform == EPlatformType.Oppo || LTPlatform.instance.platform == EPlatformType.Vivo) ? LTPlatform.instance.platformData.appKey : this.appId;
+        let appid = (LTPlatform.instance.platform == EPlatformType.Oppo || LTPlatform.instance.platform == EPlatformType.Vivo) ? LTPlatform.instance.platformData.appKey : this.appId;
         let sendData = {
-            appid: uid,
+            appid: appid,
             // flg: this.flg,
             code: code,
             channel: 'own',
@@ -291,11 +314,54 @@ export default class SDK_CQ extends SDK_Default {
     private _OnLoginSuccess(res: SDK.LoginSuccessParam) {
         console.log("SDK登录成功", res);
         this.uid = res.openid;
+        GameData.instance.uid = res.openid;
+        GameData.SaveToDisk();
         this.ReportDaily();
+        this.reportFromVideo();
     }
 
     private _OnLoginFailed(res: SDK.LoginResult) {
-        console.error("SDK登录失败", this.appId, res);
+        console.error("SDK登录失败", this.appId, res, LTSDK.uuid);
+        this.uid = LTSDK.uuid;
+        this.reportFromVideo();
+    }
+    /**上报视频来源用户*/
+    reportFromVideo() {
+        // if (!this.reportEnable) return;
+        if (LTPlatform.instance.platform == EPlatformType.TT && (LTPlatform.instance as TTPlatform).isDouyin) {
+            try {
+                let query = LTPlatform.instance.lauchOption.query as any;
+                let fromId = 'ytlj';
+                let shareId = `ytlj_scene|${LTPlatform.instance.lauchOption.scene}`;
+                let fromChannel = 'own';
+                if (query && query.openId) {
+                    fromId = query.openId;
+                    if (query.shareId) {
+                        shareId = query.shareId;
+                    } else {
+                        shareId = `ytlj_scene|${LTPlatform.instance.lauchOption.scene}`;
+                    }
+                    if (query.channelId) {
+                        fromChannel = query.channelId;
+                    }
+                }
+                let sendData = {
+                    appid: this.appId,
+                    fromId: `${fromId}|${fromChannel}`,
+                    openId: GameData.instance.uid,
+                    shareId: shareId
+                };
+                console.log(sendData);
+                LTHttp.Send(this._headPrefix + "/api/share/start/report", Laya.Handler.create(this, () => {
+                    console.log('上报视频来源用户 上报成功');
+                }), Laya.Handler.create(this, (res) => {
+                    console.log(" 上报视频来源用户 上报失败", res);
+                }), true, sendData);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
     }
 
     ReportStat(isShare: boolean, sid: string) {

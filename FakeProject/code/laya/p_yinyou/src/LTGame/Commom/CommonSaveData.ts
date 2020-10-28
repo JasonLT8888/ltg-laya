@@ -69,6 +69,7 @@ export class SaveData {
      * 与兑换码对应的次数(已观看)
      */
     public codeADCounts: number[] = [];
+    public channelId: string = 'own';
 
 }
 

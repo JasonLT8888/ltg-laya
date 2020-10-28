@@ -10,7 +10,6 @@ import { DateInfo } from "./SDK_CQ";
 
 export default class SDK_Default implements ISDK {
 
-
     shieldHours: string[];
     severTime: Date;
     isDelayClose: boolean;
@@ -53,6 +52,9 @@ export default class SDK_Default implements ISDK {
     }
     onGetDatesError(res: string) {
         console.error('云 获取日历信息失败', res);
+
+    }
+    reportShareInfo(videoId: string, shareId: string) {
 
     }
     onGetDatesInfo(res: string) {

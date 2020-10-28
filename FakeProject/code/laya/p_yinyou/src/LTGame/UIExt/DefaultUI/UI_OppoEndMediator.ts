@@ -106,6 +106,7 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
             if (this.ui.m___nativeinpage) {
                 this.ui.m___nativeinpage.visible = false;
             }
+            this.ui.m_btn_ad.visible = false;
         }
     }
     protected _OnHide() { }

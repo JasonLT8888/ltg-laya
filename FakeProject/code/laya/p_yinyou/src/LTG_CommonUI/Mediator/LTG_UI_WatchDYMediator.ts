@@ -27,12 +27,12 @@ export default class LTG_UI_WatchDYMediator extends BaseUIMediator<LTG_UI_WatchD
         }
 
         this.ui.m_view.m_text_code.text = this._cacheData.dyId;
-        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
-        this.ui.m_view.m_btn_copy.onClick(this, this._OnClickCopy);
+        this.ui.m_btn_close.onClick(this, this._OnClickClose);
+        // this.ui.m_view.m_btn_copy.onClick(this, this._OnClickCopy);
         this.ui.m_view.m_btn_watch.onClick(this, this._OnClickWatch);
-        this.ui.m_view.m_btn_copy.visible = false;
-        this.ui.m_view.m_text_code.visible = true;
-        this.ui.m_view.getChildAt(5).visible = false;
+        this.ui.m_view.m_btn_follow.onClick(this, this._OnClickWatch);
+        // this.ui.m_view.m_btn_copy.visible = false;
+        this.ui.m_view.m_text_code.visible = true; 
     }
 
     private _OnClickCopy() {

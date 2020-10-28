@@ -78,8 +78,8 @@ export class View_NativeInPage {
 
     private async _Init() {
 
-        this.visible = false;
-        this.ui.visible = false;
+        this.visible = true;
+        this.ui.visible = true;
         // for (let i = 0; i < this._cacheIds.length; ++i) {
         let i = MathEx.RandomInt(0, this._cacheIds.length)
         let ret = await this._LoadIconData(i);
@@ -92,8 +92,6 @@ export class View_NativeInPage {
 
     }
     private showAdInfo() {
-        this.visible = true;
-        this.ui.visible = true;
         if (this._cacheAdData.imgUrlList.length) {
             this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
             this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];

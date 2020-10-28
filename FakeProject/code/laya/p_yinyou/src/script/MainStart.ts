@@ -92,6 +92,7 @@ export default class MainStart extends LTStart {
         if (platformData.appId) {
             this._appId = platformData.appId;
         }
+
     }
 
     _HandleSDK() {

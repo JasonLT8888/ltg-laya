@@ -10,6 +10,10 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
 import Awaiters from "../Async/Awaiters";
+import LTSDK from "../../SDK/LTSDK";
+import GameData from "../../script/common/GameData";
+import { PackConst } from "../../script/config/PackConst";
+import CommonSaveData from "../Commom/CommonSaveData";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -20,7 +24,9 @@ export default class TTPlatform extends WXPlatform {
     recordManager: IRecordManager;
     device: IDevice;
     loginCode: string = null;
-
+    public get isDouyin() {
+        return this.systemInfo['appName'] == 'Douyin';
+    }
     Init(platformData: LTPlatformData) {
         this._base = window["tt"];
         this.base = this._base;
@@ -45,8 +51,8 @@ export default class TTPlatform extends WXPlatform {
         }
 
         this._InitLauchOption();
-        // TT禁止启动调用login 否则不能过审
-        // this._Login();
+        // TT禁止启动调用login 否则不能过审 参数 force=false时不强制登录
+        this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
         this._CreateBannerAd();
@@ -64,7 +70,7 @@ export default class TTPlatform extends WXPlatform {
             code: ""
         };
         let loginData = {
-            force: true,
+            force: false,
             success: (res) => {
                 this.loginCode = res.code;
                 this.loginState.isLogin = true;
@@ -278,6 +284,7 @@ export default class TTPlatform extends WXPlatform {
             }
         });
     }
+
     followOfficialAccount(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             this.base.openAwemeUserProfile();
@@ -308,4 +315,29 @@ export default class TTPlatform extends WXPlatform {
             });
         });
     }
+    addShareListener() {
+        console.log('监听分享 ');
+        this._base.onShareAppMessage((res) => {
+            console.log('分享', res);
+            let shareId = `${LTSDK.instance.uid}${Date.now()}`
+            return {
+                title: "音速战姬",
+                imageUrl: "https://sf1-ttcdn-tos.pstatp.com/img/developer/app/ttd60ba0b64931e10f/sia49060c~noop.image",
+                query: `from=shareVideoBtn&openId=${LTSDK.instance.uid}&shareId=${shareId}&channelId=${GameData.instance.channelId}`,
+                extra: {
+                    videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']
+                    withVideoId: true,
+                    hashtag_list: PackConst.data.topics
+                },
+                success: (rst) => {
+                    console.log("分享成功", rst, LTSDK.instance.uid, GameData.instance.channelId);
+                    if (rst.videoId) LTSDK.instance.reportShareInfo(rst.videoId, shareId);
+                },
+                fail: (e) => {
+                    console.log("分享失败", e);
+                },
+            };
+        });
+    }
+
 }
