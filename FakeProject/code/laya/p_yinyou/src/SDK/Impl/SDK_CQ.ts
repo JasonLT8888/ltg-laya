@@ -74,13 +74,13 @@ export default class SDK_CQ extends SDK_Default {
         if (LTPlatform.instance.loginState && LTPlatform.instance.loginState.code) {
             console.error('登录信息未获取');
         } else {
-            let uid = this.appId;
+            let appid = this.appId;
             if (LTPlatform.instance.platform == EPlatformType.Oppo) {
-                uid = LTPlatform.instance.platformData.appKey
+                appid = LTPlatform.instance.platformData.appKey
             }
             let sendData = {
-                appid: uid,
-                openId: LTPlatform.instance.loginState.code,
+                appid: appid,
+                openId: LTSDK.instance.uid,
                 times: score,
                 nickname: LTPlatform.instance.userInfo.nickName,
                 avatar: LTPlatform.instance.userInfo.avatarUrl,
@@ -106,7 +106,7 @@ export default class SDK_CQ extends SDK_Default {
             }
             let sendData = {
                 appid: uid,
-                openId: LTPlatform.instance.loginState.code,
+                openId: LTSDK.instance.uid,
                 times: score,
                 nickname: LTPlatform.instance.userInfo.nickName,
                 avatar: LTPlatform.instance.userInfo.avatarUrl,
@@ -136,7 +136,7 @@ export default class SDK_CQ extends SDK_Default {
             }
             let sendData = {
                 appid: uid,
-                openId: LTPlatform.instance.loginState.code,
+                openId: LTSDK.instance.uid,
                 times: score,
                 nickname: LTPlatform.instance.userInfo.nickName,
                 avatar: LTPlatform.instance.userInfo.avatarUrl,
