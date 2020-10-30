@@ -2,7 +2,7 @@
 <component size="286,105" extention="Button">
   <displayList>
     <image id="n5_8gel" name="n5" src="8gel4c" fileName="img/btn_anniuhuang(1).png" xy="0,0" size="286,105"/>
-    <image id="n6_8gel" name="n6" src="8gel4d" fileName="img/sp_guanbi.png" xy="95,23"/>
+    <image id="n6_8gel" name="n6" src="en7e7h" fileName="img/立即关注.png" xy="65,31"/>
   </displayList>
   <Button downEffect="dark" downEffectValue="0.80"/>
 </component>
