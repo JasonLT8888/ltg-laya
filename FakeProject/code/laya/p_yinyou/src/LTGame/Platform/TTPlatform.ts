@@ -322,8 +322,8 @@ export default class TTPlatform extends WXPlatform {
             console.log('分享', res);
             let shareId = `${LTSDK.instance.uid}${Date.now()}`
             return {
-                title: "音速战姬",
-                imageUrl: "https://sf1-ttcdn-tos.pstatp.com/img/developer/app/ttd60ba0b64931e10f/sia49060c~noop.image",
+                title: "",
+                imageUrl: "",
                 query: `from=shareVideoBtn&openId=${LTSDK.instance.uid}&shareId=${shareId}&channelId=${GameData.instance.channelId}`,
                 extra: {
                     videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']

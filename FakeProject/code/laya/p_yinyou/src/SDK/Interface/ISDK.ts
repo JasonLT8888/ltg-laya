@@ -98,7 +98,7 @@ export interface ISDK {
    * @param adInfo 广告数据
    * @param jumpSuccess 是否跳转成功
    */
-  ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean);
+  ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean, scene?: string);
 
   /**
    * 记录广告展示

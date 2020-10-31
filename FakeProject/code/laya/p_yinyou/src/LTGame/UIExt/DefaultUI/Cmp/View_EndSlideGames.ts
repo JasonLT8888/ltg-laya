@@ -20,7 +20,7 @@ export default class View_EndSlideGames {
             tagUI.dispose();
             return null;
         }
-        if (LTSDK.instance.checkState == ECheckState.InCheck) {
+        if (LTPlatform.instance.platform == EPlatformType.Oppo && LTSDK.instance.checkState == ECheckState.InCheck) {
             console.log("审核");
             tagUI.dispose();
             return null;
@@ -67,6 +67,8 @@ export default class View_EndSlideGames {
     private _Init() {
         if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
+        } else {
+            this._posId = 6;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
@@ -93,8 +95,8 @@ export default class View_EndSlideGames {
         this.ui.m_ad[`m_list${index}`].itemRenderer = Laya.Handler.create(this, (id: number, adUI: UI_view_item_game140) => this._OnAdItemRender(id, adUI, index), null, false);
         this.ui.m_ad[`m_list${index}`].numItems = (LTPlatform.instance.platform == EPlatformType.Oppo) ? 7 : this._cacheAds.length;
         this.ui.m_ad[`m_list${index}`].on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
-        Laya.timer.loop(40, this, () => {
-            this.ui.m_ad[`m_list${index}`].scrollPane.scrollRight(0.02, true);
+        Laya.timer.loop(25, this, () => {
+            this.ui.m_ad[`m_list${index}`].scrollPane.scrollRight(0.01, true);
         });
     }
 
@@ -125,6 +127,7 @@ export default class View_EndSlideGames {
 
     private _OnClickGameItem(item: UI_view_item_game140) {
         let data = this._cacheAds[item.data as number];
+        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:

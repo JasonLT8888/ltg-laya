@@ -58,6 +58,8 @@ export default class View_BottomGames {
     private _Init() {
         if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
+        } else {
+            this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
@@ -115,6 +117,7 @@ export default class View_BottomGames {
 
     private _OnClickGameItem(item: UI_view_item_game) {
         let data = this._cacheAds[item.data as number];
+        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '猜你喜欢');
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:

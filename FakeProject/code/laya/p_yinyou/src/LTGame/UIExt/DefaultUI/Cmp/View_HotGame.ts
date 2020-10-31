@@ -7,7 +7,7 @@ import MathEx from "../../../LTUtils/MathEx";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
 import UI_hot_game from "../UI/LTGame/UI_hot_game";
-
+//**火爆游戏  爆款推荐 */
 export default class View_HotGame {
 
     static CreateView(tagUI: fgui.GComponent): View_HotGame {
@@ -62,8 +62,11 @@ export default class View_HotGame {
     private _Init() {
         if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
+        } else {
+            this._posId = 7;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
+        this.ui.displayObject.zOrder = Number.MAX_SAFE_INTEGER;
         if (this._cacheAds == null) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
         } else {
@@ -110,16 +113,17 @@ export default class View_HotGame {
     }
 
     private _OnClickAD() {
-        let uid = this._showAd.ad_appid;
+        let navId = this._showAd.ad_appid;
+        LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, true, '更多游戏');
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:
-                uid = this._showAd.ad_package;
+                navId = this._showAd.ad_package;
                 break;
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(uid, this._showAd.ad_path, null, true, false, this._showAd.ad_id);
+        LTPlatform.instance.NavigateToApp(navId, this._showAd.ad_path, null, true, false, this._showAd.ad_id);
         this._UpdateUI();
     }
 

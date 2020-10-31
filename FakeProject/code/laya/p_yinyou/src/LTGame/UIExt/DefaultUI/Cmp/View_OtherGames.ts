@@ -45,9 +45,8 @@ export default class View_OtherGames {
     }
 
     private _Init() {
-        if (LTSDK.instance instanceof SDK_YQ) {
-            this._posId = 5;
-        }
+        this._posId = 5;
+
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
@@ -93,6 +92,7 @@ export default class View_OtherGames {
 
     private _OnClickGameItem(item: UI_view_item_game) {
         let data = this._cacheAds[item.data as number];
+        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
