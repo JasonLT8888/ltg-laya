@@ -66,7 +66,7 @@ export default class View_SideGames {
             this._posId = 10;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
-        if (this._cacheAds == null) {
+        if (!this._cacheAds || !this._cacheAds.length) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
         } else {
             this.ui.m_ads.m_list.setVirtual();

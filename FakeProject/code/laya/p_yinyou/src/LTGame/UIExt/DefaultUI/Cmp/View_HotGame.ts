@@ -67,7 +67,8 @@ export default class View_HotGame {
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         this.ui.displayObject.zOrder = Number.MAX_SAFE_INTEGER;
-        if (this._cacheAds == null) {
+        if (!this._cacheAds || !this._cacheAds.length) {
+            this.ui.visible = false;
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
         } else {
             this._cacheIndex = MathEx.RandomInt(0, this._cacheAds.length);
@@ -79,6 +80,7 @@ export default class View_HotGame {
 
     private _OnAdInited(posId: number) {
         if (posId != this._posId) return;
+        this.ui.visible = true;
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         this._cacheIndex = MathEx.RandomInt(0, this._cacheAds.length);
         this.ui.onClick(this, this._OnClickAD);

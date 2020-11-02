@@ -7,16 +7,7 @@ export class SaveData {
      * 金币数量
      */
     public coinCount: number = 0;
-    /**
-     * 达人用户主动填写的渠道号
-     */
-    public channelId: string = 'own';
-    /**
-     * 用户唯一id= openid/未登录用户唯一标识
-     */
-    public uid: string;
-
-
+   
 
 }
 

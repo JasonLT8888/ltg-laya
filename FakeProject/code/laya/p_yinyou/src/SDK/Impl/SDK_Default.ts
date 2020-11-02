@@ -9,6 +9,7 @@ import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
 import StringEx from "../../LTGame/LTUtils/StringEx";
 import GameData from "../../script/common/GameData";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export default class SDK_Default implements ISDK {
 
@@ -42,11 +43,11 @@ export default class SDK_Default implements ISDK {
         this.channel = channel;
         this.controlVersion = controlVersion;
         this.appId = appid;
-        if (StringEx.IsNullOrEmpty(GameData.instance.uid)) {
-            GameData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
+        if (StringEx.IsNullOrEmpty(CommonSaveData.instance.uid)) {
+            CommonSaveData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
             GameData.SaveToDisk();
         }
-        this.uid = GameData.instance.uid;
+        this.uid = CommonSaveData.instance.uid;
         this.severTime = new Date();
         this.shieldHours = [];
         this.adManager = new SDKADManager(); 
