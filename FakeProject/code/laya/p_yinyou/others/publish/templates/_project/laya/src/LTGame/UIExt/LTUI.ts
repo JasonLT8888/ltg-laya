@@ -48,5 +48,4 @@ export default class LTUI {
     public static UnlockScreen() {
         UI_CommonLockScreenMediator.instance.Hide();
     }
-
 }

@@ -30,11 +30,11 @@ export default class QuaternionEx {
         return new Laya.Quaternion(-q.x, q.y, q.z, -q.w);
     }
 
-    public static Euler(x: number, y: number, z: number) : Laya.Quaternion {
+    public static Euler(x: number, y: number, z: number): Laya.Quaternion {
         return this.FromEulerAngle(x, y, z);
     }
 
-    public static FromEulerAngle(x: number, y: number, z: number) : Laya.Quaternion {
+    public static FromEulerAngle(x: number, y: number, z: number): Laya.Quaternion {
         var eulerX = x / 2 * MathEx.Deg2Rad;
         var cX = Math.cos(eulerX);
         var sX = Math.sin(eulerX);
@@ -64,21 +64,21 @@ export default class QuaternionEx {
         return new Laya.Quaternion(src.x, src.y, src.z, src.w);
     }
 
-    public static Multiply(r: Laya.Quaternion, v: Laya.Vector3): Laya.Vector3 {
-        var x = r.x + r.x;
-        var y = r.y + r.y;
-        var z = r.z + r.z;
-        var xx = r.x * x;
-        var yy = r.y * y;
-        var zz = r.z * z;
-        var xy = r.x * y;
-        var xz = r.x * z;
-        var yz = r.y * z;
-        var wx = r.w * x;
-        var wy = r.w * y;
-        var wz = r.w * z;
+    public static MultiplyTo(r: Laya.Quaternion, v: Laya.Vector3, to: Laya.Vector3) {
+        let x = r.x + r.x;
+        let y = r.y + r.y;
+        let z = r.z + r.z;
+        let xx = r.x * x;
+        let yy = r.y * y;
+        let zz = r.z * z;
+        let xy = r.x * y;
+        let xz = r.x * z;
+        let yz = r.y * z;
+        let wx = r.w * x;
+        let wy = r.w * y;
+        let wz = r.w * z;
 
-        var res = Vector3Ex.zero;
+        let res = to;
         res.x = (((1 - (yy + zz)) * v.x
             + (xy - wz) * v.y
             + (xz + wy) * v.z));
@@ -90,7 +90,12 @@ export default class QuaternionEx {
         res.z = (((xz - wy) * v.x
             + (yz + wx) * v.y
             + (1 - (xx + yy)) * v.z));
-        return res;
+    }
+
+    public static Multiply(r: Laya.Quaternion, v: Laya.Vector3): Laya.Vector3 {
+        let to = new Laya.Vector3();
+        this.MultiplyTo(r, v, to);
+        return to;
     }
 
     public static Lerp(from: Laya.Quaternion, to: Laya.Quaternion, value: number): Laya.Quaternion {

@@ -49,6 +49,8 @@ export default class View_End3X3Games {
     private _Init() {
         if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
+        } else {
+            this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
@@ -102,6 +104,7 @@ export default class View_End3X3Games {
 
     private _OnClickGameItem(item: UI_item_gameSmall) {
         let data = this._cacheAds[item.data as number];
+        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:

@@ -6,10 +6,12 @@ import UI_NativeInPage from "./UI_NativeInPage";
 import UI_AdInpageComp from "./UI_AdInpageComp";
 import UI_iconLongComp from "./UI_iconLongComp";
 import UI_OpenAds from "./UI_OpenAds";
-import UI_view_game_icon from "./UI_view_game_icon";
+import UI_view_game_icon1 from "./UI_view_game_icon1";
 import UI_view_end_games from "./UI_view_end_games";
+import UI_view_game_icon from "./UI_view_game_icon";
 import UI_view_item_game164 from "./UI_view_item_game164";
 import UI_SideGames from "./UI_SideGames";
+import UI_Channel from "./UI_Channel";
 import UI_FlyPanel from "./UI_FlyPanel";
 import UI_view_fly_coin from "./UI_view_fly_coin";
 import UI_NativeIcon from "./UI_NativeIcon";
@@ -40,6 +42,10 @@ import UI_item_gameSmall from "./UI_item_gameSmall";
 import UI_bottomGames from "./UI_bottomGames";
 import UI_view_item_game128 from "./UI_view_item_game128";
 import UI_sliderADs from "./UI_sliderADs";
+import UI_OppoEnd from "./UI_OppoEnd";
+import UI_btn_scaler_yellow from "./UI_btn_scaler_yellow";
+import UI_normal_ad_btn from "./UI_normal_ad_btn";
+import UI_btn_red_scale from "./UI_btn_red_scale";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
 export default class LTGameBinder{
@@ -50,10 +56,12 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_AdInpageComp.URL, UI_AdInpageComp);
 		fgui.UIObjectFactory.setExtension(UI_iconLongComp.URL, UI_iconLongComp);
 		fgui.UIObjectFactory.setExtension(UI_OpenAds.URL, UI_OpenAds);
-		fgui.UIObjectFactory.setExtension(UI_view_game_icon.URL, UI_view_game_icon);
+		fgui.UIObjectFactory.setExtension(UI_view_game_icon1.URL, UI_view_game_icon1);
 		fgui.UIObjectFactory.setExtension(UI_view_end_games.URL, UI_view_end_games);
+		fgui.UIObjectFactory.setExtension(UI_view_game_icon.URL, UI_view_game_icon);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game164.URL, UI_view_item_game164);
 		fgui.UIObjectFactory.setExtension(UI_SideGames.URL, UI_SideGames);
+		fgui.UIObjectFactory.setExtension(UI_Channel.URL, UI_Channel);
 		fgui.UIObjectFactory.setExtension(UI_FlyPanel.URL, UI_FlyPanel);
 		fgui.UIObjectFactory.setExtension(UI_view_fly_coin.URL, UI_view_fly_coin);
 		fgui.UIObjectFactory.setExtension(UI_NativeIcon.URL, UI_NativeIcon);
@@ -84,6 +92,10 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_bottomGames.URL, UI_bottomGames);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game128.URL, UI_view_item_game128);
 		fgui.UIObjectFactory.setExtension(UI_sliderADs.URL, UI_sliderADs);
+		fgui.UIObjectFactory.setExtension(UI_OppoEnd.URL, UI_OppoEnd);
+		fgui.UIObjectFactory.setExtension(UI_btn_scaler_yellow.URL, UI_btn_scaler_yellow);
+		fgui.UIObjectFactory.setExtension(UI_normal_ad_btn.URL, UI_normal_ad_btn);
+		fgui.UIObjectFactory.setExtension(UI_btn_red_scale.URL, UI_btn_red_scale);
 		fgui.UIObjectFactory.setExtension(UI_view_sharegames_big.URL, UI_view_sharegames_big);
 	}
 }

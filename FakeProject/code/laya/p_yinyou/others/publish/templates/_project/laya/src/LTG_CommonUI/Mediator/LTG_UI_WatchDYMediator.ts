@@ -1,9 +1,8 @@
-import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
-import LTG_UI_WatchDY from "../UI/LTCom/LTG_UI_WatchDY";
-import { LTG_Com_WatchDYData } from "../Data/LTG_Com_WatchDYData";
-import LTUI from "../../LTGame/UIExt/LTUI";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
-import { LTG_Com_WatchGuideData } from "../Data/LTG_Com_WatchGuideData";
+import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
+import LTUI from "../../LTGame/UIExt/LTUI";
+import { LTG_Com_WatchDYData } from "../Data/LTG_Com_WatchDYData";
+import LTG_UI_WatchDY from "../UI/LTCom/LTG_UI_WatchDY";
 
 export default class LTG_UI_WatchDYMediator extends BaseUIMediator<LTG_UI_WatchDY> {
 
@@ -28,10 +27,12 @@ export default class LTG_UI_WatchDYMediator extends BaseUIMediator<LTG_UI_WatchD
         }
 
         this.ui.m_view.m_text_code.text = this._cacheData.dyId;
-        this.ui.m_view.m_btn_close.onClick(this, this._OnClickClose);
-        this.ui.m_view.m_btn_copy.onClick(this, this._OnClickCopy);
+        this.ui.m_btn_close.onClick(this, this._OnClickClose);
+        // this.ui.m_view.m_btn_copy.onClick(this, this._OnClickCopy);
         this.ui.m_view.m_btn_watch.onClick(this, this._OnClickWatch);
-
+        this.ui.m_view.m_btn_follow.onClick(this, this._OnClickWatch);
+        // this.ui.m_view.m_btn_copy.visible = false;
+        this.ui.m_view.m_text_code.visible = true; 
     }
 
     private _OnClickCopy() {
@@ -44,10 +45,11 @@ export default class LTG_UI_WatchDYMediator extends BaseUIMediator<LTG_UI_WatchD
     }
 
     private _OnClickWatch() {
-        let data = new LTG_Com_WatchGuideData();
-        data.iconUrl = this._cacheData.iconUrl;
-        data.Send();
-        this.Hide();
+        // let data = new LTG_Com_WatchGuideData();
+        // data.iconUrl = this._cacheData.iconUrl;
+        // data.Send();
+        // this.Hide();
+        LTPlatform.instance.followOfficialAccount();
     }
 
 }

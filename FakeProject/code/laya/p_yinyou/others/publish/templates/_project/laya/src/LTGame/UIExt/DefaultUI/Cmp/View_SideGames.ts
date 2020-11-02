@@ -1,13 +1,12 @@
 
-import LTSDK from "../../../../SDK/LTSDK";
-import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
-import LTPlatform from "../../../Platform/LTPlatform";
-import { EPlatformType } from "../../../Platform/EPlatformType";
-import { CommonEventId } from "../../../Commom/CommonEventId";
-import UI_SideGames from "../UI/LTGame/UI_SideGames";
 import { ECheckState } from "../../../../SDK/common/ECheckState";
-import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
 import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
+import LTSDK from "../../../../SDK/LTSDK";
+import { CommonEventId } from "../../../Commom/CommonEventId";
+import { EPlatformType } from "../../../Platform/EPlatformType";
+import LTPlatform from "../../../Platform/LTPlatform";
+import UI_SideGames from "../UI/LTGame/UI_SideGames";
+import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 /** __sidegames 100*100 */
 export default class View_SideGames {
 
@@ -63,6 +62,8 @@ export default class View_SideGames {
         }
         if (LTSDK.instance instanceof SDK_YQ) {
             this._posId = 5;
+        } else {
+            this._posId = 10;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (this._cacheAds == null) {
@@ -71,15 +72,24 @@ export default class View_SideGames {
             this.ui.m_ads.m_list.setVirtual();
             this.ui.m_ads.m_list.scrollPane.bouncebackEffect = false;
             this.ui.m_ads.m_list.itemRenderer = Laya.Handler.create(this, this._OnAdItemRender, null, false);
-            this.ui.m_ads.m_list.numItems = this._cacheAds.length;
+            this.ui.m_ads.m_list.numItems = this._cacheAds.length * 6;
             this.ui.m_ads.m_list.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
-            Laya.timer.loop(100, this, () => {
-                this.ui.m_ads.m_list.scrollPane.scrollDown(0.01, true);
-            });
+
             this.ui.displayObject.zOrder = 99999;
             this.ui.m_ads.m_btn_return.onClick(this, () => {
                 this.ui.m_red.visible = false;
                 this.ui.m_show.selectedIndex = (this.ui.m_show.selectedIndex + 1) % 2;
+                if (this.ui.m_show.selectedIndex == 1) {
+                    this.ui.m_ads.m_list.addSelection(0, true);
+                    Laya.timer.loop(25, this, () => {
+                        this.ui.m_ads.m_list.scrollPane.scrollDown(0.005, true);
+                        if (this.ui.m_ads.m_list.scrollPane.isBottomMost) {
+                            this.ui.m_ads.m_list.scrollPane.scrollTop(true);
+                        }
+                    });
+                } else {
+                    Laya.timer.clearAll(this);
+                }
             });
             // this.ui.m_ads.m_btn_return.onClick(this, () => {
             //     this.ui.m_show.selectedIndex = 0;
@@ -110,24 +120,25 @@ export default class View_SideGames {
     }
 
     private _OnAdItemRender(index: number, adUI: UI_view_item_game) {
-        let adData = this._cacheAds[index];
-        adUI.data = index;
+        let adData = this._cacheAds[index % this._cacheAds.length];
+        adUI.data = index % this._cacheAds.length;
         adUI.m_icon.m_icon.url = adData.ad_img;
         adUI.m_text_name.text = adData.ad_name;
     }
 
     private _OnClickGameItem(item: UI_view_item_game) {
         let data = this._cacheAds[item.data as number];
-        let uid = data.ad_appid;
+        let navId = data.ad_appid;
+        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '更多游戏');
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:
-                uid = data.ad_package;
+                navId = data.ad_package;
                 break;
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(uid, data.ad_path, null, true, false, data.ad_id);
+        LTPlatform.instance.NavigateToApp(navId, data.ad_path, null, true, false, data.ad_id);
     }
 
 }

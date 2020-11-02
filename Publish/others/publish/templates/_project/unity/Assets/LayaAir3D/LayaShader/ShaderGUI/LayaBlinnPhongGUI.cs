@@ -15,13 +15,13 @@ class LayaShaderGUI : ShaderGUI
     }
     public enum RenderMode
     {
-        /**ï¿½ï¿½È¾×´Ì¬_ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½*/
+        /**äÖÈ¾×´Ì¬_²»Í¸Ã÷¡£*/
         Opaque = 0,
-        /**ï¿½ï¿½È¾×´Ì¬_Í¸ï¿½ï¿½ï¿½ï¿½ï¿½Ô¡ï¿½*/
+        /**äÖÈ¾×´Ì¬_Í¸Ã÷²âÊÔ¡£*/
         Cutout = 1,
-        /**ï¿½ï¿½È¾×´Ì¬_Í¸ï¿½ï¿½ï¿½ï¿½Ï¡ï¿½*/
+        /**äÖÈ¾×´Ì¬_Í¸Ã÷»ìºÏ¡£*/
         Transparent = 2,
-        /**ï¿½ï¿½È¾×´Ì¬_ï¿½Ô¶ï¿½ï¿½å¡£*/
+        /**äÖÈ¾×´Ì¬_×Ô¶¨Òå¡£*/
         Custom = 3
     }
 
@@ -137,7 +137,7 @@ class LayaShaderGUI : ShaderGUI
 
     MaterialProperty isVertexColor = null;
 
-
+    bool m_FirstTimeApply = true;
 
     public void FindProperties(MaterialProperty[] props)
     {
@@ -279,7 +279,7 @@ class LayaShaderGUI : ShaderGUI
 
                 //renderMode
                 renderMode.floatValue = (float)mode;
-
+                
                 //lightMode
                 lighting.floatValue = (float)light;
                 material.SetInt("_Lighting", (int)light);
@@ -374,7 +374,7 @@ class LayaShaderGUI : ShaderGUI
 
     public void onChangeRender(Material material, RenderMode mode)
     {
-
+        
         switch (mode)
         {
             case RenderMode.Opaque:
@@ -388,15 +388,7 @@ class LayaShaderGUI : ShaderGUI
                 material.DisableKeyword("_ALPHATEST_ON");
                 material.DisableKeyword("_ALPHABLEND_ON");
                 material.DisableKeyword("EnableAlphaCutoff");
-                if (lighting == null || lighting.floatValue == 0)
-                {
-                    material.EnableKeyword("EnableLighting");
-                }
-                else
-                {
-                    material.DisableKeyword("EnableLighting");
-                }
-                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;  
                 break;
             case RenderMode.Cutout:
                 material.SetInt("_Mode", 1);
@@ -409,14 +401,6 @@ class LayaShaderGUI : ShaderGUI
                 material.EnableKeyword("_ALPHATEST_ON");
                 material.DisableKeyword("_ALPHABLEND_ON");
                 material.EnableKeyword("EnableAlphaCutoff");
-                if (lighting.floatValue == 0)
-                {
-                    material.EnableKeyword("EnableLighting");
-                }
-                else
-                {
-                    material.DisableKeyword("EnableLighting");
-                }
                 material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
                 break;
             case RenderMode.Transparent:
@@ -430,14 +414,6 @@ class LayaShaderGUI : ShaderGUI
                 material.DisableKeyword("_ALPHATEST_ON");
                 material.EnableKeyword("_ALPHABLEND_ON");
                 material.DisableKeyword("EnableAlphaCutoff");
-                if (lighting.floatValue == 0)
-                {
-                    material.EnableKeyword("EnableLighting");
-                }
-                else
-                {
-                    material.DisableKeyword("EnableLighting");
-                }
                 material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                 break;
             case RenderMode.Custom:
@@ -454,16 +430,19 @@ class LayaShaderGUI : ShaderGUI
                 material.DisableKeyword("_ALPHATEST_ON");
                 material.DisableKeyword("_ALPHABLEND_ON");
                 material.DisableKeyword("EnableAlphaCutoff");
-                if (lighting.floatValue == 0)
-                {
-                    material.EnableKeyword("EnableLighting");
-                }
-                else
-                {
-                    material.DisableKeyword("EnableLighting");
-                }
                 material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
                 break;
+        }
+        if (lighting != null)
+        {
+            if (lighting.floatValue == 0)
+            {
+                material.EnableKeyword("EnableLighting");
+            }
+            else
+            {
+                material.DisableKeyword("EnableLighting");
+            }
         }
     }
 

@@ -51,6 +51,7 @@ export default class StateMachine<T extends BaseState> {
     }
 
     public LogicUpdate(dt: number) {
+        if(this.currState == null) return;
         let nextState = this.currState.GetNextState();
         if (nextState != 0) {
             this.ChangeState(nextState);

@@ -114,7 +114,7 @@ fixed4 frag(v2f i) : SV_Target {
 	#if ENABLEVERTEXCOLOR
 	color = fixed4((diffuse + specular).rgb * atten, albedo.a)*i.color;
 	#else
-	color = fixed4((diffuse + specular).rgb * atten, albedo.a);
+	color = fixed4((diffuse + specular).rgb * atten, albedo.a)
 	#endif
 
 	UNITY_APPLY_FOG(i.fogCoord, color);

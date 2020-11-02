@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://hbq27te3n2g16l" designImageLayer="1">
+<component size="750,1334" designImageLayer="1">
   <displayList>
     <image id="n4_8gel" name="img_bg" src="8gel2i" fileName="img/bg.png" xy="0,0">
       <relation target="" sidePair="width-width,height-height"/>
@@ -14,7 +14,7 @@
     <loader id="n3_8gel" name="loader_display" xy="261,239" size="204,247" url="ui://hbq27te38gel2h" align="center" vAlign="middle" clearOnPublish="true">
       <relation target="" sidePair="center-center,middle-middle"/>
     </loader>
-    <list id="n14_8gel" name="list_view" xy="0,526" size="750,810" layout="flow_hz" overflow="scroll" margin="9,10,23,0" lineGap="8" colGap="29" lineItemCount="3" defaultItem="ui://hbq27te38gel2u" align="center">
+    <list id="n14_8gel" name="list_view" xy="0,491" size="750,742" layout="flow_hz" overflow="scroll" margin="9,10,23,0" lineGap="8" colGap="29" lineItemCount="3" defaultItem="ui://hbq27te38gel2u" align="center">
       <relation target="" sidePair="width-width,center-center,middle-middle,bottomext-bottom"/>
       <item/>
       <item/>

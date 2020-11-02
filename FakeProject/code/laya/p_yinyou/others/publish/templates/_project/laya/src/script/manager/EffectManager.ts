@@ -32,6 +32,8 @@ export class EffectManager {
         return this._uiEffectCamera;
     }
 
+    private _hasUIEffect: boolean;
+
     private constructor() {
         this._Init();
     }
@@ -51,15 +53,24 @@ export class EffectManager {
                 let effectPath = ResDefine.FixPath(configItem.model_path);
                 urls.push(effectPath);
             }
+            if (configItem.isUIEffect) {
+                this._hasUIEffect = true;
+            }
         }
     }
 
-    public async WarmEffects() {
+    private _InitUIEffect() {
         this._uiEffectScene = new Laya.Scene3D();
         Laya.stage.addChild(this._uiEffectScene);
         this._uiEffectCamera = new Laya.Camera();
         this._uiEffectCamera.clearFlag = Laya.CameraClearFlags.DepthOnly;
         this._uiEffectScene.addChild(this._uiEffectCamera);
+    }
+
+    public async WarmEffects() {
+        if (this._hasUIEffect) {
+            this._InitUIEffect();
+        }
 
         let preloadEffects: Laya.Sprite3D[] = [];
         for (let i = 0; i < EffectConfig.dataList.length; ++i) {

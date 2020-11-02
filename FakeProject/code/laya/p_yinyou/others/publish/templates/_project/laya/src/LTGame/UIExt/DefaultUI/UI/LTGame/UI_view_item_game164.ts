@@ -4,7 +4,7 @@ import UI_view_game_icon from "./UI_view_game_icon";
 
 export default class UI_view_item_game164 extends fgui.GComponent {
 
-	public m_bg:fgui.GGraph;
+	public m_bg:fgui.GImage;
 	public m_icon:UI_view_game_icon;
 	public m_text_name:fgui.GTextField;
 
@@ -19,7 +19,7 @@ export default class UI_view_item_game164 extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_bg = <fgui.GGraph><any>(this.getChildAt(0));
+		this.m_bg = <fgui.GImage><any>(this.getChildAt(0));
 		this.m_icon = <UI_view_game_icon><any>(this.getChildAt(1));
 		this.m_text_name = <fgui.GTextField><any>(this.getChildAt(2));
 	}

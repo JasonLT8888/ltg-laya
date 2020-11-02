@@ -44,6 +44,8 @@ export default class LTRespackManager {
         let adapter = null;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.TT:
+                adapter = Laya.TTMiniAdapter;
+                break;
             case EPlatformType.WX:
                 adapter = Laya.MiniAdpter;
                 break;
@@ -51,7 +53,7 @@ export default class LTRespackManager {
                 adapter = Laya.BMiniAdapter;
                 break;
             case EPlatformType.QQ:
-                adapter = Laya["QQMiniAdapter"];
+                adapter = Laya.QQMiniAdapter;
                 break;
             case EPlatformType.Oppo:
                 adapter = Laya.QGMiniAdapter;

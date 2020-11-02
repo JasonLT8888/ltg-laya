@@ -1,3 +1,7 @@
+import GameData from "../../script/common/GameData";
+import { PackConst } from "../../script/config/PackConst";
+import LTSDK from "../../SDK/LTSDK";
+import Awaiters from "../Async/Awaiters";
 import StringEx from "../LTUtils/StringEx";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
@@ -9,7 +13,6 @@ import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
-import Awaiters from "../Async/Awaiters";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -20,7 +23,9 @@ export default class TTPlatform extends WXPlatform {
     recordManager: IRecordManager;
     device: IDevice;
     loginCode: string = null;
-
+    public get isDouyin() {
+        return this.systemInfo['appName'] == 'Douyin';
+    }
     Init(platformData: LTPlatformData) {
         this._base = window["tt"];
         this.base = this._base;
@@ -45,6 +50,7 @@ export default class TTPlatform extends WXPlatform {
         }
 
         this._InitLauchOption();
+        // TT禁止启动调用login 否则不能过审 参数 force=false时不强制登录
         this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
@@ -63,7 +69,7 @@ export default class TTPlatform extends WXPlatform {
             code: ""
         };
         let loginData = {
-            force: true,
+            force: false,
             success: (res) => {
                 this.loginCode = res.code;
                 this.loginState.isLogin = true;
@@ -80,6 +86,7 @@ export default class TTPlatform extends WXPlatform {
                 if (this.onLoginEnd != null) {
                     this.onLoginEnd.run();
                 }
+                this.addShareListener();
             }
         };
 
@@ -251,7 +258,7 @@ export default class TTPlatform extends WXPlatform {
         });
     }
 
-    NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
+    public NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
             if (!this.isSupportJumpOther) {
                 reject(false);
@@ -277,22 +284,25 @@ export default class TTPlatform extends WXPlatform {
             }
         });
     }
-    followOfficialAccount(): Promise<boolean> {
+
+    public followOfficialAccount(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            this.base.followOfficialAccount({
-                success(res) {
-                    if (res.errCode === 0) {
-                        resolve(true);
-                    } else {
-                        console.log(res.errMsg);
-                        resolve(false);
-                    }
-                },
-            });
+            this.base.openAwemeUserProfile();
+            this.RecordEvent('focus', { id: 1 });
+            // this.base.followOfficialAccount({
+            //     success(res) {
+            //         if (res.errCode === 0) {
+            //             resolve(true);
+            //         } else {
+            //             console.log(res.errMsg);
+            //             resolve(false);
+            //         }
+            //     },
+            // });
 
         })
     }
-    checkFollowState(): Promise<boolean> {
+    public checkFollowState(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             this.base.checkFollowState({
                 success(res) {
@@ -306,4 +316,78 @@ export default class TTPlatform extends WXPlatform {
             });
         });
     }
+    public addShareListener() {
+        console.log('监听分享 ');
+        this._base.onShareAppMessage((res) => {
+            console.log('分享', res);
+            let shareId = `${LTSDK.instance.uid}${Date.now()}`
+            return {
+                title: "",
+                imageUrl: "",
+                query: `from=shareVideoBtn&openId=${LTSDK.instance.uid}&shareId=${shareId}&channelId=${GameData.instance.channelId}`,
+                extra: {
+                    videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']
+                    withVideoId: true,
+                    hashtag_list: PackConst.data.topics
+                },
+                success: (rst) => {
+                    console.log("分享成功", rst, LTSDK.instance.uid, GameData.instance.channelId);
+                    if (rst.videoId) LTSDK.instance.reportShareInfo(rst.videoId, shareId);
+                },
+                fail: (e) => {
+                    console.log("分享失败", e);
+                },
+            };
+        });
+    }
+    public navigateToVideo(videoId: string) {
+        this._base.navigateToVideoView({
+            videoId: videoId,
+            success: (res) => {
+                console.log("跳转成功", res);
+            },
+            fail: (err) => {
+                if (err.errCode === 1006) {
+                    this._base.showToast({
+                        title: "something wrong with your network",
+                    });
+                }
+            },
+        });
+    }
+    public requestVideoList(byLike: boolean = true, count: number = 12): Promise<any> {
+        return new Promise<VideoInfo[]>((resolve, reject) => {
+            let url = byLike ? "get_top_video_ids_by_like" : "get_top_video_ids_by_time";
+            this.base.request({
+                url: `https://gate.snssdk.com/developer/api/${url}`,
+                method: "POST",
+                data: {
+                    app_id: this.platformData.appId,
+                    number_of_top: count,
+                    access_token: LTSDK.instance.token
+                },
+                success: (res) => {
+                    console.log("排行榜信息");
+                    if (res.statusCode == 200 && res.data) {
+                        return resolve(res.data);
+                    } else {
+                        return resolve(null);
+                    }
+                    // 从res中获取所需视频信息（videoId数组索引与返回数据数组索引一一对应）
+                },
+            });
+        })
+
+    }
+
+}
+
+export interface VideoInfo {
+    cover_url: string;
+    digg_count: string;
+    rank: number;
+    source: number;
+    user_name: string;
+    video_id: string;
+    video_tag: string;
 }

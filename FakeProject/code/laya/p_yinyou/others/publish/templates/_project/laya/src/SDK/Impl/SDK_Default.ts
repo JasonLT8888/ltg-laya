@@ -7,9 +7,10 @@ import FakeAdDefine from "../common/FakeAdDefine";
 import { ISDK } from "../Interface/ISDK";
 import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
+import StringEx from "../../LTGame/LTUtils/StringEx";
+import GameData from "../../script/common/GameData";
 
 export default class SDK_Default implements ISDK {
-
 
     shieldHours: string[];
     severTime: Date;
@@ -25,8 +26,9 @@ export default class SDK_Default implements ISDK {
     appId: string;
     controlVersion: string;
     adManager: SDKADManager;
-    uid: string = "sdk_test";
+    uid: string = "";
     dateInfo: DateInfo[];
+    token: string;
 
     Init(flg: string, channel: string, controlVersion: string, appid: string) {
         this.isADConfigInited = true;
@@ -40,11 +42,27 @@ export default class SDK_Default implements ISDK {
         this.channel = channel;
         this.controlVersion = controlVersion;
         this.appId = appid;
+        if (StringEx.IsNullOrEmpty(GameData.instance.uid)) {
+            GameData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
+            GameData.SaveToDisk();
+        }
+        this.uid = GameData.instance.uid;
         this.severTime = new Date();
         this.shieldHours = [];
-        this.adManager = new SDKADManager();
-        this._RequestSelfAdInfo();
+        this.adManager = new SDKADManager(); 
         console.log("SDK:Init", this);
+    }
+    public getToken() {
+        let sendData = {
+            appid: LTPlatform.instance.platformData.appId
+        };
+        LTHttp.Send('https://games.api.gugudang.com//api/get/games/token', Laya.Handler.create(this, (res) => {
+            console.log(res);
+            res = JSON.parse(res);
+            if (res && res.code == 0) {
+                this.token = res.data.data.access_token;
+            }
+        }), null, true, sendData);
     }
     /**CDN 节假日信息配置 年底需更新次年数据 */
     RequestRemoteDateInfo() {
@@ -55,6 +73,9 @@ export default class SDK_Default implements ISDK {
         console.error('云 获取日历信息失败', res);
 
     }
+    reportShareInfo(videoId: string, shareId: string) {
+
+    }
     onGetDatesInfo(res: string) {
         let days = JSON.parse(res);
         let data = days as DateInfo[];
@@ -62,14 +83,7 @@ export default class SDK_Default implements ISDK {
         console.log('云 获取休息日信息', this.dateInfo);
         this._RequestCheckState();
     }
-    protected _RequestSelfAdInfo() {
-        let configFile = 'SelfAdConfig.json';
-        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
-            configFile = 'YTSelf.json';
-        }
-        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/${configFile}`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
-            Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
-    }
+   
 
     private _OnGetSelfAdInfosFailed(res: string) {
         console.error("拉取到广告信息失败", res);
@@ -145,7 +159,12 @@ export default class SDK_Default implements ISDK {
     }
 
     RequestADList() {
-        console.log("SDK:RequestADList");
+        let configFile = 'SelfAdConfig.json';
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            configFile = 'YTSelf.json';
+        }
+        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/${configFile}`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
+            Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
     }
 
     ReportClickAd(ad_id: number, locationId: number, jumpSuccess: boolean) {
