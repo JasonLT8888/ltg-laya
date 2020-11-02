@@ -2,6 +2,7 @@ import { LTUtils } from "../LTUtils/LTUtils";
 import StringEx from "../LTUtils/StringEx";
 
 export class SaveData {
+ 
 
     /**
      * 最后一次打开时间戳

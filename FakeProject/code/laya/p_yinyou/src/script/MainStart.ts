@@ -104,6 +104,7 @@ export default class MainStart extends LTStart {
             case EPlatformType.TT:
             case EPlatformType.Web:
                 LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
+                break;
             default:
                 LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
                 break;
