@@ -13,6 +13,7 @@ import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
+import CommonSaveData from "../Commom/CommonSaveData";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -324,14 +325,14 @@ export default class TTPlatform extends WXPlatform {
             return {
                 title: "",
                 imageUrl: "",
-                query: `from=shareVideoBtn&openId=${LTSDK.instance.uid}&shareId=${shareId}&channelId=${GameData.instance.channelId}`,
+                query: `from=shareVideoBtn&openId=${LTSDK.instance.uid}&shareId=${shareId}&channelId=${CommonSaveData.instance.channelId}`,
                 extra: {
                     videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']
                     withVideoId: true,
                     hashtag_list: PackConst.data.topics
                 },
                 success: (rst) => {
-                    console.log("分享成功", rst, LTSDK.instance.uid, GameData.instance.channelId);
+                    console.log("分享成功", rst, LTSDK.instance.uid, CommonSaveData.instance.channelId);
                     if (rst.videoId) LTSDK.instance.reportShareInfo(rst.videoId, shareId);
                 },
                 fail: (e) => {

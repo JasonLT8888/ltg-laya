@@ -3,6 +3,7 @@ import UI_Channel from "./UI/LTGame/UI_Channel";
 import StringEx from "../../LTUtils/StringEx";
 import LTUI from "../LTUI";
 import GameData from "../../../script/common/GameData";
+import CommonSaveData from "../../Commom/CommonSaveData";
 
 
 
@@ -28,7 +29,7 @@ export class UI_ChannelMediator extends BaseUIMediator<UI_Channel> {
         this.updateUI();
     }
     private updateUI() {
-        if (StringEx.IsNullOrEmpty(GameData.instance.channelId)) {
+        if (StringEx.IsNullOrEmpty(CommonSaveData.instance.channelId)) {
             this.ui.m_state.selectedIndex = 0;
         }
         else {
@@ -37,7 +38,7 @@ export class UI_ChannelMediator extends BaseUIMediator<UI_Channel> {
     }
 
     private clear() {
-        GameData.instance.channelId = '';
+        CommonSaveData.instance.channelId = '';
         GameData.SaveToDisk();
         this.updateUI();
     }
@@ -46,7 +47,7 @@ export class UI_ChannelMediator extends BaseUIMediator<UI_Channel> {
         if (StringEx.IsNullOrEmpty(txt)) {
             return LTUI.Toast('请重新输入');
         } else {
-            GameData.instance.channelId = txt;
+            CommonSaveData.instance.channelId = txt;
             GameData.SaveToDisk();
             LTUI.Toast('渠道绑定成功');
             this.showChannelID();
@@ -54,7 +55,7 @@ export class UI_ChannelMediator extends BaseUIMediator<UI_Channel> {
     }
     private showChannelID() {
         this.ui.m_state.selectedIndex = 1;
-        this.ui.m_txt_show.text = `您已绑定的渠道号/抖音账号：\n${GameData.instance.channelId}`;
+        this.ui.m_txt_show.text = `您已绑定的渠道号/抖音账号：\n${CommonSaveData.instance.channelId}`;
     }
     protected _OnHide() { }
 }

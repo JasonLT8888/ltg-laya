@@ -11,6 +11,7 @@ import GameData from "../../script/common/GameData";
 import TTPlatform from "../../LTGame/Platform/TTPlatform";
 import LTSDK from "../LTSDK";
 import FakeAdDefine from "../common/FakeAdDefine";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -50,7 +51,7 @@ export default class SDK_CQ extends SDK_Default {
     public reportShareInfo(videoId: string, shareId: string) {
         let sendData = {
             appid: this.appId,
-            openId: GameData.instance.uid,
+            openId: CommonSaveData.instance.uid,
             videoId: videoId,
             shareId: shareId
         };
@@ -366,7 +367,7 @@ export default class SDK_CQ extends SDK_Default {
     private _OnLoginSuccess(res: SDK.LoginSuccessParam) {
         console.log("SDK登录成功", res);
         this.uid = res.openid;
-        GameData.instance.uid = res.openid;
+        CommonSaveData.instance.uid = res.openid;
         GameData.SaveToDisk();
         this.ReportDaily();
         this.reportFromVideo();
@@ -398,7 +399,7 @@ export default class SDK_CQ extends SDK_Default {
                     let sendData = {
                         appid: this.appId,
                         fromId: `${fromId}|${fromChannel}`,
-                        openId: GameData.instance.uid,
+                        openId: CommonSaveData.instance.uid,
                         shareId: shareId
                     };
                     console.log(sendData);
