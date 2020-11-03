@@ -368,7 +368,7 @@ export default class SDK_CQ extends SDK_Default {
         console.log("SDK登录成功", res);
         this.uid = res.openid;
         CommonSaveData.instance.uid = res.openid;
-        GameData.SaveToDisk();
+        CommonSaveData.SaveToDisk();
         this.ReportDaily();
         this.reportFromVideo();
     }

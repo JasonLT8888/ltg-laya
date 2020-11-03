@@ -45,12 +45,12 @@ export default class SDK_Default implements ISDK {
         this.appId = appid;
         if (StringEx.IsNullOrEmpty(CommonSaveData.instance.uid)) {
             CommonSaveData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
-            GameData.SaveToDisk();
+            CommonSaveData.SaveToDisk();
         }
         this.uid = CommonSaveData.instance.uid;
         this.severTime = new Date();
         this.shieldHours = [];
-        this.adManager = new SDKADManager(); 
+        this.adManager = new SDKADManager();
         console.log("SDK:Init", this);
     }
     public getToken() {
@@ -84,7 +84,7 @@ export default class SDK_Default implements ISDK {
         console.log('云 获取休息日信息', this.dateInfo);
         this._RequestCheckState();
     }
-   
+
 
     private _OnGetSelfAdInfosFailed(res: string) {
         console.error("拉取到广告信息失败", res);
