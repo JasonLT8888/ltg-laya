@@ -18,6 +18,10 @@ export default class View_HotGame {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
         if (LTPlatform.instance.platform == EPlatformType.Oppo && LTSDK.instance.checkState == ECheckState.InCheck) {
             // 只有oppo支持
             console.log("hotgame,审核");
@@ -116,7 +120,7 @@ export default class View_HotGame {
 
     private _OnClickAD() {
         let navId = this._showAd.ad_appid;
-        LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, true, '更多游戏');
+        LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, true, '火爆游戏');
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:

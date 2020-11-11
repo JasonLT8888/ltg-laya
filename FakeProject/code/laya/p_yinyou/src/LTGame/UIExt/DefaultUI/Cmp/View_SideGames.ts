@@ -18,6 +18,10 @@ export default class View_SideGames {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
             // 只有oppo支持
             console.log("sidegames,审核");

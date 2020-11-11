@@ -18,6 +18,10 @@ export default class View_End3X3Games {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
 
         if (tagUI instanceof UI_End3X3Ad) {
             return new View_End3X3Games(tagUI);

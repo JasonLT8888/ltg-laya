@@ -1,23 +1,28 @@
 import BaseUIMediator from "../FGui/BaseUIMediator";
-import UI_GameCenter from "./UI/LTGame/UI_GameCenter";
+import UI_GameCenterBig from "./UI/LTGame/UI_GameCenterBig";
 import UI_item_game from "./UI/LTGame/UI_item_game";
 import UI_item_gameBig from "./UI/LTGame/UI_item_gameBig";
 import LTSDK from "../../../SDK/LTSDK";
 import LTPlatform from "../../Platform/LTPlatform";
+import UI_item_gameMax from "./UI/LTGame/UI_item_gameMax";
+import { EPlatformType } from "../../Platform/EPlatformType";
 
 
-
-export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
-    private static _instance: UI_GameCenterMediator;
+/**
+ * 猜你喜欢
+ */
+export class UI_GameCenterBigMediator extends BaseUIMediator<UI_GameCenterBig> {
+    private static _instance: UI_GameCenterBigMediator;
     _posId: number = 5;
     cacheAds: SDK.ADInfoData[];
-    public get ui(): UI_GameCenter {
+    public get ui(): UI_GameCenterBig {
         return this._ui;
     }
-    public static get instance(): UI_GameCenterMediator {
+
+    public static get instance(): UI_GameCenterBigMediator {
         if (this._instance == null) {
-            this._instance = new UI_GameCenterMediator();
-            this._instance._classDefine = UI_GameCenter;
+            this._instance = new UI_GameCenterBigMediator();
+            this._instance._classDefine = UI_GameCenterBig;
         }
         return this._instance;
     }
@@ -25,21 +30,13 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
     _OnShow() {
         this._needFilScreen = false;
         super._OnShow();
+        this._posId = 5;
         this.cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (!this.cacheAds) {
             console.error('获取广告ID失败GameCenter');
             this.Hide();
             return;
         }
-        this.ui.m_topList.setVirtualAndLoop();
-        this.ui.m_topList.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
-        this.ui.m_topList.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
-        this.ui.m_topList.numItems = this.cacheAds.length;
-        this.ui.m_topList.refreshVirtualList();
-        Laya.timer.loop(1000 * 5, this, () => {
-            this.ui.m_topList.scrollPane.scrollRight(148 / 128, true);//148/697*4
-        });
-
         this.ui.m_centerList.setVirtual();
         this.ui.m_centerList.itemRenderer = Laya.Handler.create(this, this.renderItem, null, false);
         this.ui.m_centerList.on(fairygui.Events.CLICK_ITEM, this, this.clickItem);
@@ -49,7 +46,6 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
             this.ui.m_centerList.scrollPane.scrollDown(0.005, true);
         });
         this.ui.m_btn_close.onClick(this, this.Hide);
-        // this.ui.m_btn_back.onClick(this, this.Hide);
         LTPlatform.instance.HideBannerAd();
         this.ui.m_btn_close.visible = false;
         Laya.timer.once(3000, this, () => {
@@ -67,12 +63,21 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
 
     }
     clickItem(item: UI_item_gameBig | UI_item_game) {
-        let uid = item.data['id'];
+        let appid = item.data['id'];
         let path = item.data['path']
         let adid = item.data['adid']
-        LTPlatform.instance.NavigateToApp(uid, path, null, false, false, adid);
+        LTSDK.instance.ReportClickAd(adid, this._posId, true, '猜你喜欢');
+        switch (LTPlatform.instance.platform) {
+            case EPlatformType.Oppo:
+            case EPlatformType.Vivo:
+                appid = path;
+                break;
+            default:
+                break;
+        }
+        LTPlatform.instance.NavigateToApp(appid, null, null, true, false, adid);
     }
-    renderItem(index: number, item: UI_item_game | UI_item_gameBig) {
+    renderItem(index: number, item: any) {
         let data = this.cacheAds[index];
         let info = {
             id: data.ad_appid,
@@ -83,7 +88,8 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
         item.m_title.text = data.ad_name;
         item.m_icon.m_icon.url = data.ad_img;
         item.m_red.visible = data.ad_dot == 1;
-        if (item instanceof UI_item_gameBig) {
+
+        if (item instanceof UI_item_gameMax) {
             item.m_player.text = `${data.ad_count}人玩`;
         }
     }
@@ -93,6 +99,5 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
         if (this._openParam) {
             this._openParam();
         }
-
     }
 }

@@ -113,6 +113,8 @@ export default class SDK_CQ extends SDK_Default {
                     adData.ad_name = ad.name;
                     adData.ad_path = ad.path;
                     adData.ad_package = ad.path;
+                    adData.ad_count = ad.player;
+                    adData.ad_dot = ad.dot;
                     if (adData.ad_appid != this.appId) {
                         adList.push(adData);
                     }
@@ -231,8 +233,12 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     ReportClickAd(adid: number, locationId: number, jumpSuccess: boolean, scene: string = 'defalut_scene') {
+        let appid = this.appId;
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            appid = LTPlatform.instance.platformData.appKey;
+        }
         let sendData = {
-            appid: this.appId,
+            appid: appid,
             openId: LTSDK.instance.uid,
             adId: adid,
             code: locationId,
@@ -302,6 +308,15 @@ export default class SDK_CQ extends SDK_Default {
                 }
                 if (result["isADEnable"]) {
                     this.isADEnable = (1 == parseInt(result["isADEnable"]));
+                }
+                if (result['isNavEnable']) {
+                    this.isNavEnable = result['isNavEnable'] == '1';
+                }
+                if (result['navLevels']) {
+                    let arr = (result['navLevels']).split(',');
+                    for (let item in arr) {
+                        this.navLevels.push(parseInt(arr[item]));
+                    }
                 }
                 if (result['checkState']) {
                     this.checkState = parseInt(result['checkState']) as ECheckState;
@@ -396,7 +411,7 @@ export default class SDK_CQ extends SDK_Default {
                     if (query.channelId) {
                         fromChannel = query.channelId;
                     }
-                    if (fromChannel == 'own') {
+                    if (fromChannel == 'own' || fromChannel == 'undefined') {
                         return console.log('非渠道来源用户');
                     }
                     let sendData = {

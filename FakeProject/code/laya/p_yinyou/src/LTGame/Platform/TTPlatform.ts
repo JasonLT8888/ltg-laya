@@ -320,6 +320,10 @@ export default class TTPlatform extends WXPlatform {
     }
     public addShareListener() {
         console.log('监听分享 ');
+        if(CommonSaveData.instance.channelId=='own'){
+            console.log('无效 channel')
+            return;
+        }
         this._base.onShareAppMessage((res) => {
             console.log('分享', res);
             let shareId = `${LTSDK.instance.uid}${Date.now()}`

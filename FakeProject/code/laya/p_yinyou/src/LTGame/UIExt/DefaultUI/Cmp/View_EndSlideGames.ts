@@ -20,6 +20,10 @@ export default class View_EndSlideGames {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
         if (LTPlatform.instance.platform == EPlatformType.Oppo && LTSDK.instance.checkState == ECheckState.InCheck) {
             console.log("审核");
             tagUI.dispose();

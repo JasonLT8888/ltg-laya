@@ -9,6 +9,7 @@ import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_UIDemoMediator from "./UI_UIDemoMediator";
 import UI_CommonUI2Mediator from "./UI_CommonUI2Mediator";
 import { UI_ChannelMediator } from "../../LTGame/UIExt/DefaultUI/UI_ChannelMediator";
+import { UI_GameCenterBigMediator } from "../../LTGame/UIExt/DefaultUI/UI_GameCenterBigMediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -31,6 +32,9 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
         this.ui.m_btn_performance.onClick(this, this._OnClickPerfomance);
         this.ui.m_btn_feature.onClick(this, this._OnClickFunctionTest);
         this.ui.m_btn_common2.onClick(this, this._OnClickCommon2);
+    }
+    _OnEnterAnimEnd() {
+        
     }
 
     private _OnClickCommon2() {
