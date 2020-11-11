@@ -18,6 +18,10 @@ export default class View_End3X3Games {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
 
         if (tagUI instanceof UI_End3X3Ad) {
             return new View_End3X3Games(tagUI);
@@ -48,6 +52,8 @@ export default class View_End3X3Games {
 
     private _Init() {
         if (LTSDK.instance instanceof SDK_YQ) {
+            this._posId = 5;
+        } else {
             this._posId = 5;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
@@ -102,6 +108,7 @@ export default class View_End3X3Games {
 
     private _OnClickGameItem(item: UI_item_gameSmall) {
         let data = this._cacheAds[item.data as number];
+        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:

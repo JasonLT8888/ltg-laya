@@ -118,8 +118,7 @@ export class LTStart {
 
     }
 
-    _LogicUpdate() {
-        let dt = Laya.timer.delta / 1000;
+    _LogicUpdate(dt: number) {
         let nextState = this._currentState.GetNextState();
         if (nextState != 0) {
             var changeResult = this._fsm.ChangeState(nextState, null);

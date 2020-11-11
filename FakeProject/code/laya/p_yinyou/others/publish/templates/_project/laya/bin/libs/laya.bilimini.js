@@ -688,6 +688,7 @@ window.biliMiniGame = function (exports, Laya) {
 	    }
 	    _loadResourceFilter(type, url) {
 	        var thisLoader = this;
+	        this.sourceUrl = Laya.URL.formatURL(url);
 	        if (url.indexOf(BLMiniAdapter.window.bl.env.USER_DATA_PATH) == -1 && (url.indexOf("http://") != -1 || url.indexOf("https://") != -1)) {
 	            if (MiniFileMgr.loadPath != "") {
 	                url = url.split(MiniFileMgr.loadPath)[1];
@@ -797,6 +798,15 @@ window.biliMiniGame = function (exports, Laya) {
 	        rst = fun.bind(scope);
 	        return rst;
 	    }
+	    complete(data) {
+	        if (data instanceof Laya.Resource) {
+	            data._setCreateURL(this.sourceUrl);
+	        }
+	        else if ((data instanceof Laya.Texture) && (data.bitmap instanceof Laya.Resource)) {
+	            data.bitmap._setCreateURL(this.sourceUrl);
+	        }
+	        this.originComplete(data);
+	    }
 	    _loadHttpRequestWhat(url, contentType) {
 	        var thisLoader = this;
 	        var encoding = BLMiniAdapter.getUrlEncode(url, contentType);
@@ -814,7 +824,7 @@ window.biliMiniGame = function (exports, Laya) {
 	                    MiniFileMgr.readFile(MiniFileMgr.getFileNativePath(fileObj.md5), encoding, new Laya.Handler(MiniLoader, MiniLoader.onReadNativeCallBack, [url, contentType, thisLoader]), url);
 	                }
 	                else if (thisLoader.type == "image" || thisLoader.type == "htmlimage") {
-	                    thisLoader._transformUrl(url, contentType);
+	                    thisLoader._transformImgUrl(url, contentType);
 	                }
 	                else {
 	                    if (contentType != Laya.Loader.IMAGE && ((tempurl.indexOf("http://") == -1 && tempurl.indexOf("https://") == -1) || MiniFileMgr.isLocalNativeFile(url))) {
@@ -849,12 +859,12 @@ window.biliMiniGame = function (exports, Laya) {
 	        }
 	    }
 	    static _transformImgUrl(url, type, thisLoader) {
-	        if (BLMiniAdapter.isZiYu) {
+	        if (BLMiniAdapter.isZiYu || MiniFileMgr.isLocalNativeFile(url)) {
 	            thisLoader._loadImage(url, false);
 	            return;
 	        }
-	        if (MiniFileMgr.isLocalNativeFile(url)) {
-	            thisLoader._loadImage(url, false);
+	        if (!BLMiniAdapter.autoCacheFile) {
+	            thisLoader._loadImage(encodeURI(url));
 	            return;
 	        }
 	        if (!MiniFileMgr.isLocalNativeFile(url) && !MiniFileMgr.getFileInfo(Laya.URL.formatURL(url))) {
@@ -1030,6 +1040,8 @@ window.biliMiniGame = function (exports, Laya) {
 	        Laya.Input['_createInputElement'] = MiniInput['_createInputElement'];
 	        Laya.Loader.prototype._loadResourceFilter = MiniLoader.prototype._loadResourceFilter;
 	        Laya.Loader.prototype._loadSound = MiniLoader.prototype._loadSound;
+	        Laya.Loader.prototype.originComplete = Laya.Loader.prototype.complete;
+	        Laya.Loader.prototype.complete = MiniLoader.prototype.complete;
 	        Laya.Loader.prototype._loadHttpRequestWhat = MiniLoader.prototype._loadHttpRequestWhat;
 	        Laya.LocalStorage._baseClass = MiniLocalStorage;
 	        MiniLocalStorage.__init__();
@@ -1098,9 +1110,47 @@ window.biliMiniGame = function (exports, Laya) {
 	        BLMiniAdapter.window["bl"].exitMiniProgram();
 	    }
 	    static onMkdirCallBack(errorCode, data) {
-	        if (!errorCode)
+	        if (!errorCode) {
 	            MiniFileMgr.filesListObj = JSON.parse(data.data);
-	        MiniFileMgr.fakeObj = MiniFileMgr.filesListObj;
+	            MiniFileMgr.fakeObj = JSON.parse(data.data) || {};
+	        }
+	        else {
+	            MiniFileMgr.fakeObj = {};
+	            MiniFileMgr.filesListObj = {};
+	        }
+	        MiniFileMgr.fs.readdir({
+	            dirPath: MiniFileMgr.fileNativeDir,
+	            success: function (data) {
+	                var tempMd5ListObj = {};
+	                var fileObj;
+	                for (let key in MiniFileMgr.filesListObj) {
+	                    if (key != "fileUsedSize") {
+	                        fileObj = MiniFileMgr.filesListObj[key];
+	                        tempMd5ListObj[fileObj.md5] = true;
+	                    }
+	                }
+	                var files = data.files;
+	                if (!files)
+	                    return;
+	                var fileName;
+	                for (let i = 0, sz = files.length; i < sz; i++) {
+	                    fileName = files[i];
+	                    if (fileName == MiniFileMgr.fileListName)
+	                        continue;
+	                    var deleteFileUrl = MiniFileMgr.getFileNativePath(fileName);
+	                    if (tempMd5ListObj[deleteFileUrl])
+	                        continue;
+	                    if (tempMd5ListObj[fileName])
+	                        continue;
+	                    MiniFileMgr.fs.unlink({
+	                        filePath: deleteFileUrl,
+	                        success: function (data) {
+	                            console.log("删除无引用的磁盘文件:" + fileName);
+	                        }
+	                    });
+	                }
+	            }
+	        });
 	    }
 	    static pixelRatio() {
 	        if (!BLMiniAdapter.EnvConfig.pixelRatioInt) {

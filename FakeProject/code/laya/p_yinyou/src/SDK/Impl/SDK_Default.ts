@@ -71,7 +71,7 @@ export default class SDK_Default implements ISDK {
     }
     /**CDN 节假日信息配置 年底需更新次年数据 */
     RequestRemoteDateInfo() {
-        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/DateInfo.json`, Laya.Handler.create(this, this.onGetDatesInfo),
+        LTHttp.Send(`https://file.gugudang.com/res/down/public/configs/DateInfo.json`, Laya.Handler.create(this, this.onGetDatesInfo),
             Laya.Handler.create(this, this.onGetDatesError), true);
     }
     onGetDatesError(res: string) {
@@ -170,7 +170,7 @@ export default class SDK_Default implements ISDK {
         if (LTPlatform.instance.platform == EPlatformType.Oppo) {
             configFile = 'YTSelf.json';
         }
-        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/${configFile}`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
+        LTHttp.Send(`https://file.gugudang.com/res/down/public/configs/${configFile}`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
             Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
     }
 

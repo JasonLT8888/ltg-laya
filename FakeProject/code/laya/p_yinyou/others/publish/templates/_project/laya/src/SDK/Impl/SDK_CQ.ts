@@ -7,6 +7,11 @@ import ShareManager from "../../LTGame/Platform/ShareManager";
 import { ECheckState } from "../common/ECheckState";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
+import GameData from "../../script/common/GameData";
+import TTPlatform from "../../LTGame/Platform/TTPlatform";
+import LTSDK from "../LTSDK";
+import FakeAdDefine from "../common/FakeAdDefine";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -17,6 +22,7 @@ export default class SDK_CQ extends SDK_Default {
     appId: string;
     controlVersion: string;
     adManager: SDKADManager;
+    /**openid */
     uid: string = "sdk_test";
     enableDebug: boolean = true;
     dateInfo: DateInfo[] = [];
@@ -26,7 +32,7 @@ export default class SDK_CQ extends SDK_Default {
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         super.Init(flg, channel, controlVersion, appId);
         this._RequestShareInfo();
-        // this.RecordRankInfo(1, 0);
+        // this.RecordRankInfo(1, 0); 
     }
 
     private _RequestShareInfo() {
@@ -41,6 +47,25 @@ export default class SDK_CQ extends SDK_Default {
             console.log("获取分享接口访问失败", res);
         }), true, sendData);
     }
+
+    public reportShareInfo(videoId: string, shareId: string) {
+        let sendData = {
+            appid: this.appId,
+            openId: CommonSaveData.instance.uid,
+            videoId: videoId,
+            shareId: shareId
+        };
+        try {
+            LTHttp.Send(this._headPrefix + "/api/share/video/post", Laya.Handler.create(this, () => {
+                console.log('ShareVideo上报成功');
+            }), Laya.Handler.create(this, (res) => {
+                console.log("ShareVideo上报失败", res);
+            }), true, sendData);
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
     /**
      * 按关卡上报排名 
      * @param levelID 关卡
@@ -51,13 +76,13 @@ export default class SDK_CQ extends SDK_Default {
         if (LTPlatform.instance.loginState && LTPlatform.instance.loginState.code) {
             console.error('登录信息未获取');
         } else {
-            let uid = this.appId;
+            let appid = this.appId;
             if (LTPlatform.instance.platform == EPlatformType.Oppo) {
-                uid = LTPlatform.instance.platformData.appKey
+                appid = LTPlatform.instance.platformData.appKey
             }
             let sendData = {
-                appid: uid,
-                openId: LTPlatform.instance.loginState.code,
+                appid: appid,
+                openId: LTSDK.instance.uid,
                 times: score,
                 nickname: LTPlatform.instance.userInfo.nickName,
                 avatar: LTPlatform.instance.userInfo.avatarUrl,
@@ -68,26 +93,61 @@ export default class SDK_CQ extends SDK_Default {
             }), true, sendData);
         }
     }
+
+
+
+    private onGetAdlist(res) {
+        console.log('广告信息', res);
+        let adJson = JSON.parse(res);
+        if (adJson.code == 1) {
+            console.log("拉取到广告信息", adJson.data.length, "条");
+            let fakePosId = 0;
+            for (let posAd of adJson.data) {
+                let adList = [];
+                fakePosId = parseInt(posAd.code);
+                for (let ad of posAd.ads) {
+                    let adData = {} as SDK.ADInfoData;
+                    adData.ad_appid = ad.appid;
+                    adData.ad_id = ad.id;
+                    adData.ad_img = ad.logo;
+                    adData.ad_name = ad.name;
+                    adData.ad_path = ad.path;
+                    adData.ad_package = ad.path;
+                    adData.ad_count = ad.player;
+                    adData.ad_dot = ad.dot;
+                    if (adData.ad_appid != this.appId) {
+                        adList.push(adData);
+                    }
+                }
+                // 加入广告控制器
+                this.adManager.InitADs(fakePosId, adList);
+            }
+
+        }
+
+    }
+
     /**查询周排名 
      * @param levelID 关卡
      * @param score 分数/时长
     * @param onGetList 回调处理
      */
-    getWeekRankList(levelID: number, score: number, onGetList: Function) {
+    getWeekRankList(levelID: number, score: number, onGetList: Function, count: number = 30) {
         if (LTPlatform.instance.loginState && LTPlatform.instance.loginState.code) {
             console.error('登录信息未获取');
         } else {
-            let uid = this.appId;
+            let appid = this.appId;
             if (LTPlatform.instance.platform == EPlatformType.Oppo) {
-                uid = LTPlatform.instance.platformData.appKey
+                appid = LTPlatform.instance.platformData.appKey
             }
             let sendData = {
-                appid: uid,
-                openId: LTPlatform.instance.loginState.code,
+                appid: appid,
+                openId: LTSDK.instance.uid,
                 times: score,
                 nickname: LTPlatform.instance.userInfo.nickName,
                 avatar: LTPlatform.instance.userInfo.avatarUrl,
-                type: levelID
+                type: levelID,
+                count: count
             };
             // LTHttp.Send(this._headPrefix + "/api/rank/week/time", Laya.Handler.create(this, this._OnGetRankList), Laya.Handler.create(this, (res) => {
             //     console.log("获取单日排行接口访问失败", res);
@@ -103,21 +163,20 @@ export default class SDK_CQ extends SDK_Default {
      * @param score 分数/时长
      * @param onGetList 回调处理
      */
-    getDayRankList(levelID: number, score: number, onGetList: Function) {
+    getDayRankList(levelID: number, score: number, onGetList: Function, count: number = 10) {
         if (LTPlatform.instance.loginState && LTPlatform.instance.loginState.code) {
             console.error('登录信息未获取');
         } else {
-            let uid = this.appId;
+            let appid = this.appId;
             if (LTPlatform.instance.platform == EPlatformType.Oppo) {
-                uid = LTPlatform.instance.platformData.appKey
+                appid = LTPlatform.instance.platformData.appKey
             }
             let sendData = {
-                appid: uid,
-                openId: LTPlatform.instance.loginState.code,
+                appid: appid,
+                openId: LTSDK.instance.uid,
                 times: score,
-                nickname: LTPlatform.instance.userInfo.nickName,
-                avatar: LTPlatform.instance.userInfo.avatarUrl,
-                type: levelID
+                type: levelID,
+                count: count
             };
             LTHttp.Send(this._headPrefix + "/api/rank/day/time", Laya.Handler.create(this, onGetList), Laya.Handler.create(this, (res) => {
                 console.log("获取当天排行接口访问失败", res);
@@ -173,12 +232,35 @@ export default class SDK_CQ extends SDK_Default {
         console.log("功能暂未实现");
     }
 
-    ReportClickAd(adid: number, locationId: number, jumpSuccess: boolean) {
-        console.log("功能暂未实现");
+    ReportClickAd(adid: number, locationId: number, jumpSuccess: boolean, scene: string = 'defalut_scene') {
+        let appid = this.appId;
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            appid = LTPlatform.instance.platformData.appKey;
+        }
+        let sendData = {
+            appid: appid,
+            openId: LTSDK.instance.uid,
+            adId: adid,
+            code: locationId,
+            scene: scene,
+            status: jumpSuccess ? 1 : 0
+        }
+
+        LTHttp.Send(this._headPrefix + "/ads/click/post", Laya.Handler.create(this, (res) => {
+            console.log("广告点击上报成功", res);
+        }), Laya.Handler.create(this, (res) => {
+            console.log("广告点击上报失败", res);
+        }), true, sendData);
     }
 
     RequestADList() {
-        console.log("功能暂未实现");
+        let sendData = {
+            appid: LTPlatform.instance.platform == EPlatformType.Oppo ? LTPlatform.instance.platformData.appKey : this.appId,
+            openId: LTSDK.instance.uid
+        }
+        LTHttp.Send(this._headPrefix + "/ads/get", Laya.Handler.create(this, this.onGetAdlist), Laya.Handler.create(this, (res) => {
+            console.log("广告信息获取失败", res);
+        }), true, sendData);
     }
 
     RequestRemoteConfig() {
@@ -227,6 +309,15 @@ export default class SDK_CQ extends SDK_Default {
                 if (result["isADEnable"]) {
                     this.isADEnable = (1 == parseInt(result["isADEnable"]));
                 }
+                if (result['isNavEnable']) {
+                    this.isNavEnable = result['isNavEnable'] == '1';
+                }
+                if (result['navLevels']) {
+                    let arr = (result['navLevels']).split(',');
+                    for (let item in arr) {
+                        this.navLevels.push(parseInt(arr[item]));
+                    }
+                }
                 if (result['checkState']) {
                     this.checkState = parseInt(result['checkState']) as ECheckState;
                 } else {
@@ -256,9 +347,9 @@ export default class SDK_CQ extends SDK_Default {
 
     Login(code: string, fromAppId: string) {
         console.log('登录参数：code:', code);
-        let uid = (LTPlatform.instance.platform == EPlatformType.Oppo || LTPlatform.instance.platform == EPlatformType.Vivo) ? LTPlatform.instance.platformData.appKey : this.appId;
+        let appid = (LTPlatform.instance.platform == EPlatformType.Oppo || LTPlatform.instance.platform == EPlatformType.Vivo) ? LTPlatform.instance.platformData.appKey : this.appId;
         let sendData = {
-            appid: uid,
+            appid: appid,
             // flg: this.flg,
             code: code,
             channel: 'own',
@@ -291,11 +382,57 @@ export default class SDK_CQ extends SDK_Default {
     private _OnLoginSuccess(res: SDK.LoginSuccessParam) {
         console.log("SDK登录成功", res);
         this.uid = res.openid;
+        CommonSaveData.instance.uid = res.openid;
+        CommonSaveData.SaveToDisk();
         this.ReportDaily();
+        this.reportFromVideo();
     }
 
     private _OnLoginFailed(res: SDK.LoginResult) {
         console.error("SDK登录失败", this.appId, res);
+        this.reportFromVideo();
+    }
+    /**上报视频来源用户*/
+    reportFromVideo() {
+        // if (!this.reportEnable) return;
+        if (LTPlatform.instance.platform == EPlatformType.TT && (LTPlatform.instance as TTPlatform).isDouyin) {
+            try {
+                let query = LTPlatform.instance.lauchOption.query as any;
+                let fromId = 'ytlj';
+                let shareId = `ytlj_scene|${LTPlatform.instance.lauchOption.scene}`;
+                let fromChannel = 'own';
+                if (query) {
+                    if (query.openId) {
+                        fromId = query.openId;
+                    }
+                    if (query.shareId) {
+                        shareId = query.shareId;
+                    }
+                    if (query.channelId) {
+                        fromChannel = query.channelId;
+                    }
+                    if (fromChannel == 'own' || fromChannel == 'undefined') {
+                        return console.log('非渠道来源用户');
+                    }
+                    let sendData = {
+                        appid: this.appId,
+                        fromId: `${fromId}|${fromChannel}`,
+                        openId: CommonSaveData.instance.uid,
+                        shareId: shareId
+                    };
+                    console.log(sendData);
+                    LTHttp.Send(this._headPrefix + "/api/share/start/report", Laya.Handler.create(this, () => {
+                        console.log('上报视频来源用户 上报成功');
+                    }), Laya.Handler.create(this, (res) => {
+                        console.log(" 上报视频来源用户 上报失败", res);
+                    }), true, sendData);
+                } else {
+                    console.log('非渠道来源用户');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     ReportStat(isShare: boolean, sid: string) {

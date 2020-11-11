@@ -8,6 +8,7 @@ export default class UI_SideGames extends fgui.GComponent {
 	public m_bg:fgui.GGraph;
 	public m_ads:UI_side_ads;
 	public m_red:fgui.GImage;
+	public m_t0:fgui.Transition;
 
 	public static URL:string = "ui://75kiu87keq3z6e";
 
@@ -24,5 +25,6 @@ export default class UI_SideGames extends fgui.GComponent {
 		this.m_bg = <fgui.GGraph><any>(this.getChildAt(0));
 		this.m_ads = <UI_side_ads><any>(this.getChildAt(1));
 		this.m_red = <fgui.GImage><any>(this.getChildAt(2));
+		this.m_t0 = this.getTransitionAt(0);
 	}
 }
