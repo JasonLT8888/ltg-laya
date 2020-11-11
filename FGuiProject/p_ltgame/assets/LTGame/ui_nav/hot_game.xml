@@ -2,10 +2,10 @@
 <component size="139,176" pivot="0.5,0.5" extention="Button">
   <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
   <displayList>
-    <image id="n0_kvo6" name="n0" src="74v84h" fileName="ad_res/爆款游戏.png" xy="0,0">
+    <image id="n0_kvo6" name="n0" src="74v84h" fileName="img/ad_res/爆款游戏.png" xy="0,0">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <component id="n2_kvo6" name="ic" src="bg001h" fileName="cache/view_game_icon.xml" xy="10,9" scale="0.8,0.8"/>
+    <component id="n2_kvo6" name="ic" src="cqevgw" fileName="cmp/cache/view_game_icon.xml" xy="7,5" size="124,124" aspect="true"/>
   </displayList>
   <Button downEffect="scale" downEffectValue="0.80"/>
   <transition name="anim_idle" autoPlay="true" autoPlayRepeat="-1">

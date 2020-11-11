@@ -4,7 +4,7 @@
     <graph id="n5_mpya" name="mask" xy="0,0" size="136,136" type="rect" lineSize="0" corner="8">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <loader id="n4_mpya" name="icon" xy="0,0" size="136,136" url="ui://75kiu87kr3yg7e" align="center" vAlign="middle" fill="scaleMatchWidth" clearOnPublish="true">
+    <loader id="n4_mpya" name="icon" xy="0,0" size="136,136" url="ui://75kiu87kebhigr" align="center" vAlign="middle" fill="scaleMatchWidth" clearOnPublish="true">
       <relation target="" sidePair="width-width,height-height"/>
     </loader>
     <text id="n3_mpya" name="title" xy="0,138" size="135,31" fontSize="12" color="#ffffff" align="center" vAlign="middle" autoSize="none" singleLine="true" text="">
