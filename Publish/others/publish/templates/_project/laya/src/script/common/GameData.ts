@@ -8,8 +8,6 @@ export class SaveData {
      */
     public coinCount: number = 0;
 
-   
-
 }
 
 export default class GameData {

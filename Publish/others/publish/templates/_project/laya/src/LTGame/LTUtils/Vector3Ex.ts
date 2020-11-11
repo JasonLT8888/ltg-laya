@@ -97,6 +97,10 @@ export default class Vector3Ex {
         return new Laya.Vector3(1, 0, 0);
     }
 
+    public static IsZero(vec: Laya.Vector3): boolean {
+        return vec.x && vec.y == 0 && vec.z == 0;
+    }
+
     public static Cross(right: Laya.Vector3, left: Laya.Vector3): Laya.Vector3 {
         var result = new Laya.Vector3(0, 0, 0);
         Laya.Vector3.cross(right, left, result);
@@ -107,6 +111,10 @@ export default class Vector3Ex {
         var result = new Laya.Vector3(0, 0, 0);
         Laya.Vector3.subtract(right, left, result);
         return result;
+    }
+
+    public static SubtractTo(right: Laya.Vector3, left: Laya.Vector3, to: Laya.Vector3) {
+        Laya.Vector3.subtract(right, left, to);
     }
 
     public static ClampMagnitude(vector: Laya.Vector3, maxLength: number) {

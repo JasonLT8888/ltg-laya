@@ -1,11 +1,16 @@
 import { PackConst } from "../../../../script/config/PackConst";
 import DefaultRecordManager from "../../DefaultRecordManager";
 import LTPlatform from "../../LTPlatform";
+import LTSDK from "../../../../SDK/LTSDK";
+import GameData from "../../../../script/common/GameData";
+import CommonSaveData from "../../../Commom/CommonSaveData";
 
 export default class TTRecordManager extends DefaultRecordManager {
 
     supportRecord: boolean = true;
-
+    public get isSupportRecord(): boolean {
+        return this.supportRecord;
+    }
     protected _cacheStartHandle: Laya.Handler;
     protected _cacheStopHandle: Laya.Handler;
     protected _cacheOverTimeHandle: Laya.Handler;
@@ -58,7 +63,7 @@ export default class TTRecordManager extends DefaultRecordManager {
             this.isPausing = false;
             this._cacheResumeHandle && this._cacheResumeHandle.run();
         });
-       
+
     }
 
     StartRecord(onStart: Laya.Handler, onOverTime: Laya.Handler) {
@@ -126,30 +131,36 @@ export default class TTRecordManager extends DefaultRecordManager {
         this._nativeManager.stop();
     }
 
-
+    videoID: string = '';
     ShareVideo(onSuccess: Laya.Handler, onCancel: Laya.Handler, onFailed: Laya.Handler) {
         console.log(PackConst.data);
         if (this.isRecordSuccess) {
+            let shareId = `${LTSDK.instance.uid}${Date.now()}`
             let shareData = {
                 channel: "video",
                 title: "",
-                desc: "",
+                desc: "你能挑战200次连击吗？!",
                 imageUrl: "",
                 templateId: PackConst.data.share_id,
-                query: "",
+                query: `from=sharePage`,
                 extra: {
                     videoPath: this.videoSavePath, // 可替换成录屏得到的视频地址
-                    videoTopics: PackConst.data.topics// ['小游戏', '学生党', '钻石方块']
+                    videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']
+                    withVideoId: true,
+                    hashtag_list: PackConst.data.topics,
+                    video_title: "你能挑战200次连击吗？"
                 },
-                success() {
+                success: (res) => {
                     LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
-                        console.log("分享成功");
+                        console.log("分享成功", res);
+                        this.videoID = res.videoId;
+                        LTSDK.instance.reportShareInfo(res.videoId, shareId);
                         if (onSuccess) {
                             onSuccess.run();
                         }
                     })
                 },
-                fail(e) {
+                fail: (e) => {
                     LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {
                         console.log("取消分享");
                         if (onCancel) {
@@ -166,4 +177,23 @@ export default class TTRecordManager extends DefaultRecordManager {
             }
         }
     }
+    navigateToVideo(videoId: string) {
+        if (!this.videoID) {
+            return;
+        }
+        this._base.navigateToVideoView({
+            videoId: this.videoID,
+            success: (res) => {
+                console.log("跳转成功", res);
+            },
+            fail: (err) => {
+                if (err.errCode === 1006) {
+                    this._base.showToast({
+                        title: "something wrong with your network",
+                    });
+                }
+            },
+        });
+    }
+
 }

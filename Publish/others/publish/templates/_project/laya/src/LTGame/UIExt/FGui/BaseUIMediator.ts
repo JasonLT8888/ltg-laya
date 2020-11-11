@@ -99,19 +99,7 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         } else {
             this._ui['m___hotgame'] = null;
         }
-
-        let nativeIcon = View_NativeIcon.CreateView(this._ui['m___nativeicon']);
-        if (nativeIcon) {
-            this._ui['m___nativeicon'] = nativeIcon;
-        } else {
-            this._ui['m___nativeicon'] = null;
-        }
-        let nativeIconL = View_NativeIconLong.CreateView(this._ui['m___nativeiconL']);
-        if (nativeIconL) {
-            this._ui['m___nativeiconL'] = nativeIconL;
-        } else {
-            this._ui['m___nativeiconL'] = null;
-        }
+ 
         let nativeinpage = View_NativeInPage.CreateView(this._ui['m___nativeinpage']);
         if (nativeinpage) {
             this._ui['m___nativeinpage'] = nativeinpage;

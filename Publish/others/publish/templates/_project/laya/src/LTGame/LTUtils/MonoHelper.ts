@@ -1,6 +1,6 @@
 export default class MonoHelper extends Laya.Script {
 
-    private static _instance;
+    private static _instance: MonoHelper;
     public static get instance(): MonoHelper {
         if (this._instance == null) {
             let monoHelper = new Laya.Sprite();
@@ -52,9 +52,13 @@ export default class MonoHelper extends Laya.Script {
     }
 
     onUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        if (dt > 0.3) {
+            dt = 0.05;
+        }
         for (let i = 0; i < this._updateActions.length; ++i) {
             let action = this._updateActions[i];
-            action.run();
+            action.runWith(dt);
         }
     }
 
