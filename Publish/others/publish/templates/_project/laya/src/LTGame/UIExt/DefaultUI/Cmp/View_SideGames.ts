@@ -18,6 +18,10 @@ export default class View_SideGames {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
             // 只有oppo支持
             console.log("sidegames,审核");
@@ -66,7 +70,7 @@ export default class View_SideGames {
             this._posId = 10;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
-        if (this._cacheAds == null) {
+        if (!this._cacheAds || !this._cacheAds.length) {
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
         } else {
             this.ui.m_ads.m_list.setVirtual();

@@ -3,7 +3,6 @@ import MathEx from "./MathEx";
 export default class Vector2Ex {
 
     public static cacheVec: Laya.Vector2 = new Laya.Vector2();
-    public static cacheVec0: Laya.Vector2 = new Laya.Vector2();
 
     public static get up(): Laya.Vector2 { return new Laya.Vector2(0, 1); }
 

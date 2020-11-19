@@ -20,6 +20,10 @@ export default class View_EndSlideGames {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
         if (LTPlatform.instance.platform == EPlatformType.Oppo && LTSDK.instance.checkState == ECheckState.InCheck) {
             console.log("审核");
             tagUI.dispose();
@@ -71,7 +75,8 @@ export default class View_EndSlideGames {
             this._posId = 6;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
-        if (this._cacheAds == null) {
+        if (!this._cacheAds || !this._cacheAds.length) {
+            this.ui.visible = false;
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
         } else {
             for (let i = 0; i < 3; i++) {
@@ -102,6 +107,7 @@ export default class View_EndSlideGames {
 
     private _OnAdInited(posId: number) {
         if (posId != this._posId) return;
+        this.ui.visible = true;
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         for (let i = 0; i < 3; i++) {
             this.initLists(i);

@@ -142,7 +142,7 @@ export default class TTRecordManager extends DefaultRecordManager {
                 desc: "你能挑战200次连击吗？!",
                 imageUrl: "",
                 templateId: PackConst.data.share_id,
-                query: `from=sharePage&openId=${LTSDK.instance.uid}&shareId=${shareId}&channelId=${CommonSaveData.instance.channelId}`,
+                query: `from=sharePage`,
                 extra: {
                     videoPath: this.videoSavePath, // 可替换成录屏得到的视频地址
                     videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']

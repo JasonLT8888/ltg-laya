@@ -92,6 +92,7 @@ export class View_NativeInPage {
 
     }
     private showAdInfo() {
+        if (!this._cacheAdData) return;
         if (this._cacheAdData.imgUrlList.length) {
             this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
             this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];

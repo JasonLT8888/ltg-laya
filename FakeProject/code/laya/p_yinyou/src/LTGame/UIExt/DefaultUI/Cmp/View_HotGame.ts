@@ -18,6 +18,10 @@ export default class View_HotGame {
             tagUI.dispose();
             return null;
         }
+        if (!LTSDK.instance.isNavEnable) {
+            tagUI.dispose();
+            return null;
+        }
         if (LTPlatform.instance.platform == EPlatformType.Oppo && LTSDK.instance.checkState == ECheckState.InCheck) {
             // 只有oppo支持
             console.log("hotgame,审核");
@@ -67,7 +71,8 @@ export default class View_HotGame {
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         this.ui.displayObject.zOrder = Number.MAX_SAFE_INTEGER;
-        if (this._cacheAds == null) {
+        if (!this._cacheAds || !this._cacheAds.length) {
+            this.ui.visible = false;
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
         } else {
             this._cacheIndex = MathEx.RandomInt(0, this._cacheAds.length);
@@ -79,6 +84,7 @@ export default class View_HotGame {
 
     private _OnAdInited(posId: number) {
         if (posId != this._posId) return;
+        this.ui.visible = true;
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         this._cacheIndex = MathEx.RandomInt(0, this._cacheAds.length);
         this.ui.onClick(this, this._OnClickAD);
@@ -114,7 +120,7 @@ export default class View_HotGame {
 
     private _OnClickAD() {
         let navId = this._showAd.ad_appid;
-        LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, true, '更多游戏');
+        LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, true, '火爆游戏');
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:

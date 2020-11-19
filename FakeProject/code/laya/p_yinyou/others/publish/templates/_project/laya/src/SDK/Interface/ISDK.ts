@@ -45,7 +45,10 @@ export interface ISDK {
    * 程序APPID
    */
   appId: string;
-
+  /**游戏中心关卡 */
+  navLevels: number[];
+  /**是否支持导出 */
+  isNavEnable: boolean;
   /**
    * 初始化sdk
    * @param flg 游戏唯一标识

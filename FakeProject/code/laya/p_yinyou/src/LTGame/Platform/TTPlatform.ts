@@ -72,10 +72,11 @@ export default class TTPlatform extends WXPlatform {
         let loginData = {
             force: false,
             success: (res) => {
+                console.log(LTPlatform.platformStr, "登录成功", res);
                 this.loginCode = res.code;
                 this.loginState.isLogin = true;
                 this.loginState.code = res.code;
-                this._OnLoginSuccess(res);
+                // this._OnLoginSuccess(res);
 
             },
             fail: (res) => {
@@ -121,8 +122,8 @@ export default class TTPlatform extends WXPlatform {
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
         console.log(LTPlatform.platformStr, "登录成功", res);
-        LTUI.Toast('登录成功');
-        this.getUserInfo();
+        // LTUI.Toast('登录成功');
+        // this.getUserInfo();
         // this.loginState.isLogin = true;
         // this.loginState.code = res.code;
     }
@@ -289,7 +290,7 @@ export default class TTPlatform extends WXPlatform {
     public followOfficialAccount(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             this.base.openAwemeUserProfile();
-            this.RecordEvent('focus', { id: 1 });
+            this.RecordEvent('follow', { id: 1 });
             // this.base.followOfficialAccount({
             //     success(res) {
             //         if (res.errCode === 0) {
@@ -319,6 +320,10 @@ export default class TTPlatform extends WXPlatform {
     }
     public addShareListener() {
         console.log('监听分享 ');
+        if(CommonSaveData.instance.channelId=='own'){
+            console.log('无效 channel')
+            return;
+        }
         this._base.onShareAppMessage((res) => {
             console.log('分享', res);
             let shareId = `${LTSDK.instance.uid}${Date.now()}`

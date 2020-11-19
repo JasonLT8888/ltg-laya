@@ -41,10 +41,6 @@
       <relation target="" sidePair="center-center,bottom-bottom"/>
       <Button icon="ui://75kiu87kr3yg7f"/>
     </component>
-    <component id="n16_q1a3" name="btn_back" src="rk935h" fileName="cmp/btn_back_01.xml" xy="19,58">
-      <relation target="" sidePair="left-left,top-top"/>
-      <Button icon="ui://75kiu87kkntfbm"/>
-    </component>
   </displayList>
   <transition name="anim_enter">
     <item time="0" type="Scale" target="n15_r3yg" value="0,0"/>

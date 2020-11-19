@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="144,144" mask="n5_bg00">
+<component size="144,144" overflow="hidden" mask="n5_bg00">
   <displayList>
     <graph id="n7_p2ld" name="n7" xy="0,0" size="144,144" type="rect" lineSize="0" fillColor="#03000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <graph id="n5_bg00" name="mask" xy="0,0" size="144,144" type="rect" corner="30">
+    <graph id="n5_bg00" name="mask" xy="0,0" size="144,144" type="rect" corner="32">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <loader id="n6_bg00" name="icon" xy="0,0" size="144,144" url="ui://75kiu87kebhigr" align="center" vAlign="middle" fill="scale" clearOnPublish="true">
+    <loader id="n6_bg00" name="icon" xy="0,0" size="144,144" url="ui://75kiu87kebhigr" align="center" vAlign="middle" fill="scaleFree" clearOnPublish="true">
       <relation target="" sidePair="width-width,height-height"/>
     </loader>
   </displayList>

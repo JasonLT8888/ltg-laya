@@ -1,6 +1,8 @@
 import LTPlatform from "../LTGame/Platform/LTPlatform";
 import SDK_CQ from "./Impl/SDK_CQ";
 import { ISDK } from "./Interface/ISDK";
+import GameData from "../script/common/GameData";
+import CommonSaveData from "../LTGame/Commom/CommonSaveData";
 
 export default class LTSDK {
 
@@ -62,8 +64,15 @@ export default class LTSDK {
         let channel = LTPlatform.instance.GetStorage('user_from_channel');
         let options = LTPlatform.instance.lauchOption as any;
         console.log('本地channel', channel);
-        if (LTSDK.instance instanceof SDK_CQ && options && options.query) {
-            channel = options.query.channelId;
+        if (LTSDK.instance instanceof SDK_CQ) {
+            if (CommonSaveData.instance.channelId != 'own' && options && options.query && options.query.channelId) {
+                channel = options.query.channelId;
+                if (channel) {
+                    CommonSaveData.instance.channelId = channel;
+                    CommonSaveData.SaveToDisk();
+                }
+            }
+            return CommonSaveData.instance.channelId;
         }
         if (!channel) {
             if (options && options.query) {
@@ -74,8 +83,8 @@ export default class LTSDK {
                 console.log('没有本地数据,channel默认 own');
                 channel = 'own';
             }
-            LTPlatform.instance.SetStorage('user_from_channel', channel);
         }
+        LTPlatform.instance.SetStorage('user_from_channel', channel);
         return channel;
     }
 }

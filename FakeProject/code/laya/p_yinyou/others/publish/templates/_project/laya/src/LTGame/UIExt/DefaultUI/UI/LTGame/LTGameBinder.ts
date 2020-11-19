@@ -39,6 +39,8 @@ import UI_item_gameBig from "./UI_item_gameBig";
 import UI_GameIconF from "./UI_GameIconF";
 import UI_WxSideGames from "./UI_WxSideGames";
 import UI_item_gameSmall from "./UI_item_gameSmall";
+import UI_GameCenterBig from "./UI_GameCenterBig";
+import UI_item_gameMax from "./UI_item_gameMax";
 import UI_bottomGames from "./UI_bottomGames";
 import UI_view_item_game128 from "./UI_view_item_game128";
 import UI_sliderADs from "./UI_sliderADs";
@@ -89,6 +91,8 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_GameIconF.URL, UI_GameIconF);
 		fgui.UIObjectFactory.setExtension(UI_WxSideGames.URL, UI_WxSideGames);
 		fgui.UIObjectFactory.setExtension(UI_item_gameSmall.URL, UI_item_gameSmall);
+		fgui.UIObjectFactory.setExtension(UI_GameCenterBig.URL, UI_GameCenterBig);
+		fgui.UIObjectFactory.setExtension(UI_item_gameMax.URL, UI_item_gameMax);
 		fgui.UIObjectFactory.setExtension(UI_bottomGames.URL, UI_bottomGames);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game128.URL, UI_view_item_game128);
 		fgui.UIObjectFactory.setExtension(UI_sliderADs.URL, UI_sliderADs);

@@ -2,7 +2,7 @@
 <component size="170,208">
   <displayList>
     <image id="n2_ebhi" name="bg" src="xx3jgu" fileName="img/sp_iconbg.png" xy="0,0" size="170,174"/>
-    <component id="n0_p2ld" name="icon" src="cqevgw" fileName="cmp/cache/view_game_icon1.xml" xy="85,85" pivot="0.5,0.5" anchor="true" size="166,166" aspect="true"/>
+    <component id="n0_p2ld" name="icon" src="cqevgw" fileName="cmp/cache/view_game_icon.xml" xy="85,85" pivot="0.5,0.5" anchor="true" size="160,160" aspect="true"/>
     <text id="n1_p2ld" name="text_name" xy="88,194" pivot="0.5,0.5" anchor="true" size="101,29" font="DengXian" fontSize="24" color="#ffffff" align="center" vAlign="middle" bold="true" text="快来划水">
       <relation target="" sidePair="center-center,bottom-bottom"/>
     </text>

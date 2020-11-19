@@ -9,6 +9,7 @@ import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
 import StringEx from "../../LTGame/LTUtils/StringEx";
 import GameData from "../../script/common/GameData";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export default class SDK_Default implements ISDK {
 
@@ -28,6 +29,8 @@ export default class SDK_Default implements ISDK {
     adManager: SDKADManager;
     uid: string = "";
     dateInfo: DateInfo[];
+    navLevels: number[];
+    isNavEnable: boolean;
     token: string;
 
     Init(flg: string, channel: string, controlVersion: string, appid: string) {
@@ -35,6 +38,8 @@ export default class SDK_Default implements ISDK {
         this.isADEnable = false;
         this.isDelayClose = false;
         this.isShielding = false;
+        this.isNavEnable = false;
+        this.navLevels = [];
         this.payRate = 0;
         this.checkState = ECheckState.InCheck;
         this.isConfigEnable = true;
@@ -42,14 +47,14 @@ export default class SDK_Default implements ISDK {
         this.channel = channel;
         this.controlVersion = controlVersion;
         this.appId = appid;
-        if (StringEx.IsNullOrEmpty(GameData.instance.uid)) {
-            GameData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
-            GameData.SaveToDisk();
+        if (StringEx.IsNullOrEmpty(CommonSaveData.instance.uid)) {
+            CommonSaveData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
+            CommonSaveData.SaveToDisk();
         }
-        this.uid = GameData.instance.uid;
+        this.uid = CommonSaveData.instance.uid;
         this.severTime = new Date();
         this.shieldHours = [];
-        this.adManager = new SDKADManager(); 
+        this.adManager = new SDKADManager();
         console.log("SDK:Init", this);
     }
     public getToken() {
@@ -66,7 +71,7 @@ export default class SDK_Default implements ISDK {
     }
     /**CDN 节假日信息配置 年底需更新次年数据 */
     RequestRemoteDateInfo() {
-        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/DateInfo.json`, Laya.Handler.create(this, this.onGetDatesInfo),
+        LTHttp.Send(`https://file.gugudang.com/res/down/public/configs/DateInfo.json`, Laya.Handler.create(this, this.onGetDatesInfo),
             Laya.Handler.create(this, this.onGetDatesError), true);
     }
     onGetDatesError(res: string) {
@@ -83,7 +88,7 @@ export default class SDK_Default implements ISDK {
         console.log('云 获取休息日信息', this.dateInfo);
         this._RequestCheckState();
     }
-   
+
 
     private _OnGetSelfAdInfosFailed(res: string) {
         console.error("拉取到广告信息失败", res);
@@ -124,7 +129,7 @@ export default class SDK_Default implements ISDK {
         // }), Laya.Handler.create(null, (res) => {
         //     console.log("获取版本状态失败", res);
         // }), true);
-        if (this.checkState == ECheckState.NoGame) {
+        if (this.checkState != ECheckState.InCheck) {
             //工作时时段屏蔽
             let nowtime = this.severTime;
             let date = nowtime.toISOString().substring(0, 10).replace(/\-/g, '');
@@ -139,16 +144,18 @@ export default class SDK_Default implements ISDK {
             if (isWorkday && this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
                 console.log('工作', this.shieldHours, h);
                 this.checkState = ECheckState.Normal;
+                this.payRate = 0;
+                this.navLevels = [];
             } else {
                 console.log('休息', date, h);
             }
-            if (this.isShielding) {
-                //屏蔽洗钱
-                this.checkState = ECheckState.Normal;
-                this.payRate = 0;
-            }
         }
-        console.log(`${this.appId}---云控版本为:`, this.controlVersion, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
+        if (this.isShielding) {
+            //屏蔽洗钱 
+            this.payRate = 0;
+            this.navLevels = [];
+        }
+        console.log(`${this.appId}---云控版本为:`, this.controlVersion, `游戏中心Levels:${this.navLevels}`, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
     Login(code: string, fromAppId: string) {
         console.log("SDK:Login", code, fromAppId);
@@ -163,7 +170,7 @@ export default class SDK_Default implements ISDK {
         if (LTPlatform.instance.platform == EPlatformType.Oppo) {
             configFile = 'YTSelf.json';
         }
-        LTHttp.Send(`https://hs.yz061.com/res/down/public/configs/${configFile}`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
+        LTHttp.Send(`https://file.gugudang.com/res/down/public/configs/${configFile}`, Laya.Handler.create(this, this._OnGetSelfAdInfos),
             Laya.Handler.create(this, this._OnGetSelfAdInfosFailed), true);
     }
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="120,120" opaque="false" designImageOffsetX="49" designImageOffsetY="-192" bgColor="#000000">
-  <controller name="show" exported="true" pages="1,hide,0,show" selected="0"/>
+  <controller name="show" exported="true" pages="1,hide,0,show" selected="1"/>
   <displayList>
-    <graph id="n14_zutp" name="bg" xy="-375,-1500" pivot="0.5,0.5" size="1508,2990" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
+    <graph id="n14_zutp" name="bg" xy="-375,-1500" pivot="0.5,0.5" size="1508,2990" alpha="0.7" type="rect" lineSize="0" fillColor="#ff000000">
       <gearDisplay controller="show" pages="0"/>
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="-561,-280" pivot="0.5,0.5">
-      <gearXY controller="show" pages="1,0" values="-561,-280|0,-280" tween="true"/>
+    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="0,-531" pivot="0.5,0.5">
+      <gearXY controller="show" pages="1,0" values="-561,-531|0,-531" tween="true"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <image id="n15_gsbn" name="red" src="r1gt73" fileName="img/ad_res/res/sp_tips.png" xy="68,-24" pivot="0.3,1">

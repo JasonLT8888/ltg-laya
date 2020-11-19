@@ -29,7 +29,7 @@ export default class MainStart extends LTStart {
         switch (ePlatform) {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
-                this._gameVersion = '1.0.1';//1.0.1 为全策略模式 
+                this._gameVersion = '1.1.5';//1.0.1 为全策略模式 
                 platformData.appId = "BiW1Im1l76GCc08csG4o0cCC0"//'88888888';
                 platformData.appKey = '11111111111';
                 break;
@@ -40,7 +40,7 @@ export default class MainStart extends LTStart {
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
-                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_tt/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_tt/`);
                 break;
             case EPlatformType.WX:
                 this._gameVersion = "v0.0.1";
@@ -49,7 +49,7 @@ export default class MainStart extends LTStart {
                 platformData.bannerId = "adunit-11a2571806b5fc5c";
                 platformData.rewardVideoId = "adunit-fa6dd5b431c41ceb";
                 platformData.interstitialId = "adunit-abe9d252f3a3956c";
-                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
                 break;
             case EPlatformType.Oppo:
                 this._gameVersion = "1.0.2";
@@ -61,7 +61,7 @@ export default class MainStart extends LTStart {
                 platformData.nativeBannerIds = ['195994', '195995', '195998'];
                 platformData.nativeIconIds = ['195986', '196003'];
                 platformData.nativeinpageIds = ['195999', '196002', '196003'];
-                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
             case EPlatformType.Vivo:
                 this._gameVersion = "1.0.0";
@@ -74,7 +74,7 @@ export default class MainStart extends LTStart {
                 platformData.nativeBannerIds = ['699d13284f5e4c769d59ba7ef2f4aa05', '9703bd90cbf74014853971a55cac7fe6'];
                 platformData.nativeIconIds = ['91686cf4a42a4144b884f8843d947727', 'd987f0a85f724700aa098631c751ca7e'];
                 platformData.nativeinpageIds = ['b82fb9b9d97d4a5c8281a943d41ea0aa', '4de349a96b6a432bb1b2f215493f1b07'];
-                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
                 break;
             case EPlatformType.KS:
                 this._gameVersion = "1.0.0";
@@ -83,7 +83,7 @@ export default class MainStart extends LTStart {
                 // platformData.bannerId = "f3h5a48j44l2jfopn8";
                 platformData.rewardVideoId = "2300000126_01";
                 // platformData.interstitialId = "3nmlb1smr5h1f9clmk";
-                LTRespackManager.instance.SetRemoteUrl(`https://hs.yz061.com/res/down/public/${this._gameName}/tt_${this._resVersion}/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/tt_${this._resVersion}/`);
                 break;
             default:
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");

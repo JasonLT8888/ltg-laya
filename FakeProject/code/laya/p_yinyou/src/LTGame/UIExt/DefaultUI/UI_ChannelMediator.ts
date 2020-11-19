@@ -39,7 +39,7 @@ export class UI_ChannelMediator extends BaseUIMediator<UI_Channel> {
 
     private clear() {
         CommonSaveData.instance.channelId = '';
-        GameData.SaveToDisk();
+        CommonSaveData.SaveToDisk();
         this.updateUI();
     }
     private bindChannel() {
@@ -48,7 +48,7 @@ export class UI_ChannelMediator extends BaseUIMediator<UI_Channel> {
             return LTUI.Toast('请重新输入');
         } else {
             CommonSaveData.instance.channelId = txt;
-            GameData.SaveToDisk();
+            CommonSaveData.SaveToDisk();
             LTUI.Toast('渠道绑定成功');
             this.showChannelID();
         }

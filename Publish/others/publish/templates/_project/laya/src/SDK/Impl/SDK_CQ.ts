@@ -11,6 +11,7 @@ import GameData from "../../script/common/GameData";
 import TTPlatform from "../../LTGame/Platform/TTPlatform";
 import LTSDK from "../LTSDK";
 import FakeAdDefine from "../common/FakeAdDefine";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -50,7 +51,7 @@ export default class SDK_CQ extends SDK_Default {
     public reportShareInfo(videoId: string, shareId: string) {
         let sendData = {
             appid: this.appId,
-            openId: GameData.instance.uid,
+            openId: CommonSaveData.instance.uid,
             videoId: videoId,
             shareId: shareId
         };
@@ -112,6 +113,8 @@ export default class SDK_CQ extends SDK_Default {
                     adData.ad_name = ad.name;
                     adData.ad_path = ad.path;
                     adData.ad_package = ad.path;
+                    adData.ad_count = ad.player;
+                    adData.ad_dot = ad.dot;
                     if (adData.ad_appid != this.appId) {
                         adList.push(adData);
                     }
@@ -230,8 +233,12 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     ReportClickAd(adid: number, locationId: number, jumpSuccess: boolean, scene: string = 'defalut_scene') {
+        let appid = this.appId;
+        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+            appid = LTPlatform.instance.platformData.appKey;
+        }
         let sendData = {
-            appid: this.appId,
+            appid: appid,
             openId: LTSDK.instance.uid,
             adId: adid,
             code: locationId,
@@ -302,6 +309,15 @@ export default class SDK_CQ extends SDK_Default {
                 if (result["isADEnable"]) {
                     this.isADEnable = (1 == parseInt(result["isADEnable"]));
                 }
+                if (result['isNavEnable']) {
+                    this.isNavEnable = result['isNavEnable'] == '1';
+                }
+                if (result['navLevels']) {
+                    let arr = (result['navLevels']).split(',');
+                    for (let item in arr) {
+                        this.navLevels.push(parseInt(arr[item]));
+                    }
+                }
                 if (result['checkState']) {
                     this.checkState = parseInt(result['checkState']) as ECheckState;
                 } else {
@@ -366,8 +382,8 @@ export default class SDK_CQ extends SDK_Default {
     private _OnLoginSuccess(res: SDK.LoginSuccessParam) {
         console.log("SDK登录成功", res);
         this.uid = res.openid;
-        GameData.instance.uid = res.openid;
-        GameData.SaveToDisk();
+        CommonSaveData.instance.uid = res.openid;
+        CommonSaveData.SaveToDisk();
         this.ReportDaily();
         this.reportFromVideo();
     }
@@ -385,20 +401,23 @@ export default class SDK_CQ extends SDK_Default {
                 let fromId = 'ytlj';
                 let shareId = `ytlj_scene|${LTPlatform.instance.lauchOption.scene}`;
                 let fromChannel = 'own';
-                if (query && query.openId) {
-                    fromId = query.openId;
+                if (query) {
+                    if (query.openId) {
+                        fromId = query.openId;
+                    }
                     if (query.shareId) {
                         shareId = query.shareId;
-                    } else {
-                        shareId = `ytlj_scene|${LTPlatform.instance.lauchOption.scene}`;
                     }
                     if (query.channelId) {
                         fromChannel = query.channelId;
                     }
+                    if (fromChannel == 'own' || fromChannel == 'undefined') {
+                        return console.log('非渠道来源用户');
+                    }
                     let sendData = {
                         appid: this.appId,
                         fromId: `${fromId}|${fromChannel}`,
-                        openId: GameData.instance.uid,
+                        openId: CommonSaveData.instance.uid,
                         shareId: shareId
                     };
                     console.log(sendData);
@@ -408,13 +427,12 @@ export default class SDK_CQ extends SDK_Default {
                         console.log(" 上报视频来源用户 上报失败", res);
                     }), true, sendData);
                 } else {
-                    console.log('自由渠道');
+                    console.log('非渠道来源用户');
                 }
             } catch (error) {
                 console.error(error);
             }
         }
-
     }
 
     ReportStat(isShare: boolean, sid: string) {
