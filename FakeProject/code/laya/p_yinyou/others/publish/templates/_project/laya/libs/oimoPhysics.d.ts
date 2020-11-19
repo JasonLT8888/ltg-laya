@@ -1138,7 +1138,8 @@ declare namespace OIMO {
         maxSwingAngle1: number;
         maxSwingAngle2: number;
         constructor();
-        init(rigidBody1: RigidBody, rigidBody2: RigidBody, worldAnchor: Vec3, worldTwistAxis: Vec3, worldSwingAxis: Vec3): RagdollJointConfig;
+        init(rigidBody1: RigidBody, rigidBody2: RigidBody, worldAnchor: Vec3 | Laya.Vector3, 
+            worldTwistAxis: Vec3 | Laya.Vector3, worldSwingAxis: Vec3 | Laya.Vector3): RagdollJointConfig;
     }
     
     
