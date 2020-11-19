@@ -13,7 +13,7 @@
     <IgnoreVerticesColor>True</IgnoreVerticesColor>
     <CompressMesh>True</CompressMesh>
     <AnimatorCompress>True</AnimatorCompress>
-    <TexAnimatorSetting>True</TexAnimatorSetting>
+    <TexAnimatorSetting>False</TexAnimatorSetting>
     <TexAnimatorbakeFPS>60</TexAnimatorbakeFPS>
     <TexAnimationSocket>False</TexAnimationSocket>
     <TerrainSetting>False</TerrainSetting>
@@ -34,8 +34,8 @@
     <Ios>False</Ios>
     <Android>False</Android>
     <Conventional>True</Conventional>
-    <SavePath>D:\Work_Projects\p_superpower\code\laya\p_superpower\bin\res</SavePath>
-    <ScrollPositionY>60</ScrollPositionY>
+    <SavePath>D:/Work_Projects/ltg-laya/FakeProject/code/laya/p_yinyou/bin/res</SavePath>
+    <ScrollPositionY>0</ScrollPositionY>
   </config1>
   <config2>
     <FirstlevelMenu>0</FirstlevelMenu>
@@ -190,7 +190,7 @@
     <ScrollPositionY>0</ScrollPositionY>
   </config5>
   <language>1</language>
-  <time>1603178060</time>
+  <time>1605593915</time>
   <saveAcount>
   </saveAcount>
   <savePassWorld>

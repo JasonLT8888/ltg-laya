@@ -111,7 +111,15 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
     }
 
     private _OnClickClose() {
-        this.Hide();
+        if (CommonSaveData.instance.isSigned) {
+            this.Hide();
+        } else {
+            this._OnClickGet();
+        }
+    }
+
+    _OnHide() {
+        this._cacheConfig.onClose?.run();
     }
 
 }
