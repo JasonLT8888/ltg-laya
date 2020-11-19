@@ -10,6 +10,7 @@ import { PhysicTest } from "../test/PhysicTest";
 import { HXOimoPhysicTest } from "../test/HXOimoPhysicTest";
 import { BasicTest } from "../test/OimoTest/BasicTest";
 import { CompoundShapeTest } from "../test/OimoTest/CompoundShapeTest";
+import { RagdollTest } from "../test/OimoTest/RagdollTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
 
@@ -31,6 +32,7 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
         new HXOimoPhysicTest(),
         new BasicTest(),
         new CompoundShapeTest(),
+        new RagdollTest(),
     ];
 
     _OnShow() {

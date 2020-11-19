@@ -60,8 +60,13 @@ export class BaseOimoTest implements ITest {
         this._staticMat.albedoColor = new Laya.Vector4(0.8, 0.8, 0.8, 1);
     }
 
+    protected _OnLogicUpdate(dt: number) {
+
+    }
+
     private _LogicUpdate() {
         let dt = Laya.timer.delta / 1000;
+        dt = Math.min(dt, 0.02);
         this._world.step(dt);
 
         let workRig = this._world.getRigidBodyList();
@@ -89,6 +94,7 @@ export class BaseOimoTest implements ITest {
             workRig = workRig.getNext();
         }
 
+        this._OnLogicUpdate(dt);
     }
 
     Clear() {
