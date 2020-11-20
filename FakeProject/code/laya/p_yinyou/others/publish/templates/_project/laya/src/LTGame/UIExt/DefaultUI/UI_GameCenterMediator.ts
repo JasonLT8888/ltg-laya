@@ -4,12 +4,13 @@ import UI_item_game from "./UI/LTGame/UI_item_game";
 import UI_item_gameBig from "./UI/LTGame/UI_item_gameBig";
 import LTSDK from "../../../SDK/LTSDK";
 import LTPlatform from "../../Platform/LTPlatform";
+import { EPlatformType } from "../../Platform/EPlatformType";
 
 
 
 export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
     private static _instance: UI_GameCenterMediator;
-    _posId: number = 5;
+    _posId: number = 6;
     cacheAds: SDK.ADInfoData[];
     public get ui(): UI_GameCenter {
         return this._ui;
@@ -25,6 +26,7 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
     _OnShow() {
         this._needFilScreen = false;
         super._OnShow();
+        this._posId = 6;
         this.cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
         if (!this.cacheAds) {
             console.error('获取广告ID失败GameCenter');
@@ -67,10 +69,19 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
 
     }
     clickItem(item: UI_item_gameBig | UI_item_game) {
-        let uid = item.data['id'];
+        let appid = item.data['id'];
         let path = item.data['path']
         let adid = item.data['adid']
-        LTPlatform.instance.NavigateToApp(uid, path, null, false, false, adid);
+        LTSDK.instance.ReportClickAd(adid, this._posId, true, '游戏中心');
+        switch (LTPlatform.instance.platform) {
+            case EPlatformType.Oppo:
+            case EPlatformType.Vivo:
+                appid = path;
+                break;
+            default:
+                break;
+        }
+        LTPlatform.instance.NavigateToApp(appid, null, null, true, false, adid);
     }
     renderItem(index: number, item: UI_item_game | UI_item_gameBig) {
         let data = this.cacheAds[index];

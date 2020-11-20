@@ -20,7 +20,7 @@ export default class SplashScene extends LTSplashScene {
     constructor() {
         super();
         this._splashUIClass = UI_splash;
-        this._useCommonUI = true;
+        this._useCommonUI = true; 
     }
 
     _OnBindUI() {

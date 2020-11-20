@@ -289,8 +289,11 @@ export default class TTPlatform extends WXPlatform {
 
     public followOfficialAccount(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            this.base.openAwemeUserProfile();
             this.RecordEvent('follow', { id: 1 });
+            this.base.openAwemeUserProfile(); 
+            console.error("如果后台没有绑定官方抖音号，可以跳转给小军团:)");
+            this.navigateToVideo("13104c440c2b1262015345120e7a176d5f502b450e7a406356524d450b7e416155534c470a72");
+            //今日头条端 暂时没用
             // this.base.followOfficialAccount({
             //     success(res) {
             //         if (res.errCode === 0) {
