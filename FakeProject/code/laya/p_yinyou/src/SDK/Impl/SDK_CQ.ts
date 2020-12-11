@@ -1,17 +1,15 @@
 import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 import LTHttp from "../../LTGame/Net/LTHttp";
 import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import ShareManager from "../../LTGame/Platform/ShareManager";
+import TTPlatform from "../../LTGame/Platform/TTPlatform";
 import { ECheckState } from "../common/ECheckState";
+import LTSDK from "../LTSDK";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
-import GameData from "../../script/common/GameData";
-import TTPlatform from "../../LTGame/Platform/TTPlatform";
-import LTSDK from "../LTSDK";
-import FakeAdDefine from "../common/FakeAdDefine";
-import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -304,13 +302,13 @@ export default class SDK_CQ extends SDK_Default {
                     this.payRate = parseInt(result['payRate']);
                 }
                 if (result['isDelayClose']) {
-                    this.isDelayClose = parseInt(result['isDelayClose']) == 1;
+                    this.isDelayClose = (result['isDelayClose']) == "1";
                 }
                 if (result['isShielding']) {
-                    this.isShielding = 1 == parseInt(result['isShielding']);
+                    this.isShielding = "1" == (result['isShielding']);
                 }
                 if (result["isADEnable"]) {
-                    this.isADEnable = (1 == parseInt(result["isADEnable"]));
+                    this.isADEnable = "1" == (result["isADEnable"]);
                 }
                 if (result['isNavEnable']) {
                     this.isNavEnable = result['isNavEnable'] == '1';
@@ -327,7 +325,7 @@ export default class SDK_CQ extends SDK_Default {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
                 if (result['nowtime']) {
-                    this.severTime = new Date(result['nowtime']);
+                    this.severTime = new Date(result['nowtime'].toString());
                 }
                 if (result['shieldHours']) {
                     this.shieldHours = result['shieldHours'].split(',');

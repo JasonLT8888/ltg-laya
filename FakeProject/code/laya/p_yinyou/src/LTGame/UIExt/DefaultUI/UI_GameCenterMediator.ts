@@ -81,7 +81,11 @@ export class UI_GameCenterMediator extends BaseUIMediator<UI_GameCenter> {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(appid, null, null, true, false, adid);
+        LTPlatform.instance.NavigateToApp(appid, null, null, true, false, adid).then(() => {
+            LTSDK.instance.ReportClickAd(adid, this._posId, true, '游戏中心');
+        }).catch(() => {
+            LTSDK.instance.ReportClickAd(adid, this._posId, false, '游戏中心');
+        });;
     }
     renderItem(index: number, item: UI_item_game | UI_item_gameBig) {
         let data = this.cacheAds[index];

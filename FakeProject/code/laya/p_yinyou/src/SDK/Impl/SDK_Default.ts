@@ -131,7 +131,10 @@ export default class SDK_Default implements ISDK {
         // }), true);
         if (this.checkState != ECheckState.InCheck) {
             //工作时时段屏蔽
-            let nowtime = this.severTime;
+            let nowtime = new Date();
+            if (this.severTime instanceof Date) {
+                nowtime = this.severTime;
+            }
             let date = nowtime.toISOString().substring(0, 10).replace(/\-/g, '');
             let h = nowtime.getHours();
             h = nowtime.getHours();
@@ -142,8 +145,7 @@ export default class SDK_Default implements ISDK {
             }
             //工作  时段  
             if (isWorkday && this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
-                console.log('工作', this.shieldHours, h);
-                this.checkState = ECheckState.Normal;
+                console.log('工作', this.shieldHours, h); 
                 this.payRate = 0;
                 this.navLevels = [];
             } else {

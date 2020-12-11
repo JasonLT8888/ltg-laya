@@ -61,6 +61,7 @@ export class View_NativeInPage {
 
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
+        this.ui.m_btn_clickad.onClick(this, this._OnClickAd);
         this.ui.m_btn_close.onClick(this, this.clickClose);
         this.ui.m_btn_pos.selectedIndex = btnPos;
 
