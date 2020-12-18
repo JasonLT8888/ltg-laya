@@ -69,10 +69,7 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
         this.rewardCount = 100;
         this.ui.m_label_getCoin.text = "+" + this.rewardCount;
         this.ui.m_coin.url = "";
-        LTPlatform.instance.ShowBannerAd();
-        if (!LTSDK.instance.isShielding && this.levelId >= 3) {
-            LTPlatform.instance.OpenGameBox();
-        }
+        LTPlatform.instance.ShowBannerAd(); 
     }
     clickNo() {
         if (MathEx.RandomRatio(LTSDK.instance.payRate) && this.canTouch) {
@@ -89,7 +86,9 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
     nextLevel() {
 
         console.error('todo =========== 处理下一关');
-
+        if (!LTSDK.instance.isShielding && this.levelId >= 3) {
+            LTPlatform.instance.OpenGameBox();
+        }
         this.Hide();
     }
 

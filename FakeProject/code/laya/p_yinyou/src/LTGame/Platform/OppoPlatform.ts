@@ -806,7 +806,7 @@ export default class OppoPlatform extends WXPlatform {
             });
         })
     }
-
+    canshowBox = false;
     createGameBox() {
         if (!this.platformData.gameBoxAdId) {
             return console.error("没有配置盒子广告ID");
@@ -817,14 +817,20 @@ export default class OppoPlatform extends WXPlatform {
                 adUnitId: this.platformData.gameBoxAdId
             });
             this.oppoBoxAd.onLoad(() => {
-                console.log('互推盒子加载成功')
+                console.log('互推盒子加载成功');
+                this.canshowBox = true;
             });
-            this.oppoBoxAd.onError(function (err) {
-                console.log(err)
+            this.oppoBoxAd.onError((err) => {
+                console.log(err);
+                this.canshowBox = false;
+
             })
-            this.oppoBoxAd.onClose(function () {
+            this.oppoBoxAd.onClose(() => {
+                this.canshowBox = false;
+                this.oppoBoxAd.load();
                 console.log('互推盒子九宫格广告关闭');
             });
+            this.oppoBoxAd.load();
         } else {
             console.log('快应用平台版本号低于1076，暂不支持互推盒子相关 API');
         }
@@ -835,11 +841,15 @@ export default class OppoPlatform extends WXPlatform {
             return;
         }
         if (this.oppoBoxAd) {
-            this.oppoBoxAd.load().then(() => {
+            if (this.canshowBox) {
                 this.oppoBoxAd.show();
-            }).catch(e => {
-                console.log(e);
-            });
+            } else {
+                this.oppoBoxAd.load().then(() => {
+                    this.oppoBoxAd.show();
+                }).catch(e => {
+                    console.log(e);
+                });
+            }
         }
         // else {
         //     this.oppoBoxAd.destroy();

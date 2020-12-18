@@ -56,8 +56,8 @@ export default class View_SideGames {
     }
 
     private _Init() {
-        if (LTPlatform.instance.platform == EPlatformType.TT) {
-            this.ui.m_ads.dispose();
+        if (LTPlatform.instance.platform == EPlatformType.TT || LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this.ui.m_ads.m_list.dispose();
             this.ui.m_ads.onClick(this, () => {
                 this.ui.m_red.visible = false;
                 LTPlatform.instance.OpenGameBox([]);
