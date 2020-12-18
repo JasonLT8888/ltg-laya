@@ -10,6 +10,7 @@ import { DateInfo } from "./SDK_CQ";
 import StringEx from "../../LTGame/LTUtils/StringEx";
 import GameData from "../../script/common/GameData";
 import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
+import md5 from "./../Libs/md5.js";
 
 export default class SDK_Default implements ISDK {
 
@@ -32,8 +33,11 @@ export default class SDK_Default implements ISDK {
     navLevels: number[];
     isNavEnable: boolean;
     token: string;
-
+    timeRub: number;
+    randomNum: string;
     Init(flg: string, channel: string, controlVersion: string, appid: string) {
+        this.timeRub = Date.now();
+        this.randomNum = Math.random().toString(36).substr(2, 8);
         this.isADConfigInited = true;
         this.isADEnable = false;
         this.isDelayClose = false;
@@ -48,7 +52,8 @@ export default class SDK_Default implements ISDK {
         this.controlVersion = controlVersion;
         this.appId = appid;
         if (StringEx.IsNullOrEmpty(CommonSaveData.instance.uid)) {
-            CommonSaveData.instance.uid = 'YT_' + Number(Math.random().toString().substr(4, 3) + Date.now()).toString(36);
+            let uuid = md5.hex_md5(`${this.appId}#${this.timeRub}#${this.randomNum}#43b49394197b65540979c7143da7c8a8`);
+            CommonSaveData.instance.uid = uuid;
             CommonSaveData.SaveToDisk();
         }
         this.uid = CommonSaveData.instance.uid;
@@ -145,7 +150,7 @@ export default class SDK_Default implements ISDK {
             }
             //工作  时段  
             if (isWorkday && this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
-                console.log('工作', this.shieldHours, h); 
+                console.log('工作', this.shieldHours, h);
                 this.payRate = 0;
                 this.navLevels = [];
             } else {
@@ -190,6 +195,7 @@ export default class SDK_Default implements ISDK {
     ReportLogin() {
 
     }
+    ReportDaily() { }
     /**查询周排名 
 * @param levelID 关卡
 * @param score 分数/时长

@@ -28,7 +28,8 @@ export default class OppoPlatform extends WXPlatform {
     recordManager: IRecordManager = new DefaultRecordManager();
     device: IDevice = new OppoDevice();
     systemInfo: any;
-
+    /**盒子广告 */
+    oppoBoxAd: any;
     /**
      * 是否支持直接跳转到其他小程序
      */
@@ -59,7 +60,7 @@ export default class OppoPlatform extends WXPlatform {
     protected _cacheVideoAD: boolean = false;
 
     protected _cacheOnShowHandle: Laya.Handler;
-
+    private noAdTime: number = 60;
     Init(platformData: LTPlatformData) {
         this._base = window["qg"];
         if (this._base == null) {
@@ -94,6 +95,7 @@ export default class OppoPlatform extends WXPlatform {
         }
 
         window["iplatform"] = this;
+
     }
 
     private async getSystemInfo() {
@@ -103,13 +105,15 @@ export default class OppoPlatform extends WXPlatform {
                 this.systemInfo = res;
                 console.log('systeminfo', this.systemInfo);
                 if (!this.safeArea) {
-                    this.safeArea = { top: res['notchHeight'], bottom: res['screenHeight'] - res['notchHeight'], left: 0, right: res['screenWidth'], height: res['screenHeight'], width: res['screenWidth'] }
+                    this.safeArea = { top: res['notchHeight'], bottom: res['screenHeight'], left: 0, right: res['screenWidth'], height: res['screenHeight'] - res['notchHeight'], width: res['screenWidth'] }
                 }
                 this._cacheScreenScale = this.systemInfo.screenWidth / Laya.stage.width;
                 console.log(this.safeArea);
             },
             fail: () => { },
-            complete: () => { }
+            complete: () => {
+                this.createGameBox();
+            }
         });
     }
     /**
@@ -119,6 +123,9 @@ export default class OppoPlatform extends WXPlatform {
         console.log('oppo上报数据', this.systemInfo);
         if (this.systemInfo && this.systemInfo.platformVersion >= 1060) {
             this._base.reportMonitor('game_scene', 0);
+        }
+        if (this.onLoginEnd != null) {
+            this.onLoginEnd.run();
         }
     }
 
@@ -145,7 +152,7 @@ export default class OppoPlatform extends WXPlatform {
                 this.onLoginEnd.run();
             }
         };
-        this._base.login(loginData);
+        // this._base.login(loginData);
     }
 
     protected _OnLoginSuccess(res: any) {
@@ -289,7 +296,9 @@ export default class OppoPlatform extends WXPlatform {
     }
 
     IsBannerAvaliable() {
-        return this._isBannerLoaded;
+        if (!LTSDK.instance.isShielding)
+            return true;
+        return this.noAdTime < 0;
     }
     IsVideoAvaliable() {
         return this._isVideoLoaded;
@@ -300,10 +309,20 @@ export default class OppoPlatform extends WXPlatform {
     IsNativeAvaliable() {
         return this._nativeAdLoaded;
     }
+    bannerTimer() {
+        this.noAdTime -= 1;
+        if (this.noAdTime < 0) {
+            Laya.timer.clear(this, this.bannerTimer);
+        }
+    }
     async ShowBannerAd() {
         // 先尝试展示普通banner
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
-            console.log('审核中');
+            console.log('banner 审核中');
+            return;
+        }
+        if (!this.IsBannerAvaliable()) {
+            console.log("banner 尚未准备好");
             return;
         }
         if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
@@ -767,11 +786,6 @@ export default class OppoPlatform extends WXPlatform {
             }
         );
     }
-
-    OpenGameBox(appIds: string[]) {
-
-        console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
-    }
     /**
      * @param appId oppo vivo传包名
      */
@@ -793,6 +807,45 @@ export default class OppoPlatform extends WXPlatform {
         })
     }
 
+    createGameBox() {
+        if (!this.platformData.gameBoxAdId) {
+            return console.error("没有配置盒子广告ID");
+        }
+
+        if (LTPlatform.instance.systemInfo.platformVersionCode >= 1076) {
+            this.oppoBoxAd = LTPlatform.instance.base.createGamePortalAd({
+                adUnitId: this.platformData.gameBoxAdId
+            });
+            this.oppoBoxAd.onLoad(() => {
+                console.log('互推盒子加载成功')
+            });
+            this.oppoBoxAd.onError(function (err) {
+                console.log(err)
+            })
+            this.oppoBoxAd.onClose(function () {
+                console.log('互推盒子九宫格广告关闭');
+            });
+        } else {
+            console.log('快应用平台版本号低于1076，暂不支持互推盒子相关 API');
+        }
+
+    }
+    OpenGameBox(appIds?: string[]) {
+        if (LTSDK.instance.checkState == ECheckState.InCheck) {
+            return;
+        }
+        if (this.oppoBoxAd) {
+            this.oppoBoxAd.load().then(() => {
+                this.oppoBoxAd.show();
+            }).catch(e => {
+                console.log(e);
+            });
+        }
+        // else {
+        //     this.oppoBoxAd.destroy();
+        //     this.createGameBox();
+        // }
+    }
 
 }
 export interface OppoAdData {

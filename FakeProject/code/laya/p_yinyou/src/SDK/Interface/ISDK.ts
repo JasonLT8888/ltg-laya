@@ -2,6 +2,27 @@ import SDKADManager from "../SDKADManager";
 import { ECheckState } from "../common/ECheckState";
 
 export interface ISDK {
+
+
+  /**
+   * config 代表游戏开关
+   * 用于控制常规交叉推广
+   */
+  isConfigEnable: boolean;
+
+  /**
+   * 游戏状态
+   */
+  checkState: ECheckState;
+
+  /**
+   * 程序APPID
+   */
+  appId: string;
+  /**游戏中心关卡 */
+  navLevels: number[];
+  /**是否支持导出 */
+  isNavEnable: boolean;
   /**
    * 误触概率 试用皮肤
    */
@@ -13,8 +34,17 @@ export interface ISDK {
   isShielding: boolean;
 
   /**
-   * 游戏唯一标识
+   * ad 代表 banner 开关
+   * 用于控制特殊操作,比如广告提拉等违规操作
    */
+  isADEnable: boolean;
+  /**
+   * 延迟关闭按钮
+   */
+  isDelayClose: boolean;
+  /**
+    * 游戏唯一标识
+    */
   flg: string;
 
   /**
@@ -25,7 +55,6 @@ export interface ISDK {
    * token
    */
   token: string;
-
   /**
    * 云控版本号
    */
@@ -42,14 +71,6 @@ export interface ISDK {
   adManager: SDKADManager;
 
   /**
-   * 程序APPID
-   */
-  appId: string;
-  /**游戏中心关卡 */
-  navLevels: number[];
-  /**是否支持导出 */
-  isNavEnable: boolean;
-  /**
    * 初始化sdk
    * @param flg 游戏唯一标识
    * @param channel 渠道号
@@ -63,27 +84,6 @@ export interface ISDK {
    * @param fromAppId 用户来源的appid，没有的情况下可以不传
    */
   Login(code: string, fromAppId: string);
-
-  /**
-   * ad 代表 banner 开关
-   * 用于控制特殊操作,比如广告提拉等违规操作
-   */
-  isADEnable: boolean;
-  /**
-   * 延迟关闭按钮
-   */
-  isDelayClose: boolean;
-
-  /**
-   * config 代表游戏开关
-   * 用于控制常规交叉推广
-   */
-  isConfigEnable: boolean;
-
-  /**
-   * 游戏状态
-   */
-  checkState: ECheckState;
 
 
   /**
@@ -142,4 +142,6 @@ export interface ISDK {
    * 上报 视频分享参数 
    * */
   reportShareInfo(videoId: string, shareId: string);
+  /**上报日活 */
+  ReportDaily();
 }

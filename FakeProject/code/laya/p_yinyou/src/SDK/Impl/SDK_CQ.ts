@@ -391,6 +391,7 @@ export default class SDK_CQ extends SDK_Default {
 
     private _OnLoginFailed(res: SDK.LoginResult) {
         console.error("SDK登录失败", this.appId, res);
+        this.ReportDaily();
         this.reportFromVideo();
     }
     /**上报视频来源用户*/
@@ -441,7 +442,23 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     public ReportDaily() {
-        console.log("上报日活 功能暂未实现");
+        let fappid = LTPlatform.instance.GetFromAppId();
+        let channel = fappid ? fappid : CommonSaveData.instance.channelId;
+        let sendData = {
+            appid: this.appId,
+            channel: channel,
+            timeRub: this.timeRub,
+            randomNum: this.randomNum,
+            fappid: fappid,
+            ttId: CommonSaveData.instance.uid
+        };
+        console.log(sendData);
+        LTHttp.Send(this._headPrefix + "/api/vus/user/repost", Laya.Handler.create(this, () => {
+            console.log('上报日活成功');
+        }), Laya.Handler.create(this, (res) => {
+            console.log(" 上报日活失败", res);
+        }), true, sendData);
+
     }
 
 }

@@ -10,6 +10,7 @@ import LTUI from "../LTUI";
 import { UI_GameCenterMediator } from "./UI_GameCenterMediator";
 import { LTG_Com_RollData } from "../../../LTG_CommonUI/Data/LTG_Com_RollData";
 import { RollConfig } from "../../../script/config/RollConfig";
+import MathEx from "../../LTUtils/MathEx";
 
 
 
@@ -28,8 +29,10 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
     }
     levelId: number = 1;
     rewardCount: number = 0;
+    private canTouch: boolean = true;
     _OnShow() {
         super._OnShow();
+        this.canTouch = true;
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
             this.ui.m_btn_ad.visible = false;
             if (this.ui.m___endSG) {
@@ -67,8 +70,15 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
         this.ui.m_label_getCoin.text = "+" + this.rewardCount;
         this.ui.m_coin.url = "";
         LTPlatform.instance.ShowBannerAd();
+        if (!LTSDK.instance.isShielding && this.levelId >= 3) {
+            LTPlatform.instance.OpenGameBox();
+        }
     }
     clickNo() {
+        if (MathEx.RandomRatio(LTSDK.instance.payRate) && this.canTouch) {
+            this.canTouch = false;
+            return this.doubleReward();
+        }
         GameData.instance.coinCount += this.rewardCount;
         GameData.SaveToDisk();
         LTUI.Toast(`获得金币+${this.rewardCount}`);
