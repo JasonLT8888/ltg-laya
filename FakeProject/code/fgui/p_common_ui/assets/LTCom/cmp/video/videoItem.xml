@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="211,270">
+  <displayList>
+    <image id="n17_e410" name="n17" src="cx1n7z" fileName="img/视频排行榜/sp_mingciputongbg0.png" xy="0,0" size="211,236"/>
+    <image id="n18_e410" name="n18" src="cx1n80" fileName="img/视频排行榜/sp_mingciputongbg.png" xy="6,6"/>
+    <component id="n11_e410" name="icon" src="cx1n7q" fileName="cmp/iconVdieo.xml" xy="6,8" size="199,174">
+      <relation target="" sidePair="width-width,height-height"/>
+      <property target="icon" propertyId="1" value=""/>
+    </component>
+    <image id="n16_e410" name="n16" src="cx1n7t" fileName="img/视频排行榜/sp_bofang.png" xy="60,53"/>
+    <image id="n12_e410" name="n12" src="cx1n7r" fileName="img/视频排行榜/sp_aixin.png" xy="50,187"/>
+    <text id="n15_e410" name="nickname" xy="0,237" size="211,31" font="DengXian" fontSize="22" color="#5ce409" align="center" vAlign="middle" autoSize="none" bold="true" text="奥特"/>
+    <text id="n14_e410" name="digs" xy="86,182" size="84,39" font="DengXian" fontSize="30" color="#ef0506" align="center" vAlign="middle" autoSize="none" bold="true" text="1020"/>
+  </displayList>
+</component>
