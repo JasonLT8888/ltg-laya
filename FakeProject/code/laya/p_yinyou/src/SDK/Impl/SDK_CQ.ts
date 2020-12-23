@@ -94,8 +94,7 @@ export default class SDK_CQ extends SDK_Default {
 
 
 
-    private onGetAdlist(res) {
-        console.log('广告信息', res);
+    private onGetAdlist(res) { 
         let adJson = JSON.parse(res);
         if (adJson.code == 1) {
             console.log("拉取到广告信息", adJson.data.length, "条");

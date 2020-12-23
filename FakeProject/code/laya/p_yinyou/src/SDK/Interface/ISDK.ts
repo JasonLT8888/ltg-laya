@@ -84,8 +84,10 @@ export interface ISDK {
    * @param fromAppId 用户来源的appid，没有的情况下可以不传
    */
   Login(code: string, fromAppId: string);
-
-
+  /**
+   * 获取token
+   */
+  getToken(): Promise<string>;
   /**
    * 请求远程开关信息
    */

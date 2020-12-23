@@ -15,6 +15,7 @@ import { LTG_Com_EggWallData } from "../../LTG_CommonUI/Data/LTG_Com_EggWallData
 import { GameConst } from "../config/GameConst";
 import { LTG_Com_UnlockItemData } from "../../LTG_CommonUI/Data/LTG_Com_UnlockItemData";
 import { RewardCodeConfig } from "../config/RewardCodeConfig";
+import { LTG_Com_VideoListData } from "../../LTG_CommonUI/Data/LTG_Com_VideoListData";
 
 class UIDemoData {
 
@@ -113,6 +114,13 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         new UIDemoData("彩蛋墙", () => {
             let data = new LTG_Com_EggWallData();
             data.onUnlocked = Laya.Handler.create(null, (rewardCode: number, rewardValue: number) => {
+
+            }, null, false);
+            data.Send();
+        }),
+        new UIDemoData("视频墙", () => {
+            let data = new LTG_Com_VideoListData();
+            data.onShareVideo = Laya.Handler.create(null, (rewardCode: number, rewardValue: number) => {
 
             }, null, false);
             data.Send();

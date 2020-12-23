@@ -62,17 +62,26 @@ export default class SDK_Default implements ISDK {
         this.adManager = new SDKADManager();
         console.log("SDK:Init", this);
     }
-    public getToken() {
-        let sendData = {
-            appid: LTPlatform.instance.platformData.appId
-        };
-        LTHttp.Send('https://games.api.gugudang.com//api/get/games/token', Laya.Handler.create(this, (res) => {
-            console.log(res);
-            res = JSON.parse(res);
-            if (res && res.code == 0) {
-                this.token = res.data.data.access_token;
+    public getToken(): Promise<string> { 
+        return new Promise<string>((resolve, rej) => {
+            if (this.token) {
+                resolve(this.token);
+            } else {
+                let sendData = {
+                    appid: LTPlatform.instance.platformData.appId
+                };
+                LTHttp.Send('https://games.api.gugudang.com//api/get/games/token', Laya.Handler.create(this, (res) => {
+                    console.log(res);
+                    res = JSON.parse(res);
+                    if (res && res.code == 0) {
+                        this.token = res.data.data.access_token;
+                        resolve(this.token);
+                    } else {
+                        rej(null);
+                    }
+                }), null, true, sendData);
             }
-        }), null, true, sendData);
+        })
     }
     /**CDN 节假日信息配置 年底需更新次年数据 */
     RequestRemoteDateInfo() {
