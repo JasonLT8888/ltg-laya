@@ -15,7 +15,7 @@ import md5 from "./../Libs/md5.js";
 export default class SDK_Default implements ISDK {
 
     shieldHours: string[];
-    severTime: Date;
+    severTime: string;
     isDelayClose: boolean;
     payRate: number;
     checkState: ECheckState;
@@ -57,12 +57,12 @@ export default class SDK_Default implements ISDK {
             CommonSaveData.SaveToDisk();
         }
         this.uid = CommonSaveData.instance.uid;
-        this.severTime = new Date();
+        this.severTime = "";
         this.shieldHours = [];
         this.adManager = new SDKADManager();
         console.log("SDK:Init", this);
     }
-    public getToken(): Promise<string> { 
+    public getToken(): Promise<string> {
         return new Promise<string>((resolve, rej) => {
             if (this.token) {
                 resolve(this.token);
@@ -85,7 +85,7 @@ export default class SDK_Default implements ISDK {
     }
     /**CDN 节假日信息配置 年底需更新次年数据 */
     RequestRemoteDateInfo() {
-        LTHttp.Send(`https://file.gugudang.com/res/down/public/configs/DateInfo.json`, Laya.Handler.create(this, this.onGetDatesInfo),
+        LTHttp.Send(`https://file.gugudang.com/res/down/public/configs/Holiday.json`, Laya.Handler.create(this, this.onGetDatesInfo),
             Laya.Handler.create(this, this.onGetDatesError), true);
     }
     onGetDatesError(res: string) {
@@ -129,49 +129,34 @@ export default class SDK_Default implements ISDK {
 
     }
 
-    protected _RequestCheckState() {
-        // if (LTRespackManager.instance.baseUrl == null) {
-        //     console.log("无cdn路径,跳过检测版本信息");
-        //     return;
-        // }
-        console.log('审核状态由重庆后台配置', `审核状态:${ECheckState[this.checkState]}`);
-        // let packConfigUrl = LTRespackManager.instance.baseUrl + "res/config/PackConst.json";
-        // LTHttp.Send(packConfigUrl, Laya.Handler.create(null, (res) => {
-        //     let parseData = JSON.parse(res);
-        //     this.checkState = parseData['check_type'];
-        //     console.log("检查状态更新", this.checkState);
-        // }), Laya.Handler.create(null, (res) => {
-        //     console.log("获取版本状态失败", res);
-        // }), true);
+    protected _RequestCheckState() { 
+        console.log('审核状态由重庆后台配置', `审核状态:${ECheckState[this.checkState]}`); 
         if (this.checkState != ECheckState.InCheck) {
-            //工作时时段屏蔽
-            let nowtime = new Date();
-            if (this.severTime instanceof Date) {
-                nowtime = this.severTime;
-            }
-            let date = nowtime.toISOString().substring(0, 10).replace(/\-/g, '');
-            let h = nowtime.getHours();
-            h = nowtime.getHours();
+            //工作时时段屏蔽 
+            let date = this.severTime.substring(0, 10).replace(/\-/g, '');
+            let h = parseInt(this.severTime.substring(12, 2));
             let today = this.dateInfo.filter(e => e.dayStr == date);
-            let isWorkday = true;
+            let isHoliday = false;
             if (today && today.length) {
-                isWorkday = today[0].type == 0;//type：0 工作日 1 周末  2 节假日 
+                isHoliday = today[0].type == 1;//type：0 工作日 1 周末&节假日 
             }
-            //工作  时段  
-            if (isWorkday && this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
-                console.log('工作', this.shieldHours, h);
+
+            if (isHoliday) {
+                console.log('假期休息', date, h);
+            } else {
+                if (this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
+                    console.log('工作', this.shieldHours, h);
+                    this.checkState = ECheckState.Normal;
+                    this.payRate = 0;
+                }
+            }
+            if (this.isShielding) {
+                //屏蔽洗钱 
                 this.payRate = 0;
                 this.navLevels = [];
-            } else {
-                console.log('休息', date, h);
             }
+            console.log(`${this.appId}---云控版本为:`, this.controlVersion, `游戏中心Levels:${this.navLevels}`, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         }
-        if (this.isShielding) {
-            //屏蔽洗钱 
-            this.payRate = 0;
-            this.navLevels = [];
-        }
-        console.log(`${this.appId}---云控版本为:`, this.controlVersion, `游戏中心Levels:${this.navLevels}`, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
     Login(code: string, fromAppId: string) {
         console.log("SDK:Login", code, fromAppId);

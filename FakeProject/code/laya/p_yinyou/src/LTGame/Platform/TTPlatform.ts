@@ -291,13 +291,13 @@ export default class TTPlatform extends WXPlatform {
     public followOfficialAccount(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             this.RecordEvent('follow', { id: 1 });
-
-            if (this.loginCode || GameConst.data.officalAccountEnable) {
+            if (this.isDouyin && this.loginCode && GameConst.data.officalAccountEnable) {
+                //只有抖音支持
                 this.base.openAwemeUserProfile();
             } else {
-                this.navigateToVideo(GameConst.data.officalVideoId);
+                this.navigateToVideo(this.OfficalVideoId);
             }
-            //今日头条端 暂时没用
+            //今日头条端 暂时没用 
             // this.base.followOfficialAccount({
             //     success(res) {
             //         if (res.errCode === 0) {
@@ -310,6 +310,16 @@ export default class TTPlatform extends WXPlatform {
             // });
 
         })
+    }
+    get OfficalVideoId(): string {
+        switch (this.systemInfo.appName) {
+            case EHostApp.Douyin:
+                return GameConst.data.douyinVideoId;
+            case EHostApp.Toutiao:
+                return GameConst.data.toutiaoVideoId;
+            default:
+                return "";
+        }
     }
     public checkFollowState(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
@@ -403,4 +413,12 @@ export interface VideoInfo {
     user_name: string;
     video_id: string;
     video_tag: string;
+}
+export enum EHostApp {
+    Douyin = "Douyin",
+    XiGua = "XiGua",
+    Toutiao = "Toutiao",
+    live_stream = "live_stream",//火"山
+    news_article_lite = "news_article_lite",
+    douyin_lite = "douyin_lite",
 }

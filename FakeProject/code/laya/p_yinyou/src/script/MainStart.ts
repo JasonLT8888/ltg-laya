@@ -36,7 +36,7 @@ export default class MainStart extends LTStart {
             case EPlatformType.TT:
                 this._gameVersion = "v0.0.2";
                 this._resVersion = 'v0.0.2';
-                platformData.appId = "ttd60ba0b64931e10f";
+                platformData.appId = "tt738a0537eca00dfd";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
