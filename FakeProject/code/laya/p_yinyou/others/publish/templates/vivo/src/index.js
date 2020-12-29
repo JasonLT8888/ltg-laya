@@ -14,6 +14,5 @@ require("./libs/laya.d3.js")//-----libs-end-------
 require("./libs/ltgame/generator.js");
 require("./libs/ltgame/promise.js");
 require("./libs/fairygui/fairygui.js");
-require("./libs/laya.physics3D.js");
-require("./libs/p2.js");
+require("./libs/OimoPhysics.min.js");
 require("./js/bundle.js");

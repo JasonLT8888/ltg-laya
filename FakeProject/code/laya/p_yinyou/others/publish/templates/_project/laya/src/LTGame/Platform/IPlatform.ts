@@ -186,7 +186,7 @@ export default interface IPlatform {
     /**
      * 打开游戏盒子
      */
-    OpenGameBox(appIds: string[]);
+    OpenGameBox(appIds?: string[]);
 
 
     /**

@@ -8,7 +8,7 @@ function loadpack() {
 	var loaded_package = 0;
 	for (let i = 0; i < subpackages.length; i++) {
 		qg.loadSubpackage({
-			name: subpackages[i],
+			name: subpackages[i].name,
 			success: function (res) {
 				console.log("分包加载完成", `${1 + i}/${subpackages.length}`);
 

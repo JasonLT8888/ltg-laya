@@ -18,7 +18,7 @@ export default class View_SideGames {
             tagUI.dispose();
             return null;
         }
-        if (!LTSDK.instance.isNavEnable) {
+        if (!LTSDK.instance.isADEnable) {
             tagUI.dispose();
             return null;
         }
@@ -56,8 +56,8 @@ export default class View_SideGames {
     }
 
     private _Init() {
-        if (LTPlatform.instance.platform == EPlatformType.TT) {
-            this.ui.m_ads.dispose();
+        if (LTPlatform.instance.platform == EPlatformType.TT || LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this.ui.m_ads.m_list.dispose();
             this.ui.m_ads.onClick(this, () => {
                 this.ui.m_red.visible = false;
                 LTPlatform.instance.OpenGameBox([]);
@@ -133,7 +133,6 @@ export default class View_SideGames {
     private _OnClickGameItem(item: UI_view_item_game) {
         let data = this._cacheAds[item.data as number];
         let navId = data.ad_appid;
-        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '更多游戏');
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:
@@ -142,7 +141,12 @@ export default class View_SideGames {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(navId, data.ad_path, null, true, false, data.ad_id);
+        LTPlatform.instance.NavigateToApp(navId, data.ad_path, null, true, false, data.ad_id).then(() => {
+            LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '更多游戏');
+        }).catch(() => {
+            LTSDK.instance.ReportClickAd(data.ad_id, this._posId, false, '更多游戏');
+        });;
     }
+
 
 }
