@@ -57,9 +57,7 @@ export default class MainStart extends LTStart {
                 platformData.appId = "30302891";
                 platformData.appKey = "6fyGQ6x2pzk8W84c0s04ows00";
                 platformData.bannerId = "195984";
-                platformData.rewardVideoId = "195985";
-                platformData.nativeBannerIds = ['195994', '195995', '195998'];
-                platformData.nativeIconIds = ['195986', '196003'];
+                platformData.rewardVideoId = "195985"; 
                 platformData.nativeinpageIds = ['195999', '196002', '196003'];
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;

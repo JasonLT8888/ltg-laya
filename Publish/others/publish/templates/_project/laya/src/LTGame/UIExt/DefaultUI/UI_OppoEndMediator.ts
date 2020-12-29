@@ -7,6 +7,9 @@ import LTPlatform from "../../Platform/LTPlatform";
 import { EPlatformType } from "../../Platform/EPlatformType";
 import GameData from "../../../script/common/GameData";
 import LTUI from "../LTUI";
+import { UI_GameCenterMediator } from "./UI_GameCenterMediator";
+import { LTG_Com_RollData } from "../../../LTG_CommonUI/Data/LTG_Com_RollData";
+import { RollConfig } from "../../../script/config/RollConfig";
 
 
 
@@ -23,7 +26,8 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
         }
         return this._instance;
     }
-
+    levelId: number = 1;
+    rewardCount: number = 0;
     _OnShow() {
         super._OnShow();
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
@@ -46,32 +50,37 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
         this.ui.m_btn_no.onClick(this, this.clickNo)
         this.ui.m_btn_no.m_bg.visible = LTSDK.instance.checkState == ECheckState.InCheck;
         this.ui.m_btn_next.onClick(this, this.nextLevel);
-        this.ui.m_btn_gift.onClick(this, () => {
-        });
+        this.ui.m_btn_gift.onClick(this, this.showRoll);
         this.ui.m_btn_ad.onClick(this, () => {
             if (this.ui.m___nativeinpage) {
                 this.ui.m___nativeinpage['ClickAd']();
             }
         });
-        if ((LTPlatform.instance.platform == EPlatformType.Vivo || LTPlatform.instance.platform == EPlatformType.Oppo)) {// && GameData.instance.levelId % 2 == 0) {
+        console.error('这里需要改关卡id');
+        this.levelId = GameData.instance.levelId;
+        if ((LTPlatform.instance.platform == EPlatformType.Vivo || LTPlatform.instance.platform == EPlatformType.Oppo) && this.levelId % 3 == 0) {
             console.error('每两关触发');
             (LTPlatform.instance as any).createShortcut();
         }
-        this.ui.m_label_getCoin.text = "+" + 'LevelConfig.data[GameData.instance.levelId].GetCoin';
-        this.ui.m_coin.url = '';
-        console.error('处理金币图标和奖励数据');
+        console.error('todo 这里设置==================  金币图标和奖励数据');
+        this.rewardCount = 100;
+        this.ui.m_label_getCoin.text = "+" + this.rewardCount;
+        this.ui.m_coin.url = "";
+        LTPlatform.instance.ShowBannerAd();
     }
     clickNo() {
-        // GameData.instance.coinCount += LevelConfig.data[GameData.instance.levelId].GetCoin;
+        GameData.instance.coinCount += this.rewardCount;
+        GameData.SaveToDisk();
+        LTUI.Toast(`获得金币+${this.rewardCount}`);
         console.error('处理不领奖励');
         this.changePage();
     }
     //点击下一关
     nextLevel() {
 
-        console.error('处理下一关');
+        console.error('todo =========== 处理下一关');
 
-
+        this.Hide();
     }
 
     //双倍领取
@@ -79,24 +88,17 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             console.error('处理奖励*2');
-
+            GameData.instance.coinCount += (this.rewardCount * 2);
+            GameData.SaveToDisk();
+            LTUI.Toast(`获得金币+${this.rewardCount}`);
             this.changePage();
         } else {
             LTUI.Toast("跳过视频，未获得奖励");
         }
         GameData.SaveToDisk();
-        // LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
-        //     //TODO获得双倍奖励
-        //     GameData.instance.coinCount += LevelConfig.data[GameData.instance.levelId].GetCoin;
-        //     GameData.SaveToDisk();
-        //     this._OnClickNextLevel();
-        // }), Laya.Handler.create(this, () => {
-        //     LTUI.Toast("跳过视频，未获得奖励");
-        //     GameData.SaveToDisk();
-        // }));
     }
     changePage() {
-        if (LTSDK.instance.checkState == ECheckState.InCheck) {
+        if (LTSDK.instance.checkState == ECheckState.InCheck || !LTSDK.instance.isNavEnable) {
             this.nextLevel();
         } else {
             this.ui.m_state.selectedIndex = 1;
@@ -106,8 +108,29 @@ export class UI_OppoEndMediator extends BaseUIMediator<UI_OppoEnd> {
             if (this.ui.m___nativeinpage) {
                 this.ui.m___nativeinpage.visible = false;
             }
+            if (LTSDK.instance.navLevels.indexOf(this.levelId) > -1) {
+                UI_GameCenterMediator.instance.Show(() => {
+                    this.nextLevel();
+                });
+            }
             this.ui.m_btn_ad.visible = false;
         }
     }
-    protected _OnHide() { }
+    showRoll() {
+        let data = new LTG_Com_RollData();
+        data.onRolled = Laya.Handler.create(this, (config: RollConfig.config) => {
+            GameData.instance.coinCount += config.reward_value;
+            GameData.SaveToDisk();
+            LTUI.Toast('获得金币' + config.reward_value);
+        });
+        data.onRolled = Laya.Handler.create(this, (config: RollConfig.config) => {
+            GameData.instance.coinCount += config.reward_value;
+            GameData.SaveToDisk();
+            LTUI.Toast('获得金币' + config.reward_value);
+        });
+        data.Send();
+    }
+    protected _OnHide() {
+        LTPlatform.instance.HideBannerAd();
+    }
 }

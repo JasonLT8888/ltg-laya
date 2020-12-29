@@ -118,9 +118,6 @@ export class SubpackHelper {
                 case "oppo":
                     gameJsName = "main";
                     break;
-                case "tt":
-                    gameJsName = "";
-                    break;
                 default:
                     gameJsName = "game";
                     break;

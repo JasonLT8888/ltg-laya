@@ -111,6 +111,7 @@ export default class View_WxSideGames {
     clickItem(index: number) {
         let data = this._cacheAds[this.showingIndexs[index]];;
         console.log(data.ad_name);
+        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true);
         LTPlatform.instance.NavigateToApp(data.ad_appid, data.ad_path, null, true, false, data.ad_id);
 
     }
