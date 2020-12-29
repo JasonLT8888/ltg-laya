@@ -291,6 +291,7 @@
     <image id="cx1n86" name="sp_zuixinshipin.png" path="/img/视频排行榜/"/>
     <image id="cx1n87" name="sp_chuangjianshipin.png" path="/img/视频排行榜/"/>
     <image id="cx1n88" name="视频排行榜.jpg" path="/img/视频排行榜/"/>
+    <image id="q96u89" name="bg_s.png" path="/img/" scale="tile"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

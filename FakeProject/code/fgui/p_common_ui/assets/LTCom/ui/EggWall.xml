@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImageLayer="1">
   <displayList>
-    <image id="n4_8gel" name="img_bg" src="8gel2i" fileName="img/bg.png" xy="0,0">
+    <image id="n4_8gel" name="img_bg" src="q96u89" fileName="img/bg_s.png" xy="0,-220" size="750,1554">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
     <component id="n15_8gel" name="img_grow" src="8gel2v" fileName="cmp/view_grow_01.xml" xy="117,140">

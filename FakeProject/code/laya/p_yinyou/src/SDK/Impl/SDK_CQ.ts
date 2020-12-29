@@ -94,7 +94,7 @@ export default class SDK_CQ extends SDK_Default {
 
 
 
-    private onGetAdlist(res) { 
+    private onGetAdlist(res) {
         let adJson = JSON.parse(res);
         if (adJson.code == 1) {
             console.log("拉取到广告信息", adJson.data.length, "条");
@@ -324,7 +324,7 @@ export default class SDK_CQ extends SDK_Default {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
                 if (result['nowtime']) {
-                    this.severTime = new Date(result['nowtime'].toString());
+                    this.severTime = result['nowtime'];
                 }
                 if (result['shieldHours']) {
                     this.shieldHours = result['shieldHours'].split(',');

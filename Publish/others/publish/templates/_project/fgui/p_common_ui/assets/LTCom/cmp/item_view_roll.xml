@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="150,158">
   <displayList>
-    <text id="n15_8gel" name="text_name" xy="16,0" size="123,39" fontSize="30" color="#ffffff" align="center" vAlign="middle" text="奖励名字">
+    <text id="n15_8gel" name="text_name" xy="16,0" size="125,39" fontSize="30" color="#ffffff" align="center" vAlign="middle" text="奖励名字">
       <relation target="" sidePair="center-center"/>
     </text>
-    <loader id="n16_8gel" name="loader_icon" xy="0,8" size="150,150" url="ui://hbq27te38gel3z" align="center" vAlign="middle" fill="scale"/>
+    <loader id="n16_8gel" name="loader_icon" xy="0,8" size="150,150" url="ui://hbq27te38gel3z" align="center" vAlign="middle" shrinkOnly="true"/>
   </displayList>
 </component>

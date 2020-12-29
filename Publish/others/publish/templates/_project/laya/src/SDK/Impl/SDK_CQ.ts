@@ -120,6 +120,9 @@ export default class SDK_CQ extends SDK_Default {
                     }
                 }
                 // 加入广告控制器
+                adList = adList.sort((a, b) => {
+                    return b.ad_count - a.ad_count;
+                });
                 this.adManager.InitADs(fakePosId, adList);
             }
 

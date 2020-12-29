@@ -39,8 +39,8 @@ export default class LTMain {
                 if (window['kwaigame']) {
                     var stage = Laya.stage;
                     var info = this.getAdapterInfo({
-                        width: 750, height: 1334,
-                        scaleMode: Laya.Stage.SCALE_FIXED_AUTO
+                        width: this._mainLogic.designWidth, height: this._mainLogic.designHeight,
+                        scaleMode: Laya.Stage.SCALE_EXACTFIT
                     });
                     stage.designWidth = info.w;
                     stage.designHeight = info.h;
@@ -56,7 +56,10 @@ export default class LTMain {
                 this._mainLogic.InitGame();
             }));
 
+
     }
+
+
     //ks
     getAdapterInfo(config) {
         let scaleX = 1;
@@ -74,10 +77,6 @@ export default class LTMain {
 
             case "fixedwidth":
                 scaleX = scaleY = vw / w;
-                break;
-            default:
-                scaleX = vw / w;
-                scaleY = vh / h;
                 break;
         }
         return {

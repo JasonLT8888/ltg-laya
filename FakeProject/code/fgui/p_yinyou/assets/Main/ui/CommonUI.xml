@@ -59,9 +59,12 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="限定皮肤"/>
     </component>
-    <component id="n15_f9sr" name="btn_bonus" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="86,1071">
+    <component id="n15_f9sr" name="btn_bonus" src="cc4x3" fileName="cmp/btn_text_yellow.xml" xy="436,1070">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button title="九宫宝箱"/>
     </component>
+    <graph id="n16_b9jz" name="__sidegames" xy="0,730" size="100,100" type="rect">
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </graph>
   </displayList>
 </component>

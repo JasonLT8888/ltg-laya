@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="100,20" pivot="0.5,0.5" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <loader id="n3_swh2" name="bg" xy="0,0" size="100,20" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <loader id="n4_swh2" name="icon" xy="25,-5" size="50,30" align="center" vAlign="middle" autoSize="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <text id="n5_msd2" name="title" xy="0,0" size="100,20" fontSize="12" align="center" vAlign="middle" autoSize="none" underline="true" text="">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+  <customProperty target="bg" propertyId="1" label="背景"/>
+  <customProperty target="icon" propertyId="1" label="图标"/>
+</component>

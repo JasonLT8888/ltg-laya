@@ -6,8 +6,8 @@
       <gearDisplay controller="show" pages="0"/>
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="0,-531" pivot="0.5,0.5">
-      <gearXY controller="show" pages="1,0" values="-561,-531|0,-531" tween="true"/>
+    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="0,-365" pivot="0.5,0.5">
+      <gearXY controller="show" pages="1,0" values="-561,-365|0,-365" tween="true"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <image id="n15_gsbn" name="red" src="r1gt73" fileName="img/ad_res/res/sp_tips.png" xy="68,-24" pivot="0.3,1">

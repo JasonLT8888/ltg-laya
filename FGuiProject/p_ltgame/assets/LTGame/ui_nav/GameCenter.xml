@@ -44,6 +44,6 @@
   </displayList>
   <transition name="anim_enter">
     <item time="0" type="Scale" target="n15_r3yg" value="0,0"/>
-    <item time="48" type="Scale" target="n15_r3yg" tween="true" startValue="0,0" endValue="0,0" duration="24" ease="Linear"/>
+    <item time="48" type="Scale" target="n15_r3yg" tween="true" startValue="0,0" endValue="1,1" duration="24" ease="Linear"/>
   </transition>
 </component>
