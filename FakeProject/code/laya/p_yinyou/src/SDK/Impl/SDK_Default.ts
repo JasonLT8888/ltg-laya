@@ -139,8 +139,7 @@ export default class SDK_Default implements ISDK {
             let isHoliday = false;
             if (today && today.length) {
                 isHoliday = today[0].type == 1;//type：0 工作日 1 周末&节假日 
-            }
-
+            } 
             if (isHoliday) {
                 console.log('假期休息', date, h);
             } else {
