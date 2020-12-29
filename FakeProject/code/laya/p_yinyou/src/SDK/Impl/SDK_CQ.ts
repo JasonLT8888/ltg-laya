@@ -1,17 +1,15 @@
 import { CommonEventId } from "../../LTGame/Commom/CommonEventId";
+import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 import LTHttp from "../../LTGame/Net/LTHttp";
 import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { ShareInfo } from "../../LTGame/Platform/ShareInfo";
 import ShareManager from "../../LTGame/Platform/ShareManager";
+import TTPlatform from "../../LTGame/Platform/TTPlatform";
 import { ECheckState } from "../common/ECheckState";
+import LTSDK from "../LTSDK";
 import SDKADManager from "../SDKADManager";
 import SDK_Default from "./SDK_Default";
-import GameData from "../../script/common/GameData";
-import TTPlatform from "../../LTGame/Platform/TTPlatform";
-import LTSDK from "../LTSDK";
-import FakeAdDefine from "../common/FakeAdDefine";
-import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
 export default class SDK_CQ extends SDK_Default {
 
@@ -96,8 +94,7 @@ export default class SDK_CQ extends SDK_Default {
 
 
 
-    private onGetAdlist(res) {
-        console.log('广告信息', res);
+    private onGetAdlist(res) { 
         let adJson = JSON.parse(res);
         if (adJson.code == 1) {
             console.log("拉取到广告信息", adJson.data.length, "条");
@@ -304,13 +301,13 @@ export default class SDK_CQ extends SDK_Default {
                     this.payRate = parseInt(result['payRate']);
                 }
                 if (result['isDelayClose']) {
-                    this.isDelayClose = parseInt(result['isDelayClose']) == 1;
+                    this.isDelayClose = (result['isDelayClose']) == "1";
                 }
                 if (result['isShielding']) {
-                    this.isShielding = 1 == parseInt(result['isShielding']);
+                    this.isShielding = "1" == (result['isShielding']);
                 }
                 if (result["isADEnable"]) {
-                    this.isADEnable = (1 == parseInt(result["isADEnable"]));
+                    this.isADEnable = "1" == (result["isADEnable"]);
                 }
                 if (result['isNavEnable']) {
                     this.isNavEnable = result['isNavEnable'] == '1';
@@ -327,7 +324,7 @@ export default class SDK_CQ extends SDK_Default {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
                 if (result['nowtime']) {
-                    this.severTime = new Date(result['nowtime']);
+                    this.severTime = new Date(result['nowtime'].toString());
                 }
                 if (result['shieldHours']) {
                     this.shieldHours = result['shieldHours'].split(',');
@@ -393,6 +390,7 @@ export default class SDK_CQ extends SDK_Default {
 
     private _OnLoginFailed(res: SDK.LoginResult) {
         console.error("SDK登录失败", this.appId, res);
+        this.ReportDaily();
         this.reportFromVideo();
     }
     /**上报视频来源用户*/
@@ -443,7 +441,23 @@ export default class SDK_CQ extends SDK_Default {
     }
 
     public ReportDaily() {
-        console.log("上报日活 功能暂未实现");
+        let fappid = LTPlatform.instance.GetFromAppId();
+        let channel = fappid ? fappid : CommonSaveData.instance.channelId;
+        let sendData = {
+            appid: this.appId,
+            channel: channel,
+            timeRub: this.timeRub,
+            randomNum: this.randomNum,
+            fappid: fappid,
+            ttId: CommonSaveData.instance.uid
+        };
+        console.log(sendData);
+        LTHttp.Send(this._headPrefix + "/api/vus/user/repost", Laya.Handler.create(this, () => {
+            console.log('上报日活成功');
+        }), Laya.Handler.create(this, (res) => {
+            console.log(" 上报日活失败", res);
+        }), true, sendData);
+
     }
 
 }

@@ -14,6 +14,7 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
 import CommonSaveData from "../Commom/CommonSaveData";
+import { GameConst } from "../../script/config/GameConst";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -290,10 +291,13 @@ export default class TTPlatform extends WXPlatform {
     public followOfficialAccount(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             this.RecordEvent('follow', { id: 1 });
-            this.base.openAwemeUserProfile(); 
-            console.error("如果后台没有绑定官方抖音号，可以跳转给小军团:)");
-            this.navigateToVideo("13104c440c2b1262015345120e7a176d5f502b450e7a406356524d450b7e416155534c470a72");
-            //今日头条端 暂时没用
+            if (this.isDouyin && this.loginCode && GameConst.data.officalAccountEnable) {
+                //只有抖音支持
+                this.base.openAwemeUserProfile();
+            } else {
+                this.navigateToVideo(this.OfficalVideoId);
+            }
+            //今日头条端 暂时没用 
             // this.base.followOfficialAccount({
             //     success(res) {
             //         if (res.errCode === 0) {
@@ -306,6 +310,16 @@ export default class TTPlatform extends WXPlatform {
             // });
 
         })
+    }
+    get OfficalVideoId(): string {
+        switch (this.systemInfo.appName) {
+            case EHostApp.Douyin:
+                return GameConst.data.douyinVideoId;
+            case EHostApp.Toutiao:
+                return GameConst.data.toutiaoVideoId;
+            default:
+                return "";
+        }
     }
     public checkFollowState(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
@@ -323,7 +337,7 @@ export default class TTPlatform extends WXPlatform {
     }
     public addShareListener() {
         console.log('监听分享 ');
-        if(CommonSaveData.instance.channelId=='own'){
+        if (CommonSaveData.instance.channelId == 'own') {
             console.log('无效 channel')
             return;
         }
@@ -399,4 +413,12 @@ export interface VideoInfo {
     user_name: string;
     video_id: string;
     video_tag: string;
+}
+export enum EHostApp {
+    Douyin = "Douyin",
+    XiGua = "XiGua",
+    Toutiao = "Toutiao",
+    live_stream = "live_stream",//火"山
+    news_article_lite = "news_article_lite",
+    douyin_lite = "douyin_lite",
 }

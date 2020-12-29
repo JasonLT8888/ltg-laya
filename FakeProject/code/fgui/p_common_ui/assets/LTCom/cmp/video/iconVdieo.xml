@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="162,186" mask="n4_e410">
+  <displayList>
+    <image id="n4_e410" name="n4" src="cx1n7p" fileName="img/视频排行榜/sp_mingcibg0.png" xy="0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <loader id="n5_e410" name="icon" xy="0,0" size="162,186" align="center" vAlign="middle" fill="scaleMatchWidth">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+  </displayList>
+  <customProperty target="icon" propertyId="1"/>
+</component>

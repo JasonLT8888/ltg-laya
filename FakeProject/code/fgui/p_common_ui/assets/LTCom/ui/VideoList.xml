@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://hbq27te3cx1n88" designImageAlpha="100">
+  <displayList>
+    <image id="n0_e410" name="bg" src="cx1n7j" fileName="img/视频排行榜/bg0.png" xy="0,-98" size="750,1432">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n24_e410" name="n24" src="cx1n7k" fileName="img/视频排行榜/bg1.png" xy="15,214" size="710,1005">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n25_e410" name="n25" src="cx1n7l" fileName="img/视频排行榜/sp_anniubg.png" xy="0,1206" size="750,128">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </image>
+    <image id="n20_e410" name="n20" src="cx1n7m" fileName="img/视频排行榜/sp_guang.png" xy="-10,0">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n21_e410" name="n21" src="cx1n7m" fileName="img/视频排行榜/sp_guang.png" xy="415,0" flip="hz">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <component id="n8_e410" name="item1" src="cx1n7n" fileName="cmp/video/top3.xml" xy="262,29">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3cx1n7u"/>
+      <property target="rank" propertyId="1" value="ui://hbq27te3cx1n7v"/>
+      <property target="nickname" propertyId="0" value=""/>
+    </component>
+    <component id="n2_e410" name="item2" src="cx1n7n" fileName="cmp/video/top3.xml" xy="39,54">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="nickname" propertyId="0" value=""/>
+    </component>
+    <component id="n9_e410" name="item3" src="cx1n7n" fileName="cmp/video/top3.xml" xy="488,70">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3cx1n7w"/>
+      <property target="rank" propertyId="1" value="ui://hbq27te3cx1n7x"/>
+    </component>
+    <list id="n19_e410" name="list" xy="20,420" size="700,786" layout="flow_hz" overflow="scroll" scrollBarFlags="16" lineGap="20" colGap="20" defaultItem="ui://hbq27te3cx1n7y" align="center">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <component id="n1_e410" name="btn_back" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="0,28" size="92,64">
+      <relation target="" sidePair="middle-middle,left-left"/>
+      <Button icon="ui://hbq27te3cx1n82"/>
+    </component>
+    <component id="n22_e410" name="btn_like" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="11,1220" size="228,96">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3cx1n83"/>
+      <property target="icon" propertyId="1" value="ui://hbq27te3cx1n84"/>
+    </component>
+    <component id="n23_e410" name="btn_new" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="261,1221" size="228,96">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3cx1n85"/>
+      <property target="icon" propertyId="1" value="ui://hbq27te3cx1n86"/>
+    </component>
+    <component id="n26_e410" name="btn_create" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="512,1220" size="228,96">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3cx1n85"/>
+      <property target="icon" propertyId="1" value="ui://hbq27te3cx1n87"/>
+    </component>
+  </displayList>
+</component>
