@@ -52,6 +52,7 @@ export class View_NativeInPage {
     public set visible(v: boolean) {
         this.ui.visible = v;
     }
+    showAdBtn: (isshow: boolean) => {};
 
     private constructor(ui: UI_NativeInPage, btnPos: number) {
         this._ui = ui;
@@ -61,6 +62,7 @@ export class View_NativeInPage {
 
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
+        this.ui.m_btn_clickad.onClick(this, this._OnClickAd);
         this.ui.m_btn_close.onClick(this, this.clickClose);
         this.ui.m_btn_pos.selectedIndex = btnPos;
 
@@ -88,11 +90,21 @@ export class View_NativeInPage {
         } else {
             console.log("内嵌 native加载失败", this._cacheIds[i]);
             // } 
+            if (this.showAdBtn) {
+                this.showAdBtn(false);
+            }
+            this.ui.visible = false;
         }
 
     }
     private showAdInfo() {
-        if (!this._cacheAdData) return;
+        if (!this._cacheAdData) {
+            return this.ui.visible = false;
+        }
+        if (this.showAdBtn) {
+            this.showAdBtn(true);
+        }
+        this.ui.visible = true;
         if (this._cacheAdData.imgUrlList.length) {
             this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
             this.ui.m_ad.m_img.url = this._cacheAdData.imgUrlList[0];

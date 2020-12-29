@@ -66,7 +66,6 @@ export class UI_GameCenterBigMediator extends BaseUIMediator<UI_GameCenterBig> {
         let appid = item.data['id'];
         let path = item.data['path']
         let adid = item.data['adid']
-        LTSDK.instance.ReportClickAd(adid, this._posId, true, '游戏中心');
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:
@@ -75,7 +74,11 @@ export class UI_GameCenterBigMediator extends BaseUIMediator<UI_GameCenterBig> {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(appid, null, null, true, false, adid);
+        LTPlatform.instance.NavigateToApp(appid, null, null, true, false, adid).then(() => {
+            LTSDK.instance.ReportClickAd(adid, this._posId, true, '游戏中心');
+        }).catch(() => {
+            LTSDK.instance.ReportClickAd(adid, this._posId, false, '游戏中心');
+        });;
     }
     renderItem(index: number, item: any) {
         let data = this.cacheAds[index];

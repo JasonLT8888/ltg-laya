@@ -75,6 +75,9 @@ export default class View_EndSlideGames {
             this._posId = 6;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
+        while (this._cacheAds.length < 13) {
+            this._cacheAds.concat(LTSDK.instance.adManager.GetADListByLocationId(this._posId));
+        }
         if (!this._cacheAds || !this._cacheAds.length) {
             this.ui.visible = false;
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
@@ -132,8 +135,7 @@ export default class View_EndSlideGames {
     }
 
     private _OnClickGameItem(item: UI_view_item_game140) {
-        let data = this._cacheAds[item.data as number];
-        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
+        let data = this._cacheAds[item.data as number]; 
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
@@ -143,7 +145,11 @@ export default class View_EndSlideGames {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(uid, data.ad_path, null, true, false, data.ad_id);
+        LTPlatform.instance.NavigateToApp(uid, data.ad_path, null, true, false, data.ad_id).then(() => {
+            LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
+        }).catch(() => {
+            LTSDK.instance.ReportClickAd(data.ad_id, this._posId, false, '结算界面');
+        });
     }
 
 }
