@@ -26,54 +26,7 @@ module.exports = function (options) {
 	 * 表示，在当前工程目录中存在 'engine/src/qgame-adapter.js'这个文件，在打包时会被拷贝到 build目录下的 'src/qgame-adapter.js'。
 	 * 而在game.js中 使用 require('qgame-adapter') 引用时，能加载 build目录下的 'src/qgame-adapter.js' 这个模块
 	 */
-	const externals = [
-		{
-			module_name: './js/bundle.js',
-			module_path: './js/bundle.js',
-			module_from: 'js/bundle.js'
-
-		},
-		{
-			module_name: './libs/fairygui/fairygui.js',
-			module_path: './libs/fairygui/fairygui.js',
-			module_from: 'libs/fairygui/fairygui.js'
-		},
-		{
-			module_name: './libs/laya.core.js',
-			module_path: './libs/laya.core.js',
-			module_from: 'libs/laya.core.js'
-		},
-		{
-			module_name: './libs/laya.d3.js',
-			module_path: './libs/laya.d3.js',
-			module_from: 'libs/laya.d3.js'
-		},
-		{
-			module_name: './libs/laya.html.js',
-			module_path: './libs/laya.html.js',
-			module_from: 'libs/laya.html.js'
-		},
-		{
-			module_name: './libs/p2.js',
-			module_path: './libs/p2.js',
-			module_from: 'libs/p2.js'
-
-		},
-		{
-			module_name: './libs/laya.vvmini.js',
-			module_path: './libs/laya.vvmini.js',
-			module_from: '../../bin/libs/laya.vvmini.js'
-		},
-		{
-			module_name: './libs/ltgame/generator.js',
-			module_path: './libs/ltgame/generator.js',
-			module_from: 'libs/ltgame/generator.js'
-		},
-		{
-			module_name: './libs/ltgame/promise.js',
-			module_path: './libs/ltgame/promise.js',
-			module_from: 'libs/ltgame/promise.js'
-		}]
+	const externals = []
 
 	return {
 		externals

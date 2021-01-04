@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImageLayer="1">
   <displayList>
-    <image id="n4_8gel" name="img_bg" src="8gel2i" fileName="img/bg.png" xy="0,0">
+    <image id="n4_8gel" name="img_bg" src="q96u89" fileName="img/bg_s.png" xy="0,-220" size="750,1554">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
     <component id="n15_8gel" name="img_grow" src="8gel2v" fileName="cmp/view_grow_01.xml" xy="117,140">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n0_8gel" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="26,72"/>
+    <component id="n0_8gel" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="26,128"/>
     <image id="n1_8gel" name="n1" src="8gel2f" fileName="img/sp_caidanqing.png" xy="204,121">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <loader id="n3_8gel" name="loader_display" xy="261,239" size="204,247" url="ui://hbq27te38gel2h" align="center" vAlign="middle" clearOnPublish="true">
+    <loader id="n3_8gel" name="loader_display" xy="261,211" size="204,247" url="ui://hbq27te38gel2h" align="center" clearOnPublish="true">
       <relation target="" sidePair="center-center,middle-middle"/>
     </loader>
-    <list id="n14_8gel" name="list_view" xy="0,491" size="750,742" layout="flow_hz" overflow="scroll" margin="9,10,23,0" lineGap="8" colGap="29" lineItemCount="3" defaultItem="ui://hbq27te38gel2u" align="center">
-      <relation target="" sidePair="width-width,center-center,middle-middle,bottomext-bottom"/>
+    <list id="n14_8gel" name="list_view" xy="0,466" size="750,742" layout="flow_hz" overflow="scroll" margin="9,10,23,0" lineGap="8" colGap="29" lineItemCount="3" defaultItem="ui://hbq27te38gel2u" align="center">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
       <item/>
       <item/>
       <item/>

@@ -2,7 +2,7 @@ import { LTUtils } from "../LTUtils/LTUtils";
 import StringEx from "../LTUtils/StringEx";
 
 export class SaveData {
- 
+
 
     /**
      * 最后一次打开时间戳
@@ -72,14 +72,14 @@ export class SaveData {
     public codeADCounts: number[] = [];
 
 
-     /**
-     * 达人用户主动填写的渠道号
-     */
-    public channelId: string = 'own';
+    /**
+    * 达人用户主动填写的渠道号
+    */
+    public channelId: string = '';
     /**
      * 用户唯一id= openid/未登录用户唯一标识
      */
-    public uid: string;
+    public uid: string = '';
 
 }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="211,360">
+  <displayList>
+    <loader id="n2_e410" name="bg" xy="0,37" size="211,323" url="ui://hbq27te3cx1n7o" align="center"/>
+    <image id="n10_e410" name="n10" src="cx1n7p" fileName="img/视频排行榜/sp_mingcibg0.png" xy="25,46"/>
+    <component id="n4_e410" name="icon" src="cx1n7q" fileName="cmp/video/iconVdieo.xml" xy="25,45">
+      <property target="icon" propertyId="1" value="ui://hbq27te3cx1n7p"/>
+    </component>
+    <image id="n5_e410" name="n5" src="cx1n7r" fileName="img/视频排行榜/sp_aixin.png" xy="44,236"/>
+    <loader id="n3_e410" name="rank" xy="67,0" size="74,67" url="ui://hbq27te3cx1n7s" align="center" vAlign="middle"/>
+    <text id="n6_e410" name="digs" xy="82,232" size="74,37" font="DengXian" fontSize="30" color="#ef0506" align="center" vAlign="middle" autoSize="none" bold="true" text="1020"/>
+    <image id="n7_e410" name="n7" src="cx1n7t" fileName="img/视频排行榜/sp_bofang.png" xy="61,89"/>
+    <text id="n9_e410" name="nickname" xy="104,290" pivot="0.5,0" anchor="true" size="166,31" font="DengXian" fontSize="26" color="#ffffff" align="center" autoSize="shrink" text=""/>
+  </displayList>
+  <customProperty target="bg" propertyId="1"/>
+  <customProperty target="digs" propertyId="0"/>
+  <customProperty target="rank" propertyId="1"/>
+  <customProperty target="nickname" propertyId="0"/>
+</component>

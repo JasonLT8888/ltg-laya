@@ -17,7 +17,7 @@
       <item/>
       <item/>
     </list>
-    <component id="n12_zutp" name="btn_return" src="74v83q" fileName="cmp/btn.xml" xy="556,523" pivot="0.5,0.5" size="116,126">
+    <component id="n12_zutp" name="btn_return" src="74v83q" fileName="cmp/btn.xml" xy="556,363" pivot="0.5,0.5" size="116,126">
       <relation target="" sidePair="middle-middle,right-right"/>
       <Button icon="ui://75kiu87klquign"/>
     </component>

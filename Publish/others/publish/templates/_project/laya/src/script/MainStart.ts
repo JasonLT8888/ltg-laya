@@ -36,7 +36,7 @@ export default class MainStart extends LTStart {
             case EPlatformType.TT:
                 this._gameVersion = "v0.0.2";
                 this._resVersion = 'v0.0.2';
-                platformData.appId = "ttd60ba0b64931e10f";
+                platformData.appId = "tt738a0537eca00dfd";
                 platformData.bannerId = "1bhbt9cjpr9a35bd30";
                 platformData.rewardVideoId = "6tnnb4e3em519ja6d2";
                 platformData.interstitialId = "8oe7qjl1pon2g930jf";
@@ -57,7 +57,8 @@ export default class MainStart extends LTStart {
                 platformData.appId = "30302891";
                 platformData.appKey = "6fyGQ6x2pzk8W84c0s04ows00";
                 platformData.bannerId = "195984";
-                platformData.rewardVideoId = "195985"; 
+                platformData.rewardVideoId = "195985";
+                platformData.gameBoxAdId = "";
                 platformData.nativeinpageIds = ['195999', '196002', '196003'];
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
@@ -90,7 +91,6 @@ export default class MainStart extends LTStart {
         if (platformData.appId) {
             this._appId = platformData.appId;
         }
-
     }
 
     _HandleSDK() {
@@ -101,11 +101,11 @@ export default class MainStart extends LTStart {
             case EPlatformType.Oppo:
             case EPlatformType.TT:
             case EPlatformType.Web:
+            default:
                 LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
                 break;
-            default:
-                LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
-                break;
+            // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
+            // break;
         }
     }
 

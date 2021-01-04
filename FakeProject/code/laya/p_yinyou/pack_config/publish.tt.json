@@ -7,7 +7,9 @@
     "forceInPack": [
         "res/fgui_load"
     ],
-    "maxSinglePackSize": 8,
-    "maxTotalPackSize": 16,
+    "maxSinglePackSize": 4,
+    "maxTotalPackSize": 8,
+    "packType": 1,
     "compress": true
+    
 }

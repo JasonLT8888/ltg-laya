@@ -117,10 +117,8 @@ export default class View_HotGame {
         ad.num = 1;
         LTSDK.instance.ReportShowAd([ad]);
     }
-
     private _OnClickAD() {
         let navId = this._showAd.ad_appid;
-        LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, true, '火爆游戏');
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:
@@ -129,7 +127,11 @@ export default class View_HotGame {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(navId, this._showAd.ad_path, null, true, false, this._showAd.ad_id);
+        LTPlatform.instance.NavigateToApp(navId, this._showAd.ad_path, null, true, false, this._showAd.ad_id).then(() => {
+            LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, true, '火爆游戏');
+        }).catch(() => {
+            LTSDK.instance.ReportClickAd(this._showAd.ad_id, this._posId, false, '火爆游戏');
+        });;
         this._UpdateUI();
     }
 

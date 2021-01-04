@@ -90,7 +90,7 @@ export default class MainStart extends LTStart {
         }
         if (platformData.appId) {
             this._appId = platformData.appId;
-        } 
+        }
     }
 
     _HandleSDK() {
@@ -101,11 +101,11 @@ export default class MainStart extends LTStart {
             case EPlatformType.Oppo:
             case EPlatformType.TT:
             case EPlatformType.Web:
+            default:
                 LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
                 break;
-            default:
-                LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
-                break;
+            // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
+            // break;
         }
     }
 

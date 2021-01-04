@@ -129,8 +129,8 @@ export default class SDK_Default implements ISDK {
 
     }
 
-    protected _RequestCheckState() { 
-        console.log('审核状态由重庆后台配置', `审核状态:${ECheckState[this.checkState]}`); 
+    protected _RequestCheckState() {
+        console.log('审核状态由重庆后台配置', `审核状态:${ECheckState[this.checkState]}`);
         if (this.checkState != ECheckState.InCheck) {
             //工作时时段屏蔽 
             let date = this.severTime.substring(0, 10).replace(/\-/g, '');
@@ -139,15 +139,16 @@ export default class SDK_Default implements ISDK {
             let isHoliday = false;
             if (today && today.length) {
                 isHoliday = today[0].type == 1;//type：0 工作日 1 周末&节假日 
-            }
-
+            } 
             if (isHoliday) {
                 console.log('假期休息', date, h);
             } else {
+                console.log('工作日');
                 if (this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
                     console.log('工作', this.shieldHours, h);
                     this.checkState = ECheckState.Normal;
                     this.payRate = 0;
+                    this.navLevels = [];
                 }
             }
             if (this.isShielding) {

@@ -107,8 +107,7 @@ export default class View_End3X3Games {
     }
 
     private _OnClickGameItem(item: UI_item_gameSmall) {
-        let data = this._cacheAds[item.data as number];
-        LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
+        let data = this._cacheAds[item.data as number]; 
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:
@@ -118,7 +117,11 @@ export default class View_End3X3Games {
             default:
                 break;
         }
-        LTPlatform.instance.NavigateToApp(uid, data.ad_path, null, true, false, data.ad_id);
+        LTPlatform.instance.NavigateToApp(uid, data.ad_path, null, true, false, data.ad_id).then(() => {
+            LTSDK.instance.ReportClickAd(data.ad_id, this._posId, true, '结算界面');
+        }).catch(() => {
+            LTSDK.instance.ReportClickAd(data.ad_id, this._posId, false, '结算界面');
+        });
 
     }
 

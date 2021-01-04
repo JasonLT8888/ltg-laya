@@ -264,6 +264,34 @@
     <image id="t2mg7f" name="img_white.png" path="/img/"/>
     <component id="t2mg7g" name="view_play.xml" path="/cmp/"/>
     <image id="en7e7h" name="立即关注.png" path="/img/"/>
+    <component id="cx1n7i" name="VideoList.xml" path="/ui/" exported="true"/>
+    <image id="cx1n7j" name="bg0.png" path="/img/视频排行榜/" scale="9grid" scale9grid="5,5,10,10"/>
+    <image id="cx1n7k" name="bg1.png" path="/img/视频排行榜/" scale="9grid" scale9grid="13,15,26,30"/>
+    <image id="cx1n7l" name="sp_anniubg.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7m" name="sp_guang.png" path="/img/视频排行榜/"/>
+    <component id="cx1n7n" name="top3.xml" path="/cmp/video/"/>
+    <image id="cx1n7o" name="sp_dierming.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7p" name="sp_mingcibg0.png" path="/img/视频排行榜/"/>
+    <component id="cx1n7q" name="iconVdieo.xml" path="/cmp/video/"/>
+    <image id="cx1n7r" name="sp_aixin.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7s" name="sp_dierming0.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7t" name="sp_bofang.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7u" name="sp_diyiming0.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7v" name="sp_diyiming.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7w" name="sp_disanming0.png" path="/img/视频排行榜/"/>
+    <image id="cx1n7x" name="sp_disanming.png" path="/img/视频排行榜/"/>
+    <component id="cx1n7y" name="videoItem.xml" path="/cmp/video/"/>
+    <image id="cx1n7z" name="sp_mingciputongbg0.png" path="/img/视频排行榜/" scale="9grid" scale9grid="24,23,48,38"/>
+    <image id="cx1n80" name="sp_mingciputongbg.png" path="/img/视频排行榜/"/>
+    <component id="cx1n81" name="normal_btn.xml" path="/cmp/video/"/>
+    <image id="cx1n82" name="btn_fanhui.png" path="/img/视频排行榜/"/>
+    <image id="cx1n83" name="btn_anniuhuang.png" path="/img/视频排行榜/" scale="9grid" scale9grid="18,15,36,25"/>
+    <image id="cx1n84" name="sp_remenshipin.png" path="/img/视频排行榜/"/>
+    <image id="cx1n85" name="btn_lv.png" path="/img/视频排行榜/" scale="9grid" scale9grid="16,19,32,38"/>
+    <image id="cx1n86" name="sp_zuixinshipin.png" path="/img/视频排行榜/"/>
+    <image id="cx1n87" name="sp_chuangjianshipin.png" path="/img/视频排行榜/"/>
+    <image id="cx1n88" name="视频排行榜.jpg" path="/img/视频排行榜/"/>
+    <image id="q96u89" name="bg_s.png" path="/img/" scale="tile"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>
