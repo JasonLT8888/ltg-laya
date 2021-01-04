@@ -137,6 +137,9 @@ export class SubpackHelper {
             case "oppo":
                 gameJsonName = "manifest";
                 break;
+            case "vivo":
+                gameJsonName = "src/manifest";
+                break;
             default:
                 gameJsonName = "game";
                 break;
@@ -198,14 +201,44 @@ export class SubpackHelper {
                 }
             );
         }
+        if (this._packConfig.platform == "vivo") {
+            console.log("vivo subpack.json 设置远程包");
+            for (let i = 0; i < this._remoteFiles.length; ++i) {
+                let pack = this._remoteFiles[i];
+                let relativePath = pack.fullPath.replace(upRootPath, "");
+                let checkRelativePath = LTUtils.ReplaceAll(relativePath, "\\", "/");
+                let name = LTUtils.ReplaceAll(checkRelativePath, "/", "_");
+                subpackJsonData.push(
+                    {
+                        "name": name,
+                        "path": checkRelativePath,
+                        "pathType": 3
+                    }
+                );
+            }
+        }
 
         let upSubpackPath = path.join(subpackPath, "./../");
         let subpackJsonStr = JSON.stringify(subpackJsonData);
         let subpackJsonPath = path.join(upSubpackPath, "./subpack.json");
+
         fs.writeFileSync(subpackJsonPath, subpackJsonStr, {
             "encoding": "utf-8"
         });
         console.log("输出subpack.json", subpackJsonPath);
+        if (this._packConfig.platform == 'vivo') {
+            let mani = JSON.parse(fs.readFileSync(gameJsonPath, { encoding: "utf-8" }));
+
+            let jsPath = path.join(subpackPath, "./../src/game.js")
+            let gamejs = fs.readFileSync(jsPath, { encoding: "utf-8" });
+            console.log("分包：", mani.subpackages);
+            gamejs = gamejs.replace("var subpackages = [];", `var subpackages = ${JSON.stringify(mani.subpackages)};`);
+            fs.writeFileSync(jsPath, gamejs, { encoding: "utf-8" });
+            let toSubPack = path.join(upSubpackPath, "./src/subpack.json")
+            fs.unlinkSync(toSubPack);
+            fs.renameSync(subpackJsonPath, toSubPack);
+            // shell.mv(y, toSubPack);
+        }
     }
 
     private _SplitSubpack(node: LTPackNode, subPacks: LTPackNode[], remoteFiles: LTPackNode[]) {
