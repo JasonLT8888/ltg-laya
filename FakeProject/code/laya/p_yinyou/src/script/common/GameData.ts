@@ -21,6 +21,7 @@ export default class GameData {
         if (this._instance == null) {
             this._instance = new GameData();
             this._instance._ReadFromFile();
+            this.SaveToDisk();
         }
         return this._instance._saveData;
     }
