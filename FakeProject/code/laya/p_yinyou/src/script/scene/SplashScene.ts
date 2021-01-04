@@ -20,7 +20,7 @@ export default class SplashScene extends LTSplashScene {
     constructor() {
         super();
         this._splashUIClass = UI_splash;
-        this._useCommonUI = true; 
+        this._useCommonUI = true;
     }
 
     _OnBindUI() {
@@ -40,12 +40,12 @@ export default class SplashScene extends LTSplashScene {
     }
 
     _OnGameResPrepared(urls: string[]) {
-        GlobalUnit.InitAll();
-
+        GlobalUnit.InitAll(urls);
         EffectManager.instance.Preload(urls);
     }
 
     async _OnGameResLoaded() {
+        await GlobalUnit.FirstCreate();
         await EffectManager.instance.WarmEffects();
         this.isFinished = true;
         this.nextState = ESceneType.Main;
