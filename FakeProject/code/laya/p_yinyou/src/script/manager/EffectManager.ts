@@ -7,6 +7,7 @@ import ArrayEx from "../../LTGame/LTUtils/ArrayEx";
 import ResDefine from "../common/ResDefine";
 import { CameraEx } from "../../LTGame/LTUtils/CameraEx";
 import Vector3Ex from "../../LTGame/LTUtils/Vector3Ex";
+import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
 
 
 export class EffectManager {
@@ -32,8 +33,6 @@ export class EffectManager {
         return this._uiEffectCamera;
     }
 
-    private _hasUIEffect: boolean;
-
     private constructor() {
         this._Init();
     }
@@ -53,24 +52,37 @@ export class EffectManager {
                 let effectPath = ResDefine.FixPath(configItem.model_path);
                 urls.push(effectPath);
             }
-            if (configItem.isUIEffect) {
-                this._hasUIEffect = true;
-            }
         }
+    }
+
+    public ReAddScene() {
+        GlobalUnit.s3d.addChild(this._effectRoot);
+    }
+
+    public UnloadScene() {
+        this._effectRoot.removeSelf();
     }
 
     private _InitUIEffect() {
+        if (this._uiEffectScene != null) {
+            this._uiEffectScene.parent.setChildIndex(this._uiEffectScene,
+                this._uiEffectScene.parent.numChildren - 1);
+            return;
+        }
         this._uiEffectScene = new Laya.Scene3D();
-        Laya.stage.addChild(this._uiEffectScene);
+        this._uiEffectScene.name = "UIEffect";
+        this._uiEffectScene.enableFog = false;
+        this._uiEffectScene.mouseEnabled = false;
+        this._uiEffectScene.enableLight = false;
+        Laya.stage.addChildAt(this._uiEffectScene, 0);
         this._uiEffectCamera = new Laya.Camera();
         this._uiEffectCamera.clearFlag = Laya.CameraClearFlags.DepthOnly;
         this._uiEffectScene.addChild(this._uiEffectCamera);
+        this._uiEffectCamera.transform.localPositionZ = 10;
     }
 
     public async WarmEffects() {
-        if (this._hasUIEffect) {
-            this._InitUIEffect();
-        }
+        this._InitUIEffect();
 
         let preloadEffects: Laya.Sprite3D[] = [];
         for (let i = 0; i < EffectConfig.dataList.length; ++i) {
@@ -82,15 +94,19 @@ export class EffectManager {
                     console.log("特效", configItem, "不存在");
                     continue;
                 }
-                let effectObj = this._effectRoot.addChild(getObj) as Laya.Sprite3D;
+                let effectObj = this._uiEffectScene.addChild(getObj) as Laya.Sprite3D;
+                TransformEx.ResetLocalTrans(effectObj.transform);
                 preloadEffects.push(effectObj);
                 this._effectMap.set(configItem.id, effectObj);
             }
         }
+
         await Awaiters.NextFrame();
         for (let effectObj of preloadEffects) {
             effectObj.removeSelf();
         }
+
+        this._uiEffectScene.parent.setChildIndex(this._uiEffectScene, Laya.stage.numChildren - 1);
     }
 
     public StopEffectByIndex(index: number) {
@@ -102,7 +118,7 @@ export class EffectManager {
         ArrayEx.RemoveAt(this._continueEffects, index);
     }
 
-    public async GetEffectObjById(effectId: number): Promise<Laya.Sprite3D> {
+    public GetEffectObjById(effectId: number): Laya.Sprite3D {
         let effectConfig = EffectConfig.data[effectId];
         if (effectConfig == null) {
             console.error("无效的特效id", effectId);
@@ -110,17 +126,15 @@ export class EffectManager {
         }
         let effectObj = this._effectMap.Get(effectId);
         if (effectObj == null) {
-            let effectPath = ResDefine.FixPath(effectConfig.model_path);
-            await LTRes.LoadAsync(effectPath);
-            effectObj = LTRes.Get(effectPath);
-            this._effectMap.set(effectConfig.id, effectObj);
+            console.error("特效", effectId, "尚未加载");
+            return null;
         }
         let instEffect = effectObj.clone() as Laya.Sprite3D;
         return instEffect;
     }
 
     public async PlayEffectByData(showData: EffectShowData): Promise<number> {
-        let instEffect = await this.GetEffectObjById(showData.effectId);
+        let instEffect = this.GetEffectObjById(showData.effectId);
         if (showData.parent != null) {
             showData.parent.addChild(instEffect);
         } else {
