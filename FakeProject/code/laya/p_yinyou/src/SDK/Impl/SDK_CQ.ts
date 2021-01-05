@@ -312,6 +312,9 @@ export default class SDK_CQ extends SDK_Default {
                 if (result['isNavEnable']) {
                     this.configs.isNavEnable = result['isNavEnable'] == '1';
                 }
+                if (result["gamecenterLevel"]) {
+                    this.configs.gamecenterLevel = parseInt(result['gamecenterLevel']);
+                }
                 if (result['navLevels']) {
                     let arr = (result['navLevels']).split(',');
                     for (let item in arr) {

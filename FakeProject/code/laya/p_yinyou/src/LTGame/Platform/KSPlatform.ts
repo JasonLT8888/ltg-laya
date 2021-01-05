@@ -10,8 +10,10 @@ import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
+import DefaultPlatform from "./DefaultPlatform";
 
-export default class KSPlatform implements IPlatform {
+export default class KSPlatform extends DefaultPlatform {
+
     userInfo: any;
 
     base: any;

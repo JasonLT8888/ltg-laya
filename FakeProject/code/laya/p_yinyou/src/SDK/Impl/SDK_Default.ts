@@ -152,7 +152,6 @@ export default class SDK_Default implements ISDK {
                 console.log('工作日');
                 if (this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
                     console.log('工作', this.shieldHours, h);
-                    this.checkState = ECheckState.Normal;
                     this.payRate = 0;
                     this.navLevels = [];
                 }
@@ -162,6 +161,7 @@ export default class SDK_Default implements ISDK {
             //屏蔽洗钱 
             this.payRate = 0;
             this.navLevels = [];
+            this.configs.gamecenterLevel = 1000;
         }
         console.log(`${this.appId}---云控版本为:`, this.controlVersion, `游戏中心Levels:${this.navLevels}`, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
