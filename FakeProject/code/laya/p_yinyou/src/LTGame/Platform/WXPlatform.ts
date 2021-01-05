@@ -2,8 +2,6 @@ import LTSDK from "../../SDK/LTSDK";
 import Awaiters from "../Async/Awaiters";
 import { CommonEventId } from "../Commom/CommonEventId";
 import StringEx from "../LTUtils/StringEx";
-import { UI_GameCenterMediator } from "../UIExt/DefaultUI/UI_GameCenterMediator";
-import { UI_SelfBannerMediator } from "../UIExt/DefaultUI/UI_SelfBannerMediator";
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
 import DefaultDevice from "./DefaultDevice";
@@ -352,13 +350,13 @@ export default class WXPlatform implements IPlatform {
     }
     ShowBannerAd() {
         if (!this.IsBannerAvaliable()) {
-            UI_SelfBannerMediator.instance.Show();
+            // UI_SelfBannerMediator.instance.Show();
             return;
         }
         this._bannerAd.show();
     }
     HideBannerAd() {
-        UI_SelfBannerMediator.instance.Hide();
+        // UI_SelfBannerMediator.instance.Hide();
         this._bannerAd.hide();
     }
 
@@ -661,7 +659,7 @@ export default class WXPlatform implements IPlatform {
                     }
                     reject(false);
                     if (showGC) {
-                        UI_GameCenterMediator.instance.Show();
+                        // UI_GameCenterMediator.instance.Show();
                     }
                 },
                 complete: () => { }

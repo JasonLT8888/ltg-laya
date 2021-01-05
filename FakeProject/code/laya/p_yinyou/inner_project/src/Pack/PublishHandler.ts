@@ -160,14 +160,46 @@ export class PublishHandler {
 
             console.log("当前配置无需压缩,直接拷贝所有js文件");
         }
-        if (this._packConfig.platform == "oppo") {
+        if (this._packConfig.platform == "oppo" || this._packConfig.platform == "vivo") {
             // 处理load
             let readIndexStr = LTUtils.ReadStrFrom(targetIndexPath);
             let cahceStr = "____";
             readIndexStr = LTUtils.ReplaceAll(readIndexStr, "loadLib(\"", cahceStr);
             readIndexStr = LTUtils.ReplaceAll(readIndexStr, cahceStr, "require(\"./");
             LTUtils.WriteStrTo(targetIndexPath, readIndexStr);
-            console.log("oppo平台重写index.js");
+            console.log(this._packConfig.platform + " 平台重写index.js", indexJsPath);
+            if (this._packConfig.platform == "vivo") {
+                // let indexJsPath = LTUtils.ReadStrFrom(targetIndexPath);// s.join(e, "./../index.js");
+                let outIndexPath = targetIndexPath.replace('index.js', 'src/index.js');
+                fs.writeFileSync(outIndexPath, readIndexStr);
+                let libsArr = readIndexStr.split("require(\"");
+                let cfgPath = targetIndexPath.replace('index.js', "minigame.config.js");
+                let modules = [{
+                    module_name: './libs/laya.vvmini.js',
+                    module_path: './libs/laya.vvmini.js',
+                    module_from: '../../bin/libs/laya.vvmini.js'
+                }];
+                for (let i = 1; i < libsArr.length; i++) {
+                    const libPath = libsArr[i];
+                    let path = libPath.replace('"),', "").replace('");', '');
+                    let moduleOb = {
+                        module_name: path,
+                        module_path: path,
+                        module_from: path.replace('./', "")
+                    }
+                    modules.push(moduleOb);
+                }
+                let cfgTxt = fs.readFileSync(cfgPath, { encoding: "utf-8" });
+                cfgTxt = cfgTxt.replace("const externals = []", `const externals =${JSON.stringify(modules)};`)
+                fs.writeFileSync(cfgPath, cfgTxt, { encoding: "utf-8" });
+                let resPath = targetIndexPath.replace('index.js', "res");
+                let resToPath = targetIndexPath.replace('index.js', "src\\res");
+                LTUtils.DeleteDir(resToPath);
+                // shell.rm("-rf", resToPath);
+                // shell.mv(resPath, resToPath);
+                fs.renameSync(resPath, resToPath);
+                console.log("vivo 复制 res 完成");
+            }
         }
     }
 

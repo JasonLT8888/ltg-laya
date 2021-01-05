@@ -70,6 +70,8 @@ export interface ISDK {
    */
   adManager: SDKADManager;
 
+  configs: RemoteConfig;
+
   /**
    * 初始化sdk
    * @param flg 游戏唯一标识
@@ -146,4 +148,10 @@ export interface ISDK {
   reportShareInfo(videoId: string, shareId: string);
   /**上报日活 */
   ReportDaily();
+}
+export class RemoteConfig {
+  isADEnable: boolean = false;
+  isDelayClose: boolean = false;
+  isShielding: boolean = false;
+  isNavEnable: boolean = false;
 }
