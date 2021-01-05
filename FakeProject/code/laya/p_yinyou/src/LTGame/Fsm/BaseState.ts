@@ -35,12 +35,6 @@ export default class BaseState {
         this._DoExit(enterState, param);
     }
 
-    public OnLateUpdate(dt: number) {
-        if(this.isFinished) return;
-        this._DoLateUpdate(dt);
-    }
-
-    protected _DoLateUpdate(dt: number) { }
     protected _DoEnter(exitStte, param) { }
     protected _DoRunning(param) { }
     protected _DoExit(enterState, param) { }

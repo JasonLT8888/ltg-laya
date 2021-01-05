@@ -4,6 +4,7 @@ export default class MonoHelper extends Laya.Script {
     public static get instance(): MonoHelper {
         if (this._instance == null) {
             let monoHelper = new Laya.Sprite();
+            monoHelper.name = "MonoHelper";
             this._instance = monoHelper.addComponent(MonoHelper);
             Laya.stage.addChild(monoHelper);
         }
