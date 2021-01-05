@@ -102,12 +102,10 @@ export class LTStart {
 
     private _RegistUpdate() {
         MonoHelper.instance.AddAction(EActionType.Update, this, this._LogicUpdate);
-        MonoHelper.instance.AddAction(EActionType.LateUpdate, this, this._LateUpdate);
     }
 
     private _UnRegistUpdate() {
         MonoHelper.instance.RemoveAction(EActionType.Update, this, this._LogicUpdate);
-        MonoHelper.instance.RemoveAction(EActionType.LateUpdate, this, this._LateUpdate);
     }
 
     protected _HandleSDK() {
@@ -129,11 +127,6 @@ export class LTStart {
             }
         }
         this._fsm.OnRunning(null, dt);
-    }
-
-    _LateUpdate() {
-        let dt = Laya.timer.delta / 1000;
-        this._currentState.OnLateUpdate(dt);
     }
 
     protected _InitFsm() {
