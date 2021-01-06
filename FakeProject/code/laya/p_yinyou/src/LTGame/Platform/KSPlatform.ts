@@ -382,13 +382,41 @@ export default class KSPlatform extends DefaultPlatform {
         Laya.LocalStorage.setItem(key, data);
 
     }
+    /**
+     * 打开官方号  CPServiceAccount : CP的服务号 MiniGameOfficialAccount：快⼿⼩游戏官⽅号
+     */
     followOfficialAccount(): Promise<boolean> {
-        console.log('暂不支持');
-        return;
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.openUserProfile({
+                accountType: "CPServiceAccount",
+                callback: (res) => {
+                    if (res && res.errorCode == 1) {
+                        resolve(res.hasFollow);
+                    } else {
+                        console.error(res.errorMsg);
+                        reject(false);
+                    }
+                }
+            })
+        })
     }
+    /**
+     * 检查是否关注官方号  CPServiceAccount : CP的服务号 MiniGameOfficialAccount：快⼿⼩游戏官⽅号
+     */
     checkFollowState(): Promise<boolean> {
-        console.log('暂不支持');
-        return;
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.checkFollowState({
+                accountType: "CPServiceAccount",
+                callback: (res) => {
+                    if (res && res.errorCode == 1) {
+                        resolve(res.hasFollow);
+                    } else {
+                        console.error(res.errorMsg);
+                        reject(false);
+                    }
+                }
+            })
+        })
     }
 
 }
