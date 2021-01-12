@@ -15,10 +15,10 @@ export default class UI_FlyPanelMediator extends BaseUIMediator<UI_FlyPanel> {
         return this._instance;
     }
 
+    _sortOrder = Number.MAX_SAFE_INTEGER - 1;
+
     _OnShow() {
         // your code
-        
-        this._sortOrder = Number.MAX_SAFE_INTEGER - 1;
         super._OnShow();
 
         this.ui.m_test.dispose();

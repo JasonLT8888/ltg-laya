@@ -12,8 +12,9 @@ export default class UI_CommonLockScreenMediator extends BaseUIMediator<UI_Commo
         return this._instance;
     }
 
+    _sortOrder = Number.MAX_SAFE_INTEGER;
+
     _OnShow() {
-        this._sortOrder = Number.MAX_SAFE_INTEGER;
         super._OnShow();
         // your code
     }
