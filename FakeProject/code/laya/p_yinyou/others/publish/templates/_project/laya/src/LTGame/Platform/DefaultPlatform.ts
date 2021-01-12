@@ -13,6 +13,12 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 
 export default class DefaultPlatform implements IPlatform {
+    showGameBoxBannerAd() {
+
+    }
+    hideGameBoxBannerAd() {
+
+    }
     userInfo: LTGame.UserInfo;
     base: any;
     platformData: LTPlatformData;
@@ -89,7 +95,7 @@ export default class DefaultPlatform implements IPlatform {
             onSuccess.run();
         }
     }
-    LoadSubpackage(name: string, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
+    LoadSubpackage(name: string, onSuccess: Laya.Handler, onFailed: Laya.Handler, onProgress: Laya.Handler) {
         if (onSuccess) {
             onSuccess.run();
         }
@@ -111,7 +117,7 @@ export default class DefaultPlatform implements IPlatform {
         LTUI.Toast(str);
     }
 
-    OpenGameBox() {
+    OpenGameBox(ids?: any) {
         console.error("当前平台", LTPlatform.platformStr, "暂不支持互推游戏盒子");
     }
     NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {

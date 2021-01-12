@@ -202,4 +202,7 @@ export default interface IPlatform {
     followOfficialAccount(): Promise<boolean>;
     /**检查关注账号 状态*/
     checkFollowState(): Promise<boolean>;
+    /**oppo 横幅推广盒子 */
+    showGameBoxBannerAd();
+    hideGameBoxBannerAd();
 }

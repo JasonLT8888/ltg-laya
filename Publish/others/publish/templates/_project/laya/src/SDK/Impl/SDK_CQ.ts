@@ -289,7 +289,7 @@ export default class SDK_CQ extends SDK_Default {
         }
         if (this.enableDebug)
             console.log("云控返回消息:", res);
-        this.isADEnable = false;
+        this.configs.isADEnable = false;
         this.isConfigEnable = true;
         if (res.code == 1) {
             // 成功
@@ -301,16 +301,19 @@ export default class SDK_CQ extends SDK_Default {
                     this.payRate = parseInt(result['payRate']);
                 }
                 if (result['isDelayClose']) {
-                    this.isDelayClose = (result['isDelayClose']) == "1";
+                    this.configs.isDelayClose = (result['isDelayClose']) == "1";
                 }
                 if (result['isShielding']) {
-                    this.isShielding = "1" == (result['isShielding']);
+                    this.configs.isShielding = "1" == (result['isShielding']);
                 }
                 if (result["isADEnable"]) {
-                    this.isADEnable = "1" == (result["isADEnable"]);
+                    this.configs.isADEnable = "1" == (result["isADEnable"]);
                 }
                 if (result['isNavEnable']) {
-                    this.isNavEnable = result['isNavEnable'] == '1';
+                    this.configs.isNavEnable = result['isNavEnable'] == '1';
+                }
+                if (result["gamecenterLevel"]) {
+                    this.configs.gamecenterLevel = parseInt(result['gamecenterLevel']);
                 }
                 if (result['navLevels']) {
                     let arr = (result['navLevels']).split(',');
