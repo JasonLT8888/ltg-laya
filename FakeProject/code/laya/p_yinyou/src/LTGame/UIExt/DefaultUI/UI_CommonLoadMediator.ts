@@ -12,8 +12,9 @@ export default class UI_CommondLoadMediator extends BaseUIMediator<UI_CommonLoad
         return this._instance;
     }
 
+    _sortOrder = Number.MAX_SAFE_INTEGER;
+
     _OnShow() {
-        this._sortOrder = Number.MAX_SAFE_INTEGER;
         super._OnShow();
         // your code
 

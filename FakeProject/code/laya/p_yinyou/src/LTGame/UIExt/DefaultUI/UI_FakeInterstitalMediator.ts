@@ -13,9 +13,9 @@ export default class UI_FakeInterstitalMediator extends BaseUIMediator<UI_FakeIn
     }
 
     private _closeHandle: Laya.Handler;
+    _sortOrder = Number.MAX_SAFE_INTEGER;
 
     _OnShow() {
-        this._sortOrder = Number.MAX_SAFE_INTEGER;
         super._OnShow();
         // your code
 

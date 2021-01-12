@@ -8,8 +8,6 @@ import UI_PerfomanceMediator from "./UI_PerfomanceMediator";
 import UI_RecordDemoMediator from "./UI_RecordDemoMediator";
 import UI_UIDemoMediator from "./UI_UIDemoMediator";
 import UI_CommonUI2Mediator from "./UI_CommonUI2Mediator";
-import { UI_ChannelMediator } from "../../LTGame/UIExt/DefaultUI/UI_ChannelMediator";
-import { UI_GameCenterBigMediator } from "../../LTGame/UIExt/DefaultUI/UI_GameCenterBigMediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
