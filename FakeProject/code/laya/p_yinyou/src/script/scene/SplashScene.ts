@@ -14,6 +14,7 @@ import { SignConfig } from "../config/SignConfig";
 import { EffectManager } from "../manager/EffectManager";
 import { RollConfig } from "../config/RollConfig";
 import { RewardCodeConfig } from "../config/RewardCodeConfig";
+import { LTShaderHelper } from "../../LTGame/Material/LTShaderHelper";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -45,6 +46,7 @@ export default class SplashScene extends LTSplashScene {
     }
 
     async _OnGameResLoaded() {
+        await LTShaderHelper.WarmShader();
         await GlobalUnit.FirstCreate();
         await EffectManager.instance.WarmEffects();
         this.isFinished = true;

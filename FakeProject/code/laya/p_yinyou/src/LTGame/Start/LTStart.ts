@@ -10,9 +10,9 @@ import { EScreenOrientation } from "../Commom/EScreenOrientation";
 import LTSDK from "../../SDK/LTSDK";
 import SDK_Default from "../../SDK/Impl/SDK_Default";
 import Awaiters from "../Async/Awaiters";
+import { LTShaderHelper } from "../Material/LTShaderHelper";
 
 export class LTStart {
-
 
     protected _fsm: StateMachine<BaseState>;
 
@@ -69,12 +69,8 @@ export class LTStart {
             LTSDK.CreateInstace(SDK_Default, "default", "default", "default");
         }
 
-        /* 2.6.0 版本之后 该设置已经变为默认false,无需手动禁用,如果后期调整,再进行打开
-        // 非web平台禁用debug模式
-        if (LTPlatform.instance.platform != EPlatformType.Web) {
-            Laya.Shader3D.debugMode = false;
-        }
-        */
+        LTShaderHelper.InitRecorder();
+
         if (LTPlatform.instance.platform != EPlatformType.Web) {
             while (!LTPlatform.instance.safeArea) {
                 await Awaiters.NextFrame();
@@ -83,8 +79,8 @@ export class LTStart {
 
         FGuiEx.Init(LTPlatform.instance.safeArea);
 
-
-        Laya.timer.frameOnce(1, this, this._NextFramUpdate);
+        await Awaiters.NextFrame();
+        this._NextFramUpdate();
     }
 
     private _NextFramUpdate() {
