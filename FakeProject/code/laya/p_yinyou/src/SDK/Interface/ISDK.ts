@@ -154,4 +154,5 @@ export class RemoteConfig {
   isDelayClose: boolean = false;
   isShielding: boolean = false;
   isNavEnable: boolean = false;
+  gamecenterLevel: number = 100;
 }

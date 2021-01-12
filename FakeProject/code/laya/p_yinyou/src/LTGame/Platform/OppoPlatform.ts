@@ -7,15 +7,15 @@ import UI_ImageBannerMediator, { FakeBannerData } from "../UIExt/DefaultUI/UI_Im
 import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
 import { OppoDevice } from "./DefaultDevice";
+import DefaultPlatform from "./DefaultPlatform";
 import DefaultRecordManager from "./DefaultRecordManager";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
-import WXPlatform from "./WXPlatform";
 
-export default class OppoPlatform extends WXPlatform {
+export default class OppoPlatform extends DefaultPlatform {
     userInfo: LTGame.UserInfo;
     onPause: Laya.Handler;
     appId: string;
@@ -61,7 +61,8 @@ export default class OppoPlatform extends WXPlatform {
 
     protected _cacheOnShowHandle: Laya.Handler;
     private noAdTime: number = 60;
-    Init(platformData: LTPlatformData) {
+    private oppoBoxBannerAd: any;
+    async Init(platformData: LTPlatformData) {
         this._base = window["qg"];
         if (this._base == null) {
             console.error("平台初始化错误", LTPlatform.platformStr);
@@ -70,8 +71,8 @@ export default class OppoPlatform extends WXPlatform {
         this.platformData = platformData;
         this._InitLauchOption();
         this._Login();
-        this._InitSystemInfo();
-        this.getSystemInfo();
+        // this._InitSystemInfo();
+        await this.getSystemInfo();
         if (this.systemInfo.platformVersion >= 1051) {
             // 不需要在进行initAdService
         } else {
@@ -95,9 +96,21 @@ export default class OppoPlatform extends WXPlatform {
         }
 
         window["iplatform"] = this;
-
     }
+    protected _InitSystemInfo() {
+        this.base = this._base;
+        try {
+            this.systemInfo = this._base.getSystemInfoSync();
+            console.log("系统信息已获取", this.systemInfo);
 
+            this.safeArea = this.systemInfo.safeArea as LTGame.SafeArea;
+            this._cacheScreenScale = this.systemInfo.screenWidth / Laya.stage.width;
+        } catch (e) {
+            console.error(e);
+            console.error("获取设备信息失败,执行默认初始化");
+            this.safeArea = null;
+        }
+    }
     private async getSystemInfo() {
         this.base = this._base;
         this._base.getSystemInfo({
@@ -127,6 +140,7 @@ export default class OppoPlatform extends WXPlatform {
         if (this.onLoginEnd != null) {
             this.onLoginEnd.run();
         }
+        Laya.timer.loop(1000, this, this.bannerTimer);
     }
 
     _CheckUpdate() {
@@ -310,10 +324,7 @@ export default class OppoPlatform extends WXPlatform {
         return this._nativeAdLoaded;
     }
     bannerTimer() {
-        this.noAdTime -= 1;
-        if (this.noAdTime < 0) {
-            Laya.timer.clear(this, this.bannerTimer);
-        }
+        this.noAdTime--;
     }
     async ShowBannerAd() {
         // 先尝试展示普通banner
@@ -322,7 +333,7 @@ export default class OppoPlatform extends WXPlatform {
             return;
         }
         if (!this.IsBannerAvaliable()) {
-            console.log("banner 尚未准备好");
+            console.log("banner 尚未准备好", this.noAdTime);
             return;
         }
         if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
@@ -331,6 +342,7 @@ export default class OppoPlatform extends WXPlatform {
         }
         if (this._bannerAd) {
             this._bannerAd.show();
+            this.noAdTime = 30;
             console.log('展示已有banner');
             return;
         }
@@ -486,6 +498,8 @@ export default class OppoPlatform extends WXPlatform {
         this._rewardVideo.onError((err) => {
             console.log("广告组件出现问题", err);
             LTUI.HideLoading();
+
+            LTUI.Toast("暂无广告");
             if (this._rewardSkipped) this._rewardSkipped.run();
         });
         this._rewardVideo.onLoad((res) => {
@@ -855,6 +869,34 @@ export default class OppoPlatform extends WXPlatform {
         //     this.oppoBoxAd.destroy();
         //     this.createGameBox();
         // }
+    }
+
+    private createGameBannerAd() {
+        if (LTPlatform.instance.systemInfo.platformVersionCode >= 1076) {
+            this.oppoBoxBannerAd = LTPlatform.instance.base.createGameBannerAd({
+                adUnitId: this.platformData.gameBoxBannerId
+            });
+            this.oppoBoxBannerAd.onLoad(() => {
+                console.log('互推横幅加载成功');
+            });
+        } else {
+            console.log('快应用平台版本号低于1076，暂不支持互推盒子相关 API');
+        }
+
+    }
+    showGameBoxBannerAd() {
+        this.HideBannerAd();
+        if (this.oppoBoxBannerAd) {
+            this.oppoBoxBannerAd.show();
+        } else {
+            this.createGameBannerAd();
+            this.oppoBoxBannerAd.show();
+        }
+    }
+    hideGameBoxBannerAd() {
+        if (this.oppoBoxBannerAd) {
+            this.oppoBoxBannerAd.hide();
+        }
     }
 
 }

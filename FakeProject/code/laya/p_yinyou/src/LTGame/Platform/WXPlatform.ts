@@ -15,6 +15,12 @@ import { ShareInfo } from "./ShareInfo";
 import ShareManager from "./ShareManager";
 
 export default class WXPlatform implements IPlatform {
+    showGameBoxBannerAd() {
+        
+    }
+    hideGameBoxBannerAd() {
+        
+    }
     userInfo: LTGame.UserInfo;
     base: any;
     platformData: LTPlatformData;
