@@ -14,13 +14,14 @@ import { SignConfig } from "../config/SignConfig";
 import { EffectManager } from "../manager/EffectManager";
 import { RollConfig } from "../config/RollConfig";
 import { RewardCodeConfig } from "../config/RewardCodeConfig";
+import { LTShaderHelper } from "../../LTGame/Material/LTShaderHelper";
 
 export default class SplashScene extends LTSplashScene {
 
     constructor() {
         super();
         this._splashUIClass = UI_splash;
-        this._useCommonUI = true; 
+        this._useCommonUI = true;
     }
 
     _OnBindUI() {
@@ -40,12 +41,13 @@ export default class SplashScene extends LTSplashScene {
     }
 
     _OnGameResPrepared(urls: string[]) {
-        GlobalUnit.InitAll();
-
+        GlobalUnit.InitAll(urls);
         EffectManager.instance.Preload(urls);
     }
 
     async _OnGameResLoaded() {
+        await LTShaderHelper.WarmShader();
+        await GlobalUnit.FirstCreate();
         await EffectManager.instance.WarmEffects();
         this.isFinished = true;
         this.nextState = ESceneType.Main;

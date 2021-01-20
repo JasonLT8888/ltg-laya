@@ -14,6 +14,7 @@ export default class FGuiEx {
         this.safeArea = safeArea;
         fgui.UIConfig.packageFileExtension = "bin";
         Laya.stage.addChild(fgui.GRoot.inst.displayObject);
+        fgui.GRoot.inst.displayObject.name = "GRoot";
         this.UpdateAllUI();
         Laya.stage.on(Laya.Event.RESIZE, this, this.UpdateAllUI);
     }

@@ -11,5 +11,5 @@ export enum EPlatformType {
     QTT, // 趣头条
     Native_IOS, // 原生IOS
     KS,//快手
-
+    Native_Android, // 原生Android
 }

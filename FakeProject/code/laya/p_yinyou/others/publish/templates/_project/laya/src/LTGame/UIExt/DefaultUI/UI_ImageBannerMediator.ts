@@ -15,8 +15,8 @@ export default class UI_ImageBannerMediator extends BaseUIMediator<UI_ImageBanne
 
     private _fakeBannerData: FakeBannerData;
 
+    _sortOrder = 500;
     _OnShow() {
-        this._sortOrder = 500;
         super._OnShow();
         // your code
 

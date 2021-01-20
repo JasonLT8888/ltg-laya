@@ -10,8 +10,9 @@ import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
+import DefaultPlatform from "./DefaultPlatform";
 
-export default class VivoPlatform implements IPlatform {
+export default class VivoPlatform extends DefaultPlatform {
     userInfo: LTGame.UserInfo;
     base: any;
     platformData: LTPlatformData;

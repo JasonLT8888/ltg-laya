@@ -64,9 +64,13 @@ export default class MonoHelper extends Laya.Script {
     }
 
     onLateUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        if (dt > 0.3) {
+            dt = 0.05;
+        }
         for (let i = 0; i < this._lateUpdateActions.length; ++i) {
             let action = this._lateUpdateActions[i];
-            action.run();
+            action.runWith(dt);
         }
     }
 

@@ -2,10 +2,7 @@ import BaseUIMediator from "../FGui/BaseUIMediator";
 import UI_Channel from "./UI/LTGame/UI_Channel";
 import StringEx from "../../LTUtils/StringEx";
 import LTUI from "../LTUI";
-import GameData from "../../../script/common/GameData";
 import CommonSaveData from "../../Commom/CommonSaveData";
-
-
 
 export class UI_ChannelMediator extends BaseUIMediator<UI_Channel> {
     private static _instance: UI_ChannelMediator;

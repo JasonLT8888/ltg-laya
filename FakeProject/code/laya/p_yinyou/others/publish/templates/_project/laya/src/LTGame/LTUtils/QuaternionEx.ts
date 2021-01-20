@@ -34,6 +34,28 @@ export default class QuaternionEx {
         return this.FromEulerAngle(x, y, z);
     }
 
+    public static EulerAngleTo(x: number, y: number, z: number, to: Laya.Quaternion) {
+        var eulerX = x / 2 * MathEx.Deg2Rad;
+        var cX = Math.cos(eulerX);
+        var sX = Math.sin(eulerX);
+        var eulerY = y / 2 * MathEx.Deg2Rad;
+        var cY = Math.cos(eulerY);
+        var sY = Math.sin(eulerY);
+        var eulerZ = z / 2 * MathEx.Deg2Rad;
+        var cZ = Math.cos(eulerZ);
+        var sZ = Math.sin(eulerZ);
+
+        var ix = sX * cY * cZ - cX * sY * sZ;
+        var iy = cX * sY * cZ + sX * cY * sZ;
+        var iz = cX * cY * sZ - sX * sY * cZ;
+        var iw = cX * cY * cZ + sX * sY * sZ;
+        
+        to.x = ix;
+        to.y = iy;
+        to.z = iz;
+        to.w = iw;
+    }
+
     public static FromEulerAngle(x: number, y: number, z: number): Laya.Quaternion {
         var eulerX = x / 2 * MathEx.Deg2Rad;
         var cX = Math.cos(eulerX);

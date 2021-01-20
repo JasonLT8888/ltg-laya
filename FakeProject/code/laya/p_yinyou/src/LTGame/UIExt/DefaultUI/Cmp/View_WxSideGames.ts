@@ -1,12 +1,10 @@
 
 import LTSDK from "../../../../SDK/LTSDK";
-import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
 import LTPlatform from "../../../Platform/LTPlatform";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import UI_WxSideGames from "../UI/LTGame/UI_WxSideGames";
 import UI_item_gameSmall from "../UI/LTGame/UI_item_gameSmall";
-import { UI_GameCenterMediator } from "../UI_GameCenterMediator";
 import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 /**__wxSG 750*280  */
 export default class View_WxSideGames {

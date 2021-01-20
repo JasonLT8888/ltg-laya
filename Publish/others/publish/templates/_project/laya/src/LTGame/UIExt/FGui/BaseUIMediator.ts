@@ -106,6 +106,14 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         } else {
             this._ui['m___nativeinpage'] = null;
         }
+
+        let nativeicon = View_NativeIcon.CreateView(this._ui['m___nativeicon']);
+        if (nativeicon) {
+            this._ui['m___nativeicon'] = nativeicon;
+        } else {
+            this._ui['m___nativeicon'] = null;
+        }
+        
         let bottomgames = View_BottomGames.CreateView(this._ui['m___bottomgames']);
         if (bottomgames) {
             this._ui['m___bottomgames'] = bottomgames.ui;

@@ -4,7 +4,7 @@ import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import LTRespackManager from "../../LTGame/Res/LTRespackManager";
 import { ECheckState } from "../common/ECheckState";
 import FakeAdDefine from "../common/FakeAdDefine";
-import { ISDK } from "../Interface/ISDK";
+import { ISDK, RemoteConfig } from "../Interface/ISDK";
 import SDKADManager from "../SDKADManager";
 import { DateInfo } from "./SDK_CQ";
 import StringEx from "../../LTGame/LTUtils/StringEx";
@@ -13,14 +13,24 @@ import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 import md5 from "./../Libs/md5.js";
 
 export default class SDK_Default implements ISDK {
-
+    configs: RemoteConfig;
     shieldHours: string[];
     severTime: string;
-    isDelayClose: boolean;
     payRate: number;
     checkState: ECheckState;
-    isShielding: boolean = false;
-    isADEnable: boolean;
+    get isShielding(): boolean {
+        return this.configs.isShielding;
+    }
+    get isDelayClose(): boolean {
+        return this.configs.isDelayClose;
+    }
+    get isADEnable(): boolean {
+        return this.configs.isADEnable;
+    }
+    get isNavEnable(): boolean {
+        return this.configs.isNavEnable;
+    }
+
     isADConfigInited: boolean;
     isConfigEnable: boolean;
     flg: string;
@@ -31,18 +41,14 @@ export default class SDK_Default implements ISDK {
     uid: string = "";
     dateInfo: DateInfo[];
     navLevels: number[];
-    isNavEnable: boolean;
     token: string;
     timeRub: number;
     randomNum: string;
     Init(flg: string, channel: string, controlVersion: string, appid: string) {
         this.timeRub = Date.now();
         this.randomNum = Math.random().toString(36).substr(2, 8);
+        this.configs = new RemoteConfig();
         this.isADConfigInited = true;
-        this.isADEnable = false;
-        this.isDelayClose = false;
-        this.isShielding = false;
-        this.isNavEnable = false;
         this.navLevels = [];
         this.payRate = 0;
         this.checkState = ECheckState.InCheck;
@@ -139,25 +145,25 @@ export default class SDK_Default implements ISDK {
             let isHoliday = false;
             if (today && today.length) {
                 isHoliday = today[0].type == 1;//type：0 工作日 1 周末&节假日 
-            } 
+            }
             if (isHoliday) {
                 console.log('假期休息', date, h);
             } else {
                 console.log('工作日');
                 if (this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
                     console.log('工作', this.shieldHours, h);
-                    this.checkState = ECheckState.Normal;
                     this.payRate = 0;
                     this.navLevels = [];
                 }
             }
-            if (this.isShielding) {
-                //屏蔽洗钱 
-                this.payRate = 0;
-                this.navLevels = [];
-            }
-            console.log(`${this.appId}---云控版本为:`, this.controlVersion, `游戏中心Levels:${this.navLevels}`, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
         }
+        if (this.isShielding || this.checkState == ECheckState.InCheck) {
+            //屏蔽洗钱 
+            this.payRate = 0;
+            this.navLevels = [];
+            this.configs.gamecenterLevel = 1000;
+        }
+        console.log(`${this.appId}---云控版本为:`, this.controlVersion, `游戏中心Levels:${this.navLevels}`, "config:", this.isConfigEnable, `广告开关:${this.isADEnable}, 审核状态:${ECheckState[this.checkState]},误触概率:${this.payRate},屏蔽状态:${this.isShielding},延迟按钮:${this.isDelayClose}`);
     }
     Login(code: string, fromAppId: string) {
         console.log("SDK:Login", code, fromAppId);
