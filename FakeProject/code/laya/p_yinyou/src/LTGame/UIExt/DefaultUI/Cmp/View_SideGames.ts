@@ -7,7 +7,8 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
 import UI_SideGames from "../UI/LTGame/UI_SideGames";
 import UI_view_item_game from "../UI/LTGame/UI_view_item_game";
-/** __sidegames 100*100 */
+import UI_view_item_game164 from "../UI/LTGame/UI_view_item_game164";
+/** __sidegames 78*250 */
 export default class View_SideGames {
 
     static CreateView(tagUI: fgui.GComponent): View_SideGames {
@@ -56,10 +57,10 @@ export default class View_SideGames {
     }
 
     private _Init() {
-        if (LTPlatform.instance.platform == EPlatformType.TT || LTPlatform.instance.platform == EPlatformType.Oppo) {
+        if (LTPlatform.instance.platform == EPlatformType.TT) {
             this.ui.m_ads.m_list.dispose();
             this.ui.m_ads.onClick(this, () => {
-                this.ui.m_red.visible = false;
+                // this.ui.m_red.visible = false;
                 LTPlatform.instance.OpenGameBox([]);
             });
             return;
@@ -80,9 +81,16 @@ export default class View_SideGames {
             this.ui.m_ads.m_list.on(fairygui.Events.CLICK_ITEM, this, this._OnClickGameItem);
 
             this.ui.displayObject.zOrder = 99999;
-            this.ui.m_ads.m_btn_return.onClick(this, () => {
-                this.ui.m_red.visible = false;
-                this.ui.m_show.selectedIndex = (this.ui.m_show.selectedIndex + 1) % 2;
+            this.ui.m_ads.m_btn_more.onClick(this, () => {
+                this.ui.m_ads.m_btn_more.m_red.visible = false;
+                if (this.ui.m_show.selectedIndex == 0) {
+                    this.ui.m_show.selectedIndex = 1;
+                } else if (this.ui.m_show.selectedIndex == 1) {
+                    this.ui.m_show.selectedIndex = 0;
+                } else if (this.ui.m_show.selectedIndex == 1) {
+                    this.ui.m_show.selectedIndex = 2;
+                }
+                // this.ui.m_show.selectedIndex = (this.ui.m_show.selectedIndex + 1) % 2;
                 if (this.ui.m_show.selectedIndex == 1) {
                     this.ui.m_ads.m_list.addSelection(0, true);
                     Laya.timer.loop(25, this, () => {
@@ -91,16 +99,22 @@ export default class View_SideGames {
                             this.ui.m_ads.m_list.scrollPane.scrollTop(true);
                         }
                     });
+                    // Laya.timer.once(500, this, () => {
+                    //     this.ui.m_ads.m_btn_more.m_state.selectedIndex = 1;
+                    // });
                 } else {
+                    // Laya.timer.once(500, this, () => {
+                    //     this.ui.m_ads.m_btn_more.m_state.selectedIndex = 0;
                     Laya.timer.clearAll(this);
+                    // });
                 }
             });
             // this.ui.m_ads.m_btn_return.onClick(this, () => {
             //     this.ui.m_show.selectedIndex = 0;
             // });
-            this.ui.m_bg.onClick(this, () => {
-                this.ui.m_show.selectedIndex = 0;
-            });
+            // this.ui.m_bg.onClick(this, () => {
+            //     this.ui.m_show.selectedIndex = 0;
+            // });
             let ads = [];
             this._cacheAds.forEach(adData => {
                 let ad: any = {};
@@ -123,11 +137,16 @@ export default class View_SideGames {
 
     }
 
-    private _OnAdItemRender(index: number, adUI: UI_view_item_game) {
+    private _OnAdItemRender(index: number, adUI: UI_view_item_game164) {
         let adData = this._cacheAds[index % this._cacheAds.length];
         adUI.data = index % this._cacheAds.length;
         adUI.m_icon.m_icon.url = adData.ad_img;
         adUI.m_text_name.text = adData.ad_name;
+        // adUI..text = `${adData.ad_count}人在玩`;
+        // adUI.m_dot_type.selectedIndex = adData.ad_dot;
+    }
+    public showHalf() {
+        // this.ui.m_show.selectedIndex = 1;
     }
 
     private _OnClickGameItem(item: UI_view_item_game) {

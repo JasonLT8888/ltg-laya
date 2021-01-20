@@ -127,8 +127,17 @@ export default class DefaultPlatform implements IPlatform {
             resolve(false);
         });
     }
-    createShortcut(): any {
-        console.log('创建桌面图标');
+    createShortcut(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            console.error("当前平台不支持创建桌面图标");
+            resolve(true);
+        });
+    }
+    /**是否已创建桌面图标 */
+    hasShortcutInstalled(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(false);
+        });
     }
     GetStorage(key: string) {
         console.log('读本地存储');
@@ -149,4 +158,6 @@ export default class DefaultPlatform implements IPlatform {
     SetClipboardData(str: string) {
         console.log("暂不支持拷贝剪切板", str);
     }
+
+
 }
