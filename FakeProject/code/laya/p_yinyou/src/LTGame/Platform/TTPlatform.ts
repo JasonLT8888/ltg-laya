@@ -351,7 +351,7 @@ export default class TTPlatform extends WXPlatform {
                 extra: {
                     videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']
                     withVideoId: true,
-                    hashtag_list: PackConst.data.topics
+                    videoTag: GameConst.data.douyin_id
                 },
                 success: (rst) => {
                     console.log("分享成功", rst, LTSDK.instance.uid, CommonSaveData.instance.channelId);
@@ -387,7 +387,8 @@ export default class TTPlatform extends WXPlatform {
                 data: {
                     app_id: this.platformData.appId,
                     number_of_top: count,
-                    access_token: LTSDK.instance.token
+                    access_token: LTSDK.instance.token,
+                    tag: ""
                 },
                 success: (res) => {
                     console.log("排行榜信息");

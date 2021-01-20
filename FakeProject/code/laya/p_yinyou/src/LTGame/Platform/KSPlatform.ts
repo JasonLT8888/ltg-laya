@@ -409,10 +409,10 @@ export default class KSPlatform extends DefaultPlatform {
                 accountType: "CPServiceAccount",
                 callback: (res) => {
                     if (res && res.errorCode == 1) {
-                        resolve(res.hasFollow);
+                        resolve(!res.hasFollow);
                     } else {
                         console.error(res.errorMsg);
-                        reject(false);
+                        resolve(false);
                     }
                 }
             })

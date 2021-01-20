@@ -1,6 +1,5 @@
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
 
-import UI_side_ads from "./UI_side_ads";
 import UI_hot_game from "./UI_hot_game";
 import UI_NativeInPage from "./UI_NativeInPage";
 import UI_AdInpageComp from "./UI_AdInpageComp";
@@ -10,17 +9,18 @@ import UI_view_game_icon1 from "./UI_view_game_icon1";
 import UI_view_end_games from "./UI_view_end_games";
 import UI_view_game_icon from "./UI_view_game_icon";
 import UI_view_item_game164 from "./UI_view_item_game164";
-import UI_SideGames from "./UI_SideGames";
 import UI_Channel from "./UI_Channel";
 import UI_FlyPanel from "./UI_FlyPanel";
 import UI_view_fly_coin from "./UI_view_fly_coin";
 import UI_NativeIcon from "./UI_NativeIcon";
 import UI_CommonLockScreen from "./UI_CommonLockScreen";
 import UI_End3X3Ad from "./UI_End3X3Ad";
+import UI_SideGames from "./UI_SideGames";
 import UI_CommonEndSliderADs from "./UI_CommonEndSliderADs";
 import UI_btn_normal from "./UI_btn_normal";
 import UI_CommonLoad from "./UI_CommonLoad";
 import UI_view_load from "./UI_view_load";
+import UI_side_ads1 from "./UI_side_ads1";
 import UI_NativeIconLong from "./UI_NativeIconLong";
 import UI_FakeBanner_V from "./UI_FakeBanner_V";
 import UI_CommonToast from "./UI_CommonToast";
@@ -32,6 +32,7 @@ import UI_slideAds from "./UI_slideAds";
 import UI_view_item_game from "./UI_view_item_game";
 import UI_view_item_game140 from "./UI_view_item_game140";
 import UI_ImageBanner from "./UI_ImageBanner";
+import UI_btnGames from "./UI_btnGames";
 import UI_SelfBanner from "./UI_SelfBanner";
 import UI_GameCenter from "./UI_GameCenter";
 import UI_item_game from "./UI_item_game";
@@ -52,7 +53,6 @@ import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
 export default class LTGameBinder{
 	public static bindAll():void {
-		fgui.UIObjectFactory.setExtension(UI_side_ads.URL, UI_side_ads);
 		fgui.UIObjectFactory.setExtension(UI_hot_game.URL, UI_hot_game);
 		fgui.UIObjectFactory.setExtension(UI_NativeInPage.URL, UI_NativeInPage);
 		fgui.UIObjectFactory.setExtension(UI_AdInpageComp.URL, UI_AdInpageComp);
@@ -62,17 +62,18 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_view_end_games.URL, UI_view_end_games);
 		fgui.UIObjectFactory.setExtension(UI_view_game_icon.URL, UI_view_game_icon);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game164.URL, UI_view_item_game164);
-		fgui.UIObjectFactory.setExtension(UI_SideGames.URL, UI_SideGames);
 		fgui.UIObjectFactory.setExtension(UI_Channel.URL, UI_Channel);
 		fgui.UIObjectFactory.setExtension(UI_FlyPanel.URL, UI_FlyPanel);
 		fgui.UIObjectFactory.setExtension(UI_view_fly_coin.URL, UI_view_fly_coin);
 		fgui.UIObjectFactory.setExtension(UI_NativeIcon.URL, UI_NativeIcon);
 		fgui.UIObjectFactory.setExtension(UI_CommonLockScreen.URL, UI_CommonLockScreen);
 		fgui.UIObjectFactory.setExtension(UI_End3X3Ad.URL, UI_End3X3Ad);
+		fgui.UIObjectFactory.setExtension(UI_SideGames.URL, UI_SideGames);
 		fgui.UIObjectFactory.setExtension(UI_CommonEndSliderADs.URL, UI_CommonEndSliderADs);
 		fgui.UIObjectFactory.setExtension(UI_btn_normal.URL, UI_btn_normal);
 		fgui.UIObjectFactory.setExtension(UI_CommonLoad.URL, UI_CommonLoad);
 		fgui.UIObjectFactory.setExtension(UI_view_load.URL, UI_view_load);
+		fgui.UIObjectFactory.setExtension(UI_side_ads1.URL, UI_side_ads1);
 		fgui.UIObjectFactory.setExtension(UI_NativeIconLong.URL, UI_NativeIconLong);
 		fgui.UIObjectFactory.setExtension(UI_FakeBanner_V.URL, UI_FakeBanner_V);
 		fgui.UIObjectFactory.setExtension(UI_CommonToast.URL, UI_CommonToast);
@@ -84,6 +85,7 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_view_item_game.URL, UI_view_item_game);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game140.URL, UI_view_item_game140);
 		fgui.UIObjectFactory.setExtension(UI_ImageBanner.URL, UI_ImageBanner);
+		fgui.UIObjectFactory.setExtension(UI_btnGames.URL, UI_btnGames);
 		fgui.UIObjectFactory.setExtension(UI_SelfBanner.URL, UI_SelfBanner);
 		fgui.UIObjectFactory.setExtension(UI_GameCenter.URL, UI_GameCenter);
 		fgui.UIObjectFactory.setExtension(UI_item_game.URL, UI_item_game);

@@ -60,7 +60,7 @@ export default class OppoPlatform extends DefaultPlatform {
     protected _cacheVideoAD: boolean = false;
 
     protected _cacheOnShowHandle: Laya.Handler;
-    private noAdTime: number = 60;
+    private noAdTime: number = 0;
     private oppoBoxBannerAd: any;
     async Init(platformData: LTPlatformData) {
         this._base = window["qg"];
@@ -206,28 +206,43 @@ export default class OppoPlatform extends DefaultPlatform {
 
     /** 发起创建桌面图标请求 */
     createShortcut(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+            let sht = await this.hasShortcutInstalled();
+            if (sht == false) {
+                let created = false;
+                qg['installShortcut']({
+                    success: function () {
+                        created = (true);
+                    },
+                    fail: function (err) {
+                        created = (false);
+
+                    },
+                    complete: function () {
+                        resolve(created);
+                    }
+                })
+            } else {
+                resolve(false);
+            }
+
+        });
+    }
+    hasShortcutInstalled() {
+        return new Promise<boolean>((resolve, reject) => {
             qg['hasShortcutInstalled']({
-                success: function (res) {
+                success: (res) => {
                     // 判断图标未存在时，创建图标
                     if (res == false) {
-                        qg['installShortcut']({
-                            success: function () {
-                                resolve();
-                            },
-                            fail: function (err) {
-                                reject();
-                            },
-                            complete: function () { }
-                        })
+                        resolve(false);
                     } else {
-                        resolve();
+                        resolve(true);
                     }
-                } as any,
-                fail: function (err) {
+                },
+                fail: (err) => {
                     reject();
                 },
-                complete: function () { }
+                complete: () => { }
             });
         });
     }
@@ -310,9 +325,7 @@ export default class OppoPlatform extends DefaultPlatform {
     }
 
     IsBannerAvaliable() {
-        if (!LTSDK.instance.isShielding)
-            return true;
-        return this.noAdTime < 0;
+        return false;// this.noAdTime <= 0;
     }
     IsVideoAvaliable() {
         return this._isVideoLoaded;
@@ -321,7 +334,7 @@ export default class OppoPlatform extends DefaultPlatform {
         return false;// LTSDK.instance.isADEnable && this._isInterstitialCanShow && CommonSaveData.instance.interstitialCount < 888;
     }
     IsNativeAvaliable() {
-        return this._nativeAdLoaded;
+        return this.noAdTime <= 0;
     }
     bannerTimer() {
         this.noAdTime--;
@@ -433,9 +446,7 @@ export default class OppoPlatform extends DefaultPlatform {
         UI_ImageBannerMediator.instance.Hide();
     }
     async ShowNativeAd() {
-        if (!this.IsNativeAvaliable()) {
-            return;
-        }
+        this.noAdTime = 30;
         // await this._ShowNative();
     }
     HideNativeAd() {
