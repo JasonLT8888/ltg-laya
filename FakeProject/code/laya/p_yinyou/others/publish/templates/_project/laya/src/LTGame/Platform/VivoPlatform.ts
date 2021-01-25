@@ -14,6 +14,7 @@ import DefaultPlatform from "./DefaultPlatform";
 
 export default class VivoPlatform extends DefaultPlatform {
     userInfo: LTGame.UserInfo;
+    isIOS: boolean = false;
     base: any;
     platformData: LTPlatformData;
     onPause: Laya.Handler;
@@ -180,6 +181,7 @@ export default class VivoPlatform extends DefaultPlatform {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
         return new Promise<void>(async (resolve, reject) => {
+            AudioManager.instance.Pause();
             if (this._rewardVideo) {
                 await this._rewardVideo.load();
                 this._rewardVideo.show().then(() => {
@@ -200,6 +202,7 @@ export default class VivoPlatform extends DefaultPlatform {
                 this._rewardVideo.onClose((res) => {
                     let isEnd = res["isEnded"] as boolean;
                     Awaiters.NextFrame().then(() => {
+                        AudioManager.instance.Resume();
                         if (isEnd) {
                             if (this._rewardSuccessed) this._rewardSuccessed.run();
                         } else {
@@ -231,7 +234,7 @@ export default class VivoPlatform extends DefaultPlatform {
             console.log("视频回调", res);
             let isEnd = res["isEnded"] as boolean;
             Awaiters.NextFrame().then(() => {
-
+                AudioManager.instance.Resume();
                 if (isEnd) {
                     if (this._rewardSuccessed) this._rewardSuccessed.run();
                 } else {
@@ -293,9 +296,29 @@ export default class VivoPlatform extends DefaultPlatform {
             resolve(false);
         });
     }
+    hasShortcutInstalled(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.hasShortcutInstalled({
+                success: (status) => {
+                    if (status) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                }
+            })
+        });
+    }
     createShortcut(): Promise<boolean> {
         console.log('创建桌面图标');
-        return;
+        return new Promise<boolean>((resolve, reject) => {
+            this.base.installShortcut({
+                success: () => {
+                    console.log('创建桌面图标成功');
+                    resolve(true);
+                }
+            });
+        });
     }
     GetStorage(key: string) {
         console.log('读本地存储');

@@ -60,13 +60,11 @@ export class View_NativeIcon {
 
     private constructor(ui: UI_NativeIcon, ids: string[]) {
         this._ui = ui;
-        if (ids == null || ids.length == 0) {
-            this._cacheIds = LTPlatform.instance.platformData.nativeIconIds;
-        } else {
-            this._cacheIds = ids;
-        }
+        this._cacheIds = LTPlatform.instance.platformData.nativeIconIds;
         console.log("初始化广告id", this._cacheIds);
+        this.ui.visible = false;
         this._Init();
+        this.ui.onClick(this, this.ClickAd);
     }
 
     public ClickAd() {
@@ -90,27 +88,23 @@ export class View_NativeIcon {
             View_NativeIcon._cacheNativeAd.destroy();
             View_NativeIcon._cacheNativeAd = null;
         }
-        this.visible = false;
         this.ui.visible = false;
         let i = MathEx.RandomInt(0, this._cacheIds.length);
         // for (let i = 0; i < this._cacheIds.length; ++i) {
         let ret = await this._LoadIconData(i);
         if (ret && this._cacheAdData) {
-            this.visible = true;
             this.ui.visible = true;
             let icon = this._cacheAdData.icon;
-            if (!icon && this._cacheAdData.imgUrlList.length) {
+            if (StringEx.IsNullOrEmpty(icon) && this._cacheAdData.imgUrlList.length > 0) {
                 icon = this._cacheAdData.imgUrlList[0];
             }
             this.ui.m_icon_img.url = icon;
             this.ui.m_icon_tip.url = this._cacheAdData.logoUrl;
-            // this.ui.m_title.text = this._cacheAdData.title;
-            // this.ui.m_desc.text = this._cacheAdData.desc;
             View_NativeIcon._cacheNativeAd.reportAdShow({
                 adId: this._cacheAdData.adId
             });
             console.log("原生icon广告已展示", this._cacheAdData);
-            return;
+
         }
         // }
 
@@ -129,49 +123,32 @@ export class View_NativeIcon {
     }
 
     private async _LoadIconData(index: number): Promise<boolean> {
-        let nativeAd = null;
-        if (LTPlatform.instance.platform == EPlatformType.Oppo) {
-            nativeAd = LTPlatform.instance.base.createNativeAd({
-                adUnitId: this._cacheIds[index]
-            });
-            View_NativeIcon._cacheNativeAd = nativeAd;
-            let loadRet = await nativeAd.load();
-            if (loadRet["code"] == 0) {
-                // 加载成功
-                let adList = loadRet['adList'] as any[];
-                if (adList == null || adList.length == 0) {
-                    console.error("native icon 加载失败", loadRet);
-                    return false;
-                }
-                let adData = adList[0] as OppoAdData
-                console.log('广告数据加载完成', loadRet);
-
-                if (adData == null) {
-                    console.error("native icon 加载失败", loadRet);
-                    return false;
-                }
-                this._cacheAdData = adData;
-                return true;
+        return new Promise<boolean>((resolve, reject) => {
+            let nativeAd = null;
+            if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+                nativeAd = LTPlatform.instance.base.createNativeAd({
+                    adUnitId: this._cacheIds[index]
+                });
             } else {
-                console.error("native icon 加载失败", loadRet);
-                return false;
+                nativeAd = LTPlatform.instance.base.createNativeAd({
+                    posId: this._cacheIds[index],
+                });
             }
-        } else {
-            nativeAd = LTPlatform.instance.base.createNativeAd({
-                posId: this._cacheIds[index],
-            });
             View_NativeIcon._cacheNativeAd = nativeAd;
             nativeAd.onLoad((res) => {
                 console.log('原生广告加载完成-onload触发', JSON.stringify(res));
                 if (res && res.adList) {
                     this._cacheAdData = res.adList.pop();
+                    resolve(true);
                 }
             })
             nativeAd.onError(err => {
                 console.log("原生广告加载异常", err);
+                resolve(false);
             });
-            await nativeAd.load();
-        }
+            nativeAd.load();
+        })
+
 
     }
 

@@ -13,14 +13,9 @@ import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import ShareManager from "./ShareManager";
+import DefaultPlatform from "./DefaultPlatform";
 
-export default class WXPlatform implements IPlatform {
-    showGameBoxBannerAd() {
-        
-    }
-    hideGameBoxBannerAd() {
-        
-    }
+export default class WXPlatform extends DefaultPlatform {
     userInfo: LTGame.UserInfo;
     base: any;
     platformData: LTPlatformData;

@@ -3,6 +3,8 @@ import ArrayEx from "../../LTGame/LTUtils/ArrayEx";
 import LTRes from "../../LTGame/Res/LTRes";
 import { AudioConfig } from "../config/AudioConfig";
 import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
 export default class AudioManager {
 
@@ -62,16 +64,23 @@ export default class AudioManager {
                 this._needPlayAudioIds.push(audioConfig.id);
             }
         } else {
-            this.PlayBgm("res/audio/" + audioConfig.audio_path);
-            // this.PlayByPath("res/audio/" + audioConfig.audio_path);
+            this.PlayBgm(this._GetAudioPath(audioConfig.audio_path));
         }
+    }
+
+    private _GetAudioPath(audioFilePath: string) {
+        if (LTPlatform.instance.platform == EPlatformType.Native_Android
+            || LTPlatform.instance.platform == EPlatformType.Native_IOS) {
+            return 'res/audio_wav/' + audioFilePath.replace('.mp3', '.wav');
+        }
+        return "res/audio/" + audioFilePath;
     }
 
     private _LogicUpdate() {
         if (this._needPlayAudioIds.length > 0) {
             for (let id of this._needPlayAudioIds) {
                 let audioConfig = AudioConfig.data[id];
-                Laya.SoundManager.playSound("res/audio/" + audioConfig.audio_path);
+                Laya.SoundManager.playSound(this._GetAudioPath(audioConfig.audio_path));
             }
             this._needPlayAudioIds = [];
         }
