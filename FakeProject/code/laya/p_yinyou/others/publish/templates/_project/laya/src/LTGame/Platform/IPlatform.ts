@@ -198,11 +198,14 @@ export default interface IPlatform {
      * 创建桌面图标
      */
     createShortcut(): Promise<boolean>;
+    /**是否已创建桌面图标 */
+    hasShortcutInstalled(): Promise<boolean>;
     /**关注官方账号 */
     followOfficialAccount(): Promise<boolean>;
     /**检查关注账号 状态*/
     checkFollowState(): Promise<boolean>;
     /**oppo 横幅推广盒子 */
     showGameBoxBannerAd();
+    /**关闭 横幅推广盒子 */
     hideGameBoxBannerAd();
 }

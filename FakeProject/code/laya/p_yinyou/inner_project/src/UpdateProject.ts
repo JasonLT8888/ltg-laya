@@ -39,13 +39,13 @@ class UpdateProject {
         console.log("拷贝", srcPath, "完成");
 
         // 处理发布路径
-        // fgui
+        // fgui_main
         {
             // 默认发布路径
             let defaultJsonPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/settings/Publish.json');
             let readDefaultJson = JSON.parse(LTUtils.ReadStrFrom(defaultJsonPath));
-            readDefaultJson['codeGeneration']['codePath'] = '..\\\\..\\\\laya\\\\' + projectName + '\\\\src\\\\ui';
-            readDefaultJson['path'] = '..\\\\..\\\\laya\\\\' + projectName + '\\\\bin\\\\res\\\\fgui';
+            readDefaultJson['codeGeneration']['codePath'] = '..\\..\\laya\\' + projectName + '\\src\\ui';
+            readDefaultJson['path'] = '..\\..\\laya\\' + projectName + '\\bin\\res\\fgui';
             let saveStr = JSON.stringify(readDefaultJson);
             LTUtils.WriteStrTo(defaultJsonPath, saveStr);
             // Load发布路径
@@ -60,9 +60,17 @@ class UpdateProject {
             let newProjectPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/' + projectName + '.fairy');
             LTUtils.Rename(oldProjectPath, newProjectPath);
         }
-
-
-
+        // fgui_common
+        {
+            // 重写导出路径即可
+            projectName = 'p_common_ui';
+            let defaultJsonPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/settings/Publish.json');
+            let readDefaultJson = JSON.parse(LTUtils.ReadStrFrom(defaultJsonPath));
+            readDefaultJson['codeGeneration']['codePath'] = '..\\..\\laya\\' + projectName + '\\src\\LTG_CommonUI\\UI';
+            readDefaultJson['path'] = '..\\..\\laya\\' + projectName + '\\bin\\res\\ltgame\\ui';
+            let saveStr = JSON.stringify(readDefaultJson);
+            LTUtils.WriteStrTo(defaultJsonPath, saveStr);
+        }
 
 
     }
