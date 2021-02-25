@@ -116,6 +116,7 @@ export class SubpackHelper {
             let gameJsName = "";
             switch (this._packConfig.platform) {
                 case "oppo":
+                case "ks":
                     gameJsName = "main";
                     break;
                 default:
@@ -139,6 +140,9 @@ export class SubpackHelper {
                 break;
             case "vivo":
                 gameJsonName = "src/manifest";
+                break;
+            case "ks":
+                gameJsonName = "game.config";
                 break;
             default:
                 gameJsonName = "game";
@@ -191,6 +195,8 @@ export class SubpackHelper {
             let packType = this._packConfig.packType == EPackResolveType.AllIn ? 1 : 2;
             if (this._packConfig.forceInPack.indexOf(checkRelativePath) >= 0) {
                 packType = 1;
+            } else if (this._packConfig.forceRemote.indexOf(checkRelativePath) >= 0) {
+                packType = 3;
             }
             let name = LTUtils.ReplaceAll(checkRelativePath, "/", "_");
             subpackJsonData.push(
@@ -201,11 +207,11 @@ export class SubpackHelper {
                 }
             );
         }
-        if (this._packConfig.platform == "vivo") {
-            console.log("vivo subpack.json 设置远程包");
-            for (let i = 0; i < this._remoteFiles.length; ++i) {
-                let pack = this._remoteFiles[i];
-                let relativePath = pack.fullPath.replace(upRootPath, "");
+        if (this._packConfig.platform == "vivo" || this._packConfig.platform == "ks") {
+            console.log("vivo & KS subpack.json 设置远程包");
+            for (let i = 0; i < this._packConfig.forceRemote.length; ++i) {
+                let pack = this._packConfig.forceRemote[i];
+                let relativePath = pack.replace(upRootPath, "");
                 let checkRelativePath = LTUtils.ReplaceAll(relativePath, "\\", "/");
                 let name = LTUtils.ReplaceAll(checkRelativePath, "/", "_");
                 subpackJsonData.push(
