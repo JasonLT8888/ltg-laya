@@ -16,6 +16,8 @@ import { GameConst } from "../config/GameConst";
 import { LTG_Com_UnlockItemData } from "../../LTG_CommonUI/Data/LTG_Com_UnlockItemData";
 import { RewardCodeConfig } from "../config/RewardCodeConfig";
 import { LTG_Com_VideoListData } from "../../LTG_CommonUI/Data/LTG_Com_VideoListData";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import LTSDK from "../../SDK/LTSDK";
 
 class UIDemoData {
 
@@ -125,6 +127,22 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             }, null, false);
             data.Send();
         }),
+        new UIDemoData("上报排行", () => {
+            // LTPlatform.instance.setUserCloudStorage("scroe", 100);
+            LTSDK.instance.RecordRankInfo(1, 200);
+        }),
+        new UIDemoData("获取日排行", () => {
+            // LTPlatform.instance.getRankList("scroe");
+            LTSDK.instance.GetDayRankList(1, 100, (res) => {
+                console.log(res);
+            });
+        }),
+        new UIDemoData("获取周排行", () => {
+            // LTPlatform.instance.getRankList("scroe");
+            LTSDK.instance.GetWeekRankList(1, 200, (res) => {
+                console.log(res);
+            });
+        })
     ];
 
     _OnShow() {

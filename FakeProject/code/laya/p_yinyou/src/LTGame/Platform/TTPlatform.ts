@@ -64,7 +64,79 @@ export default class TTPlatform extends WXPlatform {
         this.device = new TTDevice(this._base);
 
         window["iplatform"] = this;
+        this.setGroup();
+
     }
+    GROUPID: string = "yinsuzhanji";
+    setGroup() {
+        let openCtx = this.base.getOpenDataContext();
+        openCtx.postMessage({
+            company: "youtiao",
+        });
+        this.base.setUserGroup({
+            groupId: this.GROUPID,
+        });
+
+    }
+    setUserCloudStorage(key: string, value: number) {
+        if (!key) {
+            key = "score";
+        }
+        if (isNaN(value)) {
+            value = 0;
+        }
+        const data = {
+            ttgame: {
+                score: "score",
+                update_time: Date.now(),
+            },
+            progress: 10
+        };
+
+        this.base.setUserCloudStorage({
+            KVDataList: [
+                // key 需要在开发者后台配置，且配置为排行榜标识后，data 结构必须符合要求，否则会 set 失败
+                { key: key, value: JSON.stringify(data) },
+            ],
+        });
+    }
+
+    getRankList(key: string) {
+        if (!key) {
+            key = "score";
+        }
+        this.base.getUserCloudStorage({
+            keyList: ["score"], // 要获取的 key 列表
+            success: (res) => {
+                console.log("获取KV 成功");
+                console.log(res.KVDataList);
+            },
+            fail: (res) => {
+                console.log("获取KV调用失败");
+            },
+            complete: (res) => {
+                console.log("获取KV调用完成");
+            },
+        });
+        // this.base.getCloudStorageByRelation({
+        //     type: "group",
+        //     keyList: [key],
+        //     extra: {
+        //         sortKey: key, // 指定的key需要在后台配置过
+        //         groupId: this.GROUPID, // 指定要获取的用户所属分组
+        //     },
+        //     success: (res) => {
+        //         console.log(res);
+        //     },
+        //     fail: (e) => {
+        //         console.log("获取数据失败");
+        //     },
+        //     complete: (res) => {
+        //       console.log("调用完成");
+        //     },
+        // });
+    }
+
     protected _Login() {
         this.loginState = {
             isLogin: false,
@@ -95,29 +167,35 @@ export default class TTPlatform extends WXPlatform {
 
         window["tt"].login(loginData);
     }
-    getUserInfo() {
+    getUserInfo(): Promise<void> {
         console.log('开始授权')
-        window["tt"].authorize({
-            scope: "scope.userInfo",
-            success: () => {
-                console.log('授权成功')
-                window["tt"].getUserInfo({
-                    withCredentials: false,
-                    lang: 'zh_CN',
-                    success: (result) => {
-                        console.log('获取信息成功')
-                        console.log(result);
-                        this.userInfo = { avatarUrl: result.avatarUrl, nickName: result.nickName }
-                    },
-                    fail: () => {
-                        console.log('获取信息失败')
-                    },
-                    complete: () => {
-                        console.log('获取信息comp')
-                    }
-                })
-            },
-        });
+        return new Promise<void>((resolve, reject) => {
+            window["tt"].authorize({
+                scope: "scope.userInfo",
+                success: () => {
+                    console.log('授权成功');
+                    window["tt"].getUserInfo({
+                        withCredentials: false,
+                        lang: 'zh_CN',
+                        success: (result) => {
+                            console.log('获取信息成功')
+                            console.log(result);
+                            this.userInfo = { avatarUrl: result.userInfo.avatarUrl, nickName: result.userInfo.nickName };
+                            CommonSaveData.instance.nickName = result.userInfo.nickName;
+                            CommonSaveData.instance.avatarUrl = result.userInfo.avatarUrl;
+                            CommonSaveData.SaveToDisk();
+                        },
+                        fail: () => {
+                            console.log('获取信息失败')
+                        },
+                        complete: () => {
+                            console.log('获取信息comp');
+                            resolve();
+                        }
+                    })
+                },
+            });
+        })
 
     }
 

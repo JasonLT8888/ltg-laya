@@ -24,7 +24,7 @@
     "publish-tt": "node others/publish/bin/publish.js -p tt",
     "publish-qq": "node others/publish/bin/publish.js -p qq",
     "publish-oppo": "node others/publish/bin/publish.js -p oppo",
-    "publish-vivo": "mg-service build",
+    "publish-vivo": "node others/publish/bin/publish.js -p vivo",
     "publish-ks": "node others/publish/bin/publish.js -p ks",
     "buid-ks-debug": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/ -d 1",
     "buid-ks-release": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/",

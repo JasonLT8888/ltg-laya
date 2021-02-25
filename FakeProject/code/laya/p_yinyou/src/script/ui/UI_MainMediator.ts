@@ -32,7 +32,7 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
         this.ui.m_btn_common2.onClick(this, this._OnClickCommon2);
     }
     _OnEnterAnimEnd() {
-        
+
     }
 
     private _OnClickCommon2() {

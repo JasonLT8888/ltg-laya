@@ -177,7 +177,12 @@ export class SubpackHelper {
         }
 
         // 写出game.json文件
-        gameJson['subpackages'] = subpacks;
+        if (this._packConfig.platform == "tt") {
+            gameJson['subPackages'] = subpacks;
+        } else {
+            gameJson['subpackages'] = subpacks;
+        }
+
         let outputjson = JSON.stringify(gameJson);
         while (outputjson.indexOf("\\\\") >= 0) {
             outputjson = outputjson.replace("\\\\", "/");

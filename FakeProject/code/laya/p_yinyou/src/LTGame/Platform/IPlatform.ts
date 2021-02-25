@@ -208,4 +208,10 @@ export default interface IPlatform {
     showGameBoxBannerAd();
     /**关闭 横幅推广盒子 */
     hideGameBoxBannerAd();
+    /**设置远程数据 */
+    setUserCloudStorage(key: string, value: number);
+    /**获取排行榜 */
+    getRankList(key: string);
+    /**授权用户信息 */
+    getUserInfo(): Promise<void>;
 }

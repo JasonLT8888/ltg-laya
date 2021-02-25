@@ -77,13 +77,11 @@ export default class MainStart extends LTStart {
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
                 break;
             case EPlatformType.KS:
-                this._gameVersion = "1.0.0";
-                this._resVersion = "0910";
-                platformData.appId = "ks660058823026773759";
-                // platformData.bannerId = "f3h5a48j44l2jfopn8";
-                platformData.rewardVideoId = "2300000126_01";
-                // platformData.interstitialId = "3nmlb1smr5h1f9clmk";
-                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/tt_${this._resVersion}/`);
+                this._gameVersion = "1.0.1";
+                this._resVersion = "1.0.1";
+                platformData.appId = "ks667940122780561072";
+                platformData.rewardVideoId = "2300000737_01";
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/ks_${this._resVersion}/`);
                 break;
             default:
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");
@@ -95,19 +93,16 @@ export default class MainStart extends LTStart {
     }
 
     _HandleSDK() {
-        switch (LTPlatform.instance.platform) {
-            case EPlatformType.WX:
-                LTSDK.CreateInstace(SDK_YQ, this._gameName, this._gameVersion, this._appId);//
-                break;
-            case EPlatformType.Oppo:
-            case EPlatformType.TT:
-            case EPlatformType.Web:
-            default:
-                LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
-                break;
-            // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
-            // break;
-        }
+        // switch (LTPlatform.instance.platform) {
+        //     case EPlatformType.WX:
+        //         LTSDK.CreateInstace(SDK_YQ, this._gameName, this._gameVersion, this._appId);//
+        //         break; 
+        //     default:
+        //         break;
+        //         // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
+        //         // break;
+        //     }
+        LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
     }
 
     _InitFsm() {

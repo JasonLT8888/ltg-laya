@@ -42,6 +42,7 @@ import LTG_UI_top3 from "./LTG_UI_top3";
 import LTG_UI_iconVdieo from "./LTG_UI_iconVdieo";
 import LTG_UI_videoItem from "./LTG_UI_videoItem";
 import LTG_UI_normal_btn from "./LTG_UI_normal_btn";
+import LTG_UI_RanList from "./LTG_UI_RanList";
 import LTG_UI_view_enter_code from "./LTG_UI_view_enter_code";
 import LTG_UI_UnlockItem from "./LTG_UI_UnlockItem";
 import LTG_UI_btn_unlock_ad from "./LTG_UI_btn_unlock_ad";
@@ -95,6 +96,7 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_iconVdieo.URL, LTG_UI_iconVdieo);
 		fgui.UIObjectFactory.setExtension(LTG_UI_videoItem.URL, LTG_UI_videoItem);
 		fgui.UIObjectFactory.setExtension(LTG_UI_normal_btn.URL, LTG_UI_normal_btn);
+		fgui.UIObjectFactory.setExtension(LTG_UI_RanList.URL, LTG_UI_RanList);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_enter_code.URL, LTG_UI_view_enter_code);
 		fgui.UIObjectFactory.setExtension(LTG_UI_UnlockItem.URL, LTG_UI_UnlockItem);
 		fgui.UIObjectFactory.setExtension(LTG_UI_btn_unlock_ad.URL, LTG_UI_btn_unlock_ad);
