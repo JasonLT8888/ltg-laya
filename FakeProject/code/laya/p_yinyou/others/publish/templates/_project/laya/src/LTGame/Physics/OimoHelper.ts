@@ -29,12 +29,31 @@ export class OimoHelper {
         return rig;
     }
 
+    public static CreateCapsule(radius: number, height: number, layer: number = 1, mask: number = 1,
+        localPos: Laya.Vector3 = null, localRot: Laya.Quaternion = null) {
+        this._Init();
+
+        let boxGeo = new OIMO.CapsuleGeometry(radius, height / 2);
+        let shapeConfig = new OIMO.ShapeConfig();
+        shapeConfig.geometry = boxGeo;
+        shapeConfig.collisionGroup = layer;
+        shapeConfig.collisionMask = mask;
+        if (localPos != null) {
+            shapeConfig.position.init(localPos.x, localPos.y, localPos.z);
+        }
+        if (localRot != null) {
+            shapeConfig.rotation.fromQuat(localRot);
+        }
+        let shape = new OIMO.Shape(shapeConfig);
+        return shape;
+    }
+
     public static CreateSphere(radius: number, layer: number = 1, mask: number = 1,
         localPos: Laya.Vector3 = null, localRot: Laya.Quaternion = null): OIMO.Shape {
         this._Init();
 
-        let shapeConfig = new OIMO.ShapeConfig();
         let boxGeo = new OIMO.SphereGeometry(radius);
+        let shapeConfig = new OIMO.ShapeConfig();
         shapeConfig.geometry = boxGeo;
         shapeConfig.collisionGroup = layer;
         shapeConfig.collisionMask = mask;
@@ -52,9 +71,9 @@ export class OimoHelper {
         localPos: Laya.Vector3 = null, localRot: Laya.Quaternion = null): OIMO.Shape {
         this._Init();
 
-        let shapeConfig = new OIMO.ShapeConfig();
         this._cacheVec3.init(size.x / 2, size.y / 2, size.z / 2);
         let boxGeo = new OIMO.BoxGeometry(this._cacheVec3);
+        let shapeConfig = new OIMO.ShapeConfig();
         shapeConfig.geometry = boxGeo;
         shapeConfig.collisionGroup = layer;
         shapeConfig.collisionMask = mask;
@@ -74,16 +93,18 @@ export class OimoHelper {
         rig.setRotation(this._cacheRigMat3);
     }
 
-    static SyncTransFromRig(trans: Laya.Transform3D, rig: OIMO.RigidBody) {
+    static SyncTransFromRig(trans: Laya.Transform3D, rig: OIMO.RigidBody, onlyPos: boolean = false) {
         rig.getPositionTo(this._cacheRigPos);
-        rig.getOrientationTo(this._cacheRigQuat);
         this._cacheTransPos.setValue(this._cacheRigPos.x, this._cacheRigPos.y, this._cacheRigPos.z);
-        this._cacheTransQuat.x = this._cacheRigQuat.x;
-        this._cacheTransQuat.y = this._cacheRigQuat.y;
-        this._cacheTransQuat.z = this._cacheRigQuat.z;
-        this._cacheTransQuat.w = this._cacheRigQuat.w;
         trans.position = this._cacheTransPos;
-        trans.rotation = this._cacheTransQuat;
+        if (!onlyPos) {
+            rig.getOrientationTo(this._cacheRigQuat);
+            this._cacheTransQuat.x = this._cacheRigQuat.x;
+            this._cacheTransQuat.y = this._cacheRigQuat.y;
+            this._cacheTransQuat.z = this._cacheRigQuat.z;
+            this._cacheTransQuat.w = this._cacheRigQuat.w;
+            trans.rotation = this._cacheTransQuat;
+        }
     }
 
 }

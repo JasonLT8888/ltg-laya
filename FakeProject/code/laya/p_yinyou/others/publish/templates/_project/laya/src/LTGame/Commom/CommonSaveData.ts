@@ -81,6 +81,11 @@ export class SaveData {
      */
     public uid: string = '';
 
+    /** 昵称 */
+    public nickName: string = '';
+    /** 头像 */
+    public avatarUrl: string = '';
+
 }
 
 export default class CommonSaveData {

@@ -147,15 +147,19 @@ export default class WXPlatform extends DefaultPlatform {
         this._base.login(loginData);
     }
     getUserInfo() {
-        this.base.getUserInfo({
-            withCredentials: true,
-            lang: 'zh_CN',
-            success: (result: _getUserInfoSuccessObject) => {
-                console.log(result);
-            },
-            fail: () => { },
-            complete: () => { }
+        return new Promise<void>((resolve, reject) => {
+            this.base.getUserInfo({
+                withCredentials: true,
+                lang: 'zh_CN',
+                success: (result: _getUserInfoSuccessObject) => {
+                    console.log(result);
+                    resolve();
+                },
+                fail: () => { },
+                complete: () => { }
+            })
         })
+
     }
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {

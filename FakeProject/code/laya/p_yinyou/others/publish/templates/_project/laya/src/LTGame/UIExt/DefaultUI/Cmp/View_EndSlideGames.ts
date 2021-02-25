@@ -75,9 +75,6 @@ export default class View_EndSlideGames {
             this._posId = 6;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
-        while (this._cacheAds.length < 13) {
-            this._cacheAds.concat(LTSDK.instance.adManager.GetADListByLocationId(this._posId));
-        }
         if (!this._cacheAds || !this._cacheAds.length) {
             this.ui.visible = false;
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);
@@ -135,7 +132,7 @@ export default class View_EndSlideGames {
     }
 
     private _OnClickGameItem(item: UI_view_item_game140) {
-        let data = this._cacheAds[item.data as number]; 
+        let data = this._cacheAds[item.data as number];
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:

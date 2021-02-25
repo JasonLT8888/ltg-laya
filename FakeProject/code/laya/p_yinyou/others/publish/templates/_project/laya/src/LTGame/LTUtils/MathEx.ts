@@ -122,6 +122,35 @@ export default class MathEx {
         return current + Math.sign(target - current) * maxDelta;
     }
 
+    public static SmoothDamp(current: number, target: number, speed: number[], smoothTime: number, maxSpeed: number,
+        deltaTime: number): number {
+        // Based on Game Programming Gems 4 Chapter 1.10
+        smoothTime = Math.max(0.0001, smoothTime);
+        let omega = 2 / smoothTime;
+
+        let x = omega * deltaTime;
+        let exp = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+        let change = current - target;
+        let originalTo = target;
+
+        // Clamp maximum speed
+        let maxChange = maxSpeed * smoothTime;
+        change = MathEx.Clamp(change, -maxChange, maxChange);
+        target = current - change;
+
+        let temp = (speed[0] + omega * change) * deltaTime;
+        speed[0] = (speed[0] - omega * temp) * exp;
+        let output = target + (change + temp) * exp;
+
+        // Prevent overshooting
+        if ((originalTo - current > 0.0) == (output > originalTo)) {
+            output = originalTo;
+            speed[0] = (output - originalTo) / deltaTime;
+        }
+
+        return output;
+    }
+
     public static DeltaAngle(current: number, target: number): number {
         var num = MathEx.Repeat(target - current, 360);
         if (num > 180) {

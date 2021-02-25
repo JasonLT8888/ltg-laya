@@ -1974,8 +1974,8 @@
                     this._textField.font = fgui.UIConfig.defaultFont;
                 }
                 if (window["KSiOS"] && !fgui.ToolSet.startsWith(this._font, "ui://")) {
-                    this._textField.font = "ui://Font/wryh_45px";
-                    this._bitmapFont = fgui.UIPackage.getItemAssetByURL("ui://Font/wryh_45px");
+                    this._textField.font = "ui://KSFont/wryh_45px";
+                    this._bitmapFont = fgui.UIPackage.getItemAssetByURL("ui://KSFont/wryh_45px");
                     // this._bitmapFont.resizable = false; 
                     this._textField["setChanged"]();
                 }
