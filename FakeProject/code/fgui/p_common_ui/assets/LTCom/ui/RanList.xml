@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <text id="n0_e6qp" name="score_input" xy="190,112" size="364,58" input="true" prompt="输入分数" keyboardType="4" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" text=""/>
+    <component id="n1_e6qp" name="btn_report" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="254,178" size="242,92">
+      <Button title="上报分数" titleColor="#ffffff" titleFontSize="40"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te38gel2r"/>
+    </component>
+    <component id="n2_e6qp" name="btn_getweekly" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="454,299" size="242,92">
+      <Button title="获取周排行" titleColor="#ffffff" titleFontSize="40"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te38gel2r"/>
+    </component>
+    <component id="n3_e6qp" name="btn_getdaily" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="54,300" size="242,92">
+      <Button title="获取日排行" titleColor="#ffffff" titleFontSize="40"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te38gel2r"/>
+    </component>
+    <list id="n4_e6qp" name="list" xy="148,448" size="458,697" overflow="scroll"/>
+  </displayList>
+</component>

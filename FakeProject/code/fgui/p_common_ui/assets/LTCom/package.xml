@@ -292,6 +292,10 @@
     <image id="cx1n87" name="sp_chuangjianshipin.png" path="/img/视频排行榜/"/>
     <image id="cx1n88" name="视频排行榜.jpg" path="/img/视频排行榜/"/>
     <image id="q96u89" name="bg_s.png" path="/img/" scale="9grid" scale9grid="1,1,338,431" gridTile="16"/>
+    <component id="e6qp8a" name="RanList.xml" path="/ui/" exported="true"/>
+    <component id="e6qp8e" name="rank_item.xml" path="/cmp/"/>
   </resources>
-  <publish name="LTCom" genCode="true"/>
+  <publish name="LTCom" genCode="true">
+    <atlas compression="true" index="0"/>
+  </publish>
 </packageDescription>
