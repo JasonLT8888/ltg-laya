@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="78,250" extention="Button">
+  <controller name="state" exported="true" pages="0,hide,1,show" selected="1"/>
+  <displayList>
+    <image id="n2_ii3n" name="n2" src="ii3ni0" fileName="cmp/sp_xiaoxiong.png" xy="56,2" pivot="0.5,0.7" anchor="true">
+      <gearDisplay controller="state" pages="0"/>
+    </image>
+    <image id="n0_ii3n" name="n0" src="ii3nhw" fileName="img/ad_res/推荐/btn_gengduoyouxi.png" xy="0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_ii3n" name="n1" src="ii3nht" fileName="img/ad_res/推荐/sp_jiantou.png" xy="23,19" pivot="0.5,0.5" scale="-1,1">
+      <gearSize controller="state" pages="1" values="37,44,-1,1" default="37,44,1,1"/>
+    </image>
+  </displayList>
+  <Button/>
+  <transition name="t0" autoPlay="true">
+    <item time="0" type="Rotation" target="n2_ii3n" tween="true" startValue="-8" endValue="8" duration="10" ease="Linear" repeat="-1" yoyo="true"/>
+  </transition>
+</component>

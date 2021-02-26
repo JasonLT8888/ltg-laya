@@ -11,14 +11,33 @@ import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
+import StringEx from "../LTUtils/StringEx";
+import CommonSaveData from "../Commom/CommonSaveData";
 
 export default class DefaultPlatform implements IPlatform {
+    setUserCloudStorage(key: string, value: number) {
+        console.log(`当前平台不支持上报排行key=${key}value=${value}`);
+    }
+    getRankList(key: string) {
+        console.log(`当前平台不支持获取排行key=${key}`);
+    }
     showGameBoxBannerAd() {
 
     }
     hideGameBoxBannerAd() {
 
     }
+    getUserInfo() {
+        return new Promise<void>((resolve, reject) => {
+            if (StringEx.IsNullOrEmpty(CommonSaveData.instance.nickName) && !StringEx.IsNullOrEmpty(CommonSaveData.instance.uid)) {
+                CommonSaveData.instance.nickName = "游客" + CommonSaveData.instance.uid.substr(2, 16);
+                CommonSaveData.instance.avatarUrl = "https://sf1-ttcdn-tos.pstatp.com/obj/developer/app/ttd60ba0b64931e10f/iconed57a79";
+                CommonSaveData.SaveToDisk();
+                resolve();
+            }
+        });
+    }
+
     userInfo: LTGame.UserInfo;
     base: any;
     platformData: LTPlatformData;
@@ -47,10 +66,29 @@ export default class DefaultPlatform implements IPlatform {
         };
         this.userInfo = { nickName: '未登录用户666', avatarUrl: '66.png' }
         Laya.timer.once(500, this, this._FakeLoginEnd);
+        this._InitSystemInfo();
     }
     private _FakeLoginEnd() {
         if (this.onLoginEnd)
             this.onLoginEnd.run();
+    }
+
+    protected _InitSystemInfo() {
+        try {
+            console.log(window.innerWidth, window.innerHeight)
+            this.safeArea = {} as LTGame.SafeArea;
+            this.safeArea.left = 0;
+            this.safeArea.right = 0;
+            this.safeArea.bottom = window.innerHeight
+            this.safeArea.top = 0;
+            this.safeArea.width = window.innerWidth;
+            this.safeArea.height = window.innerHeight - this.safeArea.top;
+            console.log("初始化安全区域完成");
+        } catch (e) {
+            console.error(e);
+            console.error("获取设备信息失败,执行默认初始化");
+            this.safeArea = null;
+        }
     }
     IsBannerAvaliable() {
         return false;

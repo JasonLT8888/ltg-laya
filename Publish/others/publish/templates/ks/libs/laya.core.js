@@ -1206,8 +1206,7 @@ window.Laya = (function (exports) {
             else if (char1 === "d") {
                 if (url.indexOf("data:image") === 0)
                     return url;
-            }
-            else if (char1 === "/") {
+            } else if (char1 === "/") {
                 return url;
             }
             return URL._basePath + url;
@@ -18519,10 +18518,22 @@ window.Laya = (function (exports) {
             }
             this._loadResourceFilter(type, url);
         }
+        isRemoteFile(url) {
+            for (var i = 0, sz = window["remoteFiles"].length; i < sz; i++) {
+                if (url.startsWith(window["remoteFiles"][i]))
+                    return true;
+            }
+            return false;
+        }
         _loadResourceFilter(type, url) {
             this._loadResource(type, url);
         }
         _loadResource(type, url) {
+            if (window['kwaigame']) {
+                if (this.isRemoteFile(url)) {
+                    url = window["baseUrl"] + (url);
+                }
+            }
             switch (type) {
                 case Loader.IMAGE:
                 case "htmlimage":
@@ -18595,6 +18606,7 @@ window.Laya = (function (exports) {
                         url = url.substr('file://'.length);
                     }
                     url = URL.getAdptedFilePath(url);//对资源后缀转化，Laya 自带方法
+                    console.log(url);
                     var rt = loadRuntime();
                     var response;
                     var type = contentType;
@@ -18630,6 +18642,7 @@ window.Laya = (function (exports) {
             var _this = this;
             if (isformatURL)
                 url = URL.formatURL(url);
+
             var onError = function () {
                 _this.event(Event.ERROR, "Load image failed");
             };

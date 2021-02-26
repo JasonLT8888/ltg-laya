@@ -5,7 +5,7 @@ import MathEx from "../../../LTUtils/MathEx";
 import StringEx from "../../../LTUtils/StringEx";
 import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
-import { OppoAdData } from "../../../Platform/OppoPlatform";
+import OppoPlatform, { OppoAdData } from "../../../Platform/OppoPlatform";
 import UI_NativeInPage from "../UI/LTGame/UI_NativeInPage";
 
 export class View_NativeInPage {
@@ -20,6 +20,11 @@ export class View_NativeInPage {
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
             // 只有oppo支持
             console.log("内嵌 native已隐藏,审核");
+            tagUI.dispose();
+            return null;
+        }
+        if (LTPlatform.instance.platform == EPlatformType.Oppo && !(LTPlatform.instance as OppoPlatform).IsNativeAvaliable()) {
+            console.log("内嵌 native已隐藏,cd中");
             tagUI.dispose();
             return null;
         }
@@ -59,7 +64,7 @@ export class View_NativeInPage {
         this._cacheIds = LTPlatform.instance.platformData.nativeinpageIds;
 
         console.log("初始化 内嵌 native广告id", this._cacheIds);
-
+        this.visible = false;
         this._Init();
         this.ui.m_ad.onClick(this, this._OnClickAd);
         this.ui.m_btn_clickad.onClick(this, this._OnClickAd);
@@ -68,6 +73,7 @@ export class View_NativeInPage {
         if (this.showAdBtn) {
             this.showAdBtn(false);
         }
+
     }
 
     public ClickAd() {
@@ -81,31 +87,33 @@ export class View_NativeInPage {
     }
 
     private async _Init() {
-
-        this.visible = true;
-        this.ui.visible = true;
         // for (let i = 0; i < this._cacheIds.length; ++i) {
         let i = MathEx.RandomInt(0, this._cacheIds.length)
         let ret = await this._LoadIconData(i);
         if (ret && this._cacheAdData) {
             this.showAdInfo();
+            this.visible = true;
+            if (LTPlatform.instance.platform == EPlatformType.Oppo) {
+                (LTPlatform.instance as OppoPlatform).ShowNativeAd();
+            }
         } else {
             console.log("内嵌 native加载失败", this._cacheIds[i]);
             // } 
             if (this.showAdBtn) {
                 this.showAdBtn(false);
             }
-            this.ui.visible = false;
+            this.visible = false;
         }
 
     }
     private showAdInfo() {
         if (!this._cacheAdData) {
-            return this.ui.visible = false;
+            return this.visible = false;
         }
         if (this.showAdBtn) {
             this.showAdBtn(true);
         }
+        this.visible = true;
         this.ui.visible = true;
         if (this._cacheAdData.imgUrlList.length) {
             this.ui.m_ad.m_icon.url = this._cacheAdData.icon ? this._cacheAdData.icon : this._cacheAdData.imgUrlList[0];
@@ -151,7 +159,6 @@ export class View_NativeInPage {
                     console.log("native   加载成功", res);
                     if (res && res.adList) {
                         this._cacheAdData = res.adList[0];
-                        this.showAdInfo();
                         resolve(true);
                     }
                 });
@@ -166,20 +173,23 @@ export class View_NativeInPage {
                 nativeAd.load();
                 return;
             } else {
-                if (!View_NativeInPage._cacheNativeAd) {
-                    View_NativeInPage._cacheNativeAd = LTPlatform.instance.base.createNativeAd({
-                        adUnitId: this._cacheIds[index],
-                    });
+                let native = null;
+                native = LTPlatform.instance.base.createNativeAd({
+                    adUnitId: this._cacheIds[index],
+                });
+                if (View_NativeInPage._cacheNativeAd) {
+                    View_NativeInPage._cacheNativeAd.offLoad();
                 }
-                View_NativeInPage._cacheNativeAd.onLoad((res) => {
+                View_NativeInPage._cacheNativeAd = native;
+
+                native.onLoad((res) => {
                     console.log('原生广告加载完成 触发', JSON.stringify(res));
                     if (res && res.adList) {
                         this._cacheAdData = res.adList[0];
-                        this.showAdInfo();
                         resolve(true);
                     }
                 });
-                View_NativeInPage._cacheNativeAd.onError(err => {
+                native.onError(err => {
                     console.log("原生广告加载异常", err);
                     this.ui.visible = false;
                     if (this.showAdBtn) {
@@ -187,13 +197,13 @@ export class View_NativeInPage {
                     }
                     resolve(false);
                 });
-                View_NativeInPage._cacheNativeAd.load();
 
+                native.load();
 
             }
+
         })
-
-
     }
+
 
 }

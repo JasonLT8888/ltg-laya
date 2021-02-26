@@ -219,7 +219,7 @@ let createInputElement = function (name) {
                 }
             });
         rt.onKeyboardComplete(function () {
-            layaInput.isInputting = false;
+            // layaInput.isInputting = false;
             inputTarget.focus = false;
         });
         rt.onKeyboardConfirm(function (res) {

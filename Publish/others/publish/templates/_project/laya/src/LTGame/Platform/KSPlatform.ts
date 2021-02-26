@@ -132,17 +132,21 @@ export default class KSPlatform extends DefaultPlatform {
         });
 
     }
-    private getUserInfo() {
-        this.base.getUserInfo({
-            success: (result) => {
-                console.log("获取用户信息成功：" + JSON.stringify(result));
-            },
-            fail: (error) => {
-                console.log("获取用户信息失败: " + JSON.stringify(error));
-            },
-            complete: () => {
-                console.log("获取用户信息完成");
-            }
+    getUserInfo() {
+        return new Promise<void>((resolve, reject) => {
+            this.base.getUserInfo({
+                success: (result) => {
+                    console.log("获取用户信息成功：" + JSON.stringify(result));
+                    resolve();
+                },
+                fail: (error) => {
+                    console.log("获取用户信息失败: " + JSON.stringify(error));
+                },
+                complete: () => {
+                    console.log("获取用户信息完成");
+                    resolve();
+                }
+            });
         });
 
     }

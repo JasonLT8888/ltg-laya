@@ -5,6 +5,8 @@ export default class FGuiEx {
 
     public static top: number = 0;
     public static bottom: number = 0;
+    public static width: number = 750;
+    public static scale: number = 1;
 
     public static safeArea: LTGame.SafeArea;
 
@@ -28,7 +30,7 @@ export default class FGuiEx {
         if (param == null || !param.needFitScreen) {
             ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
         } else {
-            ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height - this.top - this.bottom);
+            ui.setSize(fgui.GRoot.inst.width, this.bottom);
             ui.y = this.top;
         }
         if (window['kwaigame']) {
@@ -55,7 +57,11 @@ export default class FGuiEx {
         if (this.safeArea != null) {
             let scale = Laya.stage.width / this.safeArea.width;
             this.top = this.safeArea.top * scale;
-            this.bottom = (this.safeArea.bottom - this.safeArea.height - this.safeArea.top) * scale;
+            this.bottom = (this.safeArea.height) * scale;
+            this.width = this.safeArea.width;
+        } else {
+            this.bottom = setHeight;
+            this.width = setWidth;
         }
         if (window['kwaigame']) {
             fgui.GRoot.inst.setSize(750, 1334);
@@ -69,7 +75,7 @@ export default class FGuiEx {
             if (getData == null || !getData.needFitScreen) {
                 ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
             } else {
-                ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height - this.top - this.bottom);
+                ui.setSize(fgui.GRoot.inst.width, this.bottom);
                 ui.y = this.top;
             }
             if (window['kwaigame']) {

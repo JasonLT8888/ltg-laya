@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="680,680" opaque="false">
+<component size="470,770" opaque="false">
   <displayList>
-    <image id="n3_kvo6" name="n3" src="xx3jgt" fileName="img/sp_heisebgban.png" xy="0,0" size="560,680">
+    <image id="n3_kvo6" name="n3" src="ii3nhr" fileName="img/ad_res/推荐/sp_tuijianbg.png" xy="0,0" size="388,770">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <list id="n0_kvo6" name="list" xy="279,340" pivot="0.5,0.5" anchor="true" size="546,658" layout="flow_hz" overflow="scroll" margin="11,0,0,0" lineGap="10" colGap="10" lineItemCount="3" defaultItem="ui://75kiu87kebhigq" align="center" autoClearItems="true">
+    <list id="n0_kvo6" name="list" xy="1,70" pivot="0.5,0" size="366,687" layout="flow_hz" overflow="scroll" lineGap="3" defaultItem="ui://75kiu87kii3nhz" align="center" autoClearItems="true">
       <relation target="" sidePair="center-center,topext-top,bottomext-bottom"/>
       <item/>
       <item/>
@@ -17,9 +17,10 @@
       <item/>
       <item/>
     </list>
-    <component id="n12_zutp" name="btn_return" src="74v83q" fileName="cmp/btn.xml" xy="556,363" pivot="0.5,0.5" size="116,126">
+    <component id="n12_zutp" name="btn_more" src="ii3nhx" fileName="cmp/btn_moregame.xml" xy="391,65" pivot="0.5,0.5" size="78,250">
       <relation target="" sidePair="middle-middle,right-right"/>
-      <Button icon="ui://75kiu87klquign"/>
+      <Button icon="ui://75kiu87kii3nhw"/>
     </component>
+    <image id="n15_ii3n" name="n15" src="ii3nhu" fileName="img/ad_res/推荐/sp_baokuangtuijian.png" xy="113,13"/>
   </displayList>
 </component>

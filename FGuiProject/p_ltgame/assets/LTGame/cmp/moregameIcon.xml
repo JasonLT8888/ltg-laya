@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="164,164" pivot="0.5,0.5" extention="Button" mask="n25_ii3n">
+  <displayList>
+    <graph id="n25_ii3n" name="n25" xy="0,0" size="164,164" type="rect" lineSize="0" lineColor="#ffffffff" fillColor="#ffff0000" corner="25"/>
+    <loader id="n23_ii3n" name="icon" xy="0,0" size="164,164" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

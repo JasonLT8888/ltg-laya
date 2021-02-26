@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="94,100" extention="Button">
+<component size="112,124" extention="Button">
   <displayList>
-    <image id="n0_il31" name="n0" src="r1gt71" fileName="ad_res/res/btn_huang.png" xy="0,0">
+    <image id="n0_il31" name="n0" src="lquign" fileName="img/btn_more.png" xy="0,0" size="112,124">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <image id="n1_il31" name="n1" src="r1gt72" fileName="ad_res/res/sp_gengduo.png" xy="11,21"/>
+    <image id="n1_n6nf" name="red" src="r1gt73" fileName="img/ad_res/res/sp_tips.png" xy="96,18" pivot="0.3,1" anchor="true"/>
   </displayList>
   <Button/>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Scale" target="n1_n6nf" tween="true" startValue="1,1" endValue="1,1" duration="12" ease="Back.InOut"/>
+    <item time="12" type="Scale" target="n1_n6nf" tween="true" startValue="1,1" endValue="1.2,1.2" duration="8" ease="Linear"/>
+  </transition>
 </component>

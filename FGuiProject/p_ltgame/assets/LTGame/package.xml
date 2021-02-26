@@ -33,7 +33,6 @@
     <component id="qdeh5t" name="ImageBanner.xml" path="/ui_ad/" exported="true"/>
     <component id="h8ea5w" name="NativeIcon.xml" path="/ui_ad/" exported="true"/>
     <component id="ulgb5x" name="sliderADs.xml" path="/ui_nav/" exported="true"/>
-    <component id="eq3z6e" name="SideGames.xml" path="/ui_nav/" exported="true"/>
     <image id="eq3z6h" name="红点小@2x.png" path="/img/ad_res/res/"/>
     <component id="k7jc6i" name="Native320.xml" path="/cmp/native/"/>
     <component id="j9at6j" name="CommonEndSliderADs.xml" path="/ui_nav/" exported="true"/>
@@ -75,7 +74,7 @@
     <component id="t3oybl" name="view_item_game128.xml" path="/cmp/cache/" exported="true"/>
     <image id="kntfbm" name="btn-fanhui2.png" path="/img/"/>
     <image id="kntfgm" name="sp_jiazai.png" path="/img/"/>
-    <image id="lquign" name="组2(1).png" path="/img/"/>
+    <image id="lquign" name="btn_more.png" path="/img/"/>
     <image id="lquigo" name="图层7.png" path="/img/" scale="9grid" scale9grid="12,23,16,46"/>
     <image id="lquigp" name="更多游戏.jpg" path="/img/"/>
     <component id="ebhigq" name="view_item_game164.xml" path="/cmp/cache/" exported="true"/>
@@ -108,6 +107,23 @@
     <image id="cqeohi" name="sp_tiaozhanshibai.png" path="/img/"/>
     <component id="rfowhj" name="GameCenterBig.xml" path="/ui_nav/" exported="true"/>
     <component id="rfowhk" name="item_gameMax.xml" path="/cmp/"/>
+    <component id="ii3nhl" name="SideGames.xml" path="/ui_nav/" exported="true"/>
+    <image id="ii3nhm" name="推荐4.jpg" path="/img/ad_res/推荐/"/>
+    <image id="ii3nhn" name="推荐3.jpg" path="/img/ad_res/推荐/"/>
+    <image id="ii3nho" name="推荐1.jpg" path="/img/ad_res/推荐/"/>
+    <image id="ii3nhp" name="sp_xinxibg.png" path="/img/ad_res/推荐/" scale="9grid" scale9grid="24,27,22,30"/>
+    <image id="ii3nhq" name="sp_xinpin.png" path="/img/ad_res/推荐/"/>
+    <image id="ii3nhr" name="sp_tuijianbg.png" path="/img/ad_res/推荐/" scale="9grid" scale9grid="13,71,80,61"/>
+    <image id="ii3nhs" name="sp_renqi.png" path="/img/ad_res/推荐/"/>
+    <image id="ii3nht" name="sp_jiantou.png" path="/img/ad_res/推荐/"/>
+    <image id="ii3nhu" name="sp_baokuangtuijian.png" path="/img/ad_res/推荐/"/>
+    <image id="ii3nhv" name="iconbg.png" path="/img/ad_res/推荐/"/>
+    <image id="ii3nhw" name="btn_gengduoyouxi.png" path="/img/ad_res/推荐/"/>
+    <component id="ii3nhx" name="btn_moregame.xml" path="/cmp/"/>
+    <component id="ii3nhy" name="moregameIcon.xml" path="/cmp/"/>
+    <component id="ii3nhz" name="moregameItem.xml" path="/cmp/"/>
+    <image id="ii3ni0" name="sp_xiaoxiong.png" path="/cmp/"/>
+    <component id="n6nfi1" name="side_ads1.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

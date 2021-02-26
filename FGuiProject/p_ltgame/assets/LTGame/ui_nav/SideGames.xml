@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="120,120" opaque="false" designImageOffsetX="49" designImageOffsetY="-192" bgColor="#000000">
+<component size="112,124" opaque="false" designImageOffsetX="49" designImageOffsetY="-192" bgColor="#000000">
   <controller name="show" exported="true" pages="1,hide,0,show" selected="1"/>
   <displayList>
-    <graph id="n14_zutp" name="bg" xy="-375,-1500" pivot="0.5,0.5" size="1508,2990" alpha="0.7" type="rect" lineSize="0" fillColor="#ff000000">
+    <graph id="n4_n6nf" name="n4" xy="0,-1498" size="3381,3179" alpha="0.6" type="rect" fillColor="#ff000000">
       <gearDisplay controller="show" pages="0"/>
-      <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n3_kvo6" name="ads" src="74v84c" fileName="cmp/side_ads.xml" xy="0,-365" pivot="0.5,0.5">
-      <gearXY controller="show" pages="1,0" values="-561,-365|0,-365" tween="true"/>
+    <component id="n3_kvo6" name="ads" src="n6nfi1" fileName="cmp/side_ads1.xml" xy="3,-505" pivot="0.5,0.5">
+      <gearXY controller="show" pages="1,0" values="-588,-505|3,-505" tween="true" ease="Back.Out" duration="0.5"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <image id="n15_gsbn" name="red" src="r1gt73" fileName="img/ad_res/res/sp_tips.png" xy="68,-24" pivot="0.3,1">
-      <gearDisplay controller="show" pages="1"/>
-      <relation target="" sidePair="right-right,top-top"/>
-    </image>
   </displayList>
-  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
-    <item time="0" type="Scale" target="n15_gsbn" tween="true" startValue="1,1" endValue="1.2,1.2" duration="12" ease="Quart.Out"/>
-    <item time="12" type="Scale" target="n15_gsbn" tween="true" startValue="1.2,1.2" endValue="1,1" duration="12"/>
-  </transition>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1"/>
 </component>
