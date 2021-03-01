@@ -1,1 +1,10 @@
-{"check_type":0,"topics":["\u5C0F\u6E38\u620F","\u5B66\u751F\u515A","\u6E38\u620F\u540D\u5B57"],"share_id":""}
+{
+    "check_type": 0,
+    "topics": [
+        "\u5C0F\u6E38\u620F",
+        "\u5B66\u751F\u515A",
+        "\u6E38\u620F\u540D\u5B57"
+    ],
+    "share_id": "",
+    "defaultBgm": "https://v.douyin.com/eed6Lcd/"
+}
