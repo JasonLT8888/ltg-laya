@@ -13,7 +13,7 @@ export default class LTMain {
         config3D.enableMultiLight = false;
         config3D.isAntialias = true;
 
-        window["KSiOS"] = true;
+        // window["KSiOS"] = true;
         if (window['kwaigame']) {
             window["remoteFiles"] = []; 
         }
