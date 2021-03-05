@@ -1,9 +1,1 @@
-{
-    "game_version": "v0.0.1",
-    "special_roll_count": 4,
-    "notice_str": "\u6E38\u620F\u516C\u544A:\n\n12333221231",
-    "douyin_id": "douyin123",
-    "douyinVideoId": "13101042082815640552404d0b7b116557022b4200724d615e534d4c097d466d5051434d0e7e",
-    "toutiaoVideoId": "131017425d7b16645207414d5b28156606072b42017a4d62515346460e7f42675e554440087a",
-    "officalAccountEnable": false
-}
+{"game_version":"v0.0.1","special_roll_count":4,"notice_str":"\u6E38\u620F\u516C\u544A:\n\n12333221231","douyin_id":"douyin123","douyinVideoId":"13104c440c2b1262015345120e7a176d5f502b450e7a406356524d450b7e416155534c470a72","toutiaoVideoId":"131017425d7b16645207414d5b28156606072b42017a4d62515346460e7f42675e554440087a","officalAccountEnable":false}

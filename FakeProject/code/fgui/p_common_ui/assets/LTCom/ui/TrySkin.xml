@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://hbq27te3n2g16r" designImageLayer="1">
+  <displayList>
+    <graph id="n0_bl1a" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n1_bl1a" name="view" src="bl1a8c" fileName="cmp/view_tryskin.xml" xy="10,8">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+  </displayList>
+</component>
