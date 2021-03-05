@@ -186,7 +186,11 @@ export default class KSPlatform extends DefaultPlatform {
 
     }
     getSystemInfo() {
-        this.safeArea = { top: 80, bottom: Laya.stage.height, left: 0, right: Laya.stage.width, height: Laya.stage.height - 80, width: Laya.stage.width }
+        if (Laya.stage.height / Laya.stage.width > 1.95) {
+            this.safeArea = { top: 80, bottom: Laya.stage.height, left: 0, right: Laya.stage.width, height: Laya.stage.height - 80, width: Laya.stage.width };
+        } else {
+            this.safeArea = { top: 0, bottom: Laya.stage.height, left: 0, right: Laya.stage.width, height: Laya.stage.height, width: Laya.stage.width };
+        }
         window["kwaigame"].getSystemInfo({
             response: (res) => {
                 this.systemInfo = res;
@@ -196,6 +200,7 @@ export default class KSPlatform extends DefaultPlatform {
                 console.log(this.safeArea);
                 // if (!this.safeArea) {
                 // } 
+                window["KSiOS"] = res['platform'] == 'iOS';
             }
             // ,
             // fail: (err) => {

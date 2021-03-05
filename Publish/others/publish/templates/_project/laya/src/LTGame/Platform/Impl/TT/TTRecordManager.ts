@@ -139,7 +139,7 @@ export default class TTRecordManager extends DefaultRecordManager {
             let shareData = {
                 channel: "video",
                 title: "",
-                desc: "你能挑战200次连击吗？!",
+                desc: "",
                 imageUrl: "",
                 templateId: PackConst.data.share_id,
                 query: `from=sharePage`,
@@ -148,7 +148,8 @@ export default class TTRecordManager extends DefaultRecordManager {
                     videoTopics: PackConst.data.topics,// ['小游戏', '学生党', '钻石方块']
                     withVideoId: true,
                     hashtag_list: PackConst.data.topics,
-                    video_title: "你能挑战200次连击吗？"
+                    defaultBgm: PackConst.data.defaultBgm,
+                    video_title: ""
                 },
                 success: (res) => {
                     LTPlatform.instance['_cacheOnShowHandle'] = Laya.Handler.create(null, () => {

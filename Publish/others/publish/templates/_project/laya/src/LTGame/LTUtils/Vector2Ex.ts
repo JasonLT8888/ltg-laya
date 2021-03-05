@@ -41,4 +41,8 @@ export default class Vector2Ex {
         return Math.sqrt(this.MagnitudeSqrt(vec));
     }
 
+    public static Lerp(from: Laya.Vector2, to: Laya.Vector2, progress: number) {
+        return new Laya.Vector2(MathEx.Lerp(from.x, to.x, progress), MathEx.Lerp(from.y, to.y, progress));
+    }
+
 }

@@ -4,4 +4,8 @@ export default class ResDefine {
         return "res/export/Conventional/" + filePath + ".lh";
     }
 
+    static FixScene(scenePath: string) {
+        return "res/export/Conventional/" + scenePath + ".ls";
+    }
+
 }

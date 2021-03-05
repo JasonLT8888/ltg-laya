@@ -214,4 +214,6 @@ export default interface IPlatform {
     getRankList(key: string);
     /**授权用户信息 */
     getUserInfo(): Promise<void>;
+    /**触发收藏 */
+    showFavoriteGuide(): void;
 }

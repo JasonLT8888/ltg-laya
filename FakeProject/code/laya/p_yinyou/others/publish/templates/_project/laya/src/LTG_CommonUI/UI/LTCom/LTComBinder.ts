@@ -37,11 +37,14 @@ import LTG_UI_toggle_01 from "./LTG_UI_toggle_01";
 import LTG_UI_view_set from "./LTG_UI_view_set";
 import LTG_UI_RewardCode from "./LTG_UI_RewardCode";
 import LTG_UI_view_rewardcode from "./LTG_UI_view_rewardcode";
+import LTG_UI_TrySkin from "./LTG_UI_TrySkin";
+import LTG_UI_view_tryskin from "./LTG_UI_view_tryskin";
 import LTG_UI_VideoList from "./LTG_UI_VideoList";
 import LTG_UI_top3 from "./LTG_UI_top3";
 import LTG_UI_iconVdieo from "./LTG_UI_iconVdieo";
 import LTG_UI_videoItem from "./LTG_UI_videoItem";
 import LTG_UI_normal_btn from "./LTG_UI_normal_btn";
+import LTG_UI_RanList from "./LTG_UI_RanList";
 import LTG_UI_view_enter_code from "./LTG_UI_view_enter_code";
 import LTG_UI_UnlockItem from "./LTG_UI_UnlockItem";
 import LTG_UI_btn_unlock_ad from "./LTG_UI_btn_unlock_ad";
@@ -51,7 +54,7 @@ import LTG_UI_view_watchguide from "./LTG_UI_view_watchguide";
 import LTG_UI_ScreenShoot from "./LTG_UI_ScreenShoot";
 import LTG_UI_view_screenshoot from "./LTG_UI_view_screenshoot";
 
-export default class LTComBinder{
+export default class LTComBinder {
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(LTG_UI_Set.URL, LTG_UI_Set);
 		fgui.UIObjectFactory.setExtension(LTG_UI_Notice.URL, LTG_UI_Notice);
@@ -90,11 +93,14 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_set.URL, LTG_UI_view_set);
 		fgui.UIObjectFactory.setExtension(LTG_UI_RewardCode.URL, LTG_UI_RewardCode);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_rewardcode.URL, LTG_UI_view_rewardcode);
+		fgui.UIObjectFactory.setExtension(LTG_UI_TrySkin.URL, LTG_UI_TrySkin);
+		fgui.UIObjectFactory.setExtension(LTG_UI_view_tryskin.URL, LTG_UI_view_tryskin);
 		fgui.UIObjectFactory.setExtension(LTG_UI_VideoList.URL, LTG_UI_VideoList);
 		fgui.UIObjectFactory.setExtension(LTG_UI_top3.URL, LTG_UI_top3);
 		fgui.UIObjectFactory.setExtension(LTG_UI_iconVdieo.URL, LTG_UI_iconVdieo);
 		fgui.UIObjectFactory.setExtension(LTG_UI_videoItem.URL, LTG_UI_videoItem);
 		fgui.UIObjectFactory.setExtension(LTG_UI_normal_btn.URL, LTG_UI_normal_btn);
+		fgui.UIObjectFactory.setExtension(LTG_UI_RanList.URL, LTG_UI_RanList);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_enter_code.URL, LTG_UI_view_enter_code);
 		fgui.UIObjectFactory.setExtension(LTG_UI_UnlockItem.URL, LTG_UI_UnlockItem);
 		fgui.UIObjectFactory.setExtension(LTG_UI_btn_unlock_ad.URL, LTG_UI_btn_unlock_ad);

@@ -4,6 +4,6 @@
     <image id="n2_odt0" name="n2" src="odt06g" fileName="img/sp_erjibg.png" xy="0,0" size="617,661"/>
     <component id="n3_odt0" name="btn_close" src="8gel4e" fileName="cmp/btn_close_03.xml" xy="160,702"/>
     <image id="n4_odt0" name="n4" src="odt06h" fileName="img/sp_guanzhu.png" xy="247,31"/>
-    <loader id="n5_odt0" name="loader_icon" xy="17,120" size="583,517" url="ui://hbq27te3odt06i"/>
+    <loader id="n5_odt0" name="loader_icon" xy="17,120" size="583,517" url="ui://hbq27te3odt06i" clearOnPublish="true"/>
   </displayList>
 </component>

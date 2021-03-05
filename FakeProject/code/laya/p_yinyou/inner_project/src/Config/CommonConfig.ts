@@ -64,6 +64,7 @@ export default class CommonConfig {
         "src/script/config/EffectConfig.ts",
         "src/script/manager/AudioManager.ts",
         "src/script/manager/EffectManager.ts",
+        "src/script/manager/DataManager.ts",
         "src/script/MainStart.ts",
         "src/Main.ts",
     ];
@@ -80,6 +81,7 @@ export default class CommonConfig {
         "sign_config.xlsx", // 签到(商业化)
         "reward_code_config.xlsx", // 兑换码(商业化)
         "egg_config.xlsx", // 彩蛋(商业化)依赖于兑换码
+        "try_item_config.xlsx", // 皮肤试用表(商业化)
     ];
 
 }

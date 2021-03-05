@@ -1,4 +1,4 @@
-;window.fairygui = window.fgui = {};
+; window.fairygui = window.fgui = {};
 (function (fgui) {
     class AssetProxy {
         constructor() {
@@ -1659,10 +1659,6 @@
                 this.reset();
                 fgui.Events.dispatch(fgui.Events.DRAG_END, this._displayObject, evt);
             }
-            else if (this._dragTesting) {
-                this._dragTesting = false;
-                this.reset();
-            }
         }
         //-------------------------------------------------------------------
         static cast(sprite) {
@@ -1695,6 +1691,7 @@
             return null;
         }
         set font(value) {
+            console.error(value)
         }
         get fontSize() {
             return 0;
@@ -1785,7 +1782,7 @@
             var result = "";
             while ((pos2 = template.indexOf("{", pos1)) != -1) {
                 if (pos2 > 0 && template.charCodeAt(pos2 - 1) == 92) //\
-                 {
+                {
                     result += template.substring(pos1, pos2 - 1);
                     result += "{";
                     pos1 = pos2 + 1;
@@ -1866,6 +1863,7 @@
                     super.setProp(index, value);
                     break;
             }
+
         }
         setup_beforeAdd(buffer, beginPos) {
             super.setup_beforeAdd(buffer, beginPos);
@@ -1927,6 +1925,7 @@
             this._displayObject = this._textField = new TextExt(this);
             this._displayObject["$owner"] = this;
             this._displayObject.mouseEnabled = false;
+
         }
         get nativeText() {
             return this._textField;
@@ -1971,9 +1970,17 @@
             else {
                 if (this._font)
                     this._textField.font = this._font;
-                else
+                else {
                     this._textField.font = fgui.UIConfig.defaultFont;
+                }
+                if (window["KSiOS"] && !fgui.ToolSet.startsWith(this._font, "ui://")) {
+                    this._textField.font = "ui://KSFont/wryh_45px";
+                    this._bitmapFont = fgui.UIPackage.getItemAssetByURL("ui://KSFont/wryh_45px");
+                    // this._bitmapFont.resizable = false; 
+                    this._textField["setChanged"]();
+                }
             }
+
         }
         get fontSize() {
             return this._textField.fontSize;
@@ -2177,7 +2184,7 @@
                     continue;
                 }
                 if (cc >= 65 && cc <= 90 || cc >= 97 && cc <= 122) //a-z,A-Z
-                 {
+                {
                     if (wordChars == 0)
                         wordStart = lineWidth;
                     wordChars++;
@@ -6190,7 +6197,7 @@
                     }
                 }
                 else //pagination
-                 {
+                {
                     if (this._columnCount > 0)
                         this._curLineItemCount = this._columnCount;
                     else {
@@ -7079,7 +7086,7 @@
                 }
             }
             else //pagination
-             {
+            {
                 var eachHeight;
                 if (this._autoResizeItem && this._lineCount > 0)
                     eachHeight = Math.floor((viewHeight - (this._lineCount - 1) * this._lineGap) / this._lineCount);
@@ -7144,7 +7151,7 @@
                             k++;
                             if (this._lineCount != 0 && k >= this._lineCount
                                 || this._lineCount == 0 && curY + child.height > viewHeight && maxWidth != 0) //new page
-                             {
+                            {
                                 page++;
                                 curY = 0;
                                 k = 0;
@@ -9252,10 +9259,7 @@
             return this._input.font;
         }
         set font(value) {
-            if (value)
-                this._input.font = value;
-            else
-                this._input.font = fgui.UIConfig.defaultFont;
+            this._input.font = value;
         }
         get fontSize() {
             return this._input.fontSize;
@@ -10916,6 +10920,7 @@
             this.setSize(this.owner.width, this.owner.height);
         }
         dispose() {
+            this.owner.displayObject.stage.offAllCaller(this);
             if (ScrollPane.draggingPane == this) {
                 ScrollPane.draggingPane = null;
             }
@@ -11517,7 +11522,7 @@
             this.refresh2();
             fgui.Events.dispatch(fgui.Events.SCROLL, this._owner.displayObject);
             if (this._needRefresh) //在onScroll事件里开发者可能修改位置，这里再刷新一次，避免闪烁
-             {
+            {
                 this._needRefresh = false;
                 Laya.timer.clear(this, this.refresh);
                 this.refresh2();
@@ -11600,7 +11605,7 @@
                     if (diff < sensitivity)
                         return;
                     if ((_gestureFlag & 2) != 0) //已经有水平方向的手势在监测，那么我们用严格的方式检查是不是按垂直方向移动，避免冲突
-                     {
+                    {
                         diff2 = Math.abs(this._beginTouchPos.x - pt.x);
                         if (diff < diff2) //不通过则不允许滚动了
                             return;
@@ -11689,7 +11694,7 @@
             if (deltaTime != 0) {
                 var elapsed = deltaTime * frameRate - 1;
                 if (elapsed > 1) //速度衰减
-                 {
+                {
                     var factor = Math.pow(0.833, elapsed);
                     this._velocity.x = this._velocity.x * factor;
                     this._velocity.y = this._velocity.y * factor;
@@ -11733,8 +11738,6 @@
             fgui.Events.dispatch(fgui.Events.SCROLL, this._owner.displayObject);
         }
         __mouseUp() {
-            if (this._owner.isDisposed)
-                return;
             this._owner.displayObject.stage.off(Laya.Event.MOUSE_MOVE, this, this.__mouseMove);
             this._owner.displayObject.stage.off(Laya.Event.MOUSE_UP, this, this.__mouseUp);
             this._owner.displayObject.stage.off(Laya.Event.CLICK, this, this.__click);
@@ -12008,12 +12011,12 @@
                 var delta = -pos - page * this._pageSize[axis];
                 //页面吸附策略
                 if (Math.abs(change) > this._pageSize[axis]) //如果滚动距离超过1页,则需要超过页面的一半，才能到更下一页
-                 {
+                {
                     if (delta > testPageSize * 0.5)
                         page++;
                 }
                 else //否则只需要页面的1/3，当然，需要考虑到左移和右移的情况
-                 {
+                {
                     if (delta > testPageSize * (change < 0 ? fgui.UIConfig.defaultScrollPagingThreshold : (1 - fgui.UIConfig.defaultScrollPagingThreshold)))
                         page++;
                 }
@@ -12106,7 +12109,7 @@
         }
         killTween() {
             if (this._tweening == 1) //取消类型为1的tween需立刻设置到终点
-             {
+            {
                 this._container.pos(this._tweenStart.x + this._tweenChange.x, this._tweenStart.y + this._tweenChange.y);
                 fgui.Events.dispatch(fgui.Events.SCROLL, this._owner.displayObject);
             }
@@ -12211,7 +12214,7 @@
                 if (this._tweening == 2 && this._bouncebackEffect) {
                     if (newValue > 20 + threshold1 && this._tweenChange[axis] > 0
                         || newValue > threshold1 && this._tweenChange[axis] == 0) //开始回弹
-                     {
+                    {
                         this._tweenTime[axis] = 0;
                         this._tweenDuration[axis] = TWEEN_TIME_DEFAULT;
                         this._tweenChange[axis] = -newValue + threshold1;
@@ -12219,7 +12222,7 @@
                     }
                     else if (newValue < threshold2 - 20 && this._tweenChange[axis] < 0
                         || newValue < threshold2 && this._tweenChange[axis] == 0) //开始回弹
-                     {
+                    {
                         this._tweenTime[axis] = 0;
                         this._tweenDuration[axis] = TWEEN_TIME_DEFAULT;
                         this._tweenChange[axis] = threshold2 - newValue;
@@ -12330,7 +12333,7 @@
                         trans = null;
                     if (trans) {
                         if (item.value.playTimes == 0) //this.stop
-                         {
+                        {
                             var j;
                             for (j = i - 1; j >= 0; j--) {
                                 var item2 = this._items[j];
@@ -12355,7 +12358,7 @@
             if (delay == 0)
                 this.onDelayedPlay();
             else
-                fgui.GTween.delayedCall(delay).setTarget(this).onComplete(this.onDelayedPlay, this);
+                fgui.GTween.delayedCall(delay).onComplete(this.onDelayedPlay, this);
         }
         stop(setToComplete, processCallback) {
             if (!this._playing)
@@ -12398,7 +12401,7 @@
                 item.tweener.kill(setToComplete);
                 item.tweener = null;
                 if (item.type == ActionType.Shake && !setToComplete) //震动必须归位，否则下次就越震越远了。
-                 {
+                {
                     item.target._gearLocked = true;
                     item.target.setXY(item.target.x - item.value.lastOffsetX, item.target.y - item.value.lastOffsetY);
                     item.target._gearLocked = false;
@@ -12690,7 +12693,7 @@
         internalPlay() {
             this._ownerBaseX = this._owner.x;
             this._ownerBaseY = this._owner.y;
-            this._totalTasks = 1;
+            this._totalTasks = 0;
             var cnt = this._items.length;
             var item;
             var needSkipAnimations = false;
@@ -12717,7 +12720,6 @@
             }
             if (needSkipAnimations)
                 this.skipAnimations();
-            this._totalTasks--;
         }
         playItem(item) {
             var time;
@@ -12872,7 +12874,7 @@
         onTweenStart(tweener) {
             var item = tweener.target;
             if (item.type == ActionType.XY || item.type == ActionType.Size) //位置和大小要到start才最终确认起始值
-             {
+            {
                 var startValue;
                 var endValue;
                 if (this._reversed) {
@@ -12990,16 +12992,11 @@
             if (this._playing && this._totalTasks == 0) {
                 if (this._totalTimes < 0) {
                     this.internalPlay();
-                    if (this._totalTasks == 0)
-                        fgui.GTween.delayedCall(0).setTarget(this).onComplete(this.checkAllComplete, this);
                 }
                 else {
                     this._totalTimes--;
-                    if (this._totalTimes > 0) {
+                    if (this._totalTimes > 0)
                         this.internalPlay();
-                        if (this._totalTasks == 0)
-                            fgui.GTween.delayedCall(0).setTarget(this).onComplete(this.checkAllComplete, this);
-                    }
                     else {
                         this._playing = false;
                         var cnt = this._items.length;
@@ -13034,7 +13031,7 @@
                     }
                     else {
                         if (value.b3) //position in percent
-                         {
+                        {
                             if (value.b1 && value.b2)
                                 item.target.setXY(value.f1 * this._owner.width, value.f2 * this._owner.height);
                             else if (value.b1)
@@ -13361,7 +13358,7 @@
                     nextPos = buffer.getInt16();
                     nextPos += buffer.pos;
                     if (buffer.readByte() == 6) //gearText
-                     {
+                    {
                         buffer.skip(2); //controller
                         valueCnt = buffer.getInt16();
                         for (k = 0; k < valueCnt; k++) {
@@ -15250,7 +15247,7 @@
                     }
                 }
                 if (this._frame == beginFrame && this._reversed == beginReversed) //走了一轮了
-                 {
+                {
                     var roundTime = backupTime - timeInMiniseconds; //这就是一轮需要的时间
                     timeInMiniseconds -= Math.floor(timeInMiniseconds / roundTime) * roundTime; //跳过
                 }
@@ -15322,13 +15319,13 @@
                 }
             }
             if (this._status == 1) //new loop
-             {
+            {
                 this._frame = this._start;
                 this._frameElapsed = 0;
                 this._status = 0;
             }
             else if (this._status == 2) //ending
-             {
+            {
                 this._frame = this._endAt;
                 this._frameElapsed = 0;
                 this._status = 3; //ended
@@ -15868,7 +15865,7 @@
         updateState() {
             var gv = this._storage[this._controller.selectedPageId];
             if (!gv)
-                this._storage[this._controller.selectedPageId] = gv = {};
+                this._storage[this._controller.selectedPageId] = {};
             gv.width = this._owner.width;
             gv.height = this._owner.height;
             gv.scaleX = this._owner.scaleX;
@@ -16887,7 +16884,7 @@
             if (dt == 0)
                 return;
             if (this._ended != 0) //Maybe completed by seek
-             {
+            {
                 this.callCompleteCallback();
                 this._killed = true;
                 return;
@@ -16904,7 +16901,7 @@
         update() {
             this._ended = 0;
             if (this._valueSize == 0) //DelayedCall
-             {
+            {
                 if (this._elapsedTime >= this._delay + this._duration)
                     this._ended = 1;
                 return;
@@ -17138,7 +17135,7 @@
             }
             if (freePosStart >= 0) {
                 if (_totalActiveTweens != cnt) //new tweens added
-                 {
+                {
                     var j = cnt;
                     cnt = _totalActiveTweens - cnt;
                     for (i = 0; i < cnt; i++)
@@ -17597,7 +17594,7 @@
             var result = "";
             while ((pos2 = this._text.indexOf("[", pos1)) != -1) {
                 if (this._text.charCodeAt(pos2 - 1) == 92) //\
-                 {
+                {
                     result += this._text.substring(pos1, pos2 - 1);
                     result += "[";
                     pos1 = pos2 + 1;
@@ -17625,7 +17622,7 @@
             var result = "";
             while ((pos2 = this._text.indexOf("[", pos1)) != -1) {
                 if (pos2 > 0 && this._text.charCodeAt(pos2 - 1) == 92) //\
-                 {
+                {
                     result += this._text.substring(pos1, pos2 - 1);
                     result += "[";
                     pos1 = pos2 + 1;
@@ -17787,7 +17784,7 @@
             var toApplyGray;
             var tp = typeof (color);
             if (tp == "boolean") //gray
-             {
+            {
                 toApplyColor = filter ? filter.$_color_ : null;
                 toApplyGray = color;
             }

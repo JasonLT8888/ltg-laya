@@ -15,6 +15,7 @@ import { EffectManager } from "../manager/EffectManager";
 import { RollConfig } from "../config/RollConfig";
 import { RewardCodeConfig } from "../config/RewardCodeConfig";
 import { LTShaderHelper } from "../../LTGame/Material/LTShaderHelper";
+import { TryItemConfig } from "../config/TryItemConfig";
 
 export default class SplashScene extends LTSplashScene {
 
@@ -38,6 +39,7 @@ export default class SplashScene extends LTSplashScene {
         ConfigManager.AddConfig(RewardCodeConfig);
         ConfigManager.AddConfig(SignConfig);
         ConfigManager.AddConfig(RollConfig);
+        ConfigManager.AddConfig(TryItemConfig);
     }
 
     _OnGameResPrepared(urls: string[]) {

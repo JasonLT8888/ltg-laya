@@ -12,6 +12,12 @@ export default class LTMain {
         config3D.octreeCulling = false;
         config3D.enableMultiLight = false;
         config3D.isAntialias = true;
+
+        window["KSiOS"] = true;
+        if (window['kwaigame']) {
+            window["remoteFiles"] = []; 
+        }
+
         //根据IDE设置初始化引擎
         Laya3D.init(this._mainLogic.designWidth, this._mainLogic.designHeight,
             config3D, Laya.Handler.create(null, () => {

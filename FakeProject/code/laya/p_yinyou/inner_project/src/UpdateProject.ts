@@ -63,8 +63,8 @@ class UpdateProject {
         // fgui_common
         {
             // 重写导出路径即可
-            projectName = 'p_common_ui';
-            let defaultJsonPath = path.join(currentWorkPath, './../../fgui/' + projectName + '/settings/Publish.json');
+            let uipackName = 'p_common_ui';
+            let defaultJsonPath = path.join(currentWorkPath, './../../fgui/' + uipackName + '/settings/Publish.json');
             let readDefaultJson = JSON.parse(LTUtils.ReadStrFrom(defaultJsonPath));
             readDefaultJson['codeGeneration']['codePath'] = '..\\..\\laya\\' + projectName + '\\src\\LTG_CommonUI\\UI';
             readDefaultJson['path'] = '..\\..\\laya\\' + projectName + '\\bin\\res\\ltgame\\ui';

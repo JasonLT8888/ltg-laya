@@ -69,6 +69,11 @@ export default class LTSplashScene extends BaseState {
                 new LoadUIPack("res/ltgame/ui/LTCom", 2)
             );
         }
+        if (window["KSiOS"]) {
+            this._needLoadOtherUIPack.push(
+                new LoadUIPack("res/ltgame/ui/KSFont")
+            );
+        }
 
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Web:

@@ -18,6 +18,9 @@ export default class DefaultPlatform implements IPlatform {
     setUserCloudStorage(key: string, value: number) {
         console.log(`当前平台不支持上报排行key=${key}value=${value}`);
     }
+    showFavoriteGuide(): void {
+        console.log(`当前平台不支持 触发收藏`);
+    }
     getRankList(key: string) {
         console.log(`当前平台不支持获取排行key=${key}`);
     }

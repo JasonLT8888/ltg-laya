@@ -481,7 +481,66 @@ export default class TTPlatform extends WXPlatform {
         })
 
     }
+    public showFavoriteGuide() {
+        this.base.showFavoriteGuide({
+            type: "bar",
+            content: "一键添加到我的小程序",
+            position: "bottom",
+            success(res) {
+                console.log("引导组件展示成功");
+            },
+            fail(res) {
+                console.log("引导组件展示失败");
+            },
+        });
+    }
+    public hasShortcutInstalled() {
+        return new Promise<boolean>((resolve) => {
 
+            this.base.checkShortcut({
+                success: function (res) {
+                    console.log(res);
+                    if (res.status && res.status.exist) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                },
+                fail: function (res) {
+                    console.log(res);
+                    resolve(false);
+                }
+            })
+        });
+
+    }
+    public createShortcut() {
+        return new Promise<boolean>((resolve) => {
+            // this.base.showFavoriteGuide({
+            //     type: "tip",
+            //     content: "点击这里添加到桌面",
+            //     success(res) {
+            //         console.log("引导组件展示成功");
+            //         resolve(true);
+            //     },
+            //     fail(res) {
+            //         console.log("引导组件展示失败");
+            //         resolve(false);
+            //     },
+            // });
+            this.base.addShortcut({
+                success: function (res) {
+                    console.log(res);
+                    resolve(true);
+                },
+                fail: function (res) {
+                    console.log(res);
+                    resolve(false);
+                }
+            })
+        });
+
+    }
 }
 
 export interface VideoInfo {

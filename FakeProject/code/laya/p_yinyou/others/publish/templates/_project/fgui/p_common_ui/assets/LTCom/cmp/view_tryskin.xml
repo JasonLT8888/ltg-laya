@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="735,862">
+  <displayList>
+    <image id="n1_n2g1" name="n1" src="n2g16w" fileName="img/皮肤试用/bg.png" xy="0,213"/>
+    <component id="n2_n2g1" name="btn_no" src="n2g171" fileName="cmp/btn_refuse.xml" xy="431,824"/>
+    <component id="n10_bl1a" name="btn_try" src="bl1a8d" fileName="cmp/btn_trystart.xml" xy="339,679"/>
+    <graph id="n8_n2g1" name="img_display" xy="33,0" size="375,667" type="rect"/>
+    <loader id="n7_n2g1" name="loader_title" xy="255,295" size="433,366" url="ui://hbq27te3n2g16t" align="center" vAlign="middle" fill="scale" clearOnPublish="true"/>
+  </displayList>
+</component>

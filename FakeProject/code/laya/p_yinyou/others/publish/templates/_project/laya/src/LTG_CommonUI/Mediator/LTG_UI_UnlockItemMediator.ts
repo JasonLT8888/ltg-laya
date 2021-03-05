@@ -1,17 +1,16 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_UnlockItem from "../UI/LTCom/LTG_UI_UnlockItem";
-import { RewardCodeConfig } from "../../script/config/RewardCodeConfig";
 import LTRes from "../../LTGame/Res/LTRes";
 import ResDefine from "../../script/common/ResDefine";
-import GlobalUnit from "../../script/common/GlobalUnit";
 import LTUI from "../../LTGame/UIExt/LTUI";
 import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
-import { AnimatorEx } from "../../LTGame/LTUtils/AnimatorEx";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { LTG_Com_EggWallData } from "../Data/LTG_Com_EggWallData";
 import { LTG_Com_UnlockItemData } from "../Data/LTG_Com_UnlockItemData";
 import LTG_UI_EggWallMediator from "./LTG_UI_EggWallMediator";
+
+const display_path = "display_obj";
 
 export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_UnlockItem> {
 
@@ -26,13 +25,8 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
 
     private _cacheData: LTG_Com_UnlockItemData;
 
-    private _rootObj: Laya.Sprite3D;
-
-    private _renderCamera: Laya.Camera;
-    private _cacheImage: fgui.GImage;
-    private _cacheRT: Laya.RenderTexture;
-
-    private _playerParent: Laya.Sprite3D;
+    private _s3d: Laya.Scene3D;
+    private _cacheRt: Laya.RenderTexture;
 
     _OnShow() {
         super._OnShow();
@@ -48,36 +42,48 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
         this.ui.m_view.m_btn_unlock.m_text_progress.text = LTG_Com_EggWallData.GetCodeUnlockProgress(this._cacheData.rewardConfig.id);
         this.ui.m_view.m_loader_title.url = this._cacheData.rewardConfig.title_icon_path;
 
-        this._CreateCamera();
-
+        this._CreateView();
     }
 
-    private async _CreateCamera() {
-        this._rootObj = await LTRes.LoadAndGet("res/ltgame/prefab/try_display.lh", true);
-        GlobalUnit.s3d.addChild(this._rootObj);
+    private async _CreateView() {
+        this.ui.m_view.m_img_display.visible = false;
 
-        this._renderCamera = this._rootObj.getChildByName("watchCamera") as Laya.Camera;
-        this._playerParent = this._rootObj.getChildByName("point_player") as Laya.Sprite3D;
+        LTUI.LockScreen();
+        let needLoadUrls: string[] = [];
+        needLoadUrls.push(ResDefine.FixPath(display_path));
+        needLoadUrls.push(ResDefine.FixPath(this._cacheData.rewardConfig.model_path));
+        await LTRes.LoadAsync(needLoadUrls);
+        this._s3d = new Laya.Scene3D();
+        let loadDisplayObj = LTRes.Get(ResDefine.FixPath(display_path));
+        this._s3d.addChild(loadDisplayObj);
+
+        let pointPlayer = LTUtils.FindChild(loadDisplayObj, "point_player");
+        let loadModel = LTRes.Get(ResDefine.FixPath(this._cacheData.rewardConfig.model_path)) as Laya.Sprite3D;
+        pointPlayer.addChild(loadModel);
+        TransformEx.ResetLocalTrans(loadModel.transform);
+
+        let camera = LTUtils.FindChild(loadDisplayObj, "point_camera/Main Camera") as Laya.Camera;
         // 注意格式只能用r8g8b8a8否则ip6不支持
-        this._cacheRT = new Laya.RenderTexture(this.ui.m_view.m_img_display.width,
+        this._cacheRt = new Laya.RenderTexture(this.ui.m_view.m_img_display.width,
             this.ui.m_view.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8,
             Laya.RenderTextureDepthFormat.DEPTH_16);
-
-        this._cacheImage = new fgui.GImage();
-        this.ui.m_view.addChildAt(this._cacheImage,
+        let cacheImage = new fgui.GImage();
+        this.ui.m_view.addChildAt(cacheImage,
             this.ui.m_view.getChildIndex(this.ui.m_view.m_img_display) + 1);
-        this._cacheImage.image.texture = new Laya.Texture(this._cacheRT as any);
-        this._cacheImage.setPivot(this.ui.m_view.m_img_display.pivotX, this.ui.m_view.m_img_display.pivotY,
+        cacheImage.image.texture = new Laya.Texture(this._cacheRt as any);
+        cacheImage.setPivot(this.ui.m_view.m_img_display.pivotX, this.ui.m_view.m_img_display.pivotY,
             this.ui.m_view.m_img_display.pivotAsAnchor);
-        this._cacheImage.setXY(this.ui.m_view.m_img_display.x, this.ui.m_view.m_img_display.y);
-        this.ui.m_view.m_img_display.dispose();
+        cacheImage.setXY(this.ui.m_view.m_img_display.x, this.ui.m_view.m_img_display.y);
 
-        this._renderCamera.renderTarget = this._cacheRT;
-        this._renderCamera.enableRender = true;
-        this._renderCamera.cullingMask = Math.pow(2, 3);
+        camera.clearColor = new Laya.Vector4(0, 0, 0, 0);
+        camera.clearFlag = Laya.CameraClearFlags.SolidColor;
+        camera.renderTarget = this._cacheRt;
 
-        this._LoadModel();
+        Laya.stage.addChild(this._s3d);
+
+        LTUI.UnlockScreen();
     }
+
 
     private async _OnClickUnlock() {
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
@@ -99,39 +105,16 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
     }
 
     _OnHide() {
-        this._playerParent.destroyChildren();
-        this._cacheRT.destroy();
-        this._rootObj.removeSelf();
+        this._s3d.destroy();
+        if (this._cacheRt != null) {
+            this._cacheRt.destroy();
+        }
+
         this._cacheData.onClose?.run();
 
         if (LTG_UI_EggWallMediator.instance.isShow) {
             LTG_UI_EggWallMediator.instance.ui.m_list_view.refreshVirtualList();
         }
-    }
-
-    private async _LoadModel() {
-
-        LTUI.ShowLoading("资源加载中...");
-        let playerObj = await LTRes.LoadAndGet(ResDefine.FixPath(this._cacheData.rewardConfig.model_path)) as Laya.Sprite3D;
-        LTUI.HideLoading();
-        if (playerObj == null) {
-            console.error("无法加载资源,请检查资源及配置");
-            return;
-        }
-        if (!this.isShow) {
-            playerObj.destroy();
-            return;
-        }
-        this._playerParent.addChild(playerObj);
-        TransformEx.ResetLocalTrans(playerObj.transform);
-        LTUtils.SetLayer(playerObj, 3);
-        let animObj = playerObj.getChildByName("view").getChildAt(0);
-        let animator = animObj.getComponent(Laya.Animator) as Laya.Animator;
-        if (animator != null) {
-            animator.play("idle");
-        }
-
-        this._cacheImage.visible = true;
     }
 
 }
