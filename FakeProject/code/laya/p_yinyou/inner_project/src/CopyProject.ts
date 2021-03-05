@@ -68,7 +68,6 @@ class CopyProject {
             } else {
                 LTUtils.CopyDir(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
         }
     }
 
@@ -94,8 +93,8 @@ class CopyProject {
             } else {
                 LTUtils.CopyDir(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
         }
+        console.log("拷贝", projectName, "完成");
 
         // 单独拷贝main
         let targetMainPath = path.join(rootPath, 'others/publish/templates/_project/fgui/' + projectName + '/assets/Main');
@@ -106,7 +105,12 @@ class CopyProject {
         // 拷贝公用ui
         targetPath = path.join(rootPath, 'others/publish/templates/_project/fgui/p_common_ui/');
         srcPath = path.join(rootPath, './../../fgui/p_common_ui/');
-        LTUtils.CopyDir(srcPath, targetPath);
+        LTUtils.CopyDir(srcPath, targetPath, (fileName: string) => {
+            if (fileName == '.objs') {
+                return false;
+            }
+            return true;
+        });
         console.log("拷贝", srcPath, "完成");
     }
 
@@ -131,8 +135,8 @@ class CopyProject {
             } else {
                 LTUtils.CopyDir(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
         }
+        console.log("拷贝unity目录完成");
     }
 
     /**
@@ -155,8 +159,9 @@ class CopyProject {
             } else {
                 LTUtils.CopyDir(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
+
         }
+        console.log("拷贝fake_res完成");
 
         // 判定初始工程初始化
         for (let value of CommonConfig.initProject) {
@@ -175,9 +180,8 @@ class CopyProject {
             } else {
                 LTUtils.CopyDir(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
         }
-
+        console.log("拷贝initProject完成");
     }
 
 }
