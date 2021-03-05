@@ -2,7 +2,7 @@
 
 import UI_splash from "./UI_splash";
 
-export default class LoadBinder{
+export default class LoadBinder {
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(UI_splash.URL, UI_splash);
 	}
