@@ -15,9 +15,13 @@ class UpdateProject {
         let currentWorkPath = process.cwd();
         console.log("开始更新框架内容");
         this._CopyLaya(currentWorkPath);
+        console.log("拷贝Laya完成");
         this._CopyUnity(currentWorkPath);
+        console.log("拷贝Unity完成");
         this._CopyFGUI(currentWorkPath);
+        console.log("拷贝Fgui完成");
         this._CopyExcel(currentWorkPath);
+        console.log("拷贝excel完成");
         console.log("更新框架完成");
     }
 
@@ -159,7 +163,6 @@ class UpdateProject {
             if (!LTUtils.IsFileExist(combieTarget)) {
                 LTUtils.CopyFile(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
         }
     }
 
@@ -185,8 +188,8 @@ class UpdateProject {
             } else {
                 LTUtils.CopyDir(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
         }
+        console.log("拷贝needCopy完成");
 
         for (let value of CommonConfig.initProject) {
             let combieSrc = path.join(srcPath, value);
@@ -199,8 +202,8 @@ class UpdateProject {
             if (!LTUtils.IsFileExist(combieTarget)) {
                 LTUtils.CopyFile(combieSrc, combieTarget);
             }
-            console.log("拷贝", combieSrc, "完成");
         }
+        console.log("拷贝initProject完成");
     }
 
 }
