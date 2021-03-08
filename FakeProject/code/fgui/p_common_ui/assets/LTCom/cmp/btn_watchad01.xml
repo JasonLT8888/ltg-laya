@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="305,104" extention="Button">
+<component size="305,104" pivot="0.5,0.5" extention="Button">
+  <controller name="ad" exported="true" pages="0,normal,1,ad" selected="0">
+    <action type="play_transition" fromPage="" toPage="1" transition="t0" repeat="-1" stopOnExit="true"/>
+  </controller>
   <displayList>
-    <image id="n19_uo3l" name="n19" src="8gel5j" fileName="img/btn_anniuhuang(2).png" xy="0,0" size="305,104"/>
-    <image id="n22_8gel" name="n22" src="8gel5w" fileName="img/sp_lingqujiangli.png" xy="74,31"/>
+    <loader id="n19_uo3l" name="bg" xy="0,0" size="305,104" url="ui://hbq27te38gel5j" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <image id="n22_8gel" name="n22" src="8gel5w" fileName="img/sp_lingqujiangli.png" xy="74,31">
+      <gearDisplay controller="ad" pages="0"/>
+    </image>
+    <image id="n23_i8ti" name="n23" src="8gel5l" fileName="img/sp_yaojinbi.png" xy="108,30">
+      <gearDisplay controller="ad" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n24_i8ti" name="n24" src="8gel2n" fileName="img/sp_shipin.png" xy="34,31">
+      <gearDisplay controller="ad" pages="1"/>
+    </image>
   </displayList>
   <Button downEffect="dark" downEffectValue="0.80"/>
+  <transition name="t0">
+    <item time="0" type="Scale" tween="true" startValue="1,1" endValue="1.1,1.1" duration="18" ease="Linear"/>
+    <item time="18" type="Scale" tween="true" startValue="1.1,1.1" endValue="1,1" duration="6" ease="Linear"/>
+  </transition>
+  <customProperty target="bg" propertyId="1"/>
 </component>
