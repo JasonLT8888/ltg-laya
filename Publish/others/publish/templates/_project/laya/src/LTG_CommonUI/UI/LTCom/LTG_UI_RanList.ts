@@ -9,17 +9,22 @@ export default class LTG_UI_RanList extends fgui.GComponent {
 	public m_btn_getweekly:LTG_UI_normal_btn;
 	public m_btn_getdaily:LTG_UI_normal_btn;
 	public m_list:fgui.GList;
+
 	public static URL:string = "ui://hbq27te3e6qp8a";
 
 	public static createInstance():LTG_UI_RanList {
-		return <LTG_UI_RanList>(fgui.UIPackage.createObject("LTCom", "RanList"));
+		return <LTG_UI_RanList><any>(fgui.UIPackage.createObject("LTCom","RanList"));
 	}
 
-	protected onConstruct():void {
-		this.m_score_input = <fgui.GTextInput>(this.getChildAt(0));
-		this.m_btn_report = <LTG_UI_normal_btn>(this.getChildAt(1));
-		this.m_btn_getweekly = <LTG_UI_normal_btn>(this.getChildAt(2));
-		this.m_btn_getdaily = <LTG_UI_normal_btn>(this.getChildAt(3));
-		this.m_list = <fgui.GList>(this.getChildAt(4));
+	public constructor() {
+		super();
+	}
+
+	protected onConstruct(): void {
+		this.m_score_input = <fgui.GTextInput><any>(this.getChildAt(0));
+		this.m_btn_report = <LTG_UI_normal_btn><any>(this.getChildAt(1));
+		this.m_btn_getweekly = <LTG_UI_normal_btn><any>(this.getChildAt(2));
+		this.m_btn_getdaily = <LTG_UI_normal_btn><any>(this.getChildAt(3));
+		this.m_list = <fgui.GList><any>(this.getChildAt(4));
 	}
 }
