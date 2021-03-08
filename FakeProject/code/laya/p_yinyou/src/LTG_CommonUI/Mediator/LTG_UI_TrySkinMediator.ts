@@ -9,7 +9,7 @@ import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
 import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
-const display_path = "display_obj";
+const display_path = "try_display";
 
 export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySkin> {
 
@@ -61,7 +61,7 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
         pointPlayer.addChild(loadModel);
         TransformEx.ResetLocalTrans(loadModel.transform);
 
-        let camera = LTUtils.FindChild(loadDisplayObj, "Camera") as Laya.Camera;
+        let camera = LTUtils.FindChild(loadDisplayObj, "watchCamera") as Laya.Camera;
         // 注意格式只能用r8g8b8a8否则ip6不支持
         this._cacheRt = new Laya.RenderTexture(this.ui.m_view.m_img_display.width,
             this.ui.m_view.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8,

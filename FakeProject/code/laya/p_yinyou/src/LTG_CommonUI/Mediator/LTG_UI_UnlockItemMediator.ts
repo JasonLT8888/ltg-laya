@@ -11,7 +11,7 @@ import { LTG_Com_UnlockItemData } from "../Data/LTG_Com_UnlockItemData";
 import LTG_UI_EggWallMediator from "./LTG_UI_EggWallMediator";
 import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
-const display_path = "display_obj";
+const display_path = "try_display";
 
 export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_UnlockItem> {
 
@@ -64,7 +64,7 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
         pointPlayer.addChild(loadModel);
         TransformEx.ResetLocalTrans(loadModel.transform);
 
-        let camera = LTUtils.FindChild(loadDisplayObj, "Camera") as Laya.Camera;
+        let camera = LTUtils.FindChild(loadDisplayObj, "watchCamera") as Laya.Camera;
         // 注意格式只能用r8g8b8a8否则ip6不支持
         this._cacheRt = new Laya.RenderTexture(this.ui.m_view.m_img_display.width,
             this.ui.m_view.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8,
