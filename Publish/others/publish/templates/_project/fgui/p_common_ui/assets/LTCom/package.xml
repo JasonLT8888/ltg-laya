@@ -137,7 +137,6 @@
     <component id="8gel3s" name="progress_02.xml" path="/cmp/"/>
     <image id="8gel3t" name="btn_anniuhuang2.png" path="/img/" scale="9grid" scale9grid="20,20,25,27"/>
     <image id="8gel3u" name="sp_mainfeichoujiang.png" path="/img/"/>
-    <image id="8gel3v" name="sp_shipin00.png" path="/img/"/>
     <component id="8gel3w" name="btn_watchad_roll.xml" path="/cmp/"/>
     <image id="8gel3x" name="btn_anniulv0.png" path="/img/" scale="9grid" scale9grid="20,20,33,33"/>
     <component id="8gel3y" name="btn_free_roll.xml" path="/cmp/"/>
@@ -195,7 +194,6 @@
     <image id="8gel5h" name="签到.png" path="/效果图/"/>
     <component id="8gel5i" name="btn_watchad01.xml" path="/cmp/"/>
     <image id="8gel5j" name="btn_anniuhuang(2).png" path="/img/" scale="9grid" scale9grid="15,15,26,26"/>
-    <image id="8gel5k" name="img_shipin.png" path="/img/"/>
     <image id="8gel5l" name="sp_yaojinbi.png" path="/img/"/>
     <component id="8gel5m" name="btn_sign.xml" path="/cmp/"/>
     <image id="8gel5n" name="btn_geiqian.png" path="/img/签到/"/>
@@ -244,7 +242,6 @@
     <image id="n2g16v" name="sp_kaishizhandou.png" path="/img/皮肤试用/"/>
     <image id="n2g16w" name="bg.png" path="/img/皮肤试用/"/>
     <image id="n2g16x" name="sp_yongjiujiesuo.png" path="/img/皮肤试用/"/>
-    <image id="n2g16y" name="sp_shipin.png" path="/img/皮肤试用/"/>
     <image id="n2g16z" name="btn_anniuhuang.png" path="/img/皮肤试用/" scale="9grid" scale9grid="30,30,32,27"/>
     <component id="n2g170" name="btn_unlock_ad.xml" path="/cmp/"/>
     <component id="n2g171" name="btn_refuse.xml" path="/cmp/"/>
@@ -295,7 +292,7 @@
     <component id="bl1a8a" name="TrySkin.xml" path="/ui/" exported="true"/>
     <component id="bl1a8c" name="view_tryskin.xml" path="/cmp/"/>
     <component id="bl1a8d" name="btn_trystart.xml" path="/cmp/"/>
-	<component id="e6qp8a" name="RanList.xml" path="/ui/" exported="true"/>
+    <component id="e6qp8a" name="RanList.xml" path="/ui/" exported="true"/>
     <component id="e6qp8e" name="rank_item.xml" path="/cmp/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>

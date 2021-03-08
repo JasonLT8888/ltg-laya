@@ -52,6 +52,9 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
         this.ui.m_view.m_day_6.m_loader_icon.url = SignConfig.data[6].show_icon;
         this.ui.m_view.m_day_7.m_loader_icon.url = SignConfig.data[7].show_icon;
         this.ui.m_view.m_state.selectedIndex = CommonSaveData.instance.isSigned ? 1 : 0;
+
+
+
         if (CommonSaveData.instance.isSigned) {
             let displayDay = CommonSaveData.instance.signDayCount % 7;
             for (let i = 0; i < displayDay; ++i) {
@@ -71,29 +74,20 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
             this._currentReward = SignConfig.data[displayDay + 1];
             this._cacheUIItem = itemUI;
             this.ui.m_view.m_text_signed.visible = false;
-            this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickGet);
+            this.ui.m_view.m_btn_normal.onClick(this, this._OnClickGet);
+            this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickWatchAd);
         }
-        this._isToggled = LTSDK.instance.isADEnable;//LTSDK.instance.checkState == ECheckState.InCheck ? false : true;
-        this.ui.m_view.m_tog.visible = LTSDK.instance.isADEnable;
-        this.ui.m_view.m_tog.m_selected.selectedIndex = this._isToggled ? 1 : 0;
-        this.ui.m_view.m_tog.onClick(this, this._OnClickToggle);
+
     }
 
-    private _OnClickToggle() {
-        this._isToggled = !this._isToggled;
-        this.ui.m_view.m_tog.m_selected.selectedIndex = this._isToggled ? 1 : 0;
-    }
+
 
     private _OnClickGet() {
-        if (this.ui.m_view.m_tog.m_selected.selectedIndex == 1) {
-            this._OnClickWatchAd();
-        } else {
-            CommonSaveData.instance.isSigned = true;
-            CommonSaveData.instance.signDayCount++;
-            CommonSaveData.SaveToDisk();
-            this._cacheConfig.onSign?.runWith([this._currentReward, false]);
-            this.Hide();
-        }
+        CommonSaveData.instance.isSigned = true;
+        CommonSaveData.instance.signDayCount++;
+        CommonSaveData.SaveToDisk();
+        this._cacheConfig.onSign?.runWith([this._currentReward, false]);
+        this.Hide();
     }
 
     private async _OnClickWatchAd() {

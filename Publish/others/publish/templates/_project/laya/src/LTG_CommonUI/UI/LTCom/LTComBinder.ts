@@ -30,7 +30,7 @@ import LTG_UI_view_item_sign_03 from "./LTG_UI_view_item_sign_03";
 import LTG_UI_view_item_sign_05 from "./LTG_UI_view_item_sign_05";
 import LTG_UI_view_item_sign_06 from "./LTG_UI_view_item_sign_06";
 import LTG_UI_view_item_sign_07 from "./LTG_UI_view_item_sign_07";
-import LTG_UI_btn_tog from "./LTG_UI_btn_tog";
+import LTG_UI_btn_watchad01 from "./LTG_UI_btn_watchad01";
 import LTG_UI_HideMenu from "./LTG_UI_HideMenu";
 import LTG_UI_view_hidemenu from "./LTG_UI_view_hidemenu";
 import LTG_UI_toggle_01 from "./LTG_UI_toggle_01";
@@ -87,7 +87,7 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_item_sign_05.URL, LTG_UI_view_item_sign_05);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_item_sign_06.URL, LTG_UI_view_item_sign_06);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_item_sign_07.URL, LTG_UI_view_item_sign_07);
-		fgui.UIObjectFactory.setExtension(LTG_UI_btn_tog.URL, LTG_UI_btn_tog);
+		fgui.UIObjectFactory.setExtension(LTG_UI_btn_watchad01.URL, LTG_UI_btn_watchad01);
 		fgui.UIObjectFactory.setExtension(LTG_UI_HideMenu.URL, LTG_UI_HideMenu);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_hidemenu.URL, LTG_UI_view_hidemenu);
 		fgui.UIObjectFactory.setExtension(LTG_UI_toggle_01.URL, LTG_UI_toggle_01);
