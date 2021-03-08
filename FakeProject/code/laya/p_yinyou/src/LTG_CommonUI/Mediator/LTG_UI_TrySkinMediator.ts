@@ -7,6 +7,7 @@ import ResDefine from "../../script/common/ResDefine";
 import LTRes from "../../LTGame/Res/LTRes";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
 const display_path = "display_obj";
 
@@ -39,7 +40,7 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
 
         this.ui.m_view.m_btn_no.onClick(this, this._OnClickClose);
         this.ui.m_view.m_btn_try.onClick(this, this._OnClickWatchAd);
-
+        this.ui.m_view.m_btn_no.m_bg.visible = LTPlatform.instance.platform == EPlatformType.TT;
         this._CreateView();
     }
 
@@ -60,7 +61,7 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
         pointPlayer.addChild(loadModel);
         TransformEx.ResetLocalTrans(loadModel.transform);
 
-        let camera = LTUtils.FindChild(loadDisplayObj, "point_camera/Main Camera") as Laya.Camera;
+        let camera = LTUtils.FindChild(loadDisplayObj, "Camera") as Laya.Camera;
         // 注意格式只能用r8g8b8a8否则ip6不支持
         this._cacheRt = new Laya.RenderTexture(this.ui.m_view.m_img_display.width,
             this.ui.m_view.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8,
@@ -80,6 +81,8 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
         Laya.stage.addChild(this._s3d);
 
         LTUI.UnlockScreen();
+
+
     }
 
     _OnHide() {

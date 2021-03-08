@@ -9,6 +9,7 @@ import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { LTG_Com_EggWallData } from "../Data/LTG_Com_EggWallData";
 import { LTG_Com_UnlockItemData } from "../Data/LTG_Com_UnlockItemData";
 import LTG_UI_EggWallMediator from "./LTG_UI_EggWallMediator";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
 const display_path = "display_obj";
 
@@ -41,6 +42,7 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
         this.ui.m_view.m_btn_unlock.onClick(this, this._OnClickUnlock);
         this.ui.m_view.m_btn_unlock.m_text_progress.text = LTG_Com_EggWallData.GetCodeUnlockProgress(this._cacheData.rewardConfig.id);
         this.ui.m_view.m_loader_title.url = this._cacheData.rewardConfig.title_icon_path;
+        this.ui.m_view.m_btn_no.m_bg.visible = LTPlatform.instance.platform == EPlatformType.TT;
 
         this._CreateView();
     }
@@ -62,7 +64,7 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
         pointPlayer.addChild(loadModel);
         TransformEx.ResetLocalTrans(loadModel.transform);
 
-        let camera = LTUtils.FindChild(loadDisplayObj, "point_camera/Main Camera") as Laya.Camera;
+        let camera = LTUtils.FindChild(loadDisplayObj, "Camera") as Laya.Camera;
         // 注意格式只能用r8g8b8a8否则ip6不支持
         this._cacheRt = new Laya.RenderTexture(this.ui.m_view.m_img_display.width,
             this.ui.m_view.m_img_display.height, Laya.RenderTextureFormat.R8G8B8A8,

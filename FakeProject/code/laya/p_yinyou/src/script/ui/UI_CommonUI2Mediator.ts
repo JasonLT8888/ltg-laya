@@ -18,6 +18,9 @@ import { RewardCodeConfig } from "../config/RewardCodeConfig";
 import { LTG_Com_VideoListData } from "../../LTG_CommonUI/Data/LTG_Com_VideoListData";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import LTSDK from "../../SDK/LTSDK";
+import { LTG_Com_TrySkinData } from "../../LTG_CommonUI/Data/LTG_Com_TrySkinData";
+import { TryItemConfig } from "../config/TryItemConfig";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 class UIDemoData {
 
@@ -59,11 +62,24 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             });
             data.Send();
         }),
+        new UIDemoData("皮肤试用", () => {
+            let data = new LTG_Com_TrySkinData();
+            data.tryConfig = TryItemConfig.dataList[0];
+            data.onClose = Laya.Handler.create(this, (res) => {
+                if (res) {
+                    LTUI.Toast("试用");
+                } else {
+                    LTUI.Toast("不试用");
+                }
+            })
+            data.Send();
+        }),
+
         new UIDemoData("限定皮肤", () => {
             let data = new LTG_Com_UnlockItemData();
             data.rewardConfig = RewardCodeConfig.dataList[0];
             data.onUnlocked = Laya.Handler.create(null, (rewardType: number, rewardValue: number) => {
-
+                LTUI.Toast(`解锁了皮肤 type+${rewardType} id:${rewardValue}`);
             });
             data.onClose = Laya.Handler.create(null, () => {
 

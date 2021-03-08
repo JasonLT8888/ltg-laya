@@ -25,6 +25,12 @@
 				1
 			],
 			"intensity":1,
+			"shadowMode":2,
+			"shadowDistance":150,
+			"shadowNearPlane":3,
+			"shadowCascadesMode":4,
+			"shadowResolution":1024,
+			"shadowStrength":0.591,
 			"lightmapBakedType":0,
 			"color":[
 				1,
