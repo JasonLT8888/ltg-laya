@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="320,116" extention="Button">
   <displayList>
-    <image id="n3_i8ti" name="bg" src="n2g16z" fileName="img/皮肤试用/btn_anniuhuang.png" xy="0,0" size="320,116" grayed="true">
+    <image id="n3_i8ti" name="bg" src="8gel3x" fileName="img/btn_anniulv0.png" xy="0,0" size="320,116" grayed="true">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <image id="n2_n2g1" name="n2" src="n2g16u" fileName="img/皮肤试用/sp_rentongjujue.png" xy="87,31">
+    <image id="n2_n2g1" name="n2" src="n2g16u" fileName="img/皮肤试用/sp_rentongjujue.png" xy="87,37">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
   </displayList>
