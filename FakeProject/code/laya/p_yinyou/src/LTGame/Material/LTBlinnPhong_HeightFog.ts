@@ -688,7 +688,6 @@ export class LTBlinnPhong_HeightFog extends Laya.Material {
             'a_BoneWeights': Laya.VertexMesh.MESH_BLENDWEIGHT0,
             'a_BoneIndices': Laya.VertexMesh.MESH_BLENDINDICES0,
             'a_Tangent0': Laya.VertexMesh.MESH_TANGENT0,
-            'a_MvpMatrix': Laya.VertexMesh.MESH_MVPMATRIX_ROW0,
             'a_WorldMat': Laya.VertexMesh.MESH_WORLDMATRIX_ROW0
         };
         let uniformMap: any = {
