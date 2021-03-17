@@ -7,7 +7,6 @@ import View_BottomGames from "../DefaultUI/Cmp/View_BottomGames";
 import View_SideGames from "../DefaultUI/Cmp/View_SideGames";
 import View_EndSlideGames from "../DefaultUI/Cmp/View_EndSlideGames";
 import LTSDK from "../../../SDK/LTSDK";
-import { View_NativeIconLong } from "../DefaultUI/Cmp/View_NativeIconLong";
 import { View_NativeInPage } from "../DefaultUI/Cmp/View_NativeInpage";
 import View_WxSideGames from "../DefaultUI/Cmp/View_WxSideGames";
 import View_End3X3Games from "../DefaultUI/Cmp/View_End3X3Games";
@@ -40,21 +39,6 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     protected _sortOrder: number = 10;
 
-    protected _InitBottom() {
-        let bottomGroup = this.ui["m_bottom_group"];
-        if (bottomGroup == null) {
-            this._defaultBottomHeight = 0;
-        } else {
-            this._defaultBottomHeight = bottomGroup.y;
-        }
-    }
-
-    protected _SetBottomDown(downDistance: number = 0) {
-        let bottomGroup = this.ui["m_bottom_group"];
-        if (bottomGroup == null) return;
-        bottomGroup.y = this._defaultBottomHeight + downDistance;
-    }
-
     public Show(obj: any = null) {
         if (this._isShow) {
             return;
@@ -67,21 +51,6 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         this._ui.sortingOrder = this._sortOrder;
         this._InitSelfAd();
         this._OnShow();
-        const anim_enter = "m_anim_enter";
-        if (this._ui[anim_enter] && LTSDK.instance.isDelayClose) {
-            let anim = this._ui[anim_enter] as fgui.Transition;
-            anim.play(Laya.Handler.create(this, this._CallEnterAnimEnd));
-        } else {
-            this._CallEnterAnimEnd();
-        }
-    }
-
-    private _CallEnterAnimEnd() {
-        this._OnEnterAnimEnd();
-    }
-
-    protected _OnEnterAnimEnd() {
-
     }
 
     private _InitSelfAd() {
@@ -148,22 +117,14 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
 
     }
 
-    protected _OnShow() {
-    }
+    protected _OnShow() { }
 
     public Hide(dispose: boolean = true) {
         if (this._ui == null) return;
         if (this._ui.isDisposed) return;
         this._isShow = false;
         this._OnHide();
-
-        const anim_exit = "m_anim_exit";
-        if (this._ui[anim_exit]) {
-            let anim = this._ui[anim_exit] as fgui.Transition;
-            anim.play(Laya.Handler.create(this, this._DoHide, [dispose]));
-        } else {
-            this._DoHide(dispose);
-        }
+        this._DoHide(dispose);
     }
 
     private _DoHide(dispose: boolean) {
