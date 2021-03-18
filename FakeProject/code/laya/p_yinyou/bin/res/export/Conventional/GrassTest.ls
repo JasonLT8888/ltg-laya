@@ -3,14 +3,14 @@
 	"data":{
 		"type":"Scene3D",
 		"props":{
-			"name":"CommandBuffer",
+			"name":"GrassTest",
 			"ambientColor":[
 				0.212,
 				0.227,
 				0.259
 			],
 			"reflectionDecodingFormat":1,
-			"reflection":"Assets/Test/CommandBufferGIReflection.ltcb.ls",
+			"reflection":"Assets/Test/GrassTestGIReflection.ltcb.ls",
 			"reflectionIntensity":1,
 			"ambientMode":0,
 			"ambientSphericalHarmonicsIntensity":1,
@@ -35,8 +35,8 @@
 					"layer":0,
 					"position":[
 						0,
-						8,
-						-10
+						16,
+						-20
 					],
 					"rotation":[
 						0,
@@ -116,9 +116,9 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.07726514,
-						0.3575334,
-						0.4881196
+						0,
+						0,
+						0
 					],
 					"rotation":[
 						0,
@@ -127,9 +127,9 @@
 						-1
 					],
 					"scale":[
-						1,
-						1,
-						1
+						10,
+						10,
+						10
 					],
 					"meshPath":"Library/unity default resources-Plane.lm",
 					"enableRender":true,
@@ -148,13 +148,13 @@
 				"type":"MeshSprite3D",
 				"instanceID":3,
 				"props":{
-					"name":"Cube",
+					"name":"Sphere",
 					"active":true,
 					"isStatic":false,
 					"layer":0,
 					"position":[
 						0,
-						1,
+						0.5,
 						0
 					],
 					"rotation":[
@@ -168,7 +168,7 @@
 						1,
 						1
 					],
-					"meshPath":"Library/unity default resources-Cube.lm",
+					"meshPath":"Library/unity default resources-Sphere.lm",
 					"enableRender":true,
 					"receiveShadows":true,
 					"castShadow":true,

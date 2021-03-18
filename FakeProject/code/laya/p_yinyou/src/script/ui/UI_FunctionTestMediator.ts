@@ -12,6 +12,7 @@ import { BasicTest } from "../test/OimoTest/BasicTest";
 import { CompoundShapeTest } from "../test/OimoTest/CompoundShapeTest";
 import { RagdollTest } from "../test/OimoTest/RagdollTest";
 import { CommandBufferTest } from "../test/CommandBufferTest";
+import { GassTest } from "../test/GassTest";
 
 export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionTest> {
 
@@ -35,6 +36,7 @@ export default class UI_FunctionTestMediator extends BaseUIMediator<UI_FunctionT
         new CompoundShapeTest(),
         new RagdollTest(),
         new CommandBufferTest(),
+        new GassTest(),
     ];
 
     _OnShow() {
