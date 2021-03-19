@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImage="ui://hbq27te38gel3l" designImageAlpha="0" designImageLayer="1">
+  <controller name="plat" exported="true" pages="0,oth,1,tt" selected="1"/>
   <displayList>
     <graph id="n1_8gel" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -8,6 +9,11 @@
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <component id="n5_8gel" name="btn_close" src="n2g171" fileName="cmp/btn_refuse.xml" xy="218,1098" size="286,92">
+      <gearDisplay controller="plat" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n6_7nzp" name="btn_no" src="8gel1d" fileName="cmp/btn_close_01.xml" xy="95,199">
+      <gearDisplay controller="plat" pages="0"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
   </displayList>
