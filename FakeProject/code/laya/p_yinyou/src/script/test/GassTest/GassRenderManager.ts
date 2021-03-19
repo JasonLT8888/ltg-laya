@@ -117,9 +117,9 @@ export class GrassRenderManager {
         this.grassMap.length = lastIndex;
     }
 
-    update(caemra: Laya.Camera) {
+    update(camera: Laya.Camera) {
         //根据距离排序更新 最后渲染
-        this.frustumCulling(caemra);
+        this.frustumCulling(camera);
         let offset = 0;
         for (let i = 0, n = this.drawGrassLevelNums.length; i < n; i++) {
             let drawnums = this.drawGrassLevelNums[i];

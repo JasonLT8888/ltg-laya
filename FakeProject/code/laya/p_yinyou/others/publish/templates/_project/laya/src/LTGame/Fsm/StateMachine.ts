@@ -1,30 +1,37 @@
-import LTDictionary from "../LTUtils/LTDictionary";
 import BaseState from "./BaseState";
 
 export default class StateMachine<T extends BaseState> {
-    private _states: LTDictionary<number, T>;
+
+    private _states: Map<number, T>;
 
     constructor() {
-        this._states = new LTDictionary<number, T>();
+        this._states = new Map<number, T>();
     }
 
     public get count(): number {
-        return this._states.count;
+        return this._states.size;
     }
 
     public currState: T;
     public lastState: T;
 
+    private _forceChangeState: number = 0;
+    private _forceChangeParam: any;
+
     public Add(addState: T): boolean {
-        return this._states.Add(addState.id, addState);
+        if (this._states.has(addState.id)) {
+            return false;
+        }
+        this._states.set(addState.id, addState);
+        return true;
     }
 
     public Remove(id: number): boolean {
-        return this._states.Remove(id);
+        return this._states.delete(id);
     }
 
     public RemoveAll(): void {
-        this._states.Clear();
+        this._states.clear();
         this.currState = null;
     }
 
@@ -46,12 +53,34 @@ export default class StateMachine<T extends BaseState> {
             state.OnEnter(this.lastState, param);
             return true;
         }
-        console.error("不存在的状态ID:" + id);
+        console.error("[状态机] 不存在的状态ID:" + id);
         return false;
     }
 
+    public SetForceChangeState(id: number, param: any = null) {
+        this._forceChangeState = id;
+        this._forceChangeParam = param;
+    }
+
     public LogicUpdate(dt: number) {
-        if(this.currState == null) return;
+        if (this.currState == null) {
+            if (this._forceChangeState != 0) {
+                this.ChangeState(this._forceChangeState, this._forceChangeParam);
+                this._forceChangeState = 0;
+                this._forceChangeParam = null;
+                this.OnRunning(null, dt);
+            }
+            return;
+        }
+
+        if (this._forceChangeState != 0) {
+            this.ChangeState(this._forceChangeState, this._forceChangeParam);
+            this._forceChangeState = 0;
+            this._forceChangeParam = null;
+            this.OnRunning(null, dt);
+            return;
+        }
+
         let nextState = this.currState.GetNextState();
         if (nextState != 0) {
             this.ChangeState(nextState);
@@ -67,6 +96,6 @@ export default class StateMachine<T extends BaseState> {
     }
 
     public Find(id: number): T {
-        return this._states.Get(id);
+        return this._states.get(id);
     }
 }

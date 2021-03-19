@@ -633,7 +633,7 @@
 	        if (super.get_scaleX() == value)
 	            return;
 	        super.set_scaleX(value);
-	        this.event(Laya.Event.RESIZE);
+	        this.callLater(this._sizeChanged);
 	    }
 	    get scaleX() {
 	        return super.scaleX;
@@ -645,7 +645,7 @@
 	        if (super.get_scaleY() == value)
 	            return;
 	        super.set_scaleY(value);
-	        this.event(Laya.Event.RESIZE);
+	        this.callLater(this._sizeChanged);
 	    }
 	    get scaleY() {
 	        return super.scaleY;
@@ -878,16 +878,16 @@
 	                    path: "",
 	                    extraData: "",
 	                    envVersion: "release",
-	                    success: function success() {
+	                    success: () => {
 	                        console.log("-------------跳转成功--------------");
 	                    },
-	                    fail: function fail() {
+	                    fail: () => {
 	                        console.log("-------------跳转失败--------------");
 	                    },
-	                    complete: function complete() {
+	                    complete: () => {
 	                        console.log("-------------跳转接口调用成功--------------");
 	                        this.updateAdvsInfo();
-	                    }.bind(this)
+	                    }
 	                });
 	            }
 	        }
@@ -2864,7 +2864,7 @@
 	        this._scrollBar.once(Laya.Event.END, this, this.onScrollEnd);
 	    }
 	    onScrollEnd() {
-	        super.cacheAs = this._usedCache;
+	        super.cacheAs = this._usedCache || 'none';
 	    }
 	    get content() {
 	        return this._content;
@@ -3153,10 +3153,11 @@
 	        if (!this.cacheContent) {
 	            var index = scrollLine * lineX;
 	            var num = 0;
+	            let down = true;
+	            var toIndex = 0;
 	            if (index > this._startIndex) {
 	                num = index - this._startIndex;
-	                var down = true;
-	                var toIndex = this._startIndex + lineX * (lineY + 1);
+	                toIndex = this._startIndex + lineX * (lineY + 1);
 	                this._isMoved = true;
 	            }
 	            else if (index < this._startIndex) {
@@ -3206,7 +3207,6 @@
 	        if (!this._scrollBar)
 	            return;
 	        var lineX = (this._isVertical ? this.repeatX : this.repeatY);
-	        var lineY = (this._isVertical ? this.repeatY : this.repeatX);
 	        var pos = Math.floor(cellIndex / lineX) * this._cellSize;
 	        this._isVertical ? cell._y = pos : cell.x = pos;
 	    }
@@ -3228,10 +3228,12 @@
 	        }
 	    }
 	    get selectedItem() {
+	        if (!this._array)
+	            return null;
 	        return this._selectedIndex != -1 ? this._array[this._selectedIndex] : null;
 	    }
 	    set selectedItem(value) {
-	        this.selectedIndex = this._array.indexOf(value);
+	        this._array && (this.selectedIndex = this._array.indexOf(value));
 	    }
 	    get selection() {
 	        return this.getCell(this._selectedIndex);
@@ -3315,9 +3317,8 @@
 	    }
 	    updateArray(array) {
 	        this._array = array;
-	        var freshStart;
 	        if (this._array) {
-	            freshStart = this._preLen - this._startIndex;
+	            let freshStart = this._preLen - this._startIndex;
 	            if (freshStart >= 0)
 	                this.renderItems(freshStart);
 	            this._preLen = this._array.length;
@@ -3376,13 +3377,15 @@
 	        this.array = this._array;
 	    }
 	    getItem(index) {
+	        if (!this._array)
+	            return null;
 	        if (index > -1 && index < this._array.length) {
 	            return this._array[index];
 	        }
 	        return null;
 	    }
 	    changeItem(index, source) {
-	        if (index > -1 && index < this._array.length) {
+	        if (index > -1 && this._array && index < this._array.length) {
 	            this._array[index] = source;
 	            if (index >= this._startIndex && index < this._startIndex + this._cells.length) {
 	                this.renderItem(this.getCell(index), index);
@@ -3392,8 +3395,13 @@
 	    setItem(index, source) {
 	        this.changeItem(index, source);
 	    }
-	    addItem(souce) {
-	        this._array.push(souce);
+	    addItem(source) {
+	        if (!this.array) {
+	            this.array = [source];
+	        }
+	        else {
+	            this._array.push(source);
+	        }
 	        this.array = this._array;
 	    }
 	    addItemAt(souce, index) {
@@ -3401,8 +3409,10 @@
 	        this.array = this._array;
 	    }
 	    deleteItem(index) {
-	        this._array.splice(index, 1);
-	        this.array = this._array;
+	        if (this._array) {
+	            this._array.splice(index, 1);
+	            this.array = this._array;
+	        }
 	    }
 	    getCell(index) {
 	        this.runCallLater(this.changeCells);
@@ -5645,7 +5655,6 @@
 
 	class IUI {
 	}
-	IUI.Dialog = null;
 
 	class DialogManager extends Laya.Sprite {
 	    constructor() {

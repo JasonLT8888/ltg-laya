@@ -14,6 +14,8 @@ export default class MonoHelper extends Laya.Script {
     private _updateActions: Laya.Handler[] = [];
     private _lateUpdateActions: Laya.Handler[] = [];
 
+    public deltaTime: number = 1 / 60;
+
     private _GetActionList(actionType: EActionType): Laya.Handler[] {
         switch (actionType) {
             case EActionType.Update:
@@ -53,24 +55,20 @@ export default class MonoHelper extends Laya.Script {
     }
 
     onUpdate() {
-        let dt = Laya.timer.delta * 0.001;
-        if (dt > 0.3) {
-            dt = 0.05;
+        this.deltaTime = Laya.timer.delta * 0.001;
+        if (this.deltaTime > 0.05) {
+            this.deltaTime = 0.05;
         }
         for (let i = 0; i < this._updateActions.length; ++i) {
             let action = this._updateActions[i];
-            action.runWith(dt);
+            action.runWith(this.deltaTime);
         }
     }
 
     onLateUpdate() {
-        let dt = Laya.timer.delta * 0.001;
-        if (dt > 0.3) {
-            dt = 0.05;
-        }
         for (let i = 0; i < this._lateUpdateActions.length; ++i) {
             let action = this._lateUpdateActions[i];
-            action.runWith(dt);
+            action.runWith(this.deltaTime);
         }
     }
 
