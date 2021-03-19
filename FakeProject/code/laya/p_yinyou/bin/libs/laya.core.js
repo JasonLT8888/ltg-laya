@@ -11,7 +11,8 @@ window.Laya= (function (exports) {
     Config.preserveDrawingBuffer = false;
     Config.webGL2D_MeshAllocMaxMem = true;
     Config.is2DPixelArtGame = false;
-    Config.useWebGL2 = true;
+    Config.useWebGL2 = false;
+    Config.printWebglOrder = false;
     Config.allowGPUInstanceDynamicBatch = true;
     Config.useRetinalCanvas = false;
     window.Config = Config;
@@ -819,6 +820,8 @@ window.Laya= (function (exports) {
     LayaGL.UPLOAD_SHADER_UNIFORM_TYPE_ID = 0;
     LayaGL.UPLOAD_SHADER_UNIFORM_TYPE_DATA = 1;
 
+    var _sFactor = 1;
+    var _dFactor = 0;
     class WebGLContext {
         static __init__() {
             var gl = LayaGL.instance;
@@ -826,12 +829,17 @@ window.Laya= (function (exports) {
             WebGLContext._blendEquation = gl.FUNC_ADD;
             WebGLContext._blendEquationRGB = gl.FUNC_ADD;
             WebGLContext._blendEquationAlpha = gl.FUNC_ADD;
-            WebGLContext._sFactor = gl.ONE;
-            WebGLContext._dFactor = gl.ZERO;
+            _sFactor = gl.ONE;
+            _dFactor = gl.ZERO;
             WebGLContext._sFactorAlpha = gl.ONE;
             WebGLContext._dFactorAlpha = gl.ZERO;
             WebGLContext._activedTextureID = gl.TEXTURE0;
-            WebGLContext._glTextureIDs = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3, gl.TEXTURE4, gl.TEXTURE5, gl.TEXTURE6, gl.TEXTURE7];
+            var maxTexturenum = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+            WebGLContext._activeTextures = new Array(maxTexturenum);
+            WebGLContext._glTextureIDs = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3, gl.TEXTURE4, gl.TEXTURE5, gl.TEXTURE6, gl.TEXTURE7, gl.TEXTURE8, gl.TEXTURE9, gl.TEXTURE10, gl.TEXTURE11, gl.TEXTURE12, gl.TEXTURE13, gl.TEXTURE14, gl.TEXTURE15, gl.TEXTURE16, gl.TEXTURE17, gl.TEXTURE18, gl.TEXTURE19, gl.TEXTURE20, gl.TEXTURE21, gl.TEXTURE22, gl.TEXTURE23, gl.TEXTURE24, gl.TEXTURE25, gl.TEXTURE26, gl.TEXTURE27, gl.TEXTURE28, gl.TEXTURE29, gl.TEXTURE30, gl.TEXTURE31];
+            var maxVertexUniform = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
+            var maxFragUniform = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
+            WebGLContext._maxUniformFragmentVectors = Math.min(maxVertexUniform, maxFragUniform);
         }
         static useProgram(gl, program) {
             if (WebGLContext._useProgram === program)
@@ -868,9 +876,9 @@ window.Laya= (function (exports) {
             }
         }
         static setBlendFunc(gl, sFactor, dFactor, force = false) {
-            if (force || sFactor !== WebGLContext._sFactor || dFactor !== WebGLContext._dFactor) {
-                WebGLContext._sFactor = sFactor;
-                WebGLContext._dFactor = dFactor;
+            if (force || sFactor !== _sFactor || dFactor !== _dFactor) {
+                _sFactor = sFactor;
+                _dFactor = dFactor;
                 WebGLContext._sFactorRGB = null;
                 WebGLContext._dFactorRGB = null;
                 WebGLContext._sFactorAlpha = null;
@@ -884,8 +892,8 @@ window.Laya= (function (exports) {
                 WebGLContext._dFactorRGB = dstRGB;
                 WebGLContext._sFactorAlpha = srcAlpha;
                 WebGLContext._dFactorAlpha = dstAlpha;
-                WebGLContext._sFactor = null;
-                WebGLContext._dFactor = null;
+                _sFactor = null;
+                _dFactor = null;
                 gl.blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
             }
         }
@@ -957,8 +965,11 @@ window.Laya= (function (exports) {
         static bindVertexArrayForNative(gl, vertexArray) {
             gl.bindVertexArray(vertexArray);
         }
+        static getUniformMaxVector() {
+            return WebGLContext._maxUniformFragmentVectors;
+        }
     }
-    WebGLContext._activeTextures = new Array(8);
+    WebGLContext._activeTextures = new Array(1);
     WebGLContext._useProgram = null;
     WebGLContext._depthTest = true;
     WebGLContext._depthMask = true;
@@ -2028,8 +2039,18 @@ window.Laya= (function (exports) {
             var dPos = this.pos - tPos - 2;
             this._d_.setUint16(tPos, dPos, this._xd_);
         }
+        writeUTFString32(value) {
+            var tPos = this.pos;
+            this.writeUint32(1);
+            this.writeUTFBytes(value);
+            var dPos = this.pos - tPos - 4;
+            this._d_.setUint32(tPos, dPos, this._xd_);
+        }
         readUTFString() {
             return this.readUTFBytes(this.getUint16());
+        }
+        readUTFString32() {
+            return this.readUTFBytes(this.getUint32());
         }
         getUTFString() {
             return this.readUTFString();
@@ -6607,7 +6628,6 @@ window.Laya= (function (exports) {
         getRenderType() {
             return SubmitBase.TYPE_CANVAS;
         }
-        ;
     }
     SubmitCanvas.POOL = [];
     {
@@ -7569,7 +7589,7 @@ window.Laya= (function (exports) {
                     onok && onok();
                 }
                 else {
-                    ILaya.loader.load(url, Handler.create(this, function (bit) {
+                    ILaya.loader.load(url, Handler.create(this, (bit) => {
                         this.bitmap = bit;
                         onok && onok();
                     }), null, "htmlimage", 1, true);
@@ -7760,7 +7780,7 @@ window.Laya= (function (exports) {
             var maxTouchPoints = win.navigator.maxTouchPoints || 0;
             var platform = win.navigator.platform;
             if ("my" in Browser.window) {
-                if ("tb" in Browser.window.my) {
+                if (u.indexOf('TB/') > -1 || u.indexOf('Taobao/') > -1 || u.indexOf('TM/') > -1) {
                     window.tbMiniGame(Laya, Laya);
                     if (!Laya["TBMiniAdapter"]) {
                         console.error("请先添加淘宝适配库,详细教程：https://ldc2.layabox.com/doc/?language=zh&nav=zh-ts-5-6-0");
@@ -7887,7 +7907,7 @@ window.Laya= (function (exports) {
                 meta.name = 'viewport', meta.content = content;
                 doc.getElementsByTagName('head')[0].appendChild(meta);
             }
-            Browser.onMobile = window.isConchApp ? true : u.indexOf("Mobile") > -1;
+            Browser.onMobile = window.conch ? true : u.indexOf("Mobile") > -1;
             Browser.onIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
             Browser.onIPhone = u.indexOf("iPhone") > -1;
             Browser.onMac = u.indexOf("Mac OS X") > -1;
@@ -7902,7 +7922,7 @@ window.Laya= (function (exports) {
             Browser.onPC = !Browser.onMobile;
             Browser.onMiniGame = u.indexOf('MiniGame') > -1;
             Browser.onBDMiniGame = u.indexOf('SwanGame') > -1;
-            Browser.onLayaRuntime = !!Browser.window.conch;
+            Browser.onLayaRuntime = !!window.conch;
             if (u.indexOf('OPPO') > -1 && u.indexOf('MiniGame') > -1) {
                 Browser.onQGMiniGame = true;
                 Browser.onMiniGame = false;
@@ -7930,6 +7950,9 @@ window.Laya= (function (exports) {
                 Browser.onTBMiniGame = true;
             }
             return win;
+        }
+        static get _isMiniGame() {
+            return Browser.onMiniGame || Browser.onBDMiniGame || Browser.onQGMiniGame || Browser.onKGMiniGame || Browser.onVVMiniGame || Browser.onAlipayMiniGame || Browser.onQQMiniGame || Browser.onBLMiniGame || Browser.onTTMiniGame || Browser.onHWMiniGame || Browser.onTBMiniGame;
         }
         static createElement(type) {
             Browser.__init__();
@@ -7998,7 +8021,7 @@ window.Laya= (function (exports) {
     Browser._pixelRatio = -1;
     Browser.mainCanvas = null;
     Browser.hanzi = new RegExp("^[\u4E00-\u9FA5]$");
-    Browser.fontMap = [];
+    Browser.fontMap = {};
     Browser.measureText = function (txt, font) {
         var isChinese = Browser.hanzi.test(txt);
         if (isChinese && Browser.fontMap[font]) {
@@ -8226,8 +8249,6 @@ window.Laya= (function (exports) {
             this.fontSizeInfo = {};
             this.mapFont = {};
             this.fontID = 0;
-            this.mapColor = [];
-            this.colorID = 0;
             this.fontScaleX = 1.0;
             this.fontScaleY = 1.0;
             this._curStrPos = 0;
@@ -8419,7 +8440,7 @@ window.Laya= (function (exports) {
                         else {
                             var add = sameTexData[ri.tex.id];
                             if (!add) {
-                                var o1 = { texgen: ri.tex.genID, tex: ri.tex, words: [] };
+                                var o1 = { texgen: ri.tex.genID, tex: ri.tex, words: new Array() };
                                 sameTexData[ri.tex.id] = o1;
                                 add = o1.words;
                             }
@@ -8444,7 +8465,6 @@ window.Laya= (function (exports) {
         _drawResortedWords(ctx, startx, starty, samePagesData) {
             var isLastRender = ctx._charSubmitCache ? ctx._charSubmitCache._enable : false;
             var mat = ctx._curMat;
-            var slen = samePagesData.length;
             for (var id in samePagesData) {
                 var dt = samePagesData[id];
                 if (!dt)
@@ -8921,7 +8941,6 @@ window.Laya= (function (exports) {
             this._submits = null;
             this._curSubmit = null;
             this._submitKey = new SubmitKey();
-            this._mesh = null;
             this._pathMesh = null;
             this._triangleMesh = null;
             this.meshlist = [];
@@ -9185,7 +9204,7 @@ window.Laya= (function (exports) {
             --Context._contextcount;
             this.sprite = null;
             this._releaseMem(keepRT);
-            this._charSubmitCache.destroy();
+            this._charSubmitCache && this._charSubmitCache.destroy();
             this._mesh.destroy();
             if (!keepRT) {
                 this._targets && this._targets.destroy();
@@ -9602,7 +9621,7 @@ window.Laya= (function (exports) {
         }
         _inner_drawTexture(tex, imgid, x, y, width, height, m, uv, alpha, lastRender) {
             if (width <= 0 || height <= 0) {
-                return;
+                return false;
             }
             var preKey = this._curSubmit._key;
             uv = uv || tex._uv;
@@ -11191,6 +11210,8 @@ window.Laya= (function (exports) {
                 return null;
             }
             var gl = LayaGL.instance = WebGLContext.mainContext = getWebGLContext(Render._mainCanvas.source);
+            if (Config.printWebglOrder)
+                this._replaceWebglcall(gl);
             if (!gl)
                 return false;
             LayaGL.instance = gl;
@@ -11208,6 +11229,28 @@ window.Laya= (function (exports) {
             Buffer2D.__int__(gl);
             BlendMode._init_(gl);
             return true;
+        }
+        _replaceWebglcall(gl) {
+            var tempgl = {};
+            for (const key in gl) {
+                if (typeof gl[key] == "function" && key != "getError" && key != "__proto__") {
+                    tempgl[key] = gl[key];
+                    gl[key] = function () {
+                        let arr = [];
+                        for (let i = 0; i < arguments.length; i++) {
+                            arr.push(arguments[i]);
+                        }
+                        let result = tempgl[key].apply(gl, arr);
+                        console.log(RenderInfo.loopCount + ":gl." + key + ":" + arr);
+                        let err = gl.getError();
+                        if (err) {
+                            console.log(err);
+                            debugger;
+                        }
+                        return result;
+                    };
+                }
+            }
         }
         _enterFrame(e = null) {
             ILaya.stage._loop();
@@ -12075,7 +12118,7 @@ window.Laya= (function (exports) {
                 return null;
             return this._saveToCmd(Render._context.drawTextures, DrawTexturesCmd.create.call(this, texture, pos));
         }
-        drawTriangles(texture, x, y, vertices, uvs, indices, matrix = null, alpha = 1, color = null, blendMode = null, colorNum = undefined) {
+        drawTriangles(texture, x, y, vertices, uvs, indices, matrix = null, alpha = 1, color = null, blendMode = null, colorNum = 0xffffffff) {
             return this._saveToCmd(Render._context.drawTriangles, DrawTrianglesCmd.create.call(this, texture, x, y, vertices, uvs, indices, matrix, alpha, color, blendMode, colorNum));
         }
         fillTexture(texture, x, y, width = 0, height = 0, type = "repeat", offset = null) {
@@ -12111,7 +12154,7 @@ window.Laya= (function (exports) {
             return this._saveToCmd(Render._context.fillText, FillTextCmd.create.call(this, text, null, x, y, font || ILaya.Text.defaultFontStr(), fillColor, textAlign, lineWidth, borderColor));
         }
         fillWords(words, x, y, font, color) {
-            return this._saveToCmd(Render._context.fillText, FillTextCmd.create.call(this, null, words, x, y, font || ILaya.Text.defaultFontStr(), color));
+            return this._saveToCmd(Render._context.fillText, FillTextCmd.create.call(this, null, words, x, y, font || ILaya.Text.defaultFontStr(), color, '', 0, null));
         }
         fillBorderWords(words, x, y, font, fillColor, borderColor, lineWidth) {
             return this._saveToCmd(Render._context.fillText, FillTextCmd.create.call(this, null, words, x, y, font || ILaya.Text.defaultFontStr(), fillColor, "", lineWidth, borderColor));
@@ -12263,7 +12306,7 @@ window.Laya= (function (exports) {
         drawPath(x, y, paths, brush = null, pen = null) {
             return this._saveToCmd(Render._context._drawPath, DrawPathCmd.create.call(this, x, y, paths, brush, pen));
         }
-        draw9Grid(texture, x = 0, y = 0, width = 0, height = 0, sizeGrid = null) {
+        draw9Grid(texture, x = 0, y = 0, width = 0, height = 0, sizeGrid) {
             this._saveToCmd(null, Draw9GridTexture.create(texture, x, y, width, height, sizeGrid));
         }
     }
@@ -13622,7 +13665,7 @@ window.Laya= (function (exports) {
                     this._children = Node.ARRAY_EMPTY;
                 }
                 else {
-                    arr = childs.splice(beginIndex, endIndex - beginIndex);
+                    arr = childs.splice(beginIndex, endIndex - beginIndex + 1);
                 }
                 for (var i = 0, n = arr.length; i < n; i++) {
                     arr[i]._setParent(null);
@@ -13867,7 +13910,7 @@ window.Laya= (function (exports) {
             if (this._components) {
                 for (var i = 0, n = this._components.length; i < n; i++) {
                     var comp = this._components[i];
-                    comp._setActive(false);
+                    (!comp._isScript()) && comp._setActive(false);
                     (comp._isScript() && comp._enabled) && (activeChangeScripts.push(comp));
                 }
             }
@@ -14255,11 +14298,11 @@ window.Laya= (function (exports) {
             }
             else {
                 pList = Utils.clearArray(this._boundStyle.temBM);
-                if (this._texture) {
-                    rec = Rectangle.TEMP;
-                    rec.setTo(0, 0, this.width || this._texture.width, this.height || this._texture.height);
-                    Utils.concatArray(pList, rec._getBoundPoints());
-                }
+            }
+            if (this._texture) {
+                rec = Rectangle.TEMP;
+                rec.setTo(0, 0, this.width || this._texture.width, this.height || this._texture.height);
+                Utils.concatArray(pList, rec._getBoundPoints());
             }
             var child;
             var cList;
@@ -15121,7 +15164,7 @@ window.Laya= (function (exports) {
             return Pool.getItemByClass("TextStyle", TextStyle);
         }
         render(sprite, context, x, y) {
-            (this.bgColor || this.borderColor) && context.drawRect(x, y, sprite.width, sprite.height, this.bgColor, this.borderColor, 1);
+            (this.bgColor || this.borderColor) && context.drawRect(x - this.pivotX, y - this.pivotY, sprite.width, sprite.height, this.bgColor, this.borderColor, 1);
         }
     }
     TextStyle.EMPTY = new TextStyle();
@@ -15460,16 +15503,16 @@ window.Laya= (function (exports) {
                     startX = this._width * 0.5 + padding[3] - padding[1];
                 }
             }
+            let bitmapScale = 1;
+            if (tCurrBitmapFont && tCurrBitmapFont.autoScaleSize) {
+                bitmapScale = tCurrBitmapFont.fontSize / this.fontSize;
+            }
             if (this._height > 0) {
                 var tempVAlign = (this._textHeight > this._height) ? "top" : this.valign;
                 if (tempVAlign === "middle")
-                    startY = (this._height - visibleLineCount * lineHeight) * 0.5 + padding[0] - padding[2];
+                    startY = (this._height - visibleLineCount / bitmapScale * lineHeight) * 0.5 + padding[0] - padding[2];
                 else if (tempVAlign === "bottom")
-                    startY = this._height - visibleLineCount * lineHeight - padding[2];
-            }
-            var style = this._style;
-            if (tCurrBitmapFont && tCurrBitmapFont.autoScaleSize) {
-                var bitmapScale = tCurrBitmapFont.fontSize / this.fontSize;
+                    startY = this._height - visibleLineCount / bitmapScale * lineHeight - padding[2];
             }
             if (this._clipPoint) {
                 graphics.save();
@@ -15487,6 +15530,7 @@ window.Laya= (function (exports) {
                 }
                 this.repaint();
             }
+            var style = this._style;
             var password = style.asPassword;
             if (("prompt" in this) && this['prompt'] == this._text)
                 password = false;
@@ -15496,9 +15540,8 @@ window.Laya= (function (exports) {
                 var word = lines[i];
                 var _word;
                 if (password) {
-                    var len = word.length;
                     word = "";
-                    for (var j = len; j > 0; j--) {
+                    for (var j = word.length; j > 0; j--) {
                         word += "●";
                     }
                 }
@@ -15511,6 +15554,8 @@ window.Laya= (function (exports) {
                     var tWidth = this.width;
                     if (tCurrBitmapFont.autoScaleSize) {
                         tWidth = this.width * bitmapScale;
+                        x *= bitmapScale;
+                        y *= bitmapScale;
                     }
                     tCurrBitmapFont._drawText(word, this, x, y, this.align, tWidth);
                 }
@@ -15584,8 +15629,14 @@ window.Laya= (function (exports) {
         _evalTextSize() {
             var nw, nh;
             nw = Math.max.apply(this, this._lineWidths);
-            if (this._style.currBitmapFont)
-                nh = this._lines.length * (this._style.currBitmapFont.getMaxHeight() + this.leading) + this.padding[0] + this.padding[2];
+            let bmpFont = this._style.currBitmapFont;
+            if (bmpFont) {
+                let h = bmpFont.getMaxHeight();
+                if (bmpFont.autoScaleSize) {
+                    h = this.fontSize;
+                }
+                nh = this._lines.length * (h + this.leading) + this.padding[0] + this.padding[2];
+            }
             else {
                 nh = this._lines.length * (this._charSize.height + this.leading) + this.padding[0] + this.padding[2];
                 if (this._lines.length) {
@@ -15863,7 +15914,7 @@ window.Laya= (function (exports) {
             Input._initInput(Input.input = ILaya.Browser.createElement("input"));
             Input.inputContainer = ILaya.Browser.createElement("div");
             Input.inputContainer.style.position = "absolute";
-            Input.inputContainer.style.zIndex = 1E5;
+            Input.inputContainer.style.zIndex = '1E5';
             ILaya.Browser.container.appendChild(Input.inputContainer);
             Input.inputContainer.setPos = function (x, y) {
                 Input.inputContainer.style.left = x + 'px';
@@ -15877,7 +15928,7 @@ window.Laya= (function (exports) {
             style.backgroundColor = 'transparent';
             style.border = 'none';
             style.outline = 'none';
-            style.zIndex = 1;
+            style.zIndex = '1';
             input.addEventListener('input', Input._processInputting);
             input.addEventListener('mousemove', Input._stopEvent);
             input.addEventListener('mousedown', Input._stopEvent);
@@ -15981,6 +16032,10 @@ window.Laya= (function (exports) {
         _setInputMethod() {
             Input.input.parentElement && (Input.inputContainer.removeChild(Input.input));
             Input.area.parentElement && (Input.inputContainer.removeChild(Input.area));
+            if (ILaya.Browser.onAndroid) {
+                Input.input = Input.inputElement = ILaya.Browser.createElement('input');
+                Input._initInput(Input.input);
+            }
             Input.inputElement = (this._multiline ? Input.area : Input.input);
             Input.inputContainer.appendChild(Input.inputElement);
             if (Text.RightToLeft) {
@@ -16001,7 +16056,6 @@ window.Laya= (function (exports) {
                 input.setForbidEdit(!this._editable);
             }
             input.maxLength = this._maxChars;
-            var padding = this.padding;
             input.value = this._content;
             input.placeholder = this._prompt;
             ILaya.stage.off(Event.KEY_DOWN, this, this._onKeyDown);
@@ -16011,7 +16065,6 @@ window.Laya= (function (exports) {
             if (ILaya.Browser.onPC)
                 input.focus();
             if (!ILaya.Browser.onMiniGame && !ILaya.Browser.onBDMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame && !ILaya.Browser.onTTMiniGame && !ILaya.Browser.onHWMiniGame && !ILaya.Browser.onTBMiniGame) {
-                var temp = this._text;
                 this._text = null;
             }
             this.typeset();
@@ -17723,7 +17776,7 @@ window.Laya= (function (exports) {
                 AudioSound._initMusicAudio();
                 ad = AudioSound._musicAudio;
                 if (ad.src != url) {
-                    AudioSound._audioCache[ad.src] = null;
+                    delete AudioSound._audioCache[ad.src];
                     ad = null;
                 }
             }
@@ -17776,6 +17829,10 @@ window.Laya= (function (exports) {
             var ad;
             if (this.url == ILaya.SoundManager._bgMusic) {
                 ad = AudioSound._musicAudio;
+                if (ad.src != "" && ad.src != this.url) {
+                    delete AudioSound._audioCache[ad.src];
+                    AudioSound._audioCache[this.url] = ad;
+                }
             }
             else {
                 ad = AudioSound._audioCache[this.url];
@@ -18139,7 +18196,9 @@ window.Laya= (function (exports) {
             if (supportWebAudio)
                 WebAudioSound.initWebAudio();
             SoundManager._soundClass = supportWebAudio ? WebAudioSound : AudioSound;
-            AudioSound._initMusicAudio();
+            if (!Browser.onTBMiniGame) {
+                AudioSound._initMusicAudio();
+            }
             SoundManager._musicClass = AudioSound;
             return supportWebAudio;
         }
@@ -18332,7 +18391,7 @@ window.Laya= (function (exports) {
                     return null;
             }
             var tSound;
-            if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame && !ILaya.Browser.onTTMiniGame && !ILaya.Browser.onHWMiniGame && !ILaya.Browser.onTBMiniGame) {
+            if (!Browser._isMiniGame) {
                 tSound = ILaya.loader.getRes(url);
             }
             if (!soundClass)
@@ -18340,7 +18399,7 @@ window.Laya= (function (exports) {
             if (!tSound) {
                 tSound = new soundClass();
                 tSound.load(url);
-                if (!ILaya.Browser.onBDMiniGame && !ILaya.Browser.onMiniGame && !ILaya.Browser.onKGMiniGame && !ILaya.Browser.onQGMiniGame && !ILaya.Browser.onVVMiniGame && !ILaya.Browser.onAlipayMiniGame && !ILaya.Browser.onQQMiniGame && !ILaya.Browser.onBLMiniGame && !ILaya.Browser.onTTMiniGame && !ILaya.Browser.onHWMiniGame && !ILaya.Browser.onTBMiniGame) {
+                if (!Browser._isMiniGame) {
                     ILaya.Loader.cacheRes(url, tSound);
                 }
             }
@@ -18631,7 +18690,9 @@ window.Laya= (function (exports) {
                     http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 else {
                     http.setRequestHeader("Content-Type", "application/json");
-                    isJson = true;
+                    if (!(data instanceof ArrayBuffer) && typeof data !== "string") {
+                        isJson = true;
+                    }
                 }
             }
             let restype = responseType !== "arraybuffer" ? "text" : "arraybuffer";
@@ -18735,7 +18796,7 @@ window.Laya= (function (exports) {
             }
             Loader.setGroup(url, "666");
             this._url = url;
-            if (url.indexOf("data:image") === 0)
+            if (url.indexOf("data:image") === 0 && !type)
                 type = Loader.IMAGE;
             else
                 url = URL.formatURL(url);
@@ -18746,7 +18807,10 @@ window.Laya= (function (exports) {
             if (useWorkerLoader)
                 ILaya.WorkerLoader.enableWorkerLoader();
             var cacheRes;
-            cacheRes = Loader.loadedMap[url];
+            if (type == Loader.IMAGE)
+                cacheRes = Loader.textureMap[url];
+            else
+                cacheRes = Loader.loadedMap[url];
             if (!ignoreCache && cacheRes) {
                 this._data = cacheRes;
                 this.event(Event.PROGRESS, 1);
@@ -19248,6 +19312,9 @@ window.Laya= (function (exports) {
                 }
             }
         }
+        static cacheResForce(url, data) {
+            Loader.loadedMap[url] = data;
+        }
         static cacheTexture(url, data) {
             url = URL.formatURL(url);
             if (Loader.textureMap[url] != null) {
@@ -19293,7 +19360,7 @@ window.Laya= (function (exports) {
     Loader.AVATAR = "AVATAR";
     Loader.TERRAINHEIGHTDATA = "TERRAINHEIGHTDATA";
     Loader.TERRAINRES = "TERRAIN";
-    Loader.typeMap = { "ttf": "ttf", "png": "image", "jpg": "image", "jpeg": "image", "ktx": "image", "pvr": "image", "txt": "text", "json": "json", "prefab": "prefab", "xml": "xml", "als": "atlas", "atlas": "atlas", "mp3": "sound", "ogg": "sound", "wav": "sound", "part": "json", "fnt": "font", "plf": "plf", "plfb": "plfb", "scene": "json", "ani": "json", "sk": "arraybuffer" };
+    Loader.typeMap = { "ttf": "ttf", "png": "image", "jpg": "image", "jpeg": "image", "ktx": "image", "pvr": "image", "txt": "text", "json": "json", "prefab": "prefab", "xml": "xml", "als": "atlas", "atlas": "atlas", "mp3": "sound", "ogg": "sound", "wav": "sound", "part": "json", "fnt": "font", "plf": "plf", "plfb": "plfb", "scene": "json", "ani": "json", "sk": "arraybuffer", "wasm": "arraybuffer" };
     Loader.parserMap = {};
     Loader.maxTimeOut = 100;
     Loader.groupMap = {};
@@ -19433,6 +19500,12 @@ window.Laya= (function (exports) {
         load(url, complete = null, progress = null, type = null, priority = 1, cache = true, group = null, ignoreCache = false, useWorkerLoader = ILaya.WorkerLoader.enable) {
             if (url instanceof Array) {
                 return this._loadAssets(url, complete, progress, type, priority, cache, group);
+            }
+            if (!type) {
+                if (url.indexOf("data:image") === 0)
+                    type = Loader.IMAGE;
+                else
+                    type = Loader.getTypeFromUrl(url);
             }
             var content;
             if (type === Loader.IMAGE)
@@ -20658,6 +20731,10 @@ window.Laya= (function (exports) {
             return 0;
         }
         _frameLoop() {
+            if (!this._controlNode || this._controlNode.destroyed) {
+                this.clearTimer(this, this._frameLoop);
+                return;
+            }
             if (this._isReverse) {
                 this._index--;
                 if (this._index < 0) {
@@ -21138,7 +21215,9 @@ window.Laya= (function (exports) {
         has(key) {
             if (key == null)
                 return false;
-            if (WeakObject.supportWeakMap) ;
+            if (WeakObject.supportWeakMap) {
+                return false;
+            }
             else {
                 if (typeof (key) == 'string' || typeof (key) == 'number')
                     return this._obj[key] != null;
@@ -21377,7 +21456,7 @@ window.Laya= (function (exports) {
         }
         static create() {
             var tool = Pool.getItemByClass("InitTool", InitTool);
-            tool._idMap = [];
+            tool._idMap = {};
             return tool;
         }
         addLoadRes(url, type = null) {
@@ -21499,7 +21578,7 @@ window.Laya= (function (exports) {
             this._view = [];
         }
         show(x = 0, y = 0) {
-            if (!Browser.onMiniGame && !ILaya.Render.isConchApp && !Browser.onBDMiniGame && !Browser.onKGMiniGame && !Browser.onQGMiniGame && !Browser.onQQMiniGame && !Browser.onAlipayMiniGame && !Browser.onBLMiniGame && !Browser.onTTMiniGame && !Browser.onHWMiniGame && !Browser.onTBMiniGame)
+            if (!Browser._isMiniGame && !ILaya.Render.isConchApp)
                 this._useCanvas = true;
             this._show = true;
             Stat._fpsData.length = 60;
@@ -22087,7 +22166,7 @@ window.Laya= (function (exports) {
             var attributes = [];
             var uniforms = [];
             var definesInfo = {};
-            var definesName = [];
+            var definesName = {};
             result.attributes = attributes;
             result.uniforms = uniforms;
             result.defines = definesInfo;
@@ -22124,7 +22203,7 @@ window.Laya= (function (exports) {
                                     }
                                     continue;
                                 }
-                                i = ShaderCompile._parseOne(attributes, uniforms, words, i, word, definesName[tempelse]);
+                                i = ShaderCompile._parseOne(attributes, uniforms, words, i, word, !!definesName[tempelse]);
                             }
                         }
                         continue;
@@ -22690,7 +22769,7 @@ window.Laya= (function (exports) {
     Laya.lateTimer = null;
     Laya.timer = null;
     Laya.loader = null;
-    Laya.version = "2.9.0";
+    Laya.version = "2.11.0beta1";
     Laya._isinit = false;
     Laya.isWXOpenDataContext = false;
     Laya.isWXPosMsg = false;
@@ -23859,6 +23938,7 @@ window.Laya= (function (exports) {
             this.autoDestroyAtClosed = false;
             this.url = null;
             this._viewCreated = false;
+            this._idMap = null;
             this._$componentType = "Scene";
             Scene.unDestroyedScenes.push(this);
             this._scene = this;
