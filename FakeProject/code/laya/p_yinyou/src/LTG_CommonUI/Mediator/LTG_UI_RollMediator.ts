@@ -8,6 +8,7 @@ import MathEx from "../../LTGame/LTUtils/MathEx";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { RollConfig } from "../../script/config/RollConfig";
 import { LTG_Com_RollData } from "../Data/LTG_Com_RollData";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
 export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
 
@@ -41,7 +42,9 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
             throw new Error("请调用LTG_Com_RollData进行界面打开操作");
         }
 
+        this.ui.m_plat.selectedIndex = LTPlatform.instance.platform == EPlatformType.TT ? 1 : 0;
         this.ui.m_btn_close.onClick(this, this._OnClickClose);
+        this.ui.m_btn_no.onClick(this, this._OnClickClose);
 
         for (let i = 1; i <= 6; ++i) {
             let itemName = 'm_item_0' + i.toFixed(0);
