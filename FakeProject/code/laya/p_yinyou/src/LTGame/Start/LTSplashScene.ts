@@ -1,5 +1,18 @@
-import BaseState from "../Fsm/BaseState"; import { LoadUIPack } from "../UIExt/FGui/LoadUIPack"; import { ESceneType } from "./ESceneType"; import LTPlatform from "../Platform/LTPlatform"; import { EPlatformType } from "../Platform/EPlatformType"; import { LoadPackConfig } from "../Config/LoadPackConfig"; import LTRespackManager from "../Res/LTRespackManager"; import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder"; import FGuiData from "../UIExt/FGui/FGuiData"; import FGuiEx from "../UIExt/FGui/FGuiEx"; import OppoPlatform from "../Platform/OppoPlatform"; import { ConfigManager } from "../Config/ConfigManager"; import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
+import BaseState from "../Fsm/BaseState";
+import { LoadUIPack } from "../UIExt/FGui/LoadUIPack";
+import { ESceneType } from "./ESceneType";
+import LTPlatform from "../Platform/LTPlatform";
+import { EPlatformType } from "../Platform/EPlatformType";
+import { LoadPackConfig } from "../Config/LoadPackConfig";
+import LTRespackManager from "../Res/LTRespackManager";
+import LTGameBinder from "../UIExt/DefaultUI/UI/LTGame/LTGameBinder";
+import FGuiData from "../UIExt/FGui/FGuiData";
+import FGuiEx from "../UIExt/FGui/FGuiEx";
+import OppoPlatform from "../Platform/OppoPlatform";
+import { ConfigManager } from "../Config/ConfigManager";
+import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 import LTComBinder from "../../LTG_CommonUI/UI/LTCom/LTComBinder";
+import { LTShaderHelper } from "../Material/LTShaderHelper";
 
 export default class LTSplashScene extends BaseState {
 
@@ -38,7 +51,7 @@ export default class LTSplashScene extends BaseState {
             + this._loadProgressWeight[1] * this._configProgress
             + this._loadProgressWeight[2] * this._resProgress
             + this._loadProgressWeight[3] * this._otherUIProgress;
-        return loadWeight / totalWeight * 100;
+        return loadWeight / totalWeight * 95;
     }
 
     private _jsonPath = "subpack.json";
@@ -210,10 +223,12 @@ export default class LTSplashScene extends BaseState {
         this._resProgress = value;
     }
 
-    private _OnResLoaded() {
+    private async _OnResLoaded() {
+        this._progressUI.value = 95;
+        await LTShaderHelper.WarmShader();
         this._progressUI.value = 100;
-        LTPlatform.instance.RecordEvent("进入游戏", null);
 
+        LTPlatform.instance.RecordEvent("进入游戏", null);
         this._OnGameResLoaded();
     }
 
@@ -230,6 +245,7 @@ export default class LTSplashScene extends BaseState {
 
     _DoExit() {
         this._ui.dispose();
+        this._initUiPack.RemovePackage();
     }
 
 }
