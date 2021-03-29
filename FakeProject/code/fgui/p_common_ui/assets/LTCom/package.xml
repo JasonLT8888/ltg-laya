@@ -292,8 +292,13 @@
     <component id="bl1a8a" name="TrySkin.xml" path="/ui/" exported="true"/>
     <component id="bl1a8c" name="view_tryskin.xml" path="/cmp/"/>
     <component id="bl1a8d" name="btn_trystart.xml" path="/cmp/"/>
-    <component id="e6qp8a" name="RanList.xml" path="/ui/" exported="true"/>
+    <component id="e6qp8a" name="RankList.xml" path="/ui/" exported="true"/>
     <component id="e6qp8e" name="rank_item.xml" path="/cmp/"/>
+    <image id="qets8f" name="rank_btn_guanbi.png" path="/img/rank/"/>
+    <image id="qets8g" name="rank_bg.png" path="/img/rank/" scale="9grid" scale9grid="22,74,44,52"/>
+    <image id="qets8h" name="btn_xiayiye.png" path="/img/rank/"/>
+    <image id="qets8i" name="btn_shangyiye.png" path="/img/rank/"/>
+    <image id="qets8j" name="biaoti.png" path="/img/rank/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>
