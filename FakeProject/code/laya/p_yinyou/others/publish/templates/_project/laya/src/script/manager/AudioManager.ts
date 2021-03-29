@@ -55,7 +55,7 @@ export default class AudioManager {
         if (!CommonSaveData.instance.isMusicOn) return;
         let audioConfig = AudioConfig.data[audioId];
         if (audioConfig == null) {
-            console.error("不存在的音效id");
+            console.error("不存在的音效id" + audioId);
             return;
         }
         if (audioConfig.audio_type == 1) {

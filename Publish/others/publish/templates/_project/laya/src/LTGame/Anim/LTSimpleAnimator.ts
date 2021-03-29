@@ -28,6 +28,8 @@ export class LTSimpleAnimator {
 
     public updateImd: boolean = false;
 
+    public noFade: boolean = false;
+
     constructor(...animators: Laya.Animator[]) {
         this._animators = animators;
         this._speed = 1;
@@ -36,11 +38,23 @@ export class LTSimpleAnimator {
     public UpdateAnim(force: boolean = false) {
         if (this._targetAnimName == null) return;
         if (this._currentAnimName != this._targetAnimName || force) {
-            this._currentAnimName = this._targetAnimName;
             for (let animator of this._animators) {
-                animator.crossFade(this._currentAnimName, 0.1);
+                if (this._currentAnimName != null && !this.noFade) {
+                    animator.crossFade(this._targetAnimName, 0.1);
+                    // animator.play(this._targetAnimName, 0, 0);
+                } else {
+                    animator.play(this._targetAnimName, 0, 0);
+                }
             }
+            this._currentAnimName = this._targetAnimName;
         }
+    }
+
+    public SwitchAnimObj(...animators: Laya.Animator[]) {
+        this._animators = animators;
+        let cacheCurrentAnim = this._currentAnimName;
+        this._currentAnimName = null;
+        this.targetAnimName = cacheCurrentAnim;
     }
 
     public GetStateLength(stateName: string): number {

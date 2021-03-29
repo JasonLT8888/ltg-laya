@@ -1,3 +1,5 @@
+import LTRes from "../../Res/LTRes";
+
 export class LoadUIPack {
 
     public packPath: string;
@@ -19,6 +21,15 @@ export class LoadUIPack {
 
     public AddPackage() {
         fgui.UIPackage.addPackage(this.packPath);
+    }
+
+    public RemovePackage() {
+        fgui.UIPackage.removePackage(this.packPath);
+        let urls: any[] = [];
+        this.PushUrl(urls);
+        for (let url of urls) {
+            LTRes.Unload(url.url);
+        }
     }
 
 }
