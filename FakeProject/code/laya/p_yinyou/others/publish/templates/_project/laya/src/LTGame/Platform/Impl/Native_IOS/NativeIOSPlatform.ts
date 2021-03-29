@@ -2,6 +2,7 @@ import DefaultPlatform from "../../DefaultPlatform";
 import { EPlatformType } from "../../EPlatformType";
 import LTPlatformData from "../../Data/LTPlatformData";
 import LTPlatform from "../../LTPlatform";
+import LTUI from "../../../UIExt/LTUI";
 
 export class NativeIOSPlatform extends DefaultPlatform {
 
@@ -9,7 +10,7 @@ export class NativeIOSPlatform extends DefaultPlatform {
 
     isSupportJumpOther: boolean = false;
 
-    private _isDebug: boolean = true;;
+    private _isDebug: boolean = false;
 
     Init(platformData: LTPlatformData) {
         this.platformData = platformData;
@@ -18,42 +19,93 @@ export class NativeIOSPlatform extends DefaultPlatform {
         let PlatformClass = window['PlatformClass'];
         let os = conchConfig.getOS();
         if (os == "Conch-ios") {
-            this.base = PlatformClass.createClass("JSBridge");//创建脚步代理
+            this.base = PlatformClass.createClass("JSBridge");//创建脚本代理
         }
         console.log("平台初始化完成", LTPlatform.platformStr, this);
-
+        this._InitSystemInfo();
         if (this._isDebug) {
             console.log("js 调用 InitAppId");
         }
-        this.base.call("InitAppId", platformData.appId);
+        // this.base.call("InitAppId", platformData.appId);
+    }
+
+    protected _InitSystemInfo() {
+        try {
+            this.safeArea = {} as LTGame.SafeArea;
+            this.safeArea.left = 0;
+            this.safeArea.right = 0;
+            this.safeArea.bottom = 0;
+            this.safeArea.top = 0;
+            this.safeArea.width = 750;
+            this.safeArea.height = 1334;
+            console.log("初始化安全区域完成");
+        } catch (e) {
+            console.error(e);
+            console.error("获取设备信息失败,执行默认初始化");
+            this.safeArea = null;
+        }
     }
 
     ShowBannerAd() {
         if (this._isDebug) {
             console.log("js 调用 ShowBannerAd");
         }
-        this.base.call("ShowBannerAd");
+        this._AsyncBack("ShowBannerAd", null);
     }
 
     HideBannerAd() {
         if (this._isDebug) {
             console.log("js 调用 HideBannerAd");
         }
-        this.base.call("HideBannerAd");
+        this._AsyncBack("HideBannerAd", null);
     }
 
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         if (this._isDebug) {
             console.log("js 调用 ShowRewardVideoAd");
         }
-        this.base.call("ShowRewardVideoAd");
+        LTUI.ShowLoading("广告加载中");
+        let isSuccessed: boolean = true;
+        this._AsyncBack("ShowRewardVideoAd",
+            (value: string) => {
+                LTUI.HideLoading();
+                console.log("二次转接" + value);
+                switch (value) {
+                    case "Failed":
+                        onSkipped?.run();
+                        break;
+                    case "Close":
+                        if (isSuccessed) {
+                            onSuccess?.run();
+                        } else {
+                            onSkipped?.run();
+                        }
+                        break;
+                    case "Skip":
+                        isSuccessed = false;
+                        break;
+                    case "Success":
+                        isSuccessed = true;
+                        break;
+                }
+            });
+
+    }
+
+    _AsyncBack(msg: string, action: Function) {
+        this.base.callWithBack(
+            function (value: string) {
+                console.log("接收到OC消息", value);
+                action(value);
+            }, "_AsyncBack:", msg
+        );
     }
 
     ShowInterstitalAd() {
         if (this._isDebug) {
             console.log("js 调用 ShowInterstitalAd");
         }
-        this.base.call("ShowInterstitalAd");
+        // this.base.call("ShowInterstitalAd");
     }
 
     RecordEvent(eventId: string, param: object) {
@@ -64,14 +116,14 @@ export class NativeIOSPlatform extends DefaultPlatform {
         if (this._isDebug) {
             console.log("js 调用 RecordEvent");
         }
-        this.base.call("RecordEvent", eventId, paramStr);
+        this.base.call("RecordEvent:", eventId + "|" + paramStr);
     }
 
     ShowNormalVideoAd() {
         if (this._isDebug) {
             console.log("js 调用 ShowNormalVideoAd");
         }
-        this.base.call("ShowNormalVideoAd");
+        // this.base.call("ShowNormalVideoAd");
     }
 
 }

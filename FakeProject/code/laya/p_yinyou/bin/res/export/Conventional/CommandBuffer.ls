@@ -143,6 +143,43 @@
 				},
 				"components":[],
 				"child":[]
+			},
+			{
+				"type":"MeshSprite3D",
+				"instanceID":3,
+				"props":{
+					"name":"Cube",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0,
+						1,
+						0
+					],
+					"rotation":[
+						0,
+						0,
+						0,
+						-1
+					],
+					"scale":[
+						1,
+						1,
+						1
+					],
+					"meshPath":"Library/unity default resources-Cube.lm",
+					"enableRender":true,
+					"receiveShadows":true,
+					"castShadow":true,
+					"materials":[
+						{
+							"path":"Assets/_res/mat/jiaose.lmat"
+						}
+					]
+				},
+				"components":[],
+				"child":[]
 			}
 		]
 	}

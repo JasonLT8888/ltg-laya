@@ -167,6 +167,13 @@ export default class Vector3Ex {
         return result;
     }
 
+    public static Bessel(p0: Laya.Vector3, p1: Laya.Vector3, p2: Laya.Vector3, progress: number): Laya.Vector3 {
+        let cache1 = Vector3Ex.Scale(p0, Math.pow(1 - progress, 2));
+        let cache2 = Vector3Ex.Scale(p1, 2 * progress * (1 - progress));
+        let cache3 = Vector3Ex.Scale(p2, progress * progress);
+        return Vector3Ex.Add(cache1, cache2, cache3);
+    }
+
     public static MagnitudeSqrt(v3: Laya.Vector3) {
         return v3.x * v3.x + v3.y * v3.y + v3.z * v3.z;
     }
