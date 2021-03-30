@@ -15,6 +15,7 @@ import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
 import CommonSaveData from "../Commom/CommonSaveData";
 import { GameConst } from "../../script/config/GameConst";
+import TTOpenDataContext from "./Impl/TT/TTOpenDataContext";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -64,18 +65,6 @@ export default class TTPlatform extends WXPlatform {
         this.device = new TTDevice(this._base);
 
         window["iplatform"] = this;
-        this.setGroup();
-
-    }
-    GROUPID: string = "yinsuzhanji";
-    setGroup() {
-        let openCtx = this.base.getOpenDataContext();
-        openCtx.postMessage({
-            company: "youtiao",
-        });
-        this.base.setUserGroup({
-            groupId: this.GROUPID,
-        });
 
     }
     setUserCloudStorage(key: string, value: number) {
@@ -143,13 +132,13 @@ export default class TTPlatform extends WXPlatform {
             code: ""
         };
         let loginData = {
-            force: false,
+            force: true,
             success: (res) => {
                 console.log(LTPlatform.platformStr, "登录成功", res);
+                this._OnLoginSuccess(res);
                 this.loginCode = res.code;
                 this.loginState.isLogin = true;
                 this.loginState.code = res.code;
-                // this._OnLoginSuccess(res);
 
             },
             fail: (res) => {
@@ -201,6 +190,9 @@ export default class TTPlatform extends WXPlatform {
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
         console.log(LTPlatform.platformStr, "登录成功", res);
+        this.openDataContext = new TTOpenDataContext(this.base);
+        this.openDataContext.setUserGroup("");
+        // this.postMsg({ text: "login succeed" });
         // LTUI.Toast('登录成功');
         // this.getUserInfo();
         // this.loginState.isLogin = true;
@@ -256,9 +248,9 @@ export default class TTPlatform extends WXPlatform {
         bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         bannerObj["adIntervals"] = 30;
         let styleObj = {};
-        styleObj["left"] = 0;
-        styleObj["top"] = 0;
-        styleObj["width"] = windowWidth;
+        styleObj["width"] = Math.floor(windowWidth * 0.9);
+        styleObj["left"] = (windowWidth - styleObj["width"]) / 2;
+        styleObj["top"] = windowHeight - Math.floor(styleObj["width"] * 0.347);
         bannerObj["style"] = styleObj;
 
         this._bannerAd = this._base.createBannerAd(bannerObj);
@@ -276,7 +268,7 @@ export default class TTPlatform extends WXPlatform {
 
         this._bannerAd.onResize((size) => {
             this._bannerAd.style.top = windowHeight - size.height;
-            this._bannerAd.style.left = (windowWidth - size.width) / 2;
+            // this._bannerAd.style.left = (windowWidth - size.width) / 2;
         });
     }
 
@@ -469,7 +461,6 @@ export default class TTPlatform extends WXPlatform {
                     tag: ""
                 },
                 success: (res) => {
-                    console.log("排行榜信息");
                     if (res.statusCode == 200 && res.data) {
                         return resolve(res.data);
                     } else {

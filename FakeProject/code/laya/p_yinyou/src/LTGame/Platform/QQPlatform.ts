@@ -5,6 +5,10 @@ import LTPlatform from "./LTPlatform";
 import StringEx from "../LTUtils/StringEx";
 import { CommonEventId } from "../Commom/CommonEventId";
 import LTUI from "../UIExt/LTUI";
+import GameData from "../../script/common/GameData";
+import CommonSaveData from "../Commom/CommonSaveData";
+import Awaiters from "../Async/Awaiters";
+import WXOpenDataContext from "./Impl/WXQQ/WXOpenDataContext";
 
 export default class QQPlatform extends WXPlatform {
 
@@ -12,7 +16,7 @@ export default class QQPlatform extends WXPlatform {
     blockAd: any;
     appBox: any;
     Init(platformData: LTPlatformData) {
-        this._base = window["qq"];
+        this.base = this._base = window["qq"];
         if (this._base == null) {
             console.error("平台初始化错误", LTPlatform.platformStr);
             return;
@@ -26,11 +30,34 @@ export default class QQPlatform extends WXPlatform {
         this._CreateBannerAd();
         this._CreateVideoAd();
         this._CreateInterstitalAd();
-
         window["iplatform"] = this;
         console.error("平台初始化完成", LTPlatform.platformStr);
     }
+    protected _Login() {
 
+        this.loginState = {
+            isLogin: false,
+            code: ""
+        };
+        let loginData = {} as LTGame.LoginData;
+        loginData.success = (res) => {
+            this.loginCode = res.code;
+            this._OnLoginSuccess(res);
+            console.error(this.loginState);
+            this.getUserInfo();
+        };
+        loginData.fail = (res) => {
+            console.error(LTPlatform.platformStr, "登录失败", res);
+            this.loginState.isLogin = false;
+            this.loginState.code = "";
+        };
+        loginData.complete = () => {
+            if (this.onLoginEnd != null) {
+                this.onLoginEnd.run();
+            }
+        };
+        this._base.login(loginData);
+    }
     protected _InitSystemInfo() {
         try {
             let systemInfo = this._base.getSystemInfoSync();
@@ -48,6 +75,100 @@ export default class QQPlatform extends WXPlatform {
             this.safeArea = null;
         }
     }
+    protected _InitLauchOption() {
+        // 绑定onShow事件
+        this._base.onShow(this._OnShow);
+        this._base.onHide(this._OnHide);
+        // 自动获取一次启动参数
+        let res = this._base.getLaunchOptionsSync() as LTGame.LaunchOption;
+        this._OnShow(res);
+    }
+    /**
+    * 小游戏回到前台的事件
+    */
+    protected _OnShow(res: any) {
+        console.log(LTPlatform.platformStr, "OnShow", res);
+        LTPlatform.instance.lauchOption = res;
+        LTPlatform.instance._CheckUpdate();
+        // this.NavigateToAppSuccess = null;//wx
+        Awaiters.NextFrame().then(() => {
+            if (LTPlatform.instance.onResume) {
+                LTPlatform.instance.onResume.runWith(res);
+            }
+            let cacheOnShow = LTPlatform.instance["_cacheOnShowHandle"];
+            if (cacheOnShow) {
+                cacheOnShow.run();
+                LTPlatform.instance["_cacheOnShowHandle"] = null;
+            }
+        });
+    }
+
+    /**
+     * 小游戏退出前台的事件
+     */
+    protected _OnHide(res: LTGame.LaunchOption) {
+        console.log(LTPlatform.platformStr, "OnHide", res);
+        if (LTPlatform.instance.onPause) {
+            LTPlatform.instance.onPause.runWith(res);
+        } else {
+            //  this.showFavoriteGuide(); 
+            window["qq"].getSetting({
+                success(res) {
+                    if (!res.authSetting['scope.recentColorSign']) {
+                        window["qq"].authorize({
+                            scope: 'scope.recentColorSign',
+                            success() {
+                                window["qq"].addRecentColorSign({
+                                    query: 'a=1&b=2',
+                                    success(res) {
+                                        console.log('addRecentColorSign success: ', res);
+                                        // CommonSaveData.instance.RecentColorSign = true;
+                                        // CommonSaveData.SaveToDisk();
+                                    },
+                                    fail(err) {
+                                        console.log('addRecentColorSign fail: ', err);
+                                    },
+                                    complete(res) {
+                                        console.log('addRecentColorSign complete: ', res);
+                                    }
+                                });
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        //wx
+        // if (this.NavigateToAppSuccess) {
+        //     this.NavigateToAppSuccess();
+        // }
+
+    }
+    getUserInfo() {
+        return new Promise<void>(() => {
+            this.base.getSetting({
+                success: (sucData): void => {
+                    console.log("getSetting - > 成功 ", sucData);
+                    if (sucData.authSetting["scope.userInfo"]) {
+                        this.base.getUserInfo(
+                            {
+                                openIdList: ['selfOpenId'],
+                                fail: (res): void => {
+                                    console.log("getUserInfo - > 失败 ", res);
+
+                                },
+                                success: (successData): void => {
+                                    console.log("getUserInfo - > 成功 ", successData);
+                                    this.openDataContext.postMsg({ type: "userInfoData", data: successData });
+                                }
+                            });
+                    }
+                }
+            });
+        })
+
+    }
+
 
     protected _CreateBannerAd(show?: boolean) {
         if (StringEx.IsNullOrEmpty(this.platformData.bannerId)) {
@@ -60,9 +181,9 @@ export default class QQPlatform extends WXPlatform {
         bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         let styleObj = {};
 
-        styleObj["top"] = windowHeight - 80;
-        styleObj["width"] = 300;
-        styleObj["left"] = (windowWidth - styleObj["width"]) / 2;
+        styleObj["top"] = windowHeight - 96;
+        styleObj["width"] = 360;
+        styleObj["left"] = (windowWidth - 360) / 2;
         bannerObj["style"] = styleObj;
 
         this._bannerAd = this._base.createBannerAd(bannerObj);
@@ -82,8 +203,8 @@ export default class QQPlatform extends WXPlatform {
 
         this._bannerAd.onResize((size) => {
             console.log("onResize", size);
-            this._bannerAd.style.top = windowHeight - 80;
-            this._bannerAd.style.left = (windowWidth - 300) / 2;
+            this._bannerAd.style.top = windowHeight - 96;
+            this._bannerAd.style.left = (windowWidth - 360) / 2;
             console.log("onResize", this._bannerAd);
         });
         // super._CreateBannerAd();
@@ -105,24 +226,24 @@ export default class QQPlatform extends WXPlatform {
         }
         this._bannerAd.show();
         this.isBannerShowing = true;
-        Laya.timer.loop(15 * 1000, this, this.refreshBanner);
+        //Laya.timer.loop(15 * 1000, this, this.refreshBanner);
     }
     refreshBanner() {
-        if (this.isBannerShowing) {
-            console.log('refresh banner');
-            this._bannerAd.hide();
-            this._CreateBannerAd(true);
-        }
+        // if (this.isBannerShowing) {
+        //     console.log('refresh banner');
+        //     this._bannerAd.hide();
+        //     this._CreateBannerAd(true);
+        // }
     }
     HideBannerAd() {
 
         if (!this.IsBannerAvaliable()) return;
         if (this._bannerAd) {
             this._bannerAd.hide();
-            Laya.timer.clear(this, this.refreshBanner);
-            this.isBannerShowing = false;
+            // Laya.timer.clear(this, this.refreshBanner);
+            // this.isBannerShowing = false;
         }
-        this._CreateBannerAd();
+        // this._CreateBannerAd();
 
     }
 
@@ -281,7 +402,54 @@ export default class QQPlatform extends WXPlatform {
             this.blockAd.destroy();
         }
     }
-
+    hasShortcutInstalled() {
+        return new Promise<boolean>((resolve, reject) => {
+            resolve(CommonSaveData.instance.hasShotcut);
+        });
+    }
+    createShortcut() {
+        return new Promise<boolean>((resolve, reject) => {
+            if (!CommonSaveData.instance.hasShotcut) {
+                this.base.saveAppToDesktop({
+                    success: (res) => {
+                        console.log("创建桌面图标成功", res);
+                        // CommonSaveData.instance.hasShotcut = true;
+                        // CommonSaveData.SaveToDisk();
+                    },
+                    fail: (res) => {
+                        console.log("创建桌面图标失败", res);
+                    },
+                    complete: (res) => {
+                        console.log("创建桌面图标complete", res);
+                        if (res && res.errMsg && res.errMsg == "saveAppToDesktop:ok") {
+                            CommonSaveData.instance.hasShotcut = true;
+                            CommonSaveData.SaveToDisk();
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    },
+                })
+            } else {
+                resolve(true);
+            }
+        });
+    }
+    showFavoriteGuide() {
+        this.base.addRecentColorSign({
+            query: 'a=1&b=2',
+            success(res) {
+                console.log('addRecentColorSign success: ', res);
+                CommonSaveData.SaveToDisk();
+            },
+            fail(err) {
+                console.log('addRecentColorSign fail: ', err);
+            },
+            complete(res) {
+                console.log('addRecentColorSign complete: ', res);
+            }
+        });
+    }
 
 }
 interface BlockADItem {

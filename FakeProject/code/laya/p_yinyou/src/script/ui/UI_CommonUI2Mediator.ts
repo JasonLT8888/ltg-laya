@@ -21,6 +21,7 @@ import LTSDK from "../../SDK/LTSDK";
 import { LTG_Com_TrySkinData } from "../../LTG_CommonUI/Data/LTG_Com_TrySkinData";
 import { TryItemConfig } from "../config/TryItemConfig";
 import LTUI from "../../LTGame/UIExt/LTUI";
+import { LTG_UI_RankListMediator } from "../../LTG_CommonUI/Mediator/LTG_UI_RankListMediator";
 
 class UIDemoData {
 
@@ -44,7 +45,7 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }
         return this._instance;
     }
-
+    private fakeScore = 10;
     private _demos: UIDemoData[] = [
         new UIDemoData("隐藏菜单", () => {
             LTG_UI_HideMenuMediator.instance.Show();
@@ -143,21 +144,28 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             }, null, false);
             data.Send();
         }),
-        new UIDemoData("上报排行", () => {
+        new UIDemoData("上报开放数据", () => {
             // LTPlatform.instance.setUserCloudStorage("scroe", 100);
-            LTSDK.instance.RecordRankInfo(1, 200);
+            // LTSDK.instance.RecordRankInfo(1, 200);
+            LTPlatform.instance.openDataContext.setUserCloudStorage({ score: this.fakeScore });
+            this.fakeScore += 20;
         }),
-        new UIDemoData("获取日排行", () => {
+        new UIDemoData("获取开放数据", () => {
             // LTPlatform.instance.getRankList("scroe");
-            LTSDK.instance.GetDayRankList(1, 100, (res) => {
-                console.log(res);
-            });
-        }),
-        new UIDemoData("获取周排行", () => {
+            // LTSDK.instance.GetDayRankList(1, 100, (res) => {
+            //     console.log(res);
+            // });
+            LTPlatform.instance.openDataContext.getUserCloudStorage(["score"]);
+        })
+        ,
+        new UIDemoData("获取排行", () => {
             // LTPlatform.instance.getRankList("scroe");
-            LTSDK.instance.GetWeekRankList(1, 200, (res) => {
-                console.log(res);
-            });
+            // LTSDK.instance.GetWeekRankList(1, 200, (res) => {
+            //     console.log(res);
+            // });
+            // LTPlatform.instance.openDataContext.getCloudStorageByRelation();
+            LTG_UI_RankListMediator.instance.Show();
+
         })
     ];
 

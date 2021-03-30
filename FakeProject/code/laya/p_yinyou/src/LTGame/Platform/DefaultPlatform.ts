@@ -7,7 +7,7 @@ import DefaultDevice from "./DefaultDevice";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
 import { WebRecordManager } from "./Impl/Web/WebRecordManager";
-import IPlatform from "./IPlatform";
+import IPlatform, { OpenDataContext } from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
@@ -15,6 +15,7 @@ import StringEx from "../LTUtils/StringEx";
 import CommonSaveData from "../Commom/CommonSaveData";
 
 export default class DefaultPlatform implements IPlatform {
+    openDataContext: OpenDataContext;
     setUserCloudStorage(key: string, value: number) {
         console.log(`当前平台不支持上报排行key=${key}value=${value}`);
     }
@@ -28,6 +29,9 @@ export default class DefaultPlatform implements IPlatform {
 
     }
     hideGameBoxBannerAd() {
+
+    }
+    public postMsg(msg: object): void {
 
     }
     getUserInfo() {
@@ -70,6 +74,7 @@ export default class DefaultPlatform implements IPlatform {
         this.userInfo = { nickName: '未登录用户666', avatarUrl: '66.png' }
         Laya.timer.once(500, this, this._FakeLoginEnd);
         this._InitSystemInfo();
+        this.openDataContext = new OpenDataContext(this.base);
     }
     private _FakeLoginEnd() {
         if (this.onLoginEnd)
