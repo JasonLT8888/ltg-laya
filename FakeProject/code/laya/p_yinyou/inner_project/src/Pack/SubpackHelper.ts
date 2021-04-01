@@ -179,6 +179,8 @@ export class SubpackHelper {
         // 写出game.json文件
         if (this._packConfig.platform == "tt") {
             gameJson['subPackages'] = subpacks;
+        } else if (this._packConfig.platform == "oppo") {
+            gameJson['subpackages'] = [];
         } else {
             gameJson['subpackages'] = subpacks;
         }
@@ -263,7 +265,7 @@ export class SubpackHelper {
             } else {
                 // 文件夹
                 let relativePath = child.fullPath.replace(upRootPath, "");
-                relativePath = relativePath.replace("\\", "/");
+                relativePath = relativePath.replace(new RegExp("\\\\", "g"), "/");
                 let isInForceMainPack = this._packConfig.forceInPack.indexOf(relativePath) >= 0;
                 if (!isInForceMainPack) {
                     let isInForceRemote = this._packConfig.forceRemote.indexOf(relativePath) >= 0;
@@ -271,6 +273,7 @@ export class SubpackHelper {
                         console.log("强制远程包", relativePath.green);
                         remoteFiles.push(child);
                     } else {
+                        console.log("包内：", relativePath.red)
                         if (child.size > this.single_max_size) {
                             this._SplitSubpack(child, subPacks, remoteFiles);
                         } else {
