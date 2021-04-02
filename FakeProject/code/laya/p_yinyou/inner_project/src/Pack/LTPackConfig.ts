@@ -18,5 +18,5 @@ export class LTPackConfig {
      */
     es5: boolean = false;
     isDebug: boolean = false;
-
+    openDataContext: boolean = false;
 }

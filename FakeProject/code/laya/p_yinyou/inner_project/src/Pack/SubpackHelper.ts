@@ -176,7 +176,10 @@ export class SubpackHelper {
             }
         }
 
-        // 写出game.json文件
+        //写出game.json文件
+        if (this._packConfig.openDataContext) {
+            gameJson['openDataContext'] = "openDataContext";
+        }
         if (this._packConfig.platform == "tt") {
             gameJson['subPackages'] = subpacks;
         } else if (this._packConfig.platform == "oppo") {
@@ -184,6 +187,7 @@ export class SubpackHelper {
         } else {
             gameJson['subpackages'] = subpacks;
         }
+
 
         let outputjson = JSON.stringify(gameJson);
         while (outputjson.indexOf("\\\\") >= 0) {
@@ -273,7 +277,6 @@ export class SubpackHelper {
                         console.log("强制远程包", relativePath.green);
                         remoteFiles.push(child);
                     } else {
-                        console.log("包内：", relativePath.red)
                         if (child.size > this.single_max_size) {
                             this._SplitSubpack(child, subPacks, remoteFiles);
                         } else {

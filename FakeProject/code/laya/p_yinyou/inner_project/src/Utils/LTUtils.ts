@@ -103,7 +103,7 @@ export class LTUtils {
 
     static CopyDir(srcDir: string, targetDir: string, checkFunc: Function = null) {
         this.MakeDirExist(targetDir);
-        let files = fs.readdirSync(srcDir);
+        let files = fs.readdirSync(srcDir); 
         for (let i = 0; i < files.length; ++i) {
             let fileName = files[i];
             let targetPath = path.join(targetDir, fileName);

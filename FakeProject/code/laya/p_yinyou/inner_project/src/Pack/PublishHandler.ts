@@ -38,6 +38,7 @@ export class PublishHandler {
     private _workPath: string;
     private _releasePath: string;
     private _templatePath: string;
+    private _openDataContextPath: string;
     private _binPath: string;
     private _cdnPath: string;
     private _packConfig: LTPackConfig;
@@ -54,6 +55,7 @@ export class PublishHandler {
         this._CheckRelease();
         this._CopyTemplate();
         this._CopyBin();
+        this._CopyOpenDataContext();
 
         if (this._platformStr == "oppo") {
             // 打包成rpk
@@ -104,8 +106,15 @@ export class PublishHandler {
         let cachePath = path.join(this._workPath, "./temp/" + this._platformStr + "/");
         LTUtils.MakeDirExist(cachePath);
 
-        let regex = /loadLib\("(.*)"\)/gm;
         let str = readJs;
+        if (this._packConfig.openDataContext) {
+            //开放域所需引用laya ui 库
+            str = str.replace("//openContext", "");
+        } else {
+            str = str.replace('loadLib("libs/laya.ui.js");', "");
+        }
+
+        let regex = /loadLib\("(.*)"\)/gm;
         let m;
         while ((m = regex.exec(str)) !== null) {
             if (m.index === regex.lastIndex) {
@@ -114,7 +123,7 @@ export class PublishHandler {
             if (m[1]) {
                 let fileName = m[1] as string;
                 let srcPath = path.join(this._binPath, fileName);
-
+                console.log(srcPath.green);
                 // 确保目标路径存在
                 let targetPath = path.join(this._releasePath, fileName);
                 let lastIndex = targetPath.lastIndexOf("\\");
@@ -149,17 +158,23 @@ export class PublishHandler {
         }
 
         let targetIndexPath = path.join(this._releasePath, "./index.js");
+        LTUtils.WriteStrTo(targetIndexPath, str);
         if (this._packConfig.compress) {
-            this._DoCacheCompress("index.js", indexJsPath, cachePath, targetIndexPath);
+            this._DoCacheCompress("index.js", targetIndexPath, cachePath, targetIndexPath);
+            // this._DoCacheCompress("index.js", indexJsPath, cachePath, targetIndexPath);
             let endTime = Date.now();
             let passTime = ((endTime - startTime) / 1000).toFixed(2);
             console.log("压缩完成,总共耗时 " + passTime.green + " 秒");
         } else {
             // 拷贝indexjs
-            fs.copyFileSync(indexJsPath, targetIndexPath);
-
+            // fs.copyFileSync(indexJsPath, targetIndexPath);
+            // if (this._packConfig.openDataContext) {
+            //     //开放域所需引用laya ui 库 
+            // }
             console.log("当前配置无需压缩,直接拷贝所有js文件");
+            LTUtils.WriteStrTo(targetIndexPath, str);
         }
+
         if (this._packConfig.platform == "oppo" || this._packConfig.platform == "vivo") {
             // 处理load
             let readIndexStr = LTUtils.ReadStrFrom(targetIndexPath);
@@ -254,6 +269,16 @@ export class PublishHandler {
         console.log("template拷贝完成");
         console.log();
     }
+    private _CopyOpenDataContext() {
+        if (this._packConfig.openDataContext) {
+            let targetPath = path.join(this._releasePath, "./openDataContext/")
+            LTUtils.CopyDir(this._openDataContextPath, targetPath);
+            console.log("开放域工程".bgRed, "openDataContext 目录拷贝完成".green);
+        } else {
+            console.log("不是开放域工程,无需拷贝 openDataContext");
+        }
+
+    }
 
     private _CheckRelease() {
         let checkResult = LTUtils.MakeDirExist(this._releasePath);
@@ -284,6 +309,7 @@ export class PublishHandler {
 
         this._releasePath = path.join(this._workPath, "./release/" + this._platformStr);
         this._templatePath = path.join(this._workPath, "./others/publish/templates/" + this._platformStr);
+        this._openDataContextPath = path.join(this._workPath, "./others/publish/templates/openDataContext");
         this._binPath = path.join(this._workPath, "./bin/");
         this._cdnPath = path.join(this._workPath, "./cdn/" + this._platformStr);
 
