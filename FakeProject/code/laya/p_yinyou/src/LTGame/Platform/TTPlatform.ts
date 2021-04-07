@@ -14,8 +14,8 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
 import CommonSaveData from "../Commom/CommonSaveData";
-import { GameConst } from "../../script/config/GameConst";
-import TTOpenDataContext from "./Impl/TT/TTOpenDataContext";
+import { GameConst } from "../../script/config/GameConst"; 
+import WXOpenDataContext from "./Impl/WX/WXOpenDataContext";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -156,49 +156,41 @@ export default class TTPlatform extends WXPlatform {
 
         window["tt"].login(loginData);
     }
-    getUserInfo(): Promise<void> {
-        console.log('开始授权')
-        return new Promise<void>((resolve, reject) => {
-            window["tt"].authorize({
-                scope: "scope.userInfo",
-                success: () => {
-                    console.log('授权成功');
-                    window["tt"].getUserInfo({
-                        withCredentials: false,
-                        lang: 'zh_CN',
-                        success: (result) => {
-                            console.log('获取信息成功')
-                            console.log(result);
-                            this.userInfo = { avatarUrl: result.userInfo.avatarUrl, nickName: result.userInfo.nickName };
-                            CommonSaveData.instance.nickName = result.userInfo.nickName;
-                            CommonSaveData.instance.avatarUrl = result.userInfo.avatarUrl;
-                            CommonSaveData.SaveToDisk();
-                        },
-                        fail: () => {
-                            console.log('获取信息失败')
-                        },
-                        complete: () => {
-                            console.log('获取信息comp');
-                            resolve();
-                        }
-                    })
-                },
+    getUserInfo() {
+        return new Promise<void>(() => {
+            this.base.getSetting({
+                success: (sucData): void => {
+                    console.log("getSetting - > 成功 ", sucData);
+                    if (sucData.authSetting["scope.userInfo"]) {
+                        this.base.getUserInfo(
+                            {
+                                openIdList: ['selfOpenId'],
+                                fail: (res): void => {
+                                    console.log("getUserInfo - > 失败 ", res);
+
+                                },
+                                success: (successData): void => {
+                                    console.log("getUserInfo - > 成功 ", successData);
+                                    this.openDataContext.postMsg({ type: "userInfoData", data: successData });
+                                }
+                            });
+                    }
+                }
             });
         })
 
     }
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
-        console.log(LTPlatform.platformStr, "登录成功", res);
-        this.openDataContext = new TTOpenDataContext(this.base);
-        this.openDataContext.setUserGroup("");
+        this.openDataContext = new WXOpenDataContext(this.base);
+        this.openDataContext.setUserGroup("test_group");
         // this.postMsg({ text: "login succeed" });
         // LTUI.Toast('登录成功');
-        // this.getUserInfo();
+        this.getUserInfo();
         // this.loginState.isLogin = true;
         // this.loginState.code = res.code;
-    }
 
+    }
     protected _InitLauchOption() {
         // 绑定onShow事件
         this._base.onShow(this._OnShow);

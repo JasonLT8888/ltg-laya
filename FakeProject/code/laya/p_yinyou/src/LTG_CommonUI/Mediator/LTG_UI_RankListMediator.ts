@@ -3,6 +3,9 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTUI from "../../LTGame/UIExt/LTUI";
 import LTSDK from "../../SDK/LTSDK";
 import LTG_UI_RankList from "../UI/LTCom/LTG_UI_RankList";
+import GameData from "../../script/common/GameData";
+import MathEx from "../../LTGame/LTUtils/MathEx";
+import { EOpenDataMethod } from "../../LTGame/Platform/Impl/OpenDataContext";
 /**
      *  排行榜默认key：maxscore
      */
@@ -21,7 +24,7 @@ export class LTG_UI_RankListMediator extends BaseUIMediator<LTG_UI_RankList> {
     }
     opendataView: Laya.WXOpenDataViewer;
     sharedCanvas: any;
-
+    private maxScore: number = 0;
 
     _OnShow() {
         super._OnShow();
@@ -37,32 +40,38 @@ export class LTG_UI_RankListMediator extends BaseUIMediator<LTG_UI_RankList> {
         this.ui.m_openView.visible = false;
         this.ui.displayObject.addChild(this.opendataView);
 
-        // this.updateMaxScore(GameData.instance.levelId - 1);
+        let testscore = MathEx.RandomInt(1, 100);
 
+        console.error("测试排行榜");
+        this.getSelfScore();
+        this.updateMaxScore(testscore);
         this.initRankList();
     }
-    _onClickReport() {
-        // let score = parseInt(this.ui.m_score_input.text);
-        // if (!isNaN(score)) {
-        //     this.updateMaxScore(score);
-        // } else {
-        //     console.error("参数错误");
-        // }
-    }
+
     async  initRankList() {
-        LTPlatform.instance.openDataContext.postMsg({ method: "resize", width: Laya.stage.width, height: Laya.stage.height, rankSuffix: "次" });
-        LTPlatform.instance.openDataContext.postMsg({ method: "getFriendRankData", userId: LTSDK.instance.uid, index: 1, pageNum: 7 });
+        LTPlatform.instance.openDataContext.postMsg({ method: EOpenDataMethod.resize, width: Laya.stage.width, height: Laya.stage.height, rankSuffix: "次" });
+        LTPlatform.instance.openDataContext.postMsg({
+            method: EOpenDataMethod.getFriendRankData, userId: LTSDK.instance.uid, index: 1, pageNum: 7
+        });
         LTUI.ShowLoading("加载中");
         Laya.timer.once(1500, this, () => {
             LTUI.HideLoading();
-            LTPlatform.instance.openDataContext.postMsg({ method: "showFriendRank", userId: LTSDK.instance.uid, index: 1, pageNum: 7 });
+            LTPlatform.instance.openDataContext.postMsg({ method: EOpenDataMethod.showFriendRank, userId: LTSDK.instance.uid, index: 1, pageNum: 7 });
         });
     }
     _onClickPrePage() {
-        LTPlatform.instance.openDataContext.postMsg({ method: "changePage", userId: LTSDK.instance.uid, page: -1, pageNum: 7 });
+        LTPlatform.instance.openDataContext.postMsg({ method: EOpenDataMethod.changePage, userId: LTSDK.instance.uid, page: -1, pageNum: 7 });
     }
     _onClickNextPage() {
-        LTPlatform.instance.openDataContext.postMsg({ method: "changePage", userId: LTSDK.instance.uid, page: 1, pageNum: 7 });
+        LTPlatform.instance.openDataContext.postMsg({ method: EOpenDataMethod.changePage, userId: LTSDK.instance.uid, page: 1, pageNum: 7 });
+    }
+    getSelfScore() {
+        // LTPlatform.instance.openDataContext.postMsg({
+        //     method: EOpenDataMethod.getSelfScore, userId: LTSDK.instance.uid, callback: (e) => {
+        //         console.log(e);
+        //     }
+        // });
+        this.maxScore = GameData.instance.maxScore;
     }
     protected _OnHide() {
         if (this.opendataView) {
@@ -70,10 +79,16 @@ export class LTG_UI_RankListMediator extends BaseUIMediator<LTG_UI_RankList> {
         }
     }
     updateMaxScore(score: number) {
+        if (score < this.maxScore) {
+            return console.log("当前分数小于最大分数——不记录");
+        } else {
+            GameData.instance.maxScore = score;
+            GameData.SaveToDisk();
+        }
         LTPlatform.instance.openDataContext.postMsg({
-            method: "updateMaxScore",
+            method: EOpenDataMethod.updateMaxScore,
             maxscore: score,
-            maxscore2: null,
+            maxscore2: 0,
             userId: LTSDK.instance.uid
         });
     }

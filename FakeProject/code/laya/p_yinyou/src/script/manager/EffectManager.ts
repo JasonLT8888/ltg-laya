@@ -144,7 +144,7 @@ export class EffectManager {
 
                 if (showData.setPos != null) {
                     let ray = CameraEx.ScreenPosToRay(this.uiEffectCamera, new Laya.Vector2(showData.setPos.x, showData.setPos.y));
-                    showData.setPos = Vector3Ex.Add(ray.origin, Vector3Ex.Scale(ray.origin, 100));
+                    showData.setPos = Vector3Ex.Add(ray.origin, Vector3Ex.Scale(ray.direction, 10));
                 }
 
             } else {
@@ -177,6 +177,7 @@ export class EffectManager {
         data.setRot = rot;
         return this.PlayEffectByData(data);
     }
+
 
 }
 

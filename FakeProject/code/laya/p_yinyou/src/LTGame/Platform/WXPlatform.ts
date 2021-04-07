@@ -14,7 +14,7 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import ShareManager from "./ShareManager";
 import DefaultPlatform from "./DefaultPlatform";
-import WXOpenDataContext from "./Impl/WXQQ/WXOpenDataContext";
+import WXOpenDataContext from "./Impl/WX/WXOpenDataContext";
 
 export default class WXPlatform extends DefaultPlatform {
     userInfo: LTGame.UserInfo;

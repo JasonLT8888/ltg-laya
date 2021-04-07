@@ -8,7 +8,7 @@ import LTUI from "../UIExt/LTUI";
 import GameData from "../../script/common/GameData";
 import CommonSaveData from "../Commom/CommonSaveData";
 import Awaiters from "../Async/Awaiters";
-import WXOpenDataContext from "./Impl/WXQQ/WXOpenDataContext";
+import WXOpenDataContext from "./Impl/WX/WXOpenDataContext";
 
 export default class QQPlatform extends WXPlatform {
 

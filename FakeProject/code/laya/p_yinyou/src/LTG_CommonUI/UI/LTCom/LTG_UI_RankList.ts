@@ -12,6 +12,7 @@ export default class LTG_UI_RankList extends fgui.GComponent {
 	public m_btn_pre:LTG_UI_btn_normalg;
 	public m_btn_next:LTG_UI_btn_normalg;
 	public m_openView:fgui.GGraph;
+	public m_test_icon:fgui.GLoader;
 
 	public static URL:string = "ui://hbq27te3e6qp8a";
 
@@ -32,5 +33,6 @@ export default class LTG_UI_RankList extends fgui.GComponent {
 		this.m_btn_pre = <LTG_UI_btn_normalg><any>(this.getChildAt(7));
 		this.m_btn_next = <LTG_UI_btn_normalg><any>(this.getChildAt(8));
 		this.m_openView = <fgui.GGraph><any>(this.getChildAt(9));
+		this.m_test_icon = <fgui.GLoader><any>(this.getChildAt(10));
 	}
 }
