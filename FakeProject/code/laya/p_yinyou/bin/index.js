@@ -11,7 +11,7 @@ window.screenOrientation = "portrait";
 loadLib("libs/laya.core.js");
 loadLib("libs/laya.html.js");
 loadLib("libs/laya.d3.js");//-----libs-end-------
-loadLib('libs/laya.ui.js');
+loadLib("libs/laya.ui.js");
 loadLib("libs/ltgame/generator.js");
 loadLib("libs/ltgame/promise.js");
 loadLib("libs/fairygui/fairygui.js");
