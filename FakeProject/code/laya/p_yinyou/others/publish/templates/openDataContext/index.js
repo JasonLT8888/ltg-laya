@@ -7,6 +7,8 @@
     var rankSuffix = "";//排行榜后缀
     var SelfOpenID = "";//自己的开放ID;
     var platform = '';
+    /**字节 */
+    var isByteDance = true;
     console.log("初始化中...")
     /** 平台环境 */
     var getPlane = function () {
@@ -78,45 +80,96 @@
 
     //获取好友排名数据
     var onGetFriendRank = function (msg) {
-        platform.getFriendCloudStorage({
-            keyList: ["avatarUrl", "nickName", "userId", "maxscore", "maxscore2"],
-            success: function (res) {
-                var canv = platform.getSharedCanvas();
-                var cont = canv.getContext("2d");
-                cont[msg.method_id] = {
-                    data: res.data,
-                    status: true
-                };
-            },
-            fail: function (erro) {
-                var canv = platform.getSharedCanvas();
-                var cont = canv.getContext("2d");
-                cont[msg.method_id] = {
-                    data: erro,
-                    status: false
-                };
-            },
-            complete: function () { }
-        });
+        let keyList = ["avatarUrl", "nickName", "userId", "maxscore", "maxscore2"];
+        if (!isByteDance) {
+            platform.getFriendCloudStorage({
+                keyList: keyList,
+                success: function (res) {
+                    var canv = platform.getSharedCanvas();
+                    var cont = canv.getContext("2d");
+                    cont[msg.method_id] = {
+                        data: res.data,
+                        status: true
+                    };
+
+                },
+                fail: function (erro) {
+                    var canv = platform.getSharedCanvas();
+                    var cont = canv.getContext("2d");
+                    cont[msg.method_id] = {
+                        data: erro,
+                        status: false
+                    };
+                },
+                complete: function () { }
+            });
+        } else {
+            platform.getCloudStorageByRelation({
+                type: "group",
+                keyList: keyList,
+                extra: {
+                    sortKey: "maxscore", // 指定的key需要在后台配置过
+                    groupId: "test_group", // 指定要获取的用户所属分组
+                },
+                success: function (res) {
+                    var canv = platform.getSharedCanvas();
+                    var cont = canv.getContext("2d");
+                    cont[msg.method_id] = {
+                        data: res.data,
+                        status: true
+                    };
+
+                },
+                fail: function (erro) {
+                    var canv = platform.getSharedCanvas();
+                    var cont = canv.getContext("2d");
+                    cont[msg.method_id] = {
+                        data: erro,
+                        status: false
+                    };
+                },
+                complete: function () { }
+            });
+        }
+
     };
 
     //更新分数
     var onUpdateScore = function (msg) {
         var arr = [];
-        if (msg.maxscore != undefined) {
-            arr.push({ key: "maxscore", value: msg.maxscore + "" })
+        if (isByteDance) {
+            console.log("头条")
+            if (msg.maxscore != undefined) {
+                let v = {
+                    ttgame: {
+                        score: msg.maxscore,
+                        update_time: Math.floor(Date.now() / 1000)
+                    },
+                    progress: 10
+                }
+                arr.push({ key: "maxscore", value: JSON.stringify(v) });
+            }
+            if (msg.maxscore2 != undefined) {
+                arr.push({ key: "maxscore2", value: msg.maxscore + "" });
+            }
+            arr.push({ key: "userId", value: msg.userId + "" });
+        } else {
+            if (msg.maxscore != undefined) {
+                arr.push({ key: "maxscore", value: msg.maxscore + "" })
+            }
+            if (msg.maxscore2 != undefined) {
+                arr.push({ key: "maxscore2", value: msg.maxscore2 + "" });
+            }
+            arr.push({ key: "userId", value: msg.userId + "" })
         }
-        if (msg.maxscore2 != undefined) {
-            arr.push({ key: "maxscore2", value: msg.maxscore2 + "" });
-        }
-        arr.push({ key: "userId", value: msg.userId + "" })
+        console.error(arr);
         platform.setUserCloudStorage({
             KVDataList: arr,
-            success: function () {
-                console.log("OpenData setUserCloudStorage ---> success", msg.maxscore, msg.maxscore2, arguments);
+            success: function (res) {
+                console.log("OpenData setUserCloudStorage ---> success", msg.maxscore, msg.maxscore2, res);
             },
-            fail: function () {
-                console.log("OpenData setUserCloudStorage ---> fail", arguments);
+            fail: function (res) {
+                console.log("OpenData setUserCloudStorage ---> fail", res);
             },
             complete: function () {
 
@@ -169,14 +222,31 @@
             d = 0;
         if (a.KVDataList && 0 < a.KVDataList.length)
             for (var e, f = 0; f < a.KVDataList.length; f++) e = a.KVDataList[f].key,
-                "userId" == e && (b = a.KVDataList[f].value), "maxscore" == e && (c = parseInt(a.KVDataList[f].value)),
+                "userId" == e && (b = a.KVDataList[f].value), "maxscore" == e && (
+                    c = parseInt(a.KVDataList[f].value) | getTTScore(a)),
                 "maxscore2" == e && (d = parseInt(a.KVDataList[f].value));
         a.userId = b, a.maxscore = c, a.maxscore2 = d;
     };
+    var getTTScore = function (a) {
+        let score = 0;
+        if (isByteDance) {
+            for (let i = 0; i < a.KVDataList.length; i++) {
+                const s = a.KVDataList[i];
+                if (s.key == "maxscore") {
+                    let v = JSON.parse(s.value);
+                    if (v.ttgame && v.ttgame.score) {
+                        score = v.ttgame.score;
+                    }
+                }
+            }
+        }
+        return score;
+    }
     var currentPage = 0;
     var maxPage = 0;
     //绘制排行榜界面
     var renderRankList = function (arr, d) {
+        console.error(arr);
         var f;
         var g = 0;
         for (g = 0; g < arr.length; g++) {
@@ -191,14 +261,18 @@
                 j = f.maxscore2;
             }
             else {
+
                 j = f.maxscore;
+
             }
             for (var l = g - 1; l >= 0; l--) {
                 if (d.index == 0) {
                     h = arr[l].maxscore2;
                 }
                 else {
+
                     h = arr[l].maxscore;
+
                 }
                 if (j > h) {
                     arr[l + 1] = arr[l];
@@ -232,7 +306,7 @@
                     bgPic.toY = i;
                     bgPic.rank = rankID;
                     bgPic.dex = n;
-                    bgPic.src = "openContext/res/rank/bg_ranking_1.png";
+                    bgPic.src = "openDataContext/res/rank/bg_ranking_1.png";
                     bgPic.onload = function (a) {
                         var c = a.target;
                         cont.drawImage(c, 0, c.toY, sz(794), sz(105));
@@ -242,7 +316,7 @@
                             var pic = platform.createImage();
                             pic.toY = c.toY;
                             var url = "";
-                            url = "openContext/res/rank/icon_no." + (c.rank + 1) + ".png";
+                            url = "openDataContext/res/rank/icon_no." + (c.rank + 1) + ".png";
                             pic.src = url;
                             pic.onload = function (a) {
                                 var c = a.target;
@@ -260,7 +334,7 @@
                         //头像底
                         var headBG = platform.createImage();
                         headBG.toY = c.toY;
-                        headBG.src = "openContext/res/rank/icon_tou_di.png";
+                        headBG.src = "openDataContext/res/rank/icon_tou_di.png";
                         headBG.rank = c.rank;
                         headBG.onload = function (evt) {
                             var img = evt.target;
@@ -312,7 +386,7 @@
         var i = sz(105) * pageNum + pageNum * sz(15);
         var bgPic = platform.createImage();
         bgPic.toY = i;
-        bgPic.src = "openContext/res/rank/bg_ranking.png";
+        bgPic.src = "openDataContext/res/rank/bg_ranking.png";
         var rankID = getselfVo()
         var f = rankDataList[rankID];
         bgPic.rank = rankID;
@@ -325,7 +399,7 @@
                 var pic = platform.createImage();
                 pic.toY = c.toY;
                 var url = "";
-                url = "openContext/res/rank/icon_no." + (c.rank + 1) + ".png";
+                url = "openDataContext/res/rank/icon_no." + (c.rank + 1) + ".png";
                 pic.src = url;
                 pic.onload = function (a) {
                     var c = a.target;
@@ -343,7 +417,7 @@
             //头像底
             var headBG = platform.createImage();
             headBG.toY = c.toY;
-            headBG.src = "openContext/res/rank/icon_tou_di.png";
+            headBG.src = "openDataContext/res/rank/icon_tou_di.png";
             headBG.rank = c.rank;
             headBG.onload = function (evt) {
                 var img = evt.target;
@@ -393,6 +467,22 @@
         }
         return 0;
     }
+
+    var getSelfScore = function (msg) {
+        console.log("getSelfScore", msg)
+        platform.getUserCloudStorage({
+            keyList: ["maxscore", "maxscore2", "userId"],
+            success: function (res) {
+                console.log("OpenData getSelfScore ---> success", res);
+            },
+            fail: function (res) {
+                console.log("OpenData getSelfScore ---> fail", res);
+            },
+            complete: function (res) { 
+            }
+        });
+    };
+
     getPlane();
     platform.onMessage(function (msg) {
         if (msg.rankPreFix) {
@@ -452,6 +542,9 @@
                     onShowFriendRank(msg);
                     break;
                 }
+            case "getSelfScore":
+                getSelfScore(msg);
+                break;
         }
     });
 })();
