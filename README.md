@@ -18,9 +18,9 @@
 
 ## 使用说明
 1. 新建一个文件夹例如 `p_ceshi/code/laya/p_ceshi`
-2. 将Publish下的*所有文件*(others和package.json)拷贝到工程*根目录*
-3. 在根目录执行npm install 命令
-4. 运行npm指令:update-ltg
+2. 将Publish下的*所有文件*`(others和package.json)`拷贝到工程*根目录*
+3. 在根目录执行 `npm install `命令
+4. 运行npm指令: `update-ltg`
 5. 使用fgui导出ui工程
 6. 使用unity导出配置文件
 7. 编译并运行项目确认一切OK
@@ -32,20 +32,20 @@
 * update-ltg:更新框架代码（使用others/内的框架模板替换工程内的）
 
 ## 模块化组件规格说明
-* 大交叉推广 
-	规格:680*408
+* 大交叉推广  
+	规格:680*408  
 	预制名字:__othergames  
 	![大交叉推广](/Doc/img/img_othergames.png)
-* 爆款游戏
-	规格:139*176
+* 爆款游戏  
+	规格:139*176  
 	预制名字:__hotgame  
 	![爆款游戏](/Doc/img/img_hotgame.png)
-* 滚动交叉推广（大）
-	规格:750*450
+* 滚动交叉推广（大）  
+	规格:750*450  
 	预制名字:__endSG  
 	![滚动交叉推广](/Doc/img/img_endSG.png)
-* 滚动交叉推广（底部）
-	规格:750*200
+* 滚动交叉推广（底部）  
+	规格:750*200  
 	预制名字:__bottomgames  
 	![滚动交叉推广](/Doc/img/img_bottomgames.png)
 * 侧拉交叉推广（oppo左侧）  
@@ -68,10 +68,10 @@
 		2.可以在自定义数据中指定广告id(类似178855,178856)  
 		3.代码中进行强制跳转可以直接调用m___nativeiconL["ClickAd"]()  
 	![Oppo嵌入式原生广告长ICON](/Doc/img/img_nativeiconL.png)  
-* Oppo窗口中内嵌原生广告
-	规格:640*450
+* Oppo窗口中内嵌原生广告  
+	规格:640*450  
 	预制名字:__nativeinpage  
-	备注: 
+	备注:   
 		1.广告id在MainStart中赋值platformData.nativeinpageIds  
 		2.可以在自定义数据中指定广告id(类似178855,178856)  
 		3.代码中进行强制跳转可以直接调用m___nativeinpage["ClickAd"]()  
@@ -80,6 +80,6 @@
 # 待续
 
 ## 其他
-如有疑问,请联系QQ:821580467
+如有疑问,请联系QQ:`821580467`
 
 
