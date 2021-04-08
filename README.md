@@ -48,32 +48,32 @@
 	规格:750*200
 	预制名字:__bottomgames  
 	![滚动交叉推广](/Doc/img/img_bottomgames.png)
-* 侧拉交叉推广（oppo左侧）
-	规格:120*120
+* 侧拉交叉推广（oppo左侧）  
+	规格:120*120  
 	预制名字:__sidegames  
 	![滚动交叉推广](/Doc/img/sidegames.png)	
-* Oppo嵌入式原生广告ICON
-	规格:自定义,会自动等比拉伸进行填充
+* Oppo嵌入式原生广告ICON  
+	规格:自定义,会自动等比拉伸进行填充  
 	预制名字:__nativeicon  
 	备注:  
-		1.广告id在MainStart中赋值platformData.nativeIconIds
-		2.可以在自定义数据中指定广告id(类似178855,178856)
-		3.代码中进行强制跳转可以直接调用m___nativeicon["ClickAd"]() 
+		1.广告id在MainStart中赋值platformData.nativeIconIds  
+		2.可以在自定义数据中指定广告id(类似178855,178856)  
+		3.代码中进行强制跳转可以直接调用m___nativeicon["ClickAd"]()  
 	![Oppo嵌入式原生广告ICON](/Doc/img/img_nativeicon.png)  
-* Oppo嵌入式原生广告长ICON
-	规格:640*140
+* Oppo嵌入式原生广告长ICON  
+	规格:640*140  
 	预制名字:__nativeiconL  
 	备注:  
-		1.广告id在MainStart中赋值platformData.nativeIconIds
-		2.可以在自定义数据中指定广告id(类似178855,178856)
+		1.广告id在MainStart中赋值platformData.nativeIconIds  
+		2.可以在自定义数据中指定广告id(类似178855,178856)  
 		3.代码中进行强制跳转可以直接调用m___nativeiconL["ClickAd"]()  
 	![Oppo嵌入式原生广告长ICON](/Doc/img/img_nativeiconL.png)  
 * Oppo窗口中内嵌原生广告
 	规格:640*450
 	预制名字:__nativeinpage  
 	备注: 
-		1.广告id在MainStart中赋值platformData.nativeinpageIds
-		2.可以在自定义数据中指定广告id(类似178855,178856)
+		1.广告id在MainStart中赋值platformData.nativeinpageIds  
+		2.可以在自定义数据中指定广告id(类似178855,178856)  
 		3.代码中进行强制跳转可以直接调用m___nativeinpage["ClickAd"]()  
 	![Oppo窗口中内嵌原生广告](/Doc/img/img_nativeinpage.png) 	
 
