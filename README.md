@@ -5,15 +5,31 @@
 * 简化平台sdk接入流程
 * 一键自动发布
 * 自动拆分子包
+* android/ios相关sdk接入
 ## 对应版本
 * Unity: 2018.4.17f1 
-* Laya:2.6.0beta 
+* Laya:2.9.0 
 
 ## 目录说明
 * FakeProject 示例工程
 * Other 杂项文件
 * FGuiProject 框架UI工程
 * Publish 发布路径
+
+## 使用说明
+1. 新建一个文件夹例如 `p_ceshi/code/laya/p_ceshi`
+2. 将Publish下的*所有文件*(others和package.json)拷贝到工程*根目录*
+3. 在根目录执行npm install 命令
+4. 运行npm指令:update-ltg
+5. 使用fgui导出ui工程
+6. 使用unity导出配置文件
+7. 编译并运行项目确认一切OK
+8. 开始写代码
+
+## npm命令说明:
+* build:编译代码并持续watch
+* publish-xx:发布指定平台代码
+* update-ltg:更新框架代码（使用others/内的框架模板替换工程内的）
 
 ## 模块化组件规格说明
 * 大交叉推广 
@@ -60,18 +76,6 @@
 		2.可以在自定义数据中指定广告id(类似178855,178856)
 		3.代码中进行强制跳转可以直接调用m___nativeinpage["ClickAd"]()  
 	![Oppo窗口中内嵌原生广告](/Doc/img/img_nativeinpage.png) 	
-
-## 使用说明
-1. 使用layaide新建一个工程
-2. 将Publish下的*所有文件*(others和package.json)拷贝到工程*根目录*
-3. 在根目录执行npm install 命令
-4. 运行npm指令:update-ltg
-5. 开始写代码
-
-## npm命令说明:
-* build:编译代码并持续watch
-* publish-xx:发布指定平台代码
-* update-ltg:更新框架代码（使用others/内的框架模板替换工程内的）
 
 # 待续
 
