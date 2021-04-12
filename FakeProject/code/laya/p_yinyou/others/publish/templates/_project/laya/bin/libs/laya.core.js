@@ -1,4 +1,4 @@
-window.Laya= (function (exports) {
+window.Laya = (function (exports) {
     'use strict';
 
     class Config {
@@ -7363,9 +7363,9 @@ window.Laya= (function (exports) {
             var inAltasUVWidth = (u2 - u1), inAltasUVHeight = (v2 - v1);
             var oriUV = Texture.moveUV(uv[0], uv[1], [x, y, x + width, y, x + width, y + height, x, y + height]);
             tex.uv = new Float32Array([u1 + oriUV[0] * inAltasUVWidth, v1 + oriUV[1] * inAltasUVHeight,
-                u2 - (1 - oriUV[2]) * inAltasUVWidth, v1 + oriUV[3] * inAltasUVHeight,
-                u2 - (1 - oriUV[4]) * inAltasUVWidth, v2 - (1 - oriUV[5]) * inAltasUVHeight,
-                u1 + oriUV[6] * inAltasUVWidth, v2 - (1 - oriUV[7]) * inAltasUVHeight]);
+            u2 - (1 - oriUV[2]) * inAltasUVWidth, v1 + oriUV[3] * inAltasUVHeight,
+            u2 - (1 - oriUV[4]) * inAltasUVWidth, v2 - (1 - oriUV[5]) * inAltasUVHeight,
+            u1 + oriUV[6] * inAltasUVWidth, v2 - (1 - oriUV[7]) * inAltasUVHeight]);
             var bitmapScale = bitmap.scaleRate;
             if (bitmapScale && bitmapScale != 1) {
                 tex.sourceWidth /= bitmapScale;
@@ -7433,7 +7433,7 @@ window.Laya= (function (exports) {
         set bitmap(value) {
             this._bitmap && this._bitmap._removeReference(this._referenceCount);
             this._bitmap = value;
-            value && (value._addReference(this._referenceCount));
+            if (value && value._addReference) { value._addReference(this._referenceCount) };
         }
         get destroyed() {
             return this._destroyed;
@@ -7453,8 +7453,8 @@ window.Laya= (function (exports) {
             return this._bitmap.destroyed ? null : this.bitmap._getSource();
         }
         _onLoaded(complete, context) {
-            if (!context) ;
-            else if (context == this) ;
+            if (!context);
+            else if (context == this);
             else if (context instanceof Texture) {
                 var tex = context;
                 Texture._create(context, 0, 0, tex.width, tex.height, 0, 0, tex.sourceWidth, tex.sourceHeight, this);
@@ -7551,9 +7551,9 @@ window.Laya= (function (exports) {
                 var uk = uvw / texw;
                 var vk = uvh / texh;
                 uv = [stu + rePosX * uk, stv + rePosY * vk,
-                    stu + (rePosX + draww) * uk, stv + rePosY * vk,
-                    stu + (rePosX + draww) * uk, stv + (rePosY + drawh) * vk,
-                    stu + rePosX * uk, stv + (rePosY + drawh) * vk];
+                stu + (rePosX + draww) * uk, stv + rePosY * vk,
+                stu + (rePosX + draww) * uk, stv + (rePosY + drawh) * vk,
+                stu + rePosX * uk, stv + (rePosY + drawh) * vk];
             }
             ctx._drawTextureM(this, marginL, marginT, draww, drawh, null, 1.0, uv);
             ctx._targets.start();
@@ -8313,7 +8313,7 @@ window.Laya= (function (exports) {
                     state = 1;
                     i++;
                 }
-                else if (c === 0xfe0e || c === 0xfe0f) ;
+                else if (c === 0xfe0e || c === 0xfe0f);
                 else if (c == 0x200d) {
                     state = 2;
                 }
@@ -8436,7 +8436,7 @@ window.Laya= (function (exports) {
                         if (!ri) {
                             break;
                         }
-                        if (ri.isSpace) ;
+                        if (ri.isSpace);
                         else {
                             var add = sameTexData[ri.tex.id];
                             if (!add) {
@@ -15654,7 +15654,7 @@ window.Laya= (function (exports) {
         changeText(text) {
             if (this._text !== text) {
                 this.lang(text + "");
-                if (this._graphics && this._graphics.replaceText(this._text)) ;
+                if (this._graphics && this._graphics.replaceText(this._text));
                 else {
                     this.typeset();
                 }
@@ -16446,7 +16446,7 @@ window.Laya= (function (exports) {
             var preDowns;
             preDowns = isLeft ? this.preDowns : this.preRightDowns;
             preO = this.getTouchFromArr(touchID, preDowns);
-            if (!preO) ;
+            if (!preO);
             else {
                 var isDouble;
                 var now = Browser.now();
@@ -16478,7 +16478,7 @@ window.Laya= (function (exports) {
                 Pool.recover("TouchData", preO);
             }
             preO = this.getTouchFromArr(touchID, this.preOvers);
-            if (!preO) ;
+            if (!preO);
             else {
                 if (onMobile) {
                     sendArr = this.getEles(preO.tar, null, sendArr);
@@ -21180,7 +21180,7 @@ window.Laya= (function (exports) {
         set(key, value) {
             if (key == null)
                 return;
-            if (WeakObject.supportWeakMap) ;
+            if (WeakObject.supportWeakMap);
             else {
                 if (typeof (key) == 'string' || typeof (key) == 'number') {
                     this._obj[key] = value;
@@ -21194,7 +21194,7 @@ window.Laya= (function (exports) {
         get(key) {
             if (key == null)
                 return null;
-            if (WeakObject.supportWeakMap) ;
+            if (WeakObject.supportWeakMap);
             else {
                 if (typeof (key) == 'string' || typeof (key) == 'number')
                     return this._obj[key];
@@ -21204,7 +21204,7 @@ window.Laya= (function (exports) {
         del(key) {
             if (key == null)
                 return;
-            if (WeakObject.supportWeakMap) ;
+            if (WeakObject.supportWeakMap);
             else {
                 if (typeof (key) == 'string' || typeof (key) == 'number')
                     delete this._obj[key];
@@ -22533,15 +22533,15 @@ window.Laya= (function (exports) {
         static __init__() {
             var gl = LayaGL.instance;
             MeshParticle2D._fixattriInfo = [gl.FLOAT, 4, 0,
-                gl.FLOAT, 3, 16,
-                gl.FLOAT, 3, 28,
-                gl.FLOAT, 4, 40,
-                gl.FLOAT, 4, 56,
-                gl.FLOAT, 3, 72,
-                gl.FLOAT, 2, 84,
-                gl.FLOAT, 4, 92,
-                gl.FLOAT, 1, 108,
-                gl.FLOAT, 1, 112];
+            gl.FLOAT, 3, 16,
+            gl.FLOAT, 3, 28,
+            gl.FLOAT, 4, 40,
+            gl.FLOAT, 4, 56,
+            gl.FLOAT, 3, 72,
+            gl.FLOAT, 2, 84,
+            gl.FLOAT, 4, 92,
+            gl.FLOAT, 1, 108,
+            gl.FLOAT, 1, 112];
         }
         setMaxParticleNum(maxNum) {
             this._vb._resizeBuffer(maxNum * 4 * MeshParticle2D.const_stride, false);
@@ -25944,52 +25944,52 @@ window.Laya= (function (exports) {
         }
     }
     ArabicReshaper.charsMap = [[0x0621, 0xFE80, null, null, null],
-        [0x0622, 0xFE81, null, null, 0xFE82],
-        [0x0623, 0xFE83, null, null, 0xFE84],
-        [0x0624, 0xFE85, null, null, 0xFE86],
-        [0x0625, 0xFE87, null, null, 0xFE88],
-        [0x0626, 0xFE89, 0xFE8B, 0xFE8C, 0xFE8A],
-        [0x0627, 0xFE8D, null, null, 0xFE8E],
-        [0x0628, 0xFE8F, 0xFE91, 0xFE92, 0xFE90],
-        [0x0629, 0xFE93, null, null, 0xFE94],
-        [0x062A, 0xFE95, 0xFE97, 0xFE98, 0xFE96],
-        [0x062B, 0xFE99, 0xFE9B, 0xFE9C, 0xFE9A],
-        [0x062C, 0xFE9D, 0xFE9F, 0xFEA0, 0xFE9E],
-        [0x062D, 0xFEA1, 0xFEA3, 0xFEA4, 0xFEA2],
-        [0x062E, 0xFEA5, 0xFEA7, 0xFEA8, 0xFEA6],
-        [0x062F, 0xFEA9, null, null, 0xFEAA],
-        [0x0630, 0xFEAB, null, null, 0xFEAC],
-        [0x0631, 0xFEAD, null, null, 0xFEAE],
-        [0x0632, 0xFEAF, null, null, 0xFEB0],
-        [0x0633, 0xFEB1, 0xFEB3, 0xFEB4, 0xFEB2],
-        [0x0634, 0xFEB5, 0xFEB7, 0xFEB8, 0xFEB6],
-        [0x0635, 0xFEB9, 0xFEBB, 0xFEBC, 0xFEBA],
-        [0x0636, 0xFEBD, 0xFEBF, 0xFEC0, 0xFEBE],
-        [0x0637, 0xFEC1, 0xFEC3, 0xFEC4, 0xFEC2],
-        [0x0638, 0xFEC5, 0xFEC7, 0xFEC8, 0xFEC6],
-        [0x0639, 0xFEC9, 0xFECB, 0xFECC, 0xFECA],
-        [0x063A, 0xFECD, 0xFECF, 0xFED0, 0xFECE],
-        [0x0640, 0x0640, 0x0640, 0x0640, 0x0640],
-        [0x0641, 0xFED1, 0xFED3, 0xFED4, 0xFED2],
-        [0x0642, 0xFED5, 0xFED7, 0xFED8, 0xFED6],
-        [0x0643, 0xFED9, 0xFEDB, 0xFEDC, 0xFEDA],
-        [0x0644, 0xFEDD, 0xFEDF, 0xFEE0, 0xFEDE],
-        [0x0645, 0xFEE1, 0xFEE3, 0xFEE4, 0xFEE2],
-        [0x0646, 0xFEE5, 0xFEE7, 0xFEE8, 0xFEE6],
-        [0x0647, 0xFEE9, 0xFEEB, 0xFEEC, 0xFEEA],
-        [0x0648, 0xFEED, null, null, 0xFEEE],
-        [0x0649, 0xFEEF, null, null, 0xFEF0],
-        [0x064A, 0xFEF1, 0xFEF3, 0xFEF4, 0xFEF2],
-        [0x067E, 0xFB56, 0xFB58, 0xFB59, 0xFB57],
-        [0x06CC, 0xFBFC, 0xFBFE, 0xFBFF, 0xFBFD],
-        [0x0686, 0xFB7A, 0xFB7C, 0xFB7D, 0xFB7B],
-        [0x06A9, 0xFB8E, 0xFB90, 0xFB91, 0xFB8F],
-        [0x06AF, 0xFB92, 0xFB94, 0xFB95, 0xFB93],
-        [0x0698, 0xFB8A, null, null, 0xFB8B]];
+    [0x0622, 0xFE81, null, null, 0xFE82],
+    [0x0623, 0xFE83, null, null, 0xFE84],
+    [0x0624, 0xFE85, null, null, 0xFE86],
+    [0x0625, 0xFE87, null, null, 0xFE88],
+    [0x0626, 0xFE89, 0xFE8B, 0xFE8C, 0xFE8A],
+    [0x0627, 0xFE8D, null, null, 0xFE8E],
+    [0x0628, 0xFE8F, 0xFE91, 0xFE92, 0xFE90],
+    [0x0629, 0xFE93, null, null, 0xFE94],
+    [0x062A, 0xFE95, 0xFE97, 0xFE98, 0xFE96],
+    [0x062B, 0xFE99, 0xFE9B, 0xFE9C, 0xFE9A],
+    [0x062C, 0xFE9D, 0xFE9F, 0xFEA0, 0xFE9E],
+    [0x062D, 0xFEA1, 0xFEA3, 0xFEA4, 0xFEA2],
+    [0x062E, 0xFEA5, 0xFEA7, 0xFEA8, 0xFEA6],
+    [0x062F, 0xFEA9, null, null, 0xFEAA],
+    [0x0630, 0xFEAB, null, null, 0xFEAC],
+    [0x0631, 0xFEAD, null, null, 0xFEAE],
+    [0x0632, 0xFEAF, null, null, 0xFEB0],
+    [0x0633, 0xFEB1, 0xFEB3, 0xFEB4, 0xFEB2],
+    [0x0634, 0xFEB5, 0xFEB7, 0xFEB8, 0xFEB6],
+    [0x0635, 0xFEB9, 0xFEBB, 0xFEBC, 0xFEBA],
+    [0x0636, 0xFEBD, 0xFEBF, 0xFEC0, 0xFEBE],
+    [0x0637, 0xFEC1, 0xFEC3, 0xFEC4, 0xFEC2],
+    [0x0638, 0xFEC5, 0xFEC7, 0xFEC8, 0xFEC6],
+    [0x0639, 0xFEC9, 0xFECB, 0xFECC, 0xFECA],
+    [0x063A, 0xFECD, 0xFECF, 0xFED0, 0xFECE],
+    [0x0640, 0x0640, 0x0640, 0x0640, 0x0640],
+    [0x0641, 0xFED1, 0xFED3, 0xFED4, 0xFED2],
+    [0x0642, 0xFED5, 0xFED7, 0xFED8, 0xFED6],
+    [0x0643, 0xFED9, 0xFEDB, 0xFEDC, 0xFEDA],
+    [0x0644, 0xFEDD, 0xFEDF, 0xFEE0, 0xFEDE],
+    [0x0645, 0xFEE1, 0xFEE3, 0xFEE4, 0xFEE2],
+    [0x0646, 0xFEE5, 0xFEE7, 0xFEE8, 0xFEE6],
+    [0x0647, 0xFEE9, 0xFEEB, 0xFEEC, 0xFEEA],
+    [0x0648, 0xFEED, null, null, 0xFEEE],
+    [0x0649, 0xFEEF, null, null, 0xFEF0],
+    [0x064A, 0xFEF1, 0xFEF3, 0xFEF4, 0xFEF2],
+    [0x067E, 0xFB56, 0xFB58, 0xFB59, 0xFB57],
+    [0x06CC, 0xFBFC, 0xFBFE, 0xFBFF, 0xFBFD],
+    [0x0686, 0xFB7A, 0xFB7C, 0xFB7D, 0xFB7B],
+    [0x06A9, 0xFB8E, 0xFB90, 0xFB91, 0xFB8F],
+    [0x06AF, 0xFB92, 0xFB94, 0xFB95, 0xFB93],
+    [0x0698, 0xFB8A, null, null, 0xFB8B]];
     ArabicReshaper.combCharsMap = [[[0x0644, 0x0622], 0xFEF5, null, null, 0xFEF6],
-        [[0x0644, 0x0623], 0xFEF7, null, null, 0xFEF8],
-        [[0x0644, 0x0625], 0xFEF9, null, null, 0xFEFA],
-        [[0x0644, 0x0627], 0xFEFB, null, null, 0xFEFC]];
+    [[0x0644, 0x0623], 0xFEF7, null, null, 0xFEF8],
+    [[0x0644, 0x0625], 0xFEF9, null, null, 0xFEFA],
+    [[0x0644, 0x0627], 0xFEFB, null, null, 0xFEFC]];
     ArabicReshaper.transChars = [0x0610,
         0x0612,
         0x0613,
@@ -26284,7 +26284,7 @@ window.Laya= (function (exports) {
     exports.isWXPosMsg = isWXPosMsg;
     exports.version = version;
 
-    exports.static=_static;
+    exports.static = _static;
 
     return exports;
 

@@ -14,6 +14,7 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import ShareManager from "./ShareManager";
 import DefaultPlatform from "./DefaultPlatform";
+import WXOpenDataContext from "./Impl/WX/WXOpenDataContext";
 
 export default class WXPlatform extends DefaultPlatform {
     userInfo: LTGame.UserInfo;
@@ -63,7 +64,7 @@ export default class WXPlatform extends DefaultPlatform {
     protected _cacheOnShowHandle: Laya.Handler;
 
     Init(platformData: LTPlatformData) {
-        this._base = window["wx"];
+        this.base = this._base = window["wx"];
         if (this._base == null) {
             console.error("平台初始化错误", LTPlatform.platformStr);
             return;
@@ -77,7 +78,7 @@ export default class WXPlatform extends DefaultPlatform {
         this._CreateBannerAd();
         this._CreateVideoAd();
         this._CreateInterstitalAd();
-
+        this.openDataContext = new WXOpenDataContext(this.base);
         window["iplatform"] = this;
     }
 
@@ -164,7 +165,8 @@ export default class WXPlatform extends DefaultPlatform {
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
         console.log(LTPlatform.platformStr, "登录成功", res);
-        LTUI.Toast('登录成功');
+        // LTUI.Toast('登录成功');
+        this.openDataContext = new WXOpenDataContext(this.base);
         this.loginState.isLogin = true;
         this.loginState.code = res.code;
     }
@@ -702,5 +704,11 @@ export default class WXPlatform extends DefaultPlatform {
 
     SetClipboardData(str: string) {
         this._base.setClipboardData({ data: str });
+    }
+
+    /** 往开放域推送数据 */
+    public postMsg(msg: object): void {
+        let context = this.base.getOpenDataContext();
+        context.postMessage(msg);
     }
 }

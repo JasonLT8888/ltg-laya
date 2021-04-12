@@ -14,7 +14,8 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
 import CommonSaveData from "../Commom/CommonSaveData";
-import { GameConst } from "../../script/config/GameConst";
+import { GameConst } from "../../script/config/GameConst"; 
+import WXOpenDataContext from "./Impl/WX/WXOpenDataContext";
 
 export default class TTPlatform extends WXPlatform {
 
@@ -64,18 +65,6 @@ export default class TTPlatform extends WXPlatform {
         this.device = new TTDevice(this._base);
 
         window["iplatform"] = this;
-        this.setGroup();
-
-    }
-    GROUPID: string = "yinsuzhanji";
-    setGroup() {
-        let openCtx = this.base.getOpenDataContext();
-        openCtx.postMessage({
-            company: "youtiao",
-        });
-        this.base.setUserGroup({
-            groupId: this.GROUPID,
-        });
 
     }
     setUserCloudStorage(key: string, value: number) {
@@ -143,13 +132,13 @@ export default class TTPlatform extends WXPlatform {
             code: ""
         };
         let loginData = {
-            force: false,
+            force: true,
             success: (res) => {
                 console.log(LTPlatform.platformStr, "登录成功", res);
+                this._OnLoginSuccess(res);
                 this.loginCode = res.code;
                 this.loginState.isLogin = true;
                 this.loginState.code = res.code;
-                // this._OnLoginSuccess(res);
 
             },
             fail: (res) => {
@@ -167,46 +156,41 @@ export default class TTPlatform extends WXPlatform {
 
         window["tt"].login(loginData);
     }
-    getUserInfo(): Promise<void> {
-        console.log('开始授权')
-        return new Promise<void>((resolve, reject) => {
-            window["tt"].authorize({
-                scope: "scope.userInfo",
-                success: () => {
-                    console.log('授权成功');
-                    window["tt"].getUserInfo({
-                        withCredentials: false,
-                        lang: 'zh_CN',
-                        success: (result) => {
-                            console.log('获取信息成功')
-                            console.log(result);
-                            this.userInfo = { avatarUrl: result.userInfo.avatarUrl, nickName: result.userInfo.nickName };
-                            CommonSaveData.instance.nickName = result.userInfo.nickName;
-                            CommonSaveData.instance.avatarUrl = result.userInfo.avatarUrl;
-                            CommonSaveData.SaveToDisk();
-                        },
-                        fail: () => {
-                            console.log('获取信息失败')
-                        },
-                        complete: () => {
-                            console.log('获取信息comp');
-                            resolve();
-                        }
-                    })
-                },
+    getUserInfo() {
+        return new Promise<void>(() => {
+            this.base.getSetting({
+                success: (sucData): void => {
+                    console.log("getSetting - > 成功 ", sucData);
+                    if (sucData.authSetting["scope.userInfo"]) {
+                        this.base.getUserInfo(
+                            {
+                                openIdList: ['selfOpenId'],
+                                fail: (res): void => {
+                                    console.log("getUserInfo - > 失败 ", res);
+
+                                },
+                                success: (successData): void => {
+                                    console.log("getUserInfo - > 成功 ", successData);
+                                    this.openDataContext.postMsg({ type: "userInfoData", data: successData });
+                                }
+                            });
+                    }
+                }
             });
         })
 
     }
 
     protected _OnLoginSuccess(res: LTGame.LoginSuccessRes) {
-        console.log(LTPlatform.platformStr, "登录成功", res);
+        this.openDataContext = new WXOpenDataContext(this.base);
+        this.openDataContext.setUserGroup("test_group");
+        // this.postMsg({ text: "login succeed" });
         // LTUI.Toast('登录成功');
-        // this.getUserInfo();
+        this.getUserInfo();
         // this.loginState.isLogin = true;
         // this.loginState.code = res.code;
-    }
 
+    }
     protected _InitLauchOption() {
         // 绑定onShow事件
         this._base.onShow(this._OnShow);
@@ -256,9 +240,9 @@ export default class TTPlatform extends WXPlatform {
         bannerObj["adUnitId"] = this.platformData.bannerId; // "adunit-b48894d44d318e5a";
         bannerObj["adIntervals"] = 30;
         let styleObj = {};
-        styleObj["left"] = 0;
-        styleObj["top"] = 0;
-        styleObj["width"] = windowWidth;
+        styleObj["width"] = Math.floor(windowWidth * 0.9);
+        styleObj["left"] = (windowWidth - styleObj["width"]) / 2;
+        styleObj["top"] = windowHeight - Math.floor(styleObj["width"] * 0.347);
         bannerObj["style"] = styleObj;
 
         this._bannerAd = this._base.createBannerAd(bannerObj);
@@ -276,7 +260,7 @@ export default class TTPlatform extends WXPlatform {
 
         this._bannerAd.onResize((size) => {
             this._bannerAd.style.top = windowHeight - size.height;
-            this._bannerAd.style.left = (windowWidth - size.width) / 2;
+            // this._bannerAd.style.left = (windowWidth - size.width) / 2;
         });
     }
 
@@ -469,7 +453,6 @@ export default class TTPlatform extends WXPlatform {
                     tag: ""
                 },
                 success: (res) => {
-                    console.log("排行榜信息");
                     if (res.statusCode == 200 && res.data) {
                         return resolve(res.data);
                     } else {
