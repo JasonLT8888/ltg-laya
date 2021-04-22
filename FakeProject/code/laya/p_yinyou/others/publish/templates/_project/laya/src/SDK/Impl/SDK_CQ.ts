@@ -28,7 +28,7 @@ export default class SDK_CQ extends SDK_Default {
     enableDebug: boolean = true;
     dateInfo: DateInfo[] = [];
 
-    private _headPrefix = "https://gamer.api.gugudang.com";
+    private _headPrefix = "https://games.api.gugudang.com";
 
     Init(flg: string, channel: string, controlVersion: string, appId: string) {
         super.Init(flg, channel, controlVersion, appId);

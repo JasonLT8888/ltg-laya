@@ -7,6 +7,10 @@ export class ConfigManager {
     }
 
     public static AddConfig(configName: any) {
+        if (configName.path == null) {
+            console.error("错误的配置字段", configName);
+            return;
+        }
         ConfigManager._configList.push(configName);
     }
 

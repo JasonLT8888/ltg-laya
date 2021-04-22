@@ -3,7 +3,6 @@ import StringEx from "../LTUtils/StringEx";
 
 export class SaveData {
 
-
     /**
      * 最后一次打开时间戳
      */
@@ -85,6 +84,8 @@ export class SaveData {
     public nickName: string = '';
     /** 头像 */
     public avatarUrl: string = '';
+    /**是否已创建桌面 */
+    public hasShotcut: boolean;
 
 }
 

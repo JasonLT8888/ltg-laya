@@ -107,4 +107,28 @@ export class OimoHelper {
         }
     }
 
+    static CreateShapeByObj(obj: Laya.Sprite3D, layer: number, mask: number,
+        posOffset: Laya.Vector3 = null, rotOffset: Laya.Quaternion = null): OIMO.Shape {
+        let colliderCmp = obj.getComponent(Laya.PhysicsCollider) as Laya.PhysicsCollider;
+        if (colliderCmp == null || colliderCmp.colliderShape instanceof Laya.BoxColliderShape) {
+            let boxShape = OimoHelper.CreateBox(obj.transform.localScale, layer, mask,
+                posOffset, rotOffset);
+            return boxShape;
+        } else if (colliderCmp.colliderShape instanceof Laya.SphereColliderShape) {
+            let sphereShape = OimoHelper.CreateSphere(obj.transform.localScale.x * 0.5, layer, mask,
+                posOffset, rotOffset);
+            return sphereShape;
+        } else if (colliderCmp.colliderShape instanceof Laya.CapsuleColliderShape) {
+            let origShape = colliderCmp.colliderShape as Laya.CapsuleColliderShape;
+            let capsuleShape = OimoHelper.CreateCapsule(obj.transform.localScale.x * origShape.radius,
+                obj.transform.localScale.y * origShape.length);
+            return capsuleShape;
+        } else {
+            console.error("未识别的碰撞盒类型", colliderCmp);
+        }
+        if (colliderCmp != null) {
+            colliderCmp.destroy();
+        }
+    }
+
 }

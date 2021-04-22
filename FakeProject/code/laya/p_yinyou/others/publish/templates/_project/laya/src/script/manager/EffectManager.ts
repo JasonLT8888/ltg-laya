@@ -170,11 +170,13 @@ export class EffectManager {
         return -1;
     }
 
-    public async PlayEffectById(effectId: number, duringTime: number = 2, pos: Laya.Vector3 = null, rot: Laya.Quaternion = null): Promise<number> {
+    public async PlayEffectById(effectId: number, duringTime: number = 2, 
+        pos: Laya.Vector3 = null, rot: Laya.Quaternion = null, parent: Laya.Sprite3D = null): Promise<number> {
         let data = new EffectShowData(effectId);
         data.continueTime = duringTime;
         data.setPos = pos;
         data.setRot = rot;
+        data.parent = parent;
         return this.PlayEffectByData(data);
     }
 

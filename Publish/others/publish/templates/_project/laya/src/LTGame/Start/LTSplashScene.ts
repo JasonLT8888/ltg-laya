@@ -224,6 +224,7 @@ export default class LTSplashScene extends BaseState {
     }
 
     private async _OnResLoaded() {
+        this._isUIShowed = false;
         this._progressUI.value = 95;
         await LTShaderHelper.WarmShader();
         this._progressUI.value = 100;

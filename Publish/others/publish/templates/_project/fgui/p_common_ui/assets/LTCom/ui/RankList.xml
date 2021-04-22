@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334">
   <displayList>
-    <text id="n0_e6qp" name="score_input" xy="550,1210" size="167,58" input="true" prompt="输入分数" keyboardType="4" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" text=""/>
-    <component id="n1_e6qp" name="btn_report" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="265,1198" size="242,92">
-      <Button title="上报分数" titleColor="#ffffff" titleFontSize="40"/>
-      <property target="bg" propertyId="1" value="ui://hbq27te38gel2r"/>
-    </component>
+    <graph id="n14_cddg" name="bg" xy="0,0" size="750,1334" alpha="0.5" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
     <image id="n5_qets" name="n5" src="qets8g" fileName="img/rank/rank_bg.png" xy="86,247" size="577,840">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
     <image id="n6_qets" name="n6" src="qets8j" fileName="img/rank/biaoti.png" xy="116,171">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <text id="n10_qets" name="txt_rank" xy="128,331" size="77,39" fontSize="30" vAlign="middle" autoSize="none" text="排名"/>
-    <text id="n11_qets" name="txt_nikename" xy="282,331" size="77,39" fontSize="30" vAlign="middle" autoSize="none" text="昵称"/>
-    <text id="n12_qets" name="txt_count" xy="479,331" size="149,39" fontSize="30" vAlign="middle" autoSize="none" text="通关次数"/>
-    <graph id="n4_e6qp" name="openview" xy="114,381" size="522,700" type="rect">
+    <text id="n10_qets" name="txt_rank" xy="128,331" size="77,39" fontSize="30" vAlign="middle" autoSize="none" text="排名">
       <relation target="" sidePair="center-center,middle-middle"/>
-    </graph>
+    </text>
+    <text id="n11_qets" name="txt_nikename" xy="282,331" size="77,39" fontSize="30" vAlign="middle" autoSize="none" text="昵称">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n12_qets" name="txt_count" xy="479,331" size="149,39" fontSize="30" vAlign="middle" autoSize="none" text="通关次数">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
     <component id="n7_qets" name="btn_close" src="8gel5s" fileName="cmp/btn_normalg.xml" xy="637,276" size="33,35">
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://hbq27te3qets8f"/>
@@ -30,5 +31,8 @@
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://hbq27te3qets8h"/>
     </component>
+    <graph id="n13_cddg" name="openView" xy="91,386" size="568,681" type="rect">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
   </displayList>
 </component>

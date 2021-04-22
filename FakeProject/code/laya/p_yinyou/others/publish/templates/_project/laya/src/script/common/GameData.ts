@@ -12,6 +12,10 @@ export class SaveData {
      * 关卡id
      */
     public levelId: number = 1;
+    /**
+     * 排行榜分数
+     */
+    public maxScore: number = 0;
 
 }
 

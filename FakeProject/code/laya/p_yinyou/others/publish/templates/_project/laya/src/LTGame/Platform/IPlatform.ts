@@ -79,6 +79,8 @@ export default interface IPlatform {
      */
     userInfo: LTGame.UserInfo;
 
+    openDataContext: OpenDataContext;
+
     /**
      * 初始化
      */
@@ -216,4 +218,38 @@ export default interface IPlatform {
     getUserInfo(): Promise<void>;
     /**触发收藏 */
     showFavoriteGuide(): void;
+
+
+
+}
+/**开放数据域 */
+export class OpenDataContext {
+
+    base: any;
+    openDataContext: any;
+    constructor(_base: any) {
+        this.base = _base;
+    }
+    /** 往开放域推送数据 */
+    postMsg(msg: object) {
+
+    }
+    /**设置用户分组 */
+    setUserGroup(group: string) {
+
+    }
+    /**上报游戏数据
+     * {score:10}
+     */
+    setUserCloudStorage(obj: object) {
+
+    }
+    /**获取用户数据 */
+    getUserCloudStorage(keys: string[]) {
+
+    }
+
+    getCloudStorageByRelation() {
+
+    }
 }
