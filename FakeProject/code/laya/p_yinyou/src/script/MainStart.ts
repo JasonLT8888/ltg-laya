@@ -93,16 +93,20 @@ export default class MainStart extends LTStart {
     }
 
     _HandleSDK() {
-        // switch (LTPlatform.instance.platform) {
-        //     case EPlatformType.WX:
-        //         LTSDK.CreateInstace(SDK_YQ, this._gameName, this._gameVersion, this._appId);//
-        //         break; 
-        //     default:
-        //         break;
-        //         // LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
-        //         // break;
-        //     }
-        LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);
+        switch (LTPlatform.instance.platform) {
+            case EPlatformType.Web:
+            case EPlatformType.WX:
+            case EPlatformType.QQ:
+            case EPlatformType.TT:
+            case EPlatformType.Oppo:
+            case EPlatformType.Vivo:
+            case EPlatformType.KS:
+                LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);//
+                break;
+            default:
+                LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
+                break;
+        }
     }
 
     _InitFsm() {
