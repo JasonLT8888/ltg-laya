@@ -4,10 +4,10 @@ import { UI_MainMediator } from "../ui/UI_MainMediator";
 import LTSDK from "../../SDK/LTSDK";
 import { ECheckState } from "../../SDK/common/ECheckState";
 
-export default class MainScene extends BaseState {
+export default class MainScene extends BaseState<any> {
 
     constructor() {
-        super(ESceneType.Main);
+        super(null, ESceneType.Main);
     }
 
     _DoEnter() {

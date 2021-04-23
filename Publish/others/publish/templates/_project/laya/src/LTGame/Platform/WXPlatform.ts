@@ -711,4 +711,101 @@ export default class WXPlatform extends DefaultPlatform {
         let context = this.base.getOpenDataContext();
         context.postMessage(msg);
     }
+    customAdLeft: any;
+    customAdRight: any;
+    customAdBottom: any;
+    /**原生模板广告 */
+    showGameBoxBannerAd() {
+        this.HideBannerAd();
+        this.creatCustom();
+        if (this.customAdLeft) {
+            this.customAdLeft.show();
+        }
+        if (this.customAdRight) {
+            this.customAdRight.show();
+        }
+        if (this.customAdBottom) {
+            this.customAdBottom.show();
+        }
+    }
+
+    private creatCustom() {
+        if (!LTSDK.instance.isADEnable) return;
+        let windowWidth = this._base.getSystemInfoSync().windowWidth;
+        let windowHeight = this._base.getSystemInfoSync().windowHeight;
+        //单个格子默认 68*106 底部多个格子默认 360*106
+        if (!this.customAdLeft) {
+            this.customAdLeft = this.base.createCustomAd({
+                adUnitId: this.platformData.gameBoxAdId,
+                adIntervals: 30,
+                style: {
+                    left: 0,
+                    top: windowHeight / 2 - 300,
+                    fixed: false
+                }
+            });
+            this.customAdLeft.onLoad((res) => {
+                console.log("customAdLeft onload", res);
+            });
+
+            this.customAdLeft.onError((res) => {
+                console.log("customAdLeft err", res);
+            })
+        }
+        if (!this.customAdRight) {
+            this.customAdRight = this.base.createCustomAd({
+                adUnitId: this.platformData.customBoxAdId,
+                adIntervals: 30,
+                style: {
+                    left: windowWidth - 68,
+                    top: windowHeight / 2 - 300,
+                    fixed: false
+                }
+            });
+            this.customAdRight.onLoad((res) => {
+                console.log("customAdLeft onload", res);
+            });
+
+            this.customAdRight.onError((res) => {
+                console.log("customAdLeft err", res);
+            });
+        }
+        if (!this.customAdBottom) {
+            this.customAdBottom = this.base.createGridAd({
+                adUnitId: this.platformData.gameBoxBannerId,
+                adIntervals: 30,
+                adTheme: "white",
+                gridCount: 5,
+                style: {
+                    left: 0,
+                    top: windowHeight - 106,
+                    width: windowWidth,
+                    height: 100
+                }
+            });
+            this.customAdBottom.onLoad((res) => {
+                console.log("customAdBottom onload", res);
+            });
+            this.customAdBottom.onResize((res) => {
+                console.log("customAdBottom onResize", res);
+                this.customAdBottom.style.top = windowHeight - res.height;
+                this.customAdBottom.style.left = (windowWidth - res.width) / 2;
+            });
+            this.customAdBottom.onError((res) => {
+                console.log("customAdBottom err", res);
+            });
+        }
+    }
+
+    hideGameBoxBannerAd() {
+        if (this.customAdLeft) {
+            this.customAdLeft.hide();
+        }
+        if (this.customAdRight) {
+            this.customAdRight.hide();
+        }
+        if (this.customAdBottom) {
+            this.customAdBottom.hide();
+        }
+    }
 }

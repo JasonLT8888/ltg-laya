@@ -1,6 +1,6 @@
 import BaseState from "./BaseState";
 
-export default class StateMachine<T extends BaseState> {
+export default class StateMachine<T extends BaseState<any>> {
 
     private _states: Map<number, T>;
 
