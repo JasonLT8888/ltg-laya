@@ -14,7 +14,7 @@ import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 import LTComBinder from "../../LTG_CommonUI/UI/LTCom/LTComBinder";
 import { LTShaderHelper } from "../Material/LTShaderHelper";
 
-export default class LTSplashScene extends BaseState {
+export default class LTSplashScene extends BaseState<any> {
 
     /**
      * 用于初始化的ui包
@@ -59,7 +59,7 @@ export default class LTSplashScene extends BaseState {
     protected _useCommonUI: boolean = false;
 
     constructor() {
-        super(ESceneType.Splash);
+        super(null, ESceneType.Splash);
         switch (LTPlatform.instance.platform) {
             case EPlatformType.WX:
             case EPlatformType.QQ:
