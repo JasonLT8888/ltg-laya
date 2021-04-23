@@ -1,11 +1,13 @@
-export default class BaseState {
+export default class BaseState<T> {
     public id: any;
+    public owner: T;
     public isFinished: boolean;
     public nextState: any;
     public passTime: number;
     public deltaTime: number;
 
-    constructor(id) {
+    constructor(owner: T, id: any) {
+        this.owner = owner;
         this.id = id;
     }
 
@@ -16,7 +18,7 @@ export default class BaseState {
         return 0;
     }
 
-    public OnEnter(exitState: BaseState, param: any) {
+    public OnEnter(exitState: BaseState<T>, param: any) {
         this.isFinished = false;
         this.nextState = 0;
         this.passTime = 0;
@@ -31,7 +33,7 @@ export default class BaseState {
         this._DoRunning(param);
     }
 
-    public OnExit(enterState: BaseState, param: any) {
+    public OnExit(enterState: BaseState<T>, param: any) {
         this._DoExit(enterState, param);
     }
 

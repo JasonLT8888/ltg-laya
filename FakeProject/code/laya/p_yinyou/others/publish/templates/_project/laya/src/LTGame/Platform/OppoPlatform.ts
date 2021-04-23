@@ -325,7 +325,7 @@ export default class OppoPlatform extends DefaultPlatform {
     }
 
     IsBannerAvaliable() {
-        return false;// this.noAdTime <= 0;
+        return this.noAdTime <= 0;
     }
     IsVideoAvaliable() {
         return this._isVideoLoaded;
@@ -864,6 +864,9 @@ export default class OppoPlatform extends DefaultPlatform {
     OpenGameBox(appIds?: string[]) {
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
             return;
+        }
+        if (!this.oppoBoxAd) {
+            this.createGameBox();
         }
         if (this.oppoBoxAd) {
             if (this.canshowBox) {

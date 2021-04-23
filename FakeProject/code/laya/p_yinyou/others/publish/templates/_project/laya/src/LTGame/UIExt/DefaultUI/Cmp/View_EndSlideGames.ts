@@ -17,24 +17,27 @@ export default class View_EndSlideGames {
 
         // 额外判定一次是否支持交叉推广,如果不支持,则隐藏交叉推广
         if (!LTPlatform.instance.isSupportJumpOther) {
+            console.log('不支持跳转');
             tagUI.dispose();
             return null;
         }
+        if (LTPlatform.instance.platform != EPlatformType.WX && LTPlatform.instance.platform != EPlatformType.Web) {
+            console.log('不支持瀑布流导流');
+            tagUI.dispose();
+            return null;
+        }
+
         if (!LTSDK.instance.isNavEnable) {
+            console.log('瀑布流导流开关关闭');
             tagUI.dispose();
             return null;
         }
-        if (LTPlatform.instance.platform == EPlatformType.Oppo && LTSDK.instance.checkState == ECheckState.InCheck) {
+        if (LTSDK.instance.checkState == ECheckState.InCheck) {
             console.log("审核");
             tagUI.dispose();
             return null;
         }
-        if (LTPlatform.instance.platform == EPlatformType.QQ) {
-            // 只有oppo支持
-            console.log("QQ暂无矩阵");
-            tagUI.dispose();
-            return null;
-        }
+
 
         if (tagUI instanceof UI_EndSlideGames) {
             return new View_EndSlideGames(tagUI);
@@ -59,13 +62,21 @@ export default class View_EndSlideGames {
     private _posId: number = 0;
 
     private sortArrr: number[][] = [
-        [1, 2, 3, 9, 10, 6, 7],
-        [4, 5, 11, 1, 2, 3, 8],
-        [7, 12, 13, 8, 4, 5, 6]
-    ];//oppo 必须只能为13个
+        [1, 2, 3, 4, 5, 6, 7],
+        [8, 9, 10, 1, 2, 3, 4],
+        [5, 6, 7, 8, 9, 10, 1]
+    ]
+
+    // [
+    //     [1, 2, 3, 9, 10, 6, 7],
+    //     [4, 5, 11, 1, 2, 3, 8],
+    //     [7, 12, 13, 8, 4, 5, 6]
+    // ];//oppo 必须只能为13个
     private constructor(ui: UI_EndSlideGames) {
         this._ui = ui;
         this._Init();
+
+
     }
 
     private _Init() {
@@ -75,6 +86,10 @@ export default class View_EndSlideGames {
             this._posId = 6;
         }
         this._cacheAds = LTSDK.instance.adManager.GetADListByLocationId(this._posId);
+        if (!this._cacheAds || !this._cacheAds.length) return this.ui.visible = false;
+        while (this._cacheAds.length < 10) {
+            this._cacheAds = this._cacheAds.concat(LTSDK.instance.adManager.GetADListByLocationId(this._posId));
+        }
         if (!this._cacheAds || !this._cacheAds.length) {
             this.ui.visible = false;
             Laya.stage.on(CommonEventId.SELF_AD_INITED, this, this._OnAdInited);

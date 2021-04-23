@@ -14,9 +14,9 @@ import { LTShaderHelper } from "../Material/LTShaderHelper";
 
 export class LTStart {
 
-    protected _fsm: StateMachine<BaseState>;
+    protected _fsm: StateMachine<BaseState<any>>;
 
-    private get _currentState(): BaseState {
+    private get _currentState(): BaseState<any> {
         return this._fsm.currState;
     }
 
@@ -84,7 +84,7 @@ export class LTStart {
     }
 
     private _NextFramUpdate() {
-        this._fsm = new StateMachine<BaseState>();
+        this._fsm = new StateMachine<BaseState<any>>();
         this._InitFsm();
 
         if (this._fsm.count == 0) {
