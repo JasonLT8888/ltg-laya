@@ -333,8 +333,8 @@ export default class SDK_CQ extends SDK_Default {
                 if (result['nativePayRate']) {
                     this.configs.nativePayRate = parseInt(result['nativePayRate']);
                 }
-                if (result['nativeTouchCount']) {
-                    this.configs.nativeTouchCount = parseInt(result['nativeTouchCount']);
+                if (result['nativeClickCount']) {
+                    this.configs.nativeClickCount = parseInt(result['nativeClickCount']);
                 }
                 if (result['changeEnable']) {
                     this.configs.changeEnable = result['changeEnable'] == '1';
@@ -380,7 +380,7 @@ export default class SDK_CQ extends SDK_Default {
         if (this.isShielding || this.checkState == ECheckState.InCheck) {
             //屏蔽洗钱 
             this.configs.payRate = 0;
-            this.configs.nativeTouchCount = 0;
+            this.configs.nativeClickCount = 0;
             this.configs.nativePayRate = 0;
             this.configs.changeEnable = false;
             this.navLevels = [];

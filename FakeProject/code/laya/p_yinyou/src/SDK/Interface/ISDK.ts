@@ -139,7 +139,7 @@ export class RemoteConfig {
   isNavEnable: boolean = false;
   gamecenterLevel: number = 100;
   nativePayRate: number = 0;
-  nativeTouchCount: number = 0;
+  nativeClickCount: number = 0;
   changeEnable: boolean = false;
   shieldHours: string[] = [];
   severTime: string = "";
