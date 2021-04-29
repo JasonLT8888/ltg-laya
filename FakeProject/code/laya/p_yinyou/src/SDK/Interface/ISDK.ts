@@ -19,29 +19,6 @@ export interface ISDK {
    * 程序APPID
    */
   appId: string;
-  /**游戏中心关卡 */
-  navLevels: number[];
-  /**是否支持导出 */
-  isNavEnable: boolean;
-  /**
-   * 误触概率 试用皮肤
-   */
-  payRate: number;
-
-  /**
-   * 地区屏蔽
-   */
-  isShielding: boolean;
-
-  /**
-   * ad 代表 banner 开关
-   * 用于控制特殊操作,比如广告提拉等违规操作
-   */
-  isADEnable: boolean;
-  /**
-   * 延迟关闭按钮
-   */
-  isDelayClose: boolean;
   /**
     * 游戏唯一标识
     */
@@ -69,8 +46,10 @@ export interface ISDK {
    * 广告控制器
    */
   adManager: SDKADManager;
-
+  /**后台配置信息 */
   configs: RemoteConfig;
+  /**是否审核中 */
+  isInCheck: boolean;
 
   /**
    * 初始化sdk
@@ -148,8 +127,12 @@ export interface ISDK {
   reportShareInfo(videoId: string, shareId: string);
   /**上报日活 */
   ReportDaily();
+
 }
 export class RemoteConfig {
+  holiday: number = 0;
+  holidayName: string = "";
+  holidayWeek: string = "1";
   isADEnable: boolean = false;
   isDelayClose: boolean = false;
   isShielding: boolean = false;
@@ -158,4 +141,10 @@ export class RemoteConfig {
   nativePayRate: number = 0;
   nativeTouchCount: number = 0;
   changeEnable: boolean = false;
+  shieldHours: string[] = [];
+  severTime: string = "";
+  payRate: number = 0;
+  /**游戏中心关卡 */
+  navLevels: number[] = [];
+
 }
