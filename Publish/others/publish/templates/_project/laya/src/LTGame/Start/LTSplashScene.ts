@@ -13,6 +13,7 @@ import { ConfigManager } from "../Config/ConfigManager";
 import UI_FlyPanelMediator from "../UIExt/DefaultUI/UI_FlyPanelMediator";
 import LTComBinder from "../../LTG_CommonUI/UI/LTCom/LTComBinder";
 import { LTShaderHelper } from "../Material/LTShaderHelper";
+import Awaiters from "../Async/Awaiters";
 
 export default class LTSplashScene extends BaseState<any> {
 
@@ -245,7 +246,14 @@ export default class LTSplashScene extends BaseState<any> {
     }
 
     _DoExit() {
+        this._CloseSplash();
+    }
+
+    async _CloseSplash() {
         this._ui.dispose();
+
+        await Awaiters.NextFrame();
+
         this._initUiPack.RemovePackage();
     }
 
