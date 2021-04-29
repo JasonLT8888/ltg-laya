@@ -124,6 +124,7 @@
     <component id="ii3nhz" name="moregameItem.xml" path="/cmp/"/>
     <image id="ii3ni0" name="sp_xiaoxiong.png" path="/cmp/"/>
     <component id="n6nfi1" name="side_ads1.xml" path="/cmp/"/>
+    <image id="is4ei2" name="查看广告(1).png" path="/img/btns/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

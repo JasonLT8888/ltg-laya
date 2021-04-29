@@ -16,9 +16,10 @@
     <text id="n7_dw0g" name="desc" xy="154,231" pivot="0.5,0.5" anchor="true" size="10,29" font="DengXian" fontSize="24" color="#ffffff" align="center" vAlign="middle" text="">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <component id="n3_aqhv" name="btn_close" src="l2ax4l" fileName="ad_res/btn_normal.xml" xy="288,2" size="30,30">
+    <component id="n3_aqhv" name="btn_close" src="l2ax4l" fileName="ui_common/btn_normal.xml" xy="288,2" size="30,30">
       <relation target="n2_aqhv" sidePair="left-right,top-top"/>
-      <Button titleFontSize="30" icon="ui://75kiu87kl2ax4m"/>
+      <Button titleFontSize="30"/>
+      <property target="bg" propertyId="1" value="ui://75kiu87kl2ax4m"/>
     </component>
   </displayList>
 </component>

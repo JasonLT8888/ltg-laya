@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334">
-  <controller name="state" exported="true" pages="0,dao,1,yuan" selected="1"/>
+  <controller name="state" exported="true" pages="0,dao,1,yuan" selected="0"/>
   <controller name="end" exported="true" pages="0,win,1," selected="0"/>
   <displayList>
     <graph id="n3_sinz" name="n3" xy="0,0" size="750,1334" alpha="0.8" type="rect" lineSize="0" fillColor="#ff000000">
