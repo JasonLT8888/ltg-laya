@@ -155,4 +155,7 @@ export class RemoteConfig {
   isShielding: boolean = false;
   isNavEnable: boolean = false;
   gamecenterLevel: number = 100;
+  nativePayRate: number = 0;
+  nativeTouchCount: number = 0;
+  changeEnable: boolean = false;
 }

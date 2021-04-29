@@ -331,6 +331,18 @@ export default class SDK_CQ extends SDK_Default {
                 if (result["gamecenterLevel"]) {
                     this.configs.gamecenterLevel = parseInt(result['gamecenterLevel']);
                 }
+                if (result['nativePayRate']) {
+                    this.configs.nativePayRate = parseInt(result['nativePayRate']);
+                }
+                if (result['nativeTouchCount']) {
+                    this.configs.nativeTouchCount = parseInt(result['nativeTouchCount']);
+                }
+                if (result['changeEnable']) {
+                    this.configs.changeEnable = result['changeEnable'] == '1';
+                }
+                if (result["gamecenterLevel"]) {
+                    this.configs.gamecenterLevel = parseInt(result['gamecenterLevel']);
+                }
                 if (result['navLevels']) {
                     let arr = (result['navLevels']).split(',');
                     for (let item in arr) {

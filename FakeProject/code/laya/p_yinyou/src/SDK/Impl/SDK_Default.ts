@@ -139,8 +139,9 @@ export default class SDK_Default implements ISDK {
         console.log('审核状态由重庆后台配置', `审核状态:${ECheckState[this.checkState]}`);
         if (this.checkState != ECheckState.InCheck) {
             //工作时时段屏蔽 
-            let date = this.severTime.substring(0, 10).replace(/\-/g, '');
-            let h = parseInt(this.severTime.substring(12, 2));
+            let date = this.severTime.substr(0, 10).replace(/\-/g, '');
+            //2021-04-25 11:41:11
+            let h = this.severTime.substr(11, 2);
             let today = this.dateInfo.filter(e => e.dayStr == date);
             let isHoliday = false;
             if (today && today.length) {
@@ -149,10 +150,10 @@ export default class SDK_Default implements ISDK {
             if (isHoliday) {
                 console.log('假期休息', date, h);
             } else {
-                console.log('工作日');
-                if (this.shieldHours && this.shieldHours.indexOf(h.toString()) >= 0) {
+                console.log('工作日', date, h);
+                if (this.shieldHours && this.shieldHours.indexOf(h) >= 0) {
                     console.log('工作', this.shieldHours, h);
-                    this.payRate = 0;
+                    // this.payRate = 0;
                     this.navLevels = [];
                 }
             }
@@ -160,6 +161,9 @@ export default class SDK_Default implements ISDK {
         if (this.isShielding || this.checkState == ECheckState.InCheck) {
             //屏蔽洗钱 
             this.payRate = 0;
+            this.configs.nativeTouchCount = 0;
+            this.configs.nativePayRate = 0;
+            this.configs.changeEnable = false;
             this.navLevels = [];
             this.configs.gamecenterLevel = 1000;
         }
