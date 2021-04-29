@@ -26,7 +26,6 @@ export default class SDK_CQ extends SDK_Default {
     /**openid */
     uid: string = "sdk_test";
     enableDebug: boolean = true;
-    dateInfo: DateInfo[] = [];
 
     private _headPrefix = "https://games.api.gugudang.com";
 
@@ -311,10 +310,10 @@ export default class SDK_CQ extends SDK_Default {
             // 成功
             let result = res.data;
             if (result) {
-                console.log('如果需要在重庆后台配置参数 ')
+                console.log('如果需要在重庆后台 配置参数 ');
 
                 if (result['payRate']) {
-                    this.payRate = parseInt(result['payRate']);
+                    this.configs.payRate = parseInt(result['payRate']);
                 }
                 if (result['isDelayClose']) {
                     this.configs.isDelayClose = (result['isDelayClose']) == "1";
@@ -331,6 +330,18 @@ export default class SDK_CQ extends SDK_Default {
                 if (result["gamecenterLevel"]) {
                     this.configs.gamecenterLevel = parseInt(result['gamecenterLevel']);
                 }
+                if (result['nativePayRate']) {
+                    this.configs.nativePayRate = parseInt(result['nativePayRate']);
+                }
+                if (result['nativeClickCount']) {
+                    this.configs.nativeClickCount = parseInt(result['nativeClickCount']);
+                }
+                if (result['changeEnable']) {
+                    this.configs.changeEnable = result['changeEnable'] == '1';
+                }
+                if (result["gamecenterLevel"]) {
+                    this.configs.gamecenterLevel = parseInt(result['gamecenterLevel']);
+                }
                 if (result['navLevels']) {
                     let arr = (result['navLevels']).split(',');
                     for (let item in arr) {
@@ -343,10 +354,10 @@ export default class SDK_CQ extends SDK_Default {
                     this.checkState = LTPlatform.instance.platform == EPlatformType.Oppo ? ECheckState.InCheck : ECheckState.Normal;
                 }
                 if (result['nowtime']) {
-                    this.severTime = result['nowtime'];
+                    this.configs.severTime = result['nowtime'];
                 }
                 if (result['shieldHours']) {
-                    this.shieldHours = result['shieldHours'].split(',');
+                    this.configs.shieldHours = result['shieldHours'].split(',');
                 }
             } else {
                 console.log("未读取到后台信息,默认为打开状态");
@@ -356,12 +367,42 @@ export default class SDK_CQ extends SDK_Default {
             // 失败
             console.error("云控消息返回失败", res);
         }
+        this._UpdateCheckState();
         if (this.controlVersion) {
             this.RequestADList();
         }
-        this.RequestRemoteDateInfo();
         this.isADConfigInited = true;
         Laya.stage.event(CommonEventId.AD_CONFIG_GETTED);
+    }
+
+    public _UpdateCheckState() {
+        console.log('审核--重庆后台配置', `审核状态:${ECheckState[this.checkState]}`);
+        if (this.isShielding || this.checkState == ECheckState.InCheck) {
+            //屏蔽洗钱 
+            this.configs.payRate = 0;
+            this.configs.nativeClickCount = 0;
+            this.configs.nativePayRate = 0;
+            this.configs.changeEnable = false;
+            this.navLevels = [];
+            this.configs.gamecenterLevel = 1000;
+        } else {
+            //工作时时段屏蔽 
+            let date = this.configs.severTime.substr(0, 10).replace(/\-/g, '');
+            //2021-04-25 11:41:11
+            let h = this.configs.severTime.substr(11, 2);
+            let isHoliday = this.configs.holiday != 0;
+            if (isHoliday) {
+                console.log('假期休息', date, h);
+            } else {
+                console.log('工作日', date, h);
+                if (this.configs.shieldHours && this.configs.shieldHours.indexOf(h) >= 0) {
+                    console.log('工作', this.configs.shieldHours, h);
+                    // this.payRate = 0;
+                    this.navLevels = [];
+                }
+            }
+        }
+        console.log(`${this.appId}---云控版本为:${this.controlVersion}`, "配置信息：", this.configs);
     }
 
     Login(code: string, fromAppId: string) {
@@ -480,7 +521,4 @@ export default class SDK_CQ extends SDK_Default {
     }
 
 }
-export interface DateInfo {
-    dayStr: string;
-    type: number;
-}
+
