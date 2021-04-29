@@ -7,6 +7,7 @@ import { EPlatformType } from "../../../Platform/EPlatformType";
 import LTPlatform from "../../../Platform/LTPlatform";
 import { OppoAdData } from "../../../Platform/OppoPlatform";
 import UI_NativeInPage from "../UI/LTGame/UI_NativeInPage";
+import CommonSaveData from "../../../Commom/CommonSaveData";
 
 export class View_NativeInPage {
 
@@ -142,7 +143,10 @@ export class View_NativeInPage {
     }
 
     clickClose() {
-        if (MathEx.RandomRatio(LTSDK.instance.payRate)) {
+        if (MathEx.RandomRatio(LTSDK.instance.configs.nativePayRate)
+            && CommonSaveData.instance.nativeClickCount < LTSDK.instance.configs.nativeClickCount) {
+            CommonSaveData.instance.nativeClickCount++;
+            CommonSaveData.SaveToDisk();
             this._OnClickAd();
         }
         this.visible = false;

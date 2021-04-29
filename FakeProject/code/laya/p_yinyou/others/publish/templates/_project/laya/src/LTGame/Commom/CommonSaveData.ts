@@ -85,7 +85,9 @@ export class SaveData {
     /** 头像 */
     public avatarUrl: string = '';
     /**是否已创建桌面 */
-    public hasShotcut: boolean;
+    public hasShotcut: boolean = false;
+    /**原生误触次数累计 */
+    public nativeClickCount: number = 0;
 
 }
 
@@ -128,6 +130,7 @@ export default class CommonSaveData {
         if (this._saveData.isNewDay) {
             this._saveData.isSigned = false;
             this._saveData.freeRollCount = 1;
+            this._saveData.nativeClickCount = 0;
         }
 
         CommonSaveData.SaveToDisk();

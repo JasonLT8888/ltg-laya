@@ -3,15 +3,15 @@
     "bannerId": "",
     "rewardVideoId": "",
     "interstitialId": "",
-    "forceRemote": [
-        "res/config"
-    ],
+    "forceRemote": [],
     "forceInPack": [
+        "res/config",
         "res/fgui_load"
     ],
     "maxSinglePackSize": 4,
-    "maxTotalPackSize": 12,
+    "maxTotalPackSize": 20,
     "packType": 0,
-    "compress": true,
-    "es5": true
+    "compress": false,
+    "es5": true,
+    "openDataContext": true
 }

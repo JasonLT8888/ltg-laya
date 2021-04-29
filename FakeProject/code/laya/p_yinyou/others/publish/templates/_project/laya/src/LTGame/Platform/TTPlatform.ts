@@ -132,7 +132,7 @@ export default class TTPlatform extends WXPlatform {
             code: ""
         };
         let loginData = {
-            force: true,
+            force: false,
             success: (res) => {
                 console.log(LTPlatform.platformStr, "登录成功", res);
                 this._OnLoginSuccess(res);

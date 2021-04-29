@@ -74,6 +74,7 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
         } else {
             this.ui.m_view.m_btn_freeget.visible = false;
             this.ui.m_view.m_btn_watchad.visible = true;
+            this.ui.m_plat.selectedIndex = LTPlatform.instance.platform == EPlatformType.TT ? 1 : 0;
         }
 
         let currentRollCount = CommonSaveData.instance.totalRollCount % GameConst.data.special_roll_count;

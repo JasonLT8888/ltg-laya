@@ -10,7 +10,7 @@
         "res/fgui_load"
     ],
     "maxSinglePackSize": 10,
-    "maxTotalPackSize": 10,
+    "maxTotalPackSize": 24,
     "packType": 1,
     "compress": false,
     "es5": false,
