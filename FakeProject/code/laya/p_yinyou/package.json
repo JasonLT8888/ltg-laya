@@ -30,6 +30,7 @@
     "buid-ks-release": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/",
     "publish-bd": "node others/publish/bin/publish.js -p bd",
     "update-ltg": "node others/publish/bin/update.js",
+    "publish-ksold": "node others/publish/bin/publish.js -p ks",
     "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js release/oppp debug"
   },
   "author": "lt",

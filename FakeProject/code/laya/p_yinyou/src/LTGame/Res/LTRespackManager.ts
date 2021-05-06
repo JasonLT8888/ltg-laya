@@ -47,6 +47,7 @@ export default class LTRespackManager {
                 adapter = Laya.TTMiniAdapter;
                 break;
             case EPlatformType.WX:
+            case EPlatformType.KS:
                 adapter = Laya.MiniAdpter;
                 break;
             case EPlatformType.BD:
@@ -61,16 +62,16 @@ export default class LTRespackManager {
             case EPlatformType.Vivo:
                 adapter = Laya.VVMiniAdapter;
                 break;
-            case EPlatformType.KS:
-                let remoteFiles = [];
-                for (let pack of this._packs) {
-                    if (pack.pathType == EPackType.Remote) {
-                        remoteFiles.push(pack.path);
-                    }
-                }
-                window["baseUrl"] = this._baseUrl;
-                window["remoteFiles"] = remoteFiles;
-                break;
+            // case EPlatformType.KS:
+            //     let remoteFiles = [];
+            //     for (let pack of this._packs) {
+            //         if (pack.pathType == EPackType.Remote) {
+            //             remoteFiles.push(pack.path);
+            //         }
+            //     }
+            //     window["baseUrl"] = this._baseUrl;
+            //     window["remoteFiles"] = remoteFiles;
+            //     break;
         }
         if (adapter == null) return;
         Laya.URL.basePath = this._baseUrl;

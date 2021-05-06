@@ -142,7 +142,7 @@ export class SubpackHelper {
                 gameJsonName = "src/manifest";
                 break;
             case "ks":
-                gameJsonName = "game.config";
+                gameJsonName = "game";
                 break;
             default:
                 gameJsonName = "game";
@@ -218,8 +218,8 @@ export class SubpackHelper {
                 }
             );
         }
-        if (this._packConfig.platform == "vivo" || this._packConfig.platform == "ks") {
-            console.log("vivo & KS subpack.json 设置远程包");
+        if (this._packConfig.platform == "vivo") {
+            console.log("vivo   subpack.json 设置远程包");
             for (let i = 0; i < this._packConfig.forceRemote.length; ++i) {
                 let pack = this._packConfig.forceRemote[i];
                 let relativePath = pack.replace(upRootPath, "");

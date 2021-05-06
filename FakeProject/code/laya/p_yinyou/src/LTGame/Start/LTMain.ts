@@ -15,7 +15,7 @@ export default class LTMain {
 
         // window["KSiOS"] = true;
         if (window['kwaigame']) {
-            window["remoteFiles"] = []; 
+            window["remoteFiles"] = [];
         }
 
         //根据IDE设置初始化引擎
@@ -32,28 +32,18 @@ export default class LTMain {
                         console.error("未处理的屏幕初始化方向", this._mainLogic.screenOrientation);
                         break;
                 }
-                Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_AUTO;
+                Laya.stage.useRetinalCanvas = true;
+                Laya.stage.scaleMode = Laya.Stage.SCALE_FIXED_AUTO;//window['kwaigame'] ? Laya.Stage.SCALE_EXACTFIT :
                 Laya.stage.alignV = Laya.Stage.ALIGN_MIDDLE;
                 Laya.stage.alignH = Laya.Stage.ALIGN_CENTER;
                 //兼容微信不支持加载scene后缀场景
                 Laya.URL.exportSceneToJson = true;
 
                 //打开调试面板（通过IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
-                // if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
+                // if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") 
+                // Laya.enableDebugPanel();
                 // if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
-                //快手
-                if (window['kwaigame']) {
-                    var stage = Laya.stage;
-                    var info = this.getAdapterInfo({
-                        width: this._mainLogic.designWidth, height: this._mainLogic.designHeight,
-                        scaleMode: Laya.Stage.SCALE_EXACTFIT
-                    });
-                    stage.designWidth = info.w;
-                    stage.designHeight = info.h;
-                    stage.width = info.rw;
-                    stage.height = info.rh;
-                    stage.scale(info.scaleX, info.scaleY);
-                }
+
                 if (this._mainLogic.enableStat) {
                     Laya.Stat.show(0, 100);
                 }
@@ -66,7 +56,7 @@ export default class LTMain {
     }
 
 
-    //ks
+    //ks old 
     getAdapterInfo(config) {
         let scaleX = 1;
         let scaleY = 1;

@@ -27,7 +27,7 @@ export default class View_EndSlideGames {
             return null;
         }
 
-        if (!LTSDK.instance.isNavEnable) {
+        if (!LTSDK.instance.configs.isNavEnable) {
             console.log('瀑布流导流开关关闭');
             tagUI.dispose();
             return null;

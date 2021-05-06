@@ -730,7 +730,7 @@ export default class WXPlatform extends DefaultPlatform {
     }
 
     private creatCustom() {
-        if (!LTSDK.instance.isADEnable) return;
+        if (!LTSDK.instance.configs.isADEnable) return;
         let windowWidth = this._base.getSystemInfoSync().windowWidth;
         let windowHeight = this._base.getSystemInfoSync().windowHeight;
         //单个格子默认 68*106 底部多个格子默认 360*106
