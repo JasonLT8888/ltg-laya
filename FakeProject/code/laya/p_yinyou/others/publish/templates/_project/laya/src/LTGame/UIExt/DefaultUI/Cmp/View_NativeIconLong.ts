@@ -89,7 +89,7 @@ export class View_NativeIconLong {
     }
     clickClose() {
         let rate = randomRangeInt(0, 100);
-        if (LTSDK.instance.payRate > rate) {
+        if (LTSDK.instance.configs.nativePayRate > rate) {
             this._OnClickAd();
         }
         this.visible = false;
