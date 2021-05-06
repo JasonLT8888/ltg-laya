@@ -18,7 +18,7 @@ export default class View_End3X3Games {
             tagUI.dispose();
             return null;
         }
-        if (!LTSDK.instance.isNavEnable) {
+        if (!LTSDK.instance.configs.isNavEnable) {
             tagUI.dispose();
             return null;
         }
@@ -107,7 +107,7 @@ export default class View_End3X3Games {
     }
 
     private _OnClickGameItem(item: UI_item_gameSmall) {
-        let data = this._cacheAds[item.data as number]; 
+        let data = this._cacheAds[item.data as number];
         let uid = data.ad_appid;
         switch (LTPlatform.instance.platform) {
             case EPlatformType.Oppo:

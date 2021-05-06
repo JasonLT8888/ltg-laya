@@ -19,7 +19,7 @@ export default class View_SideGames {
             tagUI.dispose();
             return null;
         }
-        if (!LTSDK.instance.isADEnable) {
+        if (!LTSDK.instance.configs.isADEnable) {
             tagUI.dispose();
             return null;
         }

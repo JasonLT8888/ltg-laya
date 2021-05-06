@@ -18,7 +18,7 @@ export default class View_HotGame {
             tagUI.dispose();
             return null;
         }
-        if (!LTSDK.instance.isNavEnable) {
+        if (!LTSDK.instance.configs.isNavEnable) {
             tagUI.dispose();
             return null;
         }

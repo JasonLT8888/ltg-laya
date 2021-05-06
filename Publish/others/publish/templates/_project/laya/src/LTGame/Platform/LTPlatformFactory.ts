@@ -20,6 +20,8 @@ export default class LTPlatformFactory {
         let result: IPlatform;
         if (Laya.Browser.onTTMiniGame) {
             result = new TTPlatform();
+        } else if (window['ks'] && Laya.Browser.onMiniGame) {
+            result = new KSPlatform();
         } else if (Laya.Browser.onMiniGame) {
             result = new WXPlatform();
         } else if (Laya.Browser.onBDMiniGame) {
@@ -32,8 +34,6 @@ export default class LTPlatformFactory {
             result = new OppoPlatform();
         } else if (Laya.Browser.onVVMiniGame) {
             result = new VivoPlatform();
-        } else if (window['kwaigame']) {
-            result = new KSPlatform();
         } else if (window['conch']) {
             let conchConfig = window['conchConfig'];
             let os = conchConfig.getOS();
