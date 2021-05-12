@@ -115,7 +115,8 @@ export class OimoHelper {
                 posOffset, rotOffset);
             return boxShape;
         } else if (colliderCmp.colliderShape instanceof Laya.SphereColliderShape) {
-            let sphereShape = OimoHelper.CreateSphere(obj.transform.localScale.x * 0.5, layer, mask,
+            let oldCmp = colliderCmp.colliderShape as Laya.SphereColliderShape;
+            let sphereShape = OimoHelper.CreateSphere(obj.transform.localScale.x * oldCmp.radius, layer, mask,
                 posOffset, rotOffset);
             return sphereShape;
         } else if (colliderCmp.colliderShape instanceof Laya.CapsuleColliderShape) {
