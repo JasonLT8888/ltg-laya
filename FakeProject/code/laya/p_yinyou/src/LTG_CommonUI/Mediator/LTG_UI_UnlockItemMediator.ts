@@ -40,7 +40,7 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
 
         this.ui.m_view.m_btn_no.onClick(this, this._OnClickNo);
         this.ui.m_view.m_btn_unlock.onClick(this, this._OnClickUnlock);
-        this.ui.m_view.m_btn_unlock.m_text_progress.text = LTG_Com_EggWallData.GetCodeUnlockProgress(this._cacheData.rewardConfig.id);
+        this.ui.m_view.m_btn_unlock.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(this._cacheData.rewardConfig.id);
         this.ui.m_view.m_loader_title.url = this._cacheData.rewardConfig.title_icon_path;
         this.ui.m_view.m_btn_no.m_bg.visible = LTPlatform.instance.platform == EPlatformType.TT;
 
@@ -95,7 +95,7 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
                 this.Hide();
                 this._cacheData.onUnlocked.runWith([this._cacheData.rewardConfig.reward_type, this._cacheData.rewardConfig.reward_value]);
             } else {
-                this.ui.m_view.m_btn_unlock.m_text_progress.text = LTG_Com_EggWallData.GetCodeUnlockProgress(this._cacheData.rewardConfig.id);
+                this.ui.m_view.m_btn_unlock.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(this._cacheData.rewardConfig.id);
             }
         } else {
             LTUI.Toast("跳过广告无法获得奖励");

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="294,116" extention="Button">
+  <displayList>
+    <image id="n5_jlyk" name="n5" src="mwzx8k" fileName="img/新公共彩蛋/btn_huang.png" xy="0,0" size="294,116"/>
+    <image id="n7_jlyk" name="n7" src="8gel2n" fileName="img/sp_shipin.png" xy="32,36"/>
+    <image id="n8_jlyk" name="n8" src="mwzx8u" fileName="img/新公共彩蛋/sp_jiesuo.png" xy="115,40"/>
+    <text id="n9_jlyk" name="text_value" xy="215,37" size="55,46" fontSize="34" color="#bf6916" align="center" text="0/3">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+  <Button downEffect="dark" downEffectValue=".8"/>
+</component>

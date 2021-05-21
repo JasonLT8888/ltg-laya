@@ -17,21 +17,7 @@ export class LTG_Com_UnlockItemData implements ILTG_Com_Data {
     }
 
     public static HandleCodeEnter(codeStr: string, onUnlocked: Laya.Handler) {
-        for (let i = 0; i < RewardCodeConfig.dataList.length; ++i) {
-            let data = RewardCodeConfig.dataList[i];
-            if (data.code == codeStr) {
-                if (LTG_Com_EggWallData.IsUnlocked(data.id)) {
-                    LTUI.Toast("奖励已领取");
-                    return;
-                }
-                LTG_Com_EggWallData.UnlockEgg(data.id);
-                let openData = new LTG_Com_UnlockItemData();
-                openData.rewardConfig = data;
-                openData.onUnlocked = onUnlocked;
-                openData.Send();
-                return;
-            }
-        }
+        // TODO:取消该功能
         LTUI.Toast("无效的兑换码");
     }
 
