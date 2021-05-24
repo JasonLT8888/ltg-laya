@@ -220,13 +220,14 @@ export default class KSPlatform extends DefaultPlatform {
         return;
     }
     ShowInterstitalAd() {
-        console.log('todo');
-        let interad = this.base.createInterstitialAd({
-            posId: this.platformData.interstitialId
-        });
-        if (interad) {
-            interad.show();
-        }
+        return;
+        // console.log('todo');
+        // let interad = this.base.createInterstitialAd({
+        //     posId: this.platformData.interstitialId
+        // });
+        // if (interad) {
+        //     interad.show();
+        // }
     }
 
     ShowBannerAd() {

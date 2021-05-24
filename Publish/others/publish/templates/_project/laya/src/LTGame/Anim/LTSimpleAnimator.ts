@@ -1,8 +1,12 @@
 import { AnimatorEx } from "../LTUtils/AnimatorEx";
+import ArrayEx from "../LTUtils/ArrayEx";
 
 export class LTSimpleAnimator {
 
     private _animators: Laya.Animator[];
+    public get animators(): Laya.Animator[] {
+        return this._animators;
+    }
 
     private _targetAnimName: string;
     public set targetAnimName(value: string) {
@@ -55,6 +59,20 @@ export class LTSimpleAnimator {
         let cacheCurrentAnim = this._currentAnimName;
         this._currentAnimName = null;
         this.targetAnimName = cacheCurrentAnim;
+    }
+
+    public RemoveAnimator(animator: Laya.Animator) {
+        ArrayEx.Remove(this._animators, animator);
+    }
+
+    public AddAnimator(animator: Laya.Animator) {
+        let cacheAnimator = this._animators[0];
+        let playTime = 0;
+        if (cacheAnimator != null) {
+            playTime = cacheAnimator.getCurrentAnimatorPlayState().normalizedTime;
+        }
+        animator.play(this.currentAnimName, 0, playTime);
+        this._animators.push(animator);
     }
 
     public GetStateLength(stateName: string): number {

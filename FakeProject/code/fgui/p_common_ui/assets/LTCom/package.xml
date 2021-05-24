@@ -64,7 +64,7 @@
     <image id="8gel1r" name="sp_tu2.png" path="/img/"/>
     <image id="8gel1s" name="sp_tu1.png" path="/img/"/>
     <component id="8gel1t" name="view_mygame.xml" path="/cmp/"/>
-    <component id="8gel1u" name="Zhuawawa.xml" path="/ui/" exported="true"/>
+    <component id="8gel1u" name="Zhuawawa.xml" path="/ui/"/>
     <image id="8gel1v" name="抓娃娃.png" path="/效果图/"/>
     <image id="8gel1w" name="btn_zhua.png" path="/img/"/>
     <image id="8gel1x" name="sp_shou.png" path="/img/"/>
@@ -299,6 +299,28 @@
     <image id="qets8h" name="btn_xiayiye.png" path="/img/rank/"/>
     <image id="qets8i" name="btn_shangyiye.png" path="/img/rank/"/>
     <image id="qets8j" name="biaoti.png" path="/img/rank/"/>
+    <image id="mwzx8k" name="btn_huang.png" path="/img/新公共彩蛋/" scale="9grid" scale9grid="28,24,24,23"/>
+    <image id="mwzx8l" name="btn_lan.png" path="/img/新公共彩蛋/" scale="9grid" scale9grid="33,29,45,30"/>
+    <image id="mwzx8m" name="icon_commone_勾选.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8n" name="sp_caidan.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8o" name="sp_caidanjiangli.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8p" name="sp_caidankuang.png" path="/img/新公共彩蛋/" scale="9grid" scale9grid="56,37,112,34"/>
+    <image id="mwzx8q" name="sp_diercihuode.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8r" name="sp_disancihuode.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8s" name="sp_diyicihuode.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8t" name="sp_fangqidajiang.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8u" name="sp_jiesuo.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8v" name="sp_shipin2.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8w" name="sp_suo.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8x" name="sp_wupinzhao.png" path="/img/新公共彩蛋/" scale="9grid" scale9grid="38,39,52,51"/>
+    <image id="mwzx8y" name="sp_xuanzhongkuang.png" path="/img/新公共彩蛋/"/>
+    <image id="mwzx8z" name="彩蛋.jpg" path="/img/新公共彩蛋/"/>
+    <image id="mwzx90" name="彩蛋奖励.jpg" path="/img/新公共彩蛋/"/>
+    <component id="mwzx91" name="btn_giveup.xml" path="/cmp/"/>
+    <component id="mwzx92" name="btn_unlock_ad_01.xml" path="/cmp/"/>
+    <component id="mwzx93" name="view_item_egg.xml" path="/cmp/"/>
+    <component id="mwzx94" name="view_unlock_progress.xml" path="/cmp/"/>
+    <component id="mwzx95" name="EggUnlock.xml" path="/ui/" exported="true"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

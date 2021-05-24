@@ -8,21 +8,16 @@ export default class LTG_UI_ScreenShoot extends fgui.GComponent {
 	public m_view:LTG_UI_view_screenshoot;
 	public m_img_cover:fgui.GImage;
 	public m_anim_cover:fgui.Transition;
-
 	public static URL:string = "ui://hbq27te3t2mg74";
 
 	public static createInstance():LTG_UI_ScreenShoot {
-		return <LTG_UI_ScreenShoot><any>(fgui.UIPackage.createObject("LTCom","ScreenShoot"));
+		return <LTG_UI_ScreenShoot>(fgui.UIPackage.createObject("LTCom", "ScreenShoot"));
 	}
 
-	public constructor() {
-		super();
-	}
-
-	protected onConstruct(): void {
-		this.m_img_bg = <fgui.GGraph><any>(this.getChildAt(0));
-		this.m_view = <LTG_UI_view_screenshoot><any>(this.getChildAt(1));
-		this.m_img_cover = <fgui.GImage><any>(this.getChildAt(2));
+	protected onConstruct():void {
+		this.m_img_bg = <fgui.GGraph>(this.getChildAt(0));
+		this.m_view = <LTG_UI_view_screenshoot>(this.getChildAt(1));
+		this.m_img_cover = <fgui.GImage>(this.getChildAt(2));
 		this.m_anim_cover = this.getTransitionAt(0);
 	}
 }

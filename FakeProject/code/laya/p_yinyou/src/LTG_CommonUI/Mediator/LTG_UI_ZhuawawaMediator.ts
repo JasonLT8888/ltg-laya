@@ -1,4 +1,4 @@
-import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
+/*import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_Zhuawawa from "../UI/LTCom/LTG_UI_Zhuawawa";
 import MonoHelper, { EActionType } from "../../LTGame/LTUtils/MonoHelper";
 import MathEx from "../../LTGame/LTUtils/MathEx";
@@ -105,4 +105,4 @@ export default class LTG_UI_ZhuawawaMediator extends BaseUIMediator<LTG_UI_Zhuaw
 
     }
 
-}
+}*/
