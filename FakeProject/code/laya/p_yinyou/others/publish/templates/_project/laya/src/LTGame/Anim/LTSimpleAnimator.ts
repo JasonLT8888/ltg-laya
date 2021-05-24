@@ -65,13 +65,19 @@ export class LTSimpleAnimator {
         ArrayEx.Remove(this._animators, animator);
     }
 
-    public AddAnimator(animator: Laya.Animator) {
-        let cacheAnimator = this._animators[0];
-        let playTime = 0;
-        if (cacheAnimator != null) {
-            playTime = cacheAnimator.getCurrentAnimatorPlayState().normalizedTime;
+    public AddAnimator(animator: Laya.Animator, noPlay: boolean = false) {
+        if (animator == null) {
+            console.error("待增加的animator为空");
+            return;
         }
-        animator.play(this.currentAnimName, 0, playTime);
+        if (!noPlay) {
+            let cacheAnimator = this._animators[0];
+            let playTime = 0;
+            if (cacheAnimator != null) {
+                playTime = cacheAnimator.getCurrentAnimatorPlayState().normalizedTime;
+            }
+            animator.play(this.currentAnimName, 0, playTime);
+        }
         this._animators.push(animator);
     }
 

@@ -65,10 +65,10 @@ export class LTUtils {
         directionLight.shadowCascadesMode = Laya.ShadowCascadesMode.NoCascades;
     }
 
-    public static FindChild(parent: Laya.Sprite3D, path: string): Laya.Sprite3D {
-        if (path == "") return parent;
+    public static FindChild(parent: Laya.Node, path: string): Laya.Node {
+        if (path == "") return parent as Laya.Node;
         var splitPath = path.split("/");
-        return LTUtils._FindChild(splitPath, parent, 0) as Laya.Sprite3D;
+        return LTUtils._FindChild(splitPath, parent, 0) as Laya.Node;
     }
 
     private static _FindChild(nodeName: string[], currentNode: Laya.Node, currentLevel: number): Laya.Node {

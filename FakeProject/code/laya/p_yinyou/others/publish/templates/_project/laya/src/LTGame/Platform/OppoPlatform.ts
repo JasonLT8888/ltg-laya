@@ -355,7 +355,7 @@ export default class OppoPlatform extends DefaultPlatform {
         }
         if (this._bannerAd) {
             this._bannerAd.show();
-            this.noAdTime = 30;
+            this.noAdTime = 5;
             console.log('展示已有banner');
             return;
         }
@@ -446,7 +446,7 @@ export default class OppoPlatform extends DefaultPlatform {
         UI_ImageBannerMediator.instance.Hide();
     }
     async ShowNativeAd() {
-        this.noAdTime = 30;
+        this.noAdTime = 5;
         // await this._ShowNative();
     }
     HideNativeAd() {
