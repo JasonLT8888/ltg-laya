@@ -8,9 +8,9 @@
         "res/config",
         "res/fgui_load"
     ],
-    "maxSinglePackSize": 10,
-    "maxTotalPackSize": 40,
-    "packType": 1,
+    "maxSinglePackSize": 4,
+    "maxTotalPackSize": 16,
+    "packType": 0,
     "compress": true,
     "es5": false,
     "isDebug": true

@@ -116,7 +116,6 @@ export class SubpackHelper {
             let gameJsName = "";
             switch (this._packConfig.platform) {
                 case "oppo":
-                case "ks":
                     gameJsName = "main";
                     break;
                 default:
@@ -141,9 +140,6 @@ export class SubpackHelper {
             case "vivo":
                 gameJsonName = "src/manifest";
                 break;
-            case "ks":
-                gameJsonName = "game";
-                break;
             default:
                 gameJsonName = "game";
                 break;
@@ -155,6 +151,7 @@ export class SubpackHelper {
         let gameJsonStr = fs.readFileSync(gameJsonPath, {
             "encoding": "utf-8"
         });
+
         let gameJson = JSON.parse(gameJsonStr);
         let subpacks = [];
         let upRootPath = path.join(this._rootPath, "./../");
@@ -175,7 +172,6 @@ export class SubpackHelper {
                 }
             }
         }
-
         //写出game.json文件
         if (this._packConfig.openDataContext) {
             gameJson['openDataContext'] = "openDataContext";
