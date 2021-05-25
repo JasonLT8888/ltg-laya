@@ -9,13 +9,7 @@ import LTG_UI_FindGame from "./LTG_UI_FindGame";
 import LTG_UI_view_findgame from "./LTG_UI_view_findgame";
 import LTG_UI_MyGame from "./LTG_UI_MyGame";
 import LTG_UI_view_mygame from "./LTG_UI_view_mygame";
-import LTG_UI_Zhuawawa from "./LTG_UI_Zhuawawa";
-import LTG_UI_view_zhuazi from "./LTG_UI_view_zhuazi";
-import LTG_UI_view_zww from "./LTG_UI_view_zww";
 import LTG_UI_EggWall from "./LTG_UI_EggWall";
-import LTG_UI_btn_show_tips from "./LTG_UI_btn_show_tips";
-import LTG_UI_item_view_eggwall from "./LTG_UI_item_view_eggwall";
-import LTG_UI_view_grow_01 from "./LTG_UI_view_grow_01";
 import LTG_UI_Roll from "./LTG_UI_Roll";
 import LTG_UI_item_view_roll from "./LTG_UI_item_view_roll";
 import LTG_UI_view_roll_panel from "./LTG_UI_view_roll_panel";
@@ -46,6 +40,10 @@ import LTG_UI_iconVdieo from "./LTG_UI_iconVdieo";
 import LTG_UI_videoItem from "./LTG_UI_videoItem";
 import LTG_UI_normal_btn from "./LTG_UI_normal_btn";
 import LTG_UI_RankList from "./LTG_UI_RankList";
+import LTG_UI_btn_unlock_ad_01 from "./LTG_UI_btn_unlock_ad_01";
+import LTG_UI_view_item_egg from "./LTG_UI_view_item_egg";
+import LTG_UI_view_unlock_progress from "./LTG_UI_view_unlock_progress";
+import LTG_UI_EggUnlock from "./LTG_UI_EggUnlock";
 import LTG_UI_view_enter_code from "./LTG_UI_view_enter_code";
 import LTG_UI_UnlockItem from "./LTG_UI_UnlockItem";
 import LTG_UI_btn_unlock_ad from "./LTG_UI_btn_unlock_ad";
@@ -56,7 +54,7 @@ import LTG_UI_view_watchguide from "./LTG_UI_view_watchguide";
 import LTG_UI_ScreenShoot from "./LTG_UI_ScreenShoot";
 import LTG_UI_view_screenshoot from "./LTG_UI_view_screenshoot";
 
-export default class LTComBinder{
+export default class LTComBinder {
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(LTG_UI_Set.URL, LTG_UI_Set);
 		fgui.UIObjectFactory.setExtension(LTG_UI_Notice.URL, LTG_UI_Notice);
@@ -67,13 +65,7 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_findgame.URL, LTG_UI_view_findgame);
 		fgui.UIObjectFactory.setExtension(LTG_UI_MyGame.URL, LTG_UI_MyGame);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_mygame.URL, LTG_UI_view_mygame);
-		fgui.UIObjectFactory.setExtension(LTG_UI_Zhuawawa.URL, LTG_UI_Zhuawawa);
-		fgui.UIObjectFactory.setExtension(LTG_UI_view_zhuazi.URL, LTG_UI_view_zhuazi);
-		fgui.UIObjectFactory.setExtension(LTG_UI_view_zww.URL, LTG_UI_view_zww);
 		fgui.UIObjectFactory.setExtension(LTG_UI_EggWall.URL, LTG_UI_EggWall);
-		fgui.UIObjectFactory.setExtension(LTG_UI_btn_show_tips.URL, LTG_UI_btn_show_tips);
-		fgui.UIObjectFactory.setExtension(LTG_UI_item_view_eggwall.URL, LTG_UI_item_view_eggwall);
-		fgui.UIObjectFactory.setExtension(LTG_UI_view_grow_01.URL, LTG_UI_view_grow_01);
 		fgui.UIObjectFactory.setExtension(LTG_UI_Roll.URL, LTG_UI_Roll);
 		fgui.UIObjectFactory.setExtension(LTG_UI_item_view_roll.URL, LTG_UI_item_view_roll);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_roll_panel.URL, LTG_UI_view_roll_panel);
@@ -104,6 +96,10 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_videoItem.URL, LTG_UI_videoItem);
 		fgui.UIObjectFactory.setExtension(LTG_UI_normal_btn.URL, LTG_UI_normal_btn);
 		fgui.UIObjectFactory.setExtension(LTG_UI_RankList.URL, LTG_UI_RankList);
+		fgui.UIObjectFactory.setExtension(LTG_UI_btn_unlock_ad_01.URL, LTG_UI_btn_unlock_ad_01);
+		fgui.UIObjectFactory.setExtension(LTG_UI_view_item_egg.URL, LTG_UI_view_item_egg);
+		fgui.UIObjectFactory.setExtension(LTG_UI_view_unlock_progress.URL, LTG_UI_view_unlock_progress);
+		fgui.UIObjectFactory.setExtension(LTG_UI_EggUnlock.URL, LTG_UI_EggUnlock);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_enter_code.URL, LTG_UI_view_enter_code);
 		fgui.UIObjectFactory.setExtension(LTG_UI_UnlockItem.URL, LTG_UI_UnlockItem);
 		fgui.UIObjectFactory.setExtension(LTG_UI_btn_unlock_ad.URL, LTG_UI_btn_unlock_ad);

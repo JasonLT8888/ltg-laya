@@ -1,13 +1,15 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_EggWall from "../UI/LTCom/LTG_UI_EggWall";
-import LTG_UI_item_view_eggwall from "../UI/LTCom/LTG_UI_item_view_eggwall";
 import { LTG_Com_EggWallData, EEggState } from "../Data/LTG_Com_EggWallData";
-import StringEx from "../../LTGame/LTUtils/StringEx";
-import LTPlatform from "../../LTGame/Platform/LTPlatform";
-import LTUI from "../../LTGame/UIExt/LTUI";
 import { EggConfig } from "../../script/config/EggConfig";
-import { LTG_Com_UnlockItemData } from "../Data/LTG_Com_UnlockItemData";
-import { RewardCodeConfig } from "../../script/config/RewardCodeConfig";
+import LTG_UI_view_item_egg from "../UI/LTCom/LTG_UI_view_item_egg";
+import { CmpSceneDisplay } from "../../LTGame/UIExt/Cmp/CmpSceneDisplay";
+import LTUI from "../../LTGame/UIExt/LTUI";
+import { EEggUnlockType } from "../Common/EEggUnlockType";
+import LTG_UI_EggUnlockMediator from "./LTG_UI_EggUnlockMediator";
+import { CmpSimpleLoader } from "../../LTGame/UIExt/Cmp/CmpSimpleLoader";
+import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
 
 export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWall> {
 
@@ -22,148 +24,169 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
 
     private _cacheData: LTG_Com_EggWallData;
 
-    private _showIndex: number;
+    private _selectIndex: number;
+
+    private _avilableConfigs: EggConfig.config[];
+
+    private _displayScene: CmpSceneDisplay;
+    private _displayPlayer: CmpSimpleLoader;
 
     _OnShow() {
         super._OnShow();
         // your code
+
+        this._avilableConfigs = EggConfig.dataList.filter((config: EggConfig.config) => {
+            return config.avliable;
+        });
 
         this._cacheData = this._openParam as LTG_Com_EggWallData;
         if (this._cacheData == null) {
             throw new Error("请调用LTG_Com_EggWallData进行界面打开操作");
         }
 
-        this._showIndex = -1;
-        let data = EggConfig.dataList[0];
-        if (data.avliable) {
-            this._showIndex = 0;
-            if (!StringEx.IsNullOrEmpty(data.display_path)) {
-                this.ui.m_loader_display.url = data.display_path;
-            }
-        }
-        if (this._showIndex == -1) {
-            this.ui.m_loader_display.visible = false;
-            this.ui.m_img_grow.visible = false;
-        }
+        this._selectIndex = -1;
+
+        this._displayScene = new CmpSceneDisplay(this.ui.m_img_display);
 
         this.ui.m_list_view.setVirtual();
         this.ui.m_list_view.itemRenderer = Laya.Handler.create(this, this._OnItemRender, null, false);
-        this.ui.m_list_view.numItems = EggConfig.dataList.length;
+        this.ui.m_list_view.numItems = this._avilableConfigs.length;
 
         this.ui.m_view_entercode.m_text_code.valign = "middle";
         this.ui.m_view_entercode.m_text_code.nativeInput.promptColor = "#000000";
 
         this.ui.m_btn_back.onClick(this, this._OnClickBack);
         this.ui.m_view_entercode.m_btn_duihuan.onClick(this, this._OnClickEnterCode);
+
+        this._CreateScene();
     }
 
-    private _OnItemRender(index: number, itemUI: LTG_UI_item_view_eggwall) {
-        let data = EggConfig.dataList[index];
-        if (!StringEx.IsNullOrEmpty(data.icon_path)) {
-            itemUI.m_loader_icon.url = data.icon_path;
-        }
-        if (!StringEx.IsNullOrEmpty(data.lockicon_path)) {
-            itemUI.m_loader_mask.url = data.lockicon_path;
-        }
-        if (data.avliable) {
-            let lockState = LTG_Com_EggWallData.GetEggState(data);
-            switch (lockState) {
-                case EEggState.Unlocked:
-                    itemUI.m_btn_get_tip.visible = false;
-                    itemUI.m_btn_watchad.visible = false;
-                    itemUI.m_text_unlocked.visible = true;
-                    itemUI.m_text_code.visible = false;
-                    break;
-                case EEggState.Locked:
-                    itemUI.m_btn_get_tip.visible = true;
-                    itemUI.m_btn_watchad.visible = false;
-                    itemUI.m_text_unlocked.visible = false;
-                    itemUI.m_text_code.visible = false;
-                    break;
-                case EEggState.Unlocking:
-                    itemUI.m_text_code.visible = false;
-                    itemUI.m_btn_get_tip.visible = false;
+    private async _CreateScene() {
+        LTUI.ShowLoading('资源加载中');
 
-                    itemUI.m_btn_watchad.visible = true;
-                    itemUI.m_btn_watchad.m_text_progress.text = LTG_Com_EggWallData.GetCodeUnlockProgress(data.reward_code);
+        await this._displayScene.LoadScene('ZS_Egg');
+        this._displayScene.camera.clearColor = new Laya.Vector4(0, 0, 0, 0);
+        this._displayPlayer = new CmpSimpleLoader(LTUtils.FindChild(this._displayScene.s3d, 'ZS_01/xuanzhuan/jiaose') as Laya.Sprite3D);
 
-                    itemUI.m_text_unlocked.visible = false;
-                    break;
-                case EEggState.ShowHint:
-                    itemUI.m_btn_get_tip.visible = false;
-                    itemUI.m_btn_watchad.visible = false;
-                    itemUI.m_text_unlocked.visible = false;
-                    itemUI.m_text_code.visible = true;
-                    itemUI.m_text_code.text = data.secret;
-                    break;
-            }
-            itemUI.m_img_comming.visible = false;
-            itemUI.m_loader_mask.visible = false;
-            itemUI.m_loader_icon.visible = true;
-            itemUI.m_text_name.visible = true;
-            itemUI.m_text_name.text = data.name;
-        } else {
-            itemUI.m_btn_get_tip.visible = false;
-            itemUI.m_btn_watchad.visible = false;
-            itemUI.m_text_unlocked.visible = false;
-            itemUI.m_img_comming.visible = true;
-            itemUI.m_loader_mask.visible = true;
-            itemUI.m_loader_icon.visible = false;
-            itemUI.m_text_name.visible = false;
-            itemUI.m_text_code.visible = false;
-        }
-        itemUI.m_btn_get_tip.onClick(this, this._OnClickUnlockHint, [index]);
-        itemUI.m_btn_watchad.onClick(this, this._OnClickWatchAd, [index]);
-        itemUI.m_loader_icon.onClick(this, this._OnClickItem, [index]);
+        LTUI.HideLoading();
     }
 
-    private _OnClickItem(index: number) {
-        let data = EggConfig.dataList[index];
-        if (!data.avliable) {
-            LTUI.Toast("彩蛋尚未解锁");
-            return;
+    _OnHide() {
+        this._displayScene.Dispose();
+        if (this._cacheData.onUnlocked != null) {
+            this._cacheData.onUnlocked.recover();
         }
-        if (!StringEx.IsNullOrEmpty(data.display_path)) {
-            this.ui.m_loader_display.url = data.display_path;
-        }
-        this.ui.m_loader_display.visible = true;
-        this.ui.m_img_grow.visible = true;
     }
 
-    private _OnClickWatchAd(index: number) {
-        let data = EggConfig.dataList[index];
-        if (!data.avliable) return;
+    private _OnItemRender(index: number, itemUI: LTG_UI_view_item_egg) {
+        let data = this._avilableConfigs[index];
+        itemUI.m_loader_icon.url = data.icon_path;
+
         let lockState = LTG_Com_EggWallData.GetEggState(data);
-        if (lockState != EEggState.Unlocking) return;
-        this._OpenUnlockPanel(data);
+        switch (lockState) {
+            case EEggState.Unlocked:
+                itemUI.m_state_lock.selectedIndex = 0;
+                break;
+            case EEggState.Locked:
+                switch (data.unlock_type) {
+                    case EEggUnlockType.Code:
+                        itemUI.m_state_lock.selectedIndex = 2;
+                        itemUI.m_text_lockstr.text = '彩蛋';
+                        break;
+                    case EEggUnlockType.Share:
+                        itemUI.m_state_lock.selectedIndex = 2;
+                        itemUI.m_text_lockstr.text = '分享';
+                        break;
+                    case EEggUnlockType.WatchAd:
+                        itemUI.m_state_lock.selectedIndex = 1;
+                        itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                        break;
+                    default:
+                        console.error("暂未实现的彩蛋解锁类型" + data.unlock_type);
+                        break;
+                }
+                break;
+            case EEggState.Unlocking:
+                itemUI.m_state_lock.selectedIndex = 1;
+                itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                break;
+        }
+        itemUI.m_img_selected.visible = index == this._selectIndex;
+        itemUI.onClick(this, this._OnClickItem, [index]);
     }
 
-    private async _OnClickUnlockHint(index: number) {
-        let data = EggConfig.dataList[index];
-        if (!data.avliable) return;
+    private async _OnClickItem(index: number) {
+        let data = this._avilableConfigs[index];
         let lockState = LTG_Com_EggWallData.GetEggState(data);
-        if (lockState != EEggState.Locked) return;
+
+        this._selectIndex = index;
+
+        switch (lockState) {
+            case EEggState.Locked:
+                switch (data.unlock_type) {
+                    case EEggUnlockType.WatchAd:
+                        await this._WatchAd(data);
+                        break;
+                }
+                break;
+            case EEggState.Unlocking:
+                await this._WatchAd(data);
+                break;
+            case EEggState.Unlocked:
+                break;
+        }
+
+        LTUI.ShowLoading('资源加载中', false);
+        await this._displayPlayer.LoadObj(data.model_path);
+        LTUI.HideLoading();
+
+        this.ui.m_list_view.refreshVirtualList();
+    }
+
+    private async _WatchAd(config: EggConfig.config) {
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
-            LTG_Com_EggWallData.ShowEggHint(data.reward_code);
-            this.ui.m_list_view.refreshVirtualList();
+            let isUnlocked = LTG_Com_EggWallData.RecordWatchAD(config.id);
+            if (isUnlocked) {
+                this._UnlockItem(config);
+            }
         } else {
-            LTUI.Toast("跳过广告无法获得奖励");
+            LTUI.Toast('跳过广告无法获得奖励');
         }
     }
 
-    private _OpenUnlockPanel(data: EggConfig.config) {
-        let uiData = new LTG_Com_UnlockItemData();
-        uiData.onClose = Laya.Handler.create(null, () => {
-            this.ui.m_list_view.refreshVirtualList();
-        });
-        uiData.onUnlocked = this._cacheData.onUnlocked;
-        uiData.rewardConfig = RewardCodeConfig.data[data.reward_code];
-        uiData.Send();
+    public RefreshUI() {
+        if (!this.isShow) return;
+        this.ui.m_list_view.refreshVirtualList();
     }
 
     private _OnClickEnterCode() {
-        LTG_Com_UnlockItemData.HandleCodeEnter(this.ui.m_view_entercode.m_text_code.text, this._cacheData.onUnlocked);
+        let code = this.ui.m_view_entercode.m_text_code.text;
+        let searchConfig = this._SearchEnterCode(code);
+        if (searchConfig == null) {
+            return;
+        }
+        if (searchConfig.unlock_type != EEggUnlockType.Code) {
+            return;
+        }
+        let eggState = LTG_Com_EggWallData.GetEggState(searchConfig);
+        if (eggState != EEggState.Locked) {
+            return;
+        }
+        LTG_UI_EggUnlockMediator.instance.Show([searchConfig, Laya.Handler.create(this, this._UnlockItem, [searchConfig])]);
+    }
+
+    private _UnlockItem(config: EggConfig.config) {
+        this._cacheData.onUnlocked.runWith([config.reward_type, config.reward_value]);
+    }
+
+    private _SearchEnterCode(code: string): EggConfig.config {
+        for (let eggConfig of this._avilableConfigs) {
+            if (eggConfig.code == code) {
+                return eggConfig;
+            }
+        }
+        return null;
     }
 
     private _OnClickBack() {

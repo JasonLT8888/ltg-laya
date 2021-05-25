@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImageLayer="1">
+<component size="750,1334" designImage="ui://hbq27te3mwzx8z" designImageLayer="1">
   <displayList>
     <image id="n4_8gel" name="img_bg" src="q96u89" fileName="img/bg_s.png" xy="0,-220" size="750,1554">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <component id="n15_8gel" name="img_grow" src="8gel2v" fileName="cmp/view_grow_01.xml" xy="117,140">
+    <component id="n0_8gel" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="26,72"/>
+    <graph id="n24_jlyk" name="img_display" xy="180,88" size="389,558" type="rect">
       <relation target="" sidePair="center-center,middle-middle"/>
-    </component>
-    <component id="n0_8gel" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="26,128"/>
-    <image id="n1_8gel" name="n1" src="8gel2f" fileName="img/sp_caidanqing.png" xy="204,121">
+    </graph>
+    <image id="n1_8gel" name="n1" src="8gel2f" fileName="img/sp_caidanqing.png" xy="204,69">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <loader id="n3_8gel" name="loader_display" xy="261,211" size="204,247" url="ui://hbq27te38gel2h" align="center" clearOnPublish="true">
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </loader>
-    <list id="n14_8gel" name="list_view" xy="0,466" size="750,742" layout="flow_hz" overflow="scroll" margin="9,10,23,0" lineGap="8" colGap="29" lineItemCount="3" defaultItem="ui://hbq27te38gel2u" align="center">
+    <list id="n14_8gel" name="list_view" xy="0,663" size="750,545" layout="flow_hz" overflow="scroll" lineGap="17" colGap="18" lineItemCount="3" defaultItem="ui://hbq27te3mwzx93" align="center">
       <relation target="" sidePair="center-center,bottom-bottom"/>
       <item/>
       <item/>
       <item/>
       <item/>
       <item/>
+      <item/>
     </list>
-    <component id="n16_n2g1" name="view_entercode" src="n2g16q" fileName="cmp/view_enter_code.xml" xy="0,1234">
+    <component id="n16_n2g1" name="view_entercode" src="n2g16q" fileName="cmp/view_enter_code.xml" xy="0,1212">
       <relation target="" sidePair="width-width,bottom-bottom"/>
     </component>
   </displayList>
