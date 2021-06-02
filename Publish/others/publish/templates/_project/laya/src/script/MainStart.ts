@@ -26,6 +26,8 @@ export default class MainStart extends LTStart {
     private _gameName = "p_ltg";
 
     _HandleInitPlatform(ePlatform: EPlatformType, platformData: LTPlatformData) {
+        window["__GM"] = false;
+
         switch (ePlatform) {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");

@@ -7,7 +7,9 @@
     <component id="n1_uo3l" name="view" src="8gel4w" fileName="cmp/view_sign.xml" xy="374,617" pivot="0.5,0.5" anchor="true">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n3_8gel" name="btn_close" src="8gel5z" fileName="cmp/btn_back_03.xml" xy="30,68"/>
+    <component id="n3_8gel" name="btn_close" src="8gel5z" fileName="cmp/btn_back_03.xml" xy="30,68">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
   </displayList>
   <transition name="anim_enter">
     <item time="0" type="Alpha" target="n0_uo3l" tween="true" startValue="0" endValue="0.8" duration="6"/>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="624,526">
   <displayList>
-    <image id="n0_8gel" name="n0" src="8gel48" fileName="img/sp_guanzhudouying.png" xy="0,0"/>
-    <component id="n5_8gel" name="btn_follow" src="8gel4e" fileName="cmp/btn_close_03.xml" xy="166,406"/>
-    <text id="n6_odt0" name="text_code" xy="167,226" size="161,53" visible="false" fontSize="42" color="#cccccc" align="center" vAlign="middle" bold="true" text="WYSGS">
+    <image id="n0_8gel" name="n0" src="seo196" fileName="img/视频排行榜/sp_guanzhu.png" xy="-54,-260"/>
+    <component id="n5_8gel" name="btn_follow" src="8gel4e" fileName="cmp/btn_close_03.xml" xy="169,536"/>
+    <text id="n6_odt0" name="text_code" xy="306,207" size="10,53" visible="false" fontSize="42" color="#7b16ff" align="center" vAlign="middle" bold="true" text="">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <graph id="n7_odt0" name="btn_watch" xy="524,59" size="100,310" type="rect" lineSize="0" fillColor="#00ffffff"/>
-    <loader id="n8_n2g1" name="icon" xy="52,236" size="394,44" clearOnPublish="true"/>
+    <loader id="n8_n2g1" name="icon" xy="115,217" size="394,44" clearOnPublish="true"/>
   </displayList>
 </component>

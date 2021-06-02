@@ -6,14 +6,19 @@ export default class LTG_UI_FindGame extends fgui.GComponent {
 
 	public m_img_bg:fgui.GGraph;
 	public m_view:LTG_UI_view_findgame;
+
 	public static URL:string = "ui://hbq27te38gel1f";
 
 	public static createInstance():LTG_UI_FindGame {
-		return <LTG_UI_FindGame>(fgui.UIPackage.createObject("LTCom", "FindGame"));
+		return <LTG_UI_FindGame><any>(fgui.UIPackage.createObject("LTCom","FindGame"));
 	}
 
-	protected onConstruct():void {
-		this.m_img_bg = <fgui.GGraph>(this.getChildAt(0));
-		this.m_view = <LTG_UI_view_findgame>(this.getChildAt(1));
+	public constructor() {
+		super();
+	}
+
+	protected onConstruct(): void {
+		this.m_img_bg = <fgui.GGraph><any>(this.getChildAt(0));
+		this.m_view = <LTG_UI_view_findgame><any>(this.getChildAt(1));
 	}
 }
