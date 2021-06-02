@@ -91,11 +91,11 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
                 switch (data.unlock_type) {
                     case EEggUnlockType.Code:
                         itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = '彩蛋';
+                        itemUI.m_text_lockstr.text = data.name;
                         break;
                     case EEggUnlockType.Share:
                         itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = '分享';
+                        itemUI.m_text_lockstr.text = '分享' + LTG_Com_EggWallData.GetUnlockProgress(data.id);
                         break;
                     case EEggUnlockType.WatchAd:
                         itemUI.m_state_lock.selectedIndex = 1;
@@ -107,8 +107,28 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
                 }
                 break;
             case EEggState.Unlocking:
-                itemUI.m_state_lock.selectedIndex = 1;
-                itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                switch (data.unlock_type) {
+                    case EEggUnlockType.WatchAd:
+                        itemUI.m_state_lock.selectedIndex = 1;
+                        itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                        break;
+                    case EEggUnlockType.Code:
+                        itemUI.m_state_lock.selectedIndex = 2;
+                        itemUI.m_text_lockstr.text = data.name;
+                        break;
+                    case EEggUnlockType.Share:
+                        itemUI.m_state_lock.selectedIndex = 2;
+                        itemUI.m_text_lockstr.text = "分享" + LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                        break;
+                    default:
+                        break;
+                }
+                if (data.unlock_type == EEggUnlockType.WatchAd) {
+
+                } else {
+                    itemUI.m_state_lock.selectedIndex = 2;
+                    itemUI.m_text_lockstr.text = data.name;
+                }
                 break;
         }
         itemUI.m_img_selected.visible = index == this._selectIndex;
@@ -120,21 +140,41 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
         let lockState = LTG_Com_EggWallData.GetEggState(data);
 
         this._selectIndex = index;
-
-        switch (lockState) {
-            case EEggState.Locked:
-                switch (data.unlock_type) {
-                    case EEggUnlockType.WatchAd:
+        switch (data.unlock_type) {
+            case EEggUnlockType.WatchAd:
+                switch (lockState) {
+                    case EEggState.Locked:
+                    case EEggState.Unlocking:
                         await this._WatchAd(data);
+                        break;
+                    case EEggState.Unlocked:
                         break;
                 }
                 break;
-            case EEggState.Unlocking:
-                await this._WatchAd(data);
+            case EEggUnlockType.Code:
+
+                switch (lockState) {
+                    case EEggState.Locked:
+                        LTUI.Toast("输入彩蛋兑换码");
+                        break;
+                    case EEggState.Unlocking:
+                        LTG_UI_EggUnlockMediator.instance.Show([data, Laya.Handler.create(this, this._UnlockItem, [data])]);
+                        break;
+                    case EEggState.Unlocked:
+                        break;
+                }
                 break;
-            case EEggState.Unlocked:
+            case EEggUnlockType.Share:
+                switch (lockState) {
+                    case EEggState.Locked:
+                        LTUI.Toast("分享视频解锁");
+                        break;
+                    default:
+                        break;
+                }
                 break;
         }
+
 
         LTUI.ShowLoading('资源加载中', false);
         await this._displayPlayer.LoadObj(data.model_path);

@@ -54,7 +54,7 @@ import LTG_UI_view_watchguide from "./LTG_UI_view_watchguide";
 import LTG_UI_ScreenShoot from "./LTG_UI_ScreenShoot";
 import LTG_UI_view_screenshoot from "./LTG_UI_view_screenshoot";
 
-export default class LTComBinder {
+export default class LTComBinder{
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(LTG_UI_Set.URL, LTG_UI_Set);
 		fgui.UIObjectFactory.setExtension(LTG_UI_Notice.URL, LTG_UI_Notice);

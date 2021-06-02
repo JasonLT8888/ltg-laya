@@ -1,0 +1,15 @@
+{
+    "package": "com.ytlj.fksb.hwminigame",
+    "name": "游戏框架",
+    "appType": "fastgame",
+    "icon": "/oppo256.png",
+    "versionName": "0.0.1",
+    "versionCode": 1,
+    "minPlatformVersion": 1075,
+    "config": {
+        "logLevel": "log"
+    },
+    "display": {
+        "orientation": "portrait"
+    }
+}

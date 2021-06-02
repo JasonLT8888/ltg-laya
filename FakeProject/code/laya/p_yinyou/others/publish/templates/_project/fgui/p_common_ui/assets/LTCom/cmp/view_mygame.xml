@@ -3,7 +3,7 @@
   <displayList>
     <component id="n1_8gel" name="btn_back" src="8gel1n" fileName="cmp/btn_back_01.xml" xy="0,0"/>
     <image id="n2_8gel" name="n2" src="8gel1o" fileName="img/sp_bg00.png" xy="65,94" size="594,769"/>
-    <image id="n3_8gel" name="n3" src="8gel1s" fileName="img/sp_tu1.png" xy="147,259"/>
+    <loader id="n3_8gel" name="icon" xy="147,259" size="422,559" url="ui://hbq27te38gel1s" clearOnPublish="true"/>
     <image id="n4_8gel" name="n4" src="8gel1r" fileName="img/sp_tu2.png" xy="147,258"/>
     <image id="n5_8gel" name="n5" src="8gel1q" fileName="img/sp_wodexiaochengxu.png" xy="192,144"/>
     <image id="n6_8gel" name="n6" src="8gel1p" fileName="img/sp-xiaochengxu.png" xy="275,346"/>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="222,260" designImageOffsetX="-25" designImageOffsetY="-663" designImageAlpha="100">
+  <controller name="unlock_type" exported="true" pages="4,无,3,已解锁,0,弹窗彩蛋,1,视频,2,分享" selected="0"/>
+  <controller name="select_type" exported="true" pages="0,normal,1,select" selected="0"/>
+  <displayList>
+    <image id="n11_8gel" name="n11" src="tun08v" fileName="img/新公共彩蛋/sp_caidankuang.png" xy="0,0" size="222,260">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <loader id="n6_8gel" name="loader_icon" xy="21,8" size="180,180" url="ui://hbq27te38gel2k" align="center" vAlign="middle" fill="scale" clearOnPublish="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <text id="n14_t2mg" name="text_name" xy="99,204" size="73,34" fontSize="26" color="#ffffff" align="center" vAlign="middle" bold="true" text="彩蛋1">
+      <gearDisplay controller="unlock_type" pages="4,0,1,2"/>
+      <gearXY controller="unlock_type" pages="0,1,2" values="74,204|103,205|74,204" default="99,204"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <image id="n18_tun0" name="n18" src="tun08o" fileName="img/新公共彩蛋/sp_suo.png" xy="31,199">
+      <gearDisplay controller="unlock_type" pages="4"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n19_tun0" name="n19" src="tun08y" fileName="img/新公共彩蛋/icon_commone_勾选.png" xy="87,196">
+      <gearDisplay controller="unlock_type" pages="3"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n20_tun0" name="n20" src="8gel2n" fileName="img/sp_shipin.png" xy="63,209" size="32,23" aspect="true" color="#d5964a">
+      <gearDisplay controller="unlock_type" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n21_tun0" name="n21" src="tun08m" fileName="img/新公共彩蛋/sp_xuanzhongkuang.png" xy="-1,1">
+      <gearDisplay controller="select_type" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+</component>

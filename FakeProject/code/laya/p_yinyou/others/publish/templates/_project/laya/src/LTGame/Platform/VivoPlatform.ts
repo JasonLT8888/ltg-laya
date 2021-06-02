@@ -172,11 +172,7 @@ export default class VivoPlatform extends DefaultPlatform {
             this._banner.hide();
         }
     }
-
-
-
-
-
+    
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
@@ -269,7 +265,12 @@ export default class VivoPlatform extends DefaultPlatform {
     }
 
     _CheckUpdate() {
-
+        this.base.onUpdateReady(function (res) {
+            console.log(`isUpdate--- ${res}`)
+            if (res == 1) {
+                this.base.applyUpdate();
+            }
+        });
     }
 
     ShowToast(str: string) {
