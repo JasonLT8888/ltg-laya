@@ -321,6 +321,7 @@
     <component id="mwzx93" name="view_item_egg.xml" path="/cmp/"/>
     <component id="mwzx94" name="view_unlock_progress.xml" path="/cmp/"/>
     <component id="mwzx95" name="EggUnlock.xml" path="/ui/" exported="true"/>
+    <image id="seo196" name="sp_guanzhu1.png" path="/img/视频排行榜/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

@@ -8,7 +8,7 @@
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <component id="n2_en7e" name="btn_close" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="42,137">
-      <relation target="" sidePair="left-left,top-top"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
     </component>
   </displayList>
   <transition name="anim_enter">
