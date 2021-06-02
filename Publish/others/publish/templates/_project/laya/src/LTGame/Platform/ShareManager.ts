@@ -1,4 +1,3 @@
-import LTDictionary from "../LTUtils/LTDictionary";
 import MathEx from "../LTUtils/MathEx";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";

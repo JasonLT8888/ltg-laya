@@ -1,4 +1,3 @@
-import SDK_YQ from "../../../../SDK/Impl/SDK_YQ";
 import LTSDK from "../../../../SDK/LTSDK";
 import { CommonEventId } from "../../../Commom/CommonEventId";
 import { EPlatformType } from "../../../Platform/EPlatformType";
