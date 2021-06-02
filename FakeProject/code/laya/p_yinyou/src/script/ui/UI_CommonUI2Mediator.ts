@@ -132,7 +132,9 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }),
         new UIDemoData("彩蛋墙", () => {
             let data = new LTG_Com_EggWallData();
-            data.onUnlocked = Laya.Handler.create(null, (rewardCode: number, rewardValue: number) => {
+            data.onUnlocked = Laya.Handler.create(null, (rewardType: number, rewardValue: number) => {
+
+                console.log(`解锁彩蛋 道具类型 ${rewardType} 道具id= ${rewardValue}`);
 
             }, null, false);
             data.Send();

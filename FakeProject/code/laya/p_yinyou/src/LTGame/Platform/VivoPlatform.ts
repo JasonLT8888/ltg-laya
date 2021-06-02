@@ -172,11 +172,7 @@ export default class VivoPlatform extends DefaultPlatform {
             this._banner.hide();
         }
     }
-
-
-
-
-
+    
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
