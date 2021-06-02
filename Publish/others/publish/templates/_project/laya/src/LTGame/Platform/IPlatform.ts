@@ -12,6 +12,11 @@ export default interface IPlatform {
     base: any;
 
     /**
+     * 是否使用wav音效
+     */
+    useWAV: boolean;
+
+    /**
      * 平台数据
      */
     platformData: LTPlatformData;
@@ -119,15 +124,6 @@ export default interface IPlatform {
      * 隐藏banner广告
      */
     HideBannerAd();
-    // /**
-    //  * 展示Native广告
-    //  */
-    // ShowNativeAd();
-
-    // /**
-    //  * 隐藏Native广告
-    //  */
-    // HideNativeAd();
 
     /**
      * 设置剪切板内容
@@ -140,7 +136,7 @@ export default interface IPlatform {
      * @param onSuccess 
      * @param onSkipped 
      */
-    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler);
+    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler, onFailed: Laya.Handler);
 
     /**
      * 异步方法展示广告

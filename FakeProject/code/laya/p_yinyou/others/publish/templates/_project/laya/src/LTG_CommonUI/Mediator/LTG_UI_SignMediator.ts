@@ -99,8 +99,6 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
             CommonSaveData.SaveToDisk();
             this._cacheConfig.onSign?.runWith([this._currentReward, true]);
             this.Hide();
-        } else {
-            LTUI.Toast("跳过广告无法获得奖励");
         }
     }
 

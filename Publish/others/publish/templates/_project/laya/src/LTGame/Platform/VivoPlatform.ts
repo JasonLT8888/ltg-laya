@@ -245,16 +245,6 @@ export default class VivoPlatform extends DefaultPlatform {
 
     }
 
-    ShowRewardVideoAdAsync(): Promise<boolean> {
-        return new Promise(function (resolve) {
-
-            LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
-                resolve(true);
-            }), Laya.Handler.create(this, () => {
-                resolve(false);
-            }));
-        });
-    }
     GetFromAppId(): string {
         return null;
     }

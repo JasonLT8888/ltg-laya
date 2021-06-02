@@ -69,8 +69,7 @@ export default class AudioManager {
     }
 
     private _GetAudioPath(audioFilePath: string) {
-        if (LTPlatform.instance.platform == EPlatformType.Native_Android
-            || LTPlatform.instance.platform == EPlatformType.Native_IOS) {
+        if (LTPlatform.instance.useWAV) {
             return 'res/audio_wav/' + audioFilePath.replace('.mp3', '.wav');
         }
         return "res/audio/" + audioFilePath;

@@ -150,8 +150,6 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
             if (isUnlocked) {
                 this._UnlockItem(config);
             }
-        } else {
-            LTUI.Toast('跳过广告无法获得奖励');
         }
     }
 

@@ -123,8 +123,6 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             this._DoRoll();
-        } else {
-            LTUI.Toast("跳过广告无法获得奖励");
         }
     }
 

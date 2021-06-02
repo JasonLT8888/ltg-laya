@@ -532,15 +532,6 @@ export default class OppoPlatform extends DefaultPlatform {
         }
 
     }
-    ShowRewardVideoAdAsync(): Promise<boolean> {
-        return new Promise(function (resolve) {
-            LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
-                resolve(true);
-            }), Laya.Handler.create(this, () => {
-                resolve(false);
-            }));
-        });
-    }
 
     private async _ShowNativeInterstital(index: number): Promise<boolean> {
         return;

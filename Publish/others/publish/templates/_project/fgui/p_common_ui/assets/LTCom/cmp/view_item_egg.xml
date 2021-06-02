@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="224,259">
+  <controller name="state_lock" pages="0,已解锁,1,锁定看视频,2,锁定特殊" selected="0"/>
+  <displayList>
+    <image id="n17_jlyk" name="n17" src="mwzx8p" fileName="img/新公共彩蛋/sp_caidankuang.png" xy="0,0" size="224,259"/>
+    <image id="n18_jlyk" name="img_selected" src="mwzx8y" fileName="img/新公共彩蛋/sp_xuanzhongkuang.png" xy="0,0"/>
+    <image id="n19_jlyk" name="n19" src="mwzx8w" fileName="img/新公共彩蛋/sp_suo.png" xy="23,200">
+      <gearDisplay controller="state_lock" pages="1,2"/>
+    </image>
+    <image id="n20_jlyk" name="n20" src="mwzx8v" fileName="img/新公共彩蛋/sp_shipin2.png" xy="73,209">
+      <gearDisplay controller="state_lock" pages="1"/>
+    </image>
+    <text id="n21_jlyk" name="text_progress" xy="122,204" size="44,34" fontSize="24" color="#ffffff" align="center" bold="true" text="0/3">
+      <gearDisplay controller="state_lock" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n22_jlyk" name="text_lockstr" xy="90,204" size="54,34" fontSize="24" color="#ffffff" align="center" bold="true" text="彩蛋">
+      <gearDisplay controller="state_lock" pages="2"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <loader id="n23_jlyk" name="loader_icon" xy="12,12" size="200,179" align="center" vAlign="middle" fill="scale"/>
+    <image id="n24_jlyk" name="n24" src="mwzx8m" fileName="img/新公共彩蛋/icon_commone_勾选.png" xy="88,198">
+      <gearDisplay controller="state_lock" pages="0"/>
+    </image>
+  </displayList>
+</component>
