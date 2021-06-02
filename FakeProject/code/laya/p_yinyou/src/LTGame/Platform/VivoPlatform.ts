@@ -279,7 +279,12 @@ export default class VivoPlatform extends DefaultPlatform {
     }
 
     _CheckUpdate() {
-
+        this.base.onUpdateReady(function (res) {
+            console.log(`isUpdate--- ${res}`)
+            if (res == 1) {
+                this.base.applyUpdate();
+            }
+        });
     }
 
     ShowToast(str: string) {

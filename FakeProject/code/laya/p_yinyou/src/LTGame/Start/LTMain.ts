@@ -11,12 +11,7 @@ export default class LTMain {
         let config3D = new Config3D();
         config3D.octreeCulling = false;
         config3D.enableMultiLight = false;
-        config3D.isAntialias = true;
-
-        // window["KSiOS"] = true;
-        if (window['kwaigame']) {
-            window["remoteFiles"] = [];
-        }
+        config3D.isAntialias = true; 
 
         //根据IDE设置初始化引擎
         Laya3D.init(this._mainLogic.designWidth, this._mainLogic.designHeight,
@@ -54,37 +49,6 @@ export default class LTMain {
 
 
     }
-
-
-    //ks old 
-    getAdapterInfo(config) {
-        let scaleX = 1;
-        let scaleY = 1;
-        let vw = window.innerWidth;
-        let vh = window.innerHeight;
-        let w = config.width;
-        let h = config.height;
-        config.scaleMode = config.scaleMode.toLowerCase();
-        switch (config.scaleMode) {
-            case "exactfit":
-                scaleX = vw / w;
-                scaleY = vh / h;
-                break;
-
-            case "fixedwidth":
-                scaleX = scaleY = vw / w;
-                break;
-        }
-        return {
-            scaleX: scaleX,
-            scaleY: scaleY,
-            w: w,
-            h: h,
-            vw: vw,
-            vh: vh,
-            rw: w * scaleX,
-            rh: h * scaleY
-        };
-    }
+ 
 
 }

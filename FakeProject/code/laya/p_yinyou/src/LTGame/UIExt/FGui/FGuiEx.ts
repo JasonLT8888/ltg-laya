@@ -34,15 +34,7 @@ export default class FGuiEx {
             ui.setSize(fgui.GRoot.inst.width, this.bottom);
             ui.y = this.top;
         }
-        // if (window['kwaigame']) {
-        //     let scale = (1334 / 750) / (Laya.stage.height / Laya.stage.width);
-        //     ui.asCom._children.forEach(c => {
-        //         if (ui.asCom._children.indexOf(c) > 0) {
-        //             c.scaleY = scale;
-        //         }
-        //     });
-        // }
-
+     
         this._cacheMap.set(ui.constructor.name, param);
 
         window[ui.constructor.name] = ui;
