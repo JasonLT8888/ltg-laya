@@ -5,7 +5,7 @@
 			"name": "chrome调试",
 			"type": "chrome",
 			"request": "launch",
-			"file": "${workspaceRoot}/bin/index.html",
+			"url": "${workspaceRoot}/bin/index.html",
 			// "换成自己的谷歌安装路径，": 比如
 			//"C:\Program Files (x86)\Google\Chrome\Application"
 			//window 默认安装路径为: "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
@@ -14,10 +14,10 @@
 			"runtimeArgs": [
 				"--allow-file-access-from-files",
 				"--allow-file-access-frome-files",
-				" --disable-web-security"
 			],
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
+			"userDataDir": "${workspaceRoot}/.vscode/chrome"
 		}
 	]
 }

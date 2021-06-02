@@ -6,6 +6,8 @@ import LTSDK from "../../../../SDK/LTSDK";
 import { ECheckState } from "../../../../SDK/common/ECheckState";
 
 export class NativeAndroidPlatform extends DefaultPlatform {
+    useWAV = true;
+    
     platform: EPlatformType = EPlatformType.Native_Android;
     safeArea: LTGame.SafeArea = null;
     bridge: any;
@@ -79,16 +81,6 @@ export class NativeAndroidPlatform extends DefaultPlatform {
         }, "RewardVideoAd", JSON.stringify(obj));
 
         this.bridge.call("ShowRewardAd");
-    }
-    ShowRewardVideoAdAsync(): Promise<boolean> {
-
-        return new Promise(function (resolve) {
-            LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
-                resolve(true);
-            }), Laya.Handler.create(this, () => {
-                resolve(false);
-            }));
-        });
     }
 
     ShowInterstitalAd() {

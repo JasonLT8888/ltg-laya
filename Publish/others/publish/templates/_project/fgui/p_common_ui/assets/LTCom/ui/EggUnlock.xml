@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://hbq27te3mwzx90" designImageLayer="1">
+  <displayList>
+    <graph id="n0_jlyk" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n1_jlyk" name="n1" src="mwzx8o" fileName="img/新公共彩蛋/sp_caidanjiangli.png" xy="168,87">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <graph id="n19_jlyk" name="img_display" xy="218,264" size="314,518" type="rect">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <component id="n2_jlyk" name="view_unlock_progress" src="mwzx94" fileName="cmp/view_unlock_progress.xml" xy="143,828">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n3_jlyk" name="btn_giveup" src="mwzx91" fileName="cmp/btn_giveup.xml" xy="65,977">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n5_jlyk" name="btn_unlock_ad" src="mwzx92" fileName="cmp/btn_unlock_ad_01.xml" xy="392,977">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <text id="n18_jlyk" name="n18" xy="258,781" size="234,34" fontSize="24" color="#ffffff" text="3次视频解锁彩蛋奖励">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+</component>

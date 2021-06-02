@@ -97,8 +97,6 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
             } else {
                 this.ui.m_view.m_btn_unlock.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(this._cacheData.rewardConfig.id);
             }
-        } else {
-            LTUI.Toast("跳过广告无法获得奖励");
         }
     }
 

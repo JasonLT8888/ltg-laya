@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="293,116" extention="Button">
+  <displayList>
+    <image id="n3_jlyk" name="n3" src="mwzx8l" fileName="img/新公共彩蛋/btn_lan.png" xy="0,0" size="293,116"/>
+    <image id="n4_jlyk" name="n4" src="mwzx8t" fileName="img/新公共彩蛋/sp_fangqidajiang.png" xy="73,40"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue=".8"/>
+</component>

@@ -322,15 +322,6 @@ export default class QQPlatform extends WXPlatform {
         }
     }
 
-    ShowRewardVideoAdAsync(): Promise<boolean> {
-        return new Promise(function (resolve) {
-            LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
-                resolve(true);
-            }, null, true), Laya.Handler.create(this, () => {
-                resolve(false);
-            }, null, true));
-        });
-    }
     ShowInterstitalAd() {
         if (!this._isInterstitialLoaded) {
             console.error("插页广告尚未加载好");

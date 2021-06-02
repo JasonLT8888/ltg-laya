@@ -1,12 +1,11 @@
-import LTDictionary from "../LTGame/LTUtils/LTDictionary";
 import { CommonEventId } from "../LTGame/Commom/CommonEventId";
 
 export default class SDKADManager {
 
-    private _adDict: LTDictionary<number, Array<SDK.ADInfoData>>;
+    private _adDict: Map<number, Array<SDK.ADInfoData>>;
 
     constructor() {
-        this._adDict = new LTDictionary<number, Array<SDK.ADInfoData>>();
+        this._adDict = new Map<number, Array<SDK.ADInfoData>>();
     }
 
     /**

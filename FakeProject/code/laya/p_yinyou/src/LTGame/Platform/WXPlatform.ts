@@ -8,7 +8,6 @@ import DefaultDevice from "./DefaultDevice";
 import DefaultRecordManager from "./DefaultRecordManager";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
-import IPlatform from "./IPlatform";
 import IRecordManager from "./IRecordManager";
 import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
@@ -379,18 +378,18 @@ export default class WXPlatform extends DefaultPlatform {
         this._rewardVideo.show();
     }
 
-    protected _DoNoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
+    protected _DoNoCacheShowVideo(onSuccess: Laya.Handler, onSkipped: Laya.Handler, onFailed: Laya.Handler) {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
         if (StringEx.IsNullOrEmpty(this.platformData.rewardVideoId)) {
             console.log("无有效的视频广告ID,取消加载");
-            onSkipped.run();
+            onFailed?.run();
             return;
         }
         let createRewardedVideoAd = this._base["createRewardedVideoAd"];
         if (createRewardedVideoAd == null) {
             console.error("无createRewardedVideoAd方法,跳过初始化");
-            onSkipped.run();
+            onFailed?.run();
             return;
         }
         LTUI.ShowLoading("广告拉取中...");
@@ -438,40 +437,14 @@ export default class WXPlatform extends DefaultPlatform {
         });;
     }
 
-
-    private onVideoClose(res): any {
-        Laya.stage.event(CommonEventId.RESUM_AUDIO);
-        console.log("视频回调", res);
-        let isEnd = res["isEnded"] as boolean;
-        Awaiters.NextFrame().then(() => {
-            if (isEnd) {
-                if (this._rewardSuccessed)
-                    this._rewardSuccessed.run();
-            }
-            else {
-                if (this._rewardSkipped)
-                    this._rewardSkipped.run();
-            }
-        });
-    }
-
-    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
+    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler, onFailed: Laya.Handler) {
         if (this._cacheVideoAD) {
             this._DoCacheShowVideo(onSuccess, onSkipped);
         } else {
-            this._DoNoCacheShowVideo(onSuccess, onSkipped);
+            this._DoNoCacheShowVideo(onSuccess, onSkipped, onFailed);
         }
+    }
 
-    }
-    ShowRewardVideoAdAsync(): Promise<boolean> {
-        return new Promise(function (resolve) {
-            LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
-                resolve(true);
-            }), Laya.Handler.create(this, () => {
-                resolve(false);
-            }));
-        });
-    }
     ShowInterstitalAd() {
         if (!this._isInterstitialLoaded) {
             console.error("插页广告尚未加载好");

@@ -49,6 +49,8 @@ export default class UI_ADDemoMediator extends BaseUIMediator<UI_ADDemo> {
             LTUI.Toast("获得奖励");
         }), Laya.Handler.create(this, () => {
             LTUI.Toast("跳过视频");
+        }), Laya.Handler.create(this, ()=>{
+            LTUI.Toast("展示视频失败");
         }));
     }
 
