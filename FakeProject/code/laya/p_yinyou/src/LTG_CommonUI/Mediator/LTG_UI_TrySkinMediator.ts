@@ -102,8 +102,6 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
         if (result) {
             this.Hide();
             this._cacheData.onClose?.runWith(true);
-        } else {
-            LTUI.Toast('跳过广告无法获得奖励');
         }
     }
 

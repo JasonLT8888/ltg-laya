@@ -15,7 +15,10 @@ import StringEx from "../LTUtils/StringEx";
 import CommonSaveData from "../Commom/CommonSaveData";
 
 export default class DefaultPlatform implements IPlatform {
+    useWAV = false;
+
     openDataContext: OpenDataContext;
+    
     setUserCloudStorage(key: string, value: number) {
         console.log(`当前平台不支持上报排行key=${key}value=${value}`);
     }
@@ -115,16 +118,22 @@ export default class DefaultPlatform implements IPlatform {
         console.log("调用HideBannerAd");
         UI_FakeBannerVMediator.instance.Hide();
     }
-    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
+
+    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler, onFailed: Laya.Handler) {
         console.log("调用ShowRewardVideoAd");
         UI_FakeRewardADMediator.instance.Show([onSuccess, onSkipped]);
     }
+
     ShowRewardVideoAdAsync(): Promise<boolean> {
         return new Promise(function (resolve) {
             LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
                 resolve(true);
             }), Laya.Handler.create(this, () => {
                 resolve(false);
+                LTUI.Toast('跳过播放视频无法获得奖励');
+            }), Laya.Handler.create(this, ()=>{
+                resolve(null);
+                LTUI.Toast('拉取视频失败,请稍后重试');
             }));
         });
     }

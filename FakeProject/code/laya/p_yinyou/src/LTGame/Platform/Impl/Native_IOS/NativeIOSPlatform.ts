@@ -8,6 +8,8 @@ export class NativeIOSPlatform extends DefaultPlatform {
 
     platform: EPlatformType = EPlatformType.Native_IOS;
 
+    useWAV = true;
+
     isSupportJumpOther: boolean = false;
 
     private _isDebug: boolean = false;
@@ -60,7 +62,7 @@ export class NativeIOSPlatform extends DefaultPlatform {
         this._AsyncBack("HideBannerAd", null);
     }
 
-    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
+    ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler, onFailed: Laya.Handler) {
         if (this._isDebug) {
             console.log("js 调用 ShowRewardVideoAd");
         }
@@ -69,10 +71,12 @@ export class NativeIOSPlatform extends DefaultPlatform {
         this._AsyncBack("ShowRewardVideoAd",
             (value: string) => {
                 LTUI.HideLoading();
-                console.log("二次转接" + value);
+                if (this._isDebug) {
+                    console.log("二次转接" + value);
+                }
                 switch (value) {
                     case "Failed":
-                        onSkipped?.run();
+                        onFailed?.run();
                         break;
                     case "Close":
                         if (isSuccessed) {
@@ -82,7 +86,7 @@ export class NativeIOSPlatform extends DefaultPlatform {
                         }
                         break;
                     case "Skip":
-                        isSuccessed = false;
+                        isSuccessed = true;
                         break;
                     case "Success":
                         isSuccessed = true;
@@ -95,7 +99,9 @@ export class NativeIOSPlatform extends DefaultPlatform {
     _AsyncBack(msg: string, action: Function) {
         this.base.callWithBack(
             function (value: string) {
-                console.log("接收到OC消息", value);
+                if (this._isDebug) {
+                    console.log("接收到OC消息", value);
+                }
                 action(value);
             }, "_AsyncBack:", msg
         );
@@ -105,7 +111,7 @@ export class NativeIOSPlatform extends DefaultPlatform {
         if (this._isDebug) {
             console.log("js 调用 ShowInterstitalAd");
         }
-        // this.base.call("ShowInterstitalAd");
+        this._AsyncBack("ShowIntersital", null);
     }
 
     RecordEvent(eventId: string, param: object) {
@@ -119,11 +125,11 @@ export class NativeIOSPlatform extends DefaultPlatform {
         this.base.call("RecordEvent:", eventId + "|" + paramStr);
     }
 
-    ShowNormalVideoAd() {
+    ShowFullScreenAd() {
         if (this._isDebug) {
-            console.log("js 调用 ShowNormalVideoAd");
+            console.log("js 调用 ShowFullScreen");
         }
-        // this.base.call("ShowNormalVideoAd");
+        this._AsyncBack("ShowFullScreen", null);
     }
 
 }
