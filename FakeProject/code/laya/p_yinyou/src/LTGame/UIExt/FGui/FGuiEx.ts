@@ -1,6 +1,4 @@
-import LTDictionary from "../../LTUtils/LTDictionary";
 import FGuiData from "./FGuiData";
-import LTMain from "../../Start/LTMain";
 
 export default class FGuiEx {
 
@@ -11,7 +9,7 @@ export default class FGuiEx {
 
     public static safeArea: LTGame.SafeArea;
 
-    private static _cacheMap: LTDictionary<string, FGuiData> = new LTDictionary<string, FGuiData>();
+    private static _cacheMap: Map<string, FGuiData> = new Map<string, FGuiData>();
 
     public static Init(safeArea: LTGame.SafeArea = null) {
         this.safeArea = safeArea;
@@ -70,7 +68,7 @@ export default class FGuiEx {
         let childCount = fgui.GRoot.inst.numChildren;
         for (let i = 0; i < childCount; ++i) {
             let ui = fgui.GRoot.inst.getChildAt(i);
-            let getData = this._cacheMap.Get(ui.constructor.name);
+            let getData = this._cacheMap.get(ui.constructor.name);
             if (getData == null || !getData.needFitScreen) {
                 ui.setSize(fgui.GRoot.inst.width, fgui.GRoot.inst.height);
             } else {

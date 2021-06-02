@@ -1,4 +1,3 @@
-import LTDictionary from "../../LTGame/LTUtils/LTDictionary";
 import GlobalUnit from "../common/GlobalUnit";
 import { EffectConfig } from "../config/EffectConfig";
 import LTRes from "../../LTGame/Res/LTRes";
@@ -21,7 +20,7 @@ export class EffectManager {
     private static _instance: EffectManager;
 
     private _effectRoot: Laya.Sprite3D;
-    private _effectMap: LTDictionary<number, Laya.Sprite3D>;
+    private _effectMap: Map<number, Laya.Sprite3D>;
     private _continueEffects: Laya.Sprite3D[];
 
     private _uiEffectScene: Laya.Scene3D;
@@ -41,7 +40,7 @@ export class EffectManager {
         this._effectRoot = new Laya.Sprite3D("EffectManager");
         GlobalUnit.s3d.addChild(this._effectRoot);
 
-        this._effectMap = new LTDictionary<number, Laya.Sprite3D>();
+        this._effectMap = new Map<number, Laya.Sprite3D>();
         this._continueEffects = [];
     }
 
@@ -124,7 +123,7 @@ export class EffectManager {
             console.error("无效的特效id", effectId);
             return null;
         }
-        let effectObj = this._effectMap.Get(effectId);
+        let effectObj = this._effectMap.get(effectId);
         if (effectObj == null) {
             console.error("特效", effectId, "尚未加载");
             return null;
