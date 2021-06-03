@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://75kiu87knmlki3">
+  <displayList>
+    <graph id="n9_nmlk" name="n9" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ff161a21">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n0_nmlk" name="btn_close" src="74v83q" fileName="cmp/btn.xml" xy="28,60" size="83,44">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87knmlkib"/>
+    </component>
+    <component id="n1_nmlk" name="game_hot" src="nmlkif" fileName="cmp/rank_item.xml" xy="30,182">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n6_nmlk" name="game_new" src="nmlkif" fileName="cmp/rank_item.xml" xy="401,182">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="rank_title" propertyId="0" value="最新榜"/>
+      <property target="rank_bg" propertyId="1" value="ui://75kiu87knmlki4"/>
+    </component>
+    <component id="n7_nmlk" name="mid_banner" src="nmlkij" fileName="cmp/mid_banner.xml" xy="31,360">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <image id="n8_nmlk" name="n8" src="nmlkia" fileName="img/字节导流/sp_jingxuanhaoyou.png" xy="28,601">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <list id="n14_nmlk" name="list" xy="0,643" size="750,689" layout="flow_hz" overflow="scroll" margin="6,0,30,0" lineGap="30" colGap="30" lineItemCount="4" defaultItem="ui://75kiu87knmlkii">
+      <relation target="" sidePair="center-center,middle-middle,bottomext-bottom"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

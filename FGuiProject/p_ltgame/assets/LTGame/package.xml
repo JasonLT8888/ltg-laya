@@ -84,7 +84,7 @@
     <image id="xx3jgu" name="sp_iconbg.png" path="/img/" scale="9grid" scale9grid="43,23,86,120"/>
     <image id="cqevgv" name="guanggaobg.png" path="/img/" scale="9grid" scale9grid="36,36,72,72"/>
     <component id="cqevgw" name="view_game_icon.xml" path="/cmp/cache/" exported="true"/>
-    <component id="vo5igx" name="OppoEnd.xml" path="/ui_common/" exported="true"/>
+    <component id="vo5igx" name="OppoEnd.xml" path="/ui_common/"/>
     <component id="vo5igy" name="btn_scaler_yellow.xml" path="/img/按钮/" exported="true"/>
     <image id="vo5igz" name="btn_anniuhuang2.png" path="/img/btns/" scale="9grid" scale9grid="94,32,44,52"/>
     <image id="vo5ih0" name="sp_shipin.png" path="/img/按钮/"/>
@@ -125,6 +125,22 @@
     <image id="ii3ni0" name="sp_xiaoxiong.png" path="/cmp/"/>
     <component id="n6nfi1" name="side_ads1.xml" path="/cmp/"/>
     <image id="is4ei2" name="查看广告(1).png" path="/img/btns/"/>
+    <image id="nmlki3" name="未标题-10.jpg" path="/img/字节导流/"/>
+    <image id="nmlki4" name="sp_zuixinbg.png" path="/img/字节导流/"/>
+    <image id="nmlki5" name="sp_zuixin.png" path="/img/字节导流/"/>
+    <image id="nmlki6" name="sp_zuirezuixinkuang.png" path="/img/字节导流/" scale="9grid" scale9grid="30,30,60,60"/>
+    <image id="nmlki7" name="sp_zuirebg.png" path="/img/字节导流/"/>
+    <image id="nmlki8" name="sp_zuihuo.png" path="/img/字节导流/"/>
+    <image id="nmlki9" name="sp_jinxuankuang.png" path="/img/字节导流/" scale="9grid" scale9grid="38,38,76,76"/>
+    <image id="nmlkia" name="sp_jingxuanhaoyou.png" path="/img/字节导流/"/>
+    <image id="nmlkib" name="sp_guanbi.png" path="/img/字节导流/"/>
+    <image id="nmlkic" name="bg.png" path="/img/字节导流/"/>
+    <image id="nmlkid" name="banner.png" path="/img/字节导流/"/>
+    <component id="nmlkie" name="MiniGames.xml" path="/ui_nav/" exported="true"/>
+    <component id="nmlkif" name="rank_item.xml" path="/cmp/"/>
+    <component id="nmlkig" name="tt_icon.xml" path="/cmp/"/>
+    <component id="nmlkii" name="ttgame_items.xml" path="/cmp/"/>
+    <component id="nmlkij" name="mid_banner.xml" path="/cmp/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
