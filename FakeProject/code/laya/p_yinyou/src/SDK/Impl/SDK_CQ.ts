@@ -117,6 +117,7 @@ export default class SDK_CQ extends SDK_Default {
                     adData.ad_package = ad.path;
                     adData.ad_count = ad.player;
                     adData.ad_dot = ad.dot;
+                    adData.ad_device = ad.device;
                     if (adData.ad_appid != this.appId) {
                         adList.push(adData);
                     }
@@ -272,6 +273,9 @@ export default class SDK_CQ extends SDK_Default {
         let sendData = {
             appid: LTPlatform.instance.platform == EPlatformType.Oppo ? LTPlatform.instance.platformData.appKey : this.appId,
             openId: LTSDK.instance.uid
+        }
+        if (LTPlatform.instance.platform == EPlatformType.TT || LTPlatform.instance.platform == EPlatformType.Web) {
+            sendData.appid = "88888888";
         }
         LTHttp.Send(this._headPrefix + "/ads/get", Laya.Handler.create(this, this.onGetAdlist), Laya.Handler.create(this, (res) => {
             console.log("广告信息获取失败", res);
