@@ -360,6 +360,21 @@
     <component id="fig0a6" name="common_ad_btn.xml" path="/cmp/"/>
     <image id="fig0aa" name="sp_diertian.png" path="/img/七日签到/"/>
     <image id="fig0ab" name="di_2.png" path="/img/七日签到/" scale="9grid" scale9grid="40,36,80,72"/>
+    <image id="fig0ac" name="zhp_jian.png" path="/img/转盘/"/>
+    <image id="fig0ad" name="zhp_di.png" path="/img/转盘/"/>
+    <image id="fig0ae" name="loading_2.png" path="/img/转盘/"/>
+    <image id="fig0af" name="loading_1.png" path="/img/转盘/"/>
+    <image id="fig0ag" name="gifticon.png" path="/img/转盘/"/>
+    <image id="fig0ah" name="fangqi.png" path="/img/转盘/"/>
+    <image id="fig0ai" name="choujiang.png" path="/img/转盘/"/>
+    <image id="fig0aj" name="wg.png" path="/img/转盘/"/>
+    <image id="fig0ak" name="sp_wenan3.png" path="/img/转盘/"/>
+    <image id="fig0al" name="sp_wenan2.png" path="/img/转盘/"/>
+    <image id="fig0am" name="sp_wenan1.png" path="/img/转盘/"/>
+    <image id="fig0an" name="4.png" path="/img/转盘/"/>
+    <image id="fig0ao" name="3.png" path="/img/转盘/"/>
+    <image id="fig0ap" name="2.png" path="/img/转盘/"/>
+    <image id="fig0aq" name="1.png" path="/img/转盘/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>
