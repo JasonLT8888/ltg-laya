@@ -4,7 +4,7 @@
 
 export default class LTG_UI_btn_refuse extends fgui.GButton {
 
-	public m_bg:fgui.GImage;
+	public m_bg:fgui.GLoader;
 
 	public static URL:string = "ui://hbq27te3n2g171";
 
@@ -17,6 +17,6 @@ export default class LTG_UI_btn_refuse extends fgui.GButton {
 	}
 
 	protected onConstruct(): void {
-		this.m_bg = <fgui.GImage><any>(this.getChildAt(0));
+		this.m_bg = <fgui.GLoader><any>(this.getChildAt(0));
 	}
 }

@@ -1,13 +1,10 @@
-import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
-import LTG_UI_Sign from "../UI/LTCom/LTG_UI_Sign";
-import { SignConfig } from "../../script/config/SignConfig";
-import LTUI from "../../LTGame/UIExt/LTUI";
 import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
-import LTG_UI_view_item_sign_01 from "../UI/LTCom/LTG_UI_view_item_sign_01";
-import LTSDK from "../../SDK/LTSDK";
-import { ECheckState } from "../../SDK/common/ECheckState";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
+import { SignConfig } from "../../script/config/SignConfig";
 import { LTG_Com_SignData } from "../Data/LTG_Com_SignData";
+import LTG_UI_Sign from "../UI/LTCom/LTG_UI_Sign";
+import LTG_UI_view_item_sign_01 from "../UI/LTCom/LTG_UI_view_item_sign_01";
 
 export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
 
@@ -77,7 +74,7 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
             this.ui.m_view.m_btn_normal.onClick(this, this._OnClickGet);
             this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickWatchAd);
         }
-
+        LTPlatform.instance.ShowBannerAd();
     }
 
 
@@ -111,6 +108,7 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
     }
 
     _OnHide() {
+        LTPlatform.instance.HideBannerAd();
         this._cacheConfig.onClose?.run();
     }
 
