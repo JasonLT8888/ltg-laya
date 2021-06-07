@@ -222,7 +222,7 @@
     <component id="8gel6b" name="btn_addshortcut.xml" path="/cmp/"/>
     <component id="8gel6c" name="btn_findgame.xml" path="/cmp/"/>
     <image id="odt06d" name="sp_shou(1).png" path="/img/"/>
-    <component id="odt06e" name="WatchGuide.xml" path="/ui/" exported="true"/>
+    <component id="odt06e" name="WatchGuide.xml" path="/ui/"/>
     <image id="odt06f" name="关注.jpg" path="/效果图/"/>
     <image id="odt06g" name="sp_erjibg.png" path="/img/" scale="9grid" scale9grid="45,129,90,45"/>
     <image id="odt06h" name="sp_guanzhu.png" path="/img/"/>
@@ -322,6 +322,44 @@
     <component id="mwzx94" name="view_unlock_progress.xml" path="/cmp/"/>
     <component id="mwzx95" name="EggUnlock.xml" path="/ui/" exported="true"/>
     <image id="seo196" name="sp_guanzhu1.png" path="/img/视频排行榜/"/>
+    <image id="fig097" name="zi_0008_d.png" path="/img/七日签到/"/>
+    <image id="fig098" name="zi_0007_t.png" path="/img/七日签到/"/>
+    <image id="fig099" name="zi_0006_1.png" path="/img/七日签到/"/>
+    <image id="fig09a" name="zi_0005_2.png" path="/img/七日签到/"/>
+    <image id="fig09b" name="zi_0004_3.png" path="/img/七日签到/"/>
+    <image id="fig09c" name="zi_0003_4.png" path="/img/七日签到/"/>
+    <image id="fig09d" name="zi_0002_5.png" path="/img/七日签到/"/>
+    <image id="fig09e" name="zi_0001_6.png" path="/img/七日签到/"/>
+    <image id="fig09f" name="zi_0000_7.png" path="/img/七日签到/"/>
+    <image id="fig09g" name="ylq.png" path="/img/七日签到/"/>
+    <image id="fig09h" name="tittle.png" path="/img/七日签到/"/>
+    <image id="fig09i" name="sbqd.png" path="/img/七日签到/"/>
+    <image id="fig09j" name="riqikuang.png" path="/img/七日签到/" scale="9grid" scale9grid="19,43,78,86"/>
+    <image id="fig09k" name="qd.png" path="/img/七日签到/"/>
+    <image id="fig09l" name="klq.png" path="/img/七日签到/"/>
+    <image id="fig09m" name="jbi_0009_0.png" path="/img/七日签到/"/>
+    <image id="fig09n" name="jbi_0008_1.png" path="/img/七日签到/"/>
+    <image id="fig09o" name="jbi_0007_2.png" path="/img/七日签到/"/>
+    <image id="fig09p" name="jbi_0006_3.png" path="/img/七日签到/"/>
+    <image id="fig09q" name="jbi_0005_4.png" path="/img/七日签到/"/>
+    <image id="fig09r" name="jbi_0004_5.png" path="/img/七日签到/"/>
+    <image id="fig09s" name="jbi_0003_6.png" path="/img/七日签到/"/>
+    <image id="fig09t" name="jbi_0002_7.png" path="/img/七日签到/"/>
+    <image id="fig09u" name="jbi_0001_8.png" path="/img/七日签到/"/>
+    <image id="fig09v" name="jbi_0000_9.png" path="/img/七日签到/"/>
+    <image id="fig09w" name="coin.png" path="/img/七日签到/"/>
+    <image id="fig09x" name="back.png" path="/img/七日签到/"/>
+    <image id="fig09y" name="7day.png" path="/img/七日签到/"/>
+    <font id="fig09z" name="FontSignCoin.fnt" path="/img/七日签到/" exported="true"/>
+    <image id="fig0a0" name="签到.png" path="/img/七日签到/"/>
+    <font id="fig0a1" name="FontDay.fnt" path="/img/七日签到/" exported="true"/>
+    <image id="fig0a2" name="di_1.png" path="/img/七日签到/" scale="9grid" scale9grid="48,48,105,106"/>
+    <component id="fig0a3" name="view_item_sign_08.xml" path="/cmp/"/>
+    <image id="fig0a4" name="btn_1.png" path="/img/七日签到/" scale="9grid" scale9grid="22,16,48,47"/>
+    <image id="fig0a5" name="btn_2.png" path="/img/七日签到/" scale="9grid" scale9grid="21,16,28,47"/>
+    <component id="fig0a6" name="common_ad_btn.xml" path="/cmp/"/>
+    <image id="fig0aa" name="sp_diertian.png" path="/img/七日签到/"/>
+    <image id="fig0ab" name="di_2.png" path="/img/七日签到/" scale="9grid" scale9grid="40,36,80,72"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

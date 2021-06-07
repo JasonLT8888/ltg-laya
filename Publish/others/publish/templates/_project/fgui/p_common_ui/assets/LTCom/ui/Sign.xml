@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImageLayer="1">
+<component size="750,1334" designImage="ui://hbq27te3fig0a0" designImageAlpha="0" designImageLayer="1">
   <displayList>
     <graph id="n0_uo3l" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n1_uo3l" name="view" src="8gel4w" fileName="cmp/view_sign.xml" xy="374,617" pivot="0.5,0.5" anchor="true">
+    <component id="n1_uo3l" name="view" src="8gel4w" fileName="cmp/view_sign.xml" xy="374,574" pivot="0.5,0.5" anchor="true" size="649,1038">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n3_8gel" name="btn_close" src="8gel5z" fileName="cmp/btn_back_03.xml" xy="30,68">
+    <component id="n3_8gel" name="btn_close" src="8gel5s" fileName="cmp/btn_normalg.xml" xy="131,154" size="60,58">
       <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3fig09x"/>
     </component>
   </displayList>
   <transition name="anim_enter">
