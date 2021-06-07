@@ -8,9 +8,8 @@
         "res/fgui_load"
     ],
     "maxSinglePackSize": 4,
-    "maxTotalPackSize": 16,
+    "maxTotalPackSize": 12,
     "packType": 1,
     "compress": true,
-    "openDataContext": true
-    
+    "openDataContext": false
 }
