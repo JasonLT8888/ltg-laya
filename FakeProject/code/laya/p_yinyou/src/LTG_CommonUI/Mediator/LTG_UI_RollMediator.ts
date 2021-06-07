@@ -65,6 +65,8 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
             this._rollIndex.push(i + 1);
             this._rollWeight.push(RollConfig.data[i + 1].roll_weight);
         }
+
+        LTPlatform.instance.ShowBannerAd();
     }
 
     private _UpdateUI() {
@@ -132,6 +134,9 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
     }
     private _OnClickClose() {
         this.Hide();
+    }
+    _OnHide() {
+        LTPlatform.instance.HideBannerAd();
     }
 
 }
