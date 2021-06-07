@@ -10,6 +10,7 @@ import LTG_UI_EggUnlockMediator from "./LTG_UI_EggUnlockMediator";
 import { CmpSimpleLoader } from "../../LTGame/UIExt/Cmp/CmpSimpleLoader";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
 
 export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWall> {
 
@@ -177,7 +178,19 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
 
 
         LTUI.ShowLoading('资源加载中', false);
-        await this._displayPlayer.LoadObj(data.model_path);
+        let model = await this._displayPlayer.LoadObj(data.model_path);
+        if (model) {
+            TransformEx.ResetLocalTrans(model.transform);
+            model.transform.localRotationEuler = new Laya.Vector3(data.rotation[0], data.rotation[1], data.rotation[2]);
+            let pos: Laya.Vector3 = model.transform.localPosition.clone();
+            model.transform.localPosition = new Laya.Vector3(pos.x + data.offset[0], pos.y + data.offset[1], pos.z + data.offset[2]);
+            model.transform.localScale = new Laya.Vector3(data.scale[0], data.scale[1], data.scale[2]);
+            let anim: Laya.Animator = model.getChildAt(0).getComponent(Laya.Animator);
+            if (anim) {
+                anim.play(data.default_anim);
+            }
+        }
+
         LTUI.HideLoading();
 
         this.ui.m_list_view.refreshVirtualList();
