@@ -5,6 +5,7 @@
 export default class LTG_UI_view_item_sign_01 extends fgui.GComponent {
 
 	public m_state_get:fgui.Controller;
+	public m_state_day:fgui.Controller;
 	public m_img_bg:fgui.GImage;
 	public m_img_can_get:fgui.GImage;
 	public m_img_got:fgui.GImage;
@@ -24,6 +25,7 @@ export default class LTG_UI_view_item_sign_01 extends fgui.GComponent {
 
 	protected onConstruct(): void {
 		this.m_state_get = this.getControllerAt(0);
+		this.m_state_day = this.getControllerAt(1);
 		this.m_img_bg = <fgui.GImage><any>(this.getChildAt(0));
 		this.m_img_can_get = <fgui.GImage><any>(this.getChildAt(1));
 		this.m_img_got = <fgui.GImage><any>(this.getChildAt(2));
