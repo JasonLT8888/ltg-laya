@@ -9,7 +9,7 @@
     ],
     "maxSinglePackSize": 4,
     "maxTotalPackSize": 12,
-    "packType": 1,
+    "packType": 0,
     "compress": true,
     "openDataContext": false
 }
