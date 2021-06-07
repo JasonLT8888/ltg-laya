@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="649,1092" designImageOffsetX="-47" designImageOffsetY="-73" designImageLayer="1">
+<component size="649,1092" designImage="ui://hbq27te3fig0a0" designImageOffsetX="-47" designImageOffsetY="-73" designImageAlpha="0" designImageLayer="1">
   <controller name="state" exported="true" pages="0,tosign,1,signed" selected="0"/>
   <displayList>
-    <image id="n1_uo3l" name="n1" src="8gel4x" fileName="img/sp_diban(2).png" xy="0,81" size="649,834"/>
-    <image id="n2_uo3l" name="n2" src="8gel4y" fileName="img/sp_biaoti.png" xy="146,0"/>
-    <component id="n4_uo3l" name="day_1" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="39,203"/>
-    <component id="n10_uo3l" name="day_3" src="8gel53" fileName="cmp/view_item_sign_02.xml" xy="461,204"/>
-    <component id="n11_uo3l" name="day_2" src="8gel55" fileName="cmp/view_item_sign_03.xml" xy="199,203" size="252,180"/>
-    <component id="n12_uo3l" name="day_4" src="8gel53" fileName="cmp/view_item_sign_02.xml" xy="39,406">
-      <property target="text_day" propertyId="0" value="第4天"/>
+    <image id="n1_uo3l" name="n1" src="fig0a2" fileName="img/七日签到/di_1.png" xy="59,124" size="538,826"/>
+    <image id="n2_uo3l" name="n2" src="fig09h" fileName="img/七日签到/tittle.png" xy="224,154"/>
+    <image id="n27_fig0" name="n27" src="fig0ab" fileName="img/七日签到/di_2.png" xy="87,237" size="480,402"/>
+    <component id="n4_uo3l" name="day_1" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="85,242">
+      <property target="text_day" propertyId="0" value="d1t"/>
     </component>
-    <component id="n14_uo3l" name="day_5" src="8gel59" fileName="cmp/view_item_sign_05.xml" xy="199,406" size="148,180"/>
-    <component id="n15_uo3l" name="day_6" src="8gel5a" fileName="cmp/view_item_sign_06.xml" xy="360,406" size="251,180"/>
-    <component id="n17_uo3l" name="day_7" src="8gel5b" fileName="cmp/view_item_sign_07.xml" xy="52,612"/>
+    <component id="n11_uo3l" name="day_2" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="238,242" size="148,190" controller="state_day,1">
+      <property target="text_day" propertyId="0" value="d2t"/>
+      <property target="loader_icon" propertyId="1" value="ui://hbq27te3fig0aa"/>
+    </component>
+    <component id="n10_uo3l" name="day_3" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="393,243">
+      <property target="text_day" propertyId="0" value="d3t"/>
+    </component>
+    <component id="n12_uo3l" name="day_4" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="83,427">
+      <property target="text_day" propertyId="0" value="d4t"/>
+    </component>
+    <component id="n14_uo3l" name="day_5" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="237,427">
+      <property target="text_day" propertyId="0" value="d5t"/>
+    </component>
+    <component id="n15_uo3l" name="day_6" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="392,427">
+      <property target="text_day" propertyId="0" value="d6t"/>
+    </component>
+    <component id="n17_uo3l" name="day_7" src="fig0a3" fileName="cmp/view_item_sign_08.xml" xy="86,661" size="480,152"/>
     <text id="n18_uo3l" name="text_signed" xy="211,830" size="236,79" fontSize="32" color="#ffffff" align="center" vAlign="middle" bold="true" text="今日已领取&#xA;欢迎明天再来！">
       <gearDisplay controller="state" pages="1"/>
     </text>
-    <component id="n19_uo3l" name="btn_normal" src="8gel5i" fileName="cmp/btn_watchad01.xml" xy="10,929">
+    <component id="n19_uo3l" name="btn_normal" src="n2g171" fileName="cmp/btn_refuse.xml" xy="190,947" size="269,90">
       <gearDisplay controller="state" pages="0"/>
+      <Button icon="ui://hbq27te3fig09k"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3fig0a4"/>
     </component>
-    <component id="n26_i8ti" name="btn_watchad" src="8gel5i" fileName="cmp/btn_watchad01.xml" xy="339,928" controller="ad,1">
+    <component id="n26_i8ti" name="btn_watchad" src="fig0a6" fileName="cmp/common_ad_btn.xml" xy="324,876" size="269,96">
       <gearDisplay controller="state" pages="0"/>
-      <Button icon="ui://hbq27te38gel3x"/>
-      <property target="bg" propertyId="1" value="ui://hbq27te38gel3x"/>
+      <Button icon="ui://hbq27te3fig09i"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3fig0a5"/>
     </component>
   </displayList>
 </component>
