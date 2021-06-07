@@ -15,6 +15,7 @@ export namespace EggConfig {
         /** 偏移值 */ readonly offset: number[];
         /** 旋转 */ readonly rotation: number[];
         /** 缩放 */ readonly scale: number[];
+        /** 默认动画 */ readonly default_anim: string;
     }
     export var isConst: boolean = false;
     export var data: {[key: number]: EggConfig.config};

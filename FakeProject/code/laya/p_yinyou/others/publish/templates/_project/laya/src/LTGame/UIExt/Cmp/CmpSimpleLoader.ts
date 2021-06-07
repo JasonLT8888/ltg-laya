@@ -17,8 +17,8 @@ export class CmpSimpleLoader {
         this.placePoint = placePoint;
     }
 
-    public async LoadObj(objPath: string) {
-        if (this._cachePath == objPath) return;
+    public async LoadObj(objPath: string): Promise<Laya.Sprite3D> {
+        if (this._cachePath == objPath) return this.loadObj;
         this._cachePath = objPath;
 
         if (this._loadObj != null) {
@@ -29,6 +29,7 @@ export class CmpSimpleLoader {
         this._loadObj = await LTRes.LoadAndGet(fullPath);
         this.placePoint.addChild(this._loadObj);
         TransformEx.ResetLocalTrans(this._loadObj.transform);
+        return this.loadObj;
     }
 
 }
