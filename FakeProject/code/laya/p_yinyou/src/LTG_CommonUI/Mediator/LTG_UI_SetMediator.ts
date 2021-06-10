@@ -3,6 +3,7 @@ import LTG_UI_Set from "../UI/LTCom/LTG_UI_Set";
 import { LTG_Com_SetData } from "../Data/LTG_Com_SetData";
 import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 import { LTG_Com_RewardCodeData } from "../Data/LTG_Com_RewardCodeData";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class LTG_UI_SetMediator extends BaseUIMediator<LTG_UI_Set> {
 
@@ -34,6 +35,7 @@ export default class LTG_UI_SetMediator extends BaseUIMediator<LTG_UI_Set> {
     }
 
     private _OnClickCode() {
+        LTUI.TrigerBtnClick();
         this.Hide();
         let data = new LTG_Com_RewardCodeData();
         data.onCodeEntered = this._cacheData.onCodeEntered;
@@ -43,6 +45,7 @@ export default class LTG_UI_SetMediator extends BaseUIMediator<LTG_UI_Set> {
     private _OnClickMusic() {
         CommonSaveData.instance.isMusicOn = !CommonSaveData.instance.isMusicOn;
         CommonSaveData.SaveToDisk();
+        LTUI.TrigerBtnClick();
         this.ui.m_view.m_toggle_music.m_toggle_state.selectedIndex = CommonSaveData.instance.isMusicOn ? 1 : 0;
         this._cacheData.onMusicToggled?.run();
     }
@@ -50,11 +53,13 @@ export default class LTG_UI_SetMediator extends BaseUIMediator<LTG_UI_Set> {
     private _OnClickShake() {
         CommonSaveData.instance.isShakeOn = !CommonSaveData.instance.isShakeOn;
         CommonSaveData.SaveToDisk();
+        LTUI.TrigerBtnClick();
         this.ui.m_view.m_toggle_shake.m_toggle_state.selectedIndex = CommonSaveData.instance.isShakeOn ? 1 : 0;
         this._cacheData.onShakeToggled?.run();
     }
 
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

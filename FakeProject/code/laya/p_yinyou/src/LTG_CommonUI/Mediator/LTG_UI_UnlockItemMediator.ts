@@ -88,6 +88,7 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
 
 
     private async _OnClickUnlock() {
+        LTUI.TrigerBtnClick();
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             let isUnlocked = LTG_Com_EggWallData.RecordWatchAD(this._cacheData.rewardConfig.id);
@@ -101,6 +102,7 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
     }
 
     private _OnClickNo() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

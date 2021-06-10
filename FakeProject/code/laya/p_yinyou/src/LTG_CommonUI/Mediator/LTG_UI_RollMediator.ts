@@ -129,10 +129,12 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
     }
 
     private _OnClickFreeRoll() {
+        LTUI.TrigerBtnClick();
         CommonSaveData.instance.freeRollCount--;
         this._DoRoll();
     }
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
     _OnHide() {

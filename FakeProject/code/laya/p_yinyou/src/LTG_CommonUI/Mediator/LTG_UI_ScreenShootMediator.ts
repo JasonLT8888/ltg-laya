@@ -55,6 +55,7 @@ export default class LTG_UI_ScreenShootMediator extends BaseUIMediator<LTG_UI_Sc
     }
 
     private _OnClickShare() {
+        LTUI.TrigerBtnClick();
         LTPlatform.instance.recordManager.ShareVideo(Laya.Handler.create(null, () => {
             this.Hide();
             this._cacheData.onClosed?.runWith([1]);
@@ -66,6 +67,7 @@ export default class LTG_UI_ScreenShootMediator extends BaseUIMediator<LTG_UI_Sc
     }
 
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
         this._cacheData.onClosed?.runWith([0]);
     }
