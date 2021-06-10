@@ -21,6 +21,10 @@ import UI_btn_normal from "./UI_btn_normal";
 import UI_CommonLoad from "./UI_CommonLoad";
 import UI_view_load from "./UI_view_load";
 import UI_side_ads1 from "./UI_side_ads1";
+import UI_MiniGames from "./UI_MiniGames";
+import UI_rank_item from "./UI_rank_item";
+import UI_ttgame_items from "./UI_ttgame_items";
+import UI_mid_banner from "./UI_mid_banner";
 import UI_NativeIconLong from "./UI_NativeIconLong";
 import UI_FakeBanner_V from "./UI_FakeBanner_V";
 import UI_CommonToast from "./UI_CommonToast";
@@ -45,9 +49,7 @@ import UI_item_gameMax from "./UI_item_gameMax";
 import UI_bottomGames from "./UI_bottomGames";
 import UI_view_item_game128 from "./UI_view_item_game128";
 import UI_sliderADs from "./UI_sliderADs";
-import UI_OppoEnd from "./UI_OppoEnd";
 import UI_btn_scaler_yellow from "./UI_btn_scaler_yellow";
-import UI_normal_ad_btn from "./UI_normal_ad_btn";
 import UI_btn_red_scale from "./UI_btn_red_scale";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
@@ -74,6 +76,10 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_CommonLoad.URL, UI_CommonLoad);
 		fgui.UIObjectFactory.setExtension(UI_view_load.URL, UI_view_load);
 		fgui.UIObjectFactory.setExtension(UI_side_ads1.URL, UI_side_ads1);
+		fgui.UIObjectFactory.setExtension(UI_MiniGames.URL, UI_MiniGames);
+		fgui.UIObjectFactory.setExtension(UI_rank_item.URL, UI_rank_item);
+		fgui.UIObjectFactory.setExtension(UI_ttgame_items.URL, UI_ttgame_items);
+		fgui.UIObjectFactory.setExtension(UI_mid_banner.URL, UI_mid_banner);
 		fgui.UIObjectFactory.setExtension(UI_NativeIconLong.URL, UI_NativeIconLong);
 		fgui.UIObjectFactory.setExtension(UI_FakeBanner_V.URL, UI_FakeBanner_V);
 		fgui.UIObjectFactory.setExtension(UI_CommonToast.URL, UI_CommonToast);
@@ -98,9 +104,7 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_bottomGames.URL, UI_bottomGames);
 		fgui.UIObjectFactory.setExtension(UI_view_item_game128.URL, UI_view_item_game128);
 		fgui.UIObjectFactory.setExtension(UI_sliderADs.URL, UI_sliderADs);
-		fgui.UIObjectFactory.setExtension(UI_OppoEnd.URL, UI_OppoEnd);
 		fgui.UIObjectFactory.setExtension(UI_btn_scaler_yellow.URL, UI_btn_scaler_yellow);
-		fgui.UIObjectFactory.setExtension(UI_normal_ad_btn.URL, UI_normal_ad_btn);
 		fgui.UIObjectFactory.setExtension(UI_btn_red_scale.URL, UI_btn_red_scale);
 		fgui.UIObjectFactory.setExtension(UI_view_sharegames_big.URL, UI_view_sharegames_big);
 	}

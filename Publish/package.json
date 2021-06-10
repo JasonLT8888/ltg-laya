@@ -26,6 +26,7 @@
     "publish-oppo": "node others/publish/bin/publish.js -p oppo",
     "publish-vivo": "node others/publish/bin/publish.js -p vivo",
     "publish-ks": "node others/publish/bin/publish.js -p ks",
+    "publish-hw": "node others/publish/bin/publish.js -p hw",
     "buid-ks-debug": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/ -d 1",
     "buid-ks-release": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/",
     "publish-bd": "node others/publish/bin/publish.js -p bd",

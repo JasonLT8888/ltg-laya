@@ -10,6 +10,7 @@ import LTG_UI_EggUnlockMediator from "./LTG_UI_EggUnlockMediator";
 import { CmpSimpleLoader } from "../../LTGame/UIExt/Cmp/CmpSimpleLoader";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
 
 export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWall> {
 
@@ -91,11 +92,11 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
                 switch (data.unlock_type) {
                     case EEggUnlockType.Code:
                         itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = '彩蛋';
+                        itemUI.m_text_lockstr.text = data.name;
                         break;
                     case EEggUnlockType.Share:
                         itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = '分享';
+                        itemUI.m_text_lockstr.text = '分享' + LTG_Com_EggWallData.GetUnlockProgress(data.id);
                         break;
                     case EEggUnlockType.WatchAd:
                         itemUI.m_state_lock.selectedIndex = 1;
@@ -107,8 +108,28 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
                 }
                 break;
             case EEggState.Unlocking:
-                itemUI.m_state_lock.selectedIndex = 1;
-                itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                switch (data.unlock_type) {
+                    case EEggUnlockType.WatchAd:
+                        itemUI.m_state_lock.selectedIndex = 1;
+                        itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                        break;
+                    case EEggUnlockType.Code:
+                        itemUI.m_state_lock.selectedIndex = 2;
+                        itemUI.m_text_lockstr.text = data.name;
+                        break;
+                    case EEggUnlockType.Share:
+                        itemUI.m_state_lock.selectedIndex = 2;
+                        itemUI.m_text_lockstr.text = "分享" + LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                        break;
+                    default:
+                        break;
+                }
+                if (data.unlock_type == EEggUnlockType.WatchAd) {
+
+                } else {
+                    itemUI.m_state_lock.selectedIndex = 2;
+                    itemUI.m_text_lockstr.text = data.name;
+                }
                 break;
         }
         itemUI.m_img_selected.visible = index == this._selectIndex;
@@ -120,24 +141,56 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
         let lockState = LTG_Com_EggWallData.GetEggState(data);
 
         this._selectIndex = index;
-
-        switch (lockState) {
-            case EEggState.Locked:
-                switch (data.unlock_type) {
-                    case EEggUnlockType.WatchAd:
+        switch (data.unlock_type) {
+            case EEggUnlockType.WatchAd:
+                switch (lockState) {
+                    case EEggState.Locked:
+                    case EEggState.Unlocking:
                         await this._WatchAd(data);
+                        break;
+                    case EEggState.Unlocked:
                         break;
                 }
                 break;
-            case EEggState.Unlocking:
-                await this._WatchAd(data);
+            case EEggUnlockType.Code:
+
+                switch (lockState) {
+                    case EEggState.Locked:
+                        LTUI.Toast("输入彩蛋兑换码");
+                        break;
+                    case EEggState.Unlocking:
+                        LTG_UI_EggUnlockMediator.instance.Show([data, Laya.Handler.create(this, this._UnlockItem, [data])]);
+                        break;
+                    case EEggState.Unlocked:
+                        break;
+                }
                 break;
-            case EEggState.Unlocked:
+            case EEggUnlockType.Share:
+                switch (lockState) {
+                    case EEggState.Locked:
+                        LTUI.Toast("分享视频解锁");
+                        break;
+                    default:
+                        break;
+                }
                 break;
         }
 
+
         LTUI.ShowLoading('资源加载中', false);
-        await this._displayPlayer.LoadObj(data.model_path);
+        let model = await this._displayPlayer.LoadObj(data.model_path);
+        if (model) {
+            TransformEx.ResetLocalTrans(model.transform);
+            model.transform.localRotationEuler = new Laya.Vector3(data.rotation[0], data.rotation[1], data.rotation[2]);
+            let pos: Laya.Vector3 = model.transform.localPosition.clone();
+            model.transform.localPosition = new Laya.Vector3(pos.x + data.offset[0], pos.y + data.offset[1], pos.z + data.offset[2]);
+            model.transform.localScale = new Laya.Vector3(data.scale[0], data.scale[1], data.scale[2]);
+            let anim: Laya.Animator = model.getChildAt(0).getComponent(Laya.Animator);
+            if (anim) {
+                anim.play(data.default_anim);
+            }
+        }
+
         LTUI.HideLoading();
 
         this.ui.m_list_view.refreshVirtualList();

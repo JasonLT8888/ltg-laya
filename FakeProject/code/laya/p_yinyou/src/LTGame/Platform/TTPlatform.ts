@@ -14,7 +14,7 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import WXPlatform from "./WXPlatform";
 import CommonSaveData from "../Commom/CommonSaveData";
-import { GameConst } from "../../script/config/GameConst"; 
+import { GameConst } from "../../script/config/GameConst";
 import WXOpenDataContext from "./Impl/WX/WXOpenDataContext";
 
 export default class TTPlatform extends WXPlatform {
@@ -311,7 +311,7 @@ export default class TTPlatform extends WXPlatform {
         this._base.shareAppMessage(shareObj);
     }
 
-    OpenGameBox(appIds: string[]) {
+    OpenGameBox(appIds: string[] = []) {
         let openData = [];
         for (let i = 0; i < appIds.length; ++i) {
             openData.push({
@@ -325,28 +325,30 @@ export default class TTPlatform extends WXPlatform {
 
     public NavigateToApp(appid: string, path?: string, extra?: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            if (!this.isSupportJumpOther) {
-                reject(false);
-                console.log("当前平台不支持小游戏跳转", this);
-            } else {
-                this._base.showMoreGamesModal({
-                    appLaunchOptions: [
-                        {
-                            appId: this.platformData.appId,
-                            query: "foo=bar&baz=qux",
-                            extraData: {}
-                        }
-                    ],
-                    success(res) {
-                        resolve(true);
-                        console.log("跳转小游戏成功", appid);
-                    },
-                    fail(err) {
-                        reject(false);
-                        console.log("跳转小游戏失败", appid);
-                    }
-                });
-            }
+            // if (!this.isSupportJumpOther) {
+            //     reject(false);
+            //     console.log("当前平台不支持小游戏跳转", this);
+            // } else {
+            //     this._base.showMoreGamesModal({
+            //         appLaunchOptions: [
+            //             {
+            //                 appId: this.platformData.appId,
+            //                 query: "foo=bar&baz=qux",
+            //                 extraData: {}
+            //             }
+            //         ],
+            //         success(res) {
+            //             resolve(true);
+            //             console.log("跳转小游戏成功", appid);
+            //         },
+            //         fail(err) {
+            //             reject(false);
+            //             console.log("跳转小游戏失败", appid);
+            //         }
+            //     });
+            // }
+            this.navigateToVideo(appid);
+            resolve(true);
         });
     }
 
@@ -417,7 +419,13 @@ export default class TTPlatform extends WXPlatform {
                 },
                 success: (rst) => {
                     console.log("分享成功", rst, LTSDK.instance.uid, CommonSaveData.instance.channelId);
-                    if (rst.videoId) LTSDK.instance.reportShareInfo(rst.videoId, shareId);
+
+                    if (rst.videoId) {
+                        LTSDK.instance.reportShareInfo(rst.videoId, shareId);
+                        if (window["__GM"]) {
+                            this.SetClipboardData(rst.videoId);
+                        }
+                    }
                 },
                 fail: (e) => {
                     console.log("分享失败", e);

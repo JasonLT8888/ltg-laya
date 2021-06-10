@@ -26,11 +26,13 @@ export default class MainStart extends LTStart {
     private _gameName = "p_ltg";
 
     _HandleInitPlatform(ePlatform: EPlatformType, platformData: LTPlatformData) {
+        window["__GM"] = false;
+
         switch (ePlatform) {
             case EPlatformType.Web:
                 console.log("web平台,默认框架测试数据");
-                this._gameVersion = '1.1.5';//1.0.1 为全策略模式 
-                platformData.appId = "BiW1Im1l76GCc08csG4o0cCC0"//'88888888';
+                this._gameVersion = '0.0.1';//1.0.1 为全策略模式 
+                platformData.appId = "wx149cdd1b3b19378f"//'88888888';
                 platformData.appKey = '11111111111';
                 break;
             case EPlatformType.TT:

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="290,112" pivot="0.5,0.5" anchor="true" extention="Button" designImageOffsetX="-231" designImageOffsetY="-808">
+  <displayList>
+    <loader id="n4_bif5" name="bg" xy="0,0" size="290,112" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <loader id="n5_bif5" name="icon" xy="92,32" pivot="0.5,0.5" size="164,40" align="center" vAlign="middle" autoSize="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <image id="n6_r401" name="n6" src="8gel2n" fileName="img/sp_shipin.png" xy="22,32">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+  <Button downEffect="scale" downEffectValue="0.80"/>
+  <transition name="t0">
+    <item time="0" type="Scale" tween="true" startValue="1,1" endValue="1.2,1.2" duration="24" ease="Linear" repeat="-1" yoyo="true"/>
+  </transition>
+  <customProperty target="bg" propertyId="1" label="背景"/>
+  <customProperty target="icon" propertyId="1" label="图标"/>
+</component>

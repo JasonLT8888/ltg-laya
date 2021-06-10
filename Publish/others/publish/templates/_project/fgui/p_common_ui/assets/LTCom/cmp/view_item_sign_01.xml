@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="148,180">
+<component size="148,190" designImage="ui://hbq27te3fig0a0" designImageOffsetX="-285" designImageOffsetY="-316">
   <controller name="state_get" pages="0,未到时间,1,可领取,2,已领取" selected="0"/>
+  <controller name="state_day" exported="true" pages="0,other,1,2" selected="1"/>
   <displayList>
-    <image id="n4_uo3l" name="img_bg" src="8gel50" fileName="img/sp_kuang1.png" xy="-4,-1" size="157,184"/>
-    <image id="n5_uo3l" name="img_can_get" src="8gel51" fileName="img/sp_kelingqu.png" xy="-17,-38">
+    <image id="n4_uo3l" name="img_bg" src="fig09j" fileName="img/七日签到/riqikuang.png" xy="32,17" size="116,171"/>
+    <image id="n5_uo3l" name="img_can_get" src="fig09l" fileName="img/七日签到/klq.png" xy="-1,1">
       <gearDisplay controller="state_get" pages="1"/>
+      <relation target="" sidePair="left-left,top-top"/>
     </image>
-    <image id="n6_uo3l" name="img_got" src="8gel52" fileName="img/sp_yihuode.png" xy="16,13">
+    <image id="n6_uo3l" name="img_got" src="fig09g" fileName="img/七日签到/ylq.png" xy="52,47">
       <gearDisplay controller="state_get" pages="2"/>
     </image>
-    <loader id="n9_uo3l" name="loader_icon" xy="6,9" size="135,126" align="center" vAlign="middle" fill="scale">
+    <loader id="n9_uo3l" name="loader_icon" xy="36,57" size="107,88" url="ui://hbq27te3fig09w" align="center" vAlign="middle">
       <gearDisplay controller="state_get" pages="0,1"/>
+      <gearXY controller="state_day" pages="1" values="36,57" default="37,27"/>
     </loader>
-    <text id="n7_uo3l" name="text_day" xy="45,140" size="55,29" fontSize="20" color="#9092ad" align="center" vAlign="middle" text="第1天"/>
-    <text id="n8_uo3l" name="text_name" xy="41,110" size="64,36" fontSize="26" color="#ffffff" align="center" vAlign="middle" strokeColor="#000000" text="+800">
+    <text id="n7_uo3l" name="text_day" xy="62,165" size="58,27" font="ui://hbq27te3fig0a1" fontSize="20" color="#ffffff" align="center" vAlign="middle" autoSize="none" text="d1t"/>
+    <text id="n8_uo3l" name="text_name" xy="47,110" size="86,42" font="ui://hbq27te3fig09z" fontSize="10" color="#ffffff" align="center" vAlign="middle" text="200">
       <gearDisplay controller="state_get" pages="0,1"/>
+      <gearDisplay2 controller="state_day" pages="0" condition="0"/>
     </text>
   </displayList>
+  <customProperty target="text_day" propertyId="0"/>
+  <customProperty target="loader_icon" propertyId="1"/>
 </component>

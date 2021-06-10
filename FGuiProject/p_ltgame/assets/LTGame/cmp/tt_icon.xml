@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="120,120" extention="Button" mask="n4_nmlk">
+  <displayList>
+    <graph id="n4_nmlk" name="n4" xy="0,0" size="120,120" type="rect" lineSize="0" corner="14">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <loader id="n3_nmlk" name="icon" xy="0,0" size="120,120" url="ui://75kiu87knmlki6" align="center" vAlign="middle" fill="scaleFree" clearOnPublish="true">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

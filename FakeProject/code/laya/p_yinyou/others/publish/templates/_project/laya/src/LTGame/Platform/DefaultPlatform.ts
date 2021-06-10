@@ -18,7 +18,7 @@ export default class DefaultPlatform implements IPlatform {
     useWAV = false;
 
     openDataContext: OpenDataContext;
-    
+
     setUserCloudStorage(key: string, value: number) {
         console.log(`当前平台不支持上报排行key=${key}value=${value}`);
     }
@@ -126,12 +126,16 @@ export default class DefaultPlatform implements IPlatform {
 
     ShowRewardVideoAdAsync(): Promise<boolean> {
         return new Promise(function (resolve) {
+            if (window["__GM"]) {
+                console.error("！！！GM模式！！！")
+                return resolve(true);
+            }
             LTPlatform.instance.ShowRewardVideoAd(Laya.Handler.create(this, () => {
                 resolve(true);
             }), Laya.Handler.create(this, () => {
                 resolve(false);
                 LTUI.Toast('跳过播放视频无法获得奖励');
-            }), Laya.Handler.create(this, ()=>{
+            }), Laya.Handler.create(this, () => {
                 resolve(null);
                 LTUI.Toast('拉取视频失败,请稍后重试');
             }));

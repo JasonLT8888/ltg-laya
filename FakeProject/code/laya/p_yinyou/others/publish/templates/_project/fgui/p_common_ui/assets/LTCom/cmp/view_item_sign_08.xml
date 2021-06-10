@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="480,152" designImage="ui://hbq27te3fig0a0" designImageOffsetX="-135" designImageOffsetY="-735">
+  <controller name="state_get" pages="0,未到时间,1,可领取,2,已领取" selected="0"/>
+  <displayList>
+    <loader id="n9_uo3l" name="loader_icon" xy="0,0" size="480,152" url="ui://hbq27te3fig09y" align="center" vAlign="middle" fill="scaleFree">
+      <gearDisplay controller="state_get" pages="0,1,2"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <text id="n7_uo3l" name="text_day" xy="64,9" size="58,27" font="ui://hbq27te3fig0a1" fontSize="20" color="#ffffff" align="center" vAlign="middle" autoSize="none" text="d7t"/>
+    <image id="n6_uo3l" name="img_got" src="fig09g" fileName="img/七日签到/ylq.png" xy="200,31">
+      <gearDisplay controller="state_get" pages="2"/>
+    </image>
+    <image id="n5_uo3l" name="img_can_get" src="fig09l" fileName="img/七日签到/klq.png" xy="-4,-15">
+      <gearDisplay controller="state_get" pages="1"/>
+      <relation target="" sidePair="left-left,top-top"/>
+    </image>
+  </displayList>
+  <customProperty target="loader_icon" propertyId="1"/>
+</component>

@@ -20,6 +20,9 @@ export default class LTPlatformFactory {
         let result: IPlatform;
         if (Laya.Browser.onTTMiniGame) {
             result = new TTPlatform();
+        } else if (Laya.Browser.onHWMiniGame) {
+            // result = new KSPlatform();
+            console.log("华为");
         } else if (window['ks'] && Laya.Browser.onMiniGame) {
             result = new KSPlatform();
         } else if (Laya.Browser.onMiniGame) {

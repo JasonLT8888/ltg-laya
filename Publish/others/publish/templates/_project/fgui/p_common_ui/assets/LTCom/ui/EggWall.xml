@@ -4,7 +4,9 @@
     <image id="n4_8gel" name="img_bg" src="q96u89" fileName="img/bg_s.png" xy="0,-220" size="750,1554">
       <relation target="" sidePair="width-width,height-height"/>
     </image>
-    <component id="n0_8gel" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="26,72"/>
+    <component id="n0_8gel" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="26,72">
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </component>
     <graph id="n24_jlyk" name="img_display" xy="180,88" size="389,558" type="rect">
       <relation target="" sidePair="center-center,middle-middle"/>
     </graph>
