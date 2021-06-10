@@ -375,6 +375,7 @@
     <image id="fig0ao" name="3.png" path="/img/转盘/"/>
     <image id="fig0ap" name="2.png" path="/img/转盘/"/>
     <image id="fig0aq" name="1.png" path="/img/转盘/"/>
+    <component id="sy4war" name="item_view_new_eggwall.xml" path="/cmp/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>
