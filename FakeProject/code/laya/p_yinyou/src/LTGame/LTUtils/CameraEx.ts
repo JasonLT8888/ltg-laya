@@ -15,8 +15,9 @@ export class CameraEx {
 
     static ScreenPosToRay(camera: Laya.Camera, screenPos: Laya.Vector2): Laya.Ray {
         let ray: Laya.Ray = new Laya.Ray(Vector3Ex.zero, Vector3Ex.zero);
-        let clickPoint = new Laya.Vector2(screenPos.x / Laya.stage.width, screenPos.y / Laya.stage.height);
-        camera.normalizedViewportPointToRay(clickPoint, ray);
+        camera.viewportPointToRay(screenPos, ray);
+        // let clickPoint = new Laya.Vector2(screenPos.x / Laya.stage.width, screenPos.y / Laya.stage.height);
+        // camera.normalizedViewportPointToRay(clickPoint, ray);
         return ray;
     }
 
