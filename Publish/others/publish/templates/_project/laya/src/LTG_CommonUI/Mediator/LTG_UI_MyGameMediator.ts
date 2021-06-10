@@ -1,5 +1,6 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_MyGame from "../UI/LTCom/LTG_UI_MyGame";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class LTG_UI_MyGameMediator extends BaseUIMediator<LTG_UI_MyGame> {
 
@@ -19,6 +20,7 @@ export default class LTG_UI_MyGameMediator extends BaseUIMediator<LTG_UI_MyGame>
     }
 
     private _OnClickBack() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

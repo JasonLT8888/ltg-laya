@@ -41,10 +41,12 @@ export default class LTG_UI_WatchDYMediator extends BaseUIMediator<LTG_UI_WatchD
     }
 
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 
     private _OnClickWatch() {
+        LTUI.TrigerBtnClick();
         // let data = new LTG_Com_WatchGuideData();
         // data.iconUrl = this._cacheData.iconUrl;
         // data.Send();

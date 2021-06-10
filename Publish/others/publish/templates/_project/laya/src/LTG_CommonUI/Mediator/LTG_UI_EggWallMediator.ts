@@ -212,6 +212,7 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
     }
 
     private _OnClickEnterCode() {
+        LTUI.TrigerBtnClick();
         let code = this.ui.m_view_entercode.m_text_code.text;
         let searchConfig = this._SearchEnterCode(code);
         if (searchConfig == null) {
@@ -241,6 +242,7 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
     }
 
     private _OnClickBack() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

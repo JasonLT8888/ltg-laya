@@ -5,6 +5,19 @@ import UI_FlyPanelMediator from "./DefaultUI/UI_FlyPanelMediator";
 
 export default class LTUI {
 
+    private static _cacheBtnHandle: Laya.Handler;
+
+    public static SetCommonBtnClickCB(handle: Laya.Handler) {
+        handle.once = false;
+        this._cacheBtnHandle = handle;
+    }
+
+    public static TrigerBtnClick() {
+        if (this._cacheBtnHandle) {
+            this._cacheBtnHandle.run();
+        }
+    }
+
     public static Toast(str: string) {
         console.log("[Toast]" + str);
         UI_CommomToastMediator.instance.Show(str);

@@ -68,10 +68,12 @@ export default class LTG_UI_EggUnlockMediator extends BaseUIMediator<LTG_UI_EggU
     }
 
     private _OnClickGiveUp() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 
     private async _OnClickUnlock() {
+        LTUI.TrigerBtnClick();
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             LTG_Com_EggWallData.RecordWatchAD(this._cacheConfig.id);
