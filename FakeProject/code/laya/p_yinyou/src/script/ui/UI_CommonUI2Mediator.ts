@@ -166,8 +166,9 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         }),
         new UIDemoData("结算", () => {
             let windata = new LTG_Com_WinData();
+            windata.progressUnlockEnable = false;
             windata.coinIconUrl = "ui://hbq27te3fig09w";
-            windata.iconUrl = "ui://hbq27te3fig09w";
+            windata.iconUrl = "";
             windata.multiRate = 5;
             windata.winCoin = 63;
             windata.progressUnlockValue = 100;
