@@ -33,13 +33,15 @@ export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
             throw new Error("请调用LTG_Com_WinData进行界面打开操作");
         }
         this.openData = openData;
-        if (!StringEx.IsNullOrEmpty(openData.iconUrl)) {
+        if (openData.progressUnlockEnable) {
             this.ui.m_unlock_progress.m_bg.url = openData.iconUrl;
             (this.ui.m_unlock_progress.getChildAt(1) as fgui.GLoader).url = openData.iconUrl;
             this.ui.m_unlock_progress.value = openData.progressUnlockValue;
             if (openData.progressUnlockValue >= 100 && openData.onProgressItemUnlocked) {
                 openData.onProgressItemUnlocked.run();
             }
+        } else {
+            this.ui.m_unlock_progress.visible = false;
         }
         this.initBtns();
         this.ui.m_btn_multiget.onClick(this, this._onClickWatchAd);

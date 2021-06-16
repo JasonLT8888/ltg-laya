@@ -3,8 +3,10 @@ import LTG_UI_WinMediator from "../Mediator/LTG_UI_WinMediator";
 
 
 export class LTG_Com_WinData implements ILTG_Com_Data {
+    /**是否开启进度解锁 */
+    public progressUnlockEnable: boolean = false;
     /**结算进度icon */
-    public iconUrl: string = null;
+    public iconUrl: string = "";
     /**结算进度 */
     public progressUnlockValue: number = 0;
     /**进度解锁回调 */
