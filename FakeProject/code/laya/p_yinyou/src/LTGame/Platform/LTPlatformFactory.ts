@@ -21,12 +21,14 @@ export default class LTPlatformFactory {
         if (Laya.Browser.onTTMiniGame) {
             result = new TTPlatform();
         } else if (Laya.Browser.onHWMiniGame) {
-            // result = new KSPlatform();
+            //TODO
             console.log("华为");
-        } else if (window['ks'] && Laya.Browser.onMiniGame) {
-            result = new KSPlatform();
         } else if (Laya.Browser.onMiniGame) {
-            result = new WXPlatform();
+            if (window['ks']) {
+                result = new KSPlatform();
+            } else {
+                result = new WXPlatform();
+            }
         } else if (Laya.Browser.onBDMiniGame) {
             result = new BDPlatform();
         } else if (isQTT) {
