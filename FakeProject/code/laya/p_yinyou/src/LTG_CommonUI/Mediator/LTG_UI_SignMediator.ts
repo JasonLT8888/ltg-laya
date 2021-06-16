@@ -5,6 +5,7 @@ import { SignConfig } from "../../script/config/SignConfig";
 import { LTG_Com_SignData } from "../Data/LTG_Com_SignData";
 import LTG_UI_Sign from "../UI/LTCom/LTG_UI_Sign";
 import LTG_UI_view_item_sign_01 from "../UI/LTCom/LTG_UI_view_item_sign_01";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
 
@@ -80,6 +81,7 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
 
 
     private _OnClickGet() {
+        LTUI.TrigerBtnClick();
         CommonSaveData.instance.isSigned = true;
         CommonSaveData.instance.signDayCount++;
         CommonSaveData.SaveToDisk();
@@ -88,6 +90,7 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
     }
 
     private async _OnClickWatchAd() {
+        LTUI.TrigerBtnClick();
         LTPlatform.instance.RecordEvent('ad_sign', {});
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
@@ -101,6 +104,7 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
 
     private _OnClickClose() {
         if (CommonSaveData.instance.isSigned) {
+            LTUI.TrigerBtnClick();
             this.Hide();
         } else {
             this._OnClickGet();

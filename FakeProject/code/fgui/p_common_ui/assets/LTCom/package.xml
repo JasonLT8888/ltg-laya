@@ -416,7 +416,8 @@
     <image id="fig0bv" name="7.png" path="/img/结算/font_4/"/>
     <image id="fig0bw" name="8.png" path="/img/结算/font_4/"/>
     <image id="fig0bx" name="9.png" path="/img/结算/font_4/"/>
-    <image id="fig0by" name="%.png" path="/img/结算/font_4/"/>
+    <image id="fig0by" name="%.png" path="/img/结算/font_4/"/> 
+    <component id="sy4war" name="item_view_new_eggwall.xml" path="/cmp/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

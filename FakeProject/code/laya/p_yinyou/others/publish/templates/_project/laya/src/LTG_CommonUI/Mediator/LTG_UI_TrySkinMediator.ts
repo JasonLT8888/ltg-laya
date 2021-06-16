@@ -93,11 +93,13 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
     }
 
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
         this._cacheData.onClose?.runWith(false);
     }
 
     private async _OnClickWatchAd() {
+        LTUI.TrigerBtnClick();
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             this.Hide();

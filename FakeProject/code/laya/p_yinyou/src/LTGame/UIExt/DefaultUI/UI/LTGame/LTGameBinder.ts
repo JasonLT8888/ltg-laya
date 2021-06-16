@@ -53,7 +53,7 @@ import UI_btn_scaler_yellow from "./UI_btn_scaler_yellow";
 import UI_btn_red_scale from "./UI_btn_red_scale";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
-export default class LTGameBinder{
+export default class LTGameBinder {
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(UI_hot_game.URL, UI_hot_game);
 		fgui.UIObjectFactory.setExtension(UI_NativeInPage.URL, UI_NativeInPage);

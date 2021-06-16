@@ -2,6 +2,7 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_AddShortcut from "../UI/LTCom/LTG_UI_AddShortcut";
 import { LTG_Com_AddShortcutData } from "../Data/LTG_Com_AddShortcutData";
 import StringEx from "../../LTGame/LTUtils/StringEx";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class LTG_UI_AddShortcutMediator extends BaseUIMediator<LTG_UI_AddShortcut> {
 
@@ -31,6 +32,7 @@ export default class LTG_UI_AddShortcutMediator extends BaseUIMediator<LTG_UI_Ad
     }
 
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

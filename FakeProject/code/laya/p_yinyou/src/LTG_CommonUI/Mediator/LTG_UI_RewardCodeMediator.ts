@@ -1,6 +1,7 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_RewardCode from "../UI/LTCom/LTG_UI_RewardCode";
 import { LTG_Com_RewardCodeData } from "../Data/LTG_Com_RewardCodeData";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class LTG_UI_RewardCodeMediator extends BaseUIMediator<LTG_UI_RewardCode> {
 
@@ -29,11 +30,13 @@ export default class LTG_UI_RewardCodeMediator extends BaseUIMediator<LTG_UI_Rew
     }
 
     private _OnClickOk() {
+        LTUI.TrigerBtnClick();
         this.Hide();
         this._cacheData.onCodeEntered?.runWith([this.ui.m_view.m_text_input.text]);
     }
 
     private _OnClickCancel() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

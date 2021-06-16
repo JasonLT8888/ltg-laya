@@ -1,6 +1,7 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_Notice from "../UI/LTCom/LTG_UI_Notice";
 import { LTG_Com_NoticeData } from "../Data/LTG_Com_NoticeData";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class LTG_UI_NoticeMediator extends BaseUIMediator<LTG_UI_Notice> {
 
@@ -25,6 +26,7 @@ export default class LTG_UI_NoticeMediator extends BaseUIMediator<LTG_UI_Notice>
     }
 
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

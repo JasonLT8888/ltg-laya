@@ -2,6 +2,7 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_FindGame from "../UI/LTCom/LTG_UI_FindGame";
 import { LTG_Com_FindGameData } from "../Data/LTG_Com_FindGameData";
 import StringEx from "../../LTGame/LTUtils/StringEx";
+import LTUI from "../../LTGame/UIExt/LTUI";
 
 export default class LTG_UI_FindGameMediator extends BaseUIMediator<LTG_UI_FindGame> {
 
@@ -31,6 +32,7 @@ export default class LTG_UI_FindGameMediator extends BaseUIMediator<LTG_UI_FindG
     }
 
     private _OnClickClose() {
+        LTUI.TrigerBtnClick();
         this.Hide();
     }
 

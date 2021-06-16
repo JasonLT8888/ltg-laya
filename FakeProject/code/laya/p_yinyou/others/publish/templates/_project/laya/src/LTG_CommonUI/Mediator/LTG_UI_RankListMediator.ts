@@ -60,9 +60,11 @@ export class LTG_UI_RankListMediator extends BaseUIMediator<LTG_UI_RankList> {
         });
     }
     _onClickPrePage() {
+        LTUI.TrigerBtnClick();
         LTPlatform.instance.openDataContext.postMsg({ method: EOpenDataMethod.changePage, userId: LTSDK.instance.uid, page: -1, pageNum: 7 });
     }
     _onClickNextPage() {
+        LTUI.TrigerBtnClick();
         LTPlatform.instance.openDataContext.postMsg({ method: EOpenDataMethod.changePage, userId: LTSDK.instance.uid, page: 1, pageNum: 7 });
     }
     getSelfScore() {
