@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334" designImage="ui://hbq27te3fig0bh">
-  <controller name="state" exported="true" pages="0,norm,1,change" selected="1"/>
+  <controller name="state" exported="true" pages="0,norm,1,change" selected="0"/>
   <displayList>
     <graph id="n7_hfek" name="n7" xy="0,0" size="750,1334" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -14,14 +14,14 @@
     <image id="n2_fig0" name="n2" src="fig0bj" fileName="img/结算/tittle.png" xy="104,225">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <component id="n3_fig0" name="btn_multiget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,838" controller="color,0">
-      <gearXY controller="state" pages="0,1" values="220,716|220,838"/>
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </component>
-    <component id="n4_fig0" name="btn_normalget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,716" controller="ad,1,color,1">
+    <component id="n4_fig0" name="btn_normalget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,838" controller="ad,1,color,1">
       <gearXY controller="state" pages="0,1" values="220,838|220,716"/>
       <relation target="" sidePair="center-center,middle-middle"/>
       <property target="rate" propertyId="0" value="x1"/>
+    </component>
+    <component id="n3_fig0" name="btn_multiget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,716" controller="color,0">
+      <gearXY controller="state" pages="0,1" values="220,716|220,838"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <component id="n5_fig0" name="unlock_progress" src="fig0bl" fileName="img/结算/image_bar.xml" xy="288,511" size="173,164">
       <relation target="" sidePair="center-center,middle-middle"/>
