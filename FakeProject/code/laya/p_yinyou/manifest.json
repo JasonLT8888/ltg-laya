@@ -1,0 +1,15 @@
+{
+    "package": "com.p_yinyou",
+    "name": "p_yinyou",
+    "versionName": "1.0.0",
+    "versionCode": "1",
+    "minPlatformVersion": "1040",
+    "icon": "/logo.png",
+    "orientation": "portrait",
+    "type": "game",
+    "config": {
+        "logLevel": "off"
+    }
+}
+
+
