@@ -7,7 +7,6 @@ outPath = process.argv[3];
 if (zipPath.endsWith(".zip") && !outPath) {
     outPath = zipPath.replace(".zip", "");
 }
-console.log(zipPath, outPath);
 if (fs.existsSync(zipPath)) {
     console.log("正在解压", zipPath);
     fs.createReadStream(zipPath).pipe(unzip.Extract({ path: outPath }));

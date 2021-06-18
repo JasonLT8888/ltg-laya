@@ -74,14 +74,9 @@ export class PublishHandler {
 
         if (this._platformStr == "oppo") {
             // 打包成rpk
-            let toolsPath = path.join(this._workPath, "./others/publish/tools/quick-tools");
-            if (!fs.existsSync(toolsPath)) {
-                let toolsZip = path.join(this._workPath, "./others/publish/tools/quick-tools.zip");
-                let unzipJs = path.join(this._workPath, "./others/publish/tools/unzip.js");
-                shellJs.exec(`node ${unzipJs} ${toolsZip}`);
-            }
+            this.unzipTool("oppo");
             shellJs.cd(this._releasePath);
-            let rpk_packer = path.join(this._workPath, "./others/publish/tools/quick-tools/lib/bin/index.js");
+            let rpk_packer = path.join(this._workPath, "./others/publish/tools/oppo/lib/bin/index.js");
             let mode = this._packConfig.isDebug ? "debug" : "release";
             shellJs.exec(`node ${rpk_packer} pack ${mode}`)
         } else if (this._platformStr == "vivo") {
@@ -95,12 +90,7 @@ export class PublishHandler {
             shellJs.exec(`npm run release`);
             shellJs.exec(`npm run server`);
         } else if (this._platformStr == "hw") {
-            let toolsPath = path.join(this._workPath, "./others/publish/tools/huawei");
-            if (!fs.existsSync(toolsPath)) {
-                let toolsZip = path.join(this._workPath, "./others/publish/tools/huawei.zip");
-                let unzipJs = path.join(this._workPath, "./others/publish/tools/unzip.js");
-                shellJs.exec(`node ${unzipJs} ${toolsZip}`);
-            }
+            this.unzipTool();
             let manifest = path.join(this._releasePath, "manifest.json");
             let maniStr = LTUtils.ReadStrFrom(manifest);
             let packageName = JSON.parse(maniStr).package,
@@ -112,7 +102,7 @@ export class PublishHandler {
             }
             console.log("make hw rpk");
             shellJs.cd(this._releasePath);
-            let signtoolPath = path.join(this._workPath, "./others/publish/tools/huawei/index.js");
+            let signtoolPath = path.join(this._workPath, `./others/publish/tools/hw/index.js`);
             let mode = this._packConfig.isDebug ? "debug" : "release";
             let cmd = `node`,
                 privatePem = path.join(this._releasePath, "sign", "debug", "private.pem"),
@@ -143,6 +133,15 @@ export class PublishHandler {
                     console.log("华为发布完成：", distRpkPath.green);
                 }
             });
+        }
+    }
+
+    private unzipTool(dirName: string = this._platformStr) {
+        let toolsPath = path.join(this._workPath, `./others/publish/tools/${dirName}`);
+        if (!fs.existsSync(toolsPath)) {
+            let toolsZip = path.join(this._workPath, `./others/publish/tools/${dirName}.zip`);
+            let unzipJs = path.join(this._workPath, "./others/publish/tools/unzip.js");
+            shellJs.exec(`node ${unzipJs} ${toolsZip}`);
         }
     }
 
