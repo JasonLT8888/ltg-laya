@@ -30,6 +30,9 @@ export class PublishHandler {
         "oppo": [
             "manifest.json",
             "icon.png"
+        ], "hw": [
+            "manifest.json",
+            "icon.png"
         ]
     }
 
@@ -56,14 +59,8 @@ export class PublishHandler {
         this._CopyTemplate();
         this._CopyBin();
         this._CopyOpenDataContext();
+        this._makeRPK();
 
-        if (this._platformStr == "oppo") {
-            // 打包成rpk
-            shellJs.cd(this._releasePath);
-            let rpk_packer = path.join(this._workPath, "./others/publish/tools/quick-tools/lib/bin/index.js");
-            let mode = this._packConfig.isDebug ? "debug" : "release";
-            shellJs.exec(`node ${rpk_packer} pack ${mode}`)
-        }
 
         // 再次提示cdn
         console.log(("注意cdn资源,需要拷贝到服务器:" + this._cdnPath).bgRed);
@@ -72,6 +69,61 @@ export class PublishHandler {
         let passTime = ((endTime - startTime) / 1000).toFixed(2);
         console.log("发布完成", this._releasePath.green);
         console.log("总共耗时 " + passTime.green + " 秒");
+    }
+    private _makeRPK() {
+
+        if (this._platformStr == "oppo") {
+            // 打包成rpk
+            shellJs.cd(this._releasePath);
+            let rpk_packer = path.join(this._workPath, "./others/publish/tools/quick-tools/lib/bin/index.js");
+            let mode = this._packConfig.isDebug ? "debug" : "release";
+            shellJs.exec(`node ${rpk_packer} pack ${mode}`)
+        } else if (this._platformStr == "hw") {
+
+            let manifest = path.join(this._releasePath, "manifest.json");
+            let maniStr = LTUtils.ReadStrFrom(manifest);
+            let packageName = JSON.parse(maniStr).package,
+                distPath = path.join(this._releasePath, "dist"),
+                distRpkPath = path.join(distPath, `${packageName}.rpk`);
+            if (fs.existsSync(distRpkPath)) {
+                //console.log("移除旧的 rpk");
+                fs.unlinkSync(distRpkPath);
+            }
+            console.log("make hw rpk");
+            shellJs.cd(this._releasePath);
+            let signtoolPath = path.join(this._workPath, "./others/publish/tools/huawei/index.js");
+            let mode = this._packConfig.isDebug ? "debug" : "release";
+            let cmd = `node`,
+                privatePem = path.join(this._releasePath, "sign", "debug", "private.pem"),
+                certificatePemPath = path.join(this._releasePath, "sign", "debug", "certificate.pem");
+            let args = [`"${signtoolPath}"`, `"${this._releasePath}"`, `"${distPath}"`, packageName, `"${privatePem}"`, `"${certificatePemPath}"`];
+            let opts = {
+                cwd: this._workPath,
+                shell: true
+            };
+            const childProcess = require("child_process");
+            let cp = childProcess.spawn(cmd, args, opts);
+            cp.stdout.on('data', (data) => {
+                console.log(`stdout: ${data}`);
+            });
+
+            cp.stderr.on('data', (data) => {
+                console.log(`stderr: ${data}`);
+                // reject();
+            });
+
+            cp.on('close', (code) => {
+                console.log(`子进程退出码：${code}`);
+                // rpk是否生成成功
+
+                if (!fs.existsSync(distRpkPath)) {
+                    throw new Error("rpk生成失败，请检查！");
+                } else {
+                    console.log("华为发布完成：", distRpkPath.green);
+                }
+            });
+            // shellJs.exec(`node ${args} pack ${mode}`)
+        }
     }
 
     private _CopyBin() {
@@ -175,7 +227,7 @@ export class PublishHandler {
             LTUtils.WriteStrTo(targetIndexPath, str);
         }
 
-        if (this._packConfig.platform == "oppo" || this._packConfig.platform == "vivo") {
+        if (this._packConfig.platform == "oppo" || this._packConfig.platform == "vivo" || this._packConfig.platform == "hw") {
             // 处理load
             let readIndexStr = LTUtils.ReadStrFrom(targetIndexPath);
             let cahceStr = "____";
