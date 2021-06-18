@@ -416,8 +416,12 @@
     <image id="fig0bv" name="7.png" path="/img/结算/font_4/"/>
     <image id="fig0bw" name="8.png" path="/img/结算/font_4/"/>
     <image id="fig0bx" name="9.png" path="/img/结算/font_4/"/>
-    <image id="fig0by" name="%.png" path="/img/结算/font_4/"/> 
+    <image id="fig0by" name="%.png" path="/img/结算/font_4/"/>
     <component id="sy4war" name="item_view_new_eggwall.xml" path="/cmp/"/>
+    <component id="y1nvbz" name="Statement.xml" path="/ui/" exported="true"/>
+    <image id="y1nvc0" name="隐私声明.png" path="/img/隐私声明/"/>
+    <image id="y1nvc1" name="同意.png" path="/img/隐私声明/"/>
+    <image id="y1nvc2" name="不同意.png" path="/img/隐私声明/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>
