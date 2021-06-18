@@ -93,20 +93,20 @@ export class PublishHandler {
             this.unzipTool();
             let manifest = path.join(this._releasePath, "manifest.json");
             let maniStr = LTUtils.ReadStrFrom(manifest);
-            let packageName = JSON.parse(maniStr).package,
-                distPath = path.join(this._releasePath, "dist"),
+            let packageName = JSON.parse(maniStr).package;
+            packageName = this._packConfig.isDebug ? packageName : `${packageName}.signed`
+            let distPath = path.join(this._releasePath, "dist"),
                 distRpkPath = path.join(distPath, `${packageName}.rpk`);
-            if (fs.existsSync(distRpkPath)) {
-                //console.log("移除旧的 rpk");
-                fs.unlinkSync(distRpkPath);
-            }
+            shellJs.rm("-rf", distPath);
+
             console.log("make hw rpk");
             shellJs.cd(this._releasePath);
             let signtoolPath = path.join(this._workPath, `./others/publish/tools/hw/index.js`);
             let mode = this._packConfig.isDebug ? "debug" : "release";
+
             let cmd = `node`,
-                privatePem = path.join(this._releasePath, "sign", "debug", "private.pem"),
-                certificatePemPath = path.join(this._releasePath, "sign", "debug", "certificate.pem");
+                privatePem = path.join(this._releasePath, "sign", mode, "private.pem"),
+                certificatePemPath = path.join(this._releasePath, "sign", mode, "certificate.pem");
             let args = [`"${signtoolPath}"`, `"${this._releasePath}"`, `"${distPath}"`, packageName, `"${privatePem}"`, `"${certificatePemPath}"`];
             let opts = {
                 cwd: this._workPath,
