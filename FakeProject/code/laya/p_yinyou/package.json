@@ -27,16 +27,20 @@
     "publish-vivo": "node others/publish/bin/publish.js -p vivo",
     "publish-ks": "node others/publish/bin/publish.js -p ks",
     "publish-hw": "node others/publish/bin/publish.js -p hw",
+    "publish-test": "layaair2-cmd publish -c hwgame",
     "buid-ks-debug": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/ -d 1",
     "buid-ks-release": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/",
     "publish-bd": "node others/publish/bin/publish.js -p bd",
     "update-ltg": "node others/publish/bin/update.js",
     "publish-ksold": "node others/publish/bin/publish.js -p ks",
-    "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js release/oppp debug"
+    "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js hw debug"
   },
   "author": "lt",
   "license": "MIT",
   "dependencies": {
-    "@vivo-minigame/cli": "^1.3.0"
+    "@vivo-minigame/cli": "^1.3.0",
+    "gulp-jsonminify": "^1.1.0",
+    "gulp-uglify-es": "^2.0.0",
+    "unzip": "^0.1.11"
   }
 }

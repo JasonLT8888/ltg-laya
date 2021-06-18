@@ -54,15 +54,14 @@ export default class MainStart extends LTStart {
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
                 break;
             case EPlatformType.Oppo:
-                this._gameVersion = "1.0.2";
+                this._gameVersion = "0.1.2";
                 this._resVersion = "0710";
-                platformData.appId = "30302891";
-                platformData.appKey = "6fyGQ6x2pzk8W84c0s04ows00";
-                platformData.bannerId = "195984";
-                platformData.rewardVideoId = "195985";
-                platformData.gameBoxAdId = "";
-                platformData.gameBoxBannerId = "";
-                platformData.nativeinpageIds = ['195999', '196002', '196003'];
+                platformData.appId = "30484329";
+                platformData.appKey = "3u674KJ5lkqoc8gGsGOwO0kgo";
+                platformData.bannerId = "300972";
+                platformData.rewardVideoId = "300976";
+                platformData.gameBoxAdId = "314625";
+                platformData.nativeinpageIds = ['300974'];
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
             case EPlatformType.Vivo:
