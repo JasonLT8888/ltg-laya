@@ -54,15 +54,14 @@ export default class MainStart extends LTStart {
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_wx/`);
                 break;
             case EPlatformType.Oppo:
-                this._gameVersion = "1.0.2";
+                this._gameVersion = "0.1.2";
                 this._resVersion = "0710";
-                platformData.appId = "30302891";
-                platformData.appKey = "6fyGQ6x2pzk8W84c0s04ows00";
-                platformData.bannerId = "195984";
-                platformData.rewardVideoId = "195985";
-                platformData.gameBoxAdId = "";
-                platformData.gameBoxBannerId = "";
-                platformData.nativeinpageIds = ['195999', '196002', '196003'];
+                platformData.appId = "30484329";
+                platformData.appKey = "3u674KJ5lkqoc8gGsGOwO0kgo";
+                platformData.bannerId = "300972";
+                platformData.rewardVideoId = "300976";
+                platformData.gameBoxAdId = "314625";
+                platformData.nativeinpageIds = ['300974'];
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/${this._resVersion}_oppo/`);
                 break;
             case EPlatformType.Vivo:
@@ -85,6 +84,23 @@ export default class MainStart extends LTStart {
                 platformData.rewardVideoId = "2300000737_01";
                 LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/ks_${this._resVersion}/`);
                 break;
+            case EPlatformType.HW:
+                this._gameVersion = "1.0.0";
+                this._resVersion = "0723";
+                platformData.appId = "104360501";
+                platformData.appKey = "104360501";// "4593206c07a95b1edf85";
+                //测试广告位
+                platformData.bannerId = "j1pcnpx5tu";
+                platformData.rewardVideoId = "e7hm5vx799";
+                platformData.interstitialId = "testb4znbuh3n2";
+                platformData.nativeinpageIds = ['u7m3hc4gvm'];
+                // platformData.bannerId = "a3wlkri5qz";
+                // platformData.rewardVideoId = "h2iup7j2ec ";
+                // platformData.interstitialId = "c7xzj23ghu"; 
+                // platformData.nativeinpageIds = ['u79peou9cx'];
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
+
+                break;
             default:
                 console.error("未处理平台内容", LTPlatform.platformStr, "请在MainStart中添加处理");
                 break;
@@ -96,17 +112,11 @@ export default class MainStart extends LTStart {
 
     _HandleSDK() {
         switch (LTPlatform.instance.platform) {
-            case EPlatformType.Web:
-            case EPlatformType.WX:
-            case EPlatformType.QQ:
-            case EPlatformType.TT:
-            case EPlatformType.Oppo:
-            case EPlatformType.Vivo:
-            case EPlatformType.KS:
-                LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);//
+            case EPlatformType.Native_IOS:
+                LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
                 break;
             default:
-                LTSDK.CreateInstace(SDK_Default, this._gameName, this._gameVersion, this._appId);
+                LTSDK.CreateInstace(SDK_CQ, this._gameName, this._gameVersion, this._appId);//
                 break;
         }
     }

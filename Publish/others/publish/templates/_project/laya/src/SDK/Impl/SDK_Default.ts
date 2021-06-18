@@ -49,7 +49,7 @@ export default class SDK_Default implements ISDK {
         this.isADConfigInited = true;
         this.navLevels = [];
         this.configs.payRate = 0;
-        this.checkState = ECheckState.InCheck;
+        this.checkState = ECheckState.Normal;
         this.isConfigEnable = true;
         this.flg = flg;
         this.channel = channel;
