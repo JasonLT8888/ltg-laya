@@ -20,6 +20,7 @@ import LTG_UI_Sign from "./LTG_UI_Sign";
 import LTG_UI_view_sign from "./LTG_UI_view_sign";
 import LTG_UI_view_item_sign_01 from "./LTG_UI_view_item_sign_01";
 import LTG_UI_btn_normalg from "./LTG_UI_btn_normalg";
+import LTG_UI_view_title_set from "./LTG_UI_view_title_set";
 import LTG_UI_HideMenu from "./LTG_UI_HideMenu";
 import LTG_UI_view_hidemenu from "./LTG_UI_view_hidemenu";
 import LTG_UI_toggle_01 from "./LTG_UI_toggle_01";
@@ -36,6 +37,9 @@ import LTG_UI_normal_btn from "./LTG_UI_normal_btn";
 import LTG_UI_RankList from "./LTG_UI_RankList";
 import LTG_UI_view_item_sign_08 from "./LTG_UI_view_item_sign_08";
 import LTG_UI_common_ad_btn from "./LTG_UI_common_ad_btn";
+import LTG_UI_btn_morediamond from "./LTG_UI_btn_morediamond";
+import LTG_UI_Win from "./LTG_UI_Win";
+import LTG_UI_image_bar from "./LTG_UI_image_bar";
 import LTG_UI_btn_unlock_ad_01 from "./LTG_UI_btn_unlock_ad_01";
 import LTG_UI_view_item_egg from "./LTG_UI_view_item_egg";
 import LTG_UI_view_unlock_progress from "./LTG_UI_view_unlock_progress";
@@ -47,6 +51,7 @@ import LTG_UI_btn_refuse from "./LTG_UI_btn_refuse";
 import LTG_UI_view_unlock from "./LTG_UI_view_unlock";
 import LTG_UI_ScreenShoot from "./LTG_UI_ScreenShoot";
 import LTG_UI_view_screenshoot from "./LTG_UI_view_screenshoot";
+import LTG_UI_Statement from "./LTG_UI_Statement";
 
 export default class LTComBinder{
 	public static bindAll():void {
@@ -70,6 +75,7 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_sign.URL, LTG_UI_view_sign);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_item_sign_01.URL, LTG_UI_view_item_sign_01);
 		fgui.UIObjectFactory.setExtension(LTG_UI_btn_normalg.URL, LTG_UI_btn_normalg);
+		fgui.UIObjectFactory.setExtension(LTG_UI_view_title_set.URL, LTG_UI_view_title_set);
 		fgui.UIObjectFactory.setExtension(LTG_UI_HideMenu.URL, LTG_UI_HideMenu);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_hidemenu.URL, LTG_UI_view_hidemenu);
 		fgui.UIObjectFactory.setExtension(LTG_UI_toggle_01.URL, LTG_UI_toggle_01);
@@ -86,6 +92,9 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_RankList.URL, LTG_UI_RankList);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_item_sign_08.URL, LTG_UI_view_item_sign_08);
 		fgui.UIObjectFactory.setExtension(LTG_UI_common_ad_btn.URL, LTG_UI_common_ad_btn);
+		fgui.UIObjectFactory.setExtension(LTG_UI_btn_morediamond.URL, LTG_UI_btn_morediamond);
+		fgui.UIObjectFactory.setExtension(LTG_UI_Win.URL, LTG_UI_Win);
+		fgui.UIObjectFactory.setExtension(LTG_UI_image_bar.URL, LTG_UI_image_bar);
 		fgui.UIObjectFactory.setExtension(LTG_UI_btn_unlock_ad_01.URL, LTG_UI_btn_unlock_ad_01);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_item_egg.URL, LTG_UI_view_item_egg);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_unlock_progress.URL, LTG_UI_view_unlock_progress);
@@ -97,5 +106,6 @@ export default class LTComBinder{
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_unlock.URL, LTG_UI_view_unlock);
 		fgui.UIObjectFactory.setExtension(LTG_UI_ScreenShoot.URL, LTG_UI_ScreenShoot);
 		fgui.UIObjectFactory.setExtension(LTG_UI_view_screenshoot.URL, LTG_UI_view_screenshoot);
+		fgui.UIObjectFactory.setExtension(LTG_UI_Statement.URL, LTG_UI_Statement);
 	}
 }

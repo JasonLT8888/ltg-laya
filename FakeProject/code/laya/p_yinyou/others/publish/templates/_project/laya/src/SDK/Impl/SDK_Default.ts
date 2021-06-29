@@ -49,7 +49,7 @@ export default class SDK_Default implements ISDK {
         this.isADConfigInited = true;
         this.navLevels = [];
         this.configs.payRate = 0;
-        this.checkState = ECheckState.InCheck;
+        this.checkState = ECheckState.Normal;
         this.isConfigEnable = true;
         this.flg = flg;
         this.channel = channel;
@@ -74,7 +74,7 @@ export default class SDK_Default implements ISDK {
                 let sendData = {
                     appid: LTPlatform.instance.platformData.appId
                 };
-                LTHttp.Send('https://games.api.gugudang.com//api/get/games/token', Laya.Handler.create(this, (res) => {
+                LTHttp.Send('https://games.api.gugudang.com//api/get/youxi/token', Laya.Handler.create(this, (res) => {
                     console.log(res);
                     res = JSON.parse(res);
                     if (res && res.code == 0) {

@@ -4,7 +4,7 @@
     <graph id="n0_sgap" name="n0" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#ffcccccc">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <graph id="n6_gs0d" name="__nativeinpage" xy="55,343" size="640,450" type="rect">
+    <graph id="n6_gs0d" name="__nativeinpage" xy="55,388" size="640,360" customData="3" type="rect">
       <relation target="" sidePair="center-center,middle-middle"/>
     </graph>
     <component id="n1_sgap" name="btn_back" src="gxfzc" fileName="cmp/btn_text_blue.xml" xy="265,1044">

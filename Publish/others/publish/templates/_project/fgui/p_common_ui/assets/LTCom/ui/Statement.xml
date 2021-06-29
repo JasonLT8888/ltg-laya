@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n0_y1nv" name="n0" xy="0,0" size="750,1334" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n3_y1nv" name="n3" src="8gel3" fileName="img/sp_diban1.png" xy="11,116" size="727,1053">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <text id="n2_y1nv" name="n2" xy="29,179" size="691,971" fontSize="25" color="#333333" autoSize="none" text="本应用尊重并保护所有使用服务用户的个人隐私权。为了给您提供更准确、更有个性化的服务，本应用会按照本隐私权政策的规定使用和披露您的个人信息。在未征得您事先许可的情况下，本应用不会将这些信息对外披露或向第三方提供。您在同意本服务条款之时，即视为您已经同意本隐私权政策全部内容。&#xA;一、本应用将会收集和处理以下信息：&#xA;1.设备信息：包括设备标识符、操作系统的设置信息、设备的硬件信息、应用的基本信息及使用信息、网络信息、运营商信息；&#xA;2.网络信息：包括网络链接状态、接入网络的方式和类型、IP地址；&#xA;3.使用信息：包括广告内容的展现、点击、下载；&#xA;4.其他：游戏平台账号ID，以为您提供更加个性化的服务或广告。&#xA;二、上述数据将传输并保存至【中华人民共和国境内】的服务器，保存期限为60天，超出这一保存时间后将删除，但法律法规另有规定的除外。我们保证不对外公开或向任何第三方提供您的个人信息，但是存在以下情况之一的除外：&#xA;1.公开或提供相关信息之前获得您的许可的；&#xA;2.根据法律法规或有关政策的规定而公开或提供的；&#xA;3.根据国家权力机关要求公开或提供的；&#xA;如果您不同意我们采集以上信息，或不同意调用手机相关权限或功能，本应用将无法正常运行。您可以通过退出或卸载本应用来终止数据收集及上传。&#xA;三、未成年人请在您的监护人陪同下仔细阅读本服务条款，并在征得您的监护人同意的前提下使用本应用。&#xA;四、如果您对本服务条款或者本应用有任何疑问和建议，请通过客服邮箱：175690489@qq.com联系我们。&#xA;">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <component id="n4_y1nv" name="n4" src="8gel6" fileName="cmp/view_title_set.xml" xy="194,96">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="title_icon" propertyId="1" value="ui://hbq27te3y1nvc0"/>
+    </component>
+    <component id="n5_y1nv" name="btn_confirm" src="8gelt" fileName="cmp/btn_confirm_01.xml" xy="413,1163">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3y1nvc1"/>
+    </component>
+    <component id="n6_y1nv" name="btn_cancel" src="8gelw" fileName="cmp/btn_cancel_01.xml" xy="133,1163" grayed="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3y1nvc2"/>
+    </component>
+  </displayList>
+</component>

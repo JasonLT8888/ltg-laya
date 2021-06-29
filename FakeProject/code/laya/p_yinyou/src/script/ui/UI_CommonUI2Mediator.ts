@@ -23,6 +23,8 @@ import { TryItemConfig } from "../config/TryItemConfig";
 import LTUI from "../../LTGame/UIExt/LTUI";
 import { LTG_UI_RankListMediator } from "../../LTG_CommonUI/Mediator/LTG_UI_RankListMediator";
 import { UI_MiniGamesMediator } from "../../LTGame/UIExt/DefaultUI/UI_MiniGamesMediator";
+import { LTG_Com_WinData } from "../../LTG_CommonUI/Data/LTG_Com_WinData";
+import { LTG_Com_StatementData } from "../../LTG_CommonUI/Data/LTG_Com_StatementData";
 
 class UIDemoData {
 
@@ -159,6 +161,32 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         new UIDemoData("获取排行", () => {
             LTG_UI_RankListMediator.instance.Show();
 
+        }),
+        new UIDemoData("结算", () => {
+            let windata = new LTG_Com_WinData();
+            windata.progressUnlockEnable = false;
+            windata.coinIconUrl = "ui://hbq27te3fig09w";
+            windata.iconUrl = "";
+            windata.multiRate = 5;
+            windata.winCoin = 63;
+            windata.progressUnlockValue = 100;
+            windata.onNextLevel = Laya.Handler.create(this, () => {
+                console.log("结算完成，进入下一关");
+            });
+            windata.onProgressItemUnlocked = Laya.Handler.create(this, () => {
+                console.log("这里弹出解锁获得界面");
+            });
+            windata.Send();
+
+        }), new UIDemoData("条款", () => {
+            let data = new LTG_Com_StatementData();
+            data.onClose = Laya.Handler.create(this, () => {
+                console.log("不接收条款，退出游戏");
+            });
+            data.onConfirm = Laya.Handler.create(this, () => {
+                console.log("接收条款，继续游戏");
+            });
+            data.Send();
         })
     ];
 

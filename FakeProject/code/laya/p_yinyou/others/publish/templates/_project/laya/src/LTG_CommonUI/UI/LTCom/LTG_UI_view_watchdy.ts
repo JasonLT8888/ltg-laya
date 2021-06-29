@@ -8,6 +8,7 @@ export default class LTG_UI_view_watchdy extends fgui.GComponent {
 	public m_text_code:fgui.GTextField;
 	public m_btn_watch:fgui.GGraph;
 	public m_icon:fgui.GLoader;
+	public m_t0:fgui.Transition;
 
 	public static URL:string = "ui://hbq27te38gel4g";
 
@@ -24,5 +25,6 @@ export default class LTG_UI_view_watchdy extends fgui.GComponent {
 		this.m_text_code = <fgui.GTextField><any>(this.getChildAt(2));
 		this.m_btn_watch = <fgui.GGraph><any>(this.getChildAt(3));
 		this.m_icon = <fgui.GLoader><any>(this.getChildAt(4));
+		this.m_t0 = this.getTransitionAt(0);
 	}
 }

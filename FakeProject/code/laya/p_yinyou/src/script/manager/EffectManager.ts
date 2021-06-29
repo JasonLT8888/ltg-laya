@@ -1,4 +1,3 @@
-import LTDictionary from "../../LTGame/LTUtils/LTDictionary";
 import GlobalUnit from "../common/GlobalUnit";
 import { EffectConfig } from "../config/EffectConfig";
 import LTRes from "../../LTGame/Res/LTRes";
@@ -76,10 +75,7 @@ export class EffectManager {
         this._uiEffectScene.enableLight = false;
         Laya.stage.addChildAt(this._uiEffectScene, 0);
         this._uiEffectCamera = new Laya.Camera();
-        this._uiEffectCamera.name = 'UIEffectCamera';
-        this._uiEffectCamera.nearPlane = 0.3;
         this._uiEffectCamera.clearFlag = Laya.CameraClearFlags.DepthOnly;
-        // this._uiEffectCamera.transform.localRotationEulerY = 180;
         this._uiEffectScene.addChild(this._uiEffectCamera);
         this._uiEffectCamera.transform.localPositionZ = 10;
     }
@@ -136,7 +132,7 @@ export class EffectManager {
         return instEffect;
     }
 
-    public PlayEffectByData(showData: EffectShowData): number {
+    public async PlayEffectByData(showData: EffectShowData): Promise<number> {
         let instEffect = this.GetEffectObjById(showData.effectId);
         if (showData.parent != null) {
             showData.parent.addChild(instEffect);
@@ -146,13 +142,8 @@ export class EffectManager {
                 this._uiEffectScene.addChild(instEffect);
 
                 if (showData.setPos != null) {
-                    // 暂时移除
                     let ray = CameraEx.ScreenPosToRay(this.uiEffectCamera, new Laya.Vector2(showData.setPos.x, showData.setPos.y));
-
-                    let dotDistance = Vector3Ex.Dot(ray.direction, new Laya.Vector3(0, 0, -1));
-                    let scale = 10 / dotDistance;
-
-                    showData.setPos = Vector3Ex.Add(this.uiEffectCamera.transform.position, Vector3Ex.Scale(ray.direction, scale));
+                    showData.setPos = Vector3Ex.Add(ray.origin, Vector3Ex.Scale(ray.origin, 100));
                 }
 
             } else {
@@ -169,7 +160,8 @@ export class EffectManager {
             instEffect.transform.setWorldLossyScale(showData.setScale);
         }
         if (showData.continueTime) {
-            this._WaitDestory(showData.continueTime, instEffect);
+            await Awaiters.Seconds(showData.continueTime);
+            instEffect.destroy();
         } else {
             this._continueEffects.push(instEffect);
             return this._continueEffects.length - 1;
@@ -177,13 +169,8 @@ export class EffectManager {
         return -1;
     }
 
-    private async _WaitDestory(time: number, obj: Laya.Sprite3D) {
-        await Awaiters.Seconds(time);
-        obj.destroy();
-    }
-
-    public PlayEffectById(effectId: number, duringTime: number = 2,
-        pos: Laya.Vector3 = null, rot: Laya.Quaternion = null, parent: Laya.Sprite3D = null): number {
+    public async PlayEffectById(effectId: number, duringTime: number = 2, 
+        pos: Laya.Vector3 = null, rot: Laya.Quaternion = null, parent: Laya.Sprite3D = null): Promise<number> {
         let data = new EffectShowData(effectId);
         data.continueTime = duringTime;
         data.setPos = pos;

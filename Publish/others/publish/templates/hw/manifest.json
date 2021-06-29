@@ -5,11 +5,12 @@
     "icon": "/icon.png",
     "versionName": "0.0.1",
     "versionCode": 1,
-    "minPlatformVersion": 1075,
+    "minPlatformVersion": 1078,
     "config": {
         "logLevel": "log"
     },
     "display": {
         "orientation": "portrait"
-    }
+    },
+    "subpackages": []
 }

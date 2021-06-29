@@ -172,7 +172,7 @@ export default class VivoPlatform extends DefaultPlatform {
             this._banner.hide();
         }
     }
-    
+
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
         this._rewardSuccessed = onSuccess;
         this._rewardSkipped = onSkipped;
@@ -251,9 +251,23 @@ export default class VivoPlatform extends DefaultPlatform {
         }
     }
     LoadSubpackage(name: string, onSuccess: Laya.Handler, onFailed: Laya.Handler) {
-        if (onSuccess) {
-            onSuccess.run();
-        }
+        this.base.loadSubpackage({
+            name: name,
+            success: () => {
+                console.log("vivo分包加载完成", `${name}`);
+                if (onSuccess) {
+                    onSuccess.run();
+                }
+            },
+            fail: (err) => {
+                console.error("vivo分包加载出错", err);
+                if (onFailed) {
+                    onFailed.run();
+                }
+            },
+            complete: () => {
+            }
+        });
     }
 
     RecordEvent(eventId: string, param: object) {

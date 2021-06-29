@@ -2,7 +2,10 @@
   "name": "ltgame-kit",
   "version": "1.0.0",
   "description": "ltgame-kit",
-  "dependencies": {},
+  "dependencies": {
+    "compressing": "^1.5.1",
+    "unzip": "^0.1.11"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "color": "^3.1.2",

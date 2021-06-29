@@ -116,6 +116,7 @@ export class SubpackHelper {
             let gameJsName = "";
             switch (this._packConfig.platform) {
                 case "oppo":
+                case "hw":
                     gameJsName = "main";
                     break;
                 default:
@@ -135,6 +136,7 @@ export class SubpackHelper {
         let gameJsonName = "";
         switch (this._packConfig.platform) {
             case "oppo":
+            case "hw":
                 gameJsonName = "manifest";
                 break;
             case "vivo":
@@ -165,10 +167,19 @@ export class SubpackHelper {
                 if (this._packConfig.forceInPack.indexOf(checkRelativePath) >= 0) {
                     console.log("强制主包", checkRelativePath.green);
                 } else {
-                    subpacks.push({
-                        "name": name,
-                        "root": relativePath + "/"
-                    });
+
+                    if (this._packConfig.platform == "hw") {
+                        // subpacks.push({
+                        //     "name": name,
+                        //     "resource": relativePath + "/"
+                        // });
+                    } else {
+                        subpacks.push({
+                            "name": name,
+                            "root": relativePath + "/"
+                        });
+                    }
+
                 }
             }
         }

@@ -3,10 +3,9 @@
     "bannerId": "",
     "rewardVideoId": "",
     "interstitialId": "",
-    "forceRemote": [
-        "res/config"
-    ],
+    "forceRemote": [],
     "forceInPack": [
+        "res/config",
         "res/fgui_load"
     ],
     "maxSinglePackSize": 10,

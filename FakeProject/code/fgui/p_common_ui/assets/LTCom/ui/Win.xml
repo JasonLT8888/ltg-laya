@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://hbq27te3fig0bh">
+  <controller name="state" exported="true" pages="0,norm,1,change" selected="0"/>
+  <displayList>
+    <graph id="n7_hfek" name="n7" xy="0,0" size="750,1334" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n0_fig0" name="n0" src="fig0a2" fileName="img/七日签到/di_1.png" xy="104,256" size="542,721">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n1_fig0" name="n1" src="fig0bk" fileName="img/结算/start.png" xy="166,337">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n2_fig0" name="n2" src="fig0bj" fileName="img/结算/tittle.png" xy="104,225">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <component id="n4_fig0" name="btn_normalget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,838" controller="ad,1,color,1">
+      <gearXY controller="state" pages="0,1" values="220,838|220,716"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="rate" propertyId="0" value="x1"/>
+    </component>
+    <component id="n3_fig0" name="btn_multiget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,716" controller="color,0">
+      <gearXY controller="state" pages="0,1" values="220,716|220,838"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n5_fig0" name="unlock_progress" src="fig0bl" fileName="img/结算/image_bar.xml" xy="288,511" size="173,164">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <ProgressBar value="50" max="100"/>
+    </component>
+    <graph id="n6_hfek" name="__nativeinpage" xy="55,974" size="640,360" customData="3" type="rect">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </graph>
+  </displayList>
+</component>

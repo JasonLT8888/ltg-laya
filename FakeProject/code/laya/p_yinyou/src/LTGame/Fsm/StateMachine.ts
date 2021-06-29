@@ -64,6 +64,20 @@ export default class StateMachine<T extends BaseState<any>> {
 
     public LogicUpdate(dt: number) {
         if (this.currState == null) {
+            if (this._forceChangeState != 0) {
+                this.ChangeState(this._forceChangeState, this._forceChangeParam);
+                this._forceChangeState = 0;
+                this._forceChangeParam = null;
+                this.OnRunning(null, dt);
+            }
+            return;
+        }
+
+        if (this._forceChangeState != 0) {
+            this.ChangeState(this._forceChangeState, this._forceChangeParam);
+            this._forceChangeState = 0;
+            this._forceChangeParam = null;
+            this.OnRunning(null, dt);
             return;
         }
 
@@ -72,12 +86,6 @@ export default class StateMachine<T extends BaseState<any>> {
             this.ChangeState(nextState);
         }
         this.OnRunning(null, dt);
-
-        if (this._forceChangeState != 0) {
-            this.ChangeState(this._forceChangeState, this._forceChangeParam);
-            this._forceChangeState = 0;
-            this._forceChangeParam = null;
-        }
     }
 
     public OnRunning(param: any, dt: number): void {

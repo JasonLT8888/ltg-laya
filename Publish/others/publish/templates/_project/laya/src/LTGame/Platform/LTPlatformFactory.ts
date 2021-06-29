@@ -10,6 +10,7 @@ import { NativeIOSPlatform } from "./Impl/Native_IOS/NativeIOSPlatform";
 import VivoPlatform from "./VivoPlatform";
 import KSPlatform from "./KSPlatform";
 import { NativeAndroidPlatform } from "./Impl/Native_Android/NativeAndroidPlatform";
+import HWPlatform from "./HWPlatform";
 
 export default class LTPlatformFactory {
 
@@ -21,12 +22,13 @@ export default class LTPlatformFactory {
         if (Laya.Browser.onTTMiniGame) {
             result = new TTPlatform();
         } else if (Laya.Browser.onHWMiniGame) {
-            // result = new KSPlatform();
-            console.log("华为");
-        } else if (window['ks'] && Laya.Browser.onMiniGame) {
-            result = new KSPlatform();
+            result = new HWPlatform();
         } else if (Laya.Browser.onMiniGame) {
-            result = new WXPlatform();
+            if (window['ks']) {
+                result = new KSPlatform();
+            } else {
+                result = new WXPlatform();
+            }
         } else if (Laya.Browser.onBDMiniGame) {
             result = new BDPlatform();
         } else if (isQTT) {

@@ -51,6 +51,8 @@ export default class LTPlatform {
                 return "趣头条";
             case EPlatformType.KS:
                 return "快手";
+            case EPlatformType.HW:
+                return "华为";
             case EPlatformType.Native_IOS:
                 return "IOS原生"
             default:

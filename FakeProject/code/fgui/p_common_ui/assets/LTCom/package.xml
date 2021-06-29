@@ -347,7 +347,7 @@
     <image id="fig09t" name="jbi_0002_7.png" path="/img/七日签到/"/>
     <image id="fig09u" name="jbi_0001_8.png" path="/img/七日签到/"/>
     <image id="fig09v" name="jbi_0000_9.png" path="/img/七日签到/"/>
-    <image id="fig09w" name="coin.png" path="/img/七日签到/"/>
+    <image id="fig09w" name="coin.png" path="/img/七日签到/" exported="true"/>
     <image id="fig09x" name="back.png" path="/img/七日签到/"/>
     <image id="fig09y" name="7day.png" path="/img/七日签到/"/>
     <font id="fig09z" name="FontSignCoin.fnt" path="/img/七日签到/" exported="true"/>
@@ -362,7 +362,7 @@
     <image id="fig0ab" name="di_2.png" path="/img/七日签到/" scale="9grid" scale9grid="40,36,80,72"/>
     <image id="fig0ac" name="zhp_jian.png" path="/img/转盘/"/>
     <image id="fig0ad" name="zhp_di.png" path="/img/转盘/"/>
-    <image id="fig0ae" name="loading_2.png" path="/img/转盘/"/>
+    <image id="fig0ae" name="loading_2.png" path="/img/转盘/" scale="9grid" scale9grid="9,7,249,14"/>
     <image id="fig0af" name="loading_1.png" path="/img/转盘/"/>
     <image id="fig0ag" name="gifticon.png" path="/img/转盘/"/>
     <image id="fig0ah" name="fangqi.png" path="/img/转盘/"/>
@@ -375,7 +375,53 @@
     <image id="fig0ao" name="3.png" path="/img/转盘/"/>
     <image id="fig0ap" name="2.png" path="/img/转盘/"/>
     <image id="fig0aq" name="1.png" path="/img/转盘/"/>
+    <component id="fig0ar" name="btn_morediamond.xml" path="/img/结算/"/>
+    <image id="fig0as" name="btn_anniufen.png" path="/img/结算/" scale="9grid" scale9grid="35,35,33,42"/>
+    <image id="fig0at" name="sp_bg0.png" path="/img/结算/" scale="9grid" scale9grid="16,14,32,22"/>
+    <image id="fig0au" name="btn_anniulv.png" path="/img/结算/" scale="9grid" scale9grid="35,35,36,42"/>
+    <image id="fig0aw" name="sp_huode.png" path="/img/结算/"/>
+    <font id="fig0ay" name="font_1.fnt" path="/img/结算/font_1/" exported="true"/>
+    <image id="fig0az" name="0.png" path="/img/结算/font_1/"/>
+    <image id="fig0b0" name="1.png" path="/img/结算/font_1/"/>
+    <image id="fig0b1" name="2.png" path="/img/结算/font_1/"/>
+    <image id="fig0b2" name="3.png" path="/img/结算/font_1/"/>
+    <image id="fig0b3" name="4.png" path="/img/结算/font_1/"/>
+    <image id="fig0b4" name="5.png" path="/img/结算/font_1/"/>
+    <image id="fig0b5" name="6.png" path="/img/结算/font_1/"/>
+    <image id="fig0b6" name="7.png" path="/img/结算/font_1/"/>
+    <image id="fig0b7" name="8.png" path="/img/结算/font_1/"/>
+    <image id="fig0b8" name="9.png" path="/img/结算/font_1/"/>
+    <image id="fig0b9" name="+.png" path="/img/结算/font_1/"/>
+    <image id="fig0ba" name="x.png" path="/img/结算/font_1/"/>
+    <image id="fig0bb" name="L.png" path="/img/结算/font_1/"/>
+    <image id="fig0bc" name="v.png" path="/img/结算/font_1/"/>
+    <image id="fig0bd" name="guan.png" path="/img/结算/font_1/"/>
+    <image id="fig0be" name="dian.png" path="/img/结算/font_1/"/>
+    <image id="fig0bf" name="di.png" path="/img/结算/font_1/"/>
+    <image id="fig0bg" name="reward_banner.png" path="/img/结算/"/>
+    <image id="fig0bh" name="结算.png" path="/img/结算/"/>
+    <component id="fig0bi" name="Win.xml" path="/ui/" exported="true"/>
+    <image id="fig0bj" name="tittle.png" path="/img/结算/"/>
+    <image id="fig0bk" name="start.png" path="/img/结算/"/>
+    <component id="fig0bl" name="image_bar.xml" path="/img/结算/"/>
+    <image id="fig0bm" name="ball_4.png" path="/img/结算/" exported="true"/>
+    <font id="fig0bn" name="font_4.fnt" path="/img/结算/font_4/" exported="true"/>
+    <image id="fig0bo" name="0.png" path="/img/结算/font_4/"/>
+    <image id="fig0bp" name="1.png" path="/img/结算/font_4/"/>
+    <image id="fig0bq" name="2.png" path="/img/结算/font_4/"/>
+    <image id="fig0br" name="3.png" path="/img/结算/font_4/"/>
+    <image id="fig0bs" name="4.png" path="/img/结算/font_4/"/>
+    <image id="fig0bt" name="5.png" path="/img/结算/font_4/"/>
+    <image id="fig0bu" name="6.png" path="/img/结算/font_4/"/>
+    <image id="fig0bv" name="7.png" path="/img/结算/font_4/"/>
+    <image id="fig0bw" name="8.png" path="/img/结算/font_4/"/>
+    <image id="fig0bx" name="9.png" path="/img/结算/font_4/"/>
+    <image id="fig0by" name="%.png" path="/img/结算/font_4/"/>
     <component id="sy4war" name="item_view_new_eggwall.xml" path="/cmp/"/>
+    <component id="y1nvbz" name="Statement.xml" path="/ui/" exported="true"/>
+    <image id="y1nvc0" name="隐私声明.png" path="/img/隐私声明/"/>
+    <image id="y1nvc1" name="同意.png" path="/img/隐私声明/"/>
+    <image id="y1nvc2" name="不同意.png" path="/img/隐私声明/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>
