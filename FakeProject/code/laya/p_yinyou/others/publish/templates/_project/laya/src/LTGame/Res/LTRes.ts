@@ -32,6 +32,9 @@ export default class LTRes {
     }
 
     public static Get(resUrl: string, noClone: boolean = false): any {
+        if (resUrl.endsWith('.ls')) {
+            noClone = true;
+        }
         let getRes = Laya.loader.getRes(resUrl);
         if (getRes == null) {
             console.error("资源尚未加载", resUrl);
