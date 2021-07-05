@@ -65,6 +65,7 @@ export class SubpackHelper {
             console.log("强制主包", fullPath.green);
             let fakePack = new LTPackNode();
             fakePack.isNode = false;
+            fakePack.isMainPack = true;
             let dirStat = fs.statSync(fullPath);
             fakePack.size = dirStat.size;
             fakePack.fullPath = fullPath;
@@ -127,7 +128,7 @@ export class SubpackHelper {
                 continue;
             }
             let jsPath = path.join(targetPath, "./" + gameJsName + ".js");
-            if (!fs.existsSync(jsPath)) {
+            if (!fs.existsSync(jsPath) && !subpack.isMainPack) {
                 LTUtils.WriteStrTo(jsPath, "");
             }
         }

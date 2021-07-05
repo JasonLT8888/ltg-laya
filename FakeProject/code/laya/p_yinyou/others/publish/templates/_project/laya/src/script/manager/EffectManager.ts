@@ -143,7 +143,12 @@ export class EffectManager {
 
                 if (showData.setPos != null) {
                     let ray = CameraEx.ScreenPosToRay(this.uiEffectCamera, new Laya.Vector2(showData.setPos.x, showData.setPos.y));
-                    showData.setPos = Vector3Ex.Add(ray.origin, Vector3Ex.Scale(ray.origin, 100));
+
+                    let dotVal = Vector3Ex.Dot(ray.direction, Vector3Ex.back);
+
+                    let scale = ray.origin.z / dotVal;
+
+                    showData.setPos = Vector3Ex.Add(ray.origin, Vector3Ex.Scale(ray.direction, scale));
                 }
 
             } else {
@@ -169,7 +174,7 @@ export class EffectManager {
         return -1;
     }
 
-    public async PlayEffectById(effectId: number, duringTime: number = 2, 
+    public async PlayEffectById(effectId: number, duringTime: number = 2,
         pos: Laya.Vector3 = null, rot: Laya.Quaternion = null, parent: Laya.Sprite3D = null): Promise<number> {
         let data = new EffectShowData(effectId);
         data.continueTime = duringTime;

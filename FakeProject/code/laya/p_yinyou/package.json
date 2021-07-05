@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "webpack --config others/webpack_config/webpack-config-for-game.js",
+    "update-ltg": "node others/publish/bin/update.js",
     "publish-wx": "node others/publish/bin/publish.js -p wx",
     "publish-tt": "node others/publish/bin/publish.js -p tt",
     "publish-qq": "node others/publish/bin/publish.js -p qq",
@@ -31,7 +32,6 @@
     "buid-ks-debug": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/ -d 1",
     "buid-ks-release": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/",
     "publish-bd": "node others/publish/bin/publish.js -p bd",
-    "update-ltg": "node others/publish/bin/update.js",
     "publish-ksold": "node others/publish/bin/publish.js -p ks",
     "rpk_oppo": "node others/publish/templates/tools/make_oppo_rpk.js hw debug"
   },

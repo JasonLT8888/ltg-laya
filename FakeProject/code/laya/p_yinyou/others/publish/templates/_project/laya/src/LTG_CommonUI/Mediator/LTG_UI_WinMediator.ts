@@ -101,7 +101,7 @@ export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
         switch (LTPlatform.instance.platform) {
             case EPlatformType.TT:
             case EPlatformType.Web:
-                if (LTSDK.instance.configs.changeEnable && GameData.instance.levelId % 2 == 0) {
+                if (GameData.instance.levelId % 2 == 0) {
                     this.ui.m_btn_normalget.m_color.selectedIndex = 0;
                     this.ui.m_btn_multiget.m_color.selectedIndex = 1;
                     this.ui.m_state.selectedIndex = 1;

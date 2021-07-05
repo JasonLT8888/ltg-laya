@@ -11,7 +11,9 @@ import CommonSaveData from "../../../Commom/CommonSaveData";
 
 export class View_NativeInPage {
 
+    static Inst: View_NativeInPage;
     static CreateView(tagUI: fgui.GComponent): View_NativeInPage {
+        View_NativeInPage.Inst = null;
         if (tagUI == null) return null;
         if (LTPlatform.instance.platform != EPlatformType.Oppo && LTPlatform.instance.platform != EPlatformType.Vivo && LTPlatform.instance.platform != EPlatformType.HW) {
             console.log("NativeInPage已隐藏,只有oppo vivo平台支持");
@@ -36,7 +38,9 @@ export class View_NativeInPage {
             btnPos = parseInt(posStr);
         }
         tagUI.dispose();
-        return new View_NativeInPage(uiInstance, btnPos);
+        let newUI = new View_NativeInPage(uiInstance, btnPos);
+        View_NativeInPage.Inst = newUI;
+        return newUI;
     }
 
     private _ui: UI_NativeInPage;
@@ -67,9 +71,9 @@ export class View_NativeInPage {
         console.log("初始化 内嵌 native广告id", this._cacheIds);
 
         this._Init();
-        this.ui.m_ad.onClick(this, this._OnClickAd);
-        this.ui.m_btn_clickad.onClick(this, this._OnClickAd);
-        this.ui.m_btn_clickadbg.onClick(this, this._OnClickAd);
+        this.ui.m_ad.onClick(this, this.ClickAd);
+        this.ui.m_btn_clickad.onClick(this, this.ClickAd);
+        this.ui.m_btn_clickadbg.onClick(this, this.ClickAd);
         this.ui.m_btn_close.onClick(this, this.clickClose);
         this.ui.m_btn_pos.selectedIndex = btnPos;
 
@@ -78,13 +82,18 @@ export class View_NativeInPage {
     public ClickAd() {
         console.log(" 点击 内嵌 native", this._cacheAdData);
         // 相应点击事件
-        if (this._cacheAdData && this._cacheAdData.adId) {
+        if (this._cacheAdData && this._cacheAdData.adId && !this._cacheAdData.click_reported) {
+            this._cacheAdData.click_reported = true;
             View_NativeInPage._cacheNativeAd.reportAdClick({
                 adId: this._cacheAdData.adId
             });
         }
         // 刷新
-        this._Init();
+        if (LTPlatform.instance.platform != EPlatformType.HW) {
+            this._Init();
+        } else {
+            this.ui.visible = false;
+        }
     }
 
     private async _Init() {
@@ -126,28 +135,28 @@ export class View_NativeInPage {
         this.ui.m_ad.m_tag.url = this._cacheAdData.logoUrl;
         this.ui.m_ad.m_title.text = this._cacheAdData.title;
         this.ui.m_ad.m_desc.text = this._cacheAdData.desc;
+        if (this._cacheAdData.source) {
+            this.ui.m_ad.m_sourceTxt.text = `${this._cacheAdData.source}`;
+        }
         if (this._cacheAdData && !this._cacheAdData.show_reported && this._cacheAdData.adId) {
             View_NativeInPage._cacheNativeAd.reportAdShow({
                 adId: this._cacheAdData.adId
             });
             this._cacheAdData.show_reported = true;
+            console.log("内嵌 native广告已展示", this._cacheAdData.adId);
         }
         LTPlatform.instance.HideBannerAd();
-        console.log("内嵌 native广告已展示", this._cacheAdData);
     }
 
-    clickClose() {
+    private clickClose() {
         if (MathEx.RandomRatio(LTSDK.instance.configs.nativePayRate)
             && CommonSaveData.instance.nativeClickCount < LTSDK.instance.configs.nativeClickCount) {
             CommonSaveData.instance.nativeClickCount++;
             CommonSaveData.SaveToDisk();
-            this._OnClickAd();
+            this.ClickAd();
         }
         this.visible = false;
         this.ui.visible = false;
-    }
-    private _OnClickAd() {
-        this.ClickAd();
     }
 
     private async _LoadIconData(index: number): Promise<boolean> {
@@ -156,6 +165,8 @@ export class View_NativeInPage {
                 console.log('原生广告加载完成 触发', JSON.stringify(res));
                 if (res && res.adList) {
                     this._cacheAdData = res.adList[0];
+                    this._cacheAdData.show_reported = false;
+                    this._cacheAdData.click_reported = false;
                     resolve(true);
                 }
             };
@@ -186,8 +197,8 @@ export class View_NativeInPage {
                         adUnitId: this._cacheIds[index],
                     });
                 }
-                View_NativeInPage._cacheNativeAd.offLoad(onLoad);
-                View_NativeInPage._cacheNativeAd.offError(onError);
+                View_NativeInPage._cacheNativeAd.offLoad();
+                View_NativeInPage._cacheNativeAd.offError();
                 View_NativeInPage._cacheNativeAd.onLoad(onLoad);
                 View_NativeInPage._cacheNativeAd.onError(onError);
                 View_NativeInPage._cacheNativeAd.load();
@@ -196,4 +207,18 @@ export class View_NativeInPage {
 
     }
 
+    ReportShow() {
+        if (this._cacheAdData && this._cacheAdData.adId && this.visible) {
+            this._cacheAdData.show_reported = true;
+            console.log("内嵌 native广告已展示", this._cacheAdData.adId);
+
+            View_NativeInPage._cacheNativeAd.reportAdShow({
+                adId: this._cacheAdData.adId
+            });
+        }
+    }
+
+    Refresh() {
+        this._Init();
+    }
 }

@@ -121,7 +121,8 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
         LTUI.UnlockScreen();
     }
 
-    private async _OnClickWatchAd() {
+    private async _OnClickWatchAd(evt: Laya.Event) {
+        evt.stopPropagation();
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {
             this._DoRoll();

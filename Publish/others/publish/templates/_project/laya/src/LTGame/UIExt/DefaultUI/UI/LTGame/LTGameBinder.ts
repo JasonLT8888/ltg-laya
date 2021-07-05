@@ -2,7 +2,6 @@
 
 import UI_hot_game from "./UI_hot_game";
 import UI_NativeInPage from "./UI_NativeInPage";
-import UI_AdInpageComp from "./UI_AdInpageComp";
 import UI_iconLongComp from "./UI_iconLongComp";
 import UI_OpenAds from "./UI_OpenAds";
 import UI_view_game_icon1 from "./UI_view_game_icon1";
@@ -20,6 +19,7 @@ import UI_CommonEndSliderADs from "./UI_CommonEndSliderADs";
 import UI_btn_normal from "./UI_btn_normal";
 import UI_CommonLoad from "./UI_CommonLoad";
 import UI_view_load from "./UI_view_load";
+import UI_AdInpage from "./UI_AdInpage";
 import UI_side_ads1 from "./UI_side_ads1";
 import UI_MiniGames from "./UI_MiniGames";
 import UI_rank_item from "./UI_rank_item";
@@ -53,11 +53,10 @@ import UI_btn_scaler_yellow from "./UI_btn_scaler_yellow";
 import UI_btn_red_scale from "./UI_btn_red_scale";
 import UI_view_sharegames_big from "./UI_view_sharegames_big";
 
-export default class LTGameBinder {
+export default class LTGameBinder{
 	public static bindAll():void {
 		fgui.UIObjectFactory.setExtension(UI_hot_game.URL, UI_hot_game);
 		fgui.UIObjectFactory.setExtension(UI_NativeInPage.URL, UI_NativeInPage);
-		fgui.UIObjectFactory.setExtension(UI_AdInpageComp.URL, UI_AdInpageComp);
 		fgui.UIObjectFactory.setExtension(UI_iconLongComp.URL, UI_iconLongComp);
 		fgui.UIObjectFactory.setExtension(UI_OpenAds.URL, UI_OpenAds);
 		fgui.UIObjectFactory.setExtension(UI_view_game_icon1.URL, UI_view_game_icon1);
@@ -75,6 +74,7 @@ export default class LTGameBinder {
 		fgui.UIObjectFactory.setExtension(UI_btn_normal.URL, UI_btn_normal);
 		fgui.UIObjectFactory.setExtension(UI_CommonLoad.URL, UI_CommonLoad);
 		fgui.UIObjectFactory.setExtension(UI_view_load.URL, UI_view_load);
+		fgui.UIObjectFactory.setExtension(UI_AdInpage.URL, UI_AdInpage);
 		fgui.UIObjectFactory.setExtension(UI_side_ads1.URL, UI_side_ads1);
 		fgui.UIObjectFactory.setExtension(UI_MiniGames.URL, UI_MiniGames);
 		fgui.UIObjectFactory.setExtension(UI_rank_item.URL, UI_rank_item);

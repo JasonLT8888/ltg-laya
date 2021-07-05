@@ -62,16 +62,9 @@ export default class LTRespackManager {
             case EPlatformType.Vivo:
                 adapter = Laya.VVMiniAdapter;
                 break;
-            // case EPlatformType.KS:
-            //     let remoteFiles = [];
-            //     for (let pack of this._packs) {
-            //         if (pack.pathType == EPackType.Remote) {
-            //             remoteFiles.push(pack.path);
-            //         }
-            //     }
-            //     window["baseUrl"] = this._baseUrl;
-            //     window["remoteFiles"] = remoteFiles;
-            //     break;
+            case EPlatformType.HW:
+                adapter = Laya.HWMiniAdapter;
+                break;
         }
         if (adapter == null) return;
         Laya.URL.basePath = this._baseUrl;

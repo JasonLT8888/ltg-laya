@@ -87,7 +87,8 @@ export default class LTG_UI_UnlockItemMediator extends BaseUIMediator<LTG_UI_Unl
     }
 
 
-    private async _OnClickUnlock() {
+    private async _OnClickUnlock(evt: Laya.Event) {
+        evt.stopPropagation();
         LTUI.TrigerBtnClick();
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {

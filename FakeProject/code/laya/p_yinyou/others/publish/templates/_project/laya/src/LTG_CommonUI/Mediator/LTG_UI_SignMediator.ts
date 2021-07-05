@@ -89,7 +89,8 @@ export default class LTG_UI_SignMediator extends BaseUIMediator<LTG_UI_Sign> {
         this.Hide();
     }
 
-    private async _OnClickWatchAd() {
+    private async _OnClickWatchAd(evt: Laya.Event) {
+        evt.stopPropagation();
         LTUI.TrigerBtnClick();
         LTPlatform.instance.RecordEvent('ad_sign', {});
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();

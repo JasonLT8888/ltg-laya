@@ -98,7 +98,8 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
         this._cacheData.onClose?.runWith(false);
     }
 
-    private async _OnClickWatchAd() {
+    private async _OnClickWatchAd(evt: Laya.Event) {
+        evt.stopPropagation();
         LTUI.TrigerBtnClick();
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {

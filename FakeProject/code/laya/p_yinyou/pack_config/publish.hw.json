@@ -3,8 +3,7 @@
     "bannerId": "",
     "rewardVideoId": "",
     "interstitialId": "",
-    "forceRemote": [
-    ],
+    "forceRemote": [],
     "forceInPack": [
         "res/config",
         "res/fgui_load"

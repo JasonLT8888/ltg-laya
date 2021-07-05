@@ -141,6 +141,7 @@
     <component id="nmlkig" name="tt_icon.xml" path="/cmp/"/>
     <component id="nmlkii" name="ttgame_items.xml" path="/cmp/"/>
     <component id="nmlkij" name="mid_banner.xml" path="/cmp/"/>
+    <component id="n22eik" name="AdInpage.xml" path="/cmp/native/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>

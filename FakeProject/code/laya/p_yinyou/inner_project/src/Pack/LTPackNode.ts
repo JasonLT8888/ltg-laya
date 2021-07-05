@@ -29,6 +29,7 @@ export class LTPackNode {
      */
     public name: string;
 
+    public isMainPack: boolean = false;
     constructor() {
         this.childs = [];
         this.size = 0;

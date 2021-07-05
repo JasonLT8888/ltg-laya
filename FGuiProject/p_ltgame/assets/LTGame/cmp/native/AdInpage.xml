@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,360">
+  <displayList>
+    <graph id="n12_9248" name="n12" xy="0,0" size="640,360" type="rect" lineColor="#ffffffff" corner="2">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <loader id="n8_9248" name="icon" xy="5,40" pivot="0.5,0.5" size="320,320" aspect="true" align="center" vAlign="middle" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <loader id="n9_9248" name="tag" xy="510,106" pivot="0.5,0.5" size="74,24" align="center" vAlign="middle" color="#999999">
+      <relation target="" sidePair="right-right,top-top"/>
+    </loader>
+    <loader id="n15_9248" name="img" xy="0,40" size="640,320" aspect="true" align="center" vAlign="middle" fill="scaleFree" clearOnPublish="true">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <text id="n10_9248" name="title" xy="5,0" pivot="0,0.5" size="182,39" font="DengXian" fontSize="16" vAlign="middle" autoSize="none" bold="true" text="">
+      <relation target="" sidePair="left-left,top-top"/>
+    </text>
+    <text id="n11_9248" name="desc" xy="484,130" pivot="0.5,0.5" anchor="true" size="262,177" font="DengXian" fontSize="26" color="#666666" align="center" autoSize="none" text="">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n16_n22e" name="tagtxt" xy="574,13" pivot="0.5,0.5" anchor="true" size="42,18" font="DengXian" fontSize="14" color="#999999" align="center" vAlign="middle" autoSize="none" bold="true" text="广告">
+      <relation target="" sidePair="right-right,top-top"/>
+    </text>
+    <text id="n17_n22e" name="sourceTxt" xy="402,0" size="147,30" font="DengXian" fontSize="16" color="#333333" align="right" vAlign="middle" autoSize="none" text="">
+      <relation target="" sidePair="right-right,top-top"/>
+    </text>
+    <graph id="n18_n22e" name="n18" xy="548,315" size="68,35" type="rect" lineSize="0" lineColor="#ffff9933" fillColor="#ffcccccc" corner="5">
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </graph>
+    <text id="n19_n22e" name="n19" xy="551,319" size="61,30" font="DengXian" fontSize="24" color="#0066ff" align="center" vAlign="middle" autoSize="none" bold="true" text="下载">
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </text>
+  </displayList>
+</component>
