@@ -4,10 +4,11 @@ import LTPlatformData from "../../Data/LTPlatformData";
 import LTPlatform from "../../LTPlatform";
 import LTSDK from "../../../../SDK/LTSDK";
 import { ECheckState } from "../../../../SDK/common/ECheckState";
+import LTUI from "../../../UIExt/LTUI";
 
 export class NativeAndroidPlatform extends DefaultPlatform {
     useWAV = true;
-    
+
     platform: EPlatformType = EPlatformType.Native_Android;
     safeArea: LTGame.SafeArea = null;
     bridge: any;
@@ -54,8 +55,8 @@ export class NativeAndroidPlatform extends DefaultPlatform {
             this.onLoginEnd.run();
     }
     ShowRewardVideoAd(onSuccess: Laya.Handler, onSkipped: Laya.Handler) {
-        const obj = {}
-
+        const obj = {};
+        LTUI.ShowLoading("加载中...");
         this.bridge.callWithBack(function (json) {
             console.log("激励广告事件:" + json);
             const data = JSON.parse(json);
@@ -79,7 +80,9 @@ export class NativeAndroidPlatform extends DefaultPlatform {
                     break;
             }
         }, "RewardVideoAd", JSON.stringify(obj));
-
+        setTimeout(() => {
+            LTUI.HideLoading();
+        }, 5000);
         this.bridge.call("ShowRewardAd");
     }
 

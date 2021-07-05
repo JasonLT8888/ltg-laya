@@ -1,6 +1,6 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
-import LTG_UI_Statement from "../UI/LTCom/LTG_UI_Statement";
 import { LTG_Com_StatementData } from "../Data/LTG_Com_StatementData";
+import LTG_UI_Statement from "../UI/LTCom/LTG_UI_Statement";
 
 
 

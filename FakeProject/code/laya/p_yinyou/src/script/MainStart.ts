@@ -98,7 +98,7 @@ export default class MainStart extends LTStart {
                 // platformData.rewardVideoId = "h2iup7j2ec ";
                 // platformData.interstitialId = "c7xzj23ghu"; 
                 // platformData.nativeinpageIds = ['u79peou9cx'];
-                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/vivo_${this._resVersion}/`);
+                LTRespackManager.instance.SetRemoteUrl(`https://file.gugudang.com/res/down/public/${this._gameName}/hw_${this._resVersion}/`);
 
                 break;
             default:

@@ -277,6 +277,9 @@ export default class SDK_CQ extends SDK_Default {
         if (LTPlatform.instance.platform == EPlatformType.TT || LTPlatform.instance.platform == EPlatformType.Web) {
             sendData.appid = "88888888";
         }
+        if (LTPlatform.instance.platform == EPlatformType.WX) {
+            sendData.appid = "wx88888888";
+        }
         LTHttp.Send(this._headPrefix + "/ads/get", Laya.Handler.create(this, this.onGetAdlist), Laya.Handler.create(this, (res) => {
             console.log("广告信息获取失败", res);
         }), true, sendData);

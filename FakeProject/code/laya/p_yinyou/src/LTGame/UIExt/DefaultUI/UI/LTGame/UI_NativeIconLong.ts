@@ -8,15 +8,20 @@ export default class UI_NativeIconLong extends fgui.GComponent {
 	public m_bg1:fgui.GGraph;
 	public m_ad:UI_iconLongComp;
 	public m_btn_close:UI_btn_normal;
+
 	public static URL:string = "ui://75kiu87kocvx6t";
 
 	public static createInstance():UI_NativeIconLong {
-		return <UI_NativeIconLong>(fgui.UIPackage.createObject("LTGame", "NativeIconLong"));
+		return <UI_NativeIconLong><any>(fgui.UIPackage.createObject("LTGame","NativeIconLong"));
 	}
 
-	protected onConstruct():void {
-		this.m_bg1 = <fgui.GGraph>(this.getChildAt(0));
-		this.m_ad = <UI_iconLongComp>(this.getChildAt(1));
-		this.m_btn_close = <UI_btn_normal>(this.getChildAt(2));
+	public constructor() {
+		super();
+	}
+
+	protected onConstruct(): void {
+		this.m_bg1 = <fgui.GGraph><any>(this.getChildAt(0));
+		this.m_ad = <UI_iconLongComp><any>(this.getChildAt(1));
+		this.m_btn_close = <UI_btn_normal><any>(this.getChildAt(2));
 	}
 }

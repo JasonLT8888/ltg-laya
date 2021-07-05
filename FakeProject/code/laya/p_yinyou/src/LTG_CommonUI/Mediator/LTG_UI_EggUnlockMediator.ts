@@ -72,7 +72,8 @@ export default class LTG_UI_EggUnlockMediator extends BaseUIMediator<LTG_UI_EggU
         this.Hide();
     }
 
-    private async _OnClickUnlock() {
+    private async _OnClickUnlock(evt: Laya.Event) {
+        evt.stopPropagation();
         LTUI.TrigerBtnClick();
         let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
         if (result) {

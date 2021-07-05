@@ -12,6 +12,7 @@ import LTPlatform from "./LTPlatform";
 import { ShareInfo } from "./ShareInfo";
 import DefaultPlatform from "./DefaultPlatform";
 import StringEx from "../LTUtils/StringEx";
+import { View_NativeInPage } from "../UIExt/DefaultUI/Cmp/View_NativeInpage";
 
 export default class HWPlatform extends DefaultPlatform {
     userInfo: LTGame.UserInfo;
@@ -78,6 +79,9 @@ export default class HWPlatform extends DefaultPlatform {
         Awaiters.NextFrame().then(() => {
             if (LTPlatform.instance.onResume) {
                 LTPlatform.instance.onResume.runWith(res);
+            }
+            if (View_NativeInPage.Inst && View_NativeInPage.Inst.visible) {
+                View_NativeInPage.Inst.ReportShow();
             }
             let cacheOnShow = LTPlatform.instance["_cacheOnShowHandle"];
             console.log(cacheOnShow);
@@ -219,17 +223,18 @@ export default class HWPlatform extends DefaultPlatform {
         //     // this._banner.style.left = (windowWidth - size.width) / 2;
         // });
     }
+    isBannerShow: boolean = false;
     ShowBannerAd() {
-        if (this._banner) {
-            this._banner.show();
-            console.log('展示已有banner');
-            return;
+        if (!this._banner) {
+            this._CreateBannerAd();
         }
-        this._CreateBannerAd();
+        if (this.isBannerShow) return;
+        this.isBannerShow = true;
         this._banner.show();
     }
     HideBannerAd() {
-        if (this._banner) {
+        if (this._banner && this.isBannerShow) {
+            this.isBannerShow = false;
             this._banner.hide();
         }
     }

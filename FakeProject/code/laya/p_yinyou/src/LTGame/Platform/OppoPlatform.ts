@@ -920,5 +920,6 @@ export interface OppoAdData {
     show_reported?: boolean,
     /** 是否已上报点击 */
     click_reported?: boolean,
+    source?: string
 }
 
