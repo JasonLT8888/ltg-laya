@@ -4,6 +4,7 @@ import { LTG_Com_SetData } from "../Data/LTG_Com_SetData";
 import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 import { LTG_Com_RewardCodeData } from "../Data/LTG_Com_RewardCodeData";
 import LTUI from "../../LTGame/UIExt/LTUI";
+import AudioManager from "../../script/manager/AudioManager";
 
 export default class LTG_UI_SetMediator extends BaseUIMediator<LTG_UI_Set> {
 
@@ -48,6 +49,9 @@ export default class LTG_UI_SetMediator extends BaseUIMediator<LTG_UI_Set> {
         LTUI.TrigerBtnClick();
         this.ui.m_view.m_toggle_music.m_toggle_state.selectedIndex = CommonSaveData.instance.isMusicOn ? 1 : 0;
         this._cacheData.onMusicToggled?.run();
+        if (!CommonSaveData.instance.isMusicOn) {
+            AudioManager.instance.StopAll();
+        }
     }
 
     private _OnClickShake() {

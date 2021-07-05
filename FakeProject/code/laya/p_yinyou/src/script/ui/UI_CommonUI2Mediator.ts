@@ -95,9 +95,6 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
             data.onRolled = Laya.Handler.create(null, (config: RollConfig.config) => {
                 console.log("转到奖励", config);
             }, null, false);
-            data.onSpecial = Laya.Handler.create(null, (config: RollConfig.config) => {
-                console.log("特殊奖励", config);
-            }, null, false);
             data.Send();
         }),
         new UIDemoData("关注抖音号", () => {

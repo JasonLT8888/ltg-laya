@@ -114,7 +114,7 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
 
         if (this._isSpecialRoll) {
             let specialConfig = RollConfig.data[7];
-            this._cacheData.onSpecial?.runWith([specialConfig]);
+            this._cacheData.onRolled?.runWith([specialConfig]);
         }
 
         this._UpdateUI();
