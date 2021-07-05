@@ -744,25 +744,17 @@ export default class WXPlatform extends DefaultPlatform {
             });
         }
         if (!this.customAdBottom) {
-            this.customAdBottom = this.base.createGridAd({
+            this.customAdBottom = this.base.createCustomAd({
                 adUnitId: this.platformData.gameBoxBannerId,
-                adIntervals: 30,
-                adTheme: "white",
-                gridCount: 5,
                 style: {
                     left: 0,
-                    top: windowHeight - 106,
+                    top: windowHeight - 108,
                     width: windowWidth,
-                    height: 100
+                    height: 106
                 }
             });
             this.customAdBottom.onLoad((res) => {
                 console.log("customAdBottom onload", res);
-            });
-            this.customAdBottom.onResize((res) => {
-                console.log("customAdBottom onResize", res);
-                this.customAdBottom.style.top = windowHeight - res.height;
-                this.customAdBottom.style.left = (windowWidth - res.width) / 2;
             });
             this.customAdBottom.onError((res) => {
                 console.log("customAdBottom err", res);
