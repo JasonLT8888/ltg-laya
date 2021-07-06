@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="225,92" extention="Button">
   <displayList>
-    <image id="n19_8gel" name="n19" src="8gell" fileName="img/btn_lvanniu.png" xy="0,0" size="225,92"/>
+    <image id="n19_8gel" name="n19" src="8gell" fileName="img/btn_lvanniu.png" xy="0,0" size="225,92">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
     <image id="n20_8gel" name="n20" src="8gelm" fileName="img/关闭.png" xy="80,25"/>
   </displayList>
   <Button downEffect="dark" downEffectValue="0.80"/>

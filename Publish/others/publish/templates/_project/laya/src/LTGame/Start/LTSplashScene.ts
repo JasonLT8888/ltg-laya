@@ -80,7 +80,7 @@ export default class LTSplashScene extends BaseState<any> {
 
         if (this._useCommonUI) {
             this._needLoadOtherUIPack.push(
-                new LoadUIPack("res/ltgame/ui/LTCom")
+                new LoadUIPack("res/ltgame/ui/LTCom",2)
             );
         }
         

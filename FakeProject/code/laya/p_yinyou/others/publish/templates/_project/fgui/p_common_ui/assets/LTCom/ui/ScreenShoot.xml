@@ -4,7 +4,7 @@
     <graph id="n0_t2mg" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n1_t2mg" name="view" src="t2mg75" fileName="cmp/view_screenshoot.xml" xy="62,121">
+    <component id="n1_t2mg" name="view" src="gjy1c3" fileName="cmp/view_screenshoot_new.xml" xy="44,121">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <image id="n2_t2mg" name="img_cover" src="t2mg7f" fileName="img/img_white.png" xy="375,667" pivot="0.5,0.5" anchor="true" size="750,1334">

@@ -422,6 +422,12 @@
     <image id="y1nvc0" name="隐私声明.png" path="/img/隐私声明/"/>
     <image id="y1nvc1" name="同意.png" path="/img/隐私声明/"/>
     <image id="y1nvc2" name="不同意.png" path="/img/隐私声明/"/>
+    <component id="gjy1c3" name="view_screenshoot_new.xml" path="/cmp/"/>
+    <image id="gjy1c4" name="TV.png" path="/img/炫耀/"/>
+    <image id="gjy1c5" name="quit.png" path="/img/炫耀/"/>
+    <image id="gjy1c6" name="xyyx.png" path="/img/炫耀/"/>
+    <image id="gjy1c7" name="sp_bofang.png" path="/img/炫耀/"/>
+    <image id="gjy1c9" name="btn_more.png" path="/img/炫耀/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>
