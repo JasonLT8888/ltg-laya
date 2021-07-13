@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://hbq27te38gel18" designImageLayer="1">
+<component size="750,1334" designImage="ui://hbq27te38gel18" designImageAlpha="0" designImageLayer="1">
   <displayList>
     <graph id="n1_8gel" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n2_8gel" name="view" src="8gel1e" fileName="cmp/view_addshortcut.xml" xy="55,213">
+    <component id="n3_x4fg" name="view" src="x4fgdt" fileName="cmp/view_shortcut.xml" xy="0,160">
       <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n4_x4fg" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="20,148">
+      <relation target="" sidePair="middle-middle,left-left"/>
     </component>
   </displayList>
 </component>

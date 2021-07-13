@@ -18,7 +18,7 @@ export default class LTG_UI_view_enter_code extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_text_code = <fgui.GTextInput><any>(this.getChildAt(1));
-		this.m_btn_duihuan = <fgui.GButton><any>(this.getChildAt(2));
+		this.m_text_code = <fgui.GTextInput><any>(this.getChildAt(2));
+		this.m_btn_duihuan = <fgui.GButton><any>(this.getChildAt(3));
 	}
 }

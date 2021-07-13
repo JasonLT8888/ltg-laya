@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="382,138" pivot="0.5,0.5" extention="Button" designImage="ui://hbq27te3x4fgdz" designImageOffsetX="-192" designImageOffsetY="-839">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <loader id="n3_ebmo" name="bg" xy="191,69" pivot="0.5,0.5" anchor="true" size="382,138" url="ui://hbq27te3fig0au" align="center" vAlign="middle" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <image id="n4_ebmo" name="ad" src="x4fge2" fileName="img/主界面/sp_shipin.png" xy="91,68" pivot="0.5,0.5" anchor="true" size="75,52">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <loader id="n6_fq8k" name="icon" xy="144,44" size="196,48" url="ui://hbq27te3x4fge3">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+  </displayList>
+  <Button/>
+  <transition name="t4" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Scale" tween="true" startValue="1,1" endValue="1.2,1.2" duration="24" ease="Linear"/>
+    <item time="24" type="Scale" tween="true" startValue="1.2,1.2" endValue="1,1" duration="24" ease="Linear"/>
+  </transition>
+  <customProperty target="bg" propertyId="1"/>
+</component>

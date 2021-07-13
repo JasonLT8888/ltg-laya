@@ -49,12 +49,12 @@
     <component id="8gel1c" name="btn_confirm_02.xml" path="/cmp/"/>
     <component id="8gel1d" name="btn_close_01.xml" path="/cmp/"/>
     <component id="8gel1e" name="view_addshortcut.xml" path="/cmp/"/>
-    <component id="8gel1f" name="FindGame.xml" path="/ui/" exported="true"/>
+    <component id="8gel1f" name="FindGame.xml" path="/ui/old/"/>
     <image id="8gel1g" name="找回游戏.png" path="/效果图/"/>
     <image id="8gel1h" name="找回游戏.png" path="/img/"/>
     <image id="8gel1i" name="sp_neirong.png" path="/img/"/>
     <component id="8gel1j" name="view_findgame.xml" path="/cmp/"/>
-    <component id="8gel1k" name="MyGame.xml" path="/ui/" exported="true"/>
+    <component id="8gel1k" name="MyGame.xml" path="/ui/old/"/>
     <image id="8gel1l" name="小程序.jpg" path="/效果图/"/>
     <image id="8gel1m" name="sp_fanhui.png" path="/img/"/>
     <component id="8gel1n" name="btn_back_01.xml" path="/cmp/"/>
@@ -64,7 +64,7 @@
     <image id="8gel1r" name="sp_tu2.png" path="/img/"/>
     <image id="8gel1s" name="sp_tu1.png" path="/img/"/>
     <component id="8gel1t" name="view_mygame.xml" path="/cmp/"/>
-    <component id="8gel1u" name="Zhuawawa.xml" path="/ui/"/>
+    <component id="8gel1u" name="Zhuawawa.xml" path="/ui/old/"/>
     <image id="8gel1v" name="抓娃娃.png" path="/效果图/"/>
     <image id="8gel1w" name="btn_zhua.png" path="/img/"/>
     <image id="8gel1x" name="sp_shou.png" path="/img/"/>
@@ -82,7 +82,7 @@
     <component id="8gel29" name="view_zww.xml" path="/cmp/"/>
     <image id="8gel2a" name="sp_qiu.png" path="/img/"/>
     <image id="8gel2b" name="彩蛋墙.jpg" path="/效果图/"/>
-    <component id="8gel2c" name="EggWall.xml" path="/ui/" exported="true"/>
+    <component id="8gel2c" name="EggWallold.xml" path="/ui/old/"/>
     <image id="8gel2d" name="btn_fanhui.png" path="/img/"/>
     <component id="8gel2e" name="btn_back_02.xml" path="/cmp/"/>
     <image id="8gel2f" name="sp_caidanqing.png" path="/img/"/>
@@ -102,7 +102,7 @@
     <component id="8gel2t" name="btn_show_tips.xml" path="/cmp/"/>
     <component id="8gel2u" name="item_view_eggwall.xml" path="/cmp/"/>
     <component id="8gel2v" name="view_grow_01.xml" path="/cmp/"/>
-    <component id="8gel2w" name="EggNotice.xml" path="/ui/"/>
+    <component id="8gel2w" name="EggNotice.xml" path="/ui/old/"/>
     <image id="8gel2x" name="彩蛋提示.jpg" path="/效果图/"/>
     <image id="8gel2y" name="sp_tanchuang.png" path="/img/" scale="9grid" scale9grid="0,120,646,64"/>
     <image id="8gel2z" name="sp_caidantishi.png" path="/img/"/>
@@ -111,7 +111,7 @@
     <image id="8gel32" name="btn_buxiangnvli.png" path="/img/"/>
     <component id="8gel33" name="btn_get_imd.xml" path="/cmp/"/>
     <component id="8gel34" name="view_egg_notice.xml" path="/cmp/"/>
-    <component id="8gel35" name="LimitSkin.xml" path="/ui/"/>
+    <component id="8gel35" name="LimitSkin.xml" path="/ui/old/"/>
     <image id="8gel36" name="限定皮肤.png" path="/效果图/"/>
     <image id="8gel37" name="sp_bgxia.png" path="/img/"/>
     <image id="8gel38" name="sp_bgshang.png" path="/img/"/>
@@ -157,7 +157,7 @@
     <component id="8gel4e" name="btn_close_03.xml" path="/cmp/"/>
     <component id="8gel4f" name="btn_copy.xml" path="/cmp/"/>
     <component id="8gel4g" name="view_watchdy.xml" path="/cmp/"/>
-    <component id="8gel4h" name="ShareVideo.xml" path="/ui/"/>
+    <component id="8gel4h" name="ShareVideo.xml" path="/ui/old/"/>
     <image id="8gel4i" name="巅峰回顾.jpg" path="/效果图/"/>
     <image id="8gel4j" name="sp_diban(1).png" path="/img/"/>
     <image id="8gel4k" name="sp_dianfeng.png" path="/img/"/>
@@ -222,7 +222,7 @@
     <component id="8gel6b" name="btn_addshortcut.xml" path="/cmp/"/>
     <component id="8gel6c" name="btn_findgame.xml" path="/cmp/"/>
     <image id="odt06d" name="sp_shou(1).png" path="/img/"/>
-    <component id="odt06e" name="WatchGuide.xml" path="/ui/"/>
+    <component id="odt06e" name="WatchGuide.xml" path="/ui/old/"/>
     <image id="odt06f" name="关注.jpg" path="/效果图/"/>
     <image id="odt06g" name="sp_erjibg.png" path="/img/" scale="9grid" scale9grid="45,129,90,45"/>
     <image id="odt06h" name="sp_guanzhu.png" path="/img/"/>
@@ -422,12 +422,80 @@
     <image id="y1nvc0" name="隐私声明.png" path="/img/隐私声明/"/>
     <image id="y1nvc1" name="同意.png" path="/img/隐私声明/"/>
     <image id="y1nvc2" name="不同意.png" path="/img/隐私声明/"/>
-    <component id="gjy1c3" name="view_screenshoot_new.xml" path="/cmp/"/>
     <image id="gjy1c4" name="TV.png" path="/img/炫耀/"/>
     <image id="gjy1c5" name="quit.png" path="/img/炫耀/"/>
     <image id="gjy1c6" name="xyyx.png" path="/img/炫耀/"/>
     <image id="gjy1c7" name="sp_bofang.png" path="/img/炫耀/"/>
     <image id="gjy1c9" name="btn_more.png" path="/img/炫耀/"/>
+    <image id="x4fgcz" name="zanbuchoujiang.png" path="/img/转盘/"/>
+    <image id="x4fgd0" name="btn_lan0.png" path="/img/转盘/" scale="9grid" scale9grid="34,30,68,43"/>
+    <image id="x4fgd1" name="sp_shishishouqi.png" path="/img/转盘/"/>
+    <image id="x4fgd2" name="btn_huang0.png" path="/img/转盘/" scale="9grid" scale9grid="30,30,60,45"/>
+    <component id="x4fgd3" name="EggWall.xml" path="/ui/" exported="true"/>
+    <image id="x4fgd4" name="sp_biaotibg.png" path="/img/彩蛋5/"/>
+    <image id="x4fgd5" name="sp_caidanqinag.png" path="/img/彩蛋5/"/>
+    <component id="x4fgd6" name="view_item_egg1.xml" path="/cmp/"/>
+    <image id="x4fgd7" name="sp_kuang1.png" path="/img/彩蛋5/" scale="9grid" scale9grid="37,38,74,50"/>
+    <image id="x4fgd8" name="sp_kuang2.png" path="/img/彩蛋5/" scale="9grid" scale9grid="32,41,64,39"/>
+    <component id="x4fgd9" name="btn_unlock.xml" path="/cmp/"/>
+    <image id="x4fgda" name="btn_anniucheng.png" path="/img/彩蛋5/" scale="9grid" scale9grid="47,19,94,34"/>
+    <image id="x4fgdb" name="sp_chakanxiansuo.png" path="/img/彩蛋5/"/>
+    <image id="x4fgdc" name="sp_duihuanmabg.png" path="/img/彩蛋5/" scale="9grid" scale9grid="23,18,46,28"/>
+    <image id="x4fgdd" name="btn_lijiduihuan.png" path="/img/彩蛋5/"/>
+    <image id="x4fgde" name="btn_fanhui.png" path="/img/彩蛋5/"/>
+    <component id="x4fgdf" name="view_screenshoot_new.xml" path="/img/shareNew/"/>
+    <image id="x4fgdg" name="bg.png" path="/img/炫耀/"/>
+    <component id="x4fgdh" name="view_play.xml" path="/img/shareNew/"/>
+    <image id="x4fgdi" name="sp_bofang.png" path="/img/shareNew/改版UI/神级操作/"/>
+    <component id="x4fgdj" name="btn_share_02.xml" path="/cmp/"/>
+    <image id="x4fgdk" name="sp_woyaoxuanyao.png" path="/img/炫耀/"/>
+    <image id="x4fgdl" name="sp_fengxiang.png" path="/img/炫耀/"/>
+    <image id="x4fgdm" name="炫耀.jpg" path="/img/炫耀/"/>
+    <image id="x4fgdn" name="xyyx.png" path="/img/shareNew/炫耀/"/>
+    <image id="x4fgdo" name="btn_guanbi.png" path="/img/炫耀/"/>
+    <image id="x4fgdp" name="sp_fenxiang.png" path="/img/"/>
+    <image id="x4fgdq" name="sp_biaoti1.png" path="/img/关注/"/>
+    <image id="x4fgdr" name="sp_hezibg.png" path="/img/关注/"/>
+    <image id="x4fgds" name="sp_biaoti2.png" path="/img/关注/"/>
+    <component id="x4fgdt" name="view_shortcut.xml" path="/cmp/"/>
+    <image id="x4fgdu" name="sp_tianjiazhuomian0.png" path="/img/关注/"/>
+    <image id="x4fgdv" name="sp_di.png" path="/img/试用/"/>
+    <component id="x4fgdw" name="btn_next_2.xml" path="/cmp/"/>
+    <image id="x4fgdy" name="sp_xiacizaishi.png" path="/img/超凡开局/"/>
+    <image id="x4fgdz" name="结算2.jpg" path="/img/结算/"/>
+    <image id="x4fge0" name="btn_lan.png" path="/img/试用/" scale="9grid" scale9grid="40,33,80,45"/>
+    <component id="x4fge1" name="btn_get.xml" path="/cmp/"/>
+    <image id="x4fge2" name="sp_shipin.png" path="/img/主界面/" exported="true"/>
+    <image id="x4fge3" name="sp_lijibaohu.png" path="/img/超凡开局/"/>
+    <image id="x4fge4" name="sp_wolaishishi.png" path="/img/试用/"/>
+    <image id="x4fge5" name="btn_cheng.png" path="/img/试用/" scale="9grid" scale9grid="42,35,84,40"/>
+    <component id="x4fge6" name="try_view.xml" path="/cmp/"/>
+    <image id="x4fge7" name="sp_leijishiyong.png" path="/img/试用/"/>
+    <font id="x4fge8" name="FontTry.fnt" path="/img/试用/" exported="true"/>
+    <image id="x4fge9" name="0.png" path="/img/试用/"/>
+    <image id="x4fgea" name="1.png" path="/img/试用/"/>
+    <image id="x4fgeb" name="2.png" path="/img/试用/"/>
+    <image id="x4fgec" name="3.png" path="/img/试用/"/>
+    <image id="x4fged" name="_.png" path="/img/试用/"/>
+    <image id="x4fgee" name="btn_1.png" path="/img/shareNew/七日签到/"/>
+    <image id="x4fgef" name="TV.png" path="/img/shareNew/炫耀/"/>
+    <image id="x4fgeg" name="quit.png" path="/img/shareNew/炫耀/"/>
+    <image id="x4fgeh" name="sp_tianjiazhuomian0.png" path="/img/关注桌面/"/>
+    <image id="x4fgei" name="sp_tianjiazhuomian.png" path="/img/关注桌面/"/>
+    <image id="x4fgej" name="sp_guanzhu1.png" path="/img/关注桌面/"/>
+    <image id="x4fgek" name="获得线索.jpg" path="/img/彩蛋5/"/>
+    <image id="x4fgel" name="彩蛋.jpg" path="/img/彩蛋5/"/>
+    <image id="x4fgem" name="sp_tishi.png" path="/img/彩蛋5/"/>
+    <image id="x4fgen" name="sp_shuruduihuanma.png" path="/img/彩蛋5/"/>
+    <image id="x4fgeo" name="sp_mingbail.png" path="/img/彩蛋5/"/>
+    <image id="x4fgep" name="sp_huodexiansuo.png" path="/img/彩蛋5/"/>
+    <image id="x4fgeq" name="sp_biaoti2.png" path="/img/彩蛋5/" scale="9grid" scale9grid="50,54,43,39"/>
+    <image id="x4fger" name="sp_bg2.png" path="/img/彩蛋5/" scale="9grid" scale9grid="50,28,57,14"/>
+    <image id="x4fges" name="bg2.png" path="/img/彩蛋5/"/>
+    <image id="x4fget" name="bg1.png" path="/img/彩蛋5/"/>
+    <image id="x4fgeu" name="sp_fengxiang0.png" path="/img/炫耀/"/>
+    <image id="x4fgev" name="转盘.jpg" path="/img/转盘/"/>
+    <component id="x4fgf6" name="EggDetail.xml" path="/ui/" exported="true"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

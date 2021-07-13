@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="624,526">
+<component size="750,786">
   <displayList>
-    <image id="n0_8gel" name="n0" src="seo196" fileName="img/视频排行榜/sp_guanzhu1.png" xy="-54,-260"/>
-    <component id="n5_8gel" name="btn_follow" src="8gel4e" fileName="cmp/btn_close_03.xml" xy="169,536" pivot="0.5,0.5"/>
-    <text id="n6_odt0" name="text_code" xy="306,207" size="10,53" visible="false" fontSize="42" color="#7b16ff" align="center" vAlign="middle" bold="true" text="">
+    <image id="n0_8gel" name="n0" src="x4fgdr" fileName="img/关注/sp_hezibg.png" xy="0,0"/>
+    <component id="n5_8gel" name="btn_follow" src="8gel4e" fileName="cmp/btn_close_03.xml" xy="232,790" pivot="0.5,0.5"/>
+    <text id="n6_odt0" name="text_code" xy="369,337" size="10,53" visible="false" fontSize="42" color="#7b16ff" align="center" vAlign="middle" bold="true" text="">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <graph id="n7_odt0" name="btn_watch" xy="524,59" size="100,310" type="rect" lineSize="0" fillColor="#00ffffff"/>
     <loader id="n8_n2g1" name="icon" xy="115,217" size="394,44" clearOnPublish="true"/>
+    <image id="n9_x4fg" name="n9" src="x4fgds" fileName="img/关注/sp_biaoti2.png" xy="41,114"/>
   </displayList>
   <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
     <item time="0" type="Scale" target="n5_8gel" tween="true" startValue="1,1" endValue="1.2,1.2" duration="18" ease="Linear"/>

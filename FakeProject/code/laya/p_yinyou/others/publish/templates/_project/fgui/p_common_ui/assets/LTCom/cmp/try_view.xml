@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="572,168">
+  <displayList>
+    <image id="n27_nrn8" name="n27" src="x4fge7" fileName="img/试用/sp_leijishiyong.png" xy="0,0">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <text id="n28_nrn8" name="progress" xy="198,95" size="156,65" font="ui://hbq27te3x4fge8" fontSize="12" align="center" autoSize="none" text="0/3">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+</component>

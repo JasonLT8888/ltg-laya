@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n0_x4fg" name="n0" xy="0,0" size="750,1334" alpha="0.8" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n1_x4fg" name="n1" src="x4fger" fileName="img/彩蛋5/sp_bg2.png" xy="91,375" size="568,482">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n2_x4fg" name="n2" src="x4fgeq" fileName="img/彩蛋5/sp_biaoti2.png" xy="91,249" size="568,128">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <image id="n3_x4fg" name="n3" src="x4fgep" fileName="img/彩蛋5/sp_huodexiansuo.png" xy="272,295">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <component id="n4_x4fg" name="btn_ok" src="n2g171" fileName="cmp/btn_refuse.xml" xy="222,886" size="307,126">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3x4fgeo"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3x4fgda"/>
+    </component>
+    <text id="n5_x4fg" name="txt_info" xy="115,732" size="518,101" fontSize="40" color="#ffffff" align="center" autoSize="none" strokeColor="#57b0f5" text="将游戏添加到桌面即可获得">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <loader id="n6_x4fg" name="display" xy="175,379" size="399,348">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+  </displayList>
+</component>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="202,82" extention="Button">
+<component size="186,76" extention="Button">
   <displayList>
-    <image id="n18_n2g1" name="n18" src="n2g16o" fileName="img/btn_duihuan.png" xy="0,0"/>
+    <image id="n18_n2g1" name="n18" src="x4fgdd" fileName="img/彩蛋5/btn_lijiduihuan.png" xy="0,0"/>
   </displayList>
   <Button downEffect="dark" downEffectValue="0.80"/>
 </component>

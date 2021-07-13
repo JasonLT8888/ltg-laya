@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="186,76" extention="Button">
+  <displayList>
+    <image id="n30_idu1" name="n30" src="x4fgda" fileName="img/彩蛋5/btn_anniucheng.png" xy="0,0"/>
+    <image id="n31_idu1" name="n31" src="8gel2n" fileName="img/sp_shipin.png" xy="15,21" size="41,30" aspect="true"/>
+    <text id="n32_idu1" name="title" xy="62,14" size="89,45" fontSize="36" color="#ffffff" align="center" vAlign="middle" autoSize="none" text=""/>
+    <loader id="n33_idu1" name="icon" xy="60,10" size="110,50" align="center" vAlign="middle"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

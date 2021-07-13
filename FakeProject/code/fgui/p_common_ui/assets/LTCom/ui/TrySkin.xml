@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://hbq27te3n2g16r" designImageLayer="1">
+<component size="750,1334" designImage="ui://hbq27te3n2g16r" designImageAlpha="0" designImageLayer="1">
   <displayList>
     <graph id="n0_bl1a" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n1_bl1a" name="view" src="bl1a8c" fileName="cmp/view_tryskin.xml" xy="10,8">
+    <image id="n2_x4fg" name="n2" src="x4fgdv" fileName="img/试用/sp_di.png" xy="44,244">
       <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <loader id="n3_x4fg" name="img_display" xy="0,225" size="750,519" align="center" vAlign="middle">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <component id="n6_x4fg" name="view" src="x4fge6" fileName="cmp/try_view.xml" xy="93,74">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n4_x4fg" name="btn_no" src="x4fgdw" fileName="cmp/btn_next_2.xml" xy="339,972" size="336,138">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3x4fge0"/>
+    </component>
+    <component id="n5_x4fg" name="btn_try" src="x4fge1" fileName="cmp/btn_get.xml" xy="331,817" size="348,136">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3x4fge4"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3x4fge5"/>
     </component>
   </displayList>
 </component>

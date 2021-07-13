@@ -4,13 +4,22 @@ export namespace EggConfig {
         /** 名称 */ readonly name: string;
         /** 展示用模型 */ readonly model_path: string;
         /** 彩色图标路径 */ readonly icon_path: string;
-        /** 奖励类型 */ readonly reward_type: number;
+        /** 名字图标 */ readonly name_icon: string;
+        /** 奖励类型
+0金币 */ readonly reward_type: number;
         /** 奖励内容 */ readonly reward_value: number;
         /** 进度奖励金币数量 */ readonly reward_coin_value: number[];
         /** 金币图标 */ readonly coin_icon: string;
-        /** 解锁类型 */ readonly unlock_type: number;
+        /** 解锁类型
+1默认解锁
+2兑换码直接获得
+3视频直接解锁
+4分享解锁--保留
+5.详情解锁
+6.看视频进度解锁
+ */ readonly unlock_type: number;
         /** 解锁价格 */ readonly unlock_value: number;
-        /** 兑换码 */ readonly code: string;
+        /** 兑换码，若为详情解锁则填入详情 */ readonly code: string;
         /** 是否可用 */ readonly avliable: boolean;
         /** 偏移值 */ readonly offset: number[];
         /** 旋转 */ readonly rotation: number[];

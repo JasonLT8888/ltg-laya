@@ -4,13 +4,14 @@ import LTG_UI_view_enter_code from "./LTG_UI_view_enter_code";
 
 export default class LTG_UI_EggWall extends fgui.GComponent {
 
-	public m_img_bg:fgui.GImage;
-	public m_btn_back:fgui.GButton;
+	public m_img_bg:fgui.GGraph;
 	public m_img_display:fgui.GGraph;
+	public m_img_bg1:fgui.GGraph;
 	public m_list_view:fgui.GList;
 	public m_view_entercode:LTG_UI_view_enter_code;
+	public m_btn_back:fgui.GButton;
 
-	public static URL:string = "ui://hbq27te38gel2c";
+	public static URL:string = "ui://hbq27te3x4fgd3";
 
 	public static createInstance():LTG_UI_EggWall {
 		return <LTG_UI_EggWall><any>(fgui.UIPackage.createObject("LTCom","EggWall"));
@@ -21,10 +22,11 @@ export default class LTG_UI_EggWall extends fgui.GComponent {
 	}
 
 	protected onConstruct(): void {
-		this.m_img_bg = <fgui.GImage><any>(this.getChildAt(0));
-		this.m_btn_back = <fgui.GButton><any>(this.getChildAt(1));
-		this.m_img_display = <fgui.GGraph><any>(this.getChildAt(2));
-		this.m_list_view = <fgui.GList><any>(this.getChildAt(4));
-		this.m_view_entercode = <LTG_UI_view_enter_code><any>(this.getChildAt(5));
+		this.m_img_bg = <fgui.GGraph><any>(this.getChildAt(0));
+		this.m_img_display = <fgui.GGraph><any>(this.getChildAt(3));
+		this.m_img_bg1 = <fgui.GGraph><any>(this.getChildAt(4));
+		this.m_list_view = <fgui.GList><any>(this.getChildAt(5));
+		this.m_view_entercode = <LTG_UI_view_enter_code><any>(this.getChildAt(6));
+		this.m_btn_back = <fgui.GButton><any>(this.getChildAt(7));
 	}
 }

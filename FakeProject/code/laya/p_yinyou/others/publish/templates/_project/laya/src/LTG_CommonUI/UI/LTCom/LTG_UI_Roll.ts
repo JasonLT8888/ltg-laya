@@ -2,14 +2,16 @@
 
 import LTG_UI_view_roll from "./LTG_UI_view_roll";
 import LTG_UI_btn_refuse from "./LTG_UI_btn_refuse";
+import LTG_UI_btn_watchad_roll from "./LTG_UI_btn_watchad_roll";
 
 export default class LTG_UI_Roll extends fgui.GComponent {
 
 	public m_plat:fgui.Controller;
 	public m_img_bg:fgui.GGraph;
 	public m_view:LTG_UI_view_roll;
-	public m_btn_close:LTG_UI_btn_refuse;
 	public m_btn_no:fgui.GButton;
+	public m_btn_close:LTG_UI_btn_refuse;
+	public m_btn_roll:LTG_UI_btn_watchad_roll;
 
 	public static URL:string = "ui://hbq27te38gel3k";
 
@@ -25,7 +27,8 @@ export default class LTG_UI_Roll extends fgui.GComponent {
 		this.m_plat = this.getControllerAt(0);
 		this.m_img_bg = <fgui.GGraph><any>(this.getChildAt(0));
 		this.m_view = <LTG_UI_view_roll><any>(this.getChildAt(1));
-		this.m_btn_close = <LTG_UI_btn_refuse><any>(this.getChildAt(2));
-		this.m_btn_no = <fgui.GButton><any>(this.getChildAt(3));
+		this.m_btn_no = <fgui.GButton><any>(this.getChildAt(2));
+		this.m_btn_close = <LTG_UI_btn_refuse><any>(this.getChildAt(3));
+		this.m_btn_roll = <LTG_UI_btn_watchad_roll><any>(this.getChildAt(4));
 	}
 }

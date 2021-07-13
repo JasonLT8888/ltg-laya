@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,786">
+  <displayList>
+    <image id="n0_8gel" name="n0" src="x4fgdr" fileName="img/关注/sp_hezibg.png" xy="0,0"/>
+    <graph id="n7_odt0" name="btn_watch" xy="524,59" size="100,310" type="rect" lineSize="0" fillColor="#00ffffff"/>
+    <loader id="n8_n2g1" name="icon" xy="160,217" size="430,377" clearOnPublish="true"/>
+    <image id="n9_x4fg" name="n9" src="x4fgdq" fileName="img/关注/sp_biaoti1.png" xy="57,46"/>
+    <component id="n5_8gel" name="btn_follow" src="n2g171" fileName="cmp/btn_refuse.xml" xy="232,799" pivot="0.5,0.5">
+      <Button icon="ui://hbq27te3x4fgdu"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3x4fgd0"/>
+    </component>
+  </displayList>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Scale" target="n5_8gel" tween="true" startValue="1,1" endValue="1.2,1.2" duration="18" ease="Linear"/>
+    <item time="18" type="Scale" target="n5_8gel" tween="true" startValue="1.2,1.2" endValue="1,1" duration="12" ease="Linear"/>
+  </transition>
+</component>

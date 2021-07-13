@@ -55,8 +55,8 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
             itemUI.m_loader_icon.url = data.icon_path;
         }
 
-        this.ui.m_view.m_btn_freeget.onClick(this, this._OnClickFreeRoll);
-        this.ui.m_view.m_btn_watchad.onClick(this, this._OnClickWatchAd);
+        // this.ui.m_view.m_.onClick(this, this._OnClickFreeRoll);
+        this.ui.m_btn_roll.onClick(this, this._OnClickWatchAd);
         this._UpdateUI();
 
         this._rollIndex = [];
@@ -70,15 +70,14 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
     }
 
     private _UpdateUI() {
-        if (CommonSaveData.instance.freeRollCount > 0) {
-            this.ui.m_view.m_btn_freeget.visible = true;
-            this.ui.m_view.m_btn_watchad.visible = false;
+        if (false && CommonSaveData.instance.freeRollCount > 0) {
+            this.ui.m_btn_roll.m_adicon.visible = false;
         } else {
-            this.ui.m_view.m_btn_freeget.visible = false;
-            this.ui.m_view.m_btn_watchad.visible = true;
+            this.ui.m_btn_roll.m_adicon.visible = true;
             this.ui.m_plat.selectedIndex = LTPlatform.instance.platform == EPlatformType.TT ? 1 : 0;
         }
-
+        this.ui.m_btn_roll.visible = true;
+        this.ui.m_btn_close.visible = true;
         let currentRollCount = CommonSaveData.instance.totalRollCount % GameConst.data.special_roll_count;
         if (CommonSaveData.instance.totalRollCount > 0 && currentRollCount == 0) {
             currentRollCount = GameConst.data.special_roll_count;
@@ -98,8 +97,8 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
     private _DoRoll() {
         CommonSaveData.instance.totalRollCount++;
         LTUI.LockScreen();
-        this.ui.m_view.m_btn_freeget.visible = false;
-        this.ui.m_view.m_btn_watchad.visible = false;
+        this.ui.m_btn_roll.visible = false;
+        this.ui.m_btn_close.visible = false;
 
         this._cacheFinalIndex = MathEx.RandomFromWithWeight(this._rollIndex, this._rollWeight);
         let targetRotate = -(this._cacheFinalIndex - 1) * 60 - 360 * 3;
@@ -114,19 +113,23 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
 
         if (this._isSpecialRoll) {
             let specialConfig = RollConfig.data[7];
-            this._cacheData.onRolled?.runWith([specialConfig]);
+            this._cacheData.onSpecial?.runWith([specialConfig]);
         }
 
         this._UpdateUI();
         LTUI.UnlockScreen();
     }
 
-    private async _OnClickWatchAd(evt: Laya.Event) {
-        evt.stopPropagation();
-        let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
-        if (result) {
-            this._DoRoll();
+    private async _OnClickWatchAd() {
+        if (this.ui.m_btn_roll.m_adicon.visible) {
+            let result = await LTPlatform.instance.ShowRewardVideoAdAsync();
+            if (result) {
+                this._DoRoll();
+            }
+        } else {
+            this._OnClickFreeRoll();
         }
+
     }
 
     private _OnClickFreeRoll() {

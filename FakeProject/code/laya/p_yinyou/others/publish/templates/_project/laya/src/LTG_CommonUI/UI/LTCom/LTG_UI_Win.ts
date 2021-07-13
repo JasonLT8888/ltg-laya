@@ -23,9 +23,9 @@ export default class LTG_UI_Win extends fgui.GComponent {
 
 	protected onConstruct(): void {
 		this.m_state = this.getControllerAt(0);
-		this.m_btn_normalget = <LTG_UI_btn_morediamond><any>(this.getChildAt(4));
-		this.m_btn_multiget = <LTG_UI_btn_morediamond><any>(this.getChildAt(5));
-		this.m_unlock_progress = <LTG_UI_image_bar><any>(this.getChildAt(6));
-		this.m___nativeinpage = <fgui.GGraph><any>(this.getChildAt(7));
+		this.m_btn_normalget = <LTG_UI_btn_morediamond><any>(this.getChildAt(2));
+		this.m_btn_multiget = <LTG_UI_btn_morediamond><any>(this.getChildAt(3));
+		this.m_unlock_progress = <LTG_UI_image_bar><any>(this.getChildAt(4));
+		this.m___nativeinpage = <fgui.GGraph><any>(this.getChildAt(5));
 	}
 }

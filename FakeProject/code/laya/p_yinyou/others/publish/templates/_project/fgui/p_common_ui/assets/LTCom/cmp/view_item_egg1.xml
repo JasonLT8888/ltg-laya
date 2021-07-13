@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="208,353">
+  <controller name="state_lock" exported="true" pages="0,已解锁,1,视频进度解锁,2,查看线索,4,兑换码" selected="0"/>
+  <controller name="img_selected" exported="true" pages="0,,1," selected="0"/>
+  <displayList>
+    <image id="n27_idu1" name="n27" src="x4fgd7" fileName="img/彩蛋5/sp_kuang1.png" xy="0,0" size="208,276">
+      <gearDisplay controller="state_lock" pages="0"/>
+    </image>
+    <image id="n35_idu1" name="n35" src="x4fgd8" fileName="img/彩蛋5/sp_kuang2.png" xy="0,0" size="208,276">
+      <gearDisplay controller="state_lock" pages="1,2,4"/>
+    </image>
+    <loader id="n34_idu1" name="loader_icon" xy="10,15" size="188,252" align="center" vAlign="middle" fill="scaleMatchWidth"/>
+    <loader id="n28_idu1" name="txt_name" xy="6,14" size="194,50" align="center" vAlign="middle">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <text id="n29_idu1" name="n29" xy="20,281" size="172,50" fontSize="36" color="#ffffff" align="center" vAlign="middle" autoSize="none" text="已获得">
+      <gearDisplay controller="state_lock" pages="0,4"/>
+      <gearText controller="state_lock" pages="4" values="兑换码" default="已获得"/>
+    </text>
+    <component id="n30_idu1" name="btn_reward_video" src="x4fgd9" fileName="cmp/btn_unlock.xml" xy="11,277">
+      <gearDisplay controller="state_lock" pages="1"/>
+    </component>
+    <component id="n33_idu1" name="btn_get_detail" src="x4fgd9" fileName="cmp/btn_unlock.xml" xy="9,277">
+      <gearDisplay controller="state_lock" pages="2"/>
+      <Button icon="ui://hbq27te3x4fgdb"/>
+    </component>
+  </displayList>
+</component>

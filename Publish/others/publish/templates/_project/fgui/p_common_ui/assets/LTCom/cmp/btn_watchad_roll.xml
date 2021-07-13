@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="285,102" extention="Button">
+<component size="285,102" pivot="0.5,0.5" extention="Button">
   <displayList>
-    <image id="n9_8gel" name="n9" src="8gel3t" fileName="img/btn_anniuhuang2.png" xy="0,0" size="285,102"/>
-    <image id="n10_8gel" name="n10" src="8gel3u" fileName="img/sp_mainfeichoujiang.png" xy="85,28"/>
-    <image id="n11_8gel" name="n11" src="8gel2n" fileName="img/sp_shipin.png" xy="19,28"/>
+    <loader id="n9_8gel" name="bg" xy="0,0" size="285,102" url="ui://hbq27te38gel3t" align="center" vAlign="middle" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+    <loader id="n10_8gel" name="icon" xy="85,27" size="168,40" url="ui://hbq27te38gel3u">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <image id="n11_8gel" name="adicon" src="8gel2n" fileName="img/sp_shipin.png" xy="19,28">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
   </displayList>
   <Button downEffect="dark" downEffectValue="0.80"/>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Scale" tween="true" startValue="1,1" endValue="1.2,1.2" duration="24" ease="Linear"/>
+    <item time="24" type="Scale" tween="true" startValue="1.2,1.2" endValue="1,1" duration="12" ease="Linear"/>
+  </transition>
+  <customProperty target="bg" propertyId="1"/>
 </component>

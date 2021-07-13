@@ -2,7 +2,7 @@ import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import LTG_UI_EggWall from "../UI/LTCom/LTG_UI_EggWall";
 import { LTG_Com_EggWallData, EEggState } from "../Data/LTG_Com_EggWallData";
 import { EggConfig } from "../../script/config/EggConfig";
-import LTG_UI_view_item_egg from "../UI/LTCom/LTG_UI_view_item_egg";
+import LTG_UI_view_item_egg from "../UI/LTCom/LTG_UI_view_item_egg1";
 import { CmpSceneDisplay } from "../../LTGame/UIExt/Cmp/CmpSceneDisplay";
 import LTUI from "../../LTGame/UIExt/LTUI";
 import { EEggUnlockType } from "../Common/EEggUnlockType";
@@ -11,6 +11,8 @@ import { CmpSimpleLoader } from "../../LTGame/UIExt/Cmp/CmpSimpleLoader";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
+import { LTG_UI_EggDetailMediator } from "./LTG_UI_EggDetailMediator";
+import GameData from "../../script/common/GameData";
 
 export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWall> {
 
@@ -82,7 +84,7 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
     private _OnItemRender(index: number, itemUI: LTG_UI_view_item_egg) {
         let data = this._avilableConfigs[index];
         itemUI.m_loader_icon.url = data.icon_path;
-
+        itemUI.m_txt_name.icon = data.name_icon;
         let lockState = LTG_Com_EggWallData.GetEggState(data);
         switch (lockState) {
             case EEggState.Unlocked:
@@ -91,16 +93,18 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
             case EEggState.Locked:
                 switch (data.unlock_type) {
                     case EEggUnlockType.Code:
-                        itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = data.name;
+                        itemUI.m_state_lock.selectedIndex = 3;
+                        itemUI.m_txt_name.text = data.name;
                         break;
                     case EEggUnlockType.Share:
+                        break;
+                    case EEggUnlockType.Info:
                         itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = '分享' + LTG_Com_EggWallData.GetUnlockProgress(data.id);
                         break;
                     case EEggUnlockType.WatchAd:
+                    case EEggUnlockType.WatchAdPro:
                         itemUI.m_state_lock.selectedIndex = 1;
-                        itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                        itemUI.m_btn_reward_video.title = LTG_Com_EggWallData.GetUnlockProgress(data.id);
                         break;
                     default:
                         console.error("暂未实现的彩蛋解锁类型" + data.unlock_type);
@@ -110,29 +114,29 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
             case EEggState.Unlocking:
                 switch (data.unlock_type) {
                     case EEggUnlockType.WatchAd:
+                    case EEggUnlockType.WatchAdPro:
                         itemUI.m_state_lock.selectedIndex = 1;
-                        itemUI.m_text_progress.text = LTG_Com_EggWallData.GetUnlockProgress(data.id);
+                        itemUI.m_btn_reward_video.title = LTG_Com_EggWallData.GetUnlockProgress(data.id);
                         break;
                     case EEggUnlockType.Code:
-                        itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = data.name;
+                        itemUI.m_state_lock.selectedIndex = 3;
+
                         break;
                     case EEggUnlockType.Share:
+                        break;
+                    case EEggUnlockType.Info:
                         itemUI.m_state_lock.selectedIndex = 2;
-                        itemUI.m_text_lockstr.text = "分享" + LTG_Com_EggWallData.GetUnlockProgress(data.id);
                         break;
                     default:
                         break;
                 }
-                if (data.unlock_type == EEggUnlockType.WatchAd) {
+                // if (data.unlock_type == EEggUnlockType.WatchAd) {
 
-                } else {
-                    itemUI.m_state_lock.selectedIndex = 2;
-                    itemUI.m_text_lockstr.text = data.name;
-                }
+                // } else {
+                // }
                 break;
         }
-        itemUI.m_img_selected.visible = index == this._selectIndex;
+        // itemUI.m_img_selected.visible = index == this._selectIndex;
         itemUI.onClick(this, this._OnClickItem, [index]);
     }
 
@@ -169,6 +173,28 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
                 switch (lockState) {
                     case EEggState.Locked:
                         LTUI.Toast("分享视频解锁");
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case EEggUnlockType.Info:
+                switch (lockState) {
+                    case EEggState.Locked:
+                        let res = await LTPlatform.instance.ShowRewardVideoAdAsync();
+                        if (res) {
+                            LTG_UI_EggDetailMediator.instance.Show(data);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case EEggUnlockType.WatchAdPro:
+                switch (lockState) {
+                    case EEggState.Locked:
+                    case EEggState.Unlocking:
+                        LTG_UI_EggUnlockMediator.instance.Show([data, Laya.Handler.create(this, this._UnlockItem, [data])]);
                         break;
                     default:
                         break;
@@ -225,7 +251,13 @@ export default class LTG_UI_EggWallMediator extends BaseUIMediator<LTG_UI_EggWal
         if (eggState != EEggState.Locked) {
             return;
         }
-        LTG_UI_EggUnlockMediator.instance.Show([searchConfig, Laya.Handler.create(this, this._UnlockItem, [searchConfig])]);
+        if (searchConfig.unlock_type == 2) {
+            LTG_Com_EggWallData.RecordWatchAD(searchConfig.id);
+            this._cacheData.onUnlocked.runWith([searchConfig.reward_type, searchConfig.reward_value]);
+            this.RefreshUI();
+        } else {
+            LTG_UI_EggUnlockMediator.instance.Show([searchConfig, Laya.Handler.create(this, this._UnlockItem, [searchConfig])]);
+        }
     }
 
     private _UnlockItem(config: EggConfig.config) {

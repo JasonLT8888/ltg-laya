@@ -18,5 +18,14 @@ export enum EEggUnlockType {
      * 未实现
      */
     Share = 4,
+    /**
+     * 详细信息解锁
+     * 未实现
+     */
+    Info = 5,
+    /**
+         * 看视频进度解锁
+         */
+    WatchAdPro = 6,
 
 }

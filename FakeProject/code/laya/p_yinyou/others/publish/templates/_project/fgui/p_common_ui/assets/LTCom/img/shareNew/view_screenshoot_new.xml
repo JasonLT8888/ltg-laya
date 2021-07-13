@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="661,965" designImage="ui://hbq27te3x4fgdm" designImageOffsetX="-44" designImageOffsetY="-53" designImageAlpha="71">
+  <displayList>
+    <graph id="n8_8ven" name="img_display" xy="53,174" size="554,585" type="rect" lineSize="0" fillColor="#ffcccccc">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <image id="n0_8ven" name="n0" src="x4fgdg" fileName="img/炫耀/bg.png" xy="0,51"/>
+    <component id="n4_8ven" name="view_play" src="x4fgdh" fileName="img/shareNew/view_play.xml" xy="72,185"/>
+    <component id="n5_8ven" name="btn_share" src="x4fgdj" fileName="cmp/btn_share_02.xml" xy="154,1011">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3x4fgdn"/>
+    </component>
+    <component id="n2_8ven" name="btn_close" src="cx1n81" fileName="cmp/video/normal_btn.xml" xy="-37,58" size="100,98">
+      <Button icon="ui://hbq27te3x4fgdo"/>
+    </component>
+    <image id="n9_qpmg" name="n9" src="x4fgdp" fileName="img/sp_fenxiang.png" xy="363,716">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Scale" target="n5_8ven" tween="true" startValue="1,1" endValue="1.2,1.2" duration="18" ease="Linear"/>
+    <item time="18" type="Scale" target="n5_8ven" tween="true" startValue="1.2,1.2" endValue="1,1" duration="12" ease="Linear"/>
+  </transition>
+</component>

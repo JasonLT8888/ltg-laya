@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="350,128" pivot="0.5,0.5" extention="Button" designImageOffsetX="-198" designImageOffsetY="-1066">
+  <displayList>
+    <image id="n5_8ven" name="n5" src="x4fge5" fileName="img/试用/btn_cheng.png" xy="0,0" size="350,128">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n6_8ven" name="n6" src="x4fgdk" fileName="img/炫耀/sp_woyaoxuanyao.png" xy="118,40"/>
+    <image id="n7_qpmg" name="n7" src="x4fgdl" fileName="img/炫耀/sp_fengxiang.png" xy="29,33"/>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

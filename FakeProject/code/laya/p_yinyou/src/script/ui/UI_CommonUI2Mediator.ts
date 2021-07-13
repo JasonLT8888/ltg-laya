@@ -1,8 +1,6 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_CommonUI2 from "../../ui/Main/UI_CommonUI2";
 import { UI_MainMediator } from "./UI_MainMediator";
-import LTG_UI_HideMenuMediator from "../../LTG_CommonUI/Mediator/LTG_UI_HideMenuMediator";
-import { LTG_Com_MyGameData } from "../../LTG_CommonUI/Data/LTG_Com_MyGameData";
 // import { LTG_Com_ZhuaWawaData } from "../../LTG_CommonUI/Data/LTG_Com_ZhuaWawaData";
 import { LTG_Com_RollData } from "../../LTG_CommonUI/Data/LTG_Com_RollData";
 import { LTG_Com_WatchDYData } from "../../LTG_CommonUI/Data/LTG_Com_WatchDYData";
@@ -25,6 +23,7 @@ import { LTG_UI_RankListMediator } from "../../LTG_CommonUI/Mediator/LTG_UI_Rank
 import { UI_MiniGamesMediator } from "../../LTGame/UIExt/DefaultUI/UI_MiniGamesMediator";
 import { LTG_Com_WinData } from "../../LTG_CommonUI/Data/LTG_Com_WinData";
 import { LTG_Com_StatementData } from "../../LTG_CommonUI/Data/LTG_Com_StatementData";
+import { LTG_Com_AddShortcutData } from "../../LTG_CommonUI/Data/LTG_Com_AddShortcutData";
 
 class UIDemoData {
 
@@ -50,12 +49,12 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
     }
     private fakeScore = 10;
     private _demos: UIDemoData[] = [
-        new UIDemoData("隐藏菜单", () => {
-            LTG_UI_HideMenuMediator.instance.Show();
-        }),
-        new UIDemoData("我的小程序", () => {
-            new LTG_Com_MyGameData().Send();
-        }),
+        // new UIDemoData("隐藏菜单", () => {
+        //     LTG_UI_HideMenuMediator.instance.Show();
+        // }),
+        // new UIDemoData("我的小程序", () => {
+        //     new LTG_Com_MyGameData().Send();
+        // }),
         // new UIDemoData("抓娃娃", () => {
         //     let data = new LTG_Com_ZhuaWawaData();
         //     data.onPickup = Laya.Handler.create(null, () => {
@@ -67,8 +66,8 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         //     data.Send();
         // }),
         new UIDemoData("皮肤试用", () => {
-            let data = new LTG_Com_TrySkinData();
-            data.tryConfig = TryItemConfig.dataList[0];
+            let data = new LTG_Com_TrySkinData(); 
+            data.modelPath = TryItemConfig.dataList[0].display_model_path;
             data.onClose = Laya.Handler.create(this, (res) => {
                 if (res) {
                     LTUI.Toast("试用");
@@ -100,6 +99,14 @@ export default class UI_CommonUI2Mediator extends BaseUIMediator<UI_CommonUI2> {
         new UIDemoData("关注抖音号", () => {
             let data = new LTG_Com_WatchDYData();
             data.dyId = GameConst.data.douyin_id;
+            data.Send();
+        }),
+        new UIDemoData("添加桌面", () => {
+            let data = new LTG_Com_AddShortcutData();
+            data.icon_url = "";
+            data.onReward = Laya.Handler.create(null, () => {
+                LTUI.Toast("添加桌面，获得奖励");
+            });
             data.Send();
         }),
         new UIDemoData("视频分享", () => {

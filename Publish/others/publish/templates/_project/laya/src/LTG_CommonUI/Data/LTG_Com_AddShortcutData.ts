@@ -8,7 +8,7 @@ import LTG_UI_AddShortcutMediator from "../Mediator/LTG_UI_AddShortcutMediator";
 export class LTG_Com_AddShortcutData implements ILTG_Com_Data {
 
     public icon_url: string = null;
-
+    public onReward: Laya.Handler;
     Send(): number {
         LTG_UI_AddShortcutMediator.instance.Show(this);
         return 0;

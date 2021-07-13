@@ -8,15 +8,21 @@
     <component id="n2_8gel" name="view" src="8gel42" fileName="cmp/view_roll.xml" xy="0,61">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n5_8gel" name="btn_close" src="n2g171" fileName="cmp/btn_refuse.xml" xy="215,993" size="320,99">
+    <component id="n6_7nzp" name="btn_no" src="8gel1d" fileName="cmp/btn_close_01.xml" xy="95,199">
+      <gearDisplay controller="plat" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n8_x4fg" name="btn_close" src="n2g171" fileName="cmp/btn_refuse.xml" xy="40,895" size="317,117">
       <gearDisplay controller="plat" pages="1"/>
       <relation target="" sidePair="center-center,middle-middle"/>
       <Button icon="ui://hbq27te3fig0ah"/>
       <property target="bg" propertyId="1" value="ui://hbq27te3fig0a4"/>
     </component>
-    <component id="n6_7nzp" name="btn_no" src="8gel1d" fileName="cmp/btn_close_01.xml" xy="95,199">
-      <gearDisplay controller="plat" pages="0"/>
+    <component id="n9_x4fg" name="btn_roll" src="8gel3w" fileName="cmp/btn_watchad_roll.xml" xy="395,896" size="317,117">
+      <gearXY controller="plat" pages="0,1" values="216,974|395,896"/>
       <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3x4fgd1"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3x4fgd2"/>
     </component>
   </displayList>
 </component>

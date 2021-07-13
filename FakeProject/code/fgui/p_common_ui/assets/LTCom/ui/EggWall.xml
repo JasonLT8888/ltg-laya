@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://hbq27te3mwzx8z" designImageLayer="1">
+<component size="750,1334">
   <displayList>
-    <image id="n4_8gel" name="img_bg" src="q96u89" fileName="img/bg_s.png" xy="0,-220" size="750,1554">
+    <graph id="n0_x4fg" name="img_bg" xy="0,-110" size="750,1554" type="rect" lineSize="0" fillColor="#ffbaeeff">
       <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n1_x4fg" name="n1" src="x4fgd4" fileName="img/彩蛋5/sp_biaotibg.png" xy="0,0">
+      <relation target="" sidePair="center-center,top-top"/>
     </image>
-    <component id="n0_8gel" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="26,72">
-      <relation target="" sidePair="middle-middle,left-left"/>
-    </component>
-    <graph id="n24_jlyk" name="img_display" xy="180,88" size="389,558" type="rect">
+    <image id="n2_x4fg" name="n2" src="x4fgd5" fileName="img/彩蛋5/sp_caidanqinag.png" xy="268,42">
+      <relation target="" sidePair="center-center,top-top"/>
+    </image>
+    <graph id="n3_x4fg" name="img_display" xy="0,117" size="750,520" type="rect">
       <relation target="" sidePair="center-center,middle-middle"/>
     </graph>
-    <image id="n1_8gel" name="n1" src="8gel2f" fileName="img/sp_caidanqing.png" xy="204,69">
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </image>
-    <list id="n14_8gel" name="list_view" xy="0,663" size="750,545" layout="flow_hz" overflow="scroll" lineGap="17" colGap="18" lineItemCount="3" defaultItem="ui://hbq27te3mwzx93" align="center">
-      <relation target="" sidePair="center-center,bottom-bottom"/>
+    <graph id="n4_x4fg" name="img_bg1" xy="0,626" size="750,708" type="rect" lineSize="0" fillColor="#ff54b0fa">
+      <relation target="" sidePair="width-width,bottomext-bottom"/>
+      <relation target="n3_x4fg" sidePair="topext-bottom"/>
+    </graph>
+    <list id="n5_x4fg" name="list_view" xy="0,640" size="750,556" layout="flow_hz" overflow="scroll" lineGap="22" colGap="22" lineItemCount="3" defaultItem="ui://hbq27te3x4fgd6" align="center">
+      <relation target="n3_x4fg" sidePair="topext-bottom"/>
+      <relation target="" sidePair="center-center,bottomext-bottom"/>
       <item/>
       <item/>
       <item/>
@@ -22,8 +27,11 @@
       <item/>
       <item/>
     </list>
-    <component id="n16_n2g1" name="view_entercode" src="n2g16q" fileName="cmp/view_enter_code.xml" xy="0,1212">
+    <component id="n6_x4fg" name="view_entercode" src="n2g16q" fileName="cmp/view_enter_code.xml" xy="0,1192" size="750,143">
       <relation target="" sidePair="width-width,bottom-bottom"/>
+    </component>
+    <component id="n7_x4fg" name="btn_back" src="8gel2e" fileName="cmp/btn_back_02.xml" xy="22,47">
+      <relation target="" sidePair="middle-middle,left-left"/>
     </component>
   </displayList>
 </component>

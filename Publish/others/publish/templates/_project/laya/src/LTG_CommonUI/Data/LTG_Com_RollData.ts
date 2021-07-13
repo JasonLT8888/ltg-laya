@@ -7,6 +7,10 @@ export class LTG_Com_RollData implements ILTG_Com_Data {
      * config: RollConfig.config
      */
     public onRolled: Laya.Handler;
+    /**
+   * config: RollConfig.config
+   */
+    public onSpecial: Laya.Handler;
 
     public Send(): number {
         LTG_UI_RollMediator.instance.Show(this);
