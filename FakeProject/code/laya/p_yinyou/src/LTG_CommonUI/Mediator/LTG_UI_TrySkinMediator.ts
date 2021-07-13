@@ -1,16 +1,13 @@
-import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
-import LTG_UI_TrySkin from "../UI/LTCom/LTG_UI_TrySkin";
-import { LTG_Com_TrySkinData } from "../Data/LTG_Com_TrySkinData";
-import LTPlatform from "../../LTGame/Platform/LTPlatform";
-import LTUI from "../../LTGame/UIExt/LTUI";
-import ResDefine from "../../script/common/ResDefine";
-import LTRes from "../../LTGame/Res/LTRes";
 import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
-import { TransformEx } from "../../LTGame/LTUtils/TransformEx";
 import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
-import LTSDK from "../../SDK/LTSDK";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
 import { CmpSceneDisplay } from "../../LTGame/UIExt/Cmp/CmpSceneDisplay";
 import { CmpSimpleLoader } from "../../LTGame/UIExt/Cmp/CmpSimpleLoader";
+import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
+import LTUI from "../../LTGame/UIExt/LTUI";
+import LTSDK from "../../SDK/LTSDK";
+import { LTG_Com_TrySkinData } from "../Data/LTG_Com_TrySkinData";
+import LTG_UI_TrySkin from "../UI/LTCom/LTG_UI_TrySkin";
 
 const display_path = "try_display";
 
