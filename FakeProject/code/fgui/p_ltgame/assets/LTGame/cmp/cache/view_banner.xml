@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,260">
+  <displayList>
+    <graph id="n0_ovsy" name="n0" xy="0,0" size="750,260" type="rect">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1_ovsy" name="n1" xy="183,90" size="381,80" fontSize="68" text="Banner 广告">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <text id="n2_ovsy" name="n2" xy="624,222" size="108,31" fontSize="24" text="LTGame">
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </text>
+  </displayList>
+</component>

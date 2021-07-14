@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,360">
+  <controller name="btn_pos" exported="true" pages="0,,1,,2,,3,大,4,大下" selected="3"/>
+  <displayList>
+    <component id="n15_9248" name="ad" src="n22eik" fileName="cmp/native/AdInpage.xml" xy="0,0" size="640,360">
+      <gearXY controller="btn_pos" pages="0,3" values="0,39|0,0" default="0,0"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n14_9248" name="btn_close" src="l2ax4l" fileName="ui_common/btn_normal.xml" xy="593,1" size="46,46" aspect="true">
+      <relation target="n15_9248" sidePair="left-right,top-top"/>
+      <Button titleFontSize="30" icon="ui://75kiu87kl2ax4m"/>
+    </component>
+    <component id="n16_e8mb" name="btn_clickad" src="l2ax4l" fileName="ui_common/btn_normal.xml" xy="204,-57" size="198,38">
+      <gearDisplay controller="btn_pos" pages="0,1"/>
+      <gearXY controller="btn_pos" pages="0,1" values="221,-2|221,323" default="204,-57"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="查看广告" titleFontSize="32"/>
+      <property target="bg" propertyId="1" value=""/>
+    </component>
+    <component id="n17_kgip" name="btn_clickadbg" src="l2ax4l" fileName="ui_common/btn_normal.xml" xy="154,-33" size="337,150">
+      <gearDisplay controller="btn_pos" pages="3,4"/>
+      <gearXY controller="btn_pos" pages="0,1,2,3,4" values="221,-2|221,330|204,166|154,-33|151,237"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button titleFontSize="32"/>
+      <property target="bg" propertyId="1" value="ui://75kiu87kis4ei2"/>
+    </component>
+  </displayList>
+  <transition name="t0" autoPlay="true" autoPlayRepeat="-1">
+    <item time="0" type="Scale" target="n17_kgip" tween="true" startValue="1,1" endValue="1.2,1.2" duration="24" ease="Linear"/>
+    <item time="24" type="Scale" target="n17_kgip" tween="true" startValue="1.2,1.2" endValue="1,1" duration="12" ease="Linear"/>
+  </transition>
+</component>

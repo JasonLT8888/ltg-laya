@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="815,470">
+  <displayList>
+    <list id="n4_p2ld" name="list0" xy="65,0" size="750,150" layout="row" overflow="scroll" scroll="horizontal" scrollBarFlags="160" margin="1,1,0,0" colGap="14" defaultItem="ui://75kiu87kp2ld6p" vAlign="middle" autoClearItems="true">
+      <relation target="" sidePair="width-width,center-center"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <list id="n5_p2ld" name="list1" xy="-14,160" size="826,150" layout="row" overflow="scroll" scroll="horizontal" scrollBarFlags="160" margin="1,1,0,0" colGap="14" defaultItem="ui://75kiu87kp2ld6p" vAlign="middle" renderOrder="descent" autoClearItems="true">
+      <relation target="" sidePair="width-width,center-center"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <list id="n6_p2ld" name="list2" xy="65,320" size="750,150" layout="row" overflow="scroll" scroll="horizontal" scrollBarFlags="160" margin="1,1,0,0" colGap="14" defaultItem="ui://75kiu87kp2ld6p" vAlign="middle">
+      <relation target="" sidePair="width-width,center-center"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

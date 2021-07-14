@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <controller name="landscape" exported="true" pages="0,,1," selected="0"/>
+  <displayList>
+    <graph id="n3_dw0g" name="n3" xy="0,0" pivot="0.5,0.5" size="750,1334" alpha="0.9" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n6_h8ea" name="ad" src="ocvx6s" fileName="ad_res/native/NativeInterAd.xml" xy="55,422">
+      <gearXY controller="landscape" pages="0,1" values="55,422|375,801"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </component>
+    <component id="n7_ocvx" name="btn_close" src="l2ax4l" fileName="ad_res/btn_normal.xml" xy="355,826" size="40,40">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button titleFontSize="30" icon="ui://75kiu87kl2ax4m"/>
+    </component>
+  </displayList>
+  <transition name="t0"/>
+</component>
