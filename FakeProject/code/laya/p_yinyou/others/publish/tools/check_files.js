@@ -2,8 +2,18 @@ const fs = require("fs");
 const process = require("process");
 const path = require("path");
 var tempFileNames = [];
+var cnFileNames = [];
 var tempDirNames = [];
 var count = 0;
+function withChinese(s) {
+    var patrn = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi;
+    if (!patrn.exec(s)) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
 function checkFiles(currentPath) {
     let files = fs.readdirSync(currentPath);
     for (let i = 0; i < files.length; ++i) {
@@ -13,12 +23,15 @@ function checkFiles(currentPath) {
 
         if (fileStat.isDirectory()) {
             if (fileName.indexOf("#") >= 0 || fileName.indexOf(" ") >= 0) {
-                tempDirNames.push(filePath)
+                tempDirNames.push(filePath);
             }
             checkFiles(filePath);
         } else {
             if (fileName.indexOf("#") >= 0 || fileName.indexOf(" ") >= 0) {
-                tempFileNames.push(filePath)
+                tempFileNames.push(filePath);
+            }
+            if (withChinese(fileName)) {
+                cnFileNames.push(filePath);
             }
             minifyJson(filePath);
             count++;
@@ -60,6 +73,10 @@ for (let i = 0; i < tempDirNames.length; i++) {
 }
 for (let i = 0; i < tempFileNames.length; i++) {
     console.log("不安全文件：" + tempFileNames[i]);
+}
+
+for (let i = 0; i < cnFileNames.length; i++) {
+    console.log("文件名字包含中文：" + cnFileNames[i]);
 }
 
 console.log("");
