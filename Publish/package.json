@@ -21,6 +21,7 @@
   "scripts": {
     "build": "webpack --config others/webpack_config/webpack-config-for-game.js",
     "update-ltg": "node others/publish/bin/update.js",
+    "check_files": "node others/publish/tools/check_files.js",
     "publish-wx": "node others/publish/bin/publish.js -p wx",
     "publish-tt": "node others/publish/bin/publish.js -p tt",
     "publish-qq": "node others/publish/bin/publish.js -p qq",
@@ -28,7 +29,6 @@
     "publish-vivo": "node others/publish/bin/publish.js -p vivo",
     "publish-ks": "node others/publish/bin/publish.js -p ks",
     "publish-hw": "node others/publish/bin/publish.js -p hw",
-    "publish-test": "layaair2-cmd publish -c hwgame",
     "buid-ks-debug": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/ -d 1",
     "buid-ks-release": "sh ./others/publish/tools/ks/export_kwai.sh -z ./release/ks/",
     "publish-bd": "node others/publish/bin/publish.js -p bd",
