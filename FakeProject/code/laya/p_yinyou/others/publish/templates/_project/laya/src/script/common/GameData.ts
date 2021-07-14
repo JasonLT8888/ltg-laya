@@ -33,15 +33,17 @@ export default class GameData {
 
     private _saveData: SaveData;
 
+    public static SAVE_NAME: string = 'p_game01.sav';
+
     public static SaveToDisk() {
         if (!this._instance) return;
         let json = JSON.stringify(this._instance._saveData);
-        Laya.LocalStorage.setJSON(gameName, json);
+        Laya.LocalStorage.setJSON(GameData.SAVE_NAME, json);
         CommonSaveData.SaveToDisk();
     }
 
     private _ReadFromFile() {
-        let readStr = Laya.LocalStorage.getJSON(gameName);
+        let readStr = Laya.LocalStorage.getJSON(GameData.SAVE_NAME);
         this._saveData = new SaveData();
         if (!StringEx.IsNullOrEmpty(readStr)) {
             let jsonData = JSON.parse(readStr);
