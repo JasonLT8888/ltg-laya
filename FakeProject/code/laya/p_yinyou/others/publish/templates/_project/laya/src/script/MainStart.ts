@@ -9,6 +9,8 @@ import LTSDK from "../SDK/LTSDK";
 import MainScene from "./scene/MainScene";
 import SplashScene from "./scene/SplashScene";
 import SDK_Default from "../SDK/Impl/SDK_Default";
+import GameData from "./common/GameData";
+import { CommonProgressData } from "../LTGame/Commom/CommonProgressData";
 
 export default class MainStart extends LTStart {
 
@@ -27,6 +29,9 @@ export default class MainStart extends LTStart {
 
     _HandleInitPlatform(ePlatform: EPlatformType, platformData: LTPlatformData) {
         window["__GM"] = false;
+
+        GameData.SAVE_NAME = this._gameName + '.sav';
+        CommonProgressData.Init(this._gameName + '.progress');
 
         switch (ePlatform) {
             case EPlatformType.Web:
