@@ -112,6 +112,16 @@ class CopyProject {
             return true;
         });
         console.log("拷贝", srcPath, "完成");
+        // 拷贝公用广告 ui
+        var adPath = path.join(rootPath, 'others/publish/templates/_project/fgui/p_ltgame/');
+        var adsrcPath = path.join(rootPath, './../../fgui/p_ltgame/');
+        LTUtils.CopyDir(adsrcPath, adPath, (fileName: string) => {
+            if (fileName == '.objs') {
+                return false;
+            }
+            return true;
+        });
+        console.log("拷贝", adsrcPath, "完成");
     }
 
     /**

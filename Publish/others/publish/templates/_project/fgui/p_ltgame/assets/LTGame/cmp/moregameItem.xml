@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="182,228">
+  <controller name="dot_type" exported="true" pages="2,hot,1,new,0,no" selected="1"/>
+  <displayList>
+    <image id="n16_ii3n" name="n16" src="ii3nhp" fileName="img/ad_res/推荐/sp_xinxibg.png" xy="15,5" size="166,222"/>
+    <component id="n24_ii3n" name="icon" src="ii3nhy" fileName="cmp/moregameIcon.xml" xy="16,6"/>
+    <text id="n19_ii3n" name="title" xy="18,174" size="160,28" font="DengXian" fontSize="28" color="#ffd121" align="center" vAlign="middle" autoSize="none" text="飞箭传说"/>
+    <text id="n20_ii3n" name="player" xy="23,203" size="151,25" font="DengXian" fontSize="20" color="#ffffff" align="center" vAlign="bottom" autoSize="none" text="100万人在玩"/>
+    <image id="n17_ii3n" name="n17" src="ii3nhq" fileName="img/ad_res/推荐/sp_xinpin.png" xy="0,1">
+      <gearDisplay controller="dot_type" pages="1"/>
+    </image>
+    <image id="n18_ii3n" name="n18" src="ii3nhs" fileName="img/ad_res/推荐/sp_renqi.png" xy="0,0">
+      <gearDisplay controller="dot_type" pages="2"/>
+    </image>
+  </displayList>
+</component>

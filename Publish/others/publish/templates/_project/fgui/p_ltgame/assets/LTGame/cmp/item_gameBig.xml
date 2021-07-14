@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="212,280">
+  <displayList>
+    <graph id="n14_r3yg" name="n14" xy="0,0" size="212,280" type="rect" lineSize="0" corner="10"/>
+    <component id="n11_r3yg" name="icon" src="r3yg7g" fileName="cmp/GameIconF.xml" xy="0,0" size="212,213"/>
+    <text id="n9_r3yg" name="title" xy="105,230" pivot="0.5,0.5" anchor="true" size="109,31" font="DengXian" fontSize="26" align="center" vAlign="middle" bold="true" text="快来上车"/>
+    <text id="n10_r3yg" name="player" xy="105,261" pivot="0.5,0.5" anchor="true" size="109,27" font="DengXian" fontSize="22" color="#999999" align="center" vAlign="middle" text="87342人玩"/>
+    <image id="n13_r3yg" name="red" src="r3yg7a" fileName="img/ad_res/wx/红点大@2x.png" xy="177,-1" aspect="true"/>
+  </displayList>
+</component>

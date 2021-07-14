@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" opaque="false">
+  <displayList>
+    <list id="n1_qlxc" name="list_toast" xy="0,205" size="750,841" touchable="false" selectionMode="none" overflow="scroll" lineGap="10" defaultItem="ui://75kiu87kovsy8" autoItemSize="false" align="center" autoClearItems="true">
+      <relation target="" sidePair="width-width,height-height"/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

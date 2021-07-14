@@ -1,0 +1,21 @@
+{
+	"atlasSetting":{
+		"paging":true,
+		"sizeOption":"pot",
+		"trimImage":true
+	},
+	"binaryFormat":true,
+	"codeGeneration":{
+		"classNamePrefix":"UI_",
+		"codePath":"..\\..\\laya\\p_yinyou\\src\\LTGame\\UIExt\\DefaultUI\\UI",
+		"codeType":"TS-2",
+		"getMemberByName":false,
+		"ignoreNoname":true,
+		"memberNamePrefix":"m_",
+		"packageName":""
+	},
+	"compressDesc":false,
+	"fileExtension":"bin",
+	"packageCount":2,
+	"path":"..\\..\\laya\\p_yinyou\\bin\\res\\ltgame\\ui"
+}

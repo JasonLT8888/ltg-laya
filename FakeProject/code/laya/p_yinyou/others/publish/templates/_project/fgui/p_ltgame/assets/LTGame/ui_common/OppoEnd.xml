@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <controller name="state" exported="true" pages="0,dao,1,yuan" selected="0"/>
+  <controller name="end" exported="true" pages="0,win,1," selected="0"/>
+  <displayList>
+    <graph id="n3_sinz" name="n3" xy="0,0" size="750,1334" alpha="0.8" type="rect" lineSize="0" fillColor="#ff000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n4_sinz" name="__nativeinpage" xy="0,305" size="750,421" aspect="true" customData="2" type="rect">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <component id="n5_eq33" name="btn_double" src="vo5igy" fileName="img/按钮/btn_scaler_yellow.xml" xy="216,920" size="333,129">
+      <gearDisplay controller="state" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kvo5ih0"/>
+      <property target="title_icon" propertyId="1" value="ui://75kiu87kvo5ih1"/>
+    </component>
+    <component id="n7_eq33" name="btn_gift" src="vo5ih5" fileName="img/按钮/btn_red_scale.xml" xy="553,920" size="251,129" controller="style,1">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kvo5ih7"/>
+      <property target="title_icon" propertyId="1" value="ui://75kiu87kvo5ih8"/>
+    </component>
+    <image id="n8_eq33" name="win" src="cqeohh" fileName="img/sp_tiaozhanchenggong.png" xy="113,165">
+      <gearDisplay controller="end" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <component id="n9_eq33" name="btn_next" src="vo5igy" fileName="img/按钮/btn_scaler_yellow.xml" xy="217,920" size="333,129">
+      <gearDisplay controller="state" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://75kiu87kvo5ihb"/>
+      <property target="title_icon" propertyId="1" value="ui://75kiu87kvo5ihc"/>
+    </component>
+    <graph id="n10_eq33" name="__endSG" xy="0,291" size="750,470" type="rect">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <text id="n12_eq33" name="label_getCoin" xy="188,784" size="109,56" fontSize="40" color="#ffffff" align="center" vAlign="middle" autoSize="none" text="+100">
+      <gearDisplay controller="state" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+    <loader id="n13_eq33" name="coin" xy="98,785" size="61,54" url="ui://75kiu87kvo5ihe" align="center" vAlign="middle">
+      <gearDisplay controller="state" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <component id="n14_eq33" name="btn_no" src="vo5ih2" fileName="img/按钮/normal_ad_btn.xml" xy="298,1012" size="171,68">
+      <gearDisplay controller="state" pages="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="放弃双倍" titleFontSize="24"/>
+      <property target="bg" propertyId="1" value="ui://75kiu87kvo5ihf"/>
+    </component>
+    <component id="n6_eq33" name="btn_ad" src="vo5ih2" fileName="img/按钮/normal_ad_btn.xml" xy="239,655" size="271,100" controller="showAd,0">
+      <gearDisplay controller="state" pages="0,1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="bg" propertyId="1" value="ui://75kiu87kvo5ih3"/>
+      <property target="title_icon" propertyId="1" value="ui://75kiu87kvo5ih4"/>
+    </component>
+    <image id="n15_cqeo" name="n15" src="cqeohi" fileName="img/sp_tiaozhanshibai.png" xy="113,166">
+      <gearDisplay controller="end" pages="1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+</component>

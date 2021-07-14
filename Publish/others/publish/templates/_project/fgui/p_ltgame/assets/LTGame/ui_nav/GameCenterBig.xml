@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <image id="n14_r3yg" name="n14" src="r3yg7e" fileName="img/ad_res/wx/img_3.png" xy="0,-101" size="750,1435">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_r3yg" name="n1" src="r3yg77" fileName="img/ad_res/wx/游戏中心@2x.png" xy="293,58">
+      <relation target="" sidePair="center-center,top-top"/>
+    </image>
+    <list id="n13_r3yg" name="centerList" xy="25,102" size="701,1098" layout="flow_hz" overflow="scroll" lineGap="20" colGap="60" defaultItem="ui://75kiu87krfowhk" align="center" autoClearItems="true">
+      <relation target="" sidePair="height-height,center-center"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <component id="n15_r3yg" name="btn_close" src="l2ax4l" fileName="ui_common/btn_normal.xml" xy="205,1205" size="339,116">
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+      <Button icon="ui://75kiu87kr3yg7f"/>
+    </component>
+  </displayList>
+  <transition name="anim_enter">
+    <item time="0" type="Scale" target="n15_r3yg" value="0,0"/>
+    <item time="48" type="Scale" target="n15_r3yg" tween="true" startValue="0,0" endValue="0,0" duration="24" ease="Linear"/>
+  </transition>
+</component>

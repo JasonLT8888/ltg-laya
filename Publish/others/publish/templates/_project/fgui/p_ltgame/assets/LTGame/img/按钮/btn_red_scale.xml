@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="279,129" pivot="0.5,0.5" anchor="true" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <controller name="style" alias="形式" autoRadioGroupDepth="true" exported="true" pages="0,single,1,double" selected="0"/>
+  <displayList>
+    <image id="n4_nicl" name="n4" src="vo5ih6" fileName="oppo/btns/btn_anniuhong.png" xy="0,0" size="279,129">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <loader id="n2_nicl" name="icon" xy="8,22" pivot="0.5,0.5" size="80,82" align="center" vAlign="middle">
+      <relation target="" sidePair="left-left,right-left"/>
+    </loader>
+    <loader id="n1_nicl" name="title_icon" xy="146,63" pivot="0.5,0.5" anchor="true" size="211,86" align="center" vAlign="middle">
+      <gearXY controller="style" pages="0,1" values="146,63|184,63"/>
+      <gearSize controller="style" pages="0,1" values="211,86,1,1|160,86,1,1"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+  <transition name="t0" autoPlayRepeat="-1">
+    <item time="0" type="Scale" tween="true" startValue="1,1" endValue="1.1,1.1" duration="24" ease="Bounce.Out"/>
+    <item time="24" type="Scale" tween="true" startValue="1.1,1.1" endValue="1.05,1.05" duration="6"/>
+    <item time="30" type="Scale" tween="true" startValue="1.05,1.05" endValue="1,1" duration="18" ease="Linear"/>
+  </transition>
+  <customProperty target="title_icon" propertyId="1"/>
+</component>
