@@ -40,11 +40,16 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
             this.ui.m_view.visible = false;
         }
         // this.ui.m_view.m_loader_title.url = this._cacheData.tryConfig.intro_url;
-        this._displayScene = new CmpSceneDisplay(this.ui.m_img_display);
         this.ui.m_btn_no.onClick(this, this._OnClickClose);
         this.ui.m_btn_try.onClick(this, this._OnClickWatchAd);
         this.ui.m_btn_no.m_bg.visible = LTPlatform.instance.platform == EPlatformType.TT || LTSDK.instance.isInCheck;
-        this._CreateScene();
+
+        if (this._cacheData.tryIcon) {
+            this.ui.m_img_display.icon = this._cacheData.tryIcon;
+        } else {
+            this._displayScene = new CmpSceneDisplay(this.ui.m_img_display);
+            this._CreateScene();
+        }
     }
     private async _CreateScene() {
         LTUI.ShowLoading('资源加载中');
