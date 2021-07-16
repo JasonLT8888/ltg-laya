@@ -96,6 +96,7 @@ export default class AudioManager {
     }
 
     public Resume() {
+        if (!CommonSaveData.instance.isMusicOn) return;
         if (this._bgmAudio) {
             this._bgmAudio.resume();
         }
