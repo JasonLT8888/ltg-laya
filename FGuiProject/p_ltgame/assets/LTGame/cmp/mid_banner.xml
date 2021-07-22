@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="688,201">
-  <displayList>
-    <component id="n7_nmlk" name="icon" src="nmlkig" fileName="cmp/tt_icon.xml" xy="0,0" size="688,201">
-      <relation target="" sidePair="center-center,middle-middle"/>
-    </component>
-  </displayList>
-</component>

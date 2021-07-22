@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="124,56" extention="Button">
-  <displayList>
-    <image id="n16_rk93" name="n16" src="kntfbm" fileName="img/btn-fanhui2.png" xy="0,0"/>
-  </displayList>
-  <Button downEffect="dark" downEffectValue="0.80"/>
-</component>
