@@ -37,9 +37,9 @@ export default class BaseUIMediator<T extends fgui.GComponent> {
         let uiData = new FGuiData();
         uiData.needFitScreen = this._needFilScreen;
         this._ui = FGuiEx.AddUI(this._classDefine, uiData) as T;
-        this._ui.sortingOrder = this._sortOrder;
         this._InitSelfAd();
         this._OnShow();
+        this._ui.sortingOrder = this._sortOrder;
     }
 
     private _InitSelfAd() {

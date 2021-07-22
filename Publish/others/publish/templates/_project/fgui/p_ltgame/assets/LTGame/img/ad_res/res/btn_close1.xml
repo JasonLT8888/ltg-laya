@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="33,35" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n1_f8vl" name="n1" xy="0,0" size="33,35" type="rect" lineSize="0" fillColor="#ff7c9cab">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n0_f8vl" name="n0" src="a24yio" fileName="img/ad_res/res/rank_btn_guanbi.png" xy="0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+  </displayList>
+  <Button/>
+</component>

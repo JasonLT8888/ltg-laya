@@ -4,6 +4,8 @@ import UI_hot_game from "./UI_hot_game";
 import UI_NativeInPage from "./UI_NativeInPage";
 import UI_iconLongComp from "./UI_iconLongComp";
 import UI_OpenAds from "./UI_OpenAds";
+import UI_NativeBanner from "./UI_NativeBanner";
+import UI_NativeBannerComp from "./UI_NativeBannerComp";
 import UI_view_game_icon1 from "./UI_view_game_icon1";
 import UI_view_end_games from "./UI_view_end_games";
 import UI_view_game_icon from "./UI_view_game_icon";
@@ -59,6 +61,8 @@ export default class LTGameBinder{
 		fgui.UIObjectFactory.setExtension(UI_NativeInPage.URL, UI_NativeInPage);
 		fgui.UIObjectFactory.setExtension(UI_iconLongComp.URL, UI_iconLongComp);
 		fgui.UIObjectFactory.setExtension(UI_OpenAds.URL, UI_OpenAds);
+		fgui.UIObjectFactory.setExtension(UI_NativeBanner.URL, UI_NativeBanner);
+		fgui.UIObjectFactory.setExtension(UI_NativeBannerComp.URL, UI_NativeBannerComp);
 		fgui.UIObjectFactory.setExtension(UI_view_game_icon1.URL, UI_view_game_icon1);
 		fgui.UIObjectFactory.setExtension(UI_view_end_games.URL, UI_view_end_games);
 		fgui.UIObjectFactory.setExtension(UI_view_game_icon.URL, UI_view_game_icon);

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="520,304">
+  <displayList>
+    <component id="n0_f8vl" name="ad" src="a24yim" fileName="ui_ad/NativeBannerComp.xml" xy="0,0" scale="0.8,0.8">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+  </displayList>
+</component>

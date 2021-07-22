@@ -142,6 +142,10 @@
     <component id="nmlkii" name="ttgame_items.xml" path="/cmp/"/>
     <component id="nmlkij" name="mid_banner.xml" path="/cmp/"/>
     <component id="n22eik" name="AdInpage.xml" path="/cmp/native/"/>
+    <component id="a24yil" name="NativeBanner.xml" path="/ui_ad/" exported="true"/>
+    <component id="a24yim" name="NativeBannerComp.xml" path="/cmp/"/>
+    <component id="a24yin" name="btn_close1.xml" path="/img/ad_res/res/"/>
+    <image id="a24yio" name="rank_btn_guanbi.png" path="/img/ad_res/res/"/>
   </resources>
   <publish name="LTGame" genCode="true"/>
 </packageDescription>
