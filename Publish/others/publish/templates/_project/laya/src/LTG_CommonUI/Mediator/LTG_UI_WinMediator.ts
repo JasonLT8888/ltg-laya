@@ -10,6 +10,7 @@ import GameData from "../../script/common/GameData";
 import LTUI from "../../LTGame/UIExt/LTUI";
 import MathEx from "../../LTGame/LTUtils/MathEx";
 import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
+import { View_NativeBanner } from "../../LTGame/UIExt/DefaultUI/Cmp/View_NativeBanner";
 
 export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
 
@@ -23,6 +24,7 @@ export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
     }
     private openData: LTG_Com_WinData;
     private canTouch: boolean = true;
+    private cacheAd: View_NativeBanner;
     _OnShow() {
         super._OnShow();
         this.canTouch = true;
@@ -80,6 +82,7 @@ export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
         this.Hide();
     }
     _OnHide() {
+        this.cacheAd?.Hide();
         this.openData.onNextLevel?.run();
     }
 
@@ -92,9 +95,6 @@ export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
         if (LTSDK.instance.checkState == ECheckState.InCheck) {
             this.ui.m_btn_normalget.m_color.selectedIndex = 1;
             this.ui.m_btn_multiget.m_color.selectedIndex = 0;
-            if (LTPlatform.instance.platform == EPlatformType.Vivo) {
-                this.ui.m_state.selectedIndex = 2;
-            }
             return;
         }
 
@@ -112,9 +112,12 @@ export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
                 break;
             case EPlatformType.Oppo:
             case EPlatformType.Vivo:
-                this.ui.m_state.selectedIndex = 0;
+                this.ui.m_state.selectedIndex = 2;
                 this.ui.m_btn_multiget.m_color.selectedIndex = 1;
                 this.ui.m_btn_normalget.m_color.selectedIndex = 2;
+                this.cacheAd = View_NativeBanner.CreateView(this.ui.m___NB, this.ui.m_btn_ad, Laya.Handler.create(this, () => {
+                    this.ui.m_state.selectedIndex = 0;
+                }));
                 break;
             default:
                 this.ui.m_state.selectedIndex = 0;
@@ -125,14 +128,7 @@ export default class LTG_UI_WinMediator extends BaseUIMediator<LTG_UI_Win> {
 
     }
     fakeTouchAd() {
-        if (this.ui.m___nativeinpage && this.ui.m___nativeinpage.visible
-            && MathEx.RandomRatio(LTSDK.instance.configs.nativePayRate)
-            && CommonSaveData.instance.nativeClickCount < LTSDK.instance.configs.nativeClickCount) {
-            CommonSaveData.instance.nativeClickCount++;
-            this.ui.m___nativeinpage["ClickAd"]();
-            CommonSaveData.SaveToDisk();
-        }
+        this.cacheAd?.fakeClickAd();
     }
-
 
 }

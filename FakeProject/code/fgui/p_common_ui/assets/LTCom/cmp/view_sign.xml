@@ -2,7 +2,7 @@
 <component size="649,1092" designImage="ui://hbq27te3fig0a0" designImageOffsetX="-47" designImageOffsetY="-73" designImageAlpha="0" designImageLayer="1">
   <controller name="state" exported="true" pages="0,tosign,1,signed" selected="0"/>
   <displayList>
-    <image id="n1_uo3l" name="n1" src="fig0a2" fileName="img/七日签到/di_1.png" xy="59,124" size="538,826"/>
+    <image id="n1_uo3l" name="n1" src="fig0a2" fileName="img/七日签到/di_1.png" xy="59,124" size="538,711"/>
     <image id="n2_uo3l" name="n2" src="fig09h" fileName="img/七日签到/tittle.png" xy="224,154"/>
     <image id="n27_fig0" name="n27" src="fig0ab" fileName="img/七日签到/di_2.png" xy="87,237" size="480,402"/>
     <component id="n4_uo3l" name="day_1" src="8gel4z" fileName="cmp/view_item_sign_01.xml" xy="85,242">
@@ -28,15 +28,15 @@
     <text id="n18_uo3l" name="text_signed" xy="211,830" size="236,79" fontSize="32" color="#ffffff" align="center" vAlign="middle" bold="true" text="今日已领取&#xA;欢迎明天再来！">
       <gearDisplay controller="state" pages="1"/>
     </text>
-    <component id="n19_uo3l" name="btn_normal" src="n2g171" fileName="cmp/btn_refuse.xml" xy="190,947" size="269,90">
+    <component id="n19_uo3l" name="btn_normal" src="n2g171" fileName="cmp/btn_refuse.xml" xy="164,989" size="320,128">
       <gearDisplay controller="state" pages="0"/>
       <Button icon="ui://hbq27te3fig09k"/>
-      <property target="bg" propertyId="1" value="ui://hbq27te3fig0a4"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3fig0au"/>
     </component>
-    <component id="n26_i8ti" name="btn_watchad" src="fig0a6" fileName="cmp/common_ad_btn.xml" xy="324,876" size="269,96">
+    <component id="n26_i8ti" name="btn_watchad" src="fig0a6" fileName="cmp/common_ad_btn.xml" xy="324,904" size="330,128">
       <gearDisplay controller="state" pages="0"/>
       <Button icon="ui://hbq27te3fig09i"/>
-      <property target="bg" propertyId="1" value="ui://hbq27te3fig0a5"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3fig0as"/>
     </component>
   </displayList>
 </component>

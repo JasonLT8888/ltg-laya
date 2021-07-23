@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component size="750,1334" designImage="ui://hbq27te3fig0bh">
-  <controller name="state" exported="true" pages="0,norm,1,change" selected="0"/>
+<component size="750,1334" designImage="ui://hbq27te3fig0bh" designImageAlpha="0">
+  <controller name="state" exported="true" pages="0,norm,1,change,2,oppo" selected="2">
+    <action type="play_transition" fromPage="" toPage="2" transition="t0"/>
+  </controller>
   <displayList>
     <graph id="n7_hfek" name="n7" xy="0,0" size="750,1334" alpha="0.6" type="rect" lineSize="0" fillColor="#ff000000">
       <relation target="" sidePair="width-width,height-height"/>
@@ -8,21 +10,32 @@
     <image id="n2_fig0" name="n2" src="fig0bj" fileName="img/结算/tittle.png" xy="104,111">
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <component id="n4_fig0" name="btn_normalget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,838" controller="ad,1,color,1">
-      <gearXY controller="state" pages="0,1" values="220,838|220,700"/>
+    <component id="n4_fig0" name="btn_normalget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,1139" controller="ad,1,color,1">
+      <gearXY controller="state" pages="0,1,2" values="220,838|220,700|220,1139"/>
       <relation target="" sidePair="center-center,middle-middle"/>
       <property target="rate" propertyId="0" value="x1"/>
     </component>
-    <component id="n3_fig0" name="btn_multiget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="220,700" controller="color,0">
-      <gearXY controller="state" pages="0,1" values="220,700|220,838"/>
+    <component id="n3_fig0" name="btn_multiget" src="fig0ar" fileName="img/结算/btn_morediamond.xml" xy="60,684" controller="color,0">
+      <gearXY controller="state" pages="0,1,2" values="220,700|220,838|60,684"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
     <component id="n5_fig0" name="unlock_progress" src="fig0bl" fileName="img/结算/image_bar.xml" xy="288,358" size="173,164">
       <relation target="" sidePair="center-center,middle-middle"/>
       <ProgressBar value="50" max="100"/>
     </component>
-    <graph id="n6_hfek" name="__nativeinpage" xy="55,974" size="640,360" customData="3" type="rect">
-      <relation target="" sidePair="center-center,bottom-bottom"/>
+    <graph id="n6_hfek" name="__NB" xy="115,824" size="520,304" customData="3" type="rect">
+      <gearDisplay controller="state" pages="2"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
     </graph>
+    <component id="n8_xiho" name="btn_ad" src="n2g171" fileName="cmp/btn_refuse.xml" xy="406,690" size="317,117">
+      <gearDisplay controller="state" pages="2"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://hbq27te3xihof7"/>
+      <property target="bg" propertyId="1" value="ui://hbq27te3fig0au"/>
+    </component>
   </displayList>
+  <transition name="t0">
+    <item time="0" type="Scale" target="n4_fig0" value="0,0"/>
+    <item time="60" type="Scale" target="n4_fig0" tween="true" startValue="0,0" endValue="1,1" duration="12"/>
+  </transition>
 </component>

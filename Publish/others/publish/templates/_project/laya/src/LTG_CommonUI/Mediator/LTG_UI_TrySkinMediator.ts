@@ -8,8 +8,8 @@ import LTUI from "../../LTGame/UIExt/LTUI";
 import LTSDK from "../../SDK/LTSDK";
 import { LTG_Com_TrySkinData } from "../Data/LTG_Com_TrySkinData";
 import LTG_UI_TrySkin from "../UI/LTCom/LTG_UI_TrySkin";
-
-const display_path = "try_display";
+import { View_NativeBanner } from "../../LTGame/UIExt/DefaultUI/Cmp/View_NativeBanner";
+import GameData from "../../script/common/GameData";
 
 export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySkin> {
 
@@ -42,7 +42,6 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
         // this.ui.m_view.m_loader_title.url = this._cacheData.tryConfig.intro_url;
         this.ui.m_btn_no.onClick(this, this._OnClickClose);
         this.ui.m_btn_try.onClick(this, this._OnClickWatchAd);
-        this.ui.m_btn_no.m_bg.visible = LTPlatform.instance.platform == EPlatformType.TT || LTSDK.instance.isInCheck;
 
         if (this._cacheData.tryIcon) {
             this.ui.m_img_display.icon = this._cacheData.tryIcon;
@@ -50,6 +49,22 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
             this._displayScene = new CmpSceneDisplay(this.ui.m_img_display);
             this._CreateScene();
         }
+        this.initBtns();
+    }
+    cacheAd: View_NativeBanner;
+    initBtns() {
+        this.ui.m_btn_no.m_bg.visible = LTPlatform.instance.platform == EPlatformType.TT || LTSDK.instance.isInCheck;
+        if (LTSDK.instance.isInCheck) return;
+        if (LTPlatform.instance.platform == EPlatformType.Vivo || LTPlatform.instance.platform == EPlatformType.Oppo) {
+            this.ui.m_state.selectedIndex = 2;
+            LTPlatform.instance.HideBannerAd();
+            this.cacheAd = View_NativeBanner.CreateView(this.ui.m___NB, this.ui.m_btn_ad, Laya.Handler.create(this, () => {
+                this.ui.m_state.selectedIndex = 0;
+            }));
+        } else {
+            this.ui.m_state.selectedIndex = GameData.instance.levelId % 2;
+        }
+
     }
     private async _CreateScene() {
         LTUI.ShowLoading('资源加载中');
@@ -65,6 +80,7 @@ export default class LTG_UI_TrySkinMediator extends BaseUIMediator<LTG_UI_TrySki
 
     _OnHide() {
         this._displayScene?.Dispose();
+        this.cacheAd?.Hide();
     }
 
     private _OnClickClose() {

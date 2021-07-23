@@ -496,6 +496,7 @@
     <image id="x4fgeu" name="sp_fengxiang0.png" path="/img/炫耀/"/>
     <image id="x4fgev" name="转盘.jpg" path="/img/转盘/"/>
     <component id="x4fgf6" name="EggDetail.xml" path="/ui/" exported="true"/>
+    <image id="xihof7" name="去看看.png" path="/img/结算/"/>
   </resources>
   <publish name="LTCom" genCode="true"/>
 </packageDescription>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="310,123" pivot="0.5,0.5" extention="Button">
   <controller name="ad" exported="true" pages="0,,1," selected="0"/>
-  <controller name="color" exported="true" pages="0,fen,1,lv,2,small" selected="2">
+  <controller name="color" exported="true" pages="0,fen,1,lv,2,small" selected="0">
     <action type="play_transition" fromPage="" toPage="0" transition="t0" repeat="-1" stopOnExit="true"/>
   </controller>
   <displayList>
@@ -18,15 +18,15 @@
     <image id="n4_hjxp" name="n4" src="8gel2n" fileName="img/sp_shipin.png" xy="35,43" size="60,45" aspect="true">
       <gearDisplay controller="ad" pages="0"/>
     </image>
-    <image id="n5_hjxp" name="n5" src="fig0aw" fileName="img/结算/sp_huode.png" xy="57,43">
+    <image id="n5_hjxp" name="n5" src="fig0aw" fileName="img/结算/sp_huode.png" xy="119,28">
       <gearXY controller="color" pages="2" values="57,43" default="119,28"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </image>
-    <loader id="n6_hjxp" name="img_coin" xy="135,38" size="42,46" url="ui://hbq27te3fig09w" align="center" vAlign="middle" fill="scaleMatchWidth" clearOnPublish="true">
+    <loader id="n6_hjxp" name="img_coin" xy="101,67" size="42,46" url="ui://hbq27te3fig09w" align="center" vAlign="middle" fill="scaleMatchWidth" clearOnPublish="true">
       <gearXY controller="color" pages="2" values="135,38" default="101,67"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </loader>
-    <text id="n7_hjxp" name="text_value" xy="184,48" size="79,30" font="ui://hbq27te3fig0ay" fontSize="12" color="#ffffff" bold="true" text="+126">
+    <text id="n7_hjxp" name="text_value" xy="150,77" size="79,30" font="ui://hbq27te3fig0ay" fontSize="12" color="#ffffff" bold="true" text="+126">
       <gearXY controller="color" pages="0,2" values="150,77|184,48" default="150,77"/>
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
@@ -40,8 +40,8 @@
   </displayList>
   <Button downEffect="dark" downEffectValue="0.80"/>
   <transition name="t0" autoPlayRepeat="-1">
-    <item time="0" type="Scale" tween="true" startValue="1,1" endValue="1.4,1.4" duration="24" ease="Linear"/>
-    <item time="24" type="Scale" tween="true" startValue="1.4,1.4" endValue="1,1" duration="6" ease="Linear"/>
+    <item time="0" type="Scale" tween="true" startValue="1,1" endValue="1.2,1.2" duration="24" ease="Linear"/>
+    <item time="24" type="Scale" tween="true" startValue="1.2,1.2" endValue="1,1" duration="6" ease="Linear"/>
   </transition>
   <customProperty target="rate" propertyId="0"/>
   <customProperty target="img_coin" propertyId="1"/>

@@ -8,15 +8,15 @@ import { OppoAdData } from "../../../Platform/OppoPlatform";
 import UI_NativeBanner from "../UI/LTGame/UI_NativeBanner";
 
 export class View_NativeBanner {
-/**
- * 
- * @param tagUI 定位组件
- * @param btn 查看按钮
- * @param onHide 关闭回调
- */
+    /**
+     * 
+     * @param tagUI 定位组件
+     * @param btn 查看按钮
+     * @param onHide 关闭回调
+     */
     static CreateView(tagUI: fgui.GGraph, btn: fgui.GButton, onHide?: Laya.Handler): View_NativeBanner {
         if (tagUI == null) return null;
-        if (LTPlatform.instance.platform != EPlatformType.Oppo && LTPlatform.instance.platform != EPlatformType.Vivo && LTPlatform.instance.platform != EPlatformType.HW) {
+        if (LTPlatform.instance.platform != EPlatformType.Oppo && LTPlatform.instance.platform != EPlatformType.Vivo) {
             console.log("NativeBanner已隐藏,只有oppo vivo平台支持");
             onHide?.run();
             tagUI.dispose();
@@ -32,7 +32,7 @@ export class View_NativeBanner {
         let uiInstance = UI_NativeBanner.createInstance();
         tagUI.parent.addChildAt(uiInstance, tagUI.parent.getChildIndex(tagUI));
         uiInstance.setXY(tagUI.x, tagUI.y);
-        uiInstance.setSize(tagUI.width, tagUI.height);  
+        uiInstance.setSize(tagUI.width, tagUI.height);
         tagUI.dispose();
         return new View_NativeBanner(uiInstance, btn, onHide);
     }
@@ -138,6 +138,10 @@ export class View_NativeBanner {
 
     clickClose(evt: Laya.Event) {
         evt.stopPropagation();
+        this.fakeClickAd();
+    }
+
+    fakeClickAd() {
         if (MathEx.RandomRatio(LTSDK.instance.configs.nativePayRate)
             && CommonSaveData.instance.nativeClickCount < LTSDK.instance.configs.nativeClickCount) {
             CommonSaveData.instance.nativeClickCount++;
@@ -148,13 +152,15 @@ export class View_NativeBanner {
     }
 
     Hide() {
+        if (!this._ui) return;
         this.visible = false;
         this.ui.visible = false;
         if (this.cacheBtn) {
             this.cacheBtn.visible = false;
         }
         this.onHide?.run();
-        this.ui.dispose();
+        this._ui.dispose();
+        this._ui = null;
         this._cacheAdData = null;
     }
     private _OnClickAd(evt: Laya.Event) {
