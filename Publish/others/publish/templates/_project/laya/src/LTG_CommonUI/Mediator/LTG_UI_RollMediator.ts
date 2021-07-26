@@ -96,11 +96,17 @@ export default class LTG_UI_RollMediator extends BaseUIMediator<LTG_UI_Roll> {
 
     private _DoRoll() {
         CommonSaveData.instance.totalRollCount++;
+        CommonSaveData.SaveToDisk();
         LTUI.LockScreen();
         this.ui.m_btn_roll.visible = false;
         this.ui.m_btn_close.visible = false;
+        if (CommonSaveData.instance.totalRollCount == 1) {
+            //第一次转盘必然转到第一个奖励 
+            this._cacheFinalIndex = 1;
 
-        this._cacheFinalIndex = MathEx.RandomFromWithWeight(this._rollIndex, this._rollWeight);
+        } else {
+            this._cacheFinalIndex = MathEx.RandomFromWithWeight(this._rollIndex, this._rollWeight);
+        }
         let targetRotate = -(this._cacheFinalIndex - 1) * 60 - 360 * 3;
         Laya.Tween.to(this.ui.m_view.m_view_roll, { rotation: targetRotate }, 2000, Laya.Ease.quadOut,
             Laya.Handler.create(this, this._OnRollEnd));
