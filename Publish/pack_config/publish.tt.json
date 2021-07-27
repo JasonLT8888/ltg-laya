@@ -3,13 +3,18 @@
     "bannerId": "",
     "rewardVideoId": "",
     "interstitialId": "",
-    "forceRemote": [],
+    "forceRemote": [
+        "res/config",
+        "res/audio_ogg",
+        "res/audio_wav",
+        "res/export"
+    ],
     "forceInPack": [
         "res/fgui_load"
     ],
-    "maxSinglePackSize": 4,
-    "maxTotalPackSize": 12,
-    "packType": 0,
+    "maxSinglePackSize": 8,
+    "maxTotalPackSize": 8,
+    "packType": 1,
     "compress": true,
     "openDataContext": false
 }

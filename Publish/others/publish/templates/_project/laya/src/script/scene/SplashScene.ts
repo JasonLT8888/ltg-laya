@@ -47,8 +47,8 @@ export default class SplashScene extends LTSplashScene {
     }
 
     async _OnGameResLoaded() {
-        await GlobalUnit.FirstCreate();
         await EffectManager.instance.WarmEffects();
+        await GlobalUnit.FirstCreate();
         this.isFinished = true;
         this.nextState = ESceneType.Main;
     }

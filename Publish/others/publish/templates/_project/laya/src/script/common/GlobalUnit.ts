@@ -9,6 +9,7 @@ export default class GlobalUnit {
 
     static InitAll(urls: string[]) {
         this.s3d = Laya.stage.addChildAt(new Laya.Scene3D(), 0) as Laya.Scene3D;
+        window['s3d'] = this.s3d;
 
         this.dataManager = new DataManager();
         this.dataManager.InitData();
@@ -24,6 +25,7 @@ export default class GlobalUnit {
         this.s3d = scene;
         Laya.stage.addChildAt(this.s3d, 0);
         EffectManager.instance.ReAddScene();
+        window['s3d'] = this.s3d;
     }
 
     static async FirstCreate() {
