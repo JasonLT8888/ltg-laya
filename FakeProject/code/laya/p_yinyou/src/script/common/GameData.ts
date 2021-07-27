@@ -1,7 +1,6 @@
 import StringEx from "../../LTGame/LTUtils/StringEx";
 import CommonSaveData from "../../LTGame/Commom/CommonSaveData";
 
-const gameName = 'p_yinyou';
 export class SaveData {
 
     /**
