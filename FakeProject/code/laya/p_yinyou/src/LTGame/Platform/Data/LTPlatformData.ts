@@ -13,8 +13,7 @@ export default class LTPlatformData {
     public customBoxAdId: string = "";
 
     public nativeBannerIds: string[] = [];
-    public nativeIconIds: string[] = [];
-    public nativeinterstitialIds: string[] = [];
+    public nativeIconIds: string[] = []; 
     public nativeinpageIds: string[] = [];
 
 }

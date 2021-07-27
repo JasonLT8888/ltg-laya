@@ -1,0 +1,19 @@
+{
+    "appid": "",
+    "bannerId": "",
+    "rewardVideoId": "",
+    "interstitialId": "",
+    "forceRemote": [
+        "res/export"
+    ],
+    "forceInPack": [
+        "res/config",
+        "res/fgui_load",
+        "res/ltgame"
+    ],
+    "maxSinglePackSize": 4,
+    "maxTotalPackSize": 16,
+    "packType": 0,
+    "compress": true,
+    "isDebug": true
+}

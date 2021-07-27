@@ -4,6 +4,8 @@ import { UI_MainMediator } from "../ui/UI_MainMediator";
 import LTSDK from "../../SDK/LTSDK";
 import { ECheckState } from "../../SDK/common/ECheckState";
 import { UI_ChannelMediator } from "../../LTGame/UIExt/DefaultUI/UI_ChannelMediator";
+import LTPlatform from "../../LTGame/Platform/LTPlatform";
+import { EPlatformType } from "../../LTGame/Platform/EPlatformType";
 
 export default class MainScene extends BaseState<any> {
 
@@ -17,7 +19,7 @@ export default class MainScene extends BaseState<any> {
 
         UI_MainMediator.instance.Show();
 
-        if (window["__GM"]) {
+        if (window["__GM"] && LTPlatform.instance.platform == EPlatformType.TT) {
             UI_ChannelMediator.instance.Show();
         }
     }

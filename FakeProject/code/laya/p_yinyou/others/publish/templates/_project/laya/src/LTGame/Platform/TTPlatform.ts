@@ -57,7 +57,7 @@ export default class TTPlatform extends WXPlatform {
         this._Login();
         this._InitShareInfo();
         this._InitSystemInfo();
-        this._CreateBannerAd();
+        // this._CreateBannerAd();
         this._CreateVideoAd();
         this._CreateInterstitalAd();
 
@@ -277,10 +277,34 @@ export default class TTPlatform extends WXPlatform {
     }
 
     ShowBannerAd() {
-        if (!this.IsBannerAvaliable()) {
-            return;
+        // return;
+        // if (!this.IsBannerAvaliable()) {
+        //     return;
+        // }
+        // this._bannerAd.show();
+    }
+    HideBannerAd() {
+
+    }
+    ShowInterstitalAd() {
+        if (!this._intersitialAd) {
+            this._CreateInterstitalAd();
         }
-        this._bannerAd.show();
+        this._intersitialAd?.load().then(() => {
+            this._intersitialAd.show();
+        });
+    }
+    _CreateInterstitalAd() {
+        this._intersitialAd = this.base.createInterstitialAd({
+            adUnitId: this.platformData.interstitialId
+        });
+        this._intersitialAd.onError((e) => {
+            console.error("插页加载失败", e);
+        })
+        this._intersitialAd.onClose(() => {
+            this._intersitialAd.destroy();
+            this._intersitialAd = null;
+        });
     }
 
     ShareAppMessage(shareInfo: ShareInfo, onSuccess: Laya.Handler, onFailed: Laya.Handler) {

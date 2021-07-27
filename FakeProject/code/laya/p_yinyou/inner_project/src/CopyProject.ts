@@ -45,6 +45,11 @@ class CopyProject {
         let packageJsonPath = path.join(rootPath, 'package.json');
         let targetPackageJsonPath = path.join(rootPath, './../../../../Publish/package.json');
         LTUtils.CopyFile(packageJsonPath, targetPackageJsonPath);
+        // 拷贝config目录
+        let cfgPath = path.join(rootPath, 'pack_config');
+        let targetcfgPath = path.join(rootPath, './../../../../Publish/pack_config');
+        LTUtils.DeleteDir(targetcfgPath);
+        LTUtils.CopyDir(cfgPath, targetcfgPath);
         console.log("已发布到", path.join(rootPath, './../../../../Publish'));
     }
 
