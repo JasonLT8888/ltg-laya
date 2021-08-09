@@ -98,6 +98,10 @@ class UpdateProject {
     private _CopyUnity(currentWorkPath: string) {
         let projectName = LTUtils.GetDirName(currentWorkPath);
         let srcPath = path.join(currentWorkPath, './others/publish/templates/_project/unity');
+        if (LTUtils.IsFileExist(srcPath)) {
+            console.log('unity工程已存在,跳过创建');
+            return;
+        }
         let targetPath = path.join(currentWorkPath, './../../unity/' + projectName + '/');
 
         for (let value of CommonConfig.needCopyUnity) {
