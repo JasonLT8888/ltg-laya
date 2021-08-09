@@ -1,4 +1,6 @@
 import FGuiData from "./FGuiData";
+import BaseUIMediator from "./BaseUIMediator";
+import Awaiters from "../../Async/Awaiters";
 
 export default class FGuiEx {
 
@@ -20,7 +22,7 @@ export default class FGuiEx {
         Laya.stage.on(Laya.Event.RESIZE, this, this.UpdateAllUI);
     }
 
-    public static AddUI(uiType, param: FGuiData = null): fgui.GObject {
+    public static AddUI(uiType: any, param: FGuiData = null): fgui.GObject {
         let ui = uiType.createInstance() as fgui.GObject;
         fgui.GRoot.inst.addChild(ui);
         if (param == null) {
@@ -32,7 +34,7 @@ export default class FGuiEx {
             ui.setSize(fgui.GRoot.inst.width, this.bottom);
             ui.y = this.top;
         }
-     
+
         this._cacheMap.set(ui.constructor.name, param);
 
         window[ui.constructor.name] = ui;
@@ -90,6 +92,17 @@ export default class FGuiEx {
             return ui.globalToLocal(uiPos.x, uiPos.y);
         } else {
             return new Laya.Point(uiPos.x, uiPos.y);
+        }
+    }
+
+    /**
+     * 等待ui关闭
+     * @param ui 
+     */
+    public static async WaitUIClose(ui: BaseUIMediator<fgui.GComponent>) {
+        await Awaiters.NextFrame();
+        while (ui.isShow) {
+            await Awaiters.NextFrame();
         }
     }
 

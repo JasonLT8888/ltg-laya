@@ -3,9 +3,10 @@
   <resources>
     <component id="nihr0" name="splash.xml" path="/ui/" exported="true"/>
     <component id="nihr1" name="progress_simple.xml" path="/cmp/"/>
-    <image id="nihr3" name="sp_jindutiao.png" path="/img/" scale="9grid" scale9grid="100,18,78,6"/>
-    <image id="m8knb" name="sp_jindutiaobg.png" path="/img/" scale="9grid" scale9grid="27,13,234,12"/>
     <image id="r7mzc" name="notice.png" path="/img/"/>
+    <image id="m785d" name="sp_jiazaijindu.png" path="/img/"/>
+    <image id="m785e" name="bg.png" path="/img/"/>
+    <image id="m785f" name="sp_jiazaibg.png" path="/img/"/>
   </resources>
   <publish name="Load" path="..\..\laya\p_yinyou\bin\res\fgui_load" packageCount="2" genCode="true">
     <atlas compression="true" index="0"/>

@@ -1,5 +1,6 @@
 import { ILTG_Com_Data } from "./ILTG_Com_Data";
 import LTG_UI_WatchDYMediator from "../Mediator/LTG_UI_WatchDYMediator";
+import FGuiEx from "../../LTGame/UIExt/FGui/FGuiEx";
 
 /**
  * -关注抖音号-
@@ -14,6 +15,10 @@ export class LTG_Com_WatchDYData implements ILTG_Com_Data {
     public Send(): number {
         LTG_UI_WatchDYMediator.instance.Show(this);
         return 0;
+    }
+
+    public async WaitClose() {
+        await FGuiEx.WaitUIClose(LTG_UI_WatchDYMediator.instance);
     }
 
 }

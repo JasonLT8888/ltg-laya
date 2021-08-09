@@ -1,9 +1,7 @@
-import GameData from "../../script/common/GameData";
 import { PackConst } from "../../script/config/PackConst";
 import LTSDK from "../../SDK/LTSDK";
 import Awaiters from "../Async/Awaiters";
 import StringEx from "../LTUtils/StringEx";
-import LTUI from "../UIExt/LTUI";
 import LTPlatformData from "./Data/LTPlatformData";
 import { EPlatformType } from "./EPlatformType";
 import { IDevice } from "./IDevice";
@@ -298,6 +296,12 @@ export default class TTPlatform extends WXPlatform {
         this._intersitialAd = this.base.createInterstitialAd({
             adUnitId: this.platformData.interstitialId
         });
+
+        if (this._intersitialAd == null) {
+            console.log('IDE内不支持创建InterstitialAd');
+            return;
+        }
+
         this._intersitialAd.onError((e) => {
             console.error("插页加载失败", e);
         })

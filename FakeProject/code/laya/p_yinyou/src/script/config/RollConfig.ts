@@ -1,6 +1,7 @@
 export namespace RollConfig {
     export class config {
-        /** 转盘id */ readonly id: number;
+        /** 转盘id
+第一次必然转到1 */ readonly id: number;
         /** 转盘内容 */ readonly show_str: string;
         /** 文字颜色 */ readonly text_color: string;
         /** 转盘图标 */ readonly icon_path: string;

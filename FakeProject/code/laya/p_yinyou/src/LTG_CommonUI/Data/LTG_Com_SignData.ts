@@ -1,5 +1,6 @@
 import { ILTG_Com_Data } from "./ILTG_Com_Data";
 import LTG_UI_SignMediator from "../Mediator/LTG_UI_SignMediator";
+import FGuiEx from "../../LTGame/UIExt/FGui/FGuiEx";
 
 /**
  * -签到界面-
@@ -22,6 +23,10 @@ export class LTG_Com_SignData implements ILTG_Com_Data {
     public Send(): number {
         LTG_UI_SignMediator.instance.Show(this);
         return 0;
+    }
+
+    public async WaitClose() {
+        await FGuiEx.WaitUIClose(LTG_UI_SignMediator.instance);
     }
 
 }

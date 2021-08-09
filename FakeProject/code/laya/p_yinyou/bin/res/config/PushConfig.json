@@ -1,0 +1,1 @@
+{"1":{"id":1,"start":2,"duration":1,"priority":4,"type":4,"before_start":false,"enable":true},"2":{"id":2,"start":2,"duration":4,"priority":1,"type":2,"before_start":true,"enable":true},"3":{"id":3,"start":2,"duration":2,"priority":3,"type":3,"before_start":true,"enable":true},"4":{"id":4,"start":3,"duration":2,"priority":2,"type":1,"before_start":true,"enable":false}}
