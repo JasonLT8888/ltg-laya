@@ -8,4 +8,10 @@ export class TransformEx {
         trans.localScale = Vector3Ex.one;
     }
 
+    static CopyTrans(to: Laya.Transform3D, from: Laya.Transform3D) {
+        to.position = from.position;
+        to.rotation = from.rotation;
+        to.setWorldLossyScale(from.getWorldLossyScale());
+    }
+
 }
